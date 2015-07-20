@@ -31,14 +31,16 @@
       <url>${dm-site-url}</url>
     </site>
     <repository>
-      <id>releases</id>
-      <name>releases</name>
-      <url>http://mavenrepo.rphall.com:8081/nexus/content/repositories/releases/</url>
+      <id>choicemaker_releases</id>
+      <name>ChoiceMaker Enterprise Releases</name>
+      <url>
+      https://dev.choicemaker.com:8443/nexus/content/repositories/choicemaker_releases/</url>
     </repository>
     <snapshotRepository>
-      <id>snapshots</id>
-      <name>Internal Snapshots</name>
-      <url>http://mavenrepo.rphall.com:8081/nexus/content/repositories/snapshots/</url>
+      <id>choicemaker_snapshots</id>
+      <name>ChoiceMaker Enterprise Snapshots</name>
+      <url>
+      https://dev.choicemaker.com:8443/nexus/content/repositories/choicemaker_snapshots/</url>
     </snapshotRepository>
   </distributionManagement>
 
