@@ -7,7 +7,7 @@
 
   <groupId>com.choicemaker.cm</groupId>
   <artifactId>choicemaker-base</artifactId>
-  <version>2.7.1-SNAPSHOT</version>
+  <version>2.7.1-rc.1</version>
   <packaging>pom</packaging>
 
   <name>ChoiceMaker Dependencies</name>
@@ -28,10 +28,6 @@
 
     <!-- ChoiceMaker versions -->
     <choicemaker.current.version>2.7.1-SNAPSHOT</choicemaker.current.version>
-    <!-- choicemaker.prerequisite.dependency>2.7.1</choicemaker.prerequisite.dependency -->
-    <choicemaker.prerequisite.dependency>2.7.2-SNAPSHOT</choicemaker.prerequisite.dependency>
-    <choicemaker.prerequisite.version>2.7.2-SNAPSHOT</choicemaker.prerequisite.version>
-    <choicemaker.tool.dependency>2.7.1-SNAPSHOT</choicemaker.tool.dependency>
     <choicemaker.tool.version>2.7.1-SNAPSHOT</choicemaker.tool.version>
 
     <!-- Dependency versions -->
@@ -44,48 +40,48 @@
     <xpp3.version>1.1.4c</xpp3.version>
 
     <!-- Plugin versions -->
-    <plugin.codehaus-build-helper.version>1.8</plugin.codehaus-build-helper.version>
+    <plugin.codehaus-build-helper.version>1.9.1</plugin.codehaus-build-helper.version>
     <plugin.codehaus-cobertura.version>2.6</plugin.codehaus-cobertura.version>
     <plugin.codehaus-findbugs.version>2.5.3</plugin.codehaus-findbugs.version>
     <plugin.codehaus-license-manager.version>1.5</plugin.codehaus-license-manager.version>
     <plugin.codehaus-taglist.version>2.4</plugin.codehaus-taglist.version>
-    <plugin.codehaus-versions.version>2.1</plugin.codehaus-versions.version>
+    <plugin.codehaus-versions.version>2.2</plugin.codehaus-versions.version>
 
-    <plugin.docbkx.version>2.0.14</plugin.docbkx.version>
+    <plugin.docbkx.version>2.0.16</plugin.docbkx.version>
 
     <plugin.eclipse-m2e.version>1.0.0</plugin.eclipse-m2e.version>
 
-    <plugin.maven-antrun.version>1.7</plugin.maven-antrun.version>
-    <plugin.maven-assembly.version>2.4</plugin.maven-assembly.version>
+    <plugin.maven-antrun.version>1.8</plugin.maven-antrun.version>
+    <plugin.maven-assembly.version>2.5.5</plugin.maven-assembly.version>
     <plugin.maven-changelog.version>2.2</plugin.maven-changelog.version>
     <plugin.maven-checkstyle.version>2.11</plugin.maven-checkstyle.version>
 
-    <plugin.maven-compiler.version>3.1</plugin.maven-compiler.version>
+    <plugin.maven-compiler.version>3.3</plugin.maven-compiler.version>
     <plugin.maven-compiler.compilerVersion>1.7</plugin.maven-compiler.compilerVersion>
     <plugin.maven-compiler.source>1.4</plugin.maven-compiler.source>
     <plugin.maven-compiler.target>1.4</plugin.maven-compiler.target>
 
-    <plugin.maven-dependency.version>2.8</plugin.maven-dependency.version>
+    <plugin.maven-dependency.version>2.10</plugin.maven-dependency.version>
     <plugin.maven-deploy.version>2.8.1</plugin.maven-deploy.version>
     <plugin.maven-enforcer.version>1.0.1</plugin.maven-enforcer.version>
-    <plugin.maven-failsafe.version>2.17</plugin.maven-failsafe.version>
+    <plugin.maven-failsafe.version>2.18.1</plugin.maven-failsafe.version>
     <plugin.maven-help.version>2.2</plugin.maven-help.version>
     <plugin.maven-jar.version>2.4</plugin.maven-jar.version>
-    <plugin.maven-javadoc.version>2.9.1</plugin.maven-javadoc.version>
+    <plugin.maven-javadoc.version>2.10.3</plugin.maven-javadoc.version>
     <plugin.maven-jxr.version>2.3</plugin.maven-jxr.version>
     <!-- plugin.maven-pmd.version>2.7.1</plugin.maven-pmd.version -->
     <plugin.maven-pmd.version>3.0.1</plugin.maven-pmd.version>
-    <plugin.maven-project-info-reports.version>2.7</plugin.maven-project-info-reports.version>
+    <plugin.maven-project-info-reports.version>2.8</plugin.maven-project-info-reports.version>
     <plugin.maven-release.version>2.4.2</plugin.maven-release.version>
     <plugin.maven-resources.version>2.6</plugin.maven-resources.version>
-    <plugin.maven-site.version>3.3</plugin.maven-site.version>
-    <plugin.maven-source.version>2.2.1</plugin.maven-source.version>
+    <plugin.maven-site.version>3.4</plugin.maven-site.version>
+    <plugin.maven-source.version>2.4</plugin.maven-source.version>
 
-    <plugin.maven-surefire.version>2.16</plugin.maven-surefire.version>
+    <plugin.maven-surefire.version>2.18.1</plugin.maven-surefire.version>
     <plugin.maven-surefire.jvmOptions>-Xms512m -Xmx1024m -XX:MaxPermSize=1024m</plugin.maven-surefire.jvmOptions>
     <plugin.maven-surefire-report.version>2.7.2</plugin.maven-surefire-report.version>
 
-    <plugin.maven-wagon-ssh.version>2.5</plugin.maven-wagon-ssh.version>
+    <plugin.maven-wagon-ssh.version>2.9</plugin.maven-wagon-ssh.version>
 
     <plugin.sonatype-install4j.version>1.0.6</plugin.sonatype-install4j.version>
   </properties>
@@ -198,6 +194,13 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
           <version>${plugin.maven-surefire.version}</version>
+          <configuration>
+            <systemPropertyVariables>
+              <java.util.logging.config.file>
+                src/test/resources/logging.properties
+              </java.util.logging.config.file>
+            </systemPropertyVariables>
+          </configuration>
         </plugin>
 
         <plugin>
@@ -1385,7 +1388,7 @@ END: C-E Exclusion -->
       <dependency>
         <groupId>commons-logging</groupId>
         <artifactId>commons-logging</artifactId>
-        <version>1.0.4</version>
+        <version>1.1</version>
       </dependency>
       <dependency>
         <groupId>javax</groupId>
@@ -1419,18 +1422,18 @@ END: C-E Exclusion -->
       <dependency>
         <groupId>org.jfree</groupId>
         <artifactId>jcommon</artifactId>
-        <version>1.0.17</version>
+        <version>1.0.21</version>
         <classifier>sources</classifier>
       </dependency>
       <dependency>
         <groupId>com.mchange</groupId>
         <artifactId>c3p0</artifactId>
-        <version>0.9.2.1</version>
+        <version>0.9.5</version>
       </dependency>
       <dependency>
         <groupId>com.mchange</groupId>
         <artifactId>c3p0</artifactId>
-        <version>0.9.2.1</version>
+        <version>0.9.5</version>
         <classifier>sources</classifier>
       </dependency>
       <dependency>
@@ -1443,17 +1446,17 @@ END: C-E Exclusion -->
       <dependency>
         <groupId>org.jfree</groupId>
         <artifactId>jcommon</artifactId>
+        <version>1.0.21</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jfree</groupId>
+        <artifactId>jfreechart</artifactId>
         <version>1.0.17</version>
       </dependency>
       <dependency>
         <groupId>org.jfree</groupId>
         <artifactId>jfreechart</artifactId>
-        <version>1.0.15</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jfree</groupId>
-        <artifactId>jfreechart</artifactId>
-        <version>1.0.15</version>
+        <version>1.0.17</version>
         <classifier>sources</classifier>
       </dependency>
       <dependency>
@@ -1488,7 +1491,7 @@ END: C-E Exclusion -->
       <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
-        <version>4.8.1</version>
+        <version>4.8.2</version>
       </dependency>
       <dependency>
         <groupId>org.apache.commons</groupId>
@@ -1527,160 +1530,6 @@ END: C-E Exclusion -->
           </reportSet>
         </reportSets>
       </plugin>
-<!--
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-changelog-plugin</artifactId>
-        <configuration>
-          <type>range</type>
-          <range>10</range>
-          <displayFileDetailUrl>${project.scm.url}/tree/master/%FILE%</displayFileDetailUrl>
-          <headingDateFormat>yyyy-MM-dd</headingDateFormat>
-          <outputEncoding>${project.reporting.outputEncoding}</outputEncoding>
-        </configuration>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jxr-plugin</artifactId>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-checkstyle-plugin</artifactId>
-        <configuration>
-          <skip>${checkstyle.skip}</skip>
-          <configLocation>${maven-checkstyle-plugin.configLocation}</configLocation>
-          <failsOnError>false</failsOnError>
-          <enableRulesSummary>true</enableRulesSummary>
-          <includeTestSourceDirectory>
-          true</includeTestSourceDirectory>
-        </configuration>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-pmd-plugin</artifactId>
-        <configuration>
-          <skip>${pmd.skip}</skip>
-          <targetJdk>
-          ${maven.maven-compiler.source}</targetJdk>
-          <sourceEncoding>
-          ${project.build.sourceEncoding}</sourceEncoding>
-          <minimumTokens>100</minimumTokens>
-          <rulesets>
-            <ruleset>
-            ${maven-pmd-plugin.configLocation}</ruleset>
-          </rulesets>
-          <failOnViolation>false</failOnViolation>
-        </configuration>
-      </plugin>
--->
-<!--
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <configuration>
-          <skip>${javadocs.skip}</skip>
-          <failOnError>false</failOnError>
-        </configuration>
-      </plugin>
--->
-<!--
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-report-plugin</artifactId>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-failsafe-plugin</artifactId>
-      </plugin>
--->
-<!--
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>versions-maven-plugin</artifactId>
-        <version>${plugin.codehaus-versions.version}</version>
-        <reportSets>
-          <reportSet>
-            <reports>
-              <report>dependency-updates-report</report>
-              <report>plugin-updates-report</report>
-            </reports>
-          </reportSet>
-        </reportSets>
-      </plugin>
--->
-<!--
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>cobertura-maven-plugin</artifactId>
-        <configuration>
-          <skip>${cobertura.skip}</skip>
-        </configuration>
-      </plugin>
-
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>findbugs-maven-plugin</artifactId>
-        <configuration>
-          <skip>${findbugs.skip}</skip>
-          <xmlOutput>true</xmlOutput>
-        </configuration>
-      </plugin>
-
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>taglist-maven-plugin</artifactId>
-        <configuration>
-          <encoding>
-          ${project.build.sourceEncoding}</encoding>
-          <sourceFileLocale>en</sourceFileLocale>
-          <tagListOptions>
-            <tagClasses>
-              <tagClass>
-                <displayName>Code sections needing
-                review</displayName>
-                <tags>
-                  <tag>
-                    <matchString>REVIEWREQUIRED</matchString>
-                    <matchType>exact</matchType>
-                  </tag>
-                </tags>
-              </tagClass>
-              <tagClass>
-                <displayName>To do Work</displayName>
-                <tags>
-                  <tag>
-                    <matchString>specify me</matchString>
-                    <matchType>ignoreCase</matchType>
-                  </tag>
-                  <tag>
-                    <matchString>@ to do</matchString>
-                    <matchType>ignoreCase</matchType>
-                  </tag>
-                </tags>
-              </tagClass>
-              <tagClass>
-                <displayName>Noted Bugs</displayName>
-                <tag>
-                  <matchString>specify me</matchString>
-                  <matchType>ignoreCase</matchType>
-                </tag>
-              </tagClass>
-              <tagClass>
-                <displayName>Deprecated Items</displayName>
-                <tag>
-                  <matchString>@deprecated</matchString>
-                  <matchType>ignoreCase</matchType>
-                </tag>
-              </tagClass>
-            </tagClasses>
-          </tagListOptions>
-        </configuration>
-      </plugin>
--->
     </plugins>
   </reporting>
 

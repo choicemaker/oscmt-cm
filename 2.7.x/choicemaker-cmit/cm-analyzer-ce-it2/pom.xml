@@ -8,12 +8,13 @@
   <parent>
     <groupId>com.choicemaker.cm</groupId>
     <artifactId>choicemaker-base</artifactId>
-    <version>2.7.1-SNAPSHOT</version>
+    <version>2.7.1-rc.1</version>
     <relativePath>../../choicemaker-base/pom.xml</relativePath>
   </parent>
 
   <groupId>com.choicemaker.cmit</groupId>
   <artifactId>cm-analyzer-ce-it2</artifactId>
+  <version>2.7.1-SNAPSHOT</version>
  
   <name>Integration Test: ChoiceMaker Analyzer, Part 2</name>
   <description><![CDATA[
