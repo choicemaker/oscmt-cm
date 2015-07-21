@@ -7,14 +7,14 @@
 	<fileSets>
 		<fileSet>
     <directory>${eclipse.application.dir}</directory>
-		<outputDirectory>/</outputDirectory>
+		<outputDirectory></outputDirectory>
 		<includes>
         <include>**</include>
 		</includes>
 		</fileSet>
 		<fileSet>
 		<directory>${project.build.scriptSourceDirectory}</directory>
-		<outputDirectory>/</outputDirectory>
+		<outputDirectory></outputDirectory>
 		<includes>
         <include>*.sh</include>
         <include>*.bat</include>

@@ -9,7 +9,7 @@
   <fileSets>
     <fileSet>
     <directory>src/main/resources/simple_person_matching</directory>
-    <outputDirectory>/</outputDirectory>
+    <outputDirectory></outputDirectory>
     </fileSet>
   </fileSets>
 </assembly>
