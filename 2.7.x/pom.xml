@@ -65,6 +65,7 @@
     <module>choicemaker-cm</module>
     <module>choicemaker-maven</module>
 
+    <module>example_models</module>
     <module>misc/compiler-app</module>
 
     <module>choicemaker-e2it</module>
