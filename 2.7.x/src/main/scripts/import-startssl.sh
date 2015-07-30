@@ -3,6 +3,10 @@
 # Downloads and installs the startssl CA certs into the global java keystore
 # Author: Klaus Reimer <k@ailis.de>
 #
+# See "K's cluttered loft", "Java and the StartSSL CA certificates"
+# https://www.ailis.de/~k/archives/52-Java-and-the-StartSSL-CA-certificates.html
+# http://links.rph.cx/1VQawa0
+#
 
 # Check if JAVA_HOME is set
 if [ "$JAVA_HOME" = "" ]
