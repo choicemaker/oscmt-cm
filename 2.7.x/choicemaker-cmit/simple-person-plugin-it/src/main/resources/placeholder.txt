@@ -1,0 +1,2 @@
+A placeholder file to prevent the Maven packaging plugin from
+complaining about an empty main artifact (JAR file).
