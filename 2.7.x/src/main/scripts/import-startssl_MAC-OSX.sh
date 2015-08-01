@@ -4,6 +4,10 @@
 # Author: Klaus Reimer <k@ailis.de> -- Original Linux script
 # Author: Rick Hall <rphall@choicemaker.com> -- Adapted to MAC OSX
 #
+# See "K's cluttered loft", "Java and the StartSSL CA certificates"
+# https://www.ailis.de/~k/archives/52-Java-and-the-StartSSL-CA-certificates.html
+# http://links.rph.cx/1VQawa0
+#
 
 # Check if JAVA_HOME is set
 if [ "$JAVA_HOME" = "" ]
