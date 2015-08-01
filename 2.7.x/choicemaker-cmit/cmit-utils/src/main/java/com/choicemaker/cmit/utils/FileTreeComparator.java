@@ -15,23 +15,26 @@ import com.choicemaker.util.FileUtilities;
 
 public class FileTreeComparator {
 
+	private final boolean ignoreEOL;
 	private final Path root1;
 	private final Path root2;
 	private final Set<Path> excludedPaths = new HashSet<>();
 	private final Set<FileContentListener> listeners = new HashSet<>();
 
-	public FileTreeComparator(Path root1, Path root2) {
+	public FileTreeComparator(Path root1, Path root2, boolean ignoreEOL) {
 		if (root1 == null || root2 == null) {
 			throw new IllegalArgumentException("null root");
 		}
+		this.ignoreEOL = ignoreEOL;
 		this.root1 = root1;
 		this.root2 = root2;
 	}
 
-	public FileTreeComparator(File directory1, File directory2) {
+	public FileTreeComparator(File directory1, File directory2, boolean ignoreEOL) {
 		if (directory1 == null || directory2 == null) {
 			throw new IllegalArgumentException("null root");
 		}
+		this.ignoreEOL = ignoreEOL;
 		this.root1 = Paths.get(directory1.toURI());
 		this.root2 = Paths.get(directory2.toURI());
 	}
@@ -71,13 +74,15 @@ public class FileTreeComparator {
 		 */
 
 		// Walk the 1st tree checking the corresponding path in the 2nd tree
-		DirectoryVisitor visitor = new DirectoryVisitor(this.root1, this.root2);
+		DirectoryVisitor visitor = new DirectoryVisitor(this.root1, this.root2,
+				this.ignoreEOL);
 		visitor.addListeners(this.listeners);
 		visitor.addExcludedPaths(this.excludedPaths);
 		Files.walkFileTree(this.root1, visitor);
 
 		// Walk the 2nd tree checking the corresponding path in the 1st tree
-		visitor = new DirectoryVisitor(this.root2, this.root1);
+		visitor = new DirectoryVisitor(this.root2, this.root1,
+				this.ignoreEOL);
 		visitor.addListeners(this.listeners);
 		visitor.addExcludedPaths(this.excludedPaths);
 		Files.walkFileTree(this.root2, visitor);
@@ -88,27 +93,7 @@ public class FileTreeComparator {
 
 class DirectoryVisitor implements FileVisitor<Path> {
 
-//	private static final String DELIM = "|";
-
-	// private final Set<String> notifications = new HashSet<>();
-
-//	public static String createKey(Path p1, Path p2,
-//			FileContentComparison0 result) {
-//		String s1 = p1 == null ? "null" : p1.toString();
-//		String s2 = p2 == null ? "null" : p2.toString();
-//		String r = result == null ? "null" : result.toString();
-//
-//		int c = s1.compareTo(s2);
-//		StringBuilder sb = new StringBuilder();
-//		if (c <= 0) {
-//			sb.append(s1).append(DELIM).append(s2).append(DELIM).append(r);
-//		} else {
-//			sb.append(s2).append(DELIM).append(s1).append(DELIM).append(r);
-//		}
-//
-//		return sb.toString();
-//	}
-
+	private final boolean ignoreEOL;
 	private final Path thisRoot;
 	private final Path thatRoot;
 	private final Set<Path> excludedPaths = new HashSet<>();
@@ -141,13 +126,14 @@ class DirectoryVisitor implements FileVisitor<Path> {
 	 * @param thisRoot
 	 * @param thatRoot
 	 */
-	DirectoryVisitor(Path thisRoot, Path thatRoot) {
+	DirectoryVisitor(Path thisRoot, Path thatRoot, boolean ignoreEOL) {
 		if (thisRoot == null) {
 			throw new IllegalArgumentException();
 		}
 		if (thatRoot == null) {
 			throw new IllegalArgumentException();
 		}
+		this.ignoreEOL = ignoreEOL;
 		this.thisRoot = thisRoot;
 		this.thatRoot = thatRoot;
 	}
@@ -193,15 +179,31 @@ class DirectoryVisitor implements FileVisitor<Path> {
 			if (fOther.exists()) {
 				File fRef = p1.toFile();
 				assert fRef.exists();
-				String md5Ref =
-					FileUtilities.computeHash(FileUtilities.MD5_HASH_ALGORITHM,
-							fRef);
-				String md5Other =
-					FileUtilities.computeHash(FileUtilities.MD5_HASH_ALGORITHM,
-							fOther);
+
+				String md5Ref;
+				if (this.ignoreEOL) {
+					md5Ref =
+						FileUtilities.computeHashIgnoreEOL(
+								FileUtilities.MD5_HASH_ALGORITHM, fRef);
+				} else {
+					md5Ref =
+						FileUtilities.computeHash(
+								FileUtilities.MD5_HASH_ALGORITHM, fRef);
+				}
+
+				String md5Other;
+				if (this.ignoreEOL) {
+					md5Other =
+						FileUtilities.computeHashIgnoreEOL(
+								FileUtilities.MD5_HASH_ALGORITHM, fOther);
+				} else {
+					md5Other =
+						FileUtilities.computeHash(
+								FileUtilities.MD5_HASH_ALGORITHM, fOther);
+				}
+
 				if (md5Ref.equals(md5Other)) {
-					notifyListeners(p1, p2,
-							FileContentComparison0.SAME_CONTENT);
+					notifyListeners(p1, p2, FileContentComparison0.SAME_CONTENT);
 				} else {
 					notifyListeners(p1, p2,
 							FileContentComparison0.DIFFERENT_CONTENT);

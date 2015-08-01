@@ -347,14 +347,18 @@ public class SmokeTest extends AbstractMavenIntegrationTestCase {
 		f = new File(workingDir, GENERATED_SOURCE_ROOT);
 		Path rootGeneratedSource = Paths.get(f.toURI());
 		
-		PathComparison.assertSameContent(rootExpectedSource, rootGeneratedSource, MAX_REPORTED_DIFFERENCES, EXCLUDED_COMPARISONS);
+		final boolean ignoreEOL = true;
+		PathComparison.assertSameContent(rootExpectedSource,
+				rootGeneratedSource, MAX_REPORTED_DIFFERENCES,
+				EXCLUDED_COMPARISONS, ignoreEOL);
 
 		// Compare the generated tree against the expected tree
 		final int maxCollected = MAX_REPORTED_DIFFERENCES + 1;
 		DefaultFileContentListener listener =
 			new DefaultFileContentListener(maxCollected, false);
 		FileTreeComparator ftc =
-			new FileTreeComparator(rootExpectedSource, rootGeneratedSource);
+			new FileTreeComparator(rootExpectedSource, rootGeneratedSource,
+					ignoreEOL);
 		ftc.addListener(listener);
 		ftc.addExcludedPaths(EXCLUDED_COMPARISONS);
 		try {

@@ -134,7 +134,8 @@ public class SqlDbObjectMakerIT {
 			final Path computedPath = Paths.get(computedDir.toURI());
 			Files.createDirectories(computedPath);
 			maker.generateObjects(computedDir);
-			PathComparison.assertSameContent(expectedPath, computedPath);
+			boolean ignoreEOL = true;
+			PathComparison.assertSameContent(expectedPath, computedPath,ignoreEOL);
 		} catch (XmlConfException | IOException e) {
 			fail(e.toString());
 		}

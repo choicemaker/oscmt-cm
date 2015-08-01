@@ -22,13 +22,15 @@ public class PathComparison {
 	private PathComparison() {
 	}
 
-	public static void assertSameContent(Path root1, Path root2) {
+	public static void assertSameContent(Path root1, Path root2,
+			boolean ignoreEOL) {
 		Set<Path> excluded = Collections.emptySet();
-		assertSameContent(root1, root2, DEFAULT_MAX_REPORTED_DIFFERENCES, excluded);
+		assertSameContent(root1, root2, DEFAULT_MAX_REPORTED_DIFFERENCES,
+				excluded, ignoreEOL);
 	}
 
 	public static void assertSameContent(Path root1, Path root2,
-			int maxReportedDifferences, Set<Path> excludedComparisons) {
+			int maxReportedDifferences, Set<Path> excludedComparisons, boolean ignoreEOL) {
 
 		// Check that the first file tree exists
 		File f = root1.toFile();
@@ -42,7 +44,7 @@ public class PathComparison {
 		final int maxCollected = maxReportedDifferences + 1;
 		DefaultFileContentListener listener =
 			new DefaultFileContentListener(maxCollected, false);
-		FileTreeComparator ftc = new FileTreeComparator(root1, root2);
+		FileTreeComparator ftc = new FileTreeComparator(root1, root2, ignoreEOL);
 		ftc.addListener(listener);
 		ftc.addExcludedPaths(excludedComparisons);
 		try {
