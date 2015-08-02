@@ -33,11 +33,11 @@ import java.util.logging.Logger;
  * @version $Revision: 1.1 $ $Date: 2010/01/20 15:05:03 $
  */
 public class FileUtilities {
-	
+
     public static final String MD5_HASH_ALGORITHM = "MD5";
-    
+
     public static final String SHA1_HASH_ALGORITHM = "SHA1";
-	
+
 	private static Logger logger = Logger.getLogger(FileUtilities.class.getName());
 
 	public static File resolveFile(File relativeTo, String fileName) {
@@ -184,7 +184,7 @@ public class FileUtilities {
 		}
 		return res.toString();
 	}
-	
+
 	/**
 	 * Deletes the files and subdirectories contained in the specified
 	 * directory <code>d</code>. If the specified file <code>d</code>
@@ -218,7 +218,7 @@ public class FileUtilities {
 	 * is a directory, removes all the children in the directory. If a file or
 	 * directory or child can not be removed, this method fails without an
 	 * exception being thrown, although the error is logged.
-	 * 
+	 *
 	 * @param f
 	 *            file or directory
 	 */
@@ -261,12 +261,12 @@ public class FileUtilities {
 			return f;
 		} else {
 			return new File(f.getAbsolutePath() + "." + extension);
-		}	
+		}
 	}
 
     /**
      * Computes the MD5 or SHA1
-     * 
+     *
      * @param algo
      *            see {@link #MD5_HASH_ALGORITHM} and
      *            {@link #SHA1_HASH_ALGORITHM}
@@ -301,12 +301,12 @@ public class FileUtilities {
             digest = MessageDigest.getInstance(algo);
             InputStream fis = new FileInputStream(f);
             bis = new BufferedInputStream(fis);
-            int n = 0;
+            int n = bis.read(buffer);
             while (n != -1) {
-                n = bis.read(buffer);
                 if (n > 0) {
                     digest.update(buffer, 0, n);
                 }
+                n = bis.read(buffer);
             }
             buffer = digest.digest();
         } catch (NoSuchAlgorithmException e) {
@@ -329,7 +329,7 @@ public class FileUtilities {
 	 * under Mac OS may have either \0x0D or \0x0A, but not both, as the EOL
 	 * marker. This method strips out all \0x0A or \0x0D characters before
 	 * computing a hash value.
-	 * 
+	 *
 	 * @param algo
 	 *            see {@link #MD5_HASH_ALGORITHM} and
 	 *            {@link #SHA1_HASH_ALGORITHM}
@@ -368,13 +368,12 @@ public class FileUtilities {
 			digest = MessageDigest.getInstance(algo);
 			InputStream fis = new FileInputStream(f);
 			bis = new BufferedInputStream(fis);
-			int n = 0;
+
+			// read bytes from the file
+			int n = bis.read(buffer);
 			while (n != -1) {
 				int skipped = 0;
 				int digested = 0;
-
-				// read some bytes
-				n = bis.read(buffer);
 
 				// i is the first potential non-EOL index
 				int i = 0;
@@ -405,18 +404,22 @@ public class FileUtilities {
 
 				// Handle non-EOL stuff at the end of the buffer
 				if (i < j) {
+					assert j == n;
 					int N = j - i;
 					if (N > 0) {
 						digest.update(buffer, i, N);
 						digested += N;
 					}
-					i = j + 1;
+					i = j;
+					assert i == n;
 				}
 
 				// Invariants after the buffer is processed
 				assert skipped + digested == n;
 				assert j == n;
-				assert i == n + 1;
+				assert i == n;
+
+				n = bis.read(buffer);
 			}
 			buffer = digest.digest();
 		} catch (NoSuchAlgorithmException e) {
