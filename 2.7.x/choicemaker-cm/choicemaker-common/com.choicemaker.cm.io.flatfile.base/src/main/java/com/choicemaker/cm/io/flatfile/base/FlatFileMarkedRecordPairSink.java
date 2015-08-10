@@ -28,15 +28,11 @@ import com.choicemaker.cm.core.util.DateHelper;
 import com.choicemaker.util.FileUtilities;
 
 /**
- * Description
- *
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/28 09:10:40 $
  */
 public class FlatFileMarkedRecordPairSink implements MarkedRecordPairSink {
 	private String name;
 	private String fileNamePrefix;
-//	private String rawFileNamePrefix;
 	private String fileNameSuffix;
 	private boolean multiFile;
 	private boolean singleLine;
@@ -189,10 +185,7 @@ public class FlatFileMarkedRecordPairSink implements MarkedRecordPairSink {
 		return model;
 	}
 
-	/**
-	 * NOP for now
-	 * @see com.choicemaker.cm.Sink#flush()
-	 */
+	/** NOP for now */
 	public void flush() throws IOException {
 	}
 

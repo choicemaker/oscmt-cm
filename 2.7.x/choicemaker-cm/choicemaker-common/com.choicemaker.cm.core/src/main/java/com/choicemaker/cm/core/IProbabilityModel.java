@@ -65,9 +65,9 @@ public interface IProbabilityModel extends AccessProvider,
 	 * does not get changed.
 	 * 
 	 * @param filePath
-	 *            The new name.
+	 *            A path to the model file
 	 */
-	void setModelFilePath(String fileName);
+	void setModelFilePath(String filePath);
 
 	/**
 	 * Set the value of firingThreshold.

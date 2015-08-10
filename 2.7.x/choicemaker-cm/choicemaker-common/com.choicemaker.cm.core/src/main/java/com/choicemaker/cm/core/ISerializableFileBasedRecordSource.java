@@ -19,7 +19,7 @@ package com.choicemaker.cm.core;
  * constructor that takes a Properties object. Most serializable,
  * file-based record sources require at least 2 properties to be
  * configured before they are used:<ul>
- * <li/>{@line #PN_MODEL_NAME modelName}
+ * <li/>{@link #PN_MODEL_NAME modelName}
  * <li/>{@link #PN_DATA_FILE_NAME sqlQuery}</ul>
  * The parameterized constructor for a subclass should throw
  * a IncompleteSpecificationException if the specified set of

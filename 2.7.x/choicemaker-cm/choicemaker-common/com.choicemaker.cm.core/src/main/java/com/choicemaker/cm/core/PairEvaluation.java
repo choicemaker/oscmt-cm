@@ -39,9 +39,6 @@ public class PairEvaluation implements Comparable {
 	/**
 	 * Creates a <code>PairEvaluation<code> with the specified
 	 * probability and ID.
-	 *
-	 * @param   p  The match probability.
-	 * @param   mid  The ID of the matching record.
 	 */
 	public PairEvaluation(Record q, Record m, Decision d, float p,
 			Firings ac) {
@@ -55,25 +52,6 @@ public class PairEvaluation implements Comparable {
 		this.ac = ac;
 	}
 
-//	/**
-//	 * Creates a <code>PairEvaluation<code> with the specified
-//	 * probability and ID.
-//	 *
-//	 * @param p
-//	 *            The match probability.
-//	 * @param mid
-//	 *            The ID of the matching record.
-//	 */
-//	public PairEvaluation(Record q, Record m, Decision d, float p) {
-//		if (q == null || m == null || d == null) {
-//			throw new IllegalArgumentException("null parameter");
-//		}
-//		this.q = q;
-//		this.m = m;
-//		this.decision = d;
-//		this.probability = p;
-//	}
-//
 	/**
 	 * Compare decisions: match before differ and differ before hold. Next,
 	 * compare probability descending. Next, compare records ids, first

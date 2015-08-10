@@ -32,23 +32,14 @@ public class SortCondition implements Serializable {
 	}
 	
 	
-	/**
-	 * @return
-	 */
 	public boolean isAscending() {
 		return ascending;
 	}
 
-	/**
-	 * @return
-	 */
 	public String getField() {
 		return field;
 	}
 
-	/**
-	 * @return
-	 */
 	public String getNode() {
 		return node;
 	}

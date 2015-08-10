@@ -84,7 +84,7 @@ public interface ICompilationUnit {
 	public abstract void addNestedRecord(
 		String className,
 		String typeName,
-		String fieldName) throws CompilerException;
+		String recordName) throws CompilerException;
 	/**
 	 * Defines the type for Q and M.
 	 *

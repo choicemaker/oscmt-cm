@@ -14,7 +14,7 @@ package com.choicemaker.cm.core;
 
 /**
  * An unsafe, historical definition of a matching record. Wherever
- * possible, use the {@link ImmutableMatch preferred ImmutableMatch}
+ * possible, use the ImmutableMatch interface
  * or -- better yet -- an extending interface that conveys information
  * about the query record, matching model and thresholds used to
  * make a match determination.</p>
@@ -26,24 +26,22 @@ package com.choicemaker.cm.core;
  * <p>
  * The {@link #equals(Object) equality test} for this interface can be
  * particularly misleading since it checks only the type of the Object
- * being compared (to see if it is an {@link ImmutableMatch}) and if the
+ * being compared (to see if it is an ImmutableMatch and if the
  * value of the probability decisions are equal to within the required
- * {@link com.choicemaker.cm.core.base.constants.ProbabilityConstants#PRECISION precision}.
+ * precision.
  * </p>
  * <p>
- * <em><strong>This interface should be avoided</strong><em>, and its
- * peculiar method definitions are actually required. And please feel free to
- * start refactoring occurencesto the more intuitive ImmutableMatch interface
+ * <em><strong>This interface should be avoided</strong></em>, but its
+ * peculiar method definitions are actually required. Please
+ * refactor any occurences to the ImmutableMatch interface
  * and its extensions where appropriate.</p>
  * @author rphall
- * @version $Revision: 1.1 $ $Date: 2010/03/24 17:00:57 $
- * @see ImmutableMatch
  */
 public interface ImmutableUnsafeMatch {
 
 	/**
-	 * <strong><em>Overrides the {@link ImmutableMatch#equals(Object) equality}
-	 * check of {@link ImmutableMatch} in an unexpected manner</em></strong>
+	 * <strong><em>Overrides the <code>ImmutableMatch.equals(Object)</code>
+	 * check of ImmutableMatch in an unexpected manner</em></strong>
 	 * @return {@link #equalProbabilitiesOnly(Object o) equalProbabilitiesOnly(Object)}
 	 */
 	public abstract boolean equals(Object o);
@@ -51,7 +49,7 @@ public interface ImmutableUnsafeMatch {
 	/**
 	 * Returns true if:<ul>
 	 * <li/> <code>o</code> is an instance of Match
-	 * <li/> the match probabilities differ by less than {@link #PRECISION PRECISION}
+	 * <li/> the match probabilities differ by less than PRECISION
 	 * <li/> and the ids of the matching records test {@link java.lang.Object#equals(Object) equal}.
 	 * </ul>
 	 * <em><strong>Note:</strong> the ids, decisions and active clues of the matching records are
@@ -64,7 +62,7 @@ public interface ImmutableUnsafeMatch {
 	 * <li/> <code>o</code> is an instance of ImmutableMatch
 	 * <li/> the decisions test equal (they have the same
 	 * {@link Decision#toInt() toInt()} values).
-	 * <li/> the match probabilities differ by less than {@link #PRECISION PRECISION}
+	 * <li/> the match probabilities differ by less than PRECISION
 	 * <li/> and the clue firings test {@link java.lang.Object#equals(Object) equal}.
 	 * </ul>
 	 * <em><strong>Note:</strong> the ids of the matching records are
@@ -77,26 +75,24 @@ public interface ImmutableUnsafeMatch {
 	 * <li/> <code>o</code> is an instance of ImmutableMatch
 	 * <li/> the decisions test equal (they have the same
 	 * {@link Decision#toInt() toInt()} values).
-	 * <li/> the match probabilities differ by less than {@link #PRECISION PRECISION}
+	 * <li/> the match probabilities differ by less than PRECISION
 	 * <li/> the ids of the matching records test {@link java.lang.Object#equals(Object) equal}.
 	 * <li/> and the clue firings test {@link java.lang.Object#equals(Object) equal}.
 	 * </ul>
-	 * @see ImmutableMatch.equals(Object)
 	 */
 	public abstract boolean equalAllFields(Object o);
 
 	/**
-	 * <strong><em>Overrides the {@link ImmutableMatch#compareTo(Object) compareTo()}
-	 * method of {@link ImmutableMatch} in an unexpected manner</em></strong>.
+	 * <strong><em>Overrides the <code>compareTo()</code>
+	 * method of ImmutableMatch in an unexpected manner</em></strong>.
 	 * Consistent with the equality method of this interface, but different from the
-	 * {@link ImmutableMatch#equals(Object) equality) method of ImmutableMatch,
-	 * orders by descending match probability <em>only</em>.
+	 * equality method of ImmutableMatch, orders by descending match probability.
 	 */
 	public abstract int compareTo(Object o);
 
 	/**
-	 * <strong><em>Overrides the {@link ImmutableMatch#hashCode() hashCode()}
-	 * method of {@link ImmutableMatch} in an unexpected manner</em></strong>
+	 * <strong><em>Overrides the ImmutableMatch hashCode()
+	 * method of in an unexpected manner</em></strong>
 	 * Consistent with <code>equals(Object)</code>, this method hashes on just
 	 * the probability score.
 	 */

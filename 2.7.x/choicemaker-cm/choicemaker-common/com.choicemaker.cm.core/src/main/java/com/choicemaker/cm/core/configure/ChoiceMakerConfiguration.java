@@ -24,9 +24,7 @@ import com.choicemaker.cm.core.compiler.ICompiler;
  * by a mutator, the original configuration should be invalidated.<br/>
  * <br/>
  * The current ChoiceMaker configuration for an application may be obtained from
- * the singleton instance of the
- * {@link com.choicemaker.cm.core.install.InstalledConfiguration
- * InstalledConfiguration} class.
+ * the singleton instance of the InstalledConfiguration class.
  *
  * @author rphall
  *

@@ -46,7 +46,6 @@ public interface PairEvaluator {
 	 * and the thresholds.
 	 *
 	 * @param  a  The active clues.
-	 * @param  p  The match probability.
 	 * @param  lt  The lower threshold.
 	 * @param  ut  The upper threshold.
 	 * @return   The decision.
@@ -82,8 +81,7 @@ public interface PairEvaluator {
 	float getProbability(Firings a);
 
 	/**
-	 * Returns details used in calculating
-	 * {@link #getProbability(AbstractActiveClues) a ChoiceMaker probability score}
+	 * Returns details used in calculating a ChoiceMaker probability score
 	 * that are specific to a particular machine learning technique.
 	 *
 	 * @param   a  The active clues.
@@ -95,7 +93,6 @@ public interface PairEvaluator {
 	 * <p>
 	 * Subclasses should override the default, do-nothing method provided
 	 * by this class.
-	 * @author rphall
 	 * @since 2010-08-11
 	 */
 	String computeProbabilityDetails(Firings a);

@@ -34,9 +34,6 @@ public interface IRecordSourceSerializer extends Serializable {
 
 	/**
 	 * Returns serializable record source for the specified records source.
-	 * @param rs
-	 * @return
-	 * @throws NotSerializableException
 	 */
 	ISerializableRecordSource getSerializableRecordSource(RecordSource rs)
 		throws NotSerializableException;
@@ -44,8 +41,6 @@ public interface IRecordSourceSerializer extends Serializable {
 	/**
 	 * Returns serializable record source for the specified records source.
 	 * @param properties that specify a record source 
-	 * @return
-	 * @throws NotSerializableException
 	 */
 	ISerializableRecordSource getSerializableRecordSource(Properties properties)
 		throws NotSerializableException;

@@ -65,16 +65,10 @@ public class RecordBinder implements RecordSource {
 		this.startPosition = startPosition;
 	}
 
-	/**
-	 * @see com.choicemaker.cm.core.base.RecordSource#getNext()
-	 */
 	public Record getNext() throws IOException {
 		return (Record)iterator.next();
 	}
 
-	/**
-	 * @see com.choicemaker.cm.core.base.Source#open()
-	 */
 	public void open() throws IOException {
 		if(startPosition == 0) {
 			iterator = collection.iterator();
@@ -83,73 +77,43 @@ public class RecordBinder implements RecordSource {
 		}
 	}
 
-	/**
-	 * @see com.choicemaker.cm.core.base.Source#close()
-	 */
 	public void close() throws IOException {
 		iterator = null;
 	}
 
-	/**
-	 * @see com.choicemaker.cm.core.base.Source#hasNext()
-	 */
 	public boolean hasNext() {
 		return iterator.hasNext();
 	}
 
-	/**
-	 * @see com.choicemaker.cm.core.base.Source#getModelName()
-	 */
 	public String getName() {
 		return name;
 	}
 
-	/**
-	 * @see com.choicemaker.cm.core.base.Source#setModelName(java.lang.String)
-	 */
 	public void setName(String name) {
 		this.name = name;
 	}
 
-	/**
-	 * @see com.choicemaker.cm.core.base.Source#getModel()
-	 */
 	public ImmutableProbabilityModel getModel() {
 		return probabilityModel;
 	}
 
-	/**
-	 * @see com.choicemaker.cm.core.base.Source#setModel(com.choicemaker.cm.core.base.ProbabilityModel)
-	 */
 	public void setModel(ImmutableProbabilityModel probabilityModel) {
 		this.probabilityModel = probabilityModel;
 	}
 
-	/**
-	 * @see com.choicemaker.cm.core.base.Source#hasSink()
-	 */
 	public boolean hasSink() {
 		return false;
 	}
 
-	/**
-	 * @see com.choicemaker.cm.core.base.Source#getSink()
-	 */
 	public Sink getSink() {
 		return null;
 	}
 
-	/**
-	 * @see com.choicemaker.cm.core.base.Source#getModelFilePath()
-	 */
 	public String getFileName() {
 		return null;
 	}
 
-	/**
-	 * NOP for now
-	 * @see com.choicemaker.cm.core.base.Sink#flush()
-	 */
+	/** NOP for now */
 	public void flush() {
 	}
 

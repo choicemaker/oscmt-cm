@@ -19,7 +19,6 @@ import com.choicemaker.cm.core.report.Report;
 
 /**
  * @author rphall
- * @version $Revision: 1.1 $ $Date: 2010/03/24 17:00:57 $
  */
 public interface ImmutableProbabilityModel {
 	
@@ -92,8 +91,6 @@ public interface ImmutableProbabilityModel {
 	 * correspondence is a convention enforced by the ClueMaker language, and it
 	 * may not be enforced in future versions of ChoiceMaker, if and when other
 	 * languages besides ClueMaker are used to define ClueSets.
-	 * 
-	 * @return
 	 */
 	String getClueSetName();
 

@@ -30,28 +30,16 @@ public class DoNothingMachineLearningPersistance implements MlModelConf {
 	public DoNothingMachineLearningPersistance() {
 	}
 
-	/**
-	 * @see com.choicemaker.cm.xmlconf.MlModelConf#readMachineLearner(org.jdom.Element, com.choicemaker.cm.core.base.Accessor, java.util.List, int)
-	 */
 	public MachineLearner readMachineLearner(Element e, Accessor acc, List clues, int[] oldClueNums) {
 		return new DoNothingMachineLearning();
 	}
 
-	/**
-	 * @see com.choicemaker.cm.xmlconf.MlModelConf#saveClue(org.jdom.Element, int)
-	 */
 	public void saveClue(Element e, int clueNum) {
 	}
 
-	/**
-	 * @see com.choicemaker.cm.xmlconf.MlModelConf#saveMachineLearner(org.jdom.Element)
-	 */
 	public void saveMachineLearner(Element e) {
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.xmlconf.MlModelConf#getExtensionPointId()
-	 */
 	public String getExtensionPointId() {
 		return "com.choicemaker.cm.core.none";
 	}

@@ -23,7 +23,7 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 /**
  * XML configuration for the connection cache. Uses C3P0 to implement the cache.
  * 
- * @see http://www.mchange.com/projects/c3p0/
+ * See www.mchange.com/projects/c3p0/
  */
 public class ConnectionPoolDataSourceXmlConf {
 

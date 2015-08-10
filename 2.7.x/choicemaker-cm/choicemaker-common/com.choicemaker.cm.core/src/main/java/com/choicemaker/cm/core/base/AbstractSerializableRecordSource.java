@@ -18,10 +18,8 @@ import com.choicemaker.cm.core.IncompleteSpecificationException;
 
 /**
  * Provides standardized methods for
- * {@link ISerializableRecordSource.toXML toXML()},
- * {@link ISerializableRecordSource.getProperties() getProperties()} and
- * {@link ISerializableRecordSource.setProperties(Properties) setProperties(..)}
- * operations.
+ * <code>toXML()</code>, <code>getProperties()</code>
+ * and <code>setProperties(..)</code> operations.
  * @author rphall
  * @version $Revision: 1.1 $ $Date: 2010/03/24 18:02:27 $
  */
@@ -114,8 +112,7 @@ public abstract class AbstractSerializableRecordSource
 	}
 
 	/**
-	 * A default implementation of
-	 * {@link com.choicemaker.cm.urm.ISerializableRecordSource#setProperties(Properties) setProperties}
+	 * A default implementation of <code>ISerializableRecordSource.setProperties(Properties)</code>
 	 * that checks whether the specific Properties instance is non-null
 	 * contains all properties necessary to completely configure this record source.
 	 * This method invokes a subclass-specific method to check the completeness
@@ -135,9 +132,6 @@ public abstract class AbstractSerializableRecordSource
 		this.properties = (Properties) p.clone();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.urm.ISerializableRecordSource#toXML()
-	 */
 	public String toXML() {
 		return toXML(this);
 	}

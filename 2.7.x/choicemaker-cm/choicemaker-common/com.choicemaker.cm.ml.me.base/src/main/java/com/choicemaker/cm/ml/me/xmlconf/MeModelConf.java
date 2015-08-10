@@ -21,11 +21,6 @@ import com.choicemaker.cm.core.xmlconf.MlModelConf;
 import com.choicemaker.cm.ml.me.base.MaximumEntropy;
 import com.choicemaker.util.ArrayHelper;
 
-/**
- *
- * @author    
- * @version   $Revision: 1.2 $ $Date: 2010/03/24 23:19:35 $
- */
 public class MeModelConf implements MlModelConf {
 	private MaximumEntropy ml;
 

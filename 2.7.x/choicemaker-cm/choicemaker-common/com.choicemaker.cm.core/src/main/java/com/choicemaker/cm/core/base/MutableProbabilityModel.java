@@ -537,7 +537,7 @@ public class MutableProbabilityModel implements IProbabilityModel {
 	 * {@link #getModelName() model configuration name} that is associated with
 	 * in the collection is not changed.
 	 * 
-	 * @param modelFilePath
+	 * @param filePath
 	 *            The new file path.
 	 */
 	public void setModelFilePath(String filePath) {

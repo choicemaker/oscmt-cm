@@ -163,9 +163,6 @@ public class BlockingSetFactory {
 	 * count values
 	 * @param mainTableSize the normalization value by which count
 	 * values are divided to estimate field-value frequencies.
-	 * @see #createBlockingSets(BlockingConfiguration,Record,int,int,int,AbaStatistics)
-	 * for explanations of the limit parameters, return value, and possible
-	 * exceptions.
 	 */
 	public static List<IBlockingSet> createBlockingSetsInternal_1(
 		IBlockingValue[] blockingValues,

@@ -15,18 +15,11 @@ import java.io.Serializable;
 import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
 
 /**
- * Description
- * 
  * @author  Martin Buechi
  * @version $Revision: 1.2 $ $Date: 2010/03/29 14:36:26 $
  */
 public interface Filter extends Serializable {
-	/**
-	 * Method satisfy.
-	 * @param matchProbability
-	 * @param decision
-	 * @return boolean
-	 */
+
 	boolean satisfy(MutableMarkedRecordPair pair);
 	
 	void resetLimiters();

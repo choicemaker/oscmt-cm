@@ -18,8 +18,6 @@ import java.io.Serializable;
  * of ChoiceMaker, these settings were recorded as properties of the
  * <code>ImmutableProbabilityModel</code> interface.
  * 
- * @see com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultAbaSettingsBean
- * 
  * @author rphall
  *
  */

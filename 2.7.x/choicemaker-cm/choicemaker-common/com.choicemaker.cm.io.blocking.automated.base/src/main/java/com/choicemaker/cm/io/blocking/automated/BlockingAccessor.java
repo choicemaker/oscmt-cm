@@ -10,11 +10,6 @@
  */
 package com.choicemaker.cm.io.blocking.automated;
 
-/**
- *
- * @author
- * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:47 $
- */
 public interface BlockingAccessor {
 	IBlockingConfiguration getBlockingConfiguration(String name, String dbConf);
 

@@ -69,7 +69,6 @@ public interface XmlConfigurable
 	 *   &lt;/properties&gt;
 	 * &lt;/configurable&gt;
 	 * </pre>
-	 * @return
 	 */
 	String toXML();
 

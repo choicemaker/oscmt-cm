@@ -82,10 +82,8 @@ public interface IMarkedRecordPairFilter extends Serializable {
 	 */
 	public abstract Limiter[] getLimiters();
 	/**
-	 * 
+	 * Returns the limiters as a String; e.g.
 	 * 0-1:5:100, 1:10:20:100
-	 * 
-	 * @param limiters
 	 * @return String
 	 */
 	public abstract String getLimitersAsString();
@@ -96,20 +94,16 @@ public interface IMarkedRecordPairFilter extends Serializable {
 	 * 
 	 * @param limiters The limiters to set
 	 */
-	public abstract void setLimiters(String samplers);
+	public abstract void setLimiters(String limiters);
 	/**
 	 * Sets the limiters.
 	 * @param limiters The limiters to set
 	 */
-	public abstract void setLimiters(Limiter[] samplers);
+	public abstract void setLimiters(Limiter[] limiters);
 	public abstract void reset();
 	public abstract int[] filterSource(Collection src);
-	/**
-	 * @return
-	 */
+
 	public abstract IntArrayList getCollection();
-	/**
-	 * @param list
-	 */
+
 	public abstract void setCollection(IntArrayList list);
 }

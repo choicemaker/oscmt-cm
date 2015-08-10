@@ -575,7 +575,6 @@ public class XmlConfigurator implements ChoiceMakerConfigurator,
 	 *
 	 * @param fn
 	 *            The name of the configuration file.
-	 * @return
 	 * @throws XmlConfException
 	 *             if any error occurs.
 	 */

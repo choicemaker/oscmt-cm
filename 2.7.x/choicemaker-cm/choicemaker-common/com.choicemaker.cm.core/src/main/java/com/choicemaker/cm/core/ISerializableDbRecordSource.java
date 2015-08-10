@@ -20,7 +20,7 @@ package com.choicemaker.cm.core;
  * <ul>
  * <li/>{@link #PN_DATABASE_CONFIG dbConfig}
  * <li/>{@link #PN_DATASOURCE_JNDI_NAME dsJndiName}
- * <li/>{@line #PN_MODEL_NAME modelName}
+ * <li/>{@link #PN_MODEL_NAME modelName}
  * <li/>{@link #PN_SQL_QUERY sqlQuery}
  * </ul>
  * The parameterized constructor for a subclass should throw a

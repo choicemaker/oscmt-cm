@@ -23,8 +23,7 @@ public interface XmlSpecificationParser {
 	 * Recreates a Configurable object from an XML specification
 	 * using the specified ClassLoader.
 	 * @param classLoader a non-null ClassLoader
-	 * @param xml non-null XML data conforming to
-	 * {@link XmlSpecification.XML_CONFIGURABLE_SCHEMA}
+	 * @param xml non-null XML data
 	 * @return non-null
 	 * @throws XmlSpecificationException if the xml document
 	 * can not be parsed.
@@ -46,8 +45,6 @@ public interface XmlSpecificationParser {
 	 * Recreates a Configurable object from a document
 	 * using the specified ClassLoader.
 	 * @param classLoader a non-null ClassLoader
-	 * @param xml non-null XML data conforming to
-	 * {@link XmlSpecification.XML_CONFIGURABLE_SCHEMA}
 	 * @return non-null
 	 * @throws XmlSpecificationException if the xml document
 	 * can not be parsed.

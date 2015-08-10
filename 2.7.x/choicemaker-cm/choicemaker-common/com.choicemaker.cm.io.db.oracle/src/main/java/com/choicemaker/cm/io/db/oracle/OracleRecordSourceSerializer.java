@@ -43,11 +43,6 @@ public class OracleRecordSourceSerializer
 		super(URI_PATTERN, HANDLED_CLASSES, null);
 	}
 
-	/**
-	 * @param uriPattern
-	 * @param handledClass
-	 * @param properties
-	 */
 	public OracleRecordSourceSerializer(Properties ignored) {
 		this();
 		logIgnoredProperties(logger, Level.FINE, ignored);

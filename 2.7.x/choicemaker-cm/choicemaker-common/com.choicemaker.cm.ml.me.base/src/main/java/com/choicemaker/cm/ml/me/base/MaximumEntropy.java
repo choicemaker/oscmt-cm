@@ -24,10 +24,7 @@ import com.choicemaker.cm.core.xmlconf.MlModelConf;
 import com.choicemaker.cm.ml.me.xmlconf.MeModelConf;
 
 /**
- * .
- *
  * @author Adam Winkel
- * @version $Revision: 1.2 $ $Date: 2010/03/24 23:18:01 $
  */
 public class MaximumEntropy implements MachineLearner {
 
@@ -38,16 +35,10 @@ public class MaximumEntropy implements MachineLearner {
 	private int trainingIterations = 4000;
 	private ImmutableProbabilityModel model;
 
-	/**
-	 * @see com.choicemaker.cm.core.MachineLearner#getEvaluator()
-	 */
 	public Evaluator getEvaluator() {
 		return new MeEvaluator(model, weights);
 	}
 
-	/**
-	 * @see com.choicemaker.cm.core.MachineLearner#setProbabilityModel(com.choicemaker.cm.core.base.ProbabilityModel)
-	 */
 	public void setProbabilityModel(ImmutableProbabilityModel model) {
 		this.model = model;
 	}
@@ -126,10 +117,6 @@ public class MaximumEntropy implements MachineLearner {
 		this.trainingIterations = v;
 	}
 
-	/**
-	 * @see com.choicemaker.cm.core.MachineLearner#train(java.util.Collection,
-	 *      double)
-	 */
 	public Object train(Collection src, double[] firingPercentages) {
 		try {
 			MeEstimator estimator =
@@ -144,37 +131,22 @@ public class MaximumEntropy implements MachineLearner {
 		}
 	}
 
-	/**
-	 * @see com.choicemaker.cm.core.MachineLearner#getModelConf()
-	 */
 	public MlModelConf getModelConf() {
 		return new MeModelConf(this);
 	}
 
-	/**
-	 * @see com.choicemaker.cm.core.MachineLearner#canEvaluate()
-	 */
 	public boolean canEvaluate() {
 		return true;
 	}
 
-	/**
-	 * @see com.choicemaker.cm.core.MachineLearner#canTrain()
-	 */
 	public boolean canTrain() {
 		return true;
 	}
 
-	/**
-	 * @see com.choicemaker.cm.core.MachineLearner#canUse(com.choicemaker.cm.core.base.ClueSet)
-	 */
 	public boolean canUse(ClueSet cs) {
 		return cs.hasDecision() && cs.getType() == ClueSetType.BOOLEAN;
 	}
 
-	/**
-	 * @see com.choicemaker.cm.core.MachineLearner#isRegression()
-	 */
 	public boolean isRegression() {
 		return true;
 	}

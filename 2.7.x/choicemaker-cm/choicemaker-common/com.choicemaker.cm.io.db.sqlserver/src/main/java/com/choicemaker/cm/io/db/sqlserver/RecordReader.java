@@ -1,6 +1,4 @@
 /*
- * @(#)$RCSfile: RecordReader.java,v $        $Revision: 1.4.124.1 $ $Date: 2009/11/18 01:00:11 $
- *
  * Copyright (c) 2002 ChoiceMaker Technologies, Inc.
  * 41 East 11th Street, New York, NY 10003
  * All rights reserved.
@@ -30,11 +28,6 @@ import com.choicemaker.cm.core.Sink;
 import com.choicemaker.cm.io.db.base.DbAccessor;
 import com.choicemaker.cm.io.db.base.DbReaderSequential;
 
-/**
- *
- * @author    
- * @version   $Revision: 1.4.124.1 $ $Date: 2009/11/18 01:00:11 $
- */
 public class RecordReader implements RecordSource {
 	private static Logger logger = Logger.getLogger(RecordReader.class.getName());
 

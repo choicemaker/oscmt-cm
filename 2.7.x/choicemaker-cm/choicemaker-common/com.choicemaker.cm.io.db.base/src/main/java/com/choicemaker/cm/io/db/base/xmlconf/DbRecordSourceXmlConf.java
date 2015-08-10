@@ -43,16 +43,6 @@ public class DbRecordSourceXmlConf implements RecordSourceXmlConfigurator {
 
 	/**
 	 * Add a Db record source to the configuration.
-	 *
-	 * @param   name  The name of the source.
-	 * @param   probabilityModel  The name of the probability model.
-	 * @param   probabilityModelConfig  The name of the configuration containing the probability model.
-	 * @param   selection  The selection.
-	 * @param   connectionName  The name of the connection to access this source.
-	 * @param   replace  Whether an exiting probability model of the same name should be replaced.
-	 *            If the value of <code>replace</code> is <code>false</code> and a model of the
-	 *            same name already exists, an exception is thrown.
-	 * @throws  XmlConfException  if an exception occurs.
 	 */
 	public void add(RecordSource s) throws XmlConfException {
 		try {

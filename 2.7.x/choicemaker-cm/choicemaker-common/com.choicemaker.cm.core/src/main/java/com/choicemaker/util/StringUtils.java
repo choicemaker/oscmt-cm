@@ -273,7 +273,6 @@ public class StringUtils {
 	 * @param s - the input String
 	 * @param n - the maximum number of characters to return.  If s.length is
 	 * greater than n, then return the last n letters.
-	 * @return
 	 */
 	public static String removeNonDigitsMaxLength (String s, int n) {
 		String str = removeNonDigits(s);

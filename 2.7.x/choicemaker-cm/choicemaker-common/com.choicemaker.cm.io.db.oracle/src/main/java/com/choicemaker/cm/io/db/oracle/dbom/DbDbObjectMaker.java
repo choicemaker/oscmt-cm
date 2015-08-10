@@ -36,11 +36,6 @@ import com.choicemaker.cm.io.db.base.DbReaderParallel;
 import com.choicemaker.cm.io.db.base.DbView;
 import com.choicemaker.e2.CMPlatformRunnable;
 
-/**
- *
- * @author    
- * @version   $Revision: 1.2 $ $Date: 2013/02/23 19:50:05 $
- */
 public class DbDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 	private static final int SINGLE = 0;
 	private static final int SINGLE_UNION = 1;

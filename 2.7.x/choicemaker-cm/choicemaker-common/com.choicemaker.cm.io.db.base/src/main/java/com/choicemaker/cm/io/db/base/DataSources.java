@@ -16,11 +16,6 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
-/**
- *
- * @author    
- * @version   $Revision: 1.2 $ $Date: 2010/03/28 09:05:59 $
- */
 public class DataSources {
 	private static Map sources = new HashMap();
 

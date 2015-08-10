@@ -19,9 +19,7 @@ import com.choicemaker.cm.core.MarkedRecordPairSink;
 import com.choicemaker.cm.core.MarkedRecordPairSource;
 
 /**
- *
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/28 08:56:16 $
  */
 public class CompositeMarkedRecordPairSink implements MarkedRecordPairSink {
 	private String name;
@@ -85,10 +83,7 @@ public class CompositeMarkedRecordPairSink implements MarkedRecordPairSink {
 		++curIdx;
 	}
 
-	/**
-	 * NOP for now
-	 * @see com.choicemaker.cm.Sink#flush()
-	 */
+	/** NOP for now */
 	public void flush() throws IOException {
 	}
 		

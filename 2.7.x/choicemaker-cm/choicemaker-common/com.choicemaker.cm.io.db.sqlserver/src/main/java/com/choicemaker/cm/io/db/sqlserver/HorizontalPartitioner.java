@@ -1,6 +1,4 @@
 /*
- * test.java       Revision: 2.5  Date: Oct 6, 2005 2:37:37 PM 
- *
  * Copyright (c) 2001 ChoiceMaker Technologies, Inc.
  * 48 Wall Street, 11th Floor, New York, NY 10005
  * All rights reserved.
@@ -19,8 +17,6 @@ import com.choicemaker.cm.io.composite.base.CompositeRecordSource;
 
 /**
  * @author emoussikaev
- * @version Revision: 2.5  Date: Oct 6, 2005 2:37:37 PM
- * @see
  */
 public class HorizontalPartitioner {
 

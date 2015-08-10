@@ -41,11 +41,6 @@ import com.choicemaker.cm.io.db.base.DbAccessor;
 import com.choicemaker.cm.io.db.base.DbReaderParallel;
 import com.choicemaker.cm.io.db.base.Index;
 
-/**
- *
- * @author    
- * @version   $Revision: 1.2 $ $Date: 2013/02/23 19:47:11 $
- */
 public class OraDatabaseAccessor implements DatabaseAccessor {
 	private static final char BS_SEP = '^';
 	private static final char TB_VAL_SEP = '`';

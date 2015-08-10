@@ -79,16 +79,6 @@ public class Blocker2 implements AutomatedBlocker {
 	private int numberOfRecordsRetrieved;
 	private String name;
 
-	/**
-	 * @param databaseAccessor
-	 * @param model
-	 * @param q
-	 * @param dbConfigurationName
-	 * @param blockingConfigurationName
-	 * @see #createBlockingSets(BlockingConfiguration,Record,int,int,int,AbaStatistics)
-	 * for explanations of the limit parameters, return value, and possible
-	 * exceptions.
-	 */
 	public Blocker2(
 		DatabaseAccessor databaseAccessor,
 		ImmutableProbabilityModel model,

@@ -26,9 +26,6 @@ import com.choicemaker.cm.core.blocking.InMemoryBlocker;
 public class AllBlocker implements InMemoryBlocker {
 	private List records;
 
-	/**
-	 * @see com.choicemaker.cm.train.matcher.InMemoryBlocker#init(java.util.List)
-	 */
 	public void init(List records) {
 		this.records = records;
 	}
@@ -37,9 +34,6 @@ public class AllBlocker implements InMemoryBlocker {
 		this.records = null;
 	}
 
-	/**
-	 * @see com.choicemaker.cm.train.matcher.InMemoryBlocker#block(com.choicemaker.cm.core.base.Record)
-	 */
 	public RecordSource block(Record q) {
 		return new RecordBinder(records);
 	}

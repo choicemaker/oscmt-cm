@@ -28,19 +28,11 @@ public interface ICompilerFactory {
 	ICompiler getCompiler(Properties features) throws UnavailableCompilerFeaturesException;
 
 
-	/** This method gets the compiler with the given name.
-	 *
-	 * @param name
-	 * @return The compiler with the given name.
-	 * @throws UnavailableCompilerFeaturesException
-	 */
+	/** Returns the compiler with the given name */
 	ICompiler getCompiler(String name) throws UnavailableCompilerFeaturesException;
 
 
-	/** This method returns the default compiler.
-	 *
-	 * @return
-	 */
+	/** Returns the default compiler */
 	ICompiler getDefaultCompiler();
 
 }

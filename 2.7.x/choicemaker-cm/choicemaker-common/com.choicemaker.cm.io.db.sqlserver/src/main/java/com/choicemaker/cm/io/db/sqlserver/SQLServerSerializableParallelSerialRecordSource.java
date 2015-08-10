@@ -79,8 +79,7 @@ public class SQLServerSerializableParallelSerialRecordSource implements
 
 	/**
 	 * A constructor with unused parameters but the same signature as
-	 * {@link SQLServerSerializableCompositeRecordSource#SQLServerSerialRecordSource(String, String, String, String, String, int)
-	 * SQLServerSerializableCompositeRecordSource}
+	 * SQLServerSerializableCompositeRecordSource
 	 * 
 	 * @param dsJNDIName
 	 *            JNDI name of a configured data source

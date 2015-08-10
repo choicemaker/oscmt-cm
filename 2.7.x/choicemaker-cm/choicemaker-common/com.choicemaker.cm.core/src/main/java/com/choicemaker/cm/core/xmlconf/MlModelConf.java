@@ -18,11 +18,6 @@ import com.choicemaker.cm.core.Accessor;
 import com.choicemaker.cm.core.MachineLearner;
 import com.choicemaker.cm.core.XmlConfException;
 
-/**
- *
- * @author    
- * @version   $Revision: 1.1 $ $Date: 2010/01/20 15:05:01 $
- */
 public interface MlModelConf {
 	public MachineLearner readMachineLearner(Element e, Accessor acc, List clues, int[] oldClueNums) throws XmlConfException;
 

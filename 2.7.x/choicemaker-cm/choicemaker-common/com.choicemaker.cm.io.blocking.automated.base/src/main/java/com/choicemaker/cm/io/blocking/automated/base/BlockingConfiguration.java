@@ -22,11 +22,6 @@ import com.choicemaker.cm.io.blocking.automated.IDbField;
 import com.choicemaker.cm.io.blocking.automated.IDbTable;
 import com.choicemaker.cm.io.blocking.automated.IQueryField;
 
-/**
- *
- * @author    
- * @version   $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:47 $
- */
 public abstract class BlockingConfiguration implements IBlockingConfiguration,
 	Serializable {
 	

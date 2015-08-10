@@ -177,8 +177,6 @@ public abstract class Evaluator {
 	 * <p>
 	 * Subclasses should override the default, do-nothing method provided
 	 * by this class.
-	 * @author rphall
-	 * @since 2010-08-11
 	 */
 	public String getProbabilityDetails(ActiveClues a) {
 		return "";

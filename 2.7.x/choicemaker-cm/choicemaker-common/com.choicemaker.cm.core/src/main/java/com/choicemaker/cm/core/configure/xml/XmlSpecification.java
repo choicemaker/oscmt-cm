@@ -57,7 +57,6 @@ public interface XmlSpecification extends XmlConfigurable {
 	 *   &lt;/children&gt;
 	 * &lt;/configurable&gt;
 	 * </pre>
-	 * @return
 	 */
 	String toXML();
 
@@ -65,7 +64,5 @@ public interface XmlSpecification extends XmlConfigurable {
 	 * Adds an XmlConfigurable object to this specification.
 	 */
 	void add(XmlConfigurable child);
-
-	// TODO FIXME define other list operations
 
 }

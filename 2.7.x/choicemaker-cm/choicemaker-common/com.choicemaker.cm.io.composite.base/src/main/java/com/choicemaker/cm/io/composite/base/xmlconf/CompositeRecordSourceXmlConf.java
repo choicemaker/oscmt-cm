@@ -47,12 +47,7 @@ public class CompositeRecordSourceXmlConf implements RecordSourceXmlConfigurator
 
 	/**
 	 * Add a Composite record source to the configuration.
-	 *
 	 * @param   s  The composite record source.
-	 * @param   replace  Whether an exiting probability model of the same name should be replaced.
-	 *            If the value of <code>replace</code> is <code>false</code> and a model of the
-	 *            same name already exists, an exception is thrown.
-	 * @throws  XmlConfException  if an exception occurs.
 	 */
 	public void add(RecordSource s) throws XmlConfException {
 		try {

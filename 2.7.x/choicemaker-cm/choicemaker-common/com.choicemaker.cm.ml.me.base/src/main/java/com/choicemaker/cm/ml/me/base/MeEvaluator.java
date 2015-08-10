@@ -124,7 +124,6 @@ public class MeEvaluator extends Evaluator {
 	 * @param a
 	 *            The active clues.
 	 * @return An XML fragment representing classification probabilities.
-	 * @author rphall
 	 * @since 2010-08-11
 	 */
 	public String getProbabilityDetails(ActiveClues a) {

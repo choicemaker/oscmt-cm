@@ -361,7 +361,7 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 	 *            The name of the record.
 	 */
 	public void addNestedRecord(String className, String typeName,
-			String fieldName) throws CompilerException {
+			String recordName) throws CompilerException {
 		// Do actual addition to symbol table.
 
 		// get the class symbol
@@ -370,13 +370,13 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 					+ "." + className);
 		// create a field symbol for the nested record
 		VarSymbol v =
-			new VarSymbol(fieldName.intern(), new Type.ArrayType(
+			new VarSymbol(recordName.intern(), new Type.ArrayType(
 					new DeriveType(this).typeOf(typeName)), Modifiers.PUBLIC, c);
 		// enter the field symbol into the member table of c
 		c.members().enter(v);
 
 		// System.out.println("Added nested record " + typeName + " " +
-		// fieldName +
+		// recordName +
 		// " to holder class " + className);
 	}
 

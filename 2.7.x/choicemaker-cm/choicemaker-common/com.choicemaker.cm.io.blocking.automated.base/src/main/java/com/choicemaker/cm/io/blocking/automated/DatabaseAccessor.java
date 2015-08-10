@@ -17,11 +17,6 @@ import javax.sql.DataSource;
 import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.choicemaker.cm.core.Record;
 
-/**
- *
- * @author
- * @version $Revision: 1.2 $ $Date: 2010/03/24 21:35:40 $
- */
 public interface DatabaseAccessor {
 
 	String EXTENSION_POINT =

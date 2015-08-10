@@ -45,9 +45,6 @@ public class CompositeInMemoryBlocker implements InMemoryBlocker {
 		}
 	}
 
-	/**
-	 * @see com.choicemaker.cm.train.matcher.InMemoryBlocker#block(com.choicemaker.cm.core.base.Record)
-	 */
 	public RecordSource block(Record q) {
 		RecordSource[] is = new RecordSource[constituents.length];
 		for (int i = 0; i < constituents.length; ++i) {
@@ -56,9 +53,6 @@ public class CompositeInMemoryBlocker implements InMemoryBlocker {
 		return new FastCompositeRecordSource(is);
 	}
 
-	/**
-	 * @see com.choicemaker.cm.train.matcher.InMemoryBlocker#block(com.choicemaker.cm.core.base.Record, int)
-	 */
 	public RecordSource block(Record q, int start) {
 		RecordSource[] is = new RecordSource[constituents.length];
 		for (int i = 0; i < constituents.length; ++i) {

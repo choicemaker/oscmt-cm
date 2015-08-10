@@ -36,11 +36,6 @@ import com.choicemaker.cm.io.db.base.DbReaderSequential;
 import com.choicemaker.cm.io.db.sqlserver.dbom.SqlDbObjectMaker;
 import com.choicemaker.util.StringUtils;
 
-/**
- *
- * @author    
- * @version   $Revision: 1.9.88.1 $ $Date: 2009/11/18 01:00:11 $
- */
 public class SqlDatabaseAccessor implements DatabaseAccessor {
 	private static Logger logger = Logger.getLogger(SqlDatabaseAccessor.class.getName());
 

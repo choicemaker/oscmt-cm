@@ -30,8 +30,6 @@ import java.io.Serializable;
  * classes into the same virtual machine during training.
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/27 21:29:07 $
- * @see       ProbabilityModel
  */
 public interface Accessor extends Serializable {
 	/**
@@ -93,8 +91,7 @@ public interface Accessor extends Serializable {
 	
 	/**
 	 * This returns Elmer's IRecordHolder for the record.
-	 * @param r
-	 * @return
+	 * @param r a non-null Record
 	 */
 	Object toRecordHolder(Record r);
 	

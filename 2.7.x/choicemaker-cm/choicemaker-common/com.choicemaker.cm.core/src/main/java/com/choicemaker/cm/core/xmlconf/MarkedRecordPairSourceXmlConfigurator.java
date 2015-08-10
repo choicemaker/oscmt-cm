@@ -32,8 +32,8 @@ public interface MarkedRecordPairSourceXmlConfigurator extends DynamicDispatchHa
 	 * Returns an instance of the description of the specified <code>MarkedRecordPairSource</code>.
 	 *
 	 * @param   e  The JDOM element containing the XML configuration information.
-	 * @param   pmDesc  The description of the probability model to be used.
-	 * @return  The description of the specified <code>MarkedRecordPairSource</code>.
+	 * @param   model  The description of the probability model to be used.
+	 * @return  The descriptor of the specified <code>MarkedRecordPairSource</code>.
 	 * @throws  XmlConfException  if any error occurs.
 	 */
 	MarkedRecordPairSource getMarkedRecordPairSource(String fileName, Element e, ImmutableProbabilityModel model)

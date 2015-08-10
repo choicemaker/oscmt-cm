@@ -47,16 +47,6 @@ public class SqlServerMarkedRecordPairSourceXmlConf implements MarkedRecordPairS
 
 	/**
 	 * Add a Db record source to the configuration.
-	 *
-	 * @param   name  The name of the source.
-	 * @param   probabilityModel  The name of the probability accessProvider.
-	 * @param   probabilityModelConfig  The name of the configuration containing the probability accessProvider.
-	 * @param   selection  The selection.
-	 * @param   connectionName  The name of the connection to access this source.
-	 * @param   replace  Whether an exiting probability accessProvider of the same name should be replaced.
-	 *            If the value of <code>replace</code> is <code>false</code> and a accessProvider of the
-	 *            same name already exists, an exception is thrown.
-	 * @throws  XmlConfException  if an exception occurs.
 	 */
 	public void add(MarkedRecordPairSource s) throws XmlConfException {
 		try {

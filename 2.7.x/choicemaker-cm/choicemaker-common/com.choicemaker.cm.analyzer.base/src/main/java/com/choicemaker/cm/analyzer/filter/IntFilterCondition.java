@@ -89,9 +89,6 @@ public class IntFilterCondition implements FilterCondition {
 		}
 	}
 
-	/**
-	 * @see com.choicemaker.cm.train.filter.FilterCondition#satisfy(com.choicemaker.cm.core.base.ActiveClues)
-	 */
 	public boolean satisfy(ActiveClues clues) {
 		IntActiveClues intActiveClues = (IntActiveClues)clues;
 		boolean returnValue;
@@ -239,9 +236,7 @@ public class IntFilterCondition implements FilterCondition {
 			}
 		}
 	}
-	/**
-	 * @see com.choicemaker.cm.train.filter.FilterCondition#createFilterCondition(int)
-	 */
+
 	public FilterCondition createFilterCondition(int clueNum) {
 		return new IntFilterCondition(clueNum, condition, a, b);
 	}

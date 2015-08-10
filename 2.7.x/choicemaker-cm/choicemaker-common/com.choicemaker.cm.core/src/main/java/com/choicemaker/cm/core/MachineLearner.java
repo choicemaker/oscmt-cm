@@ -89,7 +89,7 @@ public interface MachineLearner {
 	 * Returns whether the machine learner can be used on the specified clue
 	 * set.
 	 *
-	 * @param    The clueset to test.
+	 * @param    clueset The clueset to test.
 	 * @return   Whether the machine learner can be used on the specified clue
 	 * set
 	 */

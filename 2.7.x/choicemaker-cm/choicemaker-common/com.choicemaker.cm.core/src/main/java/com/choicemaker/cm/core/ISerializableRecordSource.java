@@ -20,11 +20,8 @@ import java.util.Properties;
  * are used. See {@link #setProperties(Properties)}. Extensions of this
  * interface define additional, type-specific property names:
  * <ul>
- * <li/>{@link com.choicemaker.cm.io.db.base.ISerializableDbRecordSource
- * Database record sources}
- * <li/>
- * {@link com.choicemaker.cm.core.io.db.base.ISerializableFileBasedRecordSource
- * File-based record sources}
+ * <li/>ISerializableDbRecordSource: Database record sources</li>
+ * <li/>ISerializableFileBasedRecordSource: File-based record sources</li>
  * </ul>
  * 
  * @author rphall

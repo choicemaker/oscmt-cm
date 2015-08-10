@@ -12,11 +12,6 @@ package com.choicemaker.cm.io.blocking.automated;
 
 import java.io.IOException;
 
-/**
- *
- * @author
- * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:47 $
- */
 public interface CountsCreator {
 	int getMainTableSize() throws IOException;
 

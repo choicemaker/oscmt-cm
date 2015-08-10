@@ -129,8 +129,6 @@ public class SqlServerParallelRecordSource implements RecordSource {
 	 * select distinct TAP_CORPORATE_ID as ID
 	 *   from CORPORATE where primary_name like 'A%'
 	 * </pre>
-	 * 
-	 * @return
 	 */
 	private boolean isValidQuery () {
 		if (idsQuery.toUpperCase().indexOf(" AS ID ") == -1) return false;

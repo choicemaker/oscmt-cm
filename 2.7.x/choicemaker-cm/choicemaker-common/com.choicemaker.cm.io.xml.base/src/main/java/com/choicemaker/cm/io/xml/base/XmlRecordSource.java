@@ -231,7 +231,7 @@ public class XmlRecordSource extends XMLFilterImpl implements RecordHandler, Run
 
 	/**
 	 * Set the value of xmlFileName.
-	 * @param v  Value to assign to xmlFileName.
+	 * @param fn  Value to assign to xmlFileName.
 	 */
 	public void setRawXmlFileName(String fn) {
 		this.rawXmlFileName = fn;

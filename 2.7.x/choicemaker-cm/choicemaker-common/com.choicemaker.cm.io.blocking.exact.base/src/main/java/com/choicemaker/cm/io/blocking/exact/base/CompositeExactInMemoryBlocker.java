@@ -33,9 +33,6 @@ public class CompositeExactInMemoryBlocker implements InMemoryBlocker {
 		this.positionMap = positionMap;
 	}
 
-	/**
-	 * @see com.choicemaker.cm.train.matcher.InMemoryBlocker#init(java.util.List)
-	 */
 	public void init(List records) {
 		positionMap.setRecords(records);
 		for (int i = 0; i < constituents.length; i++) {
@@ -50,9 +47,6 @@ public class CompositeExactInMemoryBlocker implements InMemoryBlocker {
 		}
 	}
 
-	/**
-	 * @see com.choicemaker.cm.train.matcher.InMemoryBlocker#block(com.choicemaker.cm.core.Record)
-	 */
 	public RecordSource block(Record q) {
 		HashSet res = new HashSet();
 		for (int i = 0; i < constituents.length; i++) {
@@ -61,9 +55,6 @@ public class CompositeExactInMemoryBlocker implements InMemoryBlocker {
 		return new RecordBinder(res);
 	}
 
-	/**
-	 * @see com.choicemaker.cm.train.matcher.InMemoryBlocker#block(com.choicemaker.cm.core.Record, int)
-	 */
 	public RecordSource block(Record q, int start) {
 		HashSet res = new HashSet();
 		for (int i = 0; i < constituents.length; i++) {

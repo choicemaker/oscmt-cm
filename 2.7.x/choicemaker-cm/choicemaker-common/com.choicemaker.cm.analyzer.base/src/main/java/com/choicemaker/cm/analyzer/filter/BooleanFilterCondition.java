@@ -55,32 +55,19 @@ public class BooleanFilterCondition implements FilterCondition {
 		this.value = value;
 	}
 
-	/**
-	 * @see com.choicemaker.cm.train.filter.FilterCondition#satisfy(com.choicemaker.cm.core.base.ActiveClues)
-	 */
 	public boolean satisfy(ActiveClues clues) {
 		BooleanActiveClues bac = (BooleanActiveClues)clues;
 		return bac.containsClue(clueNum) == value.booleanValue();
 	}
 
-	/**
-	 * Returns the value.
-	 * @return boolean
-	 */
 	public boolean isActive() {
 		return value.booleanValue();
 	}
 
-	/**
-	 * Returns the clueNum.
-	 * @return int
-	 */
 	public int getClueNum() {
 		return clueNum;
 	}
-	/**
-	 * @see com.choicemaker.cm.train.filter.FilterCondition#getConditionString()
-	 */
+
 	public String getConditionString() {
 		if (value == null){
 			return NULL_STRING;
@@ -88,9 +75,7 @@ public class BooleanFilterCondition implements FilterCondition {
 			return isActive() ? ACTIVE_STRING : INACTIVE_STRING;
 		}
 	}
-	/**
-	 * @see com.choicemaker.cm.train.filter.FilterCondition#createFilterCondition(int)
-	 */
+
 	public FilterCondition createFilterCondition(int clueNum) {
 		return new BooleanFilterCondition(clueNum, value);
 	}
