@@ -27,7 +27,8 @@
     <maven.site.skip>false</maven.site.skip>
 
     <!-- ChoiceMaker versions -->
-    <choicemaker.current.version>2.7.1-SNAPSHOT</choicemaker.current.version>
+    <choicemaker.snapshot.version>2.7.1-SNAPSHOT</choicemaker.snapshot.version>
+    <choicemaker.release.version>2.7.1-rc.2</choicemaker.release.version>
     <choicemaker.tool.version>2.7.1-SNAPSHOT</choicemaker.tool.version>
     <plugin.eclipse.core.launcher.version>
       2.1.4-SNAPSHOT</plugin.eclipse.core.launcher.version>
@@ -169,6 +170,14 @@
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>build-helper-maven-plugin</artifactId>
           <version>${plugin.codehaus-build-helper.version}</version>
+          <executions>
+            <execution>
+              <id>parse-version</id>
+              <goals>
+                <goal>parse-version</goal>
+              </goals>
+            </execution>
+          </executions>
         </plugin>
 
         <plugin>
@@ -304,6 +313,18 @@
 
     <plugins>
       <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>parse-version</id>
+            <goals>
+              <goal>parse-version</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
         <artifactId>maven-site-plugin</artifactId>
         <configuration>
           <skip>true</skip>
@@ -319,74 +340,60 @@
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>org.apache.ant</artifactId>
-        <version>1.5.4-SNAPSHOT</version>
+        <version>1.5.4-rc.2</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>org.apache.ant</artifactId>
-        <version>1.5.4-SNAPSHOT</version>
+        <version>1.5.4-rc.2</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>org.apache.bcel</artifactId>
-        <version>5.0.1-SNAPSHOT</version>
+        <version>5.0.1-rc.2</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>org.apache.bcel</artifactId>
-        <version>5.0.1-SNAPSHOT</version>
+        <version>5.0.1-rc.2</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
-      </dependency>
-<!-- Jakarta ORO is no longer required, not even for testing
-      <dependency>
-        <groupId>com.choicemaker.cm</groupId>
-        <artifactId>jakarta-oro</artifactId>
-        <version>2.0.1</version>
-      </dependency>
-      <dependency>
-        <groupId>com.choicemaker.cm</groupId>
-        <artifactId>jakarta-oro</artifactId>
-        <version>2.0.1</version>
-        <classifier>eclipse2prj</classifier>
-        <type>zip</type>
-      </dependency>
--->
-      <dependency>
-        <groupId>com.choicemaker.cm</groupId>
-        <artifactId>org.eclipse.ant.core</artifactId>
-        <version>2.1.2-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>org.eclipse.ant.core</artifactId>
-        <version>2.1.2-SNAPSHOT</version>
+        <version>2.1.2-rc.2</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>org.eclipse.ant.core</artifactId>
+        <version>2.1.2-rc.2</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>org.eclipse.ant.internal.core</artifactId>
-        <version>2.1.2-SNAPSHOT</version>
+        <version>2.1.2-rc.2</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>org.eclipse.ant.internal.core</artifactId>
-        <version>2.1.2-SNAPSHOT</version>
+        <version>2.1.2-rc.2</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>org.eclipse.core.boot</artifactId>
-        <version>2.1.2-SNAPSHOT</version>
+        <version>2.1.2-rc.2</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>org.eclipse.core.boot</artifactId>
-        <version>2.1.2-SNAPSHOT</version>
+        <version>2.1.2-rc.2</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -405,114 +412,114 @@
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>org.eclipse.core.resources</artifactId>
-        <version>2.1.2-SNAPSHOT</version>
+        <version>2.1.2-rc.2</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>org.eclipse.core.resources</artifactId>
-        <version>2.1.2-SNAPSHOT</version>
+        <version>2.1.2-rc.2</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>org.eclipse.core.resources.ant</artifactId>
-        <version>2.1.2-SNAPSHOT</version>
+        <version>2.1.2-rc.2</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>org.eclipse.core.resources.ant</artifactId>
-        <version>2.1.2-SNAPSHOT</version>
+        <version>2.1.2-rc.2</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>org.eclipse.core.runtime</artifactId>
-        <version>2.1.2-SNAPSHOT</version>
+        <version>2.1.2-rc.2</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>org.eclipse.core.runtime</artifactId>
-        <version>2.1.2-SNAPSHOT</version>
+        <version>2.1.2-rc.2</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>org.jdom</artifactId>
-        <version>0.9.1-SNAPSHOT</version>
+        <version>0.9.1-rc.2</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>org.jdom</artifactId>
-        <version>0.9.1-SNAPSHOT</version>
+        <version>0.9.1-rc.2</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.e2</groupId>
         <artifactId>com.choicemaker.e2</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.release.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.e2</groupId>
         <artifactId>com.choicemaker.e2</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.release.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.e2</groupId>
         <artifactId>com.choicemaker.e2.ejb</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.release.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.e2</groupId>
         <artifactId>com.choicemaker.e2.embed</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.release.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.e2</groupId>
         <artifactId>com.choicemaker.e2.std</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.release.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.e2</groupId>
         <artifactId>com.choicemaker.e2.std</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.release.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.e2it</groupId>
         <artifactId>com.choicemaker.e2it</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.release.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.e2it</groupId>
         <artifactId>com.choicemaker.e2it.ejb</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.release.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.e2it</groupId>
         <artifactId>com.choicemaker.e2it.embed</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.release.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.e2it</groupId>
         <artifactId>com.choicemaker.e2it.std</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.release.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.analyzer.base</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.analyzer.base</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -520,145 +527,145 @@
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.analyzer.tools.gui</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.analyzer.tools.gui</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.args</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.args</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.batch</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.batch</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.core</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.core</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.compiler</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.compiler</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.sun.tools</artifactId>
-        <version>1.7.0-SNAPSHOT</version>
+        <version>1.7.0-rc.2</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.sun.tools</artifactId>
-        <version>1.7.0-SNAPSHOT</version>
+        <version>1.7.0-rc.2</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.docs</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.docs</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.gui.utils</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.gui.utils</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.matching.cfg</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.matching.cfg</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.matching.en</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.matching.en</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.matching.en.au</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.matching.en.au</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.matching.en.us</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.matching.en.us</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -666,13 +673,13 @@
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.matching.en.us.ny.nyc</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.matching.en.us.ny.nyc</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -680,61 +687,61 @@
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.matching.en.us.train</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.matching.en.us.train</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.matching.gen</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.matching.gen</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.matching.geo</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.matching.geo</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.matching.intl</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.matching.intl</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.matching.wfst</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.matching.wfst</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -742,61 +749,61 @@
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.matching.wfst.eclipse</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.matching.wfst.eclipse</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.modelmaker</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.modelmaker.std</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.mmdevtools</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.mmdevtools</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.modeldb</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.modeldb</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.modelmaker</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.modelmaker.std</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -804,37 +811,37 @@
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.modelmaker.pkg_eclipse</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.modelmaker.pkg_eclipse</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.module</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.module</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.blocking.automated.base</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.blocking.automated.base</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -842,13 +849,13 @@
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.io.blocking.automated.inmemory</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.io.blocking.automated.inmemory</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -856,13 +863,13 @@
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.io.blocking.automated.inmemory.gui</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.io.blocking.automated.inmemory.gui</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -870,13 +877,13 @@
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.io.blocking.automated.offline</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.io.blocking.automated.offline</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -884,13 +891,13 @@
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.io.blocking.automated.offline.core</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.io.blocking.automated.offline.core</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -898,13 +905,13 @@
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.io.blocking.automated.offline.server</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.io.blocking.automated.offline.server</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -912,13 +919,13 @@
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.io.blocking.base</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.io.blocking.base</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -926,13 +933,13 @@
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.io.blocking.exact.base</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.io.blocking.exact.base</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -940,13 +947,13 @@
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.io.blocking.exact.gui</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.io.blocking.exact.gui</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -954,13 +961,13 @@
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.io.composite.base</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.io.composite.base</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -968,85 +975,85 @@
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.io.composite.gui</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.io.composite.gui</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.db.base</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.db.base</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.db.gui</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.db.gui</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.db.jboss</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.db.jboss</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.db.oracle</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.db.oracle</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.db.sqlserver</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.db.sqlserver</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.db.sqlserver.gui</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.db.sqlserver.gui</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -1054,73 +1061,73 @@
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.io.flatfile.base</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.io.flatfile.base</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.flatfile.gui</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.flatfile.gui</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.xml.base</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.xml.base</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.xml.gui</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.xml.gui</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.ml.me.base</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.ml.me.base</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.ml.me.gui</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.ml.me.gui</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -1128,25 +1135,25 @@
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.reviewmaker.base</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.reviewmaker.base</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.transitivity</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.transitivity</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -1154,13 +1161,13 @@
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.transitivity.core</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.transitivity.core</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -1168,97 +1175,97 @@
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.transitivity.server</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.transitivity.server</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.urm</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.urm</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.urm.adaptor</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.urm.adaptor</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.urm.base</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.urm.base</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.urm.config</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.urm.config</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.urm.ejb</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.urm.ejb</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.urm.pkg_eclipse</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.urm.pkg_eclipse</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.util.app</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.util.app</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -1266,13 +1273,13 @@
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.util.app.pkg_eclipse</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.util.app.pkg_eclipse</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -1280,73 +1287,73 @@
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.validation.eclipse</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.validation.eclipse</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.wcohen.ss</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.wcohen.ss</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.wcohen.ss.eclipse</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.wcohen.ss.eclipse</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>cm-analyzer-ce</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>distrib</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>simple_person_matching</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>simple-person-plugin</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>simple-person-plugin</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>simple-person-plugin-tests</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>choicemaker-assembly</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.release.version}</version>
       </dependency>
 <!-- Excluded from the Community Edition due to licensing issues
       <dependency>
@@ -1365,27 +1372,27 @@ END: C-E Exclusion -->
       <dependency>
         <groupId>com.choicemaker.cmit</groupId>
         <artifactId>cmit-utils</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cmit</groupId>
         <artifactId>cmit-utils.j2ee</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cmit</groupId>
         <artifactId>cmit-aba</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cmit</groupId>
         <artifactId>cmit-oaba</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cmit</groupId>
         <artifactId>cmit-transitivity</artifactId>
-        <version>${choicemaker.current.version}</version>
+        <version>${choicemaker.snapshot.version}</version>
       </dependency>
       <dependency>
         <groupId>commons-logging</groupId>
@@ -1412,12 +1419,12 @@ END: C-E Exclusion -->
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>javax.help.eclipse2plugin</artifactId>
-        <version>2.0.05-SNAPSHOT</version>
+        <version>2.0.05-rc.2</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>javax.help.eclipse2plugin</artifactId>
-        <version>2.0.05-SNAPSHOT</version>
+        <version>2.0.05-rc.2</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -1441,7 +1448,7 @@ END: C-E Exclusion -->
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.mchange.c3p0</artifactId>
-        <version>0.9.2.2-SNAPSHOT</version>
+        <version>0.9.2.2-rc.2</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -1464,24 +1471,24 @@ END: C-E Exclusion -->
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>jfree.jcommon.eclipse2plugin</artifactId>
-        <version>1.0.17-SNAPSHOT</version>
+        <version>1.0.17-rc.2</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>jfree.jcommon.eclipse2plugin</artifactId>
-        <version>1.0.17-SNAPSHOT</version>
+        <version>1.0.17-rc.2</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>jfree.jfreechart.eclipse2plugin</artifactId>
-        <version>1.0.15-SNAPSHOT</version>
+        <version>1.0.15-rc.2</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>jfree.jfreechart.eclipse2plugin</artifactId>
-        <version>1.0.15-SNAPSHOT</version>
+        <version>1.0.15-rc.2</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>

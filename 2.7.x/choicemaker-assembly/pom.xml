@@ -7,8 +7,12 @@
 
   <groupId>com.choicemaker.cm</groupId>
   <artifactId>choicemaker-assembly</artifactId>
-  <version>2.7.1-SNAPSHOT</version>
+  <version>2.7.1-rc.2</version>
   <name>ChoiceMaker Dependencies</name>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
 
   <distributionManagement>
     <repository>
