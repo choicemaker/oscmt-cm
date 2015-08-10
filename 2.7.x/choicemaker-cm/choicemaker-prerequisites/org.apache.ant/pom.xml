@@ -106,7 +106,7 @@
           <execution>
             <id>assembly</id>
             <phase>package</phase>
-            <configuration>
+            <configuration combine.self="override">
               <descriptor>src/main/assembly/assembly.xml</descriptor>
             </configuration>
             <goals>

@@ -71,9 +71,9 @@
           </dependencies>
           <executions>
             <execution>
-              <id>prj-assembly</id>
+              <id>assembly</id>
               <phase>package</phase>
-              <configuration>
+              <configuration combine.self="override">
                 <descriptorRefs>
                   <descriptorRef>cm-model-assembly</descriptorRef>
                 </descriptorRefs>
@@ -88,11 +88,6 @@
     </pluginManagement>
 
     <plugins>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-assembly-plugin</artifactId>
-      </plugin>
 
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
