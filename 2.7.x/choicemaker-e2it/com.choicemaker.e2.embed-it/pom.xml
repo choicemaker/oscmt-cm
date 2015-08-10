@@ -8,13 +8,13 @@
   <parent>
     <groupId>com.choicemaker.cm</groupId>
     <artifactId>choicemaker-base</artifactId>
-    <version>2.7.1-SNAPSHOT</version>
+    <version>2.7.1-rc.3</version>
     <relativePath>../../choicemaker-base/pom.xml</relativePath>
   </parent>
 
   <groupId>com.choicemaker.e2it</groupId>
   <artifactId>com.choicemaker.e2it.embed-it</artifactId>
-  <version>2.7.1-rc.2</version>
+  <version>2.7.1-rc.3</version>
  
   <name>Integration Test: ChoiceMaker E2 Embedded Platform</name>
   <description><![CDATA[

@@ -8,10 +8,8 @@
   <parent>
     <groupId>com.choicemaker.cm</groupId>
 		<artifactId>choicemaker-swing</artifactId>
-    <!-- artifactId>choicemaker-base</artifactId -->
-    <version>2.7.1-SNAPSHOT</version>
+    <version>2.7.1-rc.3</version>
 		<relativePath>../pom.xml</relativePath>
-    <!-- relativePath>../../../choicemaker-base/pom.xml</relativePath -->
   </parent>
 
   <artifactId>com.choicemaker.cm.docs</artifactId>
