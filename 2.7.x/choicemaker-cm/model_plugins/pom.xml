@@ -57,7 +57,42 @@
       </resource>
     </resources>
 
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <dependencies>
+            <dependency>
+              <groupId>com.choicemaker.cm</groupId>
+              <artifactId>choicemaker-assembly</artifactId>
+              <version>2.7.1-rc.3</version>
+            </dependency>
+          </dependencies>
+          <executions>
+            <execution>
+              <id>prj-assembly</id>
+              <phase>package</phase>
+              <configuration>
+                <descriptorRefs>
+                  <descriptorRef>cm-model-assembly</descriptorRef>
+                </descriptorRefs>
+              </configuration>
+              <goals>
+                <goal>single</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+
     <plugins>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+      </plugin>
 
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
