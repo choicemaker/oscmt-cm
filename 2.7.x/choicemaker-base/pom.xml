@@ -29,7 +29,7 @@
     <!-- ChoiceMaker versions -->
     <choicemaker.snapshot.version>2.7.1-SNAPSHOT</choicemaker.snapshot.version>
     <choicemaker.release.version>2.7.1-rc.4</choicemaker.release.version>
-    <choicemaker.tool.version>2.7.1-rc.4</choicemaker.tool.version>
+    <choicemaker.tool.version>1.0-rc.4</choicemaker.tool.version>
     <plugin.eclipse.core.launcher.version>
       2.1.4-rc.4</plugin.eclipse.core.launcher.version>
 
