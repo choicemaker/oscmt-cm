@@ -14,7 +14,6 @@
 
   <groupId>com.choicemaker.e2it</groupId>
   <artifactId>choicemaker-e2it</artifactId>
-  <version>2.7.1-rc.3</version>
   <packaging>pom</packaging>
 
   <name>Integration Test: ChoiceMaker E2 Components</name>
