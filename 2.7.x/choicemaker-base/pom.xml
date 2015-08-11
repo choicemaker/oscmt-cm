@@ -1560,7 +1560,7 @@ END: C-E Exclusion -->
         <type>zip</type>
       </dependency>
       <dependency>
-        <groupId>com.choicemaker.maven</groupId>
+        <groupId>com.choicemaker.mvn.cluemaker</groupId>
         <artifactId>cluemaker-maven-plugin</artifactId>
         <version>${choicemaker.tool.version}</version>
       </dependency>
