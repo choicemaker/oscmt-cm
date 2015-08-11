@@ -74,7 +74,7 @@
         <artifactId>maven-antrun-plugin</artifactId>
         <executions>
           <execution>
-            <id>echo-params</id>
+            <id>echo-db-params</id>
             <phase>initialize</phase>
             <configuration>
               <target>

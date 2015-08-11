@@ -60,19 +60,6 @@
         <artifactId>maven-antrun-plugin</artifactId>
         <executions>
           <execution>
-            <id>echo-params</id>
-            <phase>validate</phase>
-            <configuration>
-              <target>
-                <echo
-                  message="eclipse.plugin.runtime.library.name: ${eclipse.plugin.runtime.library.name}" />
-              </target>
-            </configuration>
-            <goals>
-              <goal>run</goal>
-            </goals>
-          </execution>
-          <execution>
             <id>unpack-jar</id>
             <phase>compile</phase>
             <configuration>

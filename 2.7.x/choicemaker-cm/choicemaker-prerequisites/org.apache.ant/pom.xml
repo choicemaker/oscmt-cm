@@ -66,23 +66,6 @@
         <artifactId>maven-antrun-plugin</artifactId>
         <executions>
           <execution>
-            <id>echo-params</id>
-            <phase>validate</phase>
-            <configuration>
-              <target>
-                <echo
-                  message="eclipse.plugin.runtime.library.name: ${eclipse.plugin.runtime.library.name}" />
-                <echo
-                  message="eclipse.plugin.auxiliary.library.name: ${eclipse.plugin.auxiliary.library.name}" />
-                <echo
-                  message="eclipse.plugin.src.zip.name: ${eclipse.plugin.src.zip.name}" />
-              </target>
-            </configuration>
-            <goals>
-              <goal>run</goal>
-            </goals>
-          </execution>
-          <execution>
             <id>unpack-src</id>
             <phase>process-sources</phase>
             <configuration>
