@@ -22,14 +22,13 @@ public interface AmbiguousParser {
 	 * a float value (i.e. Float.valueOf(..) will correctly parse the String value) that
 	 * indicates the relative probability of the parse being the best choice among
 	 * a List of other weighted parses.
-	 * @see #parse(String)
+	 * <p>see parse(String)</p>
 	 */
 	String PARSE_WEIGHT = "PARSE_WEIGHT";
 
 	/**
 	 * Indicates whether this parser returns weighted parses.
-	 * @return
-	 * @see #parse(Sting)
+	 * @see #parse(String)
 	 * @see #PARSE_WEIGHT
 	 */	
 	boolean isWeighted();

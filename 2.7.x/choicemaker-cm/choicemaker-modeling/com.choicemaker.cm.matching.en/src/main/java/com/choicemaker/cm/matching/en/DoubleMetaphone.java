@@ -108,7 +108,7 @@ public final class DoubleMetaphone {
 	 * equal. This includes equality between the getPrimary() code of one object
 	 * and the non-null getAlternate() of the other.
  	 * 
-	 * @param o
+	 * @param obj
 	 *            the object for comparison
  	 * @return the equality of the Object
  	 */

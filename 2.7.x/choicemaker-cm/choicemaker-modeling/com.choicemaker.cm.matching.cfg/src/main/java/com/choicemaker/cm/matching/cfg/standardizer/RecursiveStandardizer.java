@@ -29,11 +29,11 @@ import com.choicemaker.cm.matching.cfg.Variable;
  * if a RecursiveStandardizer doesn't have any child standizers for the types of
  * nodes in the parse tree, nothing will happen, and <code>standardize()</code>
  * will return with <code>holder</code> unchanged.
+ * <p>see com.choicemaker.cm.matching.en.us.address.AddressStandardizer</p>
+ * <p>see com.choicemaker.cm.matching.en.us.name.NameStandardizer</p>
  *
  * @author   Adam Winkel
  * @version  $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:59 $
- * @see com.choicemaker.cm.matching.en.us.address.AddressStandardizer
- * @see com.choicemaker.cm.matching.en.us.name.NameStandardizer
  */
 public class RecursiveStandardizer implements ParseTreeNodeStandardizer {
 

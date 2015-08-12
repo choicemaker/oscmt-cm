@@ -25,7 +25,7 @@ public class StringContainsLettersValidator extends AbstractValidator {
 
 	/**
 	 * Partially constructs an aggregate validator. The
-	 * {@link #setValidators(Map)} or {@link #addValidator(String,IValidator)}
+	 * <code>setValidators(Map)</code> or <code>addValidator(String,IValidator)</code>
 	 * methods must be called to finish construction.
 	 */
 	public StringContainsLettersValidator() {

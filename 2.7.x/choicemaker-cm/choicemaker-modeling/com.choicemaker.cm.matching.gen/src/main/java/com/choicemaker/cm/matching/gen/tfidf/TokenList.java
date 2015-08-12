@@ -11,9 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * @author    Adam Winkel
- * @version   
  */
 public class TokenList {
 

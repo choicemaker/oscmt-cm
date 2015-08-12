@@ -26,7 +26,7 @@ public class AggregateValidatorFactory extends AbstractValidatorFactory {
 //		Logger.getLogger(AggregateValidatorFactory.class.getName());
 
 	/**
-	 * The {@link setHandledValidatorExtensionPoint(String)} method
+	 * The {@link #setHandledValidatorExtensionPoint(String)} method
 	 * must be called after construction and before other methods are
 	 * used.
 	 */

@@ -52,7 +52,7 @@ public final class Validators {
 	 * @return a non-null, but possibly empty map
 	 * @throws ValidatorCreationException if the validator collection
 	 * managed by this class can not be created.
-	 * @see #createValidatorMap()
+	 * <p>see createValidatorMap()</p>
 	 */
 	public static Map getValidators() throws ValidatorCreationException {
 		if (validators == null) {

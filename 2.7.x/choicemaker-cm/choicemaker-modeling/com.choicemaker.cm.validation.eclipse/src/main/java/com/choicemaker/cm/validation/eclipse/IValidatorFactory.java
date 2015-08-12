@@ -48,7 +48,6 @@ public interface IValidatorFactory {
 	/**
 	 * Returns the identifier of the validator extension point
 	 * handled by this factory.
-	 * @return
 	 */
 	public String getHandledValidatorExtensionPoint();
 

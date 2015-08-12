@@ -32,9 +32,6 @@ public abstract class AbstractSetBasedValidator implements ISetBasedValidator {
 	public AbstractSetBasedValidator() {
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.validation.eclipse.IValidator#equals(IValidator)
-	 */
 	public boolean equals(IValidator validator) {
 		boolean retVal = false;
 		if (validator != null) {
@@ -58,9 +55,6 @@ public abstract class AbstractSetBasedValidator implements ISetBasedValidator {
 		return retVal;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.validation.eclipse.IValidator#hashCode()
-	 */
 	public int hashCode() {
 		// FIXME: this implementation is Eclipse-specific. Move it to an abstract
 		// class in com.choicemaker.cm.validation.eclipse or replace it
@@ -74,16 +68,13 @@ public abstract class AbstractSetBasedValidator implements ISetBasedValidator {
 	}
 
 	/**
-	 * Sets the name of the {@link com.choicemaker.cm.match.gen.Sets Sets instance}
+	 * Sets the name of the Sets instance
 	 * that holds the data used by this validator.
+	 * <p>see com.choicemaker.cm.match.gen.Sets</p>
 	 * @param setName the plugin name of the collection
-	 * @see com.choicemaker.cm.match.gen.Sets
 	 */
 	public abstract void setNamedSet(String setName);
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.validation.eclipse.IValidator#toString()
-	*/
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append(this.getClass().getName());

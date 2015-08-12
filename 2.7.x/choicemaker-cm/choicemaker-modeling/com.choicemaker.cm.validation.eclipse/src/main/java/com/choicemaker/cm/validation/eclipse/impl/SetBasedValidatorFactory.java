@@ -23,7 +23,7 @@ public class SetBasedValidatorFactory extends AbstractValidatorFactory {
 //		Logger.getLogger(SetBasedValidatorFactory.class.getName());
 
 	/**
-	 * The {@link setHandledValidatorExtensionPoint(String)} method
+	 * The {@link #setHandledValidatorExtensionPoint(String)} method
 	 * must be called after construction and before other methods are
 	 * used.
 	 */

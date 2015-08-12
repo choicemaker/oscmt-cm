@@ -12,9 +12,7 @@ import com.choicemaker.cm.matching.cfg.ParsedData;
 import com.choicemaker.cm.matching.cfg.standardizer.DefaultStandardizer;
 
 /**
- *
  * @author    Adam Winkel
- * @version   
  */
 public class BaseAndExtStandardizer extends DefaultStandardizer {
 

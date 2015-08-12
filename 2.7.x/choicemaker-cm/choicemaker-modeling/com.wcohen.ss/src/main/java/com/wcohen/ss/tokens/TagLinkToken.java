@@ -63,10 +63,6 @@ private double matched, tr, sSize, tSize, totalScore;
   /**
    * score return the a strng distance value between 0 and 1 of a pair
    * of tokens. Where 1 is the maximum similarity.
-   *
-   * @param S StringWrapper
-   * @param T StringWrapper
-   * @return double
    */
   public double score(StringWrapper s, StringWrapper t) {
 	String S = s.unwrap(),
@@ -99,10 +95,6 @@ private double matched, tr, sSize, tSize, totalScore;
   /**
    * explainScore returns an explanation of how the string distance was
    * computed.
-   *
-   * @param S StringWrapper
-   * @param T StringWrapper
-   * @return String
    */
   public String explainScore(StringWrapper s, StringWrapper t) {
 	String S = s.unwrap(),

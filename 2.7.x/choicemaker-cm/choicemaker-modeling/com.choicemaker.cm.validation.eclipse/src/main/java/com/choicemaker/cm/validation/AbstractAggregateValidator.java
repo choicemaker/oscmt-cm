@@ -43,7 +43,7 @@ public abstract class AbstractAggregateValidator
 
 	/**
 	 * Partially constructs a validator. The
-	 * {@link #setValidators(IValidator[])} method must
+	 * <code>setValidators(IValidator[])<code> method must
 	 * be called to finish construction.
 	 */
 	public AbstractAggregateValidator() {

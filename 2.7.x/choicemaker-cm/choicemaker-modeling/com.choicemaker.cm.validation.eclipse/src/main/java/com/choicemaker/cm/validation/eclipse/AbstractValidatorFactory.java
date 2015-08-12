@@ -210,7 +210,7 @@ public abstract class AbstractValidatorFactory implements IValidatorFactory {
 	}
 
 	/**
-	 * The {@link setHandledValidatorExtensionPoint(String)} method must be
+	 * The {@link #setHandledValidatorExtensionPoint(String)} method must be
 	 * called after construction and before other methods are used.
 	 */
 	public AbstractValidatorFactory() {
@@ -307,7 +307,7 @@ public abstract class AbstractValidatorFactory implements IValidatorFactory {
 	 * Abstract, factory-dependent method that must be implemented by
 	 * subclasses.
 	 * 
-	 * @param els
+	 * @param el
 	 *            ConfigurationElements associated with a validator extension.
 	 * @return the validator specified by the extension.
 	 * @throws Exception
@@ -420,7 +420,7 @@ public abstract class AbstractValidatorFactory implements IValidatorFactory {
 	 * Abstract, factory-dependent method that must be implemented by
 	 * subclasses.
 	 * 
-	 * @param els
+	 * @param el
 	 *            ConfigurationElements associated with a validator extension.
 	 * @return the plugin name of the validator
 	 * @throws Exception

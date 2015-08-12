@@ -24,14 +24,6 @@ public class WfstParser implements AmbiguousParser, Cloneable {
 	private Filter filter, grammar;
 	private Interpreter interpreter;
 
-	/**
-	 * @param s WFST states
-	 * @param i initial state
-	 * @param d delimiter token
-	 * @param e epsilon token
-	 * @param l left bracket token
-	 * @param r right bracket token
-	 */
 	public WfstParser(Filter filter, Filter grammar) {
 		this.filter = filter;
 		this.grammar = grammar;

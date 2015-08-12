@@ -160,7 +160,7 @@ public class MappedParsedInput {
 
 	/**
 	 * Reads ParsedInput instances from a Reader.
-	 * @param r a non-null Reader
+	 * @param reader a non-null Reader
 	 * @return a valid ParsedInput instance until the end of the input
 	 * has been reached, at which point this method returns null
 	 * @throws IOException

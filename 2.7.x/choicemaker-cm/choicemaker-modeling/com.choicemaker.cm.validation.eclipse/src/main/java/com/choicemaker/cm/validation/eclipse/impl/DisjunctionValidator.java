@@ -21,7 +21,7 @@ import com.choicemaker.util.StringUtils;
 
 /**
  * A validator that delegates to a collection of plugin validators.
- * The {@link IValidator.isValid(Object)}
+ * The {@link IValidator#isValid(Object)}
  * method of at least one delegate must evalutate to <code>true</code>
  * in order for the method of this class to evaluate to <code>true</code>.
  * @author rphall

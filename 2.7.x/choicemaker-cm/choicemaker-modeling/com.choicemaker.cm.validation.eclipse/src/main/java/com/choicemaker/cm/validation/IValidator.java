@@ -19,7 +19,7 @@ public interface IValidator {
 	 * Checks if two validators are functionally identical; i.e.
 	 * if they are implemented by the same class and
 	 * perform the validation checks.
-	 * @see hashCode()
+	 * @see #hashCode()
 	 */
 	public boolean equals(IValidator validator);
 
@@ -40,7 +40,7 @@ public interface IValidator {
 	 * perform the same validation checks. The hashcode should
 	 * be unique by implemenation class, and within an implementation
 	 * class, unique by the set of validation checks that are performed.
-	 * @see equals(IValidator)
+	 * @see #equals(IValidator)
 	 */
 	public int hashCode();
 

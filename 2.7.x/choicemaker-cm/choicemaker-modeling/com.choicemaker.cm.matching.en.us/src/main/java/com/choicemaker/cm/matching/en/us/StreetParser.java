@@ -432,20 +432,9 @@ public class StreetParser {
 	 * "303VernonAve12B" becomes "303 Vernon Ave 12 B".
 	 * 
 	 * @param str
-	 * @return 
 	 */
 	private String unSmush(String str) {
 		int[] space = new int[str.length() + 1];
-		//         Collection streetTypes = Colls.getCollection("streetTypes");
-		//         Iterator it = streetTypes.iterator();
-		//         while (it.hasNext()) {
-		//             String type = (String)it.next();
-		//             int index = str.indexOf(type);
-		//             if (index >=0) {
-		//                 space[index] = 1;
-		//                 space[index + type.length()] = 1;
-		//             }
-		//         }
 
 		boolean[] numbers = StringUtils.findNumbers(str);
 		boolean previous = numbers[0];

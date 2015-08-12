@@ -36,7 +36,7 @@ public abstract class AbstractValidator implements IValidator {
 
  	/**
 	 * Code to keep lint happy. Subclasses should override if they
-	 * override {@link equals(IValidator)}.
+	 * override {@link #equals(IValidator)}.
 	 */
 	public int hashCode() {
 		return super.hashCode();

@@ -27,8 +27,6 @@ public class NameUtil {
 	 * MatchingInitialOrName("Ann", "Ann") -> true
 	 * MatchingInitialOrName("Anette", "Annie") -> false
 	 * MatchingInitialOrName("A", "B") -> false
-	 * @author S. Yoakum-Stover
-	 * @version$Revision: 1.2 $ $Date: 2010/03/27 22:18:58 $
 	 */
 	public static boolean matchingInitialOrName(String s1, String s2) {
 		boolean isMatch = false;

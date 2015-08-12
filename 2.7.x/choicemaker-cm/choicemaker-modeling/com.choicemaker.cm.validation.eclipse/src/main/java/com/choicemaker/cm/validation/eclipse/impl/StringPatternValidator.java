@@ -26,7 +26,7 @@ import com.choicemaker.util.StringUtils;
 /**
  * Validates a non-null name by checking whether it matches
  * any pattern in some set of patterns. Null names are considered invalid.
-* @ see StringPatternInvalidator
+ * <p>see StringPatternInvalidator</p>
  *
  * @author rphall
  * @version $Revision: 1.2 $ $Date: 2010/03/29 14:44:29 $

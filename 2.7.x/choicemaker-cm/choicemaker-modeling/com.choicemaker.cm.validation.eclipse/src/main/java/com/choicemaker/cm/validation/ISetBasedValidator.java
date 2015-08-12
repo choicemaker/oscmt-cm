@@ -19,13 +19,13 @@ import java.util.Set;
 public interface ISetBasedValidator extends IValidator {
 
 	/**
-	 * Gets the name of the {@link com.choicemaker.cm.match.gen.Sets Sets instance}
+	 * Gets the name of the Sets instance
 	 * that holds the data used by this validator.
 	 * FIXME: this operation is Eclipse-specific. Move it to an interface
 	 * in com.choicemaker.cm.validation.eclipse
 	 * FIXME: add a <code>Set getSet()</code> operation
+	 * <p>see com.choicemaker.cm.match.gen.Sets</p>
 	 * @return the plugin name of the set of tokens or Patterns used by this validator.
-	 * @see com.choicemaker.cm.match.gen.Sets
 	 */
 	public String getNamedSet();
 

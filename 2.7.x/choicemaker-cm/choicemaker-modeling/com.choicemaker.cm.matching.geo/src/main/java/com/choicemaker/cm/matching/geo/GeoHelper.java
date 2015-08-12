@@ -80,7 +80,7 @@ public class GeoHelper  {
 	/**
 	 * Converts kilometers to miles  
 	 * 
-	 * @param mld distance in kilometers 
+	 * @param kmd distance in kilometers 
 	 * @return distance in miles
 	 */
 	public static double kmToMile(double kmd){
