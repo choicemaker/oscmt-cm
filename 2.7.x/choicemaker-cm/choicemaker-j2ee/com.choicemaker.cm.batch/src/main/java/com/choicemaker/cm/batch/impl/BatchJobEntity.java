@@ -338,7 +338,7 @@ public abstract class BatchJobEntity extends AbstractPersistentObject implements
 			getId() + ", '" + getExternalId() + "': transitioning from "
 					+ getStatus() + " to " + newStatus;
 		if (newStatus != null && newStatus.equals(getStatus())) {
-			log.warning("UNNECESSARY TRANSITION: " + msg);
+			log.fine("UNNECESSARY TRANSITION: " + msg);
 		} else {
 			log.info(msg);
 		}
