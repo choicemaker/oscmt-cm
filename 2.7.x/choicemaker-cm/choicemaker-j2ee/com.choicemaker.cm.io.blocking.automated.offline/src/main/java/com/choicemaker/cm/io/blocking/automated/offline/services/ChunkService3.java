@@ -27,7 +27,6 @@ import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkDataSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIdSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIdSinkSourceFactory;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIdSinkSourceFactory2;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIdSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIndexSet;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IIDSet;
@@ -117,7 +116,7 @@ public class ChunkService3 {
 	// transformer for the oversized blocks.
 	private ITransformer transformerO;
 	
-	private IChunkRecordIdSinkSourceFactory2 recIDFactory;
+	private IChunkRecordIdSinkSourceFactory recIDFactory;
 	private IChunkDataSinkSourceFactory stageSinkFactory;
 	private IChunkDataSinkSourceFactory masterSinkFactory;
 
@@ -180,7 +179,7 @@ public class ChunkService3 {
 	public ChunkService3(IIDSetSource bSource, IIDSetSource osSource,
 			RecordSource stage, RecordSource master,
 			ImmutableProbabilityModel model,
-			IChunkRecordIdSinkSourceFactory2 recIDFactory,
+			IChunkRecordIdSinkSourceFactory recIDFactory,
 			IChunkDataSinkSourceFactory stageSinkFactory,
 			IChunkDataSinkSourceFactory masterSinkFactory,
 			ImmutableRecordIdTranslator translator, ITransformer transformer,
@@ -336,10 +335,9 @@ public class ChunkService3 {
 			RecordSink [] masterRecordSinks = new RecordSink [numChunks];
 			
 			//set up
-			boolean isDebugIndexSets = log.isLoggable(Level.FINE);
 			for (int i=0; i < numChunks; i++) {
 				IChunkRecordIdSink recSink = (IChunkRecordIdSink) recIDSinks.get(i);
-				crSets[i] = recIDFactory.getChunkRecordIndexSet(recSink,isDebugIndexSets);
+				crSets[i] = recIDFactory.getChunkRecordIndexSet(recSink);
 				stageRecordSinks[i] = stageSinkFactory.getNextSink();
 				masterRecordSinks[i] = masterSinkFactory.getNextSink();
 			} //end for

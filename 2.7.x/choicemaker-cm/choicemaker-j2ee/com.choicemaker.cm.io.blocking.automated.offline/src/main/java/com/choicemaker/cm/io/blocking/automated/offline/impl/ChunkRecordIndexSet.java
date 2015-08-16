@@ -107,7 +107,7 @@ public class ChunkRecordIndexSet implements IChunkRecordIndexSet {
 	private final EXTERNAL_DATA_FORMAT type;
 	
 	/** A flag indicating whether diagnostics are enabled */
-	private final boolean isDebugEnabled;
+	private final boolean isDebugEnabled = false;
 
 	/**
 	 * <em>Sorted</em> data from the ChunkRecordIdSource that backs this set.
@@ -129,12 +129,11 @@ public class ChunkRecordIndexSet implements IChunkRecordIndexSet {
 	 */
 	private BitSet isChecked;
 	
-	public ChunkRecordIndexSet (String fileName, EXTERNAL_DATA_FORMAT type, boolean isDebugEnabled) {
+	public ChunkRecordIndexSet (String fileName, EXTERNAL_DATA_FORMAT type) {
 		Precondition.assertNonEmptyString(fileName);
 		Precondition.assertNonNullArgument(errorMsg1,type);
 		this.fileName = fileName;
 		this.type = type;
-		this.isDebugEnabled = isDebugEnabled;
 		this.source = new ChunkRecordIdSource(this.fileName,this.type);
 	}
 

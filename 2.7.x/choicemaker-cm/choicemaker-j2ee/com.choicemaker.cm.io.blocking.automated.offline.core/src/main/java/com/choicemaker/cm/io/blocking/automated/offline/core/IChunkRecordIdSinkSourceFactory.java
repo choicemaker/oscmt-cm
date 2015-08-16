@@ -37,8 +37,16 @@ public interface IChunkRecordIdSinkSourceFactory {
 	public IChunkRecordIdSink getSink(IChunkRecordIdSource source)
 			throws BlockingException;
 
+	/** Creates a set from a sink */
+	IChunkRecordIndexSet getChunkRecordIndexSet(IChunkRecordIdSink sink)
+			throws BlockingException;
+
+	/** Creates a set from a source */
+	IChunkRecordIndexSet getChunkRecordIndexSet(IChunkRecordIdSource source)
+			throws BlockingException;
+
 	/**
-	 * Removes this sink.
+	 * Removes a sink.
 	 * 
 	 * @param sink
 	 * @throws BlockingException
@@ -46,7 +54,7 @@ public interface IChunkRecordIdSinkSourceFactory {
 	public void removeSink(IChunkRecordIdSink sink) throws BlockingException;
 
 	/**
-	 * Removes this source.
+	 * Removes a source.
 	 * 
 	 * @param source
 	 * @throws BlockingException

@@ -14,6 +14,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.EXTERNAL_DATA_FORMA
 import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIdSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIdSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIdSource;
+import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIndexSet;
 
 /**
  * This object handles producing ChunkRowSinks. Given a base file name, it
@@ -110,6 +111,20 @@ public class ChunkRecordIdSinkSourceFactory implements
 			throws BlockingException {
 		File f = new File(source.getInfo());
 		f.delete();
+	}
+
+	@Override
+	public IChunkRecordIndexSet getChunkRecordIndexSet(IChunkRecordIdSink sink)
+		throws BlockingException {
+		return new ChunkRecordIndexSet(sink.getInfo(),
+				EXTERNAL_DATA_FORMAT.STRING);
+	}
+
+	@Override
+	public IChunkRecordIndexSet getChunkRecordIndexSet(IChunkRecordIdSource source)
+		throws BlockingException {
+			return new ChunkRecordIndexSet(source.getInfo(),
+				EXTERNAL_DATA_FORMAT.STRING);
 	}
 
 }
