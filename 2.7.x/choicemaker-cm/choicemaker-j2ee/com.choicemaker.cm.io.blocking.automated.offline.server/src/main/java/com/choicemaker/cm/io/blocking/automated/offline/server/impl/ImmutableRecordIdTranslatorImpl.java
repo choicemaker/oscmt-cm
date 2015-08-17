@@ -95,7 +95,8 @@ class ImmutableRecordIdTranslatorImpl implements
 	 */
 	static <T extends Comparable<T>> ImmutableRecordIdTranslatorImpl createTranslator(
 			final BatchJob job, final RECORD_ID_TYPE expectedRecordIdType,
-			List<AbstractRecordIdTranslationEntity<T>> translations)
+			List<AbstractRecordIdTranslationEntity<T>> translations,
+			boolean doKeepFiles)
 			throws BlockingException {
 
 		if (job == null || !job.isPersistent()) {
@@ -204,7 +205,7 @@ class ImmutableRecordIdTranslatorImpl implements
 		ImmutableRecordIdTranslatorImpl irit =
 			new ImmutableRecordIdTranslatorImpl(job, recordIdType,
 					ids1_To_Indices, ids2_To_Indices, indices_To_Ids1,
-					indices_To_Ids2, splitIndex);
+					indices_To_Ids2, splitIndex, doKeepFiles);
 		return irit;
 	}
 
@@ -214,6 +215,9 @@ class ImmutableRecordIdTranslatorImpl implements
 		// Initialized on construction
 		assert onAssert = true;
 	}
+
+	/** A flag indicating whether cached translator files are retained */
+	private final boolean keepFiles;
 
 	private final BatchJob batchJob;
 
@@ -268,7 +272,8 @@ class ImmutableRecordIdTranslatorImpl implements
 			final Map<?, Integer> ids1_To_Indices,
 			final Map<?, Integer> ids2_To_Indices,
 			final SortedMap<Integer, ?> indices_To_Ids1,
-			final SortedMap<Integer, ?> indices_To_Ids2, int splitIndex)
+			final SortedMap<Integer, ?> indices_To_Ids2, int splitIndex,
+			boolean doKeepFiles)
 			throws BlockingException {
 		if (job == null) {
 			String msg = "null batch job";
@@ -285,6 +290,7 @@ class ImmutableRecordIdTranslatorImpl implements
 			log.severe(msg);
 			throw new IllegalArgumentException(msg);
 		}
+		this.keepFiles = doKeepFiles;
 		this.batchJob = job;
 		this.recordIdType = recordIdType;
 		this.splitIndex = splitIndex;
@@ -295,7 +301,7 @@ class ImmutableRecordIdTranslatorImpl implements
 	}
 
 	public ImmutableRecordIdTranslatorImpl(BatchJob job, IRecordIdSource s1,
-			IRecordIdSource s2) throws BlockingException {
+			IRecordIdSource s2, boolean doKeepFiles) throws BlockingException {
 		if (job == null) {
 			String msg = "null batch job";
 			log.severe(msg);
@@ -306,6 +312,7 @@ class ImmutableRecordIdTranslatorImpl implements
 			log.severe(msg);
 			throw new IllegalArgumentException(msg);
 		}
+		this.keepFiles = doKeepFiles;
 		this.batchJob = job;
 		INITIALIZATION_RETURN_VALUE irv = initializeFromSources(s1, s2);
 		this.splitIndex = irv.splitIndex;
@@ -420,7 +427,9 @@ class ImmutableRecordIdTranslatorImpl implements
 				}
 			}
 			source1.close();
-			source1.delete();
+			if (!keepFiles) {
+				source1.delete();
+			}
 		}
 		log.info("Number of ids from first source: " + (count + 1));
 
@@ -457,7 +466,9 @@ class ImmutableRecordIdTranslatorImpl implements
 				}
 			}
 			source2.close();
-			source2.delete();
+			if (!keepFiles) {
+				source2.delete();
+			}
 		}
 		log.info("Number of ids from second source: " + (count2));
 		log.info("Split index: " + retIDX);

@@ -111,6 +111,9 @@ class MutableRecordIdTranslatorImpl implements MutableRecordIdTranslatorLocal {
 
 	private TRANSLATOR_STATE translatorState = TRANSLATOR_STATE.MUTABLE;
 
+	/** A flag indicating whether cached translator files are retained */
+	private final boolean keepFiles;
+
 	private final BatchJob batchJob;
 
 	private final IRecordIdSinkSourceFactory rFactory;
@@ -150,17 +153,24 @@ class MutableRecordIdTranslatorImpl implements MutableRecordIdTranslatorLocal {
 
 	MutableRecordIdTranslatorImpl(BatchJob job,
 			IRecordIdSinkSourceFactory factory, IRecordIdSink s1,
-			IRecordIdSink s2) throws BlockingException {
+			IRecordIdSink s2, boolean doKeepFiles) throws BlockingException {
 		if (job == null || factory == null || s1 == null || s2 == null) {
 			throw new IllegalArgumentException("null argument");
 		}
+		this.keepFiles = doKeepFiles;
 		if (s1.exists()) {
 			String msg = "translator cache already exists: " + s1;
-			throw new IllegalArgumentException(msg);
+			log.info(msg);
+			if (!keepFiles) {
+				throw new IllegalArgumentException(msg);
+			}
 		}
 		if (s2.exists()) {
 			String msg = "translator cache already exists: " + s2;
-			throw new IllegalArgumentException(msg);
+			log.info(msg);
+			if (!keepFiles) {
+				throw new IllegalArgumentException(msg);
+			}
 		}
 		this.batchJob = job;
 		this.rFactory = factory;
@@ -178,14 +188,18 @@ class MutableRecordIdTranslatorImpl implements MutableRecordIdTranslatorLocal {
 			getSink1().flush();
 			getSink1().close();
 			sink1State = SINK_STATE.CLOSED;
-			getSink1().remove();
+			if (!keepFiles) {
+				getSink1().remove();
+			}
 			sink1State = null;
 		}
 		if (getSink2().exists()) {
 			getSink2().flush();
 			getSink2().close();
 			sink2State = SINK_STATE.CLOSED;
-			getSink2().remove();
+			if (!keepFiles) {
+				getSink2().remove();
+			}
 			sink2State = null;
 		}
 	}

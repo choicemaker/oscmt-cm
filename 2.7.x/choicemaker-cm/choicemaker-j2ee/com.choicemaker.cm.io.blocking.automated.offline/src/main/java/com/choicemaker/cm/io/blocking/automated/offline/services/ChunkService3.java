@@ -55,6 +55,25 @@ import com.choicemaker.util.LongArrayList;
 		"rawtypes", "unchecked" })
 public class ChunkService3 {
 
+	/**
+	 * The name of a system property that can be set to "true" to keep files
+	 * used in intermediate computations. By default, intermediate files are
+	 * removed once the chunk service has run.
+	 */
+	public static final String PN_KEEP_FILES = "oaba.ChunkService3.keepFiles";
+
+	/**
+	 * Checks the system property {@link #PN_KEEP_FILES} and caches the result
+	 */
+	private boolean isKeepFilesRequested() {
+		String value = System.getProperty(PN_KEEP_FILES, "false");
+		Boolean _keepFiles = Boolean.valueOf(value);
+		boolean retVal = _keepFiles.booleanValue();
+		return retVal;
+	}
+
+	private boolean keepFiles = isKeepFilesRequested();
+
 	private static final String DELIM = "|";
 
 	private static final Logger log = Logger.getLogger(ChunkService3.class
@@ -95,15 +114,13 @@ public class ChunkService3 {
 
 	/**
 	 * There are two types of chunks, regular and oversized.
+	 * 
 	 * <pre>
 	 * numOS = numChunks - numRegularChunks;
 	 * </pre>
 	 * 
 	 */
 	private int numRegularChunks = 0;
-
-	// FIXME Define system property to control this setting
-	private boolean keepFiles = false;
 
 	private long time; // this keeps track of time
 
