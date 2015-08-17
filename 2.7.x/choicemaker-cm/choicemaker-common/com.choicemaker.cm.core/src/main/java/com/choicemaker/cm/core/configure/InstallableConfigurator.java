@@ -74,12 +74,6 @@ public final class InstallableConfigurator implements ChoiceMakerConfigurator {
 			String msgPrefix = "Installing ChoiceMaker configurator: ";
 			String fqcn = System
 					.getProperty(PropertyNames.INSTALLABLE_CHOICEMAKER_CONFIGURATOR);
-//			Properties p = System.getProperties();
-//			for (Iterator i=p.keySet().iterator(); i.hasNext(); ) {
-//				Object k = i.next();
-//				Object v = p.getProperty((String) k);
-//				System.out.println(k + ": " + v);
-//			}
 			try {
 				if (fqcn != null) {
 					logger.info(msgPrefix + fqcn);
