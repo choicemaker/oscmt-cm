@@ -7,8 +7,6 @@
  *******************************************************************************/
 package com.choicemaker.cm.validation.eclipse.impl;
 
-import java.util.Map;
-
 import com.choicemaker.cm.validation.AbstractValidator;
 import com.choicemaker.cm.validation.IValidator;
 
