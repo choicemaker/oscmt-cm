@@ -141,7 +141,7 @@ public class FlatFileRecordSink implements RecordSink {
 			// FIXME ??
 			FileOutputStream o = new FileOutputStream(f);
 			BufferedOutputStream bos = new BufferedOutputStream(o);
-			log.warning("BUG: does not handle unicode? " + o);
+			// log.warning("BUG: does not handle unicode? " + o);
 			// ENDFIXME
 			Writer w = new OutputStreamWriter(bos);
 			for (int i = 0; i < n; ++i) {
