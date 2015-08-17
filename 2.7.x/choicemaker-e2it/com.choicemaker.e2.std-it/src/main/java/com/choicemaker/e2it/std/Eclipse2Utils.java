@@ -12,7 +12,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.Logging;
+import java.util.logging.Logger;
 
 public class Eclipse2Utils {
 
