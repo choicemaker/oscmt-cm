@@ -116,7 +116,8 @@ public class RecordIdTranslatorIT {
 				throws BlockingException {
 			assertTrue(sink instanceof RecordIdSink);
 			String path = sink.getInfo();
-			return new RecordIdSource<String>(String.class, path);
+			IRecordIdSource<String> retVal = new RecordIdSource<String>(String.class, path);
+			return retVal;
 		}
 
 		@SuppressWarnings("rawtypes")
@@ -204,7 +205,10 @@ public class RecordIdTranslatorIT {
 				String id = dataType.idFromString(str);
 				assertTrue(id.equals(str));
 				retVal.writeRecordID(id);
-				str = br.readLine();			}
+				str = br.readLine();
+			}
+			retVal.flush();
+			retVal.close();
 		} catch (Exception x) {
 			String msg =
 				"Unable to create RecordIdSink for '" + resourceName + "': "
@@ -323,6 +327,7 @@ public class RecordIdTranslatorIT {
 
 		IRecordIdSource<String> source1 =
 			createRecordIdSource(job, TRANSLATOR1_RESOURCE);
+		source1.open();
 		assertTrue(source1.hasNext());
 		int internalId = ImmutableRecordIdTranslator.MINIMUM_VALID_INDEX;
 		while (source1.hasNext()) {
@@ -338,9 +343,10 @@ public class RecordIdTranslatorIT {
 
 		IRecordIdSource<String> source2 =
 			createRecordIdSource(job, TRANSLATOR2_RESOURCE);
+		source2.open();
 		assertTrue(source2.hasNext());
 		while (source2.hasNext()) {
-			String expected = source1.next();
+			String expected = source2.next();
 			assertTrue(expected != null);
 			String computed = (String) irit.reverseLookup(internalId);
 			assertTrue(expected.equals(computed));
