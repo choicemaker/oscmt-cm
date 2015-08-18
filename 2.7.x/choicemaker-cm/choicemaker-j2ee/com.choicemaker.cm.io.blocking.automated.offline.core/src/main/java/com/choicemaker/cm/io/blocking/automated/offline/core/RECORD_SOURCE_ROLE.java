@@ -51,7 +51,7 @@ public enum RECORD_SOURCE_ROLE {
 	SOURCE1_NODUPES('A'),
 	/** Source 2, without duplicates */
 	MASTER('D'),
-	/** Source 3, without duplicates */
+	/** Source 2, with duplicates */
 	SOURCE2_DUPES('Z'),
 	/** A magic value internally */
 	SPLIT_INDEX('0');
