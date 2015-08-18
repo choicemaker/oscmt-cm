@@ -84,9 +84,9 @@ public class RecordIdTranslatorIT {
 	public static final RECORD_ID_TYPE TRANSLATOR_ID_TYPE =
 		RECORD_ID_TYPE.TYPE_STRING;
 
-	public static final String TRANSLATOR1_RESOURCE = "translator1.dat";
+	public static final String TRANSLATOR1_RESOURCE = "/com/choicemaker/cmit/oaba/translator1.dat";
 
-	public static final String TRANSLATOR2_RESOURCE = "translator2.dat";
+	public static final String TRANSLATOR2_RESOURCE = "/com/choicemaker/cmit/oaba/translator2.dat";
 
 	protected static class CheezyFactory implements IRecordIdSinkSourceFactory {
 
@@ -204,7 +204,7 @@ public class RecordIdTranslatorIT {
 				String id = dataType.idFromString(str);
 				assertTrue(id.equals(str));
 				retVal.writeRecordID(id);
-			}
+				str = br.readLine();			}
 		} catch (Exception x) {
 			String msg =
 				"Unable to create RecordIdSink for '" + resourceName + "': "
