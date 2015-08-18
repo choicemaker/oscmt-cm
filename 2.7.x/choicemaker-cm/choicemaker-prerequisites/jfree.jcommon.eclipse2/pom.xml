@@ -8,12 +8,12 @@
   <parent>
     <groupId>com.choicemaker.cm</groupId>
     <artifactId>choicemaker-prerequisites</artifactId>
-    <version>2.7.2-rc.5</version>
+    <version>2.7.2-rc.5a</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
   <artifactId>jfree.jcommon.eclipse2plugin</artifactId>
-  <version>1.0.17-rc.5</version>
+  <version>1.0.17-rc.5a</version>
   <packaging>jar</packaging>
   <name>JCommon Plugin</name>
 

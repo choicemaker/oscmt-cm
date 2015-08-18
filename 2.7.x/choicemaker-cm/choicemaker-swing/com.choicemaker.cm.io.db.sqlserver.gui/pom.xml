@@ -8,7 +8,7 @@
   <parent>
     <groupId>com.choicemaker.cm</groupId>
     <artifactId>choicemaker-swing</artifactId>
-    <version>2.7.1-rc.5</version>
+    <version>2.7.1-rc.5a</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 

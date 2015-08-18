@@ -8,12 +8,12 @@
   <parent>
     <groupId>com.choicemaker.cm</groupId>
     <artifactId>choicemaker-prerequisites</artifactId>
-    <version>2.7.2-rc.5</version>
+    <version>2.7.2-rc.5a</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
   <artifactId>javax.help.eclipse2plugin</artifactId>
-  <version>2.0.05-rc.5</version>
+  <version>2.0.05-rc.5a</version>
   <packaging>jar</packaging>
   <name>Java Help Plugin</name>
 

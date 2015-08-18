@@ -5,7 +5,7 @@
 
   <groupId>com.choicemaker.mvn.cluemaker</groupId>
   <artifactId>smoke-test</artifactId>
-  <version>1.0-rc.5</version>
+  <version>1.0-rc.5a</version>
   <packaging>jar</packaging>
   <name>ClueMaker Maven Plugin Smoke Test</name>
 
@@ -13,62 +13,62 @@
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.core</artifactId>
-      <version>2.7.1-rc.5</version>
+      <version>2.7.1-rc.5a</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.io.blocking.automated.base</artifactId>
-      <version>2.7.1-rc.5</version>
+      <version>2.7.1-rc.5a</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.io.blocking.exact.base</artifactId>
-      <version>2.7.1-rc.5</version>
+      <version>2.7.1-rc.5a</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.io.db.base</artifactId>
-      <version>2.7.1-rc.5</version>
+      <version>2.7.1-rc.5a</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.io.flatfile.base</artifactId>
-      <version>2.7.1-rc.5</version>
+      <version>2.7.1-rc.5a</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.io.xml.base</artifactId>
-      <version>2.7.1-rc.5</version>
+      <version>2.7.1-rc.5a</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.matching.cfg</artifactId>
-      <version>2.7.1-rc.5</version>
+      <version>2.7.1-rc.5a</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.matching.en</artifactId>
-      <version>2.7.1-rc.5</version>
+      <version>2.7.1-rc.5a</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.matching.en.au</artifactId>
-      <version>2.7.1-rc.5</version>
+      <version>2.7.1-rc.5a</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.matching.en.us</artifactId>
-      <version>2.7.1-rc.5</version>
+      <version>2.7.1-rc.5a</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.validation.eclipse</artifactId>
-      <version>2.7.1-rc.5</version>
+      <version>2.7.1-rc.5a</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.urm.base</artifactId>
-      <version>2.7.1-rc.5</version>
+      <version>2.7.1-rc.5a</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
@@ -97,7 +97,7 @@
       <plugin>
         <groupId>com.choicemaker.mvn.cluemaker</groupId>
         <artifactId>cluemaker-maven-plugin</artifactId>
-        <version>1.0-rc.5</version>
+        <version>1.0-rc.5a</version>
         <configuration />
         <executions>
           <execution>
@@ -112,37 +112,37 @@
           <dependency>
             <groupId>com.choicemaker.cm</groupId>
             <artifactId>com.choicemaker.cm.io.blocking.automated.base</artifactId>
-            <version>2.7.1-rc.5</version>
+            <version>2.7.1-rc.5a</version>
           </dependency>
           <dependency>
             <groupId>com.choicemaker.cm</groupId>
             <artifactId>com.choicemaker.cm.io.blocking.exact.base</artifactId>
-            <version>2.7.1-rc.5</version>
+            <version>2.7.1-rc.5a</version>
           </dependency>
           <dependency>
             <groupId>com.choicemaker.cm</groupId>
             <artifactId>com.choicemaker.cm.io.db.base</artifactId>
-            <version>2.7.1-rc.5</version>
+            <version>2.7.1-rc.5a</version>
           </dependency>
           <dependency>
             <groupId>com.choicemaker.cm</groupId>
             <artifactId>com.choicemaker.cm.io.flatfile.base</artifactId>
-            <version>2.7.1-rc.5</version>
+            <version>2.7.1-rc.5a</version>
           </dependency>
           <dependency>
             <groupId>com.choicemaker.cm</groupId>
             <artifactId>com.choicemaker.cm.io.xml.base</artifactId>
-            <version>2.7.1-rc.5</version>
+            <version>2.7.1-rc.5a</version>
           </dependency>
           <dependency>
             <groupId>com.choicemaker.cm</groupId>
             <artifactId>com.choicemaker.cm.matching.en</artifactId>
-            <version>2.7.1-rc.5</version>
+            <version>2.7.1-rc.5a</version>
           </dependency>
           <dependency>
             <groupId>com.choicemaker.cm</groupId>
             <artifactId>com.choicemaker.cm.matching.en.us</artifactId>
-            <version>2.7.1-rc.5</version>
+            <version>2.7.1-rc.5a</version>
           </dependency>
         </dependencies>
       </plugin>
