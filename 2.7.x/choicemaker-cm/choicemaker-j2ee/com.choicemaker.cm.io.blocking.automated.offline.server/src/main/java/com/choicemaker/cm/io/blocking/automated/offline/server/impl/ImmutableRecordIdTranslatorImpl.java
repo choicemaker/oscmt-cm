@@ -251,22 +251,6 @@ class ImmutableRecordIdTranslatorImpl implements
 	/** A map of indices for staging records to the ids of those records */
 	private final SortedMap indices_To_Ids2 = new TreeMap();
 
-	// public ImmutableRecordIdTranslatorImpl(BatchJob job)
-	// throws BlockingException {
-	// if (job == null) {
-	// throw new IllegalArgumentException("null batch job");
-	// }
-	// this.batchJob = job;
-	// RecordIdSinkSourceFactory rFactory = getTransIDFactory(job);
-	// final IRecordIdSink sink1 = rFactory.getNextSink();
-	// source1 = rFactory.getSource(sink1);
-	// log.info("Source 1: " + source1);
-	// final IRecordIdSink sink2 = rFactory.getNextSink();
-	// source2 = rFactory.getSource(sink2);
-	// log.info("Source 2: " + source2);
-	// initialize();
-	// }
-
 	public ImmutableRecordIdTranslatorImpl(final BatchJob job,
 			final RECORD_ID_TYPE recordIdType,
 			final Map<?, Integer> ids1_To_Indices,
