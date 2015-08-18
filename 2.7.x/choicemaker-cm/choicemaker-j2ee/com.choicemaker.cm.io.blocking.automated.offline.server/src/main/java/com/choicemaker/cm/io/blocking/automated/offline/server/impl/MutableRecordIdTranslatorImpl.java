@@ -35,7 +35,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.MutableRecord
  */
 @SuppressWarnings({
 		"rawtypes", "unchecked" })
-class MutableRecordIdTranslatorImpl implements MutableRecordIdTranslatorLocal {
+public class MutableRecordIdTranslatorImpl implements MutableRecordIdTranslatorLocal {
 
 	/**
 	 * For testing purposes only. Returns a list of map value in the order of
@@ -151,7 +151,7 @@ class MutableRecordIdTranslatorImpl implements MutableRecordIdTranslatorLocal {
 
 	private final Map<Comparable, Integer> seen = new HashMap<>();
 
-	MutableRecordIdTranslatorImpl(BatchJob job,
+	public MutableRecordIdTranslatorImpl(BatchJob job,
 			IRecordIdSinkSourceFactory factory, IRecordIdSink s1,
 			IRecordIdSink s2, boolean doKeepFiles) throws BlockingException {
 		if (job == null || factory == null || s1 == null || s2 == null) {
