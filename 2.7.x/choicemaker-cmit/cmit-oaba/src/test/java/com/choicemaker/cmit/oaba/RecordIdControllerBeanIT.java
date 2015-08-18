@@ -26,11 +26,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.choicemaker.cm.args.OabaLinkageType;
-import com.choicemaker.cm.args.OabaParameters;
-import com.choicemaker.cm.args.OabaSettings;
-import com.choicemaker.cm.args.PersistableRecordSource;
-import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.batch.OperationalPropertyController;
 import com.choicemaker.cm.batch.ProcessingController;
@@ -48,16 +43,12 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordIdContr
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.RecordIdSink;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.RecordIdTranslatorIT;
 import com.choicemaker.cmit.oaba.util.OabaDeploymentUtils;
-import com.choicemaker.cmit.oaba.util.OabaMdbTestProcedures;
-import com.choicemaker.cmit.testconfigs.SimplePersonSqlServerTestConfiguration;
-import com.choicemaker.cmit.utils.j2ee.EntityManagerUtils;
+import com.choicemaker.cmit.utils.j2ee.OabaTestUtils;
 import com.choicemaker.cmit.utils.j2ee.TestEntityCounts;
 import com.choicemaker.cmit.utils.j2ee.WellKnownTestConfiguration;
-import com.choicemaker.e2.CMPluginRegistry;
 import com.choicemaker.e2.ejb.EjbPlatform;
 
 @RunWith(Arquillian.class)
@@ -196,62 +187,16 @@ public class RecordIdControllerBeanIT {
 	}
 
 	WellKnownTestConfiguration getTestConfiguration() {
-		final Class<SimplePersonSqlServerTestConfiguration> c =
-			SimplePersonSqlServerTestConfiguration.class;
-		final OabaLinkageType olt = OabaLinkageType.STAGING_TO_MASTER_LINKAGE;
-		CMPluginRegistry r = e2service.getPluginRegistry();
-		WellKnownTestConfiguration retVal =
-			OabaMdbTestProcedures.createTestConfiguration(c, olt, r);
-		return retVal;
+		return RecordIdTranslatorIT.getTestConfiguration(e2service);
 	}
 
 	BatchJob createPersistentOabaJob(String methodName)
 			throws ServerConfigurationException {
 		logger.entering(LOG_SOURCE, methodName);
-
-		final String externalId =
-			EntityManagerUtils.createExternalId(methodName);
-
 		WellKnownTestConfiguration c = getTestConfiguration();
-
-		final PersistableRecordSource staging =
-			rsController.save(c.getQueryRecordSource());
-		te.add(staging);
-
-		final PersistableRecordSource master =
-			rsController.save(c.getReferenceRecordSource());
-		te.add(master);
-
-		final String dbConfig0 =
-			c.getQueryDatabaseConfiguration();
-		final String blkConf0 =
-			c.getBlockingConfiguration();
-		final String dbConfig1 =
-			c.getReferenceDatabaseConfiguration();
-
-		final OabaParameters bp =
-			new OabaParametersEntity(c.getModelConfigurationName(), c
-					.getThresholds().getDifferThreshold(), c.getThresholds()
-					.getMatchThreshold(), blkConf0, staging, dbConfig0, master,
-					dbConfig1, c.getOabaTask());
-		te.add(bp);
-
-		OabaSettings oabaSettings = new OabaSettingsEntity();
-		oabaSettings = oabaSettingsController.save(oabaSettings);
-		te.add(oabaSettings);
-
-		ServerConfiguration serverConfiguration =
-			serverController.computeGenericConfiguration();
-		serverConfiguration = serverController.save(serverConfiguration);
-		te.add(serverConfiguration);
-
-		BatchJob retVal =
-			jobController.createPersistentOabaJob(externalId, bp, oabaSettings,
-					serverConfiguration);
-		te.add(retVal);
-		assertTrue(te.contains(retVal));
-
-		return retVal;
+		return OabaTestUtils.createPersistentOabaJob(c, e2service,
+				rsController, oabaSettingsController, serverController,
+				jobController, te);
 	}
 
 	MutableRecordIdTranslator<?> createEmptyTranslator(String tag)
@@ -377,6 +322,45 @@ public class RecordIdControllerBeanIT {
 	public void testStringTranslatorPersistence() throws BlockingException,
 			ServerConfigurationException {
 		final String METHOD = "testTranslatorPersistence";
+		@SuppressWarnings("unchecked")
+		final MutableRecordIdTranslator<String> mrit =
+			(MutableRecordIdTranslator<String>) createEmptyTranslator(METHOD);
+		assertTrue(mrit != null);
+
+		List<String> recordIds =
+			createStringRecordIds(MAX_SOURCE_COUNT_FUNCTIONAL);
+		final int splitIndexString =
+			random.nextInt(MAX_SOURCE_COUNT_FUNCTIONAL);
+		int index = 0;
+		mrit.open();
+		for (String recordId : recordIds) {
+			if (index == splitIndexString) {
+				mrit.split();
+			}
+			int i = mrit.translate(recordId);
+			assert (i == index);
+			++index;
+		}
+
+		BatchJob job = createPersistentOabaJob(METHOD);
+		final ImmutableRecordIdTranslator<String> irit =
+			ridController.toImmutableTranslator(mrit);
+		final ImmutableRecordIdTranslatorLocal<String> iritl =
+			ridController.save(job, irit);
+		te.add(iritl);
+		for (int i = 0; i < recordIds.size(); i++) {
+			String expectedId = recordIds.get(i);
+			String computedId = (String) irit.reverseLookup(i);
+			assertTrue(expectedId.equals(computedId));
+		}
+
+		checkCounts();
+	}
+
+	@Test
+	public void testToImmutableTranslator() throws BlockingException,
+			ServerConfigurationException {
+		final String METHOD = "testToImmutableTranslator";
 		@SuppressWarnings("unchecked")
 		final MutableRecordIdTranslator<String> mrit =
 			(MutableRecordIdTranslator<String>) createEmptyTranslator(METHOD);
