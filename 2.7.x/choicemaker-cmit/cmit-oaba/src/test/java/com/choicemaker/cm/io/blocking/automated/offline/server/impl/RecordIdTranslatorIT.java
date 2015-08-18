@@ -270,17 +270,6 @@ public class RecordIdTranslatorIT {
 				jobController, te);
 	}
 
-	MutableRecordIdTranslator<?> createMutableTranslator(String tag)
-			throws BlockingException, ServerConfigurationException {
-		BatchJob job = createPersistentOabaJob(tag);
-		IRecordIdSinkSourceFactory factory = new CheezyFactory();
-		IRecordIdSink sink1 = createRecordIdSink(job, TRANSLATOR1_RESOURCE);
-		IRecordIdSink sink2 = createRecordIdSink(job, TRANSLATOR2_RESOURCE);
-		MutableRecordIdTranslator<?> retVal =
-			new MutableRecordIdTranslatorImpl(job, factory, sink1, sink2, false);
-		return retVal;
-	}
-
 	@Before
 	public void setUp() throws Exception {
 		te =
@@ -311,7 +300,7 @@ public class RecordIdTranslatorIT {
 		IRecordIdSink sink2 = createRecordIdSink(job, TRANSLATOR2_RESOURCE);
 		@SuppressWarnings("unchecked")
 		MutableRecordIdTranslator<String> rit =
-			new MutableRecordIdTranslatorImpl(job, factory, sink1, sink2, false);
+			new MutableRecordIdTranslatorImpl(job, factory, sink1, sink2, true);
 		assertTrue(rit != null);
 		checkCounts();
 	}
@@ -326,7 +315,7 @@ public class RecordIdTranslatorIT {
 		IRecordIdSink sink2 = createRecordIdSink(job, TRANSLATOR2_RESOURCE);
 		@SuppressWarnings("unchecked")
 		MutableRecordIdTranslator<String> rit =
-			new MutableRecordIdTranslatorImpl(job, factory, sink1, sink2, false);
+			new MutableRecordIdTranslatorImpl(job, factory, sink1, sink2, true);
 		assertTrue(rit != null);
 
 		ImmutableRecordIdTranslator<String> irit =
