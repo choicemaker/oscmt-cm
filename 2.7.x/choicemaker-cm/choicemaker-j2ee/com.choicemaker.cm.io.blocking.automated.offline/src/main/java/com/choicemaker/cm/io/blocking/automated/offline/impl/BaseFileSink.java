@@ -12,19 +12,30 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.EXTERNAL_DATA_FORMAT;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ISink;
+import com.choicemaker.util.SystemPropertyUtils;
 
 /**
  * This is a generic file based implementation of ISink. Each descendant must
  * call init.
- * 
+ *
  * @author pcheung
  *
  */
 public abstract class BaseFileSink implements ISink {
+
+	public static enum SINK_STATE { INITIAL, CONSTRUCTED, OPEN, CLOSED }
+
+	private static final Logger logger = Logger.getLogger(BaseFileSink.class.getName());
+
+	private SINK_STATE sinkState = SINK_STATE.INITIAL;
+	private String lastOpenedStackTrace;
 
 	protected DataOutputStream dos;
 	protected FileWriter fw;
@@ -34,7 +45,7 @@ public abstract class BaseFileSink implements ISink {
 
 	/**
 	 * The descendants should call this method in their constructor.
-	 * 
+	 *
 	 * @param fileName
 	 *            - file name of the sink
 	 * @param type
@@ -47,6 +58,27 @@ public abstract class BaseFileSink implements ISink {
 		this.type = type;
 		assert this.type != null;
 		this.fileName = fileName;
+		this.sinkState = SINK_STATE.CONSTRUCTED;
+	}
+
+	private String printStackTrace(String msg) {
+		StringWriter sw = new StringWriter();
+		PrintWriter pw = new PrintWriter(sw);
+		Throwable t = new RuntimeException(msg);
+		pw.println(msg);
+		t.printStackTrace(pw);
+		String retVal = sw.toString();
+		return retVal;
+	}
+
+	@Override
+	protected void finalize() throws Throwable {
+		if (this.sinkState == SINK_STATE.OPEN) {
+			String msg = this.getClass().getName() + " instance left opened";
+			msg += SystemPropertyUtils.LINE_SEPARATOR + this.lastOpenedStackTrace;
+			logger.warning(msg);
+		}
+		super.finalize();
 	}
 
 	@Override
@@ -70,6 +102,10 @@ public abstract class BaseFileSink implements ISink {
 			default:
 				throw new IllegalArgumentException("invalid type: " + type);
 			}
+			String msg = this.getClass().getName() + " opened";
+			this.lastOpenedStackTrace = printStackTrace(msg);
+			this.sinkState = SINK_STATE.OPEN;
+
 		} catch (IOException ex) {
 			throw new BlockingException(ex.toString());
 		}
@@ -88,6 +124,8 @@ public abstract class BaseFileSink implements ISink {
 		default:
 			throw new IllegalArgumentException("invalid type: " + type);
 		}
+		assert (retVal && this.sinkState == SINK_STATE.OPEN)
+			|| (!retVal && this.sinkState != SINK_STATE.OPEN);
 		return retVal;
 	}
 
@@ -129,6 +167,7 @@ public abstract class BaseFileSink implements ISink {
 			default:
 				throw new IllegalArgumentException("invalid type: " + type);
 			}
+			this.sinkState = SINK_STATE.CLOSED;
 		} catch (IOException ex) {
 			throw new BlockingException(ex.toString());
 		}
