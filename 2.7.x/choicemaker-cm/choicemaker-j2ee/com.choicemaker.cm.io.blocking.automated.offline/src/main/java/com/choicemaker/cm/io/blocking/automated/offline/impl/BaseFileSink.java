@@ -110,8 +110,12 @@ public abstract class BaseFileSink implements ISink {
 		}
 	}
 
+	/**
+	 * The base implementation flushes the sink before closing it.
+	 */
 	@Override
 	public void close() throws BlockingException {
+		flush();
 		try {
 			switch (type) {
 			case STRING:
