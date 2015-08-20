@@ -21,7 +21,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.BlockSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ChunkDataSinkSourceFactory;
-import com.choicemaker.cm.io.blocking.automated.offline.impl.ChunkRecordIDSinkSourceFactory;
+import com.choicemaker.cm.io.blocking.automated.offline.impl.ChunkRecordIdSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparisonArrayGroupSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparisonArraySinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparisonTreeGroupSinkSourceFactory;
@@ -115,9 +115,9 @@ public class OabaFileUtils {
 				BASENAME_COMPAREGROUP_STORE, BINARY_SUFFIX);
 	}
 
-	public static ChunkRecordIDSinkSourceFactory getChunkIDFactory(BatchJob job) {
+	public static ChunkRecordIdSinkSourceFactory getChunkIDFactory(BatchJob job) {
 		String wd = BatchJobFileUtils.getWorkingDir(job);
-		return new ChunkRecordIDSinkSourceFactory(wd, BASENAME_CHUNKROW_STORE,
+		return new ChunkRecordIdSinkSourceFactory(wd, BASENAME_CHUNKROW_STORE,
 				BINARY_SUFFIX);
 	}
 
