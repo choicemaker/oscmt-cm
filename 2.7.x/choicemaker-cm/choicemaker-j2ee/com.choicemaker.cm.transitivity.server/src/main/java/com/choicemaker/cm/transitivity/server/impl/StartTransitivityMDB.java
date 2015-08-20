@@ -191,7 +191,7 @@ public class StartTransitivityMDB extends AbstractTransitivityMDB {
 					OabaFileUtils.getChunkIDFactory(transJob),
 					OabaFileUtils.getStageDataFactory(transJob, model),
 					OabaFileUtils.getMasterDataFactory(transJob, model),
-					translator.getSplitIndex(), transformerO, null, maxChunk,
+					translator, transformerO, null, maxChunk,
 					numFiles, status, transJob);
 		chunkService.runService();
 		log.info("Done creating chunks " + chunkService.getTimeElapsed());
