@@ -24,16 +24,10 @@ public interface ImmutableRecordIdTranslator<T extends Comparable<T>> {
 	 */
 	public static final int NOT_SPLIT = -1;
 
-	/**
-	 * Returned from {@link #lookup(Comparable) lookup} if no internal index
-	 * exists
-	 */
+	/** Returned from lookup if no internal index exists */
 	public int INVALID_INDEX = -1;
 
-	/**
-	 * Minimum valid index that will be returned by {@link #lookup(Comparable)
-	 * lookup}
-	 */
+	/** Minimum valid index that will be returned by lookup */
 	public int MINIMUM_VALID_INDEX = INVALID_INDEX + 1;
 
 	/** Returns the type of record identifier handled by this translator */

@@ -62,7 +62,7 @@ public interface MutableRecordIdTranslator<T extends Comparable<T>> {
 	/**
 	 * Closes this instance. If a {@link #translate(Comparable) translation} is
 	 * attempted after being closed, this instance will throw an
-	 * {@link IllegalStateExceptions illegal-state exception}.
+	 * IllegalStateException.
 	 */
 	public void close() throws BlockingException;
 

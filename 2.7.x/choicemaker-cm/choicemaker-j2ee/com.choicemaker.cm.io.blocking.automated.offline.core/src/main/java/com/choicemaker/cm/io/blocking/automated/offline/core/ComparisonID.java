@@ -35,7 +35,6 @@ public class ComparisonID<T extends Comparable<T>> implements
 	 * This is true if this Object is a MatchRecord and has the same id pair as
 	 * the input MatchRecord.
 	 * 
-	 * @param o
 	 * @return boolean - true if the ids from both MatchRecords match.
 	 */
 	public boolean equals(ComparisonID<T> cp) {

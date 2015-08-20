@@ -35,8 +35,6 @@ public interface IComparisonSet<T extends Comparable<T>> extends Serializable {
 	/**
 	 * This method returns a string of all the elements in this comparison set
 	 * for debugging purposes.
-	 * 
-	 * @return
 	 */
 	public String writeDebug();
 

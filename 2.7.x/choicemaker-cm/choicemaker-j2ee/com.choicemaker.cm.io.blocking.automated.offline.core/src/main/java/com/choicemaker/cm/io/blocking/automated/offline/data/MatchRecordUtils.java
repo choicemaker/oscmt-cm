@@ -84,9 +84,6 @@ public class MatchRecordUtils {
 	/**
 	 * This method concatenates the notes into a single string delimited by
 	 * Constants.EXPORT_NOTE_SEPARATOR.
-	 * 
-	 * @param notes
-	 * @return
 	 */
 	public static String getNotesAsDelimitedString(ActiveClues ac,
 			ImmutableProbabilityModel model) {
@@ -101,7 +98,6 @@ public class MatchRecordUtils {
 	 * Constants.EXPORT_NOTE_SEPARATOR.
 	 * 
 	 * @param notes
-	 * @return
 	 */
 	public static String getNotesAsDelimitedString(String[] notes) {
 		String retVal = null;

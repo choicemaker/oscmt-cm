@@ -16,7 +16,6 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
  * 
  * @author rphall
  * @version $Revision: 1.1 $ $Date: 2010/03/28 15:45:19 $
- * @see com.choicemaker.cm.analyzer.filter.Filter
  */
 public interface IMatchRecord2Filter<T extends Comparable<T>> extends
 		Serializable {

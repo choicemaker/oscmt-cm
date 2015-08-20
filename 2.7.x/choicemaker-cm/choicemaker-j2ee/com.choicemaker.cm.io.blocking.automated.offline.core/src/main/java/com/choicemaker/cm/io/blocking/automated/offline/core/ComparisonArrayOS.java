@@ -152,7 +152,6 @@ public class ComparisonArrayOS<T extends Comparable<T>> extends
 	 *            - size of the random array
 	 * @param max
 	 *            - maximum number
-	 * @return
 	 */
 	protected static int[] getRandomIDs(Random random, int size, int max) {
 		int[] list = new int[max];
