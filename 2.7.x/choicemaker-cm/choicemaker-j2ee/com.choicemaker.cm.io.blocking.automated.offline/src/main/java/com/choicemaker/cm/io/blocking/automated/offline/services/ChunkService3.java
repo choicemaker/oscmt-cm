@@ -26,6 +26,7 @@ import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkDataSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIdSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIdSinkSourceFactory;
+import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIdSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIndexSet;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IIDSet;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IIDSetSource;
@@ -94,7 +95,7 @@ public class ChunkService3 {
 	private boolean stop;
 
 	// Translates record ids into internal ids and vice-versa
-	IRecordIDTranslator3 translator;
+	ImmutableRecordIdTranslator translator;
 
 	// transformer for the regular blocks.
 	private ITransformer transformer;
