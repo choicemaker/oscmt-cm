@@ -48,8 +48,6 @@ public class ComparisonArrayGroupSinkSourceFactory implements
 	 * @param ext
 	 * @param num
 	 *            - the number of sinks in a group
-	 * @param dataType
-	 *            - indicates if the record id is LONG, INTEGER, or String.
 	 */
 	public ComparisonArrayGroupSinkSourceFactory(String fileDir,
 			String nameBase, String ext, int num) {
@@ -68,7 +66,6 @@ public class ComparisonArrayGroupSinkSourceFactory implements
 	 * 
 	 * @param chunkId
 	 * @param treeId
-	 * @return
 	 */
 	public IComparisonArraySource getSource(int chunkId, int treeId) {
 		return new ComparisonArraySource(fileDir + nameBase + chunkId + "_"

@@ -90,7 +90,6 @@ public class RecordValuesMap /* implements Map<Integer, List<Integer>> */{
 	 * This method reads the ArrayList from a binary file. This assumes that the
 	 * record ids coming in from the file is sorted in non-decreasing order.
 	 *
-	 * @param fileName
 	 * @return ArrayList - array containing rec_id, val_id pairs.
 	 */
 	public static List<IntArrayList> readColumnList(IRecValSource rvSource)

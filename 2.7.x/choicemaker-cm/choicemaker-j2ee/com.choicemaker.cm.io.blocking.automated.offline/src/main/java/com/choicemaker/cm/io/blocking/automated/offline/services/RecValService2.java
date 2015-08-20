@@ -82,15 +82,15 @@ public class RecValService2 {
 	 *            - stage record source of the data
 	 * @param master
 	 *            - master record source of the data. This can be null.
-	 * @param accessProvider
+	 * @param model
 	 *            - probability accessProvider of the data
 	 * @param rvFactory
 	 *            - factory to get RecValSinks
-	 * @param mutableTranslator
+	 * @param translator
 	 *            - record ID to internal id mutableTranslator
 	 * @param blockName
 	 *            - blocking configuration name in the schema
-	 * @param dbConf
+	 * @param queryConf
 	 *            - db configuration in the schema
 	 * @param status
 	 *            - current status of the system
@@ -183,8 +183,6 @@ public class RecValService2 {
 	 * Constants.TYPE_INTEGER, Constants.TYPE_LONG, or Constants.TYPE_STRING.
 	 *
 	 * It returns -1 if there was not staging data.
-	 *
-	 * @return
 	 */
 	public int getStageType() {
 		return stageType;
@@ -195,8 +193,6 @@ public class RecValService2 {
 	 * Constants.TYPE_INTEGER, Constants.TYPE_LONG, or Constants.TYPE_STRING.
 	 *
 	 * It returns -1 if there was not master data.
-	 *
-	 * @return
 	 */
 	public int getMasterType() {
 		return stageType;
@@ -517,7 +513,6 @@ public class RecValService2 {
 	 *
 	 * @param bfs
 	 *            - array of BlockingFields
-	 * @return
 	 */
 	private int countFields(IBlockingField[] bfs) {
 		HashSet set = new HashSet();

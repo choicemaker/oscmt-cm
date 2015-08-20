@@ -50,7 +50,7 @@ public class ChunkIdDBSink implements IChunkRecordIdSink {
 	/**
 	 * This constructor takes these two parameters.
 	 * 
-	 * @param datasource
+	 * @param ds
 	 *            - DB datasource
 	 * @param groupID
 	 *            - unique identifier for this object.

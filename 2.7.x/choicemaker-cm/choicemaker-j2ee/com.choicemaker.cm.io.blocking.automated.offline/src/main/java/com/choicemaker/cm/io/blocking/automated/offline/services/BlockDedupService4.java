@@ -101,8 +101,6 @@ public class BlockDedupService4 {
 	 * @param biFactory
 	 *            - factory to create temporary block sinks when there is an
 	 *            reset within an interval.
-	 * @param bSink
-	 *            - output BlockSink containing deduped blocks
 	 * @param maxBlockSize
 	 *            - maximum size of the blocks
 	 */
@@ -421,9 +419,6 @@ public class BlockDedupService4 {
 	/**
 	 * This method reads in a block file that has already been dedup into a
 	 * suffix tree.
-	 * 
-	 * @param bSource
-	 * @return
 	 */
 	private SuffixTreeNode readFromFile(IBlockSource bSource)
 			throws BlockingException {

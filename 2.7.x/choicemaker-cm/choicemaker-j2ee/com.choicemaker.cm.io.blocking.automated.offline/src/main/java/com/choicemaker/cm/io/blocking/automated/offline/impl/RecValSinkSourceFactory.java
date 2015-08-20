@@ -35,10 +35,6 @@ public class RecValSinkSourceFactory implements IRecValSinkSourceFactory {
 	 * as follows:
 	 * 
 	 * fileDir + baseName + ind + "." + ext
-	 * 
-	 * @param fileDir
-	 * @param chunkBase
-	 * @param ext
 	 */
 	public RecValSinkSourceFactory(String fileDir, String baseName, String ext) {
 		this.fileDir = fileDir;

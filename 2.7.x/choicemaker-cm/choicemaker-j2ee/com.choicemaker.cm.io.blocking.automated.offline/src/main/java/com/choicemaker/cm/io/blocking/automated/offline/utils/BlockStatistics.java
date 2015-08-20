@@ -76,8 +76,6 @@ public class BlockStatistics {
 
 	/**
 	 * This method write the block distribution data with log.info.
-	 * 
-	 * @param stat
 	 */
 	public void writeStat() throws BlockingException {
 		compute();
@@ -87,8 +85,6 @@ public class BlockStatistics {
 	/**
 	 * This method write the block distribution data with log.info. This version
 	 * also writes the blocks to another sink.
-	 * 
-	 * @param stat
 	 */
 	public void writeStat(IBlockSink sink) throws BlockingException {
 		compute(sink);

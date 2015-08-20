@@ -95,8 +95,6 @@ public class ChunkService2 {
 	 *            - stage record source
 	 * @param master
 	 *            - master record source
-	 * @param accessProvider
-	 *            - probability accessProvider
 	 * @param translator
 	 *            - this contains mapping from record id to internal id
 	 * @param recIDFactory

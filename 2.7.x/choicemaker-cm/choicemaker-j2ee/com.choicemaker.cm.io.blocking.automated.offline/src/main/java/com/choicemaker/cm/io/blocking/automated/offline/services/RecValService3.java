@@ -119,8 +119,6 @@ public class RecValService3 {
 	 *            reference record source
 	 * @param model
 	 *            matching model
-	 * @param dbParams
-	 *            database and blocking configuration
 	 * @param rvFactory
 	 *            a factory for record-value sinks
 	 * @param recidFactory
@@ -440,7 +438,6 @@ public class RecValService3 {
 	 *
 	 * @param bfs
 	 *            - array of BlockingFields
-	 * @return
 	 */
 	private int countFields(IBlockingField[] bfs) {
 		HashSet set = new HashSet();

@@ -153,7 +153,6 @@ public class ComparisonTreeSource<T extends Comparable<T>> extends
 	 * 
 	 * @param str
 	 * @param from
-	 * @return
 	 */
 	private int getNextMarker(String str, int from, int size) {
 		boolean found = false;

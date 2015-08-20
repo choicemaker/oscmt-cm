@@ -576,7 +576,6 @@ public class MRPSCreator {
 	 *
 	 * @param ids
 	 * @param rs
-	 * @return
 	 * @throws BlockingException
 	 */
 	private void readRecords(Map map, Set ids, RecordSource rs, IControl control)

@@ -46,8 +46,6 @@ public class OABAPropertiesFile implements IOABAProperties {
 
 	/**
 	 * This constructor sets the values from the properties file.
-	 * 
-	 * @param fileName
 	 */
 	public OABAPropertiesFile() {
 		Properties prop = new Properties();

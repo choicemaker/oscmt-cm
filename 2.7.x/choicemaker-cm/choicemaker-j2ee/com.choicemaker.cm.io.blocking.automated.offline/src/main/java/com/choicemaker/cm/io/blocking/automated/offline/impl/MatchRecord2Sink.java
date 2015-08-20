@@ -112,9 +112,6 @@ public class MatchRecord2Sink extends BaseFileSink implements IMatchRecord2Sink 
 	/**
 	 * This method returns a string representation of MatchRecord2 to get
 	 * written to a FileWriter.
-	 * 
-	 * @param match
-	 * @return
 	 */
 	public static String getOutputString(MatchRecord2 match) {
 		StringBuffer sb = new StringBuffer();

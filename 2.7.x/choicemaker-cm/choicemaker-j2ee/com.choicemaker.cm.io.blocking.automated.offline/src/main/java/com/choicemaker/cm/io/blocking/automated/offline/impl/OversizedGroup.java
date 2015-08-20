@@ -47,9 +47,6 @@ public class OversizedGroup implements IOversizedGroup {
 
 	/**
 	 * This method finds the maximum column id of the block set.
-	 *
-	 * @param bs
-	 * @return
 	 */
 	private int findMax(BlockSet bs) {
 		IntArrayList columns = bs.getColumns();

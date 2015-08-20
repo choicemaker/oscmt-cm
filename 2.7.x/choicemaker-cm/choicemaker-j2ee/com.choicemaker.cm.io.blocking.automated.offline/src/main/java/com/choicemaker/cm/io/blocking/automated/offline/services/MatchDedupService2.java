@@ -122,8 +122,6 @@ public class MatchDedupService2 {
 
 	/**
 	 * This returns the number of matches before the dedup.
-	 * 
-	 * @return
 	 */
 	public int getNumBefore() {
 		return numBefore;
@@ -131,8 +129,6 @@ public class MatchDedupService2 {
 
 	/**
 	 * This returns the number of matches after the dedup.
-	 * 
-	 * @return
 	 */
 	public int getNumAfter() {
 		return numAfter;
@@ -338,7 +334,6 @@ public class MatchDedupService2 {
 	 * @param max
 	 *            - maximum allowable size of the hash set, or if 0, check to
 	 *            see if 70% of the system memory is being used.
-	 * @return
 	 */
 	private static boolean isFull(int size, int max) {
 		boolean ret = false;
@@ -356,7 +351,6 @@ public class MatchDedupService2 {
 	 * compares both id1 and id2 of the MatchRecord.
 	 * 
 	 * @param records
-	 * @return
 	 */
 	private static int findMin(MatchRecord2[] records) {
 		Comparable min1 = null;

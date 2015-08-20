@@ -63,7 +63,6 @@ public class OversizedSubsetRemover {
 	 * @param source
 	 * @param sink
 	 * @param bFactory
-	 * @param maxBlockSize
 	 */
 	public OversizedSubsetRemover(IBlockSource source, IBlockSink sink,
 			IBlockSinkSourceFactory bFactory) throws BlockingException {

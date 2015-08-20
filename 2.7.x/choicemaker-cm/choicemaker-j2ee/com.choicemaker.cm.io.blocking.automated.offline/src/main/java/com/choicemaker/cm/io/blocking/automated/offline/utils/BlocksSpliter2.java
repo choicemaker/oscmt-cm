@@ -85,7 +85,6 @@ public class BlocksSpliter2 {
 	 * interval. By default there is 1 bucket file per interval, but you can
 	 * increase that if there are a lot of blocks for a given size.
 	 * 
-	 * @param blockSize
 	 * @param num
 	 */
 	public void setSize(int interval, int num) {
@@ -183,7 +182,6 @@ public class BlocksSpliter2 {
 	 * return = floor (size - minSize)/interval
 	 * 
 	 * @param size
-	 * @return
 	 */
 	private int getBucket(int size) {
 		int i = (size - minSize) / interval;

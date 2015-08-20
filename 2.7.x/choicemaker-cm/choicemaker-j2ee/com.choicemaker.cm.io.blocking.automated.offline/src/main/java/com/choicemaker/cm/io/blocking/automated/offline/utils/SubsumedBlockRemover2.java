@@ -54,9 +54,7 @@ public class SubsumedBlockRemover2 {
 	 * into smaller files. Each file contains blocks of the same size, so there
 	 * are maxBlock - 1 file, since there is no 1 element block.
 	 * 
-	 * @param source
 	 * @param sink
-	 * @param bFactory
 	 * @param maxBlockSize
 	 */
 	public SubsumedBlockRemover2(BlockGroup bGroup, IBlockSink sink,

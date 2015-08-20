@@ -64,8 +64,6 @@ public class BlockMatcher2<T extends Comparable<T>> implements
 	/**
 	 * This returns the amount of time in ms in reading records into hash map.
 	 * This is reset in the matchBlocks method.
-	 * 
-	 * @return
 	 */
 	@Override
 	public long getTimeInReadMaps() {
@@ -76,8 +74,6 @@ public class BlockMatcher2<T extends Comparable<T>> implements
 	 * This returns the amount of time in ms in performing matches in the block.
 	 * This also includes the time to write out to match file. This is reset in
 	 * the matchBlocks method.
-	 * 
-	 * @return
 	 */
 	@Override
 	public long getTimeInHandleBlock() {
@@ -87,8 +83,6 @@ public class BlockMatcher2<T extends Comparable<T>> implements
 	/**
 	 * This returns the amount of time in ms in writing to the match file. This
 	 * is reset in the matchBlocks method.
-	 * 
-	 * @return
 	 */
 	@Override
 	public long getTimeInWriteMatches() {
@@ -557,7 +551,6 @@ public class BlockMatcher2<T extends Comparable<T>> implements
 	 *            - RecordSource
 	 * @param accessProvider
 	 *            - ProbabilityModel
-	 * @return
 	 */
 	private static <T extends Comparable<T>> HashMap<T, Record> getRecords(
 			RecordSource rs, ImmutableProbabilityModel model)
@@ -613,7 +606,6 @@ public class BlockMatcher2<T extends Comparable<T>> implements
 	 *            - size of the random array
 	 * @param max
 	 *            - maximum number
-	 * @return
 	 */
 	private static int[] getRandomIDs(Random random, int size, int max) {
 		int[] list = new int[max];

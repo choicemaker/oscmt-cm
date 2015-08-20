@@ -98,8 +98,6 @@ public class MatchingService3 {
 	 *            - differ threshold
 	 * @param high
 	 *            - match threshold
-	 * @param validator
-	 *            - determines if a pair for comparison is valid
 	 * @param maxBlockSize
 	 *            - maximum size of a regular block. blocks of size >
 	 *            maxBlockSize is an oversized block.
@@ -359,7 +357,6 @@ public class MatchingService3 {
 	 *            - RecordSource
 	 * @param accessProvider
 	 *            - ProbabilityModel
-	 * @return
 	 */
 	private HashMap getRecords(RecordSource rs, ImmutableProbabilityModel model)
 			throws BlockingException {

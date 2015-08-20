@@ -60,12 +60,6 @@ public class GenericDedupService {
 	 * This constructor takes in the source with dups, a sink to store the dedup
 	 * Comparables, and a factory to generate temp sinks. maxMatches is the
 	 * maximum size of the TreeSet.
-	 * 
-	 * @param mSource
-	 * @param mSink
-	 * @param mFactory
-	 * @param maxMatches
-	 * @param status
 	 */
 	public GenericDedupService(IComparableSource cSource,
 			IComparableSink cSink, IComparableSinkSourceFactory cFactory,
@@ -203,7 +197,6 @@ public class GenericDedupService {
 	 *            functions.
 	 * @param delete
 	 *            - indicates if the tempSinks should be deleted.
-	 * @return
 	 * @throws BlockingException
 	 */
 	public static int mergeFiles(List tempSinks, IComparableSink cSink,
@@ -326,7 +319,6 @@ public class GenericDedupService {
 	 * @param source
 	 * @param dups
 	 * @param cSink
-	 * @return
 	 */
 	public static int nonOverlap(IComparableSource source,
 			IComparableSource dups, IComparableSink cSink)
@@ -405,7 +397,6 @@ public class GenericDedupService {
 	 * compares both id1 and id2 of the MatchRecord.
 	 * 
 	 * @param records
-	 * @return
 	 */
 	private static int findMin(Comparable[] records, int size) {
 		Comparable min = null;
@@ -436,7 +427,6 @@ public class GenericDedupService {
 	 * @param maxMatches
 	 *            - maximum allowable size of the hash set, or if 0, check to
 	 *            see if 70% of the system memory is being used.
-	 * @return
 	 */
 	private static boolean isFull(int size, int max) {
 		boolean ret = false;

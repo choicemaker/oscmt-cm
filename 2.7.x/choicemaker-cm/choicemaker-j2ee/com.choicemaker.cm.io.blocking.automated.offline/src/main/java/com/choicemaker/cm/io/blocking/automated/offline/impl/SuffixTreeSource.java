@@ -136,7 +136,6 @@ public class SuffixTreeSource extends BaseFileSource<SuffixTreeNode> implements
 	 * 
 	 * @param str
 	 * @param from
-	 * @return
 	 */
 	private int getNextMarker(String str, int from) {
 		boolean found = false;

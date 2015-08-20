@@ -49,8 +49,8 @@ public class ChunkIdDBSource implements IChunkRecordIdSource {
 	/**
 	 * This constructor takes these two parameters.
 	 * 
-	 * @param conn
-	 *            - DB connection
+	 * @param ds
+	 *            - datasource
 	 * @param groupID
 	 *            - unique identifier for this object.
 	 */

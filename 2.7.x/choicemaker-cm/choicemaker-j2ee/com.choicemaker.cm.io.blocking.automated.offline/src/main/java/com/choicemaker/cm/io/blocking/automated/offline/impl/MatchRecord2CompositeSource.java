@@ -106,8 +106,6 @@ public class MatchRecord2CompositeSource<T extends Comparable<T>> implements
 	/**
 	 * This methods counts the number of files of the form [file base]_i.[file
 	 * ext].
-	 * 
-	 * @return
 	 */
 	private int countFiles() {
 		int i = 1;

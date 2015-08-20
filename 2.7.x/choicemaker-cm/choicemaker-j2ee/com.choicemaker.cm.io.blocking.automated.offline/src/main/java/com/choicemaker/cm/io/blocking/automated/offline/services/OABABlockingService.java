@@ -106,8 +106,6 @@ public class OABABlockingService {
 	 *            - sink to save special oversized blocks
 	 * @param osDump
 	 *            - sink to save oversized block that the algorithm throws away
-	 * @param rvs
-	 *            - RecValService
 	 * @param validator
 	 *            - this defines what's a good block
 	 * @param status
@@ -670,7 +668,6 @@ public class OABABlockingService {
 	 *            - Oversized BlockSet sink
 	 * @param col
 	 *            - the column we are currently blocking on
-	 * @return
 	 */
 	private int writeBlocks(HashMap map, IBlockSink bSink,
 			IOversizedGroup osGroup, int col) throws BlockingException {
@@ -730,7 +727,6 @@ public class OABABlockingService {
 	 *            - Oversized BlockSet object to compare
 	 * @param map
 	 *            - map of record source.
-	 * @return
 	 */
 	private static HashMap findMatching(BlockSet bs, RecordValuesMap record) {
 		HashMap match = new HashMap();

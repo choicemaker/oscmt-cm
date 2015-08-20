@@ -41,8 +41,6 @@ public class ControlChecker {
 	 * @param control
 	 * @param c
 	 * @param interval
-	 * @return
-	 * @throws BlockingException
 	 */
 	public static boolean checkStop(IControl control, int c, int interval)
 			throws BlockingException {

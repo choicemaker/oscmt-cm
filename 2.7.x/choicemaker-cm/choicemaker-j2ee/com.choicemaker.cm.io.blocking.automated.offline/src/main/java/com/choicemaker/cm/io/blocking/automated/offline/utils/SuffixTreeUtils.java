@@ -53,9 +53,6 @@ public class SuffixTreeUtils {
 	/**
 	 * This method returns the number of descendants of this node that are
 	 * leaves.
-	 * 
-	 * @param root
-	 * @return
 	 */
 	public static int countLeaves(SuffixTreeNode node) {
 		if (node.hasBlockingSetId())
@@ -82,7 +79,6 @@ public class SuffixTreeUtils {
 	 * The input is a root node with id = -1 and 1 child.
 	 * 
 	 * @param root
-	 * @return
 	 */
 	public static ArrayList<PairID> getPairs(SuffixTreeNode root) {
 		ArrayList<PairID> pairs = new ArrayList<>();

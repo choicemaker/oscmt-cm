@@ -120,8 +120,6 @@ public class MatchDedupService3 {
 
 	/**
 	 * This returns the number of matches before the dedup.
-	 * 
-	 * @return
 	 */
 	public int getNumBefore() {
 		return numBefore;
@@ -129,8 +127,6 @@ public class MatchDedupService3 {
 
 	/**
 	 * This returns the number of matches after the dedup.
-	 * 
-	 * @return
 	 */
 	public int getNumAfter() {
 		return numAfter;

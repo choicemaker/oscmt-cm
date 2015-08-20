@@ -34,11 +34,9 @@ public class BlockSinkSourceFactory implements IBlockSinkSourceFactory,
 	 * This constructor takes in key parameters to create oversized block files
 	 * as follows:
 	 * 
+   * <pre>
 	 * fileDir + baseName + ind + "." + ext
-	 * 
-	 * @param fileDir
-	 * @param chunkBase
-	 * @param ext
+   * </pre>
 	 */
 	public BlockSinkSourceFactory(String fileDir, String baseName, String ext) {
 		this.fileDir = fileDir;

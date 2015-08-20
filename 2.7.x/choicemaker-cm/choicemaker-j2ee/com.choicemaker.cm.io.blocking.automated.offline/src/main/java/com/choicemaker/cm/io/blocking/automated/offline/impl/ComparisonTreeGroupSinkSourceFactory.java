@@ -79,7 +79,6 @@ public class ComparisonTreeGroupSinkSourceFactory implements
 	 * 
 	 * @param chunkId
 	 * @param treeId
-	 * @return
 	 */
 	public IComparisonTreeSource getSource(int chunkId, int treeId) {
 		return new ComparisonTreeSource(fileDir + nameBase + chunkId + "_"

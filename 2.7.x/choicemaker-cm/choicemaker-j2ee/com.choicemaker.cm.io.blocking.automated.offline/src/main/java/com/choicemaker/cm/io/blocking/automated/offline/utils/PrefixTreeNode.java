@@ -128,9 +128,6 @@ public class PrefixTreeNode {
 	/**
 	 * This returns an ArrayList of all children with id less than or equal to
 	 * the input.
-	 * 
-	 * @param id
-	 * @return
 	 */
 	public ArrayList getChildren(long id) {
 		if (kids == null) {
@@ -266,8 +263,6 @@ public class PrefixTreeNode {
 
 	/**
 	 * This returns a string of its children.
-	 * 
-	 * @return
 	 */
 	public String writeDebug(int level) {
 		StringBuffer sb = new StringBuffer();
@@ -290,8 +285,6 @@ public class PrefixTreeNode {
 
 	/**
 	 * This returns a string of its children.
-	 * 
-	 * @return
 	 */
 	public String writeDebug(String base) {
 		StringBuffer sb = new StringBuffer();

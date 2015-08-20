@@ -90,8 +90,6 @@ public class MatchingService2 {
 	 *            - differ threshold
 	 * @param high
 	 *            - match threshold
-	 * @param validator
-	 *            - determines if a pair for comparison is valid
 	 * @param maxBlockSize
 	 *            - maximum size of a regular block. blocks of size >
 	 *            maxBlockSize is an oversized block.

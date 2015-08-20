@@ -99,7 +99,6 @@ public class MatchRecord2Source<T extends Comparable<T>> extends
 	 * object.
 	 * 
 	 * @param reader
-	 * @return
 	 * @throws IOException
 	 */
 	public static MatchRecord2 readMatchRecord(BufferedReader reader)

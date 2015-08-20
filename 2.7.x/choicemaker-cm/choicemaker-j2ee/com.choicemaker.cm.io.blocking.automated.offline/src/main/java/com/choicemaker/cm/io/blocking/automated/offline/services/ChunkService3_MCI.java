@@ -156,16 +156,16 @@ public class ChunkService3_MCI {
 	 *            - stage record source
 	 * @param master
 	 *            - master record source
-	 * @param accessProvider
-	 *            - probability accessProvider
+	 * @param model
+	 *            - probability model
 	 * @param recIDFactory
 	 *            - this factory creates chunk id files
 	 * @param stageSinkFactory
 	 *            - this factory creates chunk data files for the staging data
 	 * @param masterSinkFactory
 	 *            - this factory creates chunk data files for the master data
-	 * @param splitIndex
-	 *            - This indicates when the internal goes from stage to master/
+	 * @param translator
+	 *            - translate record ids to/from record indexes
 	 * @param transformer
 	 *            - ID transformer for the regular blocks
 	 * @param transformerO

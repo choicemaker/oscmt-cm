@@ -50,7 +50,6 @@ public class OversizedRemover {
 	 * @param source
 	 * @param sink
 	 * @param bFactory
-	 * @param maxBlockSize
 	 */
 	public OversizedRemover(IBlockSource source, IBlockSink sink,
 			IBlockSinkSourceFactory bFactory) throws BlockingException {

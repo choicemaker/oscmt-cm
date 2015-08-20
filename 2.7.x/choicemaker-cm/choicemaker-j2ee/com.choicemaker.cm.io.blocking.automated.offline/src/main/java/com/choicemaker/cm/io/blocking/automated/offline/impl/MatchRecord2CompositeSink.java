@@ -158,8 +158,6 @@ public class MatchRecord2CompositeSink implements IMatchRecord2Sink {
 
 	/**
 	 * This method checks to see if the current file is full.
-	 * 
-	 * @return
 	 */
 	private boolean isFull() throws BlockingException {
 		currentFile.flush();

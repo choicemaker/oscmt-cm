@@ -39,9 +39,6 @@ public class Size2MatchProducer {
 	 *            - The MatchRecord2 source produced by the OABA.
 	 * @param idSource
 	 *            - The id file with record id of size 2 sets.
-	 * @param idFactory
-	 *            - RecordIDSinkSourceFactory to produce record
-	 * @param mSink
 	 */
 	public Size2MatchProducer(IMatchRecord2Source originalSource,
 			IRecordIdSource idSource, IMatchRecord2Sink mSink) {

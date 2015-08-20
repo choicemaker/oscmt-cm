@@ -421,7 +421,6 @@ public class OversizedDedupService {
 	 * This method calculates the sum of an array of IDs
 	 *
 	 * @param list
-	 * @return
 	 */
 	private long getSum(LongArrayList list) {
 		long sum = 0;
@@ -460,7 +459,6 @@ public class OversizedDedupService {
 	 *
 	 * @param ids1
 	 * @param ids2
-	 * @return
 	 */
 	private static boolean differ(LongArrayList ids1, LongArrayList ids2) {
 		boolean diff = false;

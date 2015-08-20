@@ -105,11 +105,6 @@ public abstract class BaseFileSource<T> implements ISource<T> {
 	/**
 	 * This returns the location in the string str where charAt == key and
 	 * location >= start. Returns -1 if no such location.
-	 * 
-	 * @param str
-	 * @param key
-	 * @param start
-	 * @return
 	 */
 	protected int getNextLocation(String str, char key, int start) {
 		int ret = -1;

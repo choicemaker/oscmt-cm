@@ -38,7 +38,7 @@ public class ValidatorBase implements IValidatorBase, Serializable {
 	 * 
 	 * @param isBefore
 	 *            - true if the stage records are before the split Index
-	 * @param ImmutableRecordIdTranslator
+	 * @param translator
 	 *            - the record ID to internal id translator
 	 */
 	public ValidatorBase(boolean isBefore,
