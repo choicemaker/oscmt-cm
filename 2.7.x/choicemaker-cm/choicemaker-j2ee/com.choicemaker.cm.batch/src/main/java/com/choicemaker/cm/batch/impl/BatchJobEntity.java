@@ -137,8 +137,8 @@ public abstract class BatchJobEntity extends AbstractPersistentObject implements
 	protected final String type;
 
 	/**
-	 * {@link BatchJob#INVALID_BATCHJOB_ID} or references the id of some other
-	 * BatchJobEntity
+	 * {@link com.choicemaker.cm.args.PersistentObject#NONPERSISTENT_ID} or
+	 * the id of some other BatchJobEntity
 	 */
 	@Column(name = CN_BPARENT_ID)
 	protected final long bparentId;
@@ -162,8 +162,8 @@ public abstract class BatchJobEntity extends AbstractPersistentObject implements
 	protected final long serverId;
 
 	/**
-	 * {@link BatchJob#INVALID_BATCHJOB_ID} or references the id of some
-	 * UrmJobBean
+	 * {@link com.choicemaker.cm.args.PersistentObject#NONPERSISTENT_ID} or the
+	 * id of some UrmJobBean
 	 */
 	@Column(name = BatchJobJPA.CN_URM_ID)
 	protected final long urmId;
