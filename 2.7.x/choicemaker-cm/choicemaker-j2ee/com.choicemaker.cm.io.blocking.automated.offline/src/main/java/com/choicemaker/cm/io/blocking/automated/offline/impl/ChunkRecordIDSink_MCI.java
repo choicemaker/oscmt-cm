@@ -18,15 +18,15 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIdSink;
  * @author pcheung
  *
  */
-public class ChunkRecordIdSink extends BaseFileSink implements
+public class ChunkRecordIdSink_MCI extends BaseFileSink implements
 		IChunkRecordIdSink {
 
 	@Deprecated
-	public ChunkRecordIdSink(String fileName, int type) {
+	public ChunkRecordIdSink_MCI(String fileName, int type) {
 		super(fileName, EXTERNAL_DATA_FORMAT.fromSymbol(type));
 	}
 
-	public ChunkRecordIdSink(String fileName, EXTERNAL_DATA_FORMAT type) {
+	public ChunkRecordIdSink_MCI(String fileName, EXTERNAL_DATA_FORMAT type) {
 		super(fileName, type);
 	}
 

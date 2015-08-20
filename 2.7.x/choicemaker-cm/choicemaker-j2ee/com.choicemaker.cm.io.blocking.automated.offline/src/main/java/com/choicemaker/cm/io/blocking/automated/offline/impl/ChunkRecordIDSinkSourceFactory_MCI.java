@@ -22,7 +22,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIdSourc
  * @author pcheung
  *
  */
-public class ChunkRecordIdSinkSourceFactory implements
+public class ChunkRecordIdSinkSourceFactory_MCI implements
 		IChunkRecordIdSinkSourceFactory {
 
 	private String fileDir;
@@ -41,7 +41,7 @@ public class ChunkRecordIdSinkSourceFactory implements
 	 * @param chunkBase
 	 * @param ext
 	 */
-	public ChunkRecordIdSinkSourceFactory(String fileDir, String chunkBase,
+	public ChunkRecordIdSinkSourceFactory_MCI(String fileDir, String chunkBase,
 			String ext) {
 		this.fileDir = fileDir;
 		this.chunkBase = chunkBase;

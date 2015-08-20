@@ -19,7 +19,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIdSourc
  * @author pcheung
  *
  */
-public class ChunkRecordIdSource extends BaseFileSource<Long> implements
+public class ChunkRecordIdSource_MCI extends BaseFileSource<Long> implements
 		IChunkRecordIdSource {
 
 	private long nextRecID;
@@ -27,16 +27,16 @@ public class ChunkRecordIdSource extends BaseFileSource<Long> implements
 	// this is true if the lastest value read in has been used.
 	private boolean used = true;
 
-	public ChunkRecordIdSource(String fileName) {
+	public ChunkRecordIdSource_MCI(String fileName) {
 		super(fileName, EXTERNAL_DATA_FORMAT.BINARY);
 	}
 
 	@Deprecated
-	public ChunkRecordIdSource(String fileName, int type) {
+	public ChunkRecordIdSource_MCI(String fileName, int type) {
 		super(fileName, EXTERNAL_DATA_FORMAT.fromSymbol(type));
 	}
 
-	public ChunkRecordIdSource(String fileName, EXTERNAL_DATA_FORMAT type) {
+	public ChunkRecordIdSource_MCI(String fileName, EXTERNAL_DATA_FORMAT type) {
 		super(fileName, type);
 	}
 
