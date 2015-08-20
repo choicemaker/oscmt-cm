@@ -10,6 +10,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.services;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.SortedSet;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
 import java.util.logging.Logger;
@@ -29,6 +30,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIdSourc
 import com.choicemaker.cm.io.blocking.automated.offline.core.IIDSet;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IIDSetSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ITransformer;
+import com.choicemaker.cm.io.blocking.automated.offline.core.ImmutableRecordIdTranslator;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessingEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.ControlChecker;
@@ -37,17 +39,17 @@ import com.choicemaker.util.LongArrayList;
 /**
  * This version takes in blocks that contains internal id instead of the record
  * id.
- * 
+ *
  * This service creates does the following: 1. Read in blocks and/or oversized
  * blocks to create chunk id files in internal ids. 2. Read in the record
  * source, translator and chunk id files to create chunk data files. 3. Create
  * comparing block groups.
- * 
+ *
  * This version is more abstracted. It takes in IISSetSource instead of
  * IBlockSource. It also uses transformers to write internal id arrays/trees to
  * record id arrays/trees.
- * 
- * 
+ *
+ *
  * @author pcheung
  *
  */
@@ -91,6 +93,9 @@ public class ChunkService3 {
 	private IControl control;
 	private boolean stop;
 
+	// Translates record ids into internal ids and vice-versa
+	IRecordIDTranslator3 translator;
+
 	// transformer for the regular blocks.
 	private ITransformer transformer;
 
@@ -114,11 +119,11 @@ public class ChunkService3 {
 
 	/**
 	 * There are two types of chunks, regular and oversized.
-	 * 
+	 *
 	 * <pre>
 	 * numOS = numChunks - numRegularChunks;
 	 * </pre>
-	 * 
+	 *
 	 */
 	private int numRegularChunks = 0;
 
@@ -127,7 +132,7 @@ public class ChunkService3 {
 	/**
 	 * This version of the constructor takes in a block source and oversized
 	 * block source.
-	 * 
+	 *
 	 * @param bSource
 	 *            - block source
 	 * @param osSource
@@ -162,10 +167,10 @@ public class ChunkService3 {
 			ImmutableProbabilityModel model,
 			IChunkRecordIdSinkSourceFactory recIDFactory,
 			IChunkDataSinkSourceFactory stageSinkFactory,
-			IChunkDataSinkSourceFactory masterSinkFactory, int splitIndex,
-			ITransformer transformer, ITransformer transformerO,
-			int maxChunkSize, int maxFiles, ProcessingEventLog status,
-			IControl control) {
+			IChunkDataSinkSourceFactory masterSinkFactory,
+			ImmutableRecordIdTranslator translator, ITransformer transformer,
+			ITransformer transformerO, int maxChunkSize, int maxFiles,
+			ProcessingEventLog status, IControl control) {
 
 		this.bSource = bSource;
 		this.osSource = osSource;
@@ -180,7 +185,8 @@ public class ChunkService3 {
 		this.maxChunkSize = maxChunkSize;
 		this.maxFiles = maxFiles;
 		this.status = status;
-		this.splitIndex = splitIndex;
+		this.translator = translator;
+		this.splitIndex = translator.getSplitIndex();
 
 		this.control = control;
 		this.stop = false;
@@ -196,7 +202,7 @@ public class ChunkService3 {
 
 	/**
 	 * This method returns the time it takes to run the runService method.
-	 * 
+	 *
 	 * @return long - returns the time (in milliseconds) it took to run this
 	 *         service.
 	 */
@@ -206,7 +212,7 @@ public class ChunkService3 {
 
 	/**
 	 * This method runs the service.
-	 * 
+	 *
 	 * @throws IOException
 	 */
 	public void runService() throws BlockingException {
@@ -293,7 +299,7 @@ public class ChunkService3 {
 	/**
 	 * This method creates the chunk data files for stage and master record
 	 * sources.
-	 * 
+	 *
 	 * @throws IOException
 	 * @throws XmlConfException
 	 */
@@ -388,7 +394,7 @@ public class ChunkService3 {
 	/**
 	 * This method just opens the sink so that a empty file will be created for
 	 * the master sink. This is necessary because matching requires empty files.
-	 * 
+	 *
 	 * @param masterRecordSinks
 	 * @throws IOException
 	 */
@@ -403,7 +409,7 @@ public class ChunkService3 {
 	/**
 	 * This method write out chunk data for elements in the arrays from start to
 	 * end.
-	 * 
+	 *
 	 * @param start
 	 *            - The location in the array to start writing. Inclusive.
 	 * @param end
@@ -479,7 +485,7 @@ public class ChunkService3 {
 	/**
 	 * This method creates the chunk data files from the chunk id files in the
 	 * range.
-	 * 
+	 *
 	 * @param rs
 	 *            - the record source
 	 * @param accessProvider
@@ -570,7 +576,7 @@ public class ChunkService3 {
 	/**
 	 * This method creates the smaller block sink files and rec id files. These
 	 * files correspond to a single chunk.
-	 * 
+	 *
 	 * @param source
 	 *            - block source
 	 * @param isOS
@@ -587,7 +593,7 @@ public class ChunkService3 {
 		source.open();
 
 		// this stores the unique recID's in a chunk
-		TreeSet rows = new TreeSet();
+		SortedSet rows = new TreeSet();
 
 		IChunkRecordIdSink recIDSink = recIDFactory.getNextSink();
 		recIDSinks.add(recIDSink);
@@ -604,7 +610,6 @@ public class ChunkService3 {
 		count = 0;
 		while (source.hasNext() && !stop) {
 			count++;
-			// totalBlocks ++;
 			countAll++;
 
 			stop = ControlChecker.checkStop(control, countAll);
@@ -690,14 +695,14 @@ public class ChunkService3 {
 	/**
 	 * This method writes the ids in the tree set to the sink. The ids are
 	 * written in ascending order.
-	 * 
+	 *
 	 * @param recSink
 	 *            - chunk record id sink
 	 * @param rows
 	 *            - hash set containing the distinct ids
 	 * @throws IOException
 	 */
-	private static void writeChunkRows(IChunkRecordIdSink recSink, TreeSet rows)
+	private static void writeChunkRows(IChunkRecordIdSink recSink, SortedSet rows)
 			throws BlockingException {
 		recSink.open();
 
