@@ -117,15 +117,25 @@ public abstract class BaseFileSink implements ISink {
 		switch (type) {
 		case STRING:
 			retVal = fw != null;
+			if (!retVal) {
+				// if fw doesn't exist for a STRING instance, it can't be open
+				assert this.sinkState != SINK_STATE.OPEN;
+			}
 			break;
 		case BINARY:
 			retVal = dos != null;
+			if (!retVal) {
+				// if dos doesn't exist for a BINARY instance, it can't be open
+				assert this.sinkState != SINK_STATE.OPEN;
+			}
 			break;
 		default:
 			throw new IllegalArgumentException("invalid type: " + type);
 		}
-		assert (retVal && this.sinkState == SINK_STATE.OPEN)
-			|| (!retVal && this.sinkState != SINK_STATE.OPEN);
+		// if either is true, both are true
+		if (retVal || this.sinkState == SINK_STATE.OPEN) {
+			assert (retVal && this.sinkState == SINK_STATE.OPEN);
+		}
 		return retVal;
 	}
 
@@ -143,6 +153,10 @@ public abstract class BaseFileSink implements ISink {
 			default:
 				throw new IllegalArgumentException("invalid type: " + type);
 			}
+			String msg = this.getClass().getName() + " opened for appending";
+			this.lastOpenedStackTrace = printStackTrace(msg);
+			this.sinkState = SINK_STATE.OPEN;
+
 		} catch (IOException ex) {
 			throw new BlockingException(ex.toString());
 		}
