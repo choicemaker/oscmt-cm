@@ -123,7 +123,7 @@ public class Chunk2MDB extends AbstractOabaMDB {
 					OabaFileUtils.getChunkIDFactory(batchJob),
 					OabaFileUtils.getStageDataFactory(batchJob, model),
 					OabaFileUtils.getMasterDataFactory(batchJob, model),
-					translator.getSplitIndex(), tTransformer, transformerO,
+					translator, tTransformer, transformerO,
 					maxChunk, maxChunkFiles, processingLog, batchJob);
 		log.info("Chunk service: " + chunkService);
 		chunkService.runService();
