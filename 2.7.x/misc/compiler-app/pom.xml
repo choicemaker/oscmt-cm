@@ -8,7 +8,7 @@
   <parent>
     <groupId>com.choicemaker.cm</groupId>
     <artifactId>choicemaker</artifactId>
-    <version>2.7.1-rc.5a</version>
+    <version>2.7.1-rc.5b</version>
     <relativePath>../../pom.xml</relativePath>
   </parent>
 
@@ -25,176 +25,176 @@
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.io.blocking.automated.base</artifactId>
-      <version>2.7.1-rc.5a</version>
+      <version>2.7.1-rc.5b</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.io.blocking.exact.base</artifactId>
-      <version>2.7.1-rc.5a</version>
+      <version>2.7.1-rc.5b</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.io.db.base</artifactId>
-      <version>2.7.1-rc.5a</version>
+      <version>2.7.1-rc.5b</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.io.flatfile.base</artifactId>
-      <version>2.7.1-rc.5a</version>
+      <version>2.7.1-rc.5b</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.validation.eclipse</artifactId>
-      <version>2.7.1-rc.5a</version>
+      <version>2.7.1-rc.5b</version>
     </dependency>
 
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.compiler</artifactId>
-      <version>2.7.1-rc.5a</version>
+      <version>2.7.1-rc.5b</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.core</artifactId>
-      <version>2.7.1-rc.5a</version>
+      <version>2.7.1-rc.5b</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.io.xml.base</artifactId>
-      <version>2.7.1-rc.5a</version>
+      <version>2.7.1-rc.5b</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.matching.cfg</artifactId>
-      <version>2.7.1-rc.5a</version>
+      <version>2.7.1-rc.5b</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.matching.en</artifactId>
-      <version>2.7.1-rc.5a</version>
+      <version>2.7.1-rc.5b</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.matching.en.au</artifactId>
-      <version>2.7.1-rc.5a</version>
+      <version>2.7.1-rc.5b</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>
       com.choicemaker.cm.matching.en.us.ny.nyc</artifactId>
-      <version>2.7.1-rc.5a</version>
+      <version>2.7.1-rc.5b</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>
       com.choicemaker.cm.matching.en.us.train</artifactId>
-      <version>2.7.1-rc.5a</version>
+      <version>2.7.1-rc.5b</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.matching.gen</artifactId>
-      <version>2.7.1-rc.5a</version>
+      <version>2.7.1-rc.5b</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.matching.geo</artifactId>
-      <version>2.7.1-rc.5a</version>
+      <version>2.7.1-rc.5b</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.matching.intl</artifactId>
-      <version>2.7.1-rc.5a</version>
+      <version>2.7.1-rc.5b</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.matching.wfst</artifactId>
-      <version>2.7.1-rc.5a</version>
+      <version>2.7.1-rc.5b</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>
       com.choicemaker.cm.matching.wfst.eclipse</artifactId>
-      <version>2.7.1-rc.5a</version>
+      <version>2.7.1-rc.5b</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.ml.me.base</artifactId>
-      <version>2.7.1-rc.5a</version>
+      <version>2.7.1-rc.5b</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.urm.base</artifactId>
-      <version>2.7.1-rc.5a</version>
+      <version>2.7.1-rc.5b</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.util.app</artifactId>
-      <version>2.7.1-rc.5a</version>
+      <version>2.7.1-rc.5b</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.sun.tools</artifactId>
-      <version>1.7.0-rc.5a</version>
+      <version>1.7.0-rc.5b</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.wcohen.ss</artifactId>
-      <version>2.7.1-rc.5a</version>
+      <version>2.7.1-rc.5b</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.e2</groupId>
       <artifactId>com.choicemaker.e2</artifactId>
-      <version>2.7.1-rc.5a</version>
+      <version>2.7.1-rc.5b</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>org.apache.ant</artifactId>
-      <version>1.5.4-rc.5a</version>
+      <version>1.5.4-rc.5b</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>org.apache.bcel</artifactId>
-      <version>5.0.1-rc.5a</version>
+      <version>5.0.1-rc.5b</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>org.eclipse.ant.core</artifactId>
-      <version>2.1.2-rc.5a</version>
+      <version>2.1.2-rc.5b</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>org.eclipse.ant.internal.core</artifactId>
-      <version>2.1.2-rc.5a</version>
+      <version>2.1.2-rc.5b</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>org.eclipse.core.boot</artifactId>
-      <version>2.1.2-rc.5a</version>
+      <version>2.1.2-rc.5b</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>org.eclipse.core.launcher</artifactId>
-      <version>2.1.4-rc.5a</version>
+      <version>2.1.4-rc.5b</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>org.eclipse.core.resources.ant</artifactId>
-      <version>2.1.2-rc.5a</version>
+      <version>2.1.2-rc.5b</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>org.eclipse.core.resources</artifactId>
-      <version>2.1.2-rc.5a</version>
+      <version>2.1.2-rc.5b</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>org.eclipse.core.runtime</artifactId>
-      <version>2.1.2-rc.5a</version>
+      <version>2.1.2-rc.5b</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>org.jdom</artifactId>
-      <version>0.9.1-rc.5a</version>
+      <version>0.9.1-rc.5b</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>

@@ -8,7 +8,7 @@
   <parent>
     <groupId>com.choicemaker.cm</groupId>
     <artifactId>choicemaker-cm</artifactId>
-    <version>2.7.1-rc.5a</version>
+    <version>2.7.1-rc.5b</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
@@ -66,7 +66,7 @@
             <dependency>
               <groupId>com.choicemaker.cm</groupId>
               <artifactId>choicemaker-assembly</artifactId>
-              <version>2.7.1-rc.5a</version>
+              <version>2.7.1-rc.5b</version>
             </dependency>
           </dependencies>
           <executions>
