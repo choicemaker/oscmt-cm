@@ -45,9 +45,6 @@ public class ChunkRecordIndexSet implements IChunkRecordIndexSet {
 			+ EXTERNAL_DATA_FORMAT.STRING + " or "
 			+ EXTERNAL_DATA_FORMAT.BINARY;
 
-	private static final String errorMsg2 =
-		"A set must be opened before it is used.";
-
 	private static boolean precondition2(long[] data) {
 		boolean retVal = (data != null);
 		return retVal;
