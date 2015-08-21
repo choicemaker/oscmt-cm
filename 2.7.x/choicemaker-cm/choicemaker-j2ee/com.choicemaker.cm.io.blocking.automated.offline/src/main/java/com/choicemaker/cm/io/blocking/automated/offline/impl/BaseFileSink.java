@@ -171,12 +171,16 @@ public abstract class BaseFileSink implements ISink {
 		try {
 			switch (type) {
 			case STRING:
-				fw.close();
-				fw = null;
+				if (fw != null) {
+					fw.close();
+					fw = null;
+				}
 				break;
 			case BINARY:
-				dos.close();
-				dos = null;
+				if (dos != null) {
+					dos.close();
+					dos = null;
+				}
 				break;
 			default:
 				throw new IllegalArgumentException("invalid type: " + type);
@@ -209,10 +213,14 @@ public abstract class BaseFileSink implements ISink {
 		try {
 			switch (type) {
 			case STRING:
-				fw.flush();
+				if (fw != null) {
+					fw.flush();
+				}
 				break;
 			case BINARY:
-				dos.flush();
+				if (dos != null) {
+					dos.flush();
+				}
 				break;
 			default:
 				throw new IllegalArgumentException("invalid type: " + type);
