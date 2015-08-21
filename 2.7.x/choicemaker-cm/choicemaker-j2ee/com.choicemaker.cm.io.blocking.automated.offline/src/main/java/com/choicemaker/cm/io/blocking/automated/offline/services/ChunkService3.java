@@ -348,12 +348,13 @@ public class ChunkService3 {
 			if (numChunks <= maxFiles) {
 				end = numChunks;
 				boolean isStaging = true;
-				createDataFiles (start, end, crSets, stageRecordSinks, isStaging, stage, model);
+				createDataFiles(start, end, crSets, stageRecordSinks,
+						isStaging, stage, model);
 				
 				if (master != null) {
 					isStaging = false;
-					createDataFiles (start, end, crSets, masterRecordSinks, isStaging,
-					master, model);
+					createDataFiles(start, end, crSets, masterRecordSinks,
+							isStaging, master, model);
 				} else {
 					openMaster (masterRecordSinks);
 				}
@@ -361,13 +362,13 @@ public class ChunkService3 {
 			} else {
 				while (start < numChunks) {
 					boolean isStaging = true;
-					createDataFiles (start, end, crSets, stageRecordSinks, isStaging,
-					stage, model);
+					createDataFiles(start, end, crSets, stageRecordSinks,
+							isStaging, stage, model);
 					
 					if (master != null) {
 						isStaging = false;
-						createDataFiles (start, end, crSets, masterRecordSinks, isStaging,
-						master, model);
+						createDataFiles(start, end, crSets, masterRecordSinks,
+								isStaging, master, model);
 					} else {
 						openMaster (masterRecordSinks);
 					}
@@ -565,13 +566,12 @@ public class ChunkService3 {
 		assert crSets != null;
 		assert recordSinks != null;
 
-		String context = null;
 		try {
 			rs.setModel(model);
 			rs.open();
 
 			// Count intervals between log statements and stop checks				
-			int count = /* splitIndex; */0;
+			int count = 0;
 
 			// read the source record and check each of the chunk index files
 			while (rs.hasNext() && !stop) {
