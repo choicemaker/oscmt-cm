@@ -1,7 +1,5 @@
 package com.choicemaker.cm.batch.impl;
 
-import com.choicemaker.cm.batch.BatchJob;
-
 public interface BatchJobJPA {
 
 	/** Name of the table that persists batch job data */
