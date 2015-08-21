@@ -43,6 +43,10 @@ public class ComparisonTreeSource<T extends Comparable<T>> extends
 		this.dataType = dataType;
 	}
 
+	protected void resetNext() {
+		nextTree = null;
+	}
+
 	@Override
 	public ComparisonTreeNode<T> next() {
 		if (this.nextTree == null) {
@@ -129,7 +133,7 @@ public class ComparisonTreeSource<T extends Comparable<T>> extends
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.choicemaker.cm.io.blocking.automated.offline.core.ISource#hasNext()
 	 */
@@ -150,7 +154,7 @@ public class ComparisonTreeSource<T extends Comparable<T>> extends
 	/**
 	 * This method returns the location of the next OPEN_NODE or CLOSE_NODE
 	 * starting from index from+1.
-	 * 
+	 *
 	 * @param str
 	 * @param from
 	 */

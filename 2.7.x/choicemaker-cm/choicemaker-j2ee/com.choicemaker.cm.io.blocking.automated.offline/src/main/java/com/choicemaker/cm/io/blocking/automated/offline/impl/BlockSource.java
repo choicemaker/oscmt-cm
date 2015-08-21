@@ -44,6 +44,10 @@ public class BlockSource extends BaseFileSource<BlockSet> implements
 		super(fileName, type);
 	}
 
+	protected void resetNext() {
+		nextBS = null;
+	}
+
 	private BlockSet readNext() throws EOFException, IOException {
 		BlockSet ret = new BlockSet();
 

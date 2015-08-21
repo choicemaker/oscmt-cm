@@ -468,7 +468,7 @@ class ImmutableRecordIdTranslatorImpl implements
 		if (recordID != null) {
 			Integer i = (Integer) this.ids2_To_Indices.get(recordID);
 			if (i != null) {
-				retVal = i.intValue();
+				retVal = i.intValue() + getSplitIndex();
 			}
 		}
 		return retVal;

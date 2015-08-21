@@ -31,11 +31,15 @@ public class SuffixTreeSource extends BaseFileSource<SuffixTreeNode> implements
 
 	/**
 	 * This constructor creates a string source with the given name.
-	 * 
+	 *
 	 * @param fileName
 	 */
 	public SuffixTreeSource(String fileName) {
 		super(fileName, EXTERNAL_DATA_FORMAT.STRING);
+	}
+
+	protected void resetNext() {
+		nextTree = null;
 	}
 
 	@Override
@@ -112,7 +116,7 @@ public class SuffixTreeSource extends BaseFileSource<SuffixTreeNode> implements
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.choicemaker.cm.io.blocking.automated.offline.core.ISource#hasNext()
 	 */
@@ -133,7 +137,7 @@ public class SuffixTreeSource extends BaseFileSource<SuffixTreeNode> implements
 	/**
 	 * This method returns the location of the next OPEN_NODE or CLOSE_NODE
 	 * starting from index from+1.
-	 * 
+	 *
 	 * @param str
 	 * @param from
 	 */

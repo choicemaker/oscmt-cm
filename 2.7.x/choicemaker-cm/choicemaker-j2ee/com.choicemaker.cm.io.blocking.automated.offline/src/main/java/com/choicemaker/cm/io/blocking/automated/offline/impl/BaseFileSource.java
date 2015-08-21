@@ -22,7 +22,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.ISource;
 /**
  * This is a generic file based implementation of ISource. Each descendant must
  * implement hasNext and getNext, and call init.
- * 
+ *
  * @author pcheung
  *
  */
@@ -36,7 +36,7 @@ public abstract class BaseFileSource<T> implements ISource<T> {
 
 	/**
 	 * The descendants should call this method in their constructor.
-	 * 
+	 *
 	 * @param fileName
 	 *            - file name of the sink
 	 * @param type
@@ -48,7 +48,15 @@ public abstract class BaseFileSource<T> implements ISource<T> {
 		}
 		this.type = type;
 		this.fileName = fileName;
+		resetNext();
 	}
+
+	/**
+	 * Subclasses must implement this method to reset the <code>next()</code>
+	 * and <code>hasNext()</code> methods when a source instance is first
+	 * constructed or when it is closed.
+	 */
+	protected abstract void resetNext();
 
 	@Override
 	public boolean exists() {
@@ -71,7 +79,7 @@ public abstract class BaseFileSource<T> implements ISource<T> {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.choicemaker.cm.io.blocking.automated.offline.core.ISource#close()
 	 */
@@ -85,6 +93,7 @@ public abstract class BaseFileSource<T> implements ISource<T> {
 		} catch (IOException ex) {
 			throw new BlockingException(ex.toString());
 		}
+		resetNext();
 	}
 
 	public int getCount() {

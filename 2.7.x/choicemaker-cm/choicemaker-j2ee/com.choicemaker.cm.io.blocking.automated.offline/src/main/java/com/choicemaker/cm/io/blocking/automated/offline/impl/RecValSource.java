@@ -41,9 +41,15 @@ public class RecValSource extends BaseFileSource<Long> implements IRecValSource 
 		super(fileName, type);
 	}
 
+	protected void resetNext() {
+		nextRecID = 0;
+		nextValues = null;
+		usedID = true;
+	}
+
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSource#hasNext
 	 * ()
@@ -107,7 +113,7 @@ public class RecValSource extends BaseFileSource<Long> implements IRecValSource 
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSource#
 	 * getNextRecID()
 	 */
@@ -131,7 +137,7 @@ public class RecValSource extends BaseFileSource<Long> implements IRecValSource 
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSource#
 	 * getNextValues()
 	 */

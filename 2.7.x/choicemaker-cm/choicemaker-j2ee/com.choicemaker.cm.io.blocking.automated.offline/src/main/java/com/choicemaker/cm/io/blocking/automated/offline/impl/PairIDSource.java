@@ -34,6 +34,10 @@ public class PairIDSource extends BaseFileSource<PairID> implements
 		super(fileName, type);
 	}
 
+	protected void resetNext() {
+		this.p = null;
+	}
+
 	@Override
 	public PairID next() {
 		return p;
@@ -41,7 +45,7 @@ public class PairIDSource extends BaseFileSource<PairID> implements
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.choicemaker.cm.io.blocking.automated.offline.core.ISource#hasNext()
 	 */

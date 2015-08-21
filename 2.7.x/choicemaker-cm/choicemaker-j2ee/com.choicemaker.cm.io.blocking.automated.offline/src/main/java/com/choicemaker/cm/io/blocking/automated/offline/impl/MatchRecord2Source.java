@@ -23,7 +23,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 
 /**
  * This object handles reading MatchRecord objects from a file.
- * 
+ *
  * @author pcheung
  *
  */
@@ -37,7 +37,7 @@ public class MatchRecord2Source<T extends Comparable<T>> extends
 	/**
 	 * This constructor takes in the filename of the source and an indicator
 	 * telling it if the data is stored as strings or binary.
-	 * 
+	 *
 	 * @param fileName
 	 * @param type
 	 */
@@ -48,6 +48,10 @@ public class MatchRecord2Source<T extends Comparable<T>> extends
 
 	public MatchRecord2Source(String fileName, EXTERNAL_DATA_FORMAT type) {
 		super(fileName, type);
+	}
+
+	protected void resetNext() {
+		next = null;
 	}
 
 	/**
@@ -77,7 +81,7 @@ public class MatchRecord2Source<T extends Comparable<T>> extends
 	/**
 	 * This checks o see if there is any more elements in the source. Always
 	 * call hasNext before calling getNext ().
-	 * 
+	 *
 	 * @return boolean - true if there are more elements in the source.
 	 */
 	@Override
@@ -97,7 +101,7 @@ public class MatchRecord2Source<T extends Comparable<T>> extends
 	/**
 	 * This method takes in a BufferedReader and reads the next MatchRecord2
 	 * object.
-	 * 
+	 *
 	 * @param reader
 	 * @throws IOException
 	 */

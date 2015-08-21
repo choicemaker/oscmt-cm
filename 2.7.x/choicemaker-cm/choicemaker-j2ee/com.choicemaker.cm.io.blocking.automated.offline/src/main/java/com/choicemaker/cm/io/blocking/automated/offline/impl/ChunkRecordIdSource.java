@@ -40,9 +40,14 @@ public class ChunkRecordIdSource extends BaseFileSource<Long> implements
 		super(fileName, type);
 	}
 
+	protected void resetNext() {
+		nextRecID = 0;
+		used = true;
+	}
+
 	/**
 	 * This returns the next id from the source.
-	 * 
+	 *
 	 * @return long
 	 * @throws OABABlockingException
 	 * @throws EOFException
@@ -66,7 +71,7 @@ public class ChunkRecordIdSource extends BaseFileSource<Long> implements
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRowSource
 	 * #hasNext()

@@ -41,6 +41,10 @@ public class ComparisonArraySource<T extends Comparable<T>> extends
 		super(fileName, type);
 	}
 
+	protected void resetNext() {
+		nextGroup = null;
+	}
+
 	@Override
 	public ComparisonArray<T> next() {
 		if (this.nextGroup == null) {
@@ -167,7 +171,7 @@ public class ComparisonArraySource<T extends Comparable<T>> extends
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.choicemaker.cm.io.blocking.automated.offline.core.ISource#hasNext()
 	 */
