@@ -23,6 +23,9 @@ public interface ISource<T> {
 	/** Opens and initializes the source for reading. */
 	void open() throws BlockingException;
 
+	// /** True if the source has been opened. */
+	// boolean isOpen();
+
 	/** True if there is more data in the source. */
 	boolean hasNext() throws BlockingException;
 
