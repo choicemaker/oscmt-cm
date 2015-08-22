@@ -161,73 +161,76 @@ public class MatchDedupService2 {
 			return;
 
 		TreeSet matches = new TreeSet();
+		IMatchRecord2Sink tempSink = null;
 
-		IMatchRecord2Sink tempSink = mFactory.getNextSink();
-		tempSinks.add(tempSink);
-		tempSink.open();
+		try {
+			tempSink = mFactory.getNextSink();
+			tempSinks.add(tempSink);
 
-		mSource.open();
+			tempSink.open();
+			mSource.open();
 
-		numBefore = skip;
+			numBefore = skip;
+			for (int i = 0; i < skip; i++) {
+				mSource.hasNext();
+				mSource.next();
+			}
 
-		// skipping
-		for (int i = 0; i < skip; i++) {
-			mSource.hasNext();
-			mSource.next();
-		}
+			while (mSource.hasNext()) {
+				MatchRecord2 mr = (MatchRecord2) mSource.next();
+				numBefore++;
 
-		while (mSource.hasNext()) {
-			MatchRecord2 mr = (MatchRecord2) mSource.next();
-			numBefore++;
+				if (!matches.contains(mr)) {
+					matches.add(mr);
 
-			if (!matches.contains(mr)) {
-				matches.add(mr);
+					if (numBefore > 0 && numBefore % INTERVAL == 0
+							&& isFull(matches.size(), max)) {
+						log.info("writing out " + matches.size());
+						MemoryEstimator.writeMem();
 
-				if (numBefore > 0 && numBefore % INTERVAL == 0
-						&& isFull(matches.size(), max)) {
-					log.info("writing out " + matches.size());
-					MemoryEstimator.writeMem();
+						tempSink.writeMatches(matches.iterator());
+						tempSink.close();
 
-					tempSink.writeMatches(matches.iterator());
-					tempSink.close();
+						String temp =
+							Integer.toString(tempSinks.size())
+									+ OabaProcessing.DELIMIT
+									+ Integer.toString(numBefore);
+						status.setCurrentProcessingEvent(
+								OabaProcessingEvent.OUTPUT_DEDUP_MATCHES, temp);
 
-					String temp =
-						Integer.toString(tempSinks.size())
-								+ OabaProcessing.DELIMIT
-								+ Integer.toString(numBefore);
-					status.setCurrentProcessingEvent(OabaProcessingEvent.OUTPUT_DEDUP_MATCHES,
-							temp);
-
-					tempSink = mFactory.getNextSink();
-					tempSink.open();
-					tempSinks.add(tempSink);
-					matches = new TreeSet();
-
-					// if (true) throw new RuntimeException ("test fail");
+						tempSink = mFactory.getNextSink();
+						tempSink.open();
+						tempSinks.add(tempSink);
+						matches = new TreeSet();
+					}
 				}
-			} // if contains mr
+			}
+
+			// one last file
+			if (matches.size() > 0) {
+				log.info("writing out " + matches.size());
+				tempSink.writeMatches(matches.iterator());
+				String temp =
+					Integer.toString(tempSinks.size()) + OabaProcessing.DELIMIT
+							+ Integer.toString(numBefore);
+				status.setCurrentProcessingEvent(
+						OabaProcessingEvent.OUTPUT_DEDUP_MATCHES, temp);
+			}
+
+			status.setCurrentProcessingEvent(
+					OabaProcessingEvent.MERGE_DEDUP_MATCHES,
+					Integer.toString(tempSinks.size()));
+
+			log.info("total matches read " + numBefore);
+
+		} finally {
+			if (mSource != null) {
+				mSource.close();
+			}
+			if (tempSink != null) {
+				tempSink.close();
+			}
 		}
-
-		mSource.close();
-
-		// one last file
-		if (matches.size() > 0) {
-			log.info("writing out " + matches.size());
-
-			tempSink.writeMatches(matches.iterator());
-			tempSink.close();
-
-			String temp =
-				Integer.toString(tempSinks.size()) + OabaProcessing.DELIMIT
-						+ Integer.toString(numBefore);
-			status.setCurrentProcessingEvent(OabaProcessingEvent.OUTPUT_DEDUP_MATCHES, temp);
-		}
-
-		status.setCurrentProcessingEvent(OabaProcessingEvent.MERGE_DEDUP_MATCHES,
-				Integer.toString(tempSinks.size()));
-
-		log.info("total matches read " + numBefore);
-
 	}
 
 	/**
