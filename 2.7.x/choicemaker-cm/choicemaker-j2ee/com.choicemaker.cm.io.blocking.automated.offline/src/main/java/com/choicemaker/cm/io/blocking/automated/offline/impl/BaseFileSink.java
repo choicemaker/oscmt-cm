@@ -7,12 +7,14 @@
  *******************************************************************************/
 package com.choicemaker.cm.io.blocking.automated.offline.impl;
 
+import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.logging.Logger;
 
@@ -29,6 +31,8 @@ import com.choicemaker.util.SystemPropertyUtils;
  *
  */
 public abstract class BaseFileSink implements ISink {
+	
+	public static final int MAX_STACK_TRACE_DEPTH = 7;
 
 	public static enum SINK_STATE { INITIAL, CONSTRUCTED, OPEN, CLOSED }
 
@@ -61,13 +65,37 @@ public abstract class BaseFileSink implements ISink {
 		this.sinkState = SINK_STATE.CONSTRUCTED;
 	}
 
-	private String printStackTrace(String msg) {
+	// Move this method to a shared utility class
+	public static String printStackTrace(String msg) {
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);
 		Throwable t = new RuntimeException(msg);
 		pw.println(msg);
 		t.printStackTrace(pw);
-		String retVal = sw.toString();
+
+		String s = sw.toString();
+		StringReader sr = new StringReader(s);
+		BufferedReader br = new BufferedReader(sr);
+
+		// Full stack is the fall-back value
+		String retVal = s;
+
+		// Try to truncate the stack and message to MAX_STACK_TRACE_DEPTH
+		try {
+			sw = new StringWriter();
+			pw = new PrintWriter(sw);
+			String line = br.readLine();
+			int lineCount = 0;
+			while (line != null && lineCount < MAX_STACK_TRACE_DEPTH) {
+				pw.println(line);
+				++lineCount;
+				line = br.readLine();
+			}
+			retVal = sw.toString();
+		} catch (IOException x) {
+			assert retVal.equals(s);
+		}
+
 		return retVal;
 	}
 
