@@ -34,17 +34,17 @@ public abstract class BaseFileSink implements ISink {
 	
 	public static final int MAX_STACK_TRACE_DEPTH = 7;
 
-	public static enum SINK_STATE { INITIAL, CONSTRUCTED, OPEN, CLOSED }
+	public static enum STATE { INITIAL, CONSTRUCTED, OPEN, CLOSED }
 
 	private static final Logger logger = Logger.getLogger(BaseFileSink.class.getName());
 
-	private SINK_STATE sinkState = SINK_STATE.INITIAL;
+	private STATE state = STATE.INITIAL;
 	private String lastOpenedStackTrace;
 
 	protected DataOutputStream dos;
 	protected FileWriter fw;
 	protected int count = 0;
-	protected EXTERNAL_DATA_FORMAT type;
+	protected final EXTERNAL_DATA_FORMAT type;
 	protected String fileName;
 
 	/**
@@ -62,7 +62,7 @@ public abstract class BaseFileSink implements ISink {
 		this.type = type;
 		assert this.type != null;
 		this.fileName = fileName;
-		this.sinkState = SINK_STATE.CONSTRUCTED;
+		this.state = STATE.CONSTRUCTED;
 	}
 
 	// Move this method to a shared utility class
@@ -101,7 +101,7 @@ public abstract class BaseFileSink implements ISink {
 
 	@Override
 	protected void finalize() throws Throwable {
-		if (this.sinkState == SINK_STATE.OPEN) {
+		if (this.state == STATE.OPEN) {
 			String msg = this.getClass().getName() + " instance left opened";
 			msg += SystemPropertyUtils.PV_LINE_SEPARATOR + this.lastOpenedStackTrace;
 			logger.warning(msg);
@@ -132,7 +132,7 @@ public abstract class BaseFileSink implements ISink {
 			}
 			String msg = this.getClass().getName() + " opened";
 			this.lastOpenedStackTrace = printStackTrace(msg);
-			this.sinkState = SINK_STATE.OPEN;
+			this.state = STATE.OPEN;
 
 		} catch (IOException ex) {
 			throw new BlockingException(ex.toString());
@@ -147,22 +147,22 @@ public abstract class BaseFileSink implements ISink {
 			retVal = fw != null;
 			if (!retVal) {
 				// if fw doesn't exist for a STRING instance, it can't be open
-				assert this.sinkState != SINK_STATE.OPEN;
+				assert this.state != STATE.OPEN;
 			}
 			break;
 		case BINARY:
 			retVal = dos != null;
 			if (!retVal) {
 				// if dos doesn't exist for a BINARY instance, it can't be open
-				assert this.sinkState != SINK_STATE.OPEN;
+				assert this.state != STATE.OPEN;
 			}
 			break;
 		default:
 			throw new IllegalArgumentException("invalid type: " + type);
 		}
 		// if either is true, both are true
-		if (retVal || this.sinkState == SINK_STATE.OPEN) {
-			assert (retVal && this.sinkState == SINK_STATE.OPEN);
+		if (retVal || this.state == STATE.OPEN) {
+			assert (retVal && this.state == STATE.OPEN);
 		}
 		return retVal;
 	}
@@ -183,7 +183,7 @@ public abstract class BaseFileSink implements ISink {
 			}
 			String msg = this.getClass().getName() + " opened for appending";
 			this.lastOpenedStackTrace = printStackTrace(msg);
-			this.sinkState = SINK_STATE.OPEN;
+			this.state = STATE.OPEN;
 
 		} catch (IOException ex) {
 			throw new BlockingException(ex.toString());
@@ -213,10 +213,11 @@ public abstract class BaseFileSink implements ISink {
 			default:
 				throw new IllegalArgumentException("invalid type: " + type);
 			}
-			this.sinkState = SINK_STATE.CLOSED;
+			this.state = STATE.CLOSED;
 		} catch (IOException ex) {
 			throw new BlockingException(ex.toString());
 		}
+		count = 0;
 	}
 
 	@Override

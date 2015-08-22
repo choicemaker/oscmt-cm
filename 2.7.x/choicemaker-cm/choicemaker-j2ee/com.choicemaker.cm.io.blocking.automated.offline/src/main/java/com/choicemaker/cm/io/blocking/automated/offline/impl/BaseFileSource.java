@@ -7,17 +7,21 @@
  *******************************************************************************/
 package com.choicemaker.cm.io.blocking.automated.offline.impl;
 
+import static com.choicemaker.cm.io.blocking.automated.offline.impl.BaseFileSink.printStackTrace;
+
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.EXTERNAL_DATA_FORMAT;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ISource;
+import com.choicemaker.cm.io.blocking.automated.offline.impl.BaseFileSink.STATE;
+import com.choicemaker.util.SystemPropertyUtils;
 
 /**
  * This is a generic file based implementation of ISource. Each descendant must
@@ -27,6 +31,11 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.ISource;
  *
  */
 public abstract class BaseFileSource<T> implements ISource<T> {
+
+	private static final Logger logger = Logger.getLogger(BaseFileSource.class.getName());
+
+	private STATE state = STATE.INITIAL;
+	private String lastOpenedStackTrace;
 
 	protected DataInputStream dis = null;
 	protected BufferedReader br = null;
@@ -47,7 +56,9 @@ public abstract class BaseFileSource<T> implements ISource<T> {
 			throw new IllegalArgumentException("null argument");
 		}
 		this.type = type;
+		assert this.type != null;
 		this.fileName = fileName;
+		this.state = STATE.CONSTRUCTED;
 		resetNext();
 	}
 
@@ -59,6 +70,16 @@ public abstract class BaseFileSource<T> implements ISource<T> {
 	protected abstract void resetNext();
 
 	@Override
+	protected void finalize() throws Throwable {
+		if (this.state == STATE.OPEN) {
+			String msg = this.getClass().getName() + " instance left opened";
+			msg += SystemPropertyUtils.PV_LINE_SEPARATOR + this.lastOpenedStackTrace;
+			logger.warning(msg);
+		}
+		super.finalize();
+	}
+
+	@Override
 	public boolean exists() {
 		File file = new File(fileName);
 		boolean exists = file.exists();
@@ -68,31 +89,77 @@ public abstract class BaseFileSource<T> implements ISource<T> {
 	@Override
 	public void open() throws BlockingException {
 		try {
-			if (getType() == EXTERNAL_DATA_FORMAT.STRING)
+			switch (type) {
+			case STRING:
 				br = new BufferedReader(new FileReader(fileName));
-			else if (getType() == EXTERNAL_DATA_FORMAT.BINARY)
+				break;
+			case BINARY:
 				dis = new DataInputStream(new FileInputStream(fileName));
-		} catch (FileNotFoundException ex) {
+				break;
+			default:
+				throw new IllegalArgumentException("invalid type: " + type);
+			}
+			String msg = this.getClass().getName() + " opened";
+			this.lastOpenedStackTrace = printStackTrace(msg);
+			this.state = STATE.OPEN;
+
+		} catch (IOException ex) {
 			throw new BlockingException(ex.toString());
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * com.choicemaker.cm.io.blocking.automated.offline.core.ISource#close()
-	 */
+	// @Override
+	public boolean isOpen() {
+		boolean retVal = false;
+		switch (type) {
+		case STRING:
+			retVal = br != null;
+			if (!retVal) {
+				// if br doesn't exist for a STRING instance, it can't be open
+				assert this.state != STATE.OPEN;
+			}
+			break;
+		case BINARY:
+			retVal = dis != null;
+			if (!retVal) {
+				// if dis doesn't exist for a BINARY instance, it can't be open
+				assert this.state != STATE.OPEN;
+			}
+			break;
+		default:
+			throw new IllegalArgumentException("invalid type: " + type);
+		}
+		// if either is true, both are true
+		if (retVal || this.state == STATE.OPEN) {
+			assert (retVal && this.state == STATE.OPEN);
+		}
+		return retVal;
+	}
+
 	@Override
 	public void close() throws BlockingException {
 		try {
-			if (getType() == EXTERNAL_DATA_FORMAT.STRING)
-				br.close();
-			else if (getType() == EXTERNAL_DATA_FORMAT.BINARY)
-				dis.close();
+			switch (getType()) {
+			case STRING:
+				if (br != null) {
+					br.close();
+					br = null;
+				}
+				break;
+			case BINARY:
+				if (dis != null) {
+					dis.close();
+					dis = null;
+				}
+				break;
+			default:
+				throw new IllegalArgumentException("invalid type: " + type);
+			}
+			this.state = STATE.CLOSED;
 		} catch (IOException ex) {
 			throw new BlockingException(ex.toString());
 		}
+		count = 0;
 		resetNext();
 	}
 
@@ -109,6 +176,7 @@ public abstract class BaseFileSource<T> implements ISource<T> {
 	public void delete() throws BlockingException {
 		File file = new File(fileName);
 		file.delete();
+		count = 0;
 	}
 
 	/**
