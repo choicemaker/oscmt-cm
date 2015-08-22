@@ -158,7 +158,7 @@ public class MatchToBlockTransformer2 {
 		retVal.open();
 
 		// now write out the translated MatchRecord2
-		MatchRecord2<Integer> mr = null;
+		MatchRecord2<?> mr = null;
 		while (mSource.hasNext()) {
 			mr = (MatchRecord2) mSource.next();
 
@@ -176,13 +176,10 @@ public class MatchToBlockTransformer2 {
 						+ mr.getRecordID2().toString());
 			}
 
-			// 2009-08-17 rphall
-			// BUG FIX? clue notes added here
 			final String noteInfo = mr.getNotesAsDelimitedString();
-			MatchRecord2 mr2 =
+			MatchRecord2<Integer> mr2 =
 				new MatchRecord2(I1, I2, mr.getRecord2Role(),
 						mr.getProbability(), mr.getMatchType(), noteInfo);
-			// END BUG FIX?
 
 			retVal.writeMatch(mr2);
 		}
