@@ -7,7 +7,7 @@
 
   <groupId>com.choicemaker.cm</groupId>
   <artifactId>choicemaker</artifactId>
-  <version>2.7.1-rc.5c</version>
+  <version>2.7.1-rc.5cXX</version>
   <packaging>pom</packaging>
 
   <name>ChoiceMaker</name>
