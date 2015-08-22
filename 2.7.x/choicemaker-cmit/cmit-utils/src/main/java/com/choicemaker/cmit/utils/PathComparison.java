@@ -15,7 +15,7 @@ public class PathComparison {
 	public static final int DEFAULT_MAX_REPORTED_DIFFERENCES = 3;
 
 	private static final String EOL = System
-			.getProperty(SystemPropertyUtils.LINE_SEPARATOR);
+			.getProperty(SystemPropertyUtils.PN_LINE_SEPARATOR);
 
 	private static final String MORE_DIFFERENCES_INDICATOR = "...";
 

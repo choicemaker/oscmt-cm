@@ -75,7 +75,7 @@ public abstract class BaseFileSink implements ISink {
 	protected void finalize() throws Throwable {
 		if (this.sinkState == SINK_STATE.OPEN) {
 			String msg = this.getClass().getName() + " instance left opened";
-			msg += SystemPropertyUtils.LINE_SEPARATOR + this.lastOpenedStackTrace;
+			msg += SystemPropertyUtils.PN_LINE_SEPARATOR + this.lastOpenedStackTrace;
 			logger.warning(msg);
 		}
 		super.finalize();

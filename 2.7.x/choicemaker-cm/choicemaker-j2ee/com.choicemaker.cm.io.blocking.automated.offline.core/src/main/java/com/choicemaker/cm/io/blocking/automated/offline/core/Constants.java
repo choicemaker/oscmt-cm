@@ -22,7 +22,7 @@ public class Constants {
 	// public static final int ARRAY = 2;
 
 	public static final String LINE_SEPARATOR = System
-			.getProperty(SystemPropertyUtils.LINE_SEPARATOR);
+			.getProperty(SystemPropertyUtils.PN_LINE_SEPARATOR);
 
 	/** Marks the start of a suffix tree node */
 	public static final char OPEN_NODE = '[';

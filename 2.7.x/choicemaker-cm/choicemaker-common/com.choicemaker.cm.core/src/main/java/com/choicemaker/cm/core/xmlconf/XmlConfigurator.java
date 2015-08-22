@@ -486,7 +486,7 @@ public class XmlConfigurator implements ChoiceMakerConfigurator,
 
 	public String getJavaDocClasspath() {
 		String pathSeparator =
-			System.getProperty(SystemPropertyUtils.PATH_SEPARATOR);
+			System.getProperty(SystemPropertyUtils.PN_PATH_SEPARATOR);
 		Set urls = new LinkedHashSet();
 		CMPluginDescriptor[] plugins = CMPlatformUtils.getPluginDescriptors();
 		for (int i=0; i<plugins.length; i++) {

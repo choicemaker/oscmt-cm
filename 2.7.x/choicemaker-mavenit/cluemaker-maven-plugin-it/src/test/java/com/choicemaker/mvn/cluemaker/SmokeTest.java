@@ -35,7 +35,7 @@ public class SmokeTest extends AbstractMavenIntegrationTestCase {
 	public static final int MAX_REPORTED_DIFFERENCES = 3;
 
 	private static final String EOL = System
-			.getProperty(SystemPropertyUtils.LINE_SEPARATOR);
+			.getProperty(SystemPropertyUtils.PN_LINE_SEPARATOR);
 
 	private static final String LOG_FILE_SUFFIX = ".log";
 

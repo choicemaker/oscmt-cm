@@ -83,7 +83,7 @@ public class MainTest extends TestCase {
 			retVal = preface + "the path is null";
 		} else {
 			final String workingDir =
-				System.getProperty(SystemPropertyUtils.USER_DIR);
+				System.getProperty(SystemPropertyUtils.PN_USER_DIR);
 			final File d = new File(workingDir);
 			logger.fine(preface + "user dir (abstract path):  " + d.toString());
 			logger.fine(preface + "user dir (absolute path):  "

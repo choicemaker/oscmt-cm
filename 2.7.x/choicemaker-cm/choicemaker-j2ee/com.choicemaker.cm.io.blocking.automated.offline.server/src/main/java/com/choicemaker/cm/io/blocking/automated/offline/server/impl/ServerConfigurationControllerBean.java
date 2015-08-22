@@ -88,7 +88,7 @@ public class ServerConfigurationControllerBean implements
 	}
 
 	public static File computeGenericLocation() {
-		String home = System.getProperty(SystemPropertyUtils.USER_HOME);
+		String home = System.getProperty(SystemPropertyUtils.PN_USER_HOME);
 		File retVal = new File(home);
 		return retVal;
 	}

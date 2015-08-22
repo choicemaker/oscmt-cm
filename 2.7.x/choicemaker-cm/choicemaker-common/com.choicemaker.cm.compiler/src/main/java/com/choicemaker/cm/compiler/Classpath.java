@@ -36,13 +36,13 @@ public class Classpath {
 	 * the string used as separator in class paths
 	 */
 	protected static String PATH_SEP = System
-			.getProperty(SystemPropertyUtils.PATH_SEPARATOR);
+			.getProperty(SystemPropertyUtils.PN_PATH_SEPARATOR);
 
 	/**
 	 * the boot class path
 	 */
 	protected static String CLASS_PATH = System
-			.getProperty(SystemPropertyUtils.JAVA_CLASS_PATH) + PATH_SEP;
+			.getProperty(SystemPropertyUtils.PN_JAVA_CLASS_PATH) + PATH_SEP;
 
 	/**
 	 * the boot class path
@@ -54,7 +54,7 @@ public class Classpath {
 	 * the extension path
 	 */
 	protected static String EXTENSION_PATH = System
-			.getProperty(SystemPropertyUtils.JAVA_EXT_DIRS) + PATH_SEP;
+			.getProperty(SystemPropertyUtils.PN_JAVA_EXT_DIRS) + PATH_SEP;
 
 	/**
 	 * the classpath string

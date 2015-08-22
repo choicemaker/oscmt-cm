@@ -48,7 +48,7 @@ public class MutableProbabilityModelStub implements IProbabilityModel {
 	public final String modelSignature = Signature.calculateSignature(
 			evaluatorSignature, cluesetSignature, schemaSignature);
 
-	private String userName = System.getProperty(SystemPropertyUtils.USER_NAME);
+	private String userName = System.getProperty(SystemPropertyUtils.PN_USER_NAME);
 
 	// Instance data that can be tweaked for testing
 	public String accessorClassName;
