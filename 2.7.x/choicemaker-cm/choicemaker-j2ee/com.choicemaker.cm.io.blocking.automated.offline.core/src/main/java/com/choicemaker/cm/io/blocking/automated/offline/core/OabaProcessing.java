@@ -43,6 +43,7 @@ public interface OabaProcessing extends BatchProcessing {
 	int EVT_ALLOCATE_CHUNKS = 190;
 	int EVT_DONE_ALLOCATE_CHUNKS = 200;
 	int EVT_MATCHING_DATA = 210;
+	int EVT_DONE_MATCHING_CHUNKS = 215;
 	int EVT_DONE_MATCHING_DATA = 220;
 
 	int EVT_OUTPUT_DEDUP_MATCHES = 230;
@@ -74,6 +75,7 @@ public interface OabaProcessing extends BatchProcessing {
 	float PCT_ALLOCATE_CHUNKS = 0.48f;
 	float PCT_DONE_ALLOCATE_CHUNKS = 0.50f;
 	float PCT_MATCHING_DATA = 0.60f;
+	float PCT_DONE_MATCHING_CHUNKS = 0.80f;
 	float PCT_DONE_MATCHING_DATA = 0.90f;
 
 	float PCT_OUTPUT_DEDUP_MATCHES = 0.93f;

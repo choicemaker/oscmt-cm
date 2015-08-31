@@ -9,6 +9,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_CHUNK_FILE_COUNT;
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_CURRENT_CHUNK_INDEX;
+import static com.choicemaker.cm.args.OperationalPropertyNames.PN_RECORD_MATCHING_MODE;
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_REGULAR_CHUNK_FILE_COUNT;
 
 import java.io.PrintWriter;
@@ -46,6 +47,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkDataSinkSourc
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessingEvent;
+import com.choicemaker.cm.io.blocking.automated.offline.core.RecordMatchingMode;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.ChunkDataStore;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.MatchWriterMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
@@ -135,7 +137,8 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 
 	protected abstract void sendToMatchDebup(BatchJob job, OabaJobMessage sd);
 
-	protected abstract void sendToSingleRecordMatching(OabaJobMessage data);
+	protected abstract void sendToSingleRecordMatching(BatchJob job,
+			OabaJobMessage sd);
 
 	// -- Message processing
 
@@ -365,15 +368,45 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 		} // end if abort requested
 	}
 
+	protected RecordMatchingMode getRecordMatchingMode(final BatchJob job) {
+		String value =
+			getPropertyController()
+					.getJobProperty(job, PN_RECORD_MATCHING_MODE);
+		RecordMatchingMode retVal = null;
+		try {
+			retVal = RecordMatchingMode.valueOf(value);
+		} catch (IllegalArgumentException | NullPointerException x) {
+			String msg =
+				"Missing or invalid value for property '"
+						+ PN_RECORD_MATCHING_MODE + "': '" + value + "'";
+			throw new IllegalStateException(msg);
+		}
+		assert retVal != null;
+		return retVal;
+	}
+
 	/**
 	 * This method is called when all the chunks are done.
 	 */
 	protected final void nextSteps(final BatchJob job, OabaJobMessage sd)
 			throws BlockingException {
-		cleanUp(job, sd);
-		sendToUpdateStatus(job, OabaProcessingEvent.DONE_MATCHING_DATA,
-				new Date(), null);
-		sendToMatchDebup(job, sd);
+		RecordMatchingMode mode = getRecordMatchingMode(job);
+		switch (mode) {
+		case SRM:
+			sendToUpdateStatus(job, OabaProcessingEvent.DONE_MATCHING_CHUNKS,
+					new Date(), null);
+			sendToSingleRecordMatching(job, sd);
+		case BRM:
+			sendToUpdateStatus(job, OabaProcessingEvent.DONE_MATCHING_CHUNKS,
+					new Date(), null);
+			cleanUp(job, sd);
+			sendToUpdateStatus(job, OabaProcessingEvent.DONE_MATCHING_DATA,
+					new Date(), null);
+			sendToMatchDebup(job, sd);
+			break;
+		default:
+			throw new Error("Unexpected mode: " + mode);
+		}
 	}
 
 	/**

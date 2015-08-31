@@ -95,6 +95,11 @@ public class MatchSchedulerSingleton extends AbstractSchedulerSingleton {
 	@Inject
 	private JMSContext jmsContext;
 
+	@Override
+	protected JMSContext getJmsContext() {
+		return jmsContext;
+	}
+
 	// -- Callbacks
 
 	@Override
@@ -209,7 +214,7 @@ public class MatchSchedulerSingleton extends AbstractSchedulerSingleton {
 
 	@Override
 	protected void sendToMatcher(OabaJobMessage sd) {
-		MessageBeanUtils.sendStartData(sd, jmsContext, matcherQueue, log);
+		MessageBeanUtils.sendStartData(sd, getJmsContext(), matcherQueue, log);
 	}
 
 	@Override
@@ -221,18 +226,13 @@ public class MatchSchedulerSingleton extends AbstractSchedulerSingleton {
 
 	@Override
 	protected void sendToMatchDebup(BatchJob job, OabaJobMessage sd) {
-		MessageBeanUtils.sendStartData(sd, jmsContext, matchDedupQueue, log);
+		MessageBeanUtils.sendStartData(sd, getJmsContext(), matchDedupQueue, log);
 	}
 
 	@Override
-	protected void sendToSingleRecordMatching(OabaJobMessage data) {
-		MessageBeanUtils.sendStartData(data, getJmsContext(), singleMatchQueue,
+	protected void sendToSingleRecordMatching(BatchJob job, OabaJobMessage sd) {
+		MessageBeanUtils.sendStartData(sd, getJmsContext(), singleMatchQueue,
 				getLogger());
-	}
-
-	@Override
-	protected JMSContext getJmsContext() {
-		throw new Error("not yet implemented");
 	}
 
 }

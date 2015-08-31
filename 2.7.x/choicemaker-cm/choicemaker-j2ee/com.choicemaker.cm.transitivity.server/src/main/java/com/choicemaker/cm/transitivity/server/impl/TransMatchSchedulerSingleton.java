@@ -86,6 +86,9 @@ public class TransMatchSchedulerSingleton extends AbstractSchedulerSingleton {
 	@Resource(lookup = "java:/choicemaker/urm/jms/matcherQueue")
 	private Queue matcherQueue;
 
+	@Resource(lookup = "java:/choicemaker/urm/jms/singleMatchQueue")
+	private Queue singleMatchQueue;
+
 	@Inject
 	private JMSContext jmsContext;
 
@@ -96,6 +99,11 @@ public class TransMatchSchedulerSingleton extends AbstractSchedulerSingleton {
 	private Queue transMatcherQueue;
 
 	// -- Accessors
+
+	@Override
+	protected JMSContext getJmsContext() {
+		return jmsContext;
+	}
 
 	protected OabaParametersController getParametersControllerInternal() {
 		return paramsController;
@@ -207,13 +215,13 @@ public class TransMatchSchedulerSingleton extends AbstractSchedulerSingleton {
 
 	@Override
 	protected void sendToMatchDebup(BatchJob job, OabaJobMessage sd) {
-		MessageBeanUtils.sendStartData(sd, jmsContext, transMatchDedupQueue,
+		MessageBeanUtils.sendStartData(sd, getJmsContext(), transMatchDedupQueue,
 				log);
 	}
 
 	@Override
 	protected void sendToMatcher(OabaJobMessage sd) {
-		MessageBeanUtils.sendStartData(sd, jmsContext, transMatcherQueue, log);
+		MessageBeanUtils.sendStartData(sd, getJmsContext(), transMatcherQueue, log);
 	}
 
 	@Override
@@ -224,12 +232,9 @@ public class TransMatchSchedulerSingleton extends AbstractSchedulerSingleton {
 	}
 
 	@Override
-	protected JMSContext getJmsContext() {
-		throw new Error("not yet implemented");
-	}
-
-	@Override
-	protected void sendToSingleRecordMatching(OabaJobMessage data) {
+	protected void sendToSingleRecordMatching(BatchJob job, OabaJobMessage sd) {
+//		MessageBeanUtils.sendStartData(sd, getJmsContext(), singleMatchQueue,
+//				getLogger());
 		throw new Error("not yet implemented");
 	}
 

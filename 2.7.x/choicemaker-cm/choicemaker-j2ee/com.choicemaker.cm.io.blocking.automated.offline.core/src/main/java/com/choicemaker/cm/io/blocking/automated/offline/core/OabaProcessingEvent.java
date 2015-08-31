@@ -86,6 +86,9 @@ public class OabaProcessingEvent extends BatchProcessingEvent implements
 	public static final OabaProcessingEvent MATCHING_DATA =
 		new OabaProcessingEvent(OabaEvent.MATCHING_DATA);
 
+	public static final OabaProcessingEvent DONE_MATCHING_CHUNKS =
+			new OabaProcessingEvent(OabaEvent.DONE_MATCHING_CHUNKS);
+
 	public static final OabaProcessingEvent DONE_MATCHING_DATA =
 		new OabaProcessingEvent(OabaEvent.DONE_MATCHING_DATA);
 
