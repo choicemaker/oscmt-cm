@@ -67,15 +67,12 @@ import com.choicemaker.cm.io.blocking.automated.offline.impl.ValidatorBase;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SqlRecordSourceController;
-import com.choicemaker.cm.io.blocking.automated.offline.services.BlockDedupService;
 import com.choicemaker.cm.io.blocking.automated.offline.services.BlockDedupService4;
-import com.choicemaker.cm.io.blocking.automated.offline.services.ChunkService2;
 import com.choicemaker.cm.io.blocking.automated.offline.services.ChunkService3;
 import com.choicemaker.cm.io.blocking.automated.offline.services.MatchDedupService2;
 import com.choicemaker.cm.io.blocking.automated.offline.services.MatchingService2;
 import com.choicemaker.cm.io.blocking.automated.offline.services.OABABlockingService;
 import com.choicemaker.cm.io.blocking.automated.offline.services.OversizedDedupService;
-import com.choicemaker.cm.io.blocking.automated.offline.services.RecValService2;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.Transformer;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.TreeTransformer;
 import com.choicemaker.cm.io.db.base.DatabaseAbstraction;
@@ -126,16 +123,9 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 		log.info("Starting Single Record Match with maxSingle = "
 				+ oabaSettings.getMaxSingle());
 
-		// final file
-		IMatchRecord2Sink mSink = OabaFileUtils.getCompositeMatchSink(batchJob);
-
-		// run OABA on the staging data set.
-		long t = System.currentTimeMillis();
-		handleStageBatch(mSink, batchJob, oabaParams, oabaSettings,
-				processingLog, serverConfig, model);
-		log.info("Msecs in dedup stage " + (System.currentTimeMillis() - t));
-
 		// run single record match between query and reference (if any)
+		long t = System.currentTimeMillis();
+		IMatchRecord2Sink mSink = OabaFileUtils.getCompositeMatchSink(batchJob);
 		final SqlRecordSourceController rsCtl = getSqlRecordSourceController();
 		DataSource stageDS = rsCtl.getStageDataSource(oabaParams);
 		assert stageDS != null;
