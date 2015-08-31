@@ -13,9 +13,11 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.logging.Logger;
 
+import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.batch.ProcessingEventLog;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.IControl;
+import com.choicemaker.cm.core.ISerializableRecordSource;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.RecordSource;
@@ -32,6 +34,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.MutableRecordIdTran
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessingEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
+import com.choicemaker.cm.io.blocking.automated.offline.core.RecordMatchingMode;
+import com.choicemaker.cm.io.blocking.automated.offline.impl.RecValSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.ControlChecker;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.MemoryEstimator;
 import com.choicemaker.util.IntArrayList;
@@ -82,6 +86,8 @@ public class RecValService3 {
 	private final ProcessingEventLog status;
 
 	private final IControl control;
+	
+	private final RecordMatchingMode mode;
 
 	private IRecValSink[] sinks;
 
@@ -135,10 +141,21 @@ public class RecValService3 {
 			String queryConf, String refConf,
 			IRecValSinkSourceFactory rvFactory, IRecordIdFactory recidFactory,
 			MutableRecordIdTranslator translator, ProcessingEventLog status,
-			IControl control) {
+			IControl control, RecordMatchingMode mode) {
 
 		this.stage = queryRS;
-		this.master = refRS;
+		this.mode = mode;
+		switch(mode) {
+		case SRM:
+			this.master = null;
+			break;
+		case BRM:
+			this.master = refRS;
+			break;
+		default:
+			this.master = refRS;
+			throw new Error("unexpected record-matching mode: " + mode);
+		}
 		this.model = model;
 		this.blockingConfiguration = blockName;
 		this.queryConfiguration = queryConf;

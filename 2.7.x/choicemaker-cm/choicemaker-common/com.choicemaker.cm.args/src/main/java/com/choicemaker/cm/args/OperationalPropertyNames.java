@@ -100,6 +100,21 @@ public interface OperationalPropertyNames {
 	 * 
 	 * It is used in
 	 * <ul>
+	 * <li>StartOabaMDB</li>
+	 * <li>MatchSchedulerMDB</li>
+	 * </ul>
+	 */
+	String PN_RECORD_MATCHING_MODE = "RECORD_MATCHING_MODE";
+
+	/**
+	 * The name of an enum representing the record-matching mode used to compare
+	 * query records to reference records. The value is defined in
+	 * <ul>
+	 * <li>StartOabaMDB</li>
+	 * </ul>
+	 * 
+	 * It is used in
+	 * <ul>
 	 * <li>AbstractMatcher</li>
 	 * <li>ChunkMDB</li>
 	 * <li>Chunk2MDB</li>

@@ -223,4 +223,14 @@ public class TransMatchSchedulerSingleton extends AbstractSchedulerSingleton {
 				timestamp, info);
 	}
 
+	@Override
+	protected JMSContext getJmsContext() {
+		throw new Error("not yet implemented");
+	}
+
+	@Override
+	protected void sendToSingleRecordMatching(OabaJobMessage data) {
+		throw new Error("not yet implemented");
+	}
+
 }

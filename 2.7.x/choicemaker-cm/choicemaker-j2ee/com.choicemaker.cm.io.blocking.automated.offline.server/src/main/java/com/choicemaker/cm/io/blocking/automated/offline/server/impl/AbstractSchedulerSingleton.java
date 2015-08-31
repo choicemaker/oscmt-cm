@@ -21,6 +21,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.ejb.FinderException;
+import javax.jms.JMSContext;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.ObjectMessage;
@@ -118,6 +119,8 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 
 	protected abstract ProcessingController getProcessingController();
 
+	protected abstract JMSContext getJmsContext();
+
 	protected abstract Logger getLogger();
 
 	protected abstract Logger getJMSTrace();
@@ -131,6 +134,8 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 			ProcessingEvent event, Date timestamp, String info);
 
 	protected abstract void sendToMatchDebup(BatchJob job, OabaJobMessage sd);
+
+	protected abstract void sendToSingleRecordMatching(OabaJobMessage data);
 
 	// -- Message processing
 

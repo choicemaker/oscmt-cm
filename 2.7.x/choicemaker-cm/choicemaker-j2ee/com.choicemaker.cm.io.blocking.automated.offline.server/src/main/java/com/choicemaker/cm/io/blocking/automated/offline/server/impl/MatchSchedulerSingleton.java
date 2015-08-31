@@ -89,6 +89,9 @@ public class MatchSchedulerSingleton extends AbstractSchedulerSingleton {
 	@Resource(lookup = "java:/choicemaker/urm/jms/matcherQueue")
 	private Queue matcherQueue;
 
+	@Resource(lookup = "java:/choicemaker/urm/jms/singleMatchQueue")
+	private Queue singleMatchQueue;
+
 	@Inject
 	private JMSContext jmsContext;
 
@@ -219,6 +222,17 @@ public class MatchSchedulerSingleton extends AbstractSchedulerSingleton {
 	@Override
 	protected void sendToMatchDebup(BatchJob job, OabaJobMessage sd) {
 		MessageBeanUtils.sendStartData(sd, jmsContext, matchDedupQueue, log);
+	}
+
+	@Override
+	protected void sendToSingleRecordMatching(OabaJobMessage data) {
+		MessageBeanUtils.sendStartData(data, getJmsContext(), singleMatchQueue,
+				getLogger());
+	}
+
+	@Override
+	protected JMSContext getJmsContext() {
+		throw new Error("not yet implemented");
 	}
 
 }
