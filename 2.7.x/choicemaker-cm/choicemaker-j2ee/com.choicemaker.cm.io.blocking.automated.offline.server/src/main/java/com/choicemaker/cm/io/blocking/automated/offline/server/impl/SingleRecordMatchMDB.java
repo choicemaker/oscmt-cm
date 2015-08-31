@@ -10,8 +10,6 @@ package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_BLOCKING_FIELD_COUNT;
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_CHUNK_FILE_COUNT;
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_OABA_CACHED_RESULTS_FILE;
-import static com.choicemaker.cm.args.OperationalPropertyNames.PN_RECORD_ID_TYPE;
-import static com.choicemaker.cm.args.OperationalPropertyNames.PN_REGULAR_CHUNK_FILE_COUNT;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -56,28 +54,22 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source
 import com.choicemaker.cm.io.blocking.automated.offline.core.ImmutableRecordIdTranslator;
 import com.choicemaker.cm.io.blocking.automated.offline.core.MutableRecordIdTranslator;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessingEvent;
-import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE_ROLE;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecordUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.BlockGroup;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.BlockMatcher2;
-import com.choicemaker.cm.io.blocking.automated.offline.impl.IDSetSource;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ValidatorBase;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SqlRecordSourceController;
 import com.choicemaker.cm.io.blocking.automated.offline.services.BlockDedupService;
-import com.choicemaker.cm.io.blocking.automated.offline.services.BlockDedupService4;
 import com.choicemaker.cm.io.blocking.automated.offline.services.ChunkService2;
-import com.choicemaker.cm.io.blocking.automated.offline.services.ChunkService3;
 import com.choicemaker.cm.io.blocking.automated.offline.services.MatchDedupService2;
 import com.choicemaker.cm.io.blocking.automated.offline.services.MatchingService2;
 import com.choicemaker.cm.io.blocking.automated.offline.services.OABABlockingService;
 import com.choicemaker.cm.io.blocking.automated.offline.services.OversizedDedupService;
 import com.choicemaker.cm.io.blocking.automated.offline.services.RecValService2;
-import com.choicemaker.cm.io.blocking.automated.offline.utils.Transformer;
-import com.choicemaker.cm.io.blocking.automated.offline.utils.TreeTransformer;
 import com.choicemaker.cm.io.db.base.DatabaseAbstraction;
 import com.choicemaker.cm.io.db.base.DatabaseAbstractionManager;
 import com.choicemaker.e2.CMConfigurationElement;
@@ -214,13 +206,14 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 		ValidatorBase validator = new ValidatorBase(true, immutableTranslator);
 		// data.validator = validator;
 
-		// Blocking, using BlockGroup to speed up dedup later
-		final BlockGroup bGroup =
+		// blocking
+		// using BlockGroup to speed up dedup later
+		BlockGroup bGroup =
 			new BlockGroup(OabaFileUtils.getBlockGroupFactory(batchJob),
 					maxBlock);
-		final IBlockSinkSourceFactory osFactory =
+		IBlockSinkSourceFactory osFactory =
 			OabaFileUtils.getOversizedFactory(batchJob);
-		final IBlockSink osSpecial = osFactory.getNextSink();
+		IBlockSink osSpecial = osFactory.getNextSink();
 
 		// Start blocking
 		OABABlockingService blockingService;
@@ -241,7 +234,6 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 		log.info("Done blocking " + blockingService.getTimeElapsed());
 		log.info("Num Blocks " + blockingService.getNumBlocks());
 
-/*
 		// start block dedup
 		IBlockSink bSink =
 			OabaFileUtils.getBlockFactory(batchJob).getNextSink();
@@ -267,41 +259,11 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 		log.info("Num OS Done " + osDedupService.getNumBlocksOut());
 		sendToUpdateStatus(batchJob, OabaProcessingEvent.DONE_DEDUP_OVERSIZED,
 				new Date(), null);
-*/
-		// Handle regular blocking sets
-		final int interval = settings.getInterval();
-		BlockDedupService4 dedupService =
-			new BlockDedupService4(bGroup,
-					OabaFileUtils.getBigBlocksSinkSourceFactory(batchJob),
-					OabaFileUtils.getTempBlocksSinkSourceFactory(batchJob),
-					OabaFileUtils.getSuffixTreeSink(batchJob), maxBlock,
-					processingLog, batchJob, interval);
-		dedupService.runService();
-		log.info("Done block dedup " + dedupService.getTimeElapsed());
-		log.info("Blocks In " + dedupService.getNumBlocksIn());
-		log.info("Blocks Out " + dedupService.getNumBlocksOut());
-		log.info("Tree Out " + dedupService.getNumTreesOut());
-
-		// Handle oversized blocking sets
-		final IBlockSource osSource = osFactory.getSource(osSpecial);
-		final IBlockSink osDedup = osFactory.getNextSink();
-
-		OversizedDedupService osDedupService =
-			new OversizedDedupService(osSource, osDedup,
-					OabaFileUtils.getOversizedTempFactory(batchJob),
-					processingLog, batchJob);
-		osDedupService.runService();
-		log.info("Done oversized dedup " + osDedupService.getTimeElapsed());
-		log.info("Num OS Before " + osDedupService.getNumBlocksIn());
-		log.info("Num OS After Exact " + osDedupService.getNumAfterExact());
-		log.info("Num OS Done " + osDedupService.getNumBlocksOut());
-		sendToUpdateStatus(batchJob, OabaProcessingEvent.DONE_DEDUP_OVERSIZED,
-				new Date(), null);
 
 		// create the proper block source
 		IBlockSinkSourceFactory bFactory =
 			OabaFileUtils.getBlockFactory(batchJob);
-		IBlockSink bSink = bFactory.getNextSink();
+		bSink = bFactory.getNextSink();
 		IBlockSource source = bFactory.getSource(bSink);
 
 		// create the proper oversized source
@@ -318,10 +280,8 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 			throw new BlockingException(msg);
 		}
 		assert stagingRs != null;
-		final ISerializableRecordSource masterRs = null;
 
 		// Create chunks of staging records
-/*
 		ChunkService2 chunkService =
 			new ChunkService2(source, source2, stagingRs, null, stageModel,
 					null, immutableTranslator,
@@ -346,69 +306,6 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 		log.info("Number of chunks " + numChunks);
 		getPropertyController().setJobProperty(batchJob, PN_CHUNK_FILE_COUNT,
 				String.valueOf(numChunks));
-*/
-
-		// Number of staging records should be small, so use just one processor,
-		// not serverConfig.getMaxChoiceMakerThreads()
-		final int numProcessors = 1 ;
-		final int maxChunkFiles = serverConfig.getMaxOabaChunkFileCount();
-		log.info("Maximum chunk size: " + maxChunk);
-		log.info("Number of processors: " + numProcessors);
-		log.info("Maximum chunk files: " + maxChunkFiles);
-
-		@SuppressWarnings("rawtypes")
-		ImmutableRecordIdTranslator translator =
-			getRecordIdController().findRecordIdTranslator(batchJob);
-		log.info("Record translator: " + immutableTranslator);
-
-		// create the os block source.
-		final IBlockSinkSourceFactory osFactory =
-			OabaFileUtils.getOversizedFactory(batchJob);
-		log.info("Oversized factory: " + osFactory);
-		osFactory.getNextSource(); // the deduped OS file is file 2.
-		final IDSetSource source2 = new IDSetSource(osFactory.getNextSource());
-		log.info("Deduped oversized source: " + source2);
-
-		// create the tree transformer.
-		final String _recordIdType =
-			getPropertyController().getJobProperty(batchJob, PN_RECORD_ID_TYPE);
-		final RECORD_ID_TYPE recordIdType =
-			RECORD_ID_TYPE.valueOf(_recordIdType);
-		final TreeTransformer tTransformer =
-			new TreeTransformer(immutableTranslator,
-					OabaFileUtils.getComparisonTreeGroupFactory(batchJob,
-							recordIdType, numProcessors));
-
-		// create the transformer for over-sized blocks
-		final Transformer transformerO =
-			new Transformer(immutableTranslator,
-					OabaFileUtils.getComparisonArrayGroupFactoryOS(batchJob,
-							numProcessors));
-
-		ChunkService3 chunkService =
-			new ChunkService3(OabaFileUtils.getTreeSetSource(batchJob),
-					source2, stagingRs, masterRs, model,
-					OabaFileUtils.getChunkIDFactory(batchJob),
-					OabaFileUtils.getStageDataFactory(batchJob, model),
-					OabaFileUtils.getMasterDataFactory(batchJob, model),
-					immutableTranslator, tTransformer, transformerO, maxChunk,
-					maxChunkFiles, processingLog, batchJob);
-		log.info("Chunk service: " + chunkService);
-		chunkService.runService();
-		log.info("Done creating chunks " + chunkService.getTimeElapsed());
-
-		// transitivity needs the translator
-		// translator.cleanUp();
-
-		final int numChunks = chunkService.getNumChunks();
-		log.info("Number of chunks " + numChunks);
-		getPropertyController().setJobProperty(batchJob, PN_CHUNK_FILE_COUNT,
-				String.valueOf(numChunks));
-
-		final int numRegularChunks = chunkService.getNumRegularChunks();
-		log.info("Number of regular chunks " + numRegularChunks);
-		getPropertyController().setJobProperty(batchJob,
-				PN_REGULAR_CHUNK_FILE_COUNT, String.valueOf(numChunks));
 
 		// Match the staging records against themselves
 		BlockMatcher2 matcher = new BlockMatcher2();
