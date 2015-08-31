@@ -13,11 +13,9 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.logging.Logger;
 
-import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.batch.ProcessingEventLog;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.IControl;
-import com.choicemaker.cm.core.ISerializableRecordSource;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.RecordSource;
@@ -35,7 +33,6 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessingEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RecordMatchingMode;
-import com.choicemaker.cm.io.blocking.automated.offline.impl.RecValSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.ControlChecker;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.MemoryEstimator;
 import com.choicemaker.util.IntArrayList;
@@ -144,18 +141,7 @@ public class RecValService3 {
 			IControl control, RecordMatchingMode mode) {
 
 		this.stage = queryRS;
-		this.mode = mode;
-		switch(mode) {
-		case SRM:
-			this.master = null;
-			break;
-		case BRM:
-			this.master = refRS;
-			break;
-		default:
-			this.master = refRS;
-			throw new Error("unexpected record-matching mode: " + mode);
-		}
+		this.master = refRS;
 		this.model = model;
 		this.blockingConfiguration = blockName;
 		this.queryConfiguration = queryConf;
@@ -165,6 +151,7 @@ public class RecValService3 {
 		this.recidFactory = recidFactory;
 		this.status = status;
 		this.control = control;
+		this.mode = mode;
 
 		BlockingAccessor ba0 = (BlockingAccessor) model.getAccessor();
 
@@ -315,71 +302,84 @@ public class RecValService3 {
 			// write the stage record source
 			if (stage != null) {
 				stage.setModel(model);
-				stage.open(); // FIXME! try { stage.open(); ... } finally{
-								// stage.close(); }
+				try {
+					stage.open();
+					BlockingAccessor ba =
+						(BlockingAccessor) model.getAccessor();
+					IBlockingConfiguration bc =
+						ba.getBlockingConfiguration(blockingConfiguration,
+								queryConfiguration);
 
-				BlockingAccessor ba = (BlockingAccessor) model.getAccessor();
-				IBlockingConfiguration bc =
-					ba.getBlockingConfiguration(blockingConfiguration,
-							queryConfiguration);
+					while (stage.hasNext() && !stop) {
+						count++;
+						if (count % OUTPUT_INTERVAL == 0) {
+							MemoryEstimator.writeMem();
+						}
 
-				while (stage.hasNext() && !stop) {
-					count++;
-					r = stage.getNext();
+						r = stage.getNext();
+						writeRecord(bc, r, model);
+						if (firstStage) {
+							Object O = r.getId();
+							recordIdType =
+								RECORD_ID_TYPE.fromInstance((Comparable) O);
+							firstStage = false;
+						}
 
-					if (count % OUTPUT_INTERVAL == 0)
-						MemoryEstimator.writeMem();
-
-					stop = ControlChecker.checkStop(control, count);
-
-					writeRecord(bc, r, model);
-
-					// This checks the id type
-					if (firstStage) {
-						Object O = r.getId();
-						recordIdType =
-							RECORD_ID_TYPE.fromInstance((Comparable) O);
-						firstStage = false;
+						stop = ControlChecker.checkStop(control, count);
 					}
 
-				} // end while
-				stage.close();
+				} finally {
+					stage.close();
+				}
 			}
 
 			log.info(count + " stage records read");
 
-			// write the master record source
-			if (master != null) {
+			// Conditionally write the master record source
+			if (master == null) {
+				log.fine("Skipping master records (no master record source)");
+			} else if (mode != RecordMatchingMode.BRM) {
+				assert master != null;
+				String name = mode == null ? "null" : mode.name();
+				String msg = "Skipping master records (mode: '" + name + "')";
+				log.fine(msg);
+			} else {
+				assert master != null;
+				assert mode == RecordMatchingMode.BRM;
+				log.fine("Reading master records (mode: '" + mode.name() + "')");
+
 				mutableTranslator.split();
 
-				master.open(); // FIXME! try { master.open(); ... } finally{
-								// master.close(); }
+				try {
+					master.open();
+					BlockingAccessor ba =
+						(BlockingAccessor) model.getAccessor();
+					IBlockingConfiguration bc =
+						ba.getBlockingConfiguration(blockingConfiguration,
+								referenceConfiguration);
 
-				BlockingAccessor ba = (BlockingAccessor) model.getAccessor();
-				IBlockingConfiguration bc =
-					ba.getBlockingConfiguration(blockingConfiguration,
-							referenceConfiguration);
+					while (master.hasNext() && !stop) {
+						count++;
+						if (count % OUTPUT_INTERVAL == 0) {
+							MemoryEstimator.writeMem();
+						}
 
-				// 2014-04-24 rphall: Commented out unused local variable.
-				// long lastID = Long.MIN_VALUE;
-				while (master.hasNext() && !stop) {
-					count++;
-					r = master.getNext();
+						r = master.getNext();
+						writeRecord(bc, r, model);
+						if (firstMaster) {
+							Object O = r.getId();
+							RECORD_ID_TYPE rit =
+								RECORD_ID_TYPE.fromInstance((Comparable) O);
+							assert rit == recordIdType;
+							firstMaster = false;
+						}
 
-					if (count % OUTPUT_INTERVAL == 0)
-						MemoryEstimator.writeMem();
-
-					stop = ControlChecker.checkStop(control, count);
-
-					writeRecord(bc, r, model);
-
-					// This checks the id type
-					if (firstMaster) {
-						firstMaster = false;
+						stop = ControlChecker.checkStop(control, count);
 					}
 
-				} // end while
-				master.close();
+				} finally {
+					master.close();
+				}
 			}
 
 			log.info(count + " total records read");
