@@ -43,6 +43,25 @@ import com.choicemaker.util.LongArrayList;
 		"rawtypes", "unchecked" })
 public class OABABlockingService {
 
+	/**
+	 * The name of a system property that can be set to "true" to keep files
+	 * used in intermediate computations. By default, intermediate files are
+	 * removed once the record-value service has run.
+	 */
+	public static final String PN_KEEP_FILES = "oaba.OABABlockingService.keepFiles";
+
+	/**
+	 * Checks the system property {@link #PN_KEEP_FILES} and caches the result
+	 */
+	private boolean isKeepFilesRequested() {
+		String value = System.getProperty(PN_KEEP_FILES, "false");
+		Boolean _keepFiles = Boolean.valueOf(value);
+		boolean retVal = _keepFiles.booleanValue();
+		return retVal;
+	}
+
+	private boolean keepFiles = isKeepFilesRequested();
+
 	private static final Logger log = Logger
 			.getLogger(OABABlockingService.class.getName());
 
@@ -476,10 +495,12 @@ public class OABABlockingService {
 	 * @throws IOException
 	 */
 	private void cleanUp() throws BlockingException {
-		// now delete the files
-		for (int i = 0; i < rvSources.length; i++) {
-			if (rvSources[i] != null)
-				rvSources[i].delete();
+		if (!keepFiles) {
+			// Delete the record-value files
+			for (int i = 0; i < rvSources.length; i++) {
+				if (rvSources[i] != null)
+					rvSources[i].delete();
+			}
 		}
 	}
 
