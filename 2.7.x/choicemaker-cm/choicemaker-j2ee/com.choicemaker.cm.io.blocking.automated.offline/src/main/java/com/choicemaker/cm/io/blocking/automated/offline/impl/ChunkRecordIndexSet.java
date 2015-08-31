@@ -169,30 +169,31 @@ public class ChunkRecordIndexSet implements IChunkRecordIndexSet {
 		int capacity = DEFAULT_INITIAL_CAPACITY;
 		LongArrayList list = new LongArrayList(capacity);
 
-		IChunkRecordIdSource src = this.getSource();
-		src.open();
+		IChunkRecordIdSource src = null;
+		try {
+			src = this.getSource();
+			src.open();
 
-		int count = 0;
-		while (src.hasNext()) {
-			++count;
-			if (count > capacity) {
-				capacity += DEFAULT_INITIAL_CAPACITY;
-				list.ensureCapacity(capacity);
+			int count = 0;
+			while (src.hasNext()) {
+				++count;
+				if (count > capacity) {
+					capacity += DEFAULT_INITIAL_CAPACITY;
+					list.ensureCapacity(capacity);
+				}
+				long index = src.next();
+				list.add(index);
 			}
-			long index = src.next();
-			list.add(index);
-		}
-		this.data = list.toArray();
+			this.data = list.toArray();
+			this.source = createIndexSource(this.data);
+			if (this.isDebugEnabled()) {
+				this.isChecked = new BitSet(this.data.length);
+			}
 
-		// Chunk files are supposed to be sorted when they
-		// are written to disk; postcondition1 checks this.
-		// There's no need for a redundant sort here.
-		//Arrays.sort(this.data);
-		
-		this.source = createIndexSource(this.data);
-		
-		if (this.isDebugEnabled()) {
-			this.isChecked = new BitSet(this.data.length);
+		} finally {
+			if (src != null) {
+				src.close();
+			}
 		}
 
 		postcondition1(this.data);
