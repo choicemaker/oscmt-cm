@@ -7,16 +7,16 @@
  *******************************************************************************/
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
-import static com.choicemaker.cm.args.OperationalPropertyNames.PN_BLOCKING_FIELD_COUNT;
-import static com.choicemaker.cm.args.OperationalPropertyNames.PN_CHUNK_FILE_COUNT;
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_OABA_CACHED_RESULTS_FILE;
-import static com.choicemaker.cm.args.OperationalPropertyNames.PN_RECORD_ID_TYPE;
-import static com.choicemaker.cm.args.OperationalPropertyNames.PN_REGULAR_CHUNK_FILE_COUNT;
+import static com.choicemaker.cm.batch.impl.BatchJobFileUtils.TEXT_SUFFIX;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.SortedSet;
 import java.util.logging.Logger;
 
@@ -34,11 +34,9 @@ import com.choicemaker.cm.batch.ProcessingEventLog;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.choicemaker.cm.core.DatabaseException;
-import com.choicemaker.cm.core.ISerializableRecordSource;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.RecordSource;
-import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.base.Match;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.base.RecordDecisionMaker;
@@ -47,34 +45,22 @@ import com.choicemaker.cm.io.blocking.automated.AutomatedBlocker;
 import com.choicemaker.cm.io.blocking.automated.DatabaseAccessor;
 import com.choicemaker.cm.io.blocking.automated.base.Blocker2;
 import com.choicemaker.cm.io.blocking.automated.base.db.DbbCountsCreator;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSink;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSinkSourceFactory;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSource;
+import com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSink;
+import com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2SinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
-import com.choicemaker.cm.io.blocking.automated.offline.core.ImmutableRecordIdTranslator;
-import com.choicemaker.cm.io.blocking.automated.offline.core.MutableRecordIdTranslator;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessingEvent;
-import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE_ROLE;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecordUtils;
-import com.choicemaker.cm.io.blocking.automated.offline.impl.BlockGroup;
-import com.choicemaker.cm.io.blocking.automated.offline.impl.BlockMatcher2;
-import com.choicemaker.cm.io.blocking.automated.offline.impl.IDSetSource;
-import com.choicemaker.cm.io.blocking.automated.offline.impl.ValidatorBase;
+import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparableMRSink;
+import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparableMRSinkSourceFactory;
+import com.choicemaker.cm.io.blocking.automated.offline.impl.MatchRecord2CompositeSource;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SqlRecordSourceController;
-import com.choicemaker.cm.io.blocking.automated.offline.services.BlockDedupService4;
-import com.choicemaker.cm.io.blocking.automated.offline.services.ChunkService3;
-import com.choicemaker.cm.io.blocking.automated.offline.services.MatchDedupService2;
-import com.choicemaker.cm.io.blocking.automated.offline.services.MatchingService2;
-import com.choicemaker.cm.io.blocking.automated.offline.services.OABABlockingService;
-import com.choicemaker.cm.io.blocking.automated.offline.services.OversizedDedupService;
-import com.choicemaker.cm.io.blocking.automated.offline.utils.Transformer;
-import com.choicemaker.cm.io.blocking.automated.offline.utils.TreeTransformer;
+import com.choicemaker.cm.io.blocking.automated.offline.services.GenericDedupService;
 import com.choicemaker.cm.io.db.base.DatabaseAbstraction;
 import com.choicemaker.cm.io.db.base.DatabaseAbstractionManager;
 import com.choicemaker.e2.CMConfigurationElement;
@@ -108,6 +94,8 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
 			+ SingleRecordMatchMDB.class.getName());
 
+	private static final int FLUSH_INTERVAL = 10;
+
 	public static final String DATABASE_ACCESSOR =
 		ChoiceMakerExtensionPoint.CM_IO_BLOCKING_AUTOMATED_BASE_DATABASEACCESSOR;
 
@@ -123,26 +111,148 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 		log.info("Starting Single Record Match with maxSingle = "
 				+ oabaSettings.getMaxSingle());
 
+		// Get the data sources that will be used
+		final SqlRecordSourceController rsCtl = getSqlRecordSourceController();
+		final DataSource stageDS = rsCtl.getStageDataSource(oabaParams);
+		assert stageDS != null;
+		final DataSource masterDS = rsCtl.getMasterDataSource(oabaParams);
+
+		// If there's no source for master records, there's nothing to do
+		if (masterDS == null) {
+			String msg =
+				"Missing datasource for master records -- nothing to do";
+			log.warning(msg);
+			return;
+		}
+
+		// The result for intra-staging matches must already exist
+		IMatchRecord2Source stagingResults = getStagingResults(batchJob);
+		if (!checkStagingResults(stagingResults)) {
+			String msg =
+				"Missing matches from staging records: " + stagingResults;
+			throw new BlockingException(msg);
+		}
+
+		// Move aside the staging results so the file name can be reused later
+		final int STAGING_INDEX = 1;
+		final IMatchRecord2SinkSourceFactory<?> factory =
+			OabaFileUtils.getMatchTempFactory(batchJob);
+		final IMatchRecord2Sink stagingSink =
+			moveAsideStagingResults(stagingResults, factory, STAGING_INDEX);
+		final String stagingFile = stagingSink.getInfo();
+		stagingResults =
+			new MatchRecord2CompositeSource(stagingFile, TEXT_SUFFIX);
+
+		// Create a sink to hold matches between master and staging records
+		final int MS_INDEX = 2;
+		final IMatchRecord2Sink<?> masterStagingSink =
+			factory.getSink(MS_INDEX);
+
 		// run single record match between query and reference (if any)
 		long t = System.currentTimeMillis();
-		IMatchRecord2Sink mSink = OabaFileUtils.getCompositeMatchSink(batchJob);
-		final SqlRecordSourceController rsCtl = getSqlRecordSourceController();
-		DataSource stageDS = rsCtl.getStageDataSource(oabaParams);
-		assert stageDS != null;
-		DataSource masterDS = rsCtl.getMasterDataSource(oabaParams);
-		if (masterDS != null) {
-			t = System.currentTimeMillis();
-			handleSingleMatching(stageDS, masterDS, data, mSink, batchJob,
-					oabaParams, oabaSettings);
-			long duration = System.currentTimeMillis() - t;
-			log.info("Msecs in single matching " + duration);
-		}
+		handleSingleMatching(stageDS, masterDS, data, masterStagingSink,
+				batchJob, oabaParams, oabaSettings);
+		long duration = System.currentTimeMillis() - t;
+		log.info("Msecs in single matching " + duration);
+
+		sendToUpdateStatus(batchJob, OabaProcessingEvent.DONE_MATCHING_DATA,
+				new Date(), null);
+
+		// Combine and deduplicate the results
+		final ProcessingEventLog processingEntry =
+			getProcessingController().getProcessingLog(batchJob);
+		processingEntry
+				.setCurrentProcessingEvent(OabaProcessingEvent.MERGE_DEDUP_MATCHES);
+
+		List<IComparableSink> tempSinks = new ArrayList<>();
+		IComparableSink<?> icsStaging = new ComparableMRSink(stagingSink);
+		tempSinks.add(icsStaging);
+		IComparableSink<?> icsMasterStaging =
+			new ComparableMRSink(masterStagingSink);
+		tempSinks.add(icsMasterStaging);
+
+		IMatchRecord2Sink<?> mSink =
+			OabaFileUtils.getCompositeMatchSink(batchJob);
+		IComparableSink<?> sink = new ComparableMRSink(mSink);
+		IComparableSinkSourceFactory<?> mFactory =
+			new ComparableMRSinkSourceFactory(factory);
+		int i = GenericDedupService.mergeFiles(tempSinks, sink, mFactory, true);
+		log.info("Number of Distinct matches after merge: " + i);
 
 		String cachedFileName = mSink.getInfo();
 		log.info("Cached results file: " + cachedFileName);
 		getPropertyController().setJobProperty(batchJob,
 				PN_OABA_CACHED_RESULTS_FILE, cachedFileName);
+		t = System.currentTimeMillis() - t;
+		log.info("Time in merge dedup " + t);
+	}
 
+	private IMatchRecord2Source getStagingResults(BatchJob batchJob) {
+		IMatchRecord2Source mSource =
+			OabaFileUtils.getCompositeMatchSource(batchJob);
+		return mSource;
+	}
+
+	private boolean checkStagingResults(IMatchRecord2Source mSource) {
+		String fileName = mSource.getInfo();
+		boolean retVal = fileName != null;
+		if (!retVal) {
+			String msg = "No file name recorded for staging match reults";
+			log.warning(msg);
+		}
+		if (retVal && fileName.trim().isEmpty()) {
+			retVal = false;
+			String msg =
+				"Blank name recorded for staging match reults: '" + fileName
+						+ "'";
+			log.warning(msg);
+		}
+		if (retVal) {
+			File f = new File(fileName);
+			retVal = f.exists();
+			if (!retVal) {
+				String msg =
+					"Missing file for staging match reults: '" + fileName + "'";
+				log.warning(msg);
+			}
+		}
+		return retVal;
+	}
+
+	private IMatchRecord2Sink<?> moveAsideStagingResults(
+			IMatchRecord2Source stagingResults,
+			IMatchRecord2SinkSourceFactory<?> factory, int index)
+			throws BlockingException {
+
+		IMatchRecord2Sink<?> retVal = factory.getSink(index);
+		int count = 0;
+		try {
+			retVal.open();
+			while (stagingResults.hasNext()) {
+				++count;
+				MatchRecord2 mr = (MatchRecord2) stagingResults.next();
+				retVal.writeMatch(mr);
+				if (count % FLUSH_INTERVAL == 0) {
+					retVal.flush();
+				}
+			}
+		} finally {
+			retVal.close();
+		}
+
+		String fileName = stagingResults.getInfo();
+		File f = new File(fileName);
+		assert f.exists();
+		boolean isDeleted = f.delete();
+		if (!isDeleted) {
+			String msg =
+				"Unable to delete staging results file: '" + fileName + "'";
+			log.warning(msg);
+		} else {
+			assert !f.exists();
+		}
+
+		return retVal;
 	}
 
 	/**
@@ -153,12 +263,11 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 	 * @param data
 	 * @throws Exception
 	 */
-	private void handleSingleMatching(DataSource stageDS,
-	DataSource masterDS, OabaJobMessage data,
-			IMatchRecord2Sink mSinkFinal, BatchJob batchJob,
-			OabaParameters oabaParams, OabaSettings oabaSettings)
-			throws BlockingException {
-		
+	private void handleSingleMatching(DataSource stageDS, DataSource masterDS,
+			OabaJobMessage data, IMatchRecord2Sink mSinkFinal,
+			BatchJob batchJob, OabaParameters oabaParams,
+			OabaSettings oabaSettings) throws BlockingException {
+
 		if (stageDS == null) {
 			throw new IllegalArgumentException("null query data source");
 		}
@@ -189,7 +298,7 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 
 		cacheAbaStatistics(masterDS);
 		final AbaStatistics stats =
-				getAbaStatisticsController().getStatistics(model);
+			getAbaStatisticsController().getStatistics(model);
 
 		final String dbaName = getReferenceAccessorName(oabaParams);
 		log.fine("DatabaseAccessor: " + dbaName);
@@ -267,7 +376,6 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 		final ProcessingEventLog processingEntry =
 			getProcessingController().getProcessingLog(batchJob);
 		processingEntry.setCurrentProcessingEvent(BatchProcessingEvent.DONE);
-
 	}
 
 	/** Cache ABA statistics for field-value counts from a reference source */
@@ -292,7 +400,8 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 		final String retVal;
 		retVal = pc.getReferenceDatabaseAccessor(oabaParams);
 		if (retVal == null) {
-			String msg = "Null database accessor name for reference record source";
+			String msg =
+				"Null database accessor name for reference record source";
 			log.severe(msg);
 			throw new IllegalStateException(msg);
 		}
