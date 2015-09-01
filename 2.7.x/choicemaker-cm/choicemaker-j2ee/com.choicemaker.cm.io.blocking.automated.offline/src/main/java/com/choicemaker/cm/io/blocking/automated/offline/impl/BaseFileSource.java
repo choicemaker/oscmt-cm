@@ -20,7 +20,7 @@ import java.util.logging.Logger;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.EXTERNAL_DATA_FORMAT;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ISource;
-import com.choicemaker.cm.io.blocking.automated.offline.impl.BaseFileSink.STATE;
+import com.choicemaker.cm.io.blocking.automated.offline.core.SIMPLE_RESOURCE_STATE;
 import com.choicemaker.util.SystemPropertyUtils;
 
 /**
@@ -34,7 +34,7 @@ public abstract class BaseFileSource<T> implements ISource<T> {
 
 	private static final Logger logger = Logger.getLogger(BaseFileSource.class.getName());
 
-	private STATE state = STATE.INITIAL;
+	private SIMPLE_RESOURCE_STATE simple_resource_state = SIMPLE_RESOURCE_STATE.INITIAL;
 	private String lastOpenedStackTrace;
 
 	protected DataInputStream dis = null;
@@ -58,7 +58,7 @@ public abstract class BaseFileSource<T> implements ISource<T> {
 		this.type = type;
 		assert this.type != null;
 		this.fileName = fileName;
-		this.state = STATE.CONSTRUCTED;
+		this.simple_resource_state = SIMPLE_RESOURCE_STATE.CONSTRUCTED;
 		resetNext();
 	}
 
@@ -71,7 +71,7 @@ public abstract class BaseFileSource<T> implements ISource<T> {
 
 	@Override
 	protected void finalize() throws Throwable {
-		if (this.state == STATE.OPEN) {
+		if (this.simple_resource_state == SIMPLE_RESOURCE_STATE.OPEN) {
 			String msg = this.getClass().getName() + " instance left opened";
 			msg += SystemPropertyUtils.PV_LINE_SEPARATOR + this.lastOpenedStackTrace;
 			logger.warning(msg);
@@ -101,7 +101,7 @@ public abstract class BaseFileSource<T> implements ISource<T> {
 			}
 			String msg = this.getClass().getName() + " opened";
 			this.lastOpenedStackTrace = printStackTrace(msg);
-			this.state = STATE.OPEN;
+			this.simple_resource_state = SIMPLE_RESOURCE_STATE.OPEN;
 
 		} catch (IOException ex) {
 			throw new BlockingException(ex.toString());
@@ -116,22 +116,22 @@ public abstract class BaseFileSource<T> implements ISource<T> {
 			retVal = br != null;
 			if (!retVal) {
 				// if br doesn't exist for a STRING instance, it can't be open
-				assert this.state != STATE.OPEN;
+				assert this.simple_resource_state != SIMPLE_RESOURCE_STATE.OPEN;
 			}
 			break;
 		case BINARY:
 			retVal = dis != null;
 			if (!retVal) {
 				// if dis doesn't exist for a BINARY instance, it can't be open
-				assert this.state != STATE.OPEN;
+				assert this.simple_resource_state != SIMPLE_RESOURCE_STATE.OPEN;
 			}
 			break;
 		default:
 			throw new IllegalArgumentException("invalid type: " + type);
 		}
 		// if either is true, both are true
-		if (retVal || this.state == STATE.OPEN) {
-			assert (retVal && this.state == STATE.OPEN);
+		if (retVal || this.simple_resource_state == SIMPLE_RESOURCE_STATE.OPEN) {
+			assert (retVal && this.simple_resource_state == SIMPLE_RESOURCE_STATE.OPEN);
 		}
 		return retVal;
 	}
@@ -155,7 +155,7 @@ public abstract class BaseFileSource<T> implements ISource<T> {
 			default:
 				throw new IllegalArgumentException("invalid type: " + type);
 			}
-			this.state = STATE.CLOSED;
+			this.simple_resource_state = SIMPLE_RESOURCE_STATE.CLOSED;
 		} catch (IOException ex) {
 			throw new BlockingException(ex.toString());
 		}
