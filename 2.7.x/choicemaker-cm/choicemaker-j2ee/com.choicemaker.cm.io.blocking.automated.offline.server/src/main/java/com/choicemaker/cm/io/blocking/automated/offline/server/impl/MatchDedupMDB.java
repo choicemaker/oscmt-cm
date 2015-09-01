@@ -237,8 +237,6 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 		final long jobId = batchJob.getId();
 		final OabaParameters params =
 			paramsController.findOabaParametersByBatchJobId(jobId);
-		final ServerConfiguration serverConfig =
-			serverController.findServerConfigurationByJobId(jobId);
 		final ProcessingEventLog processingEntry =
 			processingController.getProcessingLog(batchJob);
 		final String modelConfigId = params.getModelConfigurationName();
@@ -249,14 +247,14 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 			log.severe(s);
 			throw new IllegalArgumentException(s);
 		}
-		final int numProcessors = serverConfig.getMaxChoiceMakerThreads();
+		final int numTempResults = getMaxTempPairwiseIndex(batchJob);
 
 		if (BatchJobStatus.ABORT_REQUESTED.equals(batchJob.getStatus())) {
 			MessageBeanUtils.stopJob(batchJob, propController, processingEntry);
 
 		} else {
-			countMessages = numProcessors;
-			for (int i = 1; i <= numProcessors; i++) {
+			countMessages = numTempResults;
+			for (int i = 1; i <= numTempResults; i++) {
 				// send to parallelized match dedup each bean
 				OabaJobMessage d2 = new OabaJobMessage(data);
 				d2.processingIndex = i;
@@ -307,6 +305,11 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 
 		t = System.currentTimeMillis() - t;
 		log.info("Time in merge dedup " + t);
+	}
+
+	private int getMaxTempPairwiseIndex(BatchJob job) {
+		return BatchJobUtils.getMaxTempPairwiseIndex(propController,
+				job);
 	}
 
 	private void sendToUpdateStatus(BatchJob job, BatchProcessingEvent event,

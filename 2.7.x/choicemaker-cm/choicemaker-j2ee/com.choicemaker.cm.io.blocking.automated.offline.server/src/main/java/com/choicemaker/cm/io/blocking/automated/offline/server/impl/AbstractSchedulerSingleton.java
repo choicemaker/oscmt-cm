@@ -68,43 +68,47 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 	private static final long serialVersionUID = 271L;
 
 	// FIXME REMOVEME (after operational properties are completed)
-	protected static final String DELIM = "|";
+	private static final String DELIM = "|";
 
 	// -- Session data
 
-	protected RecordSource[] stageRS = null;
+	private RecordSource[] stageRS = null;
 
-	protected RecordSource[] masterRS = null;
+	private RecordSource[] masterRS = null;
 
 	// This counts the number of messages sent to matcher and number of done
 	// messages got back.
-	protected int countMessages;
+	private int countMessages;
 
 	// this indicates which chunks is currently being processed.
-	protected int currentChunk = -1;
+	private int currentChunk = -1;
 
-	protected long numCompares;
+	private long numCompares;
 
-	protected long numMatches;
+	private long numMatches;
 
-	protected long currentJobID = -1;
+	private long currentJobID = -1;
 
 	// time trackers
-	protected long timeStart;
-	protected long timeReadData;
-	protected long timegc;
+	private long timeStart;
+	private long timeReadData;
+	private long timegc;
 
 	// array size = number of processors
 	// these time tracker are active only in getLogger() debug
-	protected long[] timeWriting;
-	protected long[] inHMLookUp;
-	protected long[] inCompare;
+	private long[] timeWriting;
+	private long[] inHMLookUp;
+	private long[] inCompare;
 
-	// number of processors to use
-	protected int numProcessors;
+	// number of processing threads to use -- write once
+	private int numProcessors;
+
+	private int getNumProcessors() {
+		return numProcessors;
+	}
 
 	// max chunk
-	protected int maxChunkSize;
+	private int maxChunkSize;
 
 	// -- Callbacks
 
@@ -193,8 +197,10 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 					countMessages = 0;
 					maxChunkSize = oabaSettings.getMaxChunkSize();
 					numProcessors = serverConfig.getMaxChoiceMakerThreads();
+					setMaxTempPairwiseIndex(batchJob,numProcessors);
 					getLogger().info("Maximum chunk size: " + maxChunkSize);
-					getLogger().info("Number of processors: " + numProcessors);
+					getLogger().info("Number of processing threads: " + getNumProcessors());
+					getLogger().info("Max index for intermediate pairwise result files: " + getNumProcessors());
 
 					ProcessingEventLog processingLog =
 						getProcessingController().getProcessingLog(batchJob);
@@ -212,9 +218,9 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 							timeReadData = 0;
 							timegc = 0;
 
-							timeWriting = new long[numProcessors];
-							inCompare = new long[numProcessors];
-							inHMLookUp = new long[numProcessors];
+							timeWriting = new long[getNumProcessors()];
+							inCompare = new long[getNumProcessors()];
+							inHMLookUp = new long[getNumProcessors()];
 						}
 
 						// start matching
@@ -352,7 +358,7 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 
 					// writing out time break downs
 					if (getLogger().isLoggable(Level.FINE)) {
-						for (int i = 0; i < numProcessors; i++) {
+						for (int i = 0; i < getNumProcessors(); i++) {
 							getLogger().fine(
 									"Processor " + i + " writing time: "
 											+ timeWriting[i] + " lookup time: "
@@ -494,7 +500,7 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 		BatchJob batchJob = getJobController().findBatchJob(jobId);
 
 		// This is because tree ids start with 1 and not 0.
-		for (int i = 1; i <= numProcessors; i++) {
+		for (int i = 1; i <= getNumProcessors(); i++) {
 			@SuppressWarnings("rawtypes")
 			IMatchRecord2Sink mSink =
 				OabaFileUtils.getMatchChunkFactory(batchJob).getSink(i);
@@ -546,13 +552,17 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 		MemoryEstimator.writeMem();
 
 		// Send messages to matchers. Matcher indices are one-based.
-		for (int i = 1; i <= numProcessors; i++) {
+		for (int i = 1; i <= getNumProcessors(); i++) {
 			OabaJobMessage sd2 = new OabaJobMessage(sd);
 			sd2.treeIndex = i;
 			countMessages++;
 			sendToMatcher(sd2);
 			getLogger().info("outstanding messages: " + countMessages);
 		}
+	}
+
+	private void setMaxTempPairwiseIndex(BatchJob job, int max) {
+		BatchJobUtils.setMaxTempPairwiseIndex(getPropertyController(), job, max);
 	}
 
 }
