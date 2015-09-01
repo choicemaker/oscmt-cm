@@ -41,6 +41,11 @@ public class MatchRecord2CompositeSource<T extends Comparable<T>> implements
 
 	private String info;
 
+	@Override
+	public String toString() {
+		return "MatchRecord2CompositeSource [info=" + info + "]";
+	}
+
 	/**
 	 * This constructor takes in a file base and file extension. All the files
 	 * are of the form: [file base]_i.[file ext] - i starts with 1.
