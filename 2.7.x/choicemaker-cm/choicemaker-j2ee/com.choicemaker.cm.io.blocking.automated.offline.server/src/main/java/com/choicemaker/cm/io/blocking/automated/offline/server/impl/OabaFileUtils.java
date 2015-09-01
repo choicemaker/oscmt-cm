@@ -178,7 +178,7 @@ public class OabaFileUtils {
 	@SuppressWarnings("rawtypes")
 	public static IMatchRecord2Sink getCompositeMatchSink(BatchJob job) {
 		String fileName = getCompositeMatchFileName(job);
-		return new MatchRecord2CompositeSink(fileName, "txt", MAX_FILE_SIZE);
+		return new MatchRecord2CompositeSink(fileName, TEXT_SUFFIX, MAX_FILE_SIZE);
 	}
 
 	/**
