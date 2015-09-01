@@ -30,6 +30,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSinkSourceFac
 import com.choicemaker.cm.io.blocking.automated.offline.core.ImmutableRecordIdTranslator;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessingEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
+import com.choicemaker.cm.io.blocking.automated.offline.core.RecordMatchingMode;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.IDSetSource;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
@@ -116,6 +117,8 @@ public class Chunk2MDB extends AbstractOabaMDB {
 			throw new BlockingException(e.toString());
 		}
 		assert staging != null;
+		
+		final RecordMatchingMode mode = getRecordMatchingMode(batchJob);
 
 		ChunkService3 chunkService =
 			new ChunkService3(OabaFileUtils.getTreeSetSource(batchJob), source2,
@@ -124,7 +127,7 @@ public class Chunk2MDB extends AbstractOabaMDB {
 					OabaFileUtils.getStageDataFactory(batchJob, model),
 					OabaFileUtils.getMasterDataFactory(batchJob, model),
 					translator, tTransformer, transformerO,
-					maxChunk, maxChunkFiles, processingLog, batchJob);
+					maxChunk, maxChunkFiles, processingLog, batchJob, mode);
 		log.info("Chunk service: " + chunkService);
 		chunkService.runService();
 		log.info("Done creating chunks " + chunkService.getTimeElapsed());

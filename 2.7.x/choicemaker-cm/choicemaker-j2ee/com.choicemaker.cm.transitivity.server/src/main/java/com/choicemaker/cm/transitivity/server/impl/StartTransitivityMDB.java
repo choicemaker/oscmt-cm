@@ -35,6 +35,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ImmutableRecordIdTranslator;
+import com.choicemaker.cm.io.blocking.automated.offline.core.RecordMatchingMode;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.IDSetSource;
 import com.choicemaker.cm.io.blocking.automated.offline.result.MatchToBlockTransformer2;
 import com.choicemaker.cm.io.blocking.automated.offline.result.Size2MatchProducer;
@@ -89,7 +90,7 @@ public class StartTransitivityMDB extends AbstractTransitivityMDB {
 	private void createChunks(BatchJob transJob, TransitivityParameters params,
 			OabaSettings oabaSettings, ServerConfiguration serverConfig)
 			throws BlockingException {
-	
+
 		// Get the parent/predecessor OABA job
 		long oabaJobId = transJob.getBatchParentId();
 		BatchJob oabaJob = this.getOabaJobController().findBatchJob(oabaJobId);
@@ -186,13 +187,15 @@ public class StartTransitivityMDB extends AbstractTransitivityMDB {
 			this.getProcessingController().getProcessingLog(transJob);
 		status.setCurrentProcessingEvent(DONE_TRANS_DEDUP_OVERSIZED);
 
+		final RecordMatchingMode mode = getRecordMatchingMode(transJob);
+
 		ChunkService3 chunkService =
 			new ChunkService3(source2, null, staging, master, model,
 					OabaFileUtils.getChunkIDFactory(transJob),
 					OabaFileUtils.getStageDataFactory(transJob, model),
 					OabaFileUtils.getMasterDataFactory(transJob, model),
-					translator, transformerO, null, maxChunk,
-					numFiles, status, transJob);
+					translator, transformerO, null, maxChunk, numFiles, status,
+					transJob, mode);
 		chunkService.runService();
 		log.info("Done creating chunks " + chunkService.getTimeElapsed());
 

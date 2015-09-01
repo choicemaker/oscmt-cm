@@ -35,6 +35,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.ITransformer;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ImmutableRecordIdTranslator;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessingEvent;
+import com.choicemaker.cm.io.blocking.automated.offline.core.RecordMatchingMode;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.ControlChecker;
 import com.choicemaker.util.LongArrayList;
 import com.choicemaker.util.Precondition;
@@ -57,7 +58,7 @@ import com.choicemaker.util.Precondition;
  *
  */
 @SuppressWarnings({
-	"rawtypes", "unchecked" })
+		"rawtypes", "unchecked" })
 public class ChunkService3 {
 
 	/**
@@ -88,42 +89,45 @@ public class ChunkService3 {
 
 	// FIXME make these manifest constants JMX properties
 	/** Number of records between when checks of whether this job should stop */
-	public static final int COUNT_RECORDS_BETWEEN_STOP_CHECKS = ControlChecker.CONTROL_INTERVAL;
-	
+	public static final int COUNT_RECORDS_BETWEEN_STOP_CHECKS =
+		ControlChecker.CONTROL_INTERVAL;
+
 	/** Number of records between when debug print of the current record id */
 	public static final int COUNT_RECORDS_BETWEEN_DEBUG_PRINTS = 5000;
-	
+
 	/** Number of records between when info print of the current record id */
 	public static final int COUNT_RECORDS_BETWEEN_INFO_PRINTS = 50000;
 	// END FIXME
-	
-	private IIDSetSource bSource;
-	private IIDSetSource osSource;
-	private RecordSource stage;
-	private RecordSource master;
-	private ImmutableProbabilityModel model;
 
-	// these two variables are used to stop the program in the middle
-	private IControl control;
+	private final IIDSetSource bSource;
+	private final IIDSetSource osSource;
+	private final RecordSource stage;
+	private final RecordSource master;
+	private final ImmutableProbabilityModel model;
+
+	// these two variables are used to stop the program during processing
+	private final IControl control;
 	private boolean stop;
-	
+
 	// Translates record ids into internal ids and vice-versa
-	ImmutableRecordIdTranslator translator;
+	final ImmutableRecordIdTranslator translator;
 
 	// transformer for the regular blocks.
-	private ITransformer transformer;
+	private final ITransformer transformer;
 
 	// transformer for the oversized blocks.
-	private ITransformer transformerO;
-	
-	private IChunkRecordIdSinkSourceFactory recIDFactory;
-	private IChunkDataSinkSourceFactory stageSinkFactory;
-	private IChunkDataSinkSourceFactory masterSinkFactory;
+	private final ITransformer transformerO;
 
-	private ProcessingEventLog status;
-	private int maxChunkSize;
+	private final IChunkRecordIdSinkSourceFactory recIDFactory;
+	private final IChunkDataSinkSourceFactory stageSinkFactory;
+	private final IChunkDataSinkSourceFactory masterSinkFactory;
 
-	private int splitIndex;
+	private final ProcessingEventLog status;
+	private final int maxChunkSize;
+
+	private final int splitIndex;
+
+	private final RecordMatchingMode mode;
 
 	private ArrayList recIDSinks = new ArrayList(); // list of chunk id sinks
 
@@ -184,8 +188,8 @@ public class ChunkService3 {
 			IChunkDataSinkSourceFactory masterSinkFactory,
 			ImmutableRecordIdTranslator translator, ITransformer transformer,
 			ITransformer transformerO, int maxChunkSize, int maxFiles,
-			ProcessingEventLog status, IControl control) {
-			
+			ProcessingEventLog status, IControl control, RecordMatchingMode mode) {
+
 		Precondition.assertNonNullArgument(bSource);
 		Precondition.assertNonNullArgument(stage);
 		Precondition.assertNonNullArgument(model);
@@ -195,6 +199,7 @@ public class ChunkService3 {
 		Precondition.assertNonNullArgument(transformer);
 		Precondition.assertNonNullArgument(status);
 		Precondition.assertNonNullArgument(control);
+		Precondition.assertNonNullArgument(model);
 
 		this.bSource = bSource;
 		this.osSource = osSource;
@@ -211,8 +216,9 @@ public class ChunkService3 {
 		this.status = status;
 		this.translator = translator;
 		this.splitIndex = translator.getSplitIndex();
-
 		this.control = control;
+		this.mode = mode;
+
 		this.stop = false;
 	}
 
@@ -245,22 +251,26 @@ public class ChunkService3 {
 		log.entering(SOURCE, METHOD);
 		time = System.currentTimeMillis();
 
-		if (status.getCurrentProcessingEventId() == OabaProcessing.EVT_DONE_CREATE_CHUNK_DATA ) {
-			//just need to recover numChunks for the matching step
-			StringTokenizer temp = new StringTokenizer (status.getCurrentProcessingEventInfo(),DELIM);
-			numChunks = Integer.parseInt( temp.nextToken() );
-			numRegularChunks = Integer.parseInt( temp.nextToken() );
-			log.info("Recovery, numChunks " + numChunks + " numRegularChunks " + numRegularChunks);
-			
-		} else if (status.getCurrentProcessingEventId() == OabaProcessing.EVT_DONE_DEDUP_OVERSIZED ) {
-			//create ids
+		if (status.getCurrentProcessingEventId() == OabaProcessing.EVT_DONE_CREATE_CHUNK_DATA) {
+			// just need to recover numChunks for the matching step
+			StringTokenizer temp =
+				new StringTokenizer(status.getCurrentProcessingEventInfo(),
+						DELIM);
+			numChunks = Integer.parseInt(temp.nextToken());
+			numRegularChunks = Integer.parseInt(temp.nextToken());
+			log.info("Recovery, numChunks " + numChunks + " numRegularChunks "
+					+ numRegularChunks);
+
+		} else if (status.getCurrentProcessingEventId() == OabaProcessing.EVT_DONE_DEDUP_OVERSIZED) {
+			// create ids
 			log.info("Creating ids for block source " + bSource.getInfo());
-			createIDs (bSource, false, 0, transformer);
+			createIDs(bSource, false, 0, transformer);
 			numRegularChunks = numChunks;
-			
+
 			if (osSource != null && osSource.exists()) {
-				log.info("Creating ids for oversized block source " + osSource.getInfo());
-				int count = createIDs (osSource, true, 0, transformerO);
+				log.info("Creating ids for oversized block source "
+						+ osSource.getInfo());
+				int count = createIDs(osSource, true, 0, transformerO);
 				if (count == 0) {
 					transformerO.cleanUp();
 				}
@@ -273,24 +283,28 @@ public class ChunkService3 {
 		} else if (status.getCurrentProcessingEventId() == OabaProcessing.EVT_DONE_CREATE_CHUNK_IDS
 				|| status.getCurrentProcessingEventId() == OabaProcessing.EVT_CREATE_CHUNK_OVERSIZED_IDS) {
 
-		} else if (status.getCurrentProcessingEventId() == OabaProcessing.EVT_DONE_CREATE_CHUNK_IDS ||
-			status.getCurrentProcessingEventId() == OabaProcessing.EVT_CREATE_CHUNK_OVERSIZED_IDS) {
-				
-			//create the chunk data files
-			StringTokenizer temp = new StringTokenizer (status.getCurrentProcessingEventInfo(),DELIM);
-			numChunks = Integer.parseInt( temp.nextToken() );
-			numRegularChunks = Integer.parseInt( temp.nextToken() );
-			log.info("Recovery, numChunks " + numChunks + " numRegularChunks " + numRegularChunks);
+		} else if (status.getCurrentProcessingEventId() == OabaProcessing.EVT_DONE_CREATE_CHUNK_IDS
+				|| status.getCurrentProcessingEventId() == OabaProcessing.EVT_CREATE_CHUNK_OVERSIZED_IDS) {
 
-			recoverCreateIDs (numChunks);
+			// create the chunk data files
+			StringTokenizer temp =
+				new StringTokenizer(status.getCurrentProcessingEventInfo(),
+						DELIM);
+			numChunks = Integer.parseInt(temp.nextToken());
+			numRegularChunks = Integer.parseInt(temp.nextToken());
+			log.info("Recovery, numChunks " + numChunks + " numRegularChunks "
+					+ numRegularChunks);
 
-			createDataFiles ();
-			
-		} else if (status.getCurrentProcessingEventId() == OabaProcessing.EVT_CREATE_CHUNK_IDS ) {
-			//time to create Oversized ID files
+			recoverCreateIDs(numChunks);
+
+			createDataFiles();
+
+		} else if (status.getCurrentProcessingEventId() == OabaProcessing.EVT_CREATE_CHUNK_IDS) {
+			// time to create Oversized ID files
 			if (osSource != null && osSource.exists()) {
-				log.info("Creating ids for oversized block source " + osSource.getInfo());
-				int count = createIDs (osSource, true, 0, transformerO);
+				log.info("Creating ids for oversized block source "
+						+ osSource.getInfo());
+				int count = createIDs(osSource, true, 0, transformerO);
 				if (count == 0) {
 					transformerO.cleanUp();
 				}
@@ -326,22 +340,23 @@ public class ChunkService3 {
 	private void createDataFiles() throws BlockingException {
 		try {
 			// Index sets for each chunk data file
-			IChunkRecordIndexSet [] crSets = new IChunkRecordIndexSet [numChunks];
-				
+			IChunkRecordIndexSet[] crSets = new IChunkRecordIndexSet[numChunks];
+
 			// A stage record sink for each chunk data file
-			RecordSink [] stageRecordSinks = new RecordSink [numChunks];
-			
+			RecordSink[] stageRecordSinks = new RecordSink[numChunks];
+
 			// A master record sink for each chunk data file
-			RecordSink [] masterRecordSinks = new RecordSink [numChunks];
-			
-			//set up
-			for (int i=0; i < numChunks; i++) {
-				IChunkRecordIdSink recSink = (IChunkRecordIdSink) recIDSinks.get(i);
+			RecordSink[] masterRecordSinks = new RecordSink[numChunks];
+
+			// set up
+			for (int i = 0; i < numChunks; i++) {
+				IChunkRecordIdSink recSink =
+					(IChunkRecordIdSink) recIDSinks.get(i);
 				crSets[i] = recIDFactory.getChunkRecordIndexSet(recSink);
 				stageRecordSinks[i] = stageSinkFactory.getNextSink();
 				masterRecordSinks[i] = masterSinkFactory.getNextSink();
-			} //end for
-			
+			} // end for
+
 			int start = 0;
 			int end = maxFiles;
 
@@ -350,27 +365,27 @@ public class ChunkService3 {
 				boolean isStaging = true;
 				createDataFiles(start, end, crSets, stageRecordSinks,
 						isStaging, stage, model);
-				
-				if (master != null) {
+
+				if (mode == RecordMatchingMode.BRM && master != null) {
 					isStaging = false;
 					createDataFiles(start, end, crSets, masterRecordSinks,
 							isStaging, master, model);
 				} else {
-					openMaster (masterRecordSinks);
+					createEmptySinks(masterRecordSinks);
 				}
-				
+
 			} else {
 				while (start < numChunks) {
 					boolean isStaging = true;
 					createDataFiles(start, end, crSets, stageRecordSinks,
 							isStaging, stage, model);
-					
-					if (master != null) {
+
+					if (mode == RecordMatchingMode.BRM && master != null) {
 						isStaging = false;
 						createDataFiles(start, end, crSets, masterRecordSinks,
 								isStaging, master, model);
 					} else {
-						openMaster (masterRecordSinks);
+						createEmptySinks(masterRecordSinks);
 					}
 
 					start = end;
@@ -379,13 +394,13 @@ public class ChunkService3 {
 						end = numChunks;
 				}
 			}
-			
+
 			if (!stop) {
 				String temp =
 					Integer.toString(numChunks) + DELIM
 							+ Integer.toString(numRegularChunks);
-				status.setCurrentProcessingEvent(OabaProcessingEvent.DONE_CREATE_CHUNK_DATA,
-						temp);
+				status.setCurrentProcessingEvent(
+						OabaProcessingEvent.DONE_CREATE_CHUNK_DATA, temp);
 
 				if (!keepFiles) {
 					// remove all the chunk record id files
@@ -396,6 +411,7 @@ public class ChunkService3 {
 					}
 				}
 
+				recIDSinks.clear();
 				recIDSinks = null;
 			}
 
@@ -412,7 +428,8 @@ public class ChunkService3 {
 	 * @param masterRecordSinks
 	 * @throws IOException
 	 */
-	private void openMaster(RecordSink[] masterRecordSinks) throws IOException {
+	private void createEmptySinks(RecordSink[] masterRecordSinks)
+			throws IOException {
 		int s = masterRecordSinks.length;
 		for (int i = 0; i < s; i++) {
 			masterRecordSinks[i].open();
@@ -442,33 +459,29 @@ public class ChunkService3 {
 	 * @throws XmlConfException
 	 * @throws IOException
 	 */
-	private void createDataFiles(
-		int start,
-		int end,
-		IChunkRecordIndexSet[] crSets,
-		RecordSink[] recordSinks,
-		boolean isStaging,
-		/*int splitIndex, */
-		RecordSource rs,
-		ImmutableProbabilityModel model)
-		throws BlockingException {
-			
-		log.fine ("starting " + start + " ending " + end);
+	private void createDataFiles(int start, int end,
+			IChunkRecordIndexSet[] crSets, RecordSink[] recordSinks,
+			boolean isStaging,
+			/* int splitIndex, */
+			RecordSource rs, ImmutableProbabilityModel model)
+			throws BlockingException {
 
-		//set up	
-		for (int i=start; i < end; i++) {
+		log.fine("starting " + start + " ending " + end);
+
+		// set up
+		for (int i = start; i < end; i++) {
 			crSets[i].open();
 			try {
 				recordSinks[i].open();
 			} catch (IOException e) {
 				throw new BlockingException(e.getMessage(), e);
 			}
-		} //end for
+		} // end for
 
-		createDataFile (rs, model, start, end, isStaging, crSets, recordSinks);
+		createDataFile(rs, model, start, end, isStaging, crSets, recordSinks);
 
-		//close sinks and sources
-		for (int i=start; i < end; i++) {
+		// close sinks and sources
+		for (int i = start; i < end; i++) {
 			try {
 				recordSinks[i].close();
 			} catch (IOException e) {
@@ -477,22 +490,22 @@ public class ChunkService3 {
 			if (crSets[i].isDebugEnabled()) {
 				logUncheckedIndices(crSets[i]);
 			}
-			crSets[i].close(); //close the record id sources
+			crSets[i].close(); // close the record id sources
 		}
 
 	}
-	
+
 	private static int MAX_DEBUG_INDEX_NUMBER = 5;
-	
+
 	private static void logUncheckedIndices(IChunkRecordIndexSet indexSet)
-		throws BlockingException {
+			throws BlockingException {
 		IChunkRecordIdSource src = indexSet.getUncheckedIndices();
 		LongArrayList uncheckedList = new LongArrayList(MAX_DEBUG_INDEX_NUMBER);
 		int count = 0;
-		while (src.hasNext() ) {
-			++ count;
+		while (src.hasNext()) {
+			++count;
 			long uncheckedIndex = src.next();
-			if(uncheckedList.size() < MAX_DEBUG_INDEX_NUMBER) {
+			if (uncheckedList.size() < MAX_DEBUG_INDEX_NUMBER) {
 				uncheckedList.add(uncheckedIndex);
 			} else {
 				if (count > uncheckedList.size()) {
@@ -502,17 +515,16 @@ public class ChunkService3 {
 		}
 		int exampleSize = uncheckedList.size();
 		// assert count >= exampleSize ;
-		if (count>0) {
-			StringBuffer sb =
-				new StringBuffer("Some (");
+		if (count > 0) {
+			StringBuffer sb = new StringBuffer("Some (");
 			if (count > exampleSize) {
 				sb.append("at least ");
 			}
-			sb.append(count).append(
-					") record indices did not correspond to records from the database: ");
-			for (int i=0; i<exampleSize; i++) {
+			sb.append(count)
+					.append(") record indices did not correspond to records from the database: ");
+			for (int i = 0; i < exampleSize; i++) {
 				sb.append(uncheckedList.get(i));
-				if (i<exampleSize - 1) {
+				if (i < exampleSize - 1) {
 					sb.append(", ");
 				}
 			}
@@ -548,19 +560,14 @@ public class ChunkService3 {
 	 * @throws BlockingException
 	 * @throws XmlConfException
 	 */
-	private void createDataFile(
-		RecordSource rs,
-		ImmutableProbabilityModel model,
-		int start,
-		int end,
-		boolean isStaging,
-		IChunkRecordIndexSet[] crSets,
-		RecordSink[] recordSinks)
-		throws BlockingException {
-			
+	private void createDataFile(RecordSource rs,
+			ImmutableProbabilityModel model, int start, int end,
+			boolean isStaging, IChunkRecordIndexSet[] crSets,
+			RecordSink[] recordSinks) throws BlockingException {
+
 		final String METHOD = "createDataFile(..)";
 		log.entering(SOURCE, METHOD, new Object[] {
-				start, end});
+				start, end });
 		assert rs != null;
 		assert model != null;
 		assert crSets != null;
@@ -570,7 +577,7 @@ public class ChunkService3 {
 			rs.setModel(model);
 			rs.open();
 
-			// Count intervals between log statements and stop checks				
+			// Count intervals between log statements and stop checks
 			int count = 0;
 
 			// read the source record and check each of the chunk index files
@@ -581,14 +588,13 @@ public class ChunkService3 {
 				if (isStaging) {
 					index = translator.lookupStagingIndex(id);
 				} else {
-					index = translator.lookupMasterIndex(id); 
+					index = translator.lookupMasterIndex(id);
 				}
-				if ((count % COUNT_RECORDS_BETWEEN_DEBUG_PRINTS == 0
-					&& log.isLoggable(Level.FINE))
-					|| (count % COUNT_RECORDS_BETWEEN_INFO_PRINTS == 0
-						&& log.isLoggable(Level.INFO))) {
-					String msg =
-						"Record '" + id + "' / index '" + index + "'";
+				if ((count % COUNT_RECORDS_BETWEEN_DEBUG_PRINTS == 0 && log
+						.isLoggable(Level.FINE))
+						|| (count % COUNT_RECORDS_BETWEEN_INFO_PRINTS == 0 && log
+								.isLoggable(Level.INFO))) {
+					String msg = "Record '" + id + "' / index '" + index + "'";
 					if (log.isLoggable(Level.INFO)) {
 						log.info(msg);
 					} else {
@@ -598,7 +604,8 @@ public class ChunkService3 {
 				if (index == ImmutableRecordIdTranslator.INVALID_INDEX) {
 					log.warning("no internal id for record id '" + id + "'");
 				} else {
-					// For each chunk data file, check if this record belongs to it
+					// For each chunk data file, check if this record belongs to
+					// it
 					for (int i = start; i < end; i++) {
 						// If the record index belongs to the chunk index set,
 						// add the record itself to the chunk data file
@@ -607,15 +614,17 @@ public class ChunkService3 {
 						}
 					}
 				}
-				count ++;
-				stop = ControlChecker.checkStop (control, count,COUNT_RECORDS_BETWEEN_STOP_CHECKS);					
-			} //end while rs next
+				count++;
+				stop =
+					ControlChecker.checkStop(control, count,
+							COUNT_RECORDS_BETWEEN_STOP_CHECKS);
+			} // end while rs next
 
-			//close source
-			rs.close() ;
+			// close source
+			rs.close();
 
 		} catch (IOException ex) {
-			throw new BlockingException (ex.toString());
+			throw new BlockingException(ex.toString());
 		}
 	}
 
@@ -637,9 +646,9 @@ public class ChunkService3 {
 		transformer.init();
 
 		source.open();
-		
-		//this stores the unique recID's in a chunk
-		SortedSet rows = new TreeSet ();
+
+		// this stores the unique recID's in a chunk
+		SortedSet rows = new TreeSet();
 
 		IChunkRecordIdSink recIDSink = recIDFactory.getNextSink();
 		recIDSinks.add(recIDSink);
@@ -665,78 +674,91 @@ public class ChunkService3 {
 
 			// add to the set of distinct record ids
 			for (int i = 0; i < block.size() && !stop; i++) {
-				//put the internal id in the set
+				// put the internal id in the set
 				Long index = new Long(block.get(i));
-//				boolean isValidIndex =
-//					this.translator.isValidStagingIndex(I.longValue())
-//						|| this.translator.isValidMasterIndex(I.longValue());
-				boolean isValidIndex = index.longValue() >= ImmutableRecordIdTranslator.MINIMUM_VALID_INDEX;
+				// boolean isValidIndex =
+				// this.translator.isValidStagingIndex(I.longValue())
+				// || this.translator.isValidMasterIndex(I.longValue());
+				boolean isValidIndex =
+					index.longValue() >= ImmutableRecordIdTranslator.MINIMUM_VALID_INDEX;
 				if (isValidIndex && !rows.contains(index)) {
 					rows.add(index);
-				} else if (i>0 && !isValidIndex)  {
-					log.warning(
-						"Element " + i + " of blocking set " + countAll
+				} else if (i > 0 && !isValidIndex) {
+					log.warning("Element " + i + " of blocking set " + countAll
 							+ " is an invalid index (value: " + index + ")");
-				} else if (i==0) {
-					// Don't bother logging if i==0; the first index in a block will be invalid
+				} else if (i == 0) {
+					// Don't bother logging if i==0; the first index in a block
+					// will be invalid
 					continue;
 				} else if (isValidIndex) {
 					// Don't bother logging: the row already contains this index
 					continue;
 				} else {
-					// Unexpected -- should be unreachable, although the compiler can't know this
+					// Unexpected -- should be unreachable, although the
+					// compiler can't know this
 					throw new Error("Unexpected: code should be unreachable");
 				}
 			}
-			
-			//transform and write out array or tree
+
+			// transform and write out array or tree
 			transformer.transform(bs);
-			
 
-			//when the hashset gets too big, clear it and start a new file
+			// when the hashset gets too big, clear it and start a new file
 			if (rows.size() > maxChunkSize) {
-				//write the ids to sink
-				writeChunkRows (recIDSink, rows);
+				// write the ids to sink
+				writeChunkRows(recIDSink, rows);
 
-				log.info ( recIDSink.getInfo() + " has " + count + " blocks " + rows.size() + " rows");
-				
-				//write status
-				numChunks ++;
-				String temp = Integer.toString(numChunks) + OabaProcessing.DELIMIT + Integer.toString(skip + countAll);
-				if (isOS) status.setCurrentProcessingEvent(OabaProcessingEvent.CREATE_CHUNK_OVERSIZED_IDS, temp );
-				else status.setCurrentProcessingEvent( OabaProcessingEvent.CREATE_CHUNK_IDS, temp );
-						
-				//use the next sink
+				log.info(recIDSink.getInfo() + " has " + count + " blocks "
+						+ rows.size() + " rows");
+
+				// write status
+				numChunks++;
+				String temp =
+					Integer.toString(numChunks) + OabaProcessing.DELIMIT
+							+ Integer.toString(skip + countAll);
+				if (isOS)
+					status.setCurrentProcessingEvent(
+							OabaProcessingEvent.CREATE_CHUNK_OVERSIZED_IDS,
+							temp);
+				else
+					status.setCurrentProcessingEvent(
+							OabaProcessingEvent.CREATE_CHUNK_IDS, temp);
+
+				// use the next sink
 				transformer.useNextSink();
-				
-				//create a new recIDSink
-				recIDSink = recIDFactory.getNextSink();		
+
+				// create a new recIDSink
+				recIDSink = recIDFactory.getNextSink();
 				recIDSinks.add(recIDSink);
-				
-				//reset variables
-				rows = new TreeSet ();
+
+				// reset variables
+				rows = new TreeSet();
 				count = 0;
 			}
-			
-		} //end while
-		
-		source.close ();
 
-		//One last write to sink
+		} // end while
+
+		source.close();
+
+		// One last write to sink
 		if (rows.size() > 0 && !stop) {
-			writeChunkRows (recIDSink, rows);
-			log.info ( recIDSink.getInfo() +" has " + count + " blocks " + rows.size() + " rows");
+			writeChunkRows(recIDSink, rows);
+			log.info(recIDSink.getInfo() + " has " + count + " blocks "
+					+ rows.size() + " rows");
 
-			numChunks ++;
-			
+			numChunks++;
+
 			if (isOS) {
-				String temp = Integer.toString(numChunks) + DELIM 
-					+ Integer.toString(numRegularChunks);
-				status.setCurrentProcessingEvent( OabaProcessingEvent.CREATE_CHUNK_OVERSIZED_IDS, temp );
+				String temp =
+					Integer.toString(numChunks) + DELIM
+							+ Integer.toString(numRegularChunks);
+				status.setCurrentProcessingEvent(
+						OabaProcessingEvent.CREATE_CHUNK_OVERSIZED_IDS, temp);
 			} else {
 				String temp = Integer.toString(numChunks);
-				status.setCurrentProcessingEvent( OabaProcessingEvent.CREATE_CHUNK_IDS, temp );
-			} 
+				status.setCurrentProcessingEvent(
+						OabaProcessingEvent.CREATE_CHUNK_IDS, temp);
+			}
 		}
 
 		// cleanup
@@ -758,8 +780,8 @@ public class ChunkService3 {
 	 *            - hash set containing the distinct ids
 	 * @throws IOException
 	 */
-	private static void writeChunkRows(IChunkRecordIdSink recSink, SortedSet rows)
-			throws BlockingException {
+	private static void writeChunkRows(IChunkRecordIdSink recSink,
+			SortedSet rows) throws BlockingException {
 		recSink.open();
 
 		Iterator it = rows.iterator();
