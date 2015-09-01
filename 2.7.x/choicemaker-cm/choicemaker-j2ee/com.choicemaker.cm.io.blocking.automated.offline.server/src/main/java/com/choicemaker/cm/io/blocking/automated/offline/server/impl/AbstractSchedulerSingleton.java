@@ -9,7 +9,6 @@ package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_CHUNK_FILE_COUNT;
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_CURRENT_CHUNK_INDEX;
-import static com.choicemaker.cm.args.OperationalPropertyNames.PN_RECORD_MATCHING_MODE;
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_REGULAR_CHUNK_FILE_COUNT;
 
 import java.io.PrintWriter;
@@ -369,16 +368,10 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 	}
 
 	protected RecordMatchingMode getRecordMatchingMode(final BatchJob job) {
-		String value =
-			getPropertyController()
-					.getJobProperty(job, PN_RECORD_MATCHING_MODE);
-		RecordMatchingMode retVal = null;
-		try {
-			retVal = RecordMatchingMode.valueOf(value);
-		} catch (IllegalArgumentException | NullPointerException x) {
-			String msg =
-				"Missing or invalid value for property '"
-						+ PN_RECORD_MATCHING_MODE + "': '" + value + "'";
+		RecordMatchingMode retVal =
+			BatchJobUtils.getRecordMatchingMode(getPropertyController(), job);
+		if (retVal == null) {
+			String msg = "Null record-matching mode for job " + job.getId();
 			throw new IllegalStateException(msg);
 		}
 		assert retVal != null;
@@ -396,6 +389,7 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 			sendToUpdateStatus(job, OabaProcessingEvent.DONE_MATCHING_CHUNKS,
 					new Date(), null);
 			sendToSingleRecordMatching(job, sd);
+			break;
 		case BRM:
 			sendToUpdateStatus(job, OabaProcessingEvent.DONE_MATCHING_CHUNKS,
 					new Date(), null);
