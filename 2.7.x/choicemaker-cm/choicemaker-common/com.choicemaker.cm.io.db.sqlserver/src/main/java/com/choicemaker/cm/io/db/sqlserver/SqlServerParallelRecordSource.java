@@ -32,7 +32,6 @@ import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.Sink;
-import com.choicemaker.cm.io.db.base.DataSources;
 import com.choicemaker.cm.io.db.base.DbAccessor;
 import com.choicemaker.cm.io.db.base.DbReaderParallel;
 import com.choicemaker.cm.io.db.base.DbView;
@@ -73,29 +72,26 @@ public class SqlServerParallelRecordSource implements RecordSource {
 		if (dbConfiguration == null || dbConfiguration.trim().isEmpty()) {
 			throw new IllegalArgumentException("null or blank database configuration name");
 		}
-		if (!isValidQuery()) {
+		if (!isValidQuery(idsQuery)) {
 			throw new IllegalArgumentException("idsQuery must contain ' AS ID '.");
 		}
 
+		// Don't use public modifiers here -- preconditions may not apply
 		this.fileName = fileName;
-		this.setModel(model);
-		setDataSourceName(dsName);
+		this.model = model;
+		this.dsName = dsName;
 		this.dbConfiguration = dbConfiguration;
 		this.idsQuery = idsQuery;
 	}
 
 	public void open() throws IOException {
 
-		if (getDs() == null) {
-			throw new IllegalStateException("Data source is null");
-		}
-
 		DbAccessor accessor = (DbAccessor) getModel().getAccessor();
 		dbr = accessor.getDbReaderParallel(getDbConfiguration());
 
 		try {
 			if (getConnection() == null) {
-				connection = getDs().getConnection();
+				connection = getDataSource().getConnection();
 			}
 
 			// 1. Create view
@@ -106,7 +102,7 @@ public class SqlServerParallelRecordSource implements RecordSource {
 
 			// 3. Open parallel reader
 			logger.fine("before dbr.open");
-			getDbr().open(results);
+			getDatabaseReader().open(results);
 		} catch (SQLException ex) {
 			logger.severe(ex.toString());
 
@@ -147,8 +143,8 @@ public class SqlServerParallelRecordSource implements RecordSource {
 	 *   from CORPORATE where primary_name like 'A%'
 	 * </pre>
 	 */
-	private boolean isValidQuery() {
-		if (getIdsQuery().toUpperCase().indexOf(" AS ID ") == -1)
+	private static boolean isValidQuery(String s) {
+		if (s == null || s.toUpperCase().indexOf(" AS ID ") == -1)
 			return false;
 		else
 			return true;
@@ -158,8 +154,8 @@ public class SqlServerParallelRecordSource implements RecordSource {
 		Accessor accessor = getModel().getAccessor();
 		String viewBase =
 			"vw_cmt_" + accessor.getSchemaName() + "_r_" + getDbConfiguration();
-		DbView[] views = getDbr().getViews();
-		String masterId = getDbr().getMasterId();
+		DbView[] views = getDatabaseReader().getViews();
+		String masterId = getDatabaseReader().getMasterId();
 
 		int numViews = views.length;
 		selects = new Statement[numViews];
@@ -208,13 +204,13 @@ public class SqlServerParallelRecordSource implements RecordSource {
 	}
 
 	public boolean hasNext() throws IOException {
-		return getDbr().hasNext();
+		return getDatabaseReader().hasNext();
 	}
 
 	public Record getNext() throws IOException {
 		Record r = null;
 		try {
-			r = getDbr().getNext();
+			r = getDatabaseReader().getNext();
 		} catch (SQLException e) {
 			throw new IOException(e.toString());
 		}
@@ -323,14 +319,6 @@ public class SqlServerParallelRecordSource implements RecordSource {
 		return dsName;
 	}
 
-	private void setDataSourceName(String dsName) {
-		if (dsName == null) {
-			throw new IllegalArgumentException("null dsName");
-		}
-		DataSource ds = DataSources.getDataSource(dsName);
-		setDataSource(dsName, ds);
-	}
-
 	public DataSource getDataSource() {
 		if (ds == null) {
 			throw new IllegalStateException("null data source");
@@ -349,15 +337,11 @@ public class SqlServerParallelRecordSource implements RecordSource {
 		this.ds = ds;
 	}
 
-	private DataSource getDs() {
-		return ds;
-	}
-
 	private Connection getConnection() {
 		return connection;
 	}
 
-	private DbReaderParallel getDbr() {
+	private DbReaderParallel getDatabaseReader() {
 		return dbr;
 	}
 
@@ -367,7 +351,7 @@ public class SqlServerParallelRecordSource implements RecordSource {
 	}
 
 	public String getIdsQuery() {
-		assert idsQuery != null;
+		assert isValidQuery(this.idsQuery);
 		return idsQuery;
 	}
 
