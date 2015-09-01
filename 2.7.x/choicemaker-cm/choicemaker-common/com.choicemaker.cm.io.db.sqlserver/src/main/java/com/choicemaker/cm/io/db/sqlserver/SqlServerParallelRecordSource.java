@@ -45,12 +45,11 @@ public class SqlServerParallelRecordSource implements RecordSource {
 	private static Logger logger = Logger
 			.getLogger(SqlServerParallelRecordSource.class.getName());
 
-	private String fileName;
+	private final String fileName;
+	private final String dbConfiguration;
+	private final String idsQuery;
 
 	private ImmutableProbabilityModel model;
-	private String dbConfiguration;
-	private String idsQuery;
-
 	private String dsName;
 	private DataSource ds;
 	private Connection connection;
@@ -61,9 +60,6 @@ public class SqlServerParallelRecordSource implements RecordSource {
 
 	private static final String DATA_VIEW = "DATAVIEW_1001";
 
-	public SqlServerParallelRecordSource() {
-	}
-
 	public SqlServerParallelRecordSource(String fileName,
 			ImmutableProbabilityModel model, String dsName,
 			String dbConfiguration, String idsQuery) {
@@ -71,7 +67,18 @@ public class SqlServerParallelRecordSource implements RecordSource {
 		logger.fine("Constructor: " + fileName + " " + model + " " + dsName
 				+ " " + dbConfiguration + " " + idsQuery);
 
-		this.model = model;
+		if (fileName == null) {
+			logger.fine("Null file name for SqlServerParallelRecordSource");
+		}
+		if (dbConfiguration == null || dbConfiguration.trim().isEmpty()) {
+			throw new IllegalArgumentException("null or blank database configuration name");
+		}
+		if (!isValidQuery()) {
+			throw new IllegalArgumentException("idsQuery must contain ' AS ID '.");
+		}
+
+		this.fileName = fileName;
+		this.setModel(model);
 		setDataSourceName(dsName);
 		this.dbConfiguration = dbConfiguration;
 		this.idsQuery = idsQuery;
@@ -79,28 +86,27 @@ public class SqlServerParallelRecordSource implements RecordSource {
 
 	public void open() throws IOException {
 
-		if (!isValidQuery())
-			throw new IOException("idsQuery must contain ' AS ID '.");
+		if (getDs() == null) {
+			throw new IllegalStateException("Data source is null");
+		}
 
-		DbAccessor accessor = (DbAccessor) model.getAccessor();
-		dbr = accessor.getDbReaderParallel(dbConfiguration);
+		DbAccessor accessor = (DbAccessor) getModel().getAccessor();
+		dbr = accessor.getDbReaderParallel(getDbConfiguration());
 
 		try {
-			if (connection == null) {
-				connection = ds.getConnection();
-				// connection.setAutoCommit(true);
+			if (getConnection() == null) {
+				connection = getDs().getConnection();
 			}
-			// connection.setReadOnly(true);
 
 			// 1. Create view
-			createView(connection);
+			createView(getConnection());
 
 			// 2. Get the ResultSets
 			getResultSets();
 
 			// 3. Open parallel reader
 			logger.fine("before dbr.open");
-			dbr.open(results);
+			getDbr().open(results);
 		} catch (SQLException ex) {
 			logger.severe(ex.toString());
 
@@ -116,7 +122,7 @@ public class SqlServerParallelRecordSource implements RecordSource {
 		logger.fine(s);
 		view.execute(s);
 
-		s = "create view " + DATA_VIEW + " as " + idsQuery;
+		s = "create view " + DATA_VIEW + " as " + getIdsQuery();
 		logger.fine(s);
 		view.execute(s);
 		view.close();
@@ -142,18 +148,18 @@ public class SqlServerParallelRecordSource implements RecordSource {
 	 * </pre>
 	 */
 	private boolean isValidQuery() {
-		if (idsQuery.toUpperCase().indexOf(" AS ID ") == -1)
+		if (getIdsQuery().toUpperCase().indexOf(" AS ID ") == -1)
 			return false;
 		else
 			return true;
 	}
 
 	private void getResultSets() throws SQLException {
-		Accessor accessor = model.getAccessor();
+		Accessor accessor = getModel().getAccessor();
 		String viewBase =
-			"vw_cmt_" + accessor.getSchemaName() + "_r_" + dbConfiguration;
-		DbView[] views = dbr.getViews();
-		String masterId = dbr.getMasterId();
+			"vw_cmt_" + accessor.getSchemaName() + "_r_" + getDbConfiguration();
+		DbView[] views = getDbr().getViews();
+		String masterId = getDbr().getMasterId();
 
 		int numViews = views.length;
 		selects = new Statement[numViews];
@@ -182,7 +188,7 @@ public class SqlServerParallelRecordSource implements RecordSource {
 
 			logger.fine("Query: " + queryString);
 
-			selects[i] = connection.prepareStatement(queryString);
+			selects[i] = getConnection().prepareStatement(queryString);
 			logger.fine("Prepared statement");
 			selects[i].setFetchSize(100);
 			logger.fine("Changed Fetch Size to 100");
@@ -202,13 +208,13 @@ public class SqlServerParallelRecordSource implements RecordSource {
 	}
 
 	public boolean hasNext() throws IOException {
-		return dbr.hasNext();
+		return getDbr().hasNext();
 	}
 
 	public Record getNext() throws IOException {
 		Record r = null;
 		try {
-			r = dbr.getNext();
+			r = getDbr().getNext();
 		} catch (SQLException e) {
 			throw new IOException(e.toString());
 		}
@@ -254,16 +260,16 @@ public class SqlServerParallelRecordSource implements RecordSource {
 			results = null;
 		}
 
-		if (connection != null) {
+		if (getConnection() != null) {
 			try {
-				dropView(connection);
+				dropView(getConnection());
 			} catch (SQLException e) {
 				String msg = "Problem dropping view:" + e.toString();
 				exceptionMessages.add(msg);
 			}
 
 			try {
-				connection.close();
+				getConnection().close();
 			} catch (SQLException e) {
 				String msg = "Problem dropping connection:" + e.toString();
 				exceptionMessages.add(msg);
@@ -271,9 +277,6 @@ public class SqlServerParallelRecordSource implements RecordSource {
 			connection = null;
 		}
 
-		ds = null;
-		dbr = null;
-		
 		// Log any exception messages as warnings
 		if (!exceptionMessages.isEmpty()) {
 			final int count = exceptionMessages.size();
@@ -292,9 +295,7 @@ public class SqlServerParallelRecordSource implements RecordSource {
 		// Postconditions
 		assert selects == null;
 		assert results == null;
-		assert connection == null;
-		assert ds == null;
-		assert dbr == null;
+		assert getConnection() == null;
 	}
 	
 	protected void finalize() {
@@ -302,52 +303,72 @@ public class SqlServerParallelRecordSource implements RecordSource {
 	}
 
 	public ImmutableProbabilityModel getModel() {
+		if (model == null) {
+			throw new IllegalStateException("null model");
+		}
 		return model;
 	}
 
 	public void setModel(ImmutableProbabilityModel m) {
+		if (m == null) {
+			throw new IllegalArgumentException("null model");
+		}
 		this.model = m;
 	}
 
 	public String getDataSourceName() {
+		if (dsName == null) {
+			throw new IllegalStateException("null dsName");
+		}
 		return dsName;
 	}
 
-	public void setDataSourceName(String dsName) {
+	private void setDataSourceName(String dsName) {
+		if (dsName == null) {
+			throw new IllegalArgumentException("null dsName");
+		}
 		DataSource ds = DataSources.getDataSource(dsName);
 		setDataSource(dsName, ds);
 	}
 
 	public DataSource getDataSource() {
+		if (ds == null) {
+			throw new IllegalStateException("null data source");
+		}
 		return ds;
 	}
 
-	public void setDataSource(String name, DataSource ds) {
+	void setDataSource(String name, DataSource ds) {
+		if (name == null) {
+			throw new IllegalArgumentException("null dsName");
+		}
+		if (ds == null) {
+			throw new IllegalArgumentException("null data source");
+		}
 		this.dsName = name;
 		this.ds = ds;
 	}
 
-	public void setConnection(Connection connection) {
-		this.dsName = null;
-		this.ds = null;
+	private DataSource getDs() {
+		return ds;
+	}
 
-		this.connection = connection;
+	private Connection getConnection() {
+		return connection;
+	}
+
+	private DbReaderParallel getDbr() {
+		return dbr;
 	}
 
 	public String getDbConfiguration() {
+		assert dbConfiguration != null;
 		return dbConfiguration;
 	}
 
-	public void setDbConfiguration(String dbConfiguration) {
-		this.dbConfiguration = dbConfiguration;
-	}
-
 	public String getIdsQuery() {
+		assert idsQuery != null;
 		return idsQuery;
-	}
-
-	public void setIdsQuery(String idsQuery) {
-		this.idsQuery = idsQuery;
 	}
 
 	public String getName() {
@@ -366,18 +387,14 @@ public class SqlServerParallelRecordSource implements RecordSource {
 		throw new UnsupportedOperationException();
 	}
 
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
-	}
-
 	public String getFileName() {
 		return fileName;
 	}
 
 	public String toString() {
-		return "SqlServerParallelRecordSource [fileName=" + fileName
-				+ ", model=" + model + ", dbConfiguration=" + dbConfiguration
-				+ ", idsQuery=" + idsQuery + ", dsName=" + dsName + "]";
+		return "SqlServerParallelRecordSource [fileName=" + getFileName()
+				+ ", model=" + getModel() + ", dbConfiguration=" + getDbConfiguration()
+				+ ", idsQuery=" + getIdsQuery() + ", dsName=" + getDataSourceName() + "]";
 	}
 
 }
