@@ -34,7 +34,6 @@ import javax.naming.NamingException;
 
 import com.choicemaker.cm.args.BatchProcessingEvent;
 import com.choicemaker.cm.args.OabaParameters;
-import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.batch.BatchJobStatus;
 import com.choicemaker.cm.batch.OperationalPropertyController;
@@ -194,8 +193,6 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 		final BatchJob batchJob = jobController.findBatchJob(jobId);
 		final OabaParameters params =
 			paramsController.findOabaParametersByBatchJobId(jobId);
-		final ServerConfiguration serverConfig =
-			serverController.findServerConfigurationByJobId(jobId);
 		final ProcessingEventLog processingEntry =
 			processingController.getProcessingLog(batchJob);
 		final String modelConfigId = params.getModelConfigurationName();
@@ -206,7 +203,8 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 			log.severe(s);
 			throw new IllegalArgumentException(s);
 		}
-		final int numProcessors = serverConfig.getMaxChoiceMakerThreads();
+		final int numTempResults =
+			BatchJobUtils.getMaxTempPairwiseIndex(propController, batchJob);
 
 		if (BatchJobStatus.ABORT_REQUESTED.equals(batchJob.getStatus())) {
 			MessageBeanUtils.stopJob(batchJob, propController, processingEntry);
@@ -214,7 +212,7 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 		} else {
 			processingEntry
 					.setCurrentProcessingEvent(OabaProcessingEvent.MERGE_DEDUP_MATCHES);
-			mergeMatches(numProcessors, jobId, batchJob);
+			mergeMatches(numTempResults, jobId, batchJob);
 
 			// mark as done
 			batchJob.markAsCompleted();

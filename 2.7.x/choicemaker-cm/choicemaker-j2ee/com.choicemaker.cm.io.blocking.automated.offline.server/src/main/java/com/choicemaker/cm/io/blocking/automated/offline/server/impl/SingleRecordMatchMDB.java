@@ -120,7 +120,7 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 			FINAL_STAGING_INDEX_INCLUSIVE + 1;
 		final int maxMatches = oabaSettings.getMaxMatches();
 		final IMatchRecord2SinkSourceFactory<?> factory =
-			OabaFileUtils.getMatchTempFactory(batchJob);
+			OabaFileUtils.getMatchChunkFactory(batchJob);
 
 		final int FINAL_MS_INDEX_INCLUSIVE =
 			handleSingleMatching(stageDS, masterDS, factory, batchJob,
