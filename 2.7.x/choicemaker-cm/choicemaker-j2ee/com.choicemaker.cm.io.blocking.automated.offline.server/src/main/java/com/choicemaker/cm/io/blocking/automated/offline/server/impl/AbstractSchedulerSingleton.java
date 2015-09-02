@@ -389,17 +389,19 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 	 */
 	protected final void nextSteps(final BatchJob job, OabaJobMessage sd)
 			throws BlockingException {
+
+		// Update the processing status and remove intermediate files
+		sendToUpdateStatus(job, OabaProcessingEvent.DONE_MATCHING_CHUNKS,
+				new Date(), null);
+		cleanUp(job, sd);
+
+		// Next processing stage depends on the record-matching mode
 		RecordMatchingMode mode = getRecordMatchingMode(job);
 		switch (mode) {
 		case SRM:
-			sendToUpdateStatus(job, OabaProcessingEvent.DONE_MATCHING_CHUNKS,
-					new Date(), null);
 			sendToSingleRecordMatching(job, sd);
 			break;
 		case BRM:
-			sendToUpdateStatus(job, OabaProcessingEvent.DONE_MATCHING_CHUNKS,
-					new Date(), null);
-			cleanUp(job, sd);
 			sendToUpdateStatus(job, OabaProcessingEvent.DONE_MATCHING_DATA,
 					new Date(), null);
 			sendToMatchDebup(job, sd);
