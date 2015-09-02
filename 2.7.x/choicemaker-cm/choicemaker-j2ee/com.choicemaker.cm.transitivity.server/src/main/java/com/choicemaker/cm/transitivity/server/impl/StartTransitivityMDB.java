@@ -9,6 +9,7 @@ package com.choicemaker.cm.transitivity.server.impl;
 
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_CHUNK_FILE_COUNT;
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_REGULAR_CHUNK_FILE_COUNT;
+import static com.choicemaker.cm.io.blocking.automated.offline.core.RecordMatchingMode.BRM;
 import static com.choicemaker.cm.transitivity.core.TransitivityProcessingEvent.DONE_CREATE_CHUNK_DATA;
 import static com.choicemaker.cm.transitivity.core.TransitivityProcessingEvent.DONE_TRANS_DEDUP_OVERSIZED;
 
@@ -35,11 +36,15 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ImmutableRecordIdTranslator;
+import com.choicemaker.cm.io.blocking.automated.offline.core.MutableRecordIdTranslator;
+import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE_ROLE;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RecordMatchingMode;
+import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.IDSetSource;
 import com.choicemaker.cm.io.blocking.automated.offline.result.MatchToBlockTransformer2;
 import com.choicemaker.cm.io.blocking.automated.offline.result.Size2MatchProducer;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaFileUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.services.ChunkService3;
@@ -47,11 +52,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.utils.Transformer;
 import com.choicemaker.cm.transitivity.core.TransitivityProcessingEvent;
 
 /**
- * This message bean starts the Transitivity Engine. It assumes that it can
- * access the translator file.
- *
- * @author pcheung
- *
+ * This message bean starts the Transitivity Engine.
  */
 @SuppressWarnings({ "rawtypes" })
 @MessageDriven(activationConfig = {
@@ -68,6 +69,30 @@ public class StartTransitivityMDB extends AbstractTransitivityMDB {
 
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
 			+ StartTransitivityMDB.class.getName());
+
+	/**
+	 * The name of a system property that can be set to "true" to reuse the
+	 * translator created by the preceding OABA job, assuming that the OABA job
+	 * was run in BRM mode. If this property is not true, or the OABA job was
+	 * not run in BRM mode, then a new translator is created from the pairwise
+	 * results of the OABA job.
+	 */
+	public static final String PN_REUSE_BRM_TRANSLATOR =
+		"choicemaker.trans.ReuseBrmTranslator";
+
+	/**
+	 * Checks the system property {@link #PN_REUSE_BRM_TRANSLATOR} and caches
+	 * the result
+	 */
+	private boolean isBrmTranslatorReuseRequested() {
+		String value = System.getProperty(PN_REUSE_BRM_TRANSLATOR, "false");
+		Boolean _reuse = Boolean.valueOf(value);
+		boolean retVal = _reuse.booleanValue();
+		return retVal;
+	}
+
+	private boolean isBrmTranslatorReuseRequested =
+		isBrmTranslatorReuseRequested();
 
 	@Resource(lookup = "java:/choicemaker/urm/jms/transMatchSchedulerQueue")
 	private Queue transMatchSchedulerQueue;
@@ -92,16 +117,26 @@ public class StartTransitivityMDB extends AbstractTransitivityMDB {
 			throws BlockingException {
 
 		// Get the parent/predecessor OABA job
-		long oabaJobId = transJob.getBatchParentId();
-		BatchJob oabaJob = this.getOabaJobController().findBatchJob(oabaJobId);
+		final long oabaJobId = transJob.getBatchParentId();
+		final BatchJob oabaJob =
+			this.getOabaJobController().findBatchJob(oabaJobId);
 
 		// Get the match record source from the OABA job
 		IMatchRecord2Source mSource =
 			OabaFileUtils.getCompositeMatchSource(oabaJob);
+		assert mSource != null;
 
-		// Recover the translator from the OABA job
-		ImmutableRecordIdTranslator translator =
-			this.getRecordIdController().findRecordIdTranslator(oabaJob);
+		// Create a translator for this job
+		RecordMatchingMode oabaMode =
+			BatchJobUtils.getRecordMatchingMode(getPropertyController(),
+					oabaJob);
+		ImmutableRecordIdTranslator currentTranslator = null;
+		if (isBrmTranslatorReuseRequested && oabaMode == BRM) {
+			currentTranslator =
+				this.getRecordIdController().findRecordIdTranslator(oabaJob);
+		} else {
+			currentTranslator = createTranslator(transJob, mSource);
+		}
 
 		// Create a block sink for the Transitivity job
 		IBlockSink bSink =
@@ -115,8 +150,8 @@ public class StartTransitivityMDB extends AbstractTransitivityMDB {
 			this.getRecordIdController().getRecordIdSinkSourceFactory(transJob);
 		IRecordIdSink idSink = idFactory.getNextSink();
 		MatchToBlockTransformer2 transformer =
-			new MatchToBlockTransformer2(mSource, mFactory, translator, bSink,
-					idSink);
+			new MatchToBlockTransformer2(mSource, mFactory, currentTranslator,
+					bSink, idSink);
 		int numRecords = transformer.process();
 		log.fine("Number of records: " + numRecords);
 
@@ -154,7 +189,7 @@ public class StartTransitivityMDB extends AbstractTransitivityMDB {
 
 		// create the oversized block transformer
 		Transformer transformerO =
-			new Transformer(translator,
+			new Transformer(currentTranslator,
 					OabaFileUtils.getComparisonArrayGroupFactoryOS(transJob,
 							numProcessors));
 
@@ -194,8 +229,8 @@ public class StartTransitivityMDB extends AbstractTransitivityMDB {
 					OabaFileUtils.getChunkIDFactory(transJob),
 					OabaFileUtils.getStageDataFactory(transJob, model),
 					OabaFileUtils.getMasterDataFactory(transJob, model),
-					translator, transformerO, null, maxChunk, numFiles, status,
-					transJob, mode);
+					currentTranslator, transformerO, null, maxChunk, numFiles,
+					status, transJob, mode);
 		chunkService.runService();
 		log.info("Done creating chunks " + chunkService.getTimeElapsed());
 
@@ -209,6 +244,70 @@ public class StartTransitivityMDB extends AbstractTransitivityMDB {
 		log.info("Number of regular chunks " + numChunks);
 		this.getPropertyController().setJobProperty(transJob,
 				PN_REGULAR_CHUNK_FILE_COUNT, String.valueOf(numRegularChunks));
+	}
+
+	private ImmutableRecordIdTranslator createTranslator(BatchJob transJob,
+			IMatchRecord2Source mSource) throws BlockingException {
+
+		MutableRecordIdTranslator mrit =
+			this.getRecordIdController().createMutableRecordIdTranslator(
+					transJob);
+		try {
+			mrit.open();
+			try {
+				mSource.open();
+				while (mSource.hasNext()) {
+					MatchRecord2 mr = (MatchRecord2) mSource.next();
+					Comparable id1 = mr.getRecordID1();
+					@SuppressWarnings("unchecked")
+					int unused1 = mrit.translate(id1);
+					RECORD_SOURCE_ROLE r2Role = mr.getRecord2Role();
+					switch (r2Role) {
+					case STAGING:
+					case SOURCE1_NODUPES:
+						Comparable id2 = mr.getRecordID2();
+						@SuppressWarnings("unchecked")
+						int unused2 = mrit.translate(id2);
+						break;
+					case MASTER:
+					case SOURCE2_DUPES:
+						break;
+					default:
+						throw new Error("Unexpected role: " + r2Role);
+					}
+				}
+				mSource.close();
+				mrit.split();
+				mSource.open();
+				while (mSource.hasNext()) {
+					MatchRecord2 mr = (MatchRecord2) mSource.next();
+					RECORD_SOURCE_ROLE r2Role = mr.getRecord2Role();
+					switch (r2Role) {
+					case STAGING:
+					case SOURCE1_NODUPES:
+						break;
+					case MASTER:
+					case SOURCE2_DUPES:
+						Comparable id2 = mr.getRecordID2();
+						@SuppressWarnings("unchecked")
+						int unused2 = mrit.translate(id2);
+						break;
+					default:
+						throw new Error("Unexpected role: " + r2Role);
+					}
+				}
+				mSource.close();
+			} finally {
+				mSource.close();
+			}
+		} finally {
+			mrit.close();
+		}
+
+		@SuppressWarnings("unchecked")
+		ImmutableRecordIdTranslator retVal =
+			this.getRecordIdController().toImmutableTranslator(mrit);
+		return retVal;
 	}
 
 	/**
