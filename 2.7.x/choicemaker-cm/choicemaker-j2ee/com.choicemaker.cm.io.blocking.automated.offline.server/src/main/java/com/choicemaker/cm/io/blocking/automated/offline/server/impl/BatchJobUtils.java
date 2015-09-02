@@ -6,6 +6,7 @@ import static com.choicemaker.cm.args.OperationalPropertyNames.PN_RECORD_MATCHIN
 import java.util.logging.Logger;
 
 import com.choicemaker.cm.batch.BatchJob;
+import com.choicemaker.cm.batch.OperationalProperty;
 import com.choicemaker.cm.batch.OperationalPropertyController;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RecordMatchingMode;
 
@@ -13,6 +14,40 @@ public class BatchJobUtils {
 
 	private static final Logger log = Logger.getLogger(BatchJobUtils.class
 			.getName());
+
+	public static void setRecordMatchingMode(
+			final OperationalPropertyController opPropController,
+			final BatchJob job, final RecordMatchingMode mode) {
+		if (opPropController == null) {
+			throw new IllegalArgumentException("null property controller");
+		}
+		if (job == null) {
+			throw new IllegalArgumentException("null batch job");
+		}
+		RecordMatchingMode existing =
+				getRecordMatchingMode(opPropController, job);
+
+		final String newValue = mode == null ? null : mode.name();
+		final String oldValue = existing == null ? null : existing.name();
+		if (mode == existing) {
+			String msg =
+				"No change to property '" + PN_RECORD_MATCHING_MODE
+						+ "', value '" + oldValue + "'";
+			log.fine(msg);
+
+		} else {
+			assert mode != existing;
+			OperationalProperty opProp =
+				opPropController.find(job, PN_RECORD_MATCHING_MODE);
+			opPropController.remove(opProp);
+			opPropController.setJobProperty(job, PN_RECORD_MATCHING_MODE,
+					newValue);
+			String msg =
+				"Property '" + PN_RECORD_MATCHING_MODE + "' changed from '"
+						+ oldValue + "' to '" + newValue + "'";
+			log.fine(msg);
+		}
+	}
 
 	public static RecordMatchingMode getRecordMatchingMode(
 			final OperationalPropertyController opPropController,
@@ -23,19 +58,27 @@ public class BatchJobUtils {
 		if (job == null) {
 			throw new IllegalArgumentException("null batch job");
 		}
-		String value =
+		final String value =
 			opPropController.getJobProperty(job, PN_RECORD_MATCHING_MODE);
 		RecordMatchingMode retVal = null;
-		try {
-			retVal = RecordMatchingMode.valueOf(value);
-		} catch (IllegalArgumentException | NullPointerException x) {
-			String msg =
-				"Job " + job.getId()
-						+ ": Missing or invalid value for property '"
-						+ PN_RECORD_MATCHING_MODE + "': '" + value + "'";
-			log.warning(msg);
-			assert retVal == null;
+		if (value == null) {
+			retVal = null;
+		} else {
+			try {
+				retVal = RecordMatchingMode.valueOf(value);
+			} catch (IllegalArgumentException | NullPointerException x) {
+				String msg =
+					"Job " + job.getId() + ": invalid value for property '"
+							+ PN_RECORD_MATCHING_MODE + "': '" + value + "'";
+				log.warning(msg);
+				assert retVal == null;
+			}
 		}
+
+		final String v = retVal == null ? null : retVal.name();
+		String msg = PN_RECORD_MATCHING_MODE + ": '" + v + "'";
+		log.fine(msg);
+
 		return retVal;
 	}
 
