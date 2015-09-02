@@ -80,9 +80,6 @@ public class TransMatchSchedulerSingleton extends AbstractSchedulerSingleton {
 	@EJB
 	private ProcessingController processingController;
 
-	@Resource(lookup = "java:/choicemaker/urm/jms/matchDedupQueue")
-	private Queue matchDedupQueue;
-
 	@Resource(lookup = "java:/choicemaker/urm/jms/matcherQueue")
 	private Queue matcherQueue;
 
@@ -97,6 +94,9 @@ public class TransMatchSchedulerSingleton extends AbstractSchedulerSingleton {
 
 	@Resource(lookup = "java:/choicemaker/urm/jms/transMatcherQueue")
 	private Queue transMatcherQueue;
+
+	@Resource(lookup = "java:/choicemaker/urm/jms/transSingleMatchQueue")
+	private Queue transSingleMatchQueue;
 
 	// -- Accessors
 
@@ -233,9 +233,8 @@ public class TransMatchSchedulerSingleton extends AbstractSchedulerSingleton {
 
 	@Override
 	protected void sendToSingleRecordMatching(BatchJob job, OabaJobMessage sd) {
-//		MessageBeanUtils.sendStartData(sd, getJmsContext(), singleMatchQueue,
-//				getLogger());
-		throw new Error("not yet implemented");
+		MessageBeanUtils.sendStartData(sd, getJmsContext(), transSingleMatchQueue,
+				getLogger());
 	}
 
 }
