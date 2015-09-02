@@ -15,9 +15,15 @@ package com.choicemaker.cm.io.db.base;
 public class DbField {
 	public final String table;
 	public final String name;
+ 	public final String baseName;	
 
 	public DbField(String table, String name) {
+		this(table,name,name);
+	}
+
+	public DbField(String table, String name, String baseName) {
 		this.table = table;
 		this.name = name;
+		this.baseName = baseName;
 	}
 }

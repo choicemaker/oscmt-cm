@@ -211,7 +211,7 @@ public class DbReaderConfigurationGenerator {
 		int vlen = fields.length;
 		for (int j = 0; j < vlen; ++j) {
 			DbField d = fields[j];
-			w.write("new DbField(" + GeneratorHelper.writeNullableString(d.table) + ", \"" + d.name + "\")");
+			w.write("new DbField(" + GeneratorHelper.writeNullableString(d.table) + ", \"" + d.name + "\", \"" + d.baseName + "\")");
 			if (j != vlen - 1)
 				w.write("," + Constants.LINE_SEPARATOR);
 		}
@@ -293,7 +293,7 @@ public class DbReaderConfigurationGenerator {
 			String nestedClassName = nestedRecord.getAttributeValue("className");
 			w.write("o__" + className + " = new " + className + "();" + Constants.LINE_SEPARATOR);
 			w.write(key.type + " curId = " + nestedClassName + "__" + key.name + ";" + Constants.LINE_SEPARATOR);
-			w.write("while(o__" + nestedClassName + " != null && curId == " + nestedClassName + "__" + key.name + ") {" + Constants.LINE_SEPARATOR);
+			w.write("while(o__" + nestedClassName + " != null && " + GeneratorHelper.compareField("curId", nestedClassName+"__"+key.name, key.type, true) + ") {" + Constants.LINE_SEPARATOR);
 			w.write("l__" + nestedClassName + ".add(o__" + nestedClassName + ");" + Constants.LINE_SEPARATOR);
 			w.write("o__" + nestedClassName + ".outer = o__" + className + ";" + Constants.LINE_SEPARATOR);
 			w.write("getRecord" + nestedClassName + "();" + Constants.LINE_SEPARATOR);
@@ -445,25 +445,27 @@ public class DbReaderConfigurationGenerator {
 			throw new IllegalStateException(msg);
 		}
 		String column = id.field.getAttributeValue("name");
+		String baseColumn = column;
 		Element dbf = GeneratorHelper.getFld(conf, id.field, "db");
 		if (dbf != null) {
 			column = ifNotNull(column, dbf.getAttributeValue("name"));
 		}
 		String table = getTableName(defaultTable, column, keyTables);
-		DbField retVal = new DbField(table, column);
+		DbField retVal = new DbField(table, column, baseColumn);
 		return retVal;
 	}
 
 	private DbField getDbField(Element fld, String defaultTable, List keyTables) {
 		String table = defaultTable;
 		String column = fld.getAttributeValue("name");
+		String baseColumn = column;
 		Element dbf = GeneratorHelper.getFld(conf, fld, "db");
 		if (dbf != null) {
 			table = ifNotNull(table, dbf.getAttributeValue("table"));
 			column = ifNotNull(column, dbf.getAttributeValue("name"));
 		}
 		table = getTableName(table, column, keyTables);
-		return new DbField(table, column);
+		return new DbField(table, column, baseColumn);
 	}
 
 	private String getTableName(String defaultName, String column, List keyTables) {
