@@ -39,6 +39,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2Factory
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaFileUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJobController;
@@ -104,11 +105,12 @@ public class TransMatchDedupMDB extends AbstractTransitivityMDB {
 
 		log.fine("in handleMerge");
 
-		// get the number of processors
-		final int numProcessors = serverConfig.getMaxChoiceMakerThreads();
+		// get the number of intermediate files
+		final int numTempResults =
+			BatchJobUtils.getMaxTempPairwiseIndex(propController, transJob);
 
 		// now merge them all together
-		mergeMatches(numProcessors, transJob);
+		mergeMatches(numTempResults, transJob);
 
 		// mark as done
 		final Date now = new Date();
