@@ -259,14 +259,16 @@ public class StartTransitivityMDB extends AbstractTransitivityMDB {
 				while (mSource.hasNext()) {
 					MatchRecord2 mr = (MatchRecord2) mSource.next();
 					Comparable id1 = mr.getRecordID1();
-					@SuppressWarnings("unchecked")
+					@SuppressWarnings({
+							"unchecked", "unused" })
 					int unused1 = mrit.translate(id1);
 					RECORD_SOURCE_ROLE r2Role = mr.getRecord2Role();
 					switch (r2Role) {
 					case STAGING:
 					case SOURCE1_NODUPES:
 						Comparable id2 = mr.getRecordID2();
-						@SuppressWarnings("unchecked")
+						@SuppressWarnings({
+							"unchecked", "unused" })
 						int unused2 = mrit.translate(id2);
 						break;
 					case MASTER:
@@ -289,7 +291,8 @@ public class StartTransitivityMDB extends AbstractTransitivityMDB {
 					case MASTER:
 					case SOURCE2_DUPES:
 						Comparable id2 = mr.getRecordID2();
-						@SuppressWarnings("unchecked")
+						@SuppressWarnings({
+							"unchecked", "unused" })
 						int unused2 = mrit.translate(id2);
 						break;
 					default:

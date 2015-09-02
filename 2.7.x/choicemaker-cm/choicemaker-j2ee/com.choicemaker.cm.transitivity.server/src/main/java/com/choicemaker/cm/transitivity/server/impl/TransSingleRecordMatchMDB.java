@@ -5,26 +5,30 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *******************************************************************************/
-package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
+package com.choicemaker.cm.transitivity.server.impl;
 
 import java.util.logging.Logger;
 
 import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
+import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
 import javax.jms.Queue;
 
-import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
+import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.batch.ProcessingEventLog;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessingEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.AbaStatisticsController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.SingleRecordProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
+import com.choicemaker.cm.transitivity.core.TransitivityProcessingEvent;
 
 // import com.choicemaker.cm.core.base.Accessor;
 
@@ -37,18 +41,18 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanU
  */
 @MessageDriven(activationConfig = {
 		@ActivationConfigProperty(propertyName = "destinationLookup",
-				propertyValue = "java:/choicemaker/urm/jms/singleMatchQueue"),
+				propertyValue = "java:/choicemaker/urm/jms/transSingleMatchQueue"),
 		@ActivationConfigProperty(propertyName = "destinationType",
 				propertyValue = "javax.jms.Queue") })
-public class SingleRecordMatchMDB extends AbstractOabaMDB {
+public class TransSingleRecordMatchMDB extends AbstractTransitivityMDB {
 
 	private static final long serialVersionUID = 271L;
 
 	private static final Logger log = Logger
-			.getLogger(SingleRecordMatchMDB.class.getName());
+			.getLogger(TransSingleRecordMatchMDB.class.getName());
 
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
-			+ SingleRecordMatchMDB.class.getName());
+			+ TransSingleRecordMatchMDB.class.getName());
 
 	public static final String DATABASE_ACCESSOR =
 		ChoiceMakerExtensionPoint.CM_IO_BLOCKING_AUTOMATED_BASE_DATABASEACCESSOR;
@@ -56,23 +60,42 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 	public static final String MATCH_CANDIDATE =
 		ChoiceMakerExtensionPoint.CM_CORE_MATCHCANDIDATE;
 
-	@Resource(lookup = "java:/choicemaker/urm/jms/matchDedupQueue")
-	private Queue matchDedupQueue;
+	@EJB
+	private AbaStatisticsController statsController;
+
+	@EJB
+	private OabaParametersController paramsController;
+
+	@Resource(lookup = "java:/choicemaker/urm/jms/transMatchDedupQueue")
+	private Queue transMatchDedupQueue;
+
+	protected final AbaStatisticsController getAbaStatisticsController() {
+		return statsController;
+	}
+
+	protected OabaParametersController getOabaParametersController() {
+		return new CombinedParametersController(paramsController,
+				this.getParametersController());
+	}
+
+	protected Queue getTransMatchDedupQueue() {
+		return transMatchDedupQueue;
+	}
 
 	@Override
 	protected void processOabaMessage(OabaJobMessage data, BatchJob batchJob,
-			OabaParameters oabaParams, OabaSettings oabaSettings,
+			TransitivityParameters params, OabaSettings oabaSettings,
 			ProcessingEventLog processingLog, ServerConfiguration serverConfig,
 			ImmutableProbabilityModel model) throws BlockingException {
 
 		SingleRecordProcessing srp =
 			new SingleRecordProcessing(log, jmsTrace,
-					this.getParametersController(),
+					this.getOabaParametersController(),
 					this.getRecordSourceController(),
 					this.getSqlRecordSourceController(),
 					this.getPropertyController(),
 					this.getAbaStatisticsController());
-		srp.processOabaMessage(data, batchJob, oabaParams, oabaSettings,
+		srp.processOabaMessage(data, batchJob, params, oabaSettings,
 				processingLog, serverConfig, model);
 	}
 
@@ -89,16 +112,12 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 	@Override
 	protected void notifyProcessingCompleted(OabaJobMessage data) {
 		MessageBeanUtils.sendStartData(data, getJmsContext(),
-				getMatchDedupQueue(), getLogger());
+				getTransMatchDedupQueue(), getLogger());
 	}
 
 	@Override
-	protected OabaProcessingEvent getCompletionEvent() {
-		return OabaProcessingEvent.DONE_MATCHING_DATA;
-	}
-
-	protected Queue getMatchDedupQueue() {
-		return matchDedupQueue;
+	protected TransitivityProcessingEvent getCompletionEvent() {
+		return TransitivityProcessingEvent.DONE_TRANSITIVITY_PAIRWISE;
 	}
 
 }
