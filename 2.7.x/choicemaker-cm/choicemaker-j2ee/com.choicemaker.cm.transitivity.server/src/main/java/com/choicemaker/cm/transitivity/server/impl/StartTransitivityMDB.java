@@ -10,6 +10,7 @@ package com.choicemaker.cm.transitivity.server.impl;
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_CHUNK_FILE_COUNT;
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_REGULAR_CHUNK_FILE_COUNT;
 import static com.choicemaker.cm.io.blocking.automated.offline.core.RecordMatchingMode.BRM;
+import static com.choicemaker.cm.io.blocking.automated.offline.core.RecordMatchingMode.SRM;
 import static com.choicemaker.cm.transitivity.core.TransitivityProcessingEvent.DONE_CREATE_CHUNK_DATA;
 import static com.choicemaker.cm.transitivity.core.TransitivityProcessingEvent.DONE_TRANS_DEDUP_OVERSIZED;
 
@@ -73,19 +74,26 @@ public class StartTransitivityMDB extends AbstractTransitivityMDB {
 	/**
 	 * The name of a system property that can be set to "true" to reuse the
 	 * translator created by the preceding OABA job, assuming that the OABA job
-	 * was run in BRM mode. If this property is not true, or the OABA job was
-	 * not run in BRM mode, then a new translator is created from the pairwise
-	 * results of the OABA job.
+	 * was run in BRM mode. If this property is false, or the OABA job was not
+	 * run in BRM mode, then a new translator is created from the pairwise
+	 * results of the OABA job. By default, if this property is not set, then
+	 * reuse is presumed; i.e. not setting this property is the same as setting
+	 * it to <code>true</code>. The only way to disable reuse is explicitly set
+	 * this property to <code>false</code>.
 	 */
 	public static final String PN_REUSE_BRM_TRANSLATOR =
 		"choicemaker.trans.ReuseBrmTranslator";
+
+	public static final String DEFAULT_REUSE_BRM_TRANSLATOR = "true";
 
 	/**
 	 * Checks the system property {@link #PN_REUSE_BRM_TRANSLATOR} and caches
 	 * the result
 	 */
 	private boolean isBrmTranslatorReuseRequested() {
-		String value = System.getProperty(PN_REUSE_BRM_TRANSLATOR, "false");
+		String value =
+			System.getProperty(PN_REUSE_BRM_TRANSLATOR,
+					DEFAULT_REUSE_BRM_TRANSLATOR);
 		Boolean _reuse = Boolean.valueOf(value);
 		boolean retVal = _reuse.booleanValue();
 		return retVal;
@@ -135,7 +143,19 @@ public class StartTransitivityMDB extends AbstractTransitivityMDB {
 			currentTranslator =
 				this.getRecordIdController().findRecordIdTranslator(oabaJob);
 		} else {
-			currentTranslator = createTranslator(transJob, mSource);
+			assert oabaMode == SRM || !isBrmTranslatorReuseRequested;
+			// SRM mode is not working yet, nor is translator creation
+			// currentTranslator = createTranslator(transJob, mSource);
+			String msg;
+			if (oabaMode == SRM) {
+				msg = "SRM mode is not yet supported transitivity analysis";
+			} else {
+				msg =
+					"Translator reuse is currently required "
+							+ "during transitivity analysis in BRM mode";
+			}
+			log.severe(msg);
+			throw new BlockingException(msg);
 		}
 
 		// Create a block sink for the Transitivity job
@@ -268,7 +288,7 @@ public class StartTransitivityMDB extends AbstractTransitivityMDB {
 					case SOURCE1_NODUPES:
 						Comparable id2 = mr.getRecordID2();
 						@SuppressWarnings({
-							"unchecked", "unused" })
+								"unchecked", "unused" })
 						int unused2 = mrit.translate(id2);
 						break;
 					case MASTER:
@@ -292,7 +312,7 @@ public class StartTransitivityMDB extends AbstractTransitivityMDB {
 					case SOURCE2_DUPES:
 						Comparable id2 = mr.getRecordID2();
 						@SuppressWarnings({
-							"unchecked", "unused" })
+								"unchecked", "unused" })
 						int unused2 = mrit.translate(id2);
 						break;
 					default:
