@@ -65,19 +65,19 @@ return views;
 }
 static DbView[] views = {
 new DbView(0,new DbField[]{
-new DbField("person", "linkage_role"),
-new DbField("person", "entity_id"),
-new DbField("person", "record_id"),
-new DbField("person", "ssn"),
-new DbField("person", "first_name"),
-new DbField("person", "middle_name"),
-new DbField("person", "last_name"),
-new DbField("person", "street_number"),
-new DbField("person", "street_name"),
-new DbField("person", "apartment_number"),
-new DbField("person", "city"),
-new DbField("person", "state_code"),
-new DbField("person", "zip_code")},
+new DbField("person", "linkage_role", "linkage_role"),
+new DbField("person", "entity_id", "entityId"),
+new DbField("person", "record_id", "recordId"),
+new DbField("person", "ssn", "ssn"),
+new DbField("person", "first_name", "firstName"),
+new DbField("person", "middle_name", "middleName"),
+new DbField("person", "last_name", "lastName"),
+new DbField("person", "street_number", "streetNumber"),
+new DbField("person", "street_name", "streetName"),
+new DbField("person", "apartment_number", "apartmentNumber"),
+new DbField("person", "city", "city"),
+new DbField("person", "state_code", "state"),
+new DbField("person", "zip_code", "zip")},
 "person", null,new DbField[]{
 })};
 public Map getIndices() {
