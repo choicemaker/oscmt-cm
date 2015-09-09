@@ -10,7 +10,9 @@ package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 import static com.choicemaker.util.Precondition.assertNonNullArgument;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.Serializable;
+import java.io.StringWriter;
 import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.SortedSet;
@@ -70,12 +72,22 @@ public class SingleRecordProcessing implements Serializable {
 
 	private static final long serialVersionUID = 271L;
 
+	/** Event code for incomplete blocking in SRM mode */
+	public static final String BATCH_MATCHING_SRM_INCOMPLETE_BLOCKING =
+		"BMSRM-00001";
+
+	/** Event code for write failure in SRM mode */
+	public static final String BATCH_MATCHING_SRM_FAILED_WRITE = "BMSRM-00002";
+
+	/** Facility code for batch record matching, single-record mode */
+	public static final String FACILITY_BATCH_MATCH_SRM = "BATCH_MATCH_SRM";
+
 	public static final String DATABASE_ACCESSOR =
 		ChoiceMakerExtensionPoint.CM_IO_BLOCKING_AUTOMATED_BASE_DATABASEACCESSOR;
 
 	public static final String MATCH_CANDIDATE =
 		ChoiceMakerExtensionPoint.CM_CORE_MATCHCANDIDATE;
-	
+
 	private final Logger logger;
 	private final Logger jmsTrace;
 	private final OabaParametersController paramsController;
@@ -85,16 +97,13 @@ public class SingleRecordProcessing implements Serializable {
 	private final AbaStatisticsController abaStatsController;
 
 	// -- Constructor
-	
-	public SingleRecordProcessing(
-			Logger logger,
-			Logger jmsTrace,
+
+	public SingleRecordProcessing(Logger logger, Logger jmsTrace,
 			OabaParametersController paramsController,
 			RecordSourceController rsController,
 			SqlRecordSourceController sqlRsController,
 			OperationalPropertyController opPropController,
-			AbaStatisticsController abaStatsController
-			) {
+			AbaStatisticsController abaStatsController) {
 		assertNonNullArgument("null logger", logger);
 		assertNonNullArgument("null jmsTrace", jmsTrace);
 		assertNonNullArgument("null paramsController", paramsController);
@@ -102,7 +111,7 @@ public class SingleRecordProcessing implements Serializable {
 		assertNonNullArgument("null sqlRsController", sqlRsController);
 		assertNonNullArgument("null opPropController", opPropController);
 		assertNonNullArgument("null abaStatsController", abaStatsController);
-		
+
 		this.logger = logger;
 		this.jmsTrace = jmsTrace;
 		this.paramsController = paramsController;
@@ -149,8 +158,9 @@ public class SingleRecordProcessing implements Serializable {
 			ProcessingEventLog processingLog, ServerConfiguration serverConfig,
 			ImmutableProbabilityModel model) throws BlockingException {
 
-		getLogger().info("Starting Single Record Match with maxSingle = "
-				+ oabaSettings.getMaxSingle());
+		getLogger().info(
+				"Starting Single Record Match with maxSingle = "
+						+ oabaSettings.getMaxSingle());
 		final long t0 = System.currentTimeMillis();
 
 		// Get the data sources that will be used
@@ -257,10 +267,12 @@ public class SingleRecordProcessing implements Serializable {
 		int currentSinkIndex = previousIndex + 1;
 		IMatchRecord2Sink currentSink = null;
 		try {
-			getLogger().info("Finding matches of master records to staging records...");
+			getLogger().info(
+					"Finding matches of staging records to master records...");
 			stage.open();
 
-			getLogger().fine("Current pairwise sink index: " + currentSinkIndex);
+			getLogger()
+					.fine("Current pairwise sink index: " + currentSinkIndex);
 			currentSink = factory.getSink(currentSinkIndex);
 			currentSink.open();
 
@@ -274,9 +286,20 @@ public class SingleRecordProcessing implements Serializable {
 							blockingConfiguration);
 				getLogger().fine(q.getId() + " " + rs + " " + model);
 
-				SortedSet<Match> s =
-					dm.getMatches(q, rs, model, oabaParams.getLowThreshold(),
-							oabaParams.getHighThreshold());
+				Object data = null;
+				SortedSet<Match> s = null;
+				try {
+					s =
+						dm.getMatches(q, rs, model,
+								oabaParams.getLowThreshold(),
+								oabaParams.getHighThreshold());
+				} catch (IOException x) {
+					logErrorMatchingRecord(data, q, x, batchJob);
+					logger.fine("Continuing iteration over staging records");
+					continue;
+				}
+				assert s != null;
+
 				Iterator<Match> iS = s.iterator();
 				while (iS.hasNext()) {
 					Match m = iS.next();
@@ -286,7 +309,13 @@ public class SingleRecordProcessing implements Serializable {
 						new MatchRecord2(q.getId(), m.id,
 								RECORD_SOURCE_ROLE.MASTER, m.probability,
 								m.decision, noteInfo);
-					currentSink.writeMatch(mr2);
+					try {
+						currentSink.writeMatch(mr2);
+					} catch (BlockingException x) {
+						logErrorWritingMatchResult(data, mr2, x, batchJob);
+						logger.fine("Continuing iteration over matches");
+						continue;
+					}
 					++currentSinkSize;
 
 					if (currentSinkSize > maxMatches) {
@@ -297,7 +326,8 @@ public class SingleRecordProcessing implements Serializable {
 					}
 				}
 			}
-			getLogger().info("...finished finding matches of master records to staging records...");
+			getLogger()
+					.info("...finished finding matches of staging records to master records...");
 
 		} catch (BlockingException | IOException x) {
 			String msg =
@@ -329,6 +359,40 @@ public class SingleRecordProcessing implements Serializable {
 		return currentSinkIndex;
 	}
 
+	private void logErrorMatchingRecord(Object data, Record q, IOException x,
+			BatchJob batchJob) {
+		Comparable id1 = q == null ? null : q.getId();
+		Comparable id2 = null;
+		String msg = "failed to find match for record '" + id1 + "'";
+		logMatchingErrorHACK(BATCH_MATCHING_SRM_INCOMPLETE_BLOCKING,
+				FACILITY_BATCH_MATCH_SRM, msg, x, batchJob, id1, id2);
+	}
+
+	private void logErrorWritingMatchResult(Object data, MatchRecord2 mr,
+			BlockingException x, BatchJob batchJob) {
+		final Comparable id1 = mr == null ? null : mr.getRecordID1();
+		final Comparable id2 = mr == null ? null : mr.getRecordID2();
+		String msg = "failed to write pair '" + id1 + "' / '" + id2 + "'";
+		logMatchingErrorHACK(BATCH_MATCHING_SRM_FAILED_WRITE,
+				FACILITY_BATCH_MATCH_SRM, msg, x, batchJob, id1, id2);
+	}
+
+	private void logMatchingErrorHACK(final String errorCode, String facility,
+			final String summary, Exception x, BatchJob batchJob,
+			Comparable idQuery, Comparable idReference) {
+		// FIXME log matching errors to a database table
+		StringWriter sw = new StringWriter();
+		PrintWriter pw = new PrintWriter(sw);
+		pw.println(summary);
+		pw.println("Error code: " + errorCode);
+		pw.println("Facility: " + facility);
+		pw.println("Exception: " + x.toString());
+		pw.println("Query record: " + idQuery);
+		pw.println("Reference record: " + idReference);
+		String msg = sw.toString();
+		logger.warning(msg);
+	}
+
 	/** Cache ABA statistics for field-value counts from a reference source */
 	protected void cacheAbaStatistics(DataSource ds) throws BlockingException {
 		getLogger().info("Caching ABA statistics for reference records..");
@@ -343,7 +407,8 @@ public class SingleRecordProcessing implements Serializable {
 			getLogger().severe(msg);
 			throw new BlockingException(msg);
 		}
-		getLogger().info("... finished caching ABA statistics for reference records.");
+		getLogger().info(
+				"... finished caching ABA statistics for reference records.");
 	}
 
 	protected String getReferenceAccessorName(OabaParameters oabaParams) {
