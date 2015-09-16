@@ -20,6 +20,17 @@
 
 
    <extension
+         id="dbMrpsReader"
+         name="dbMrpsReader"
+         point="com.choicemaker.cm.core.mrpsReader">
+      <handler
+            name="DB"
+            class="com.choicemaker.cm.io.db.sqlserver.xmlconf.SqlServerMarkedRecordPairSourceXmlConf"
+            backwardCompatibilityId="com.choicemaker.cm.plugin.db.xmlconf.DbMarkedRecordPairSourceXmlConf"
+            handledClass="com.choicemaker.cm.io.db.sqlserver.SqlServerMarkedRecordPairSource">
+      </handler>
+   </extension>
+   <extension
          id="SqlDbObjectMakerApp"
          point="com.choicemaker.e2.applications">
       <application>
