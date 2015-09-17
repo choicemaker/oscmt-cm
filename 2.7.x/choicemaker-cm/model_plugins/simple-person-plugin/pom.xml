@@ -8,7 +8,7 @@
   <parent>
     <groupId>com.choicemaker.cm</groupId>
     <artifactId>model_plugins</artifactId>
-    <version>2.7.1-rc.6aXX</version>
+    <version>2.7.1-rc.7</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
@@ -40,7 +40,7 @@
       <plugin>
         <groupId>com.choicemaker.mvn.cluemaker</groupId>
         <artifactId>cluemaker-maven-plugin</artifactId>
-        <version>1.0-rc.6aXX</version>
+        <version>1.0-rc.7</version>
 				<configuration>
 					<cluemakerDirectory>src/main/eclipse2/plugin/etc/models</cluemakerDirectory>
 				</configuration>
@@ -57,57 +57,57 @@
           <dependency>
             <groupId>com.choicemaker.cm</groupId>
             <artifactId>com.choicemaker.cm.compiler</artifactId>
-            <version>2.7.1-rc.6aXX</version>
+            <version>2.7.1-rc.7</version>
           </dependency>
           <dependency>
             <groupId>com.choicemaker.cm</groupId>
             <artifactId>com.choicemaker.cm.core</artifactId>
-            <version>2.7.1-rc.6aXX</version>
+            <version>2.7.1-rc.7</version>
           </dependency>
           <dependency>
             <groupId>com.choicemaker.cm</groupId>
             <artifactId>com.choicemaker.cm.io.blocking.automated.base</artifactId>
-            <version>2.7.1-rc.6aXX</version>
+            <version>2.7.1-rc.7</version>
           </dependency>
           <dependency>
             <groupId>com.choicemaker.cm</groupId>
             <artifactId>com.choicemaker.cm.io.blocking.exact.base</artifactId>
-            <version>2.7.1-rc.6aXX</version>
+            <version>2.7.1-rc.7</version>
           </dependency>
           <dependency>
             <groupId>com.choicemaker.cm</groupId>
             <artifactId>com.choicemaker.cm.io.db.base</artifactId>
-            <version>2.7.1-rc.6aXX</version>
+            <version>2.7.1-rc.7</version>
           </dependency>
           <dependency>
             <groupId>com.choicemaker.cm</groupId>
             <artifactId>com.choicemaker.cm.io.flatfile.base</artifactId>
-            <version>2.7.1-rc.6aXX</version>
+            <version>2.7.1-rc.7</version>
           </dependency>
           <dependency>
             <groupId>com.choicemaker.cm</groupId>
             <artifactId>com.choicemaker.cm.io.xml.base</artifactId>
-            <version>2.7.1-rc.6aXX</version>
+            <version>2.7.1-rc.7</version>
           </dependency>
           <dependency>
             <groupId>com.choicemaker.cm</groupId>
             <artifactId>com.choicemaker.cm.matching.cfg</artifactId>
-            <version>2.7.1-rc.6aXX</version>
+            <version>2.7.1-rc.7</version>
           </dependency>
           <dependency>
             <groupId>com.choicemaker.cm</groupId>
             <artifactId>com.choicemaker.cm.matching.en</artifactId>
-            <version>2.7.1-rc.6aXX</version>
+            <version>2.7.1-rc.7</version>
           </dependency>
           <dependency>
             <groupId>com.choicemaker.cm</groupId>
             <artifactId>com.choicemaker.cm.matching.en.au</artifactId>
-            <version>2.7.1-rc.6aXX</version>
+            <version>2.7.1-rc.7</version>
           </dependency>
           <dependency>
             <groupId>com.choicemaker.cm</groupId>
             <artifactId>com.choicemaker.cm.matching.en.us</artifactId>
-            <version>2.7.1-rc.6aXX</version>
+            <version>2.7.1-rc.7</version>
           </dependency>
         </dependencies>
       </plugin>

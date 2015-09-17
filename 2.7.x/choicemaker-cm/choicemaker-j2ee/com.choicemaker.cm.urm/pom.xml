@@ -8,7 +8,7 @@
   <parent>
     <groupId>com.choicemaker.cm</groupId>
     <artifactId>choicemaker-j2ee</artifactId>
-    <version>2.7.1-rc.6aXX</version>
+    <version>2.7.1-rc.7</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 

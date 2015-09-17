@@ -7,7 +7,7 @@
 
   <groupId>com.choicemaker.cm</groupId>
   <artifactId>choicemaker-base</artifactId>
-  <version>2.7.1-rc.6aXX</version>
+  <version>2.7.1-rc.7</version>
   <packaging>pom</packaging>
 
   <name>ChoiceMaker Dependencies</name>
@@ -28,10 +28,10 @@
 
     <!-- ChoiceMaker versions -->
     <choicemaker.snapshot.version>2.7.1-SNAPSHOT</choicemaker.snapshot.version>
-    <choicemaker.release.version>2.7.1-rc.6aXX</choicemaker.release.version>
-    <choicemaker.tool.version>1.0-rc.6aXX</choicemaker.tool.version>
+    <choicemaker.release.version>2.7.1-rc.7</choicemaker.release.version>
+    <choicemaker.tool.version>1.0-rc.7</choicemaker.tool.version>
     <plugin.eclipse.core.launcher.version>
-      2.1.4-rc.6aXX</plugin.eclipse.core.launcher.version>
+      2.1.4-rc.7</plugin.eclipse.core.launcher.version>
 
     <!-- Dependency versions -->
     <ant-jsch.version>1.9.2</ant-jsch.version>
@@ -407,60 +407,60 @@
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>org.apache.ant</artifactId>
-        <version>1.5.4-rc.6aXX</version>
+        <version>1.5.4-rc.7</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>org.apache.ant</artifactId>
-        <version>1.5.4-rc.6aXX</version>
+        <version>1.5.4-rc.7</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>org.apache.bcel</artifactId>
-        <version>5.0.1-rc.6aXX</version>
+        <version>5.0.1-rc.7</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>org.apache.bcel</artifactId>
-        <version>5.0.1-rc.6aXX</version>
+        <version>5.0.1-rc.7</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>org.eclipse.ant.core</artifactId>
-        <version>2.1.2-rc.6aXX</version>
+        <version>2.1.2-rc.7</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>org.eclipse.ant.core</artifactId>
-        <version>2.1.2-rc.6aXX</version>
+        <version>2.1.2-rc.7</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>org.eclipse.ant.internal.core</artifactId>
-        <version>2.1.2-rc.6aXX</version>
+        <version>2.1.2-rc.7</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>org.eclipse.ant.internal.core</artifactId>
-        <version>2.1.2-rc.6aXX</version>
+        <version>2.1.2-rc.7</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>org.eclipse.core.boot</artifactId>
-        <version>2.1.2-rc.6aXX</version>
+        <version>2.1.2-rc.7</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>org.eclipse.core.boot</artifactId>
-        <version>2.1.2-rc.6aXX</version>
+        <version>2.1.2-rc.7</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -479,48 +479,48 @@
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>org.eclipse.core.resources</artifactId>
-        <version>2.1.2-rc.6aXX</version>
+        <version>2.1.2-rc.7</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>org.eclipse.core.resources</artifactId>
-        <version>2.1.2-rc.6aXX</version>
+        <version>2.1.2-rc.7</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>org.eclipse.core.resources.ant</artifactId>
-        <version>2.1.2-rc.6aXX</version>
+        <version>2.1.2-rc.7</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>org.eclipse.core.resources.ant</artifactId>
-        <version>2.1.2-rc.6aXX</version>
+        <version>2.1.2-rc.7</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>org.eclipse.core.runtime</artifactId>
-        <version>2.1.2-rc.6aXX</version>
+        <version>2.1.2-rc.7</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>org.eclipse.core.runtime</artifactId>
-        <version>2.1.2-rc.6aXX</version>
+        <version>2.1.2-rc.7</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>org.jdom</artifactId>
-        <version>0.9.1-rc.6aXX</version>
+        <version>0.9.1-rc.7</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>org.jdom</artifactId>
-        <version>0.9.1-rc.6aXX</version>
+        <version>0.9.1-rc.7</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -655,12 +655,12 @@
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.sun.tools</artifactId>
-        <version>1.7.0-rc.6aXX</version>
+        <version>1.7.0-rc.7</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.sun.tools</artifactId>
-        <version>1.7.0-rc.6aXX</version>
+        <version>1.7.0-rc.7</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -1486,12 +1486,12 @@ END: C-E Exclusion -->
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>javax.help.eclipse2plugin</artifactId>
-        <version>2.0.05-rc.6aXX</version>
+        <version>2.0.05-rc.7</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>javax.help.eclipse2plugin</artifactId>
-        <version>2.0.05-rc.6aXX</version>
+        <version>2.0.05-rc.7</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -1515,7 +1515,7 @@ END: C-E Exclusion -->
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.mchange.c3p0</artifactId>
-        <version>0.9.2.2-rc.6aXX</version>
+        <version>0.9.2.2-rc.7</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -1538,24 +1538,24 @@ END: C-E Exclusion -->
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>jfree.jcommon.eclipse2plugin</artifactId>
-        <version>1.0.17-rc.6aXX</version>
+        <version>1.0.17-rc.7</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>jfree.jcommon.eclipse2plugin</artifactId>
-        <version>1.0.17-rc.6aXX</version>
+        <version>1.0.17-rc.7</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>jfree.jfreechart.eclipse2plugin</artifactId>
-        <version>1.0.15-rc.6aXX</version>
+        <version>1.0.15-rc.7</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>jfree.jfreechart.eclipse2plugin</artifactId>
-        <version>1.0.15-rc.6aXX</version>
+        <version>1.0.15-rc.7</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
