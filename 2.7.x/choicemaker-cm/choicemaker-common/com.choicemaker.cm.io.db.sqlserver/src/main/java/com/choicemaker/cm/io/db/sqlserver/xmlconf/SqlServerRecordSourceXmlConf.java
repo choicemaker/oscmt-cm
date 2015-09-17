@@ -50,10 +50,10 @@ public class SqlServerRecordSourceXmlConf implements RecordSourceXmlConfigurator
 			SqlServerRecordSource src = (SqlServerRecordSource) s;
 			String fileName = src.getFileName();
 			Element e = new Element(SqlServerXmlUtils.EN_RECORDSOURCE);
-			e.setAttribute(SqlServerXmlUtils.AN_CLASS, EXTENSION_POINT_ID);
-			e.setAttribute(SqlServerXmlUtils.AN_DATASOURCENAME, src.getDataSourceName());
-			e.setAttribute(SqlServerXmlUtils.AN_DBCONFIGURATION, src.getDbConfiguration());
-			e.addContent(new Element(SqlServerXmlUtils.AN_IDSQUERY).setText(src.getIdsQuery()));
+			e.setAttribute(SqlServerXmlUtils.AN_RS_CLASS, EXTENSION_POINT_ID);
+			e.setAttribute(SqlServerXmlUtils.AN_RS_DATASOURCENAME, src.getDataSourceName());
+			e.setAttribute(SqlServerXmlUtils.AN_RS_DBCONFIGURATION, src.getDbConfiguration());
+			e.addContent(new Element(SqlServerXmlUtils.AN_RS_IDSQUERY).setText(src.getIdsQuery()));
 			FileOutputStream fs = new FileOutputStream(new File(fileName).getAbsoluteFile());
 			XMLOutputter o = new XMLOutputter("    ", true);
 			o.setTextNormalize(true);
@@ -66,9 +66,9 @@ public class SqlServerRecordSourceXmlConf implements RecordSourceXmlConfigurator
 
 	public RecordSource getRecordSource(String fileName, Element e, ImmutableProbabilityModel model)
 		throws XmlConfException {
-		String dataSourceName = e.getAttributeValue(SqlServerXmlUtils.AN_DATASOURCENAME);
-		String dbConfiguration = e.getAttributeValue(SqlServerXmlUtils.AN_DBCONFIGURATION);
-		String idsQuery = e.getChildText(SqlServerXmlUtils.AN_IDSQUERY);
+		String dataSourceName = e.getAttributeValue(SqlServerXmlUtils.AN_RS_DATASOURCENAME);
+		String dbConfiguration = e.getAttributeValue(SqlServerXmlUtils.AN_RS_DBCONFIGURATION);
+		String idsQuery = e.getChildText(SqlServerXmlUtils.AN_RS_IDSQUERY);
 		return new SqlServerRecordSource(fileName, model, dataSourceName, dbConfiguration, idsQuery);
 	}
 	

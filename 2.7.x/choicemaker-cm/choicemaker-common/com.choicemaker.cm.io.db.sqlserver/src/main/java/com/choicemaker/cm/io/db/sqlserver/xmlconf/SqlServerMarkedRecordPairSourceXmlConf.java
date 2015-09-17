@@ -50,10 +50,10 @@ public class SqlServerMarkedRecordPairSourceXmlConf implements MarkedRecordPairS
 			SqlServerMarkedRecordPairSource src = (SqlServerMarkedRecordPairSource) s;
 			String fileName = src.getFileName();
 			Element e = new Element(SqlServerXmlUtils.EN_MARKEDRECORDPAIRSOURCE);
-			e.setAttribute(SqlServerXmlUtils.AN_CLASS, EXTENSION_POINT_ID);
-			e.setAttribute(SqlServerXmlUtils.AN_DATASOURCENAME, src.getDataSourceName());
-			e.setAttribute(SqlServerXmlUtils.AN_DBCONFIGURATION, src.getDbConfiguration());
-			e.addContent(new Element(SqlServerXmlUtils.EN_MRPSQUERY).setText(src.getMrpsQuery()));
+			e.setAttribute(SqlServerXmlUtils.AN_MRPS_CLASS, EXTENSION_POINT_ID);
+			e.setAttribute(SqlServerXmlUtils.AN_MRPS_DATASOURCENAME, src.getDataSourceName());
+			e.setAttribute(SqlServerXmlUtils.AN_MRPS_DBCONFIGURATION, src.getDbConfiguration());
+			e.addContent(new Element(SqlServerXmlUtils.AN_MRPS_IDSQUERY).setText(src.getMrpsQuery()));
 			FileOutputStream fs = new FileOutputStream(new File(fileName).getAbsoluteFile());
 			XMLOutputter o = new XMLOutputter("    ", true);
 			o.setTextNormalize(true);
@@ -66,9 +66,9 @@ public class SqlServerMarkedRecordPairSourceXmlConf implements MarkedRecordPairS
 
 	public MarkedRecordPairSource getMarkedRecordPairSource(String fileName, Element e, ImmutableProbabilityModel model)
 		throws XmlConfException {
-		String dataSourceName = e.getAttributeValue(SqlServerXmlUtils.AN_DATASOURCENAME);
-		String dbConfiguration = e.getAttributeValue(SqlServerXmlUtils.AN_DBCONFIGURATION);
-		String mrpsQuery = e.getChildText(SqlServerXmlUtils.EN_MRPSQUERY);
+		String dataSourceName = e.getChildText(SqlServerXmlUtils.AN_MRPS_DATASOURCENAME);
+		String dbConfiguration = e.getAttributeValue(SqlServerXmlUtils.AN_MRPS_DBCONFIGURATION);
+		String mrpsQuery = e.getChildText(SqlServerXmlUtils.AN_MRPS_IDSQUERY);
 		return new SqlServerMarkedRecordPairSource(fileName, model, dataSourceName, dbConfiguration, mrpsQuery);
 	}
 	

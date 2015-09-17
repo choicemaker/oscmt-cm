@@ -23,12 +23,18 @@ public class SqlServerXmlUtils {
 
 	// XML Attributes
 
-	public static final String AN_CLASS = "class";
-	public static final String AN_DATASOURCENAME = "dataSourceName";
-	public static final String AN_MODEL = "model";
-	public static final String AN_DBCONFIGURATION = "dbConfiguration";
-	public static final String AN_IDSQUERY = "idsQuery";
-	public static final String AN_MAXCOMPOSITESIZE = "maxCompositeSize";
+	public static final String AN_RS_CLASS = "class";
+	public static final String AN_RS_DATASOURCENAME = "dataSourceName";
+	public static final String AN_RS_MODEL = "model";
+	public static final String AN_RS_DBCONFIGURATION = "dbConfiguration";
+	public static final String AN_RS_IDSQUERY = "idsQuery";
+	public static final String AN_RS_MAXCOMPOSITESIZE = "maxCompositeSize";
+
+	public static final String AN_MRPS_CLASS = "class";
+	public static final String AN_MRPS_DATASOURCENAME = "connectionName";
+//	public static final String AN_MRPS_MODEL = "model";
+	public static final String AN_MRPS_DBCONFIGURATION = "conf";
+	public static final String AN_MRPS_IDSQUERY = "selection";
 
 	// Deprecated model properties
 
@@ -36,7 +42,7 @@ public class SqlServerXmlUtils {
 	public static final String PN_BLOCKING_CONFIGURATION = "blockingConfiguration";
 
 	/** @deprecated */
-	public static final String PN_DB_CONFIGURATION = AN_DBCONFIGURATION;
+	public static final String PN_DB_CONFIGURATION = AN_RS_DBCONFIGURATION;
 
 	/** @deprecated */
 	public static final String PN_LIMITPERBLOCKINGSET = "limitPerBlockingSet";
