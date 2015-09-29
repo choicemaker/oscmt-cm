@@ -590,7 +590,23 @@ public class DbbCountsCreator {
 		int retVal = 0;
 		Integer s = (Integer) tableSizes.get(dbt);
 		if (s == null) {
-			logger.warning("Table size is null. Have ABA statistics been computed?");
+			String msg = "Table size is null. Have ABA statistics been computed?";
+			logger.severe(msg);
+//			throw new IllegalStateException(msg);
+		} else {
+			retVal = s.intValue();
+			if (retVal == 0) {
+				String msg = "Table size is zero. Have ABA statistics been computed?";
+				logger.severe(msg);
+//				throw new IllegalStateException(msg);
+			} else if (retVal < 0) {
+				String msg = "negative ABA table size: " + retVal;
+				logger.severe(msg);
+				throw new IllegalStateException(msg);
+			} else {
+				String msg = "ABA table size: " + retVal + " " + dbt.toString();
+				logger.fine(msg);
+			}
 		}
 		return retVal;
 	}
