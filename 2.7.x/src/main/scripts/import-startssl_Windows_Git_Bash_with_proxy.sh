@@ -32,11 +32,11 @@ fi
 
 # Download the startssl certs
 echo "Downloading certs..."
-curl --silent http://www.startssl.com/certs/ca.crt > ca.crt
-curl --silent http://www.startssl.com/certs/sub.class1.server.ca.crt > sub.class1.server.ca.crt
-curl --silent http://www.startssl.com/certs/sub.class2.server.ca.crt > sub.class2.server.ca.crt
-curl --silent http://www.startssl.com/certs/sub.class3.server.ca.crt > sub.class3.server.ca.crt
-curl --silent http://www.startssl.com/certs/sub.class4.server.ca.crt > sub.class4.server.ca.crt
+curl --proxy 10.212.144.45:8080 --proxy-user $PROXY_USER --silent http://www.startssl.com/certs/ca.crt > ca.crt
+curl --proxy 10.212.144.45:8080 --proxy-user $PROXY_USER --silent http://www.startssl.com/certs/sub.class1.server.ca.crt > sub.class1.server.ca.crt
+curl --proxy 10.212.144.45:8080 --proxy-user $PROXY_USER --silent http://www.startssl.com/certs/sub.class2.server.ca.crt > sub.class2.server.ca.crt
+curl --proxy 10.212.144.45:8080 --proxy-user $PROXY_USER --silent http://www.startssl.com/certs/sub.class3.server.ca.crt > sub.class3.server.ca.crt
+curl --proxy 10.212.144.45:8080 --proxy-user $PROXY_USER --silent http://www.startssl.com/certs/sub.class4.server.ca.crt > sub.class4.server.ca.crt
 
 # Install certs into global keystore
 echo "Adding certs to cacerts keystore ..."
