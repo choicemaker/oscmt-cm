@@ -48,6 +48,9 @@ public class ChunkDataStore {
 	 * This gets the single instance object.
 	 */
 	public static ChunkDataStore getInstance() {
+		logger.severe("dataStore: " + dataStore);
+		logger.severe("stageMap: " + (dataStore == null ? "null" : dataStore.stageMap));
+		logger.severe("masterMap: " + (dataStore == null ? "null" : dataStore.masterMap));
 		return dataStore;
 	}
 
@@ -71,12 +74,19 @@ public class ChunkDataStore {
 			ImmutableProbabilityModel model, RecordSource masterSource,
 			int maxChunkSize, IControl control) throws BlockingException {
 
+		logger.severe("LocalDataStore: " + this);
+		logger.severe("GlobalDataStore: " + dataStore);
+
 		final String s = "Staging";
 		stageMap = readMap(stageSource, model, maxChunkSize + 10, control, s);
+		logger.severe("LocalStageMap: " + (dataStore == null ? "null" : stageMap));
+		logger.severe("GlobalStageMap: " + (dataStore == null ? "null" : dataStore.stageMap));
 		logger.info("Stage map size: " + stageMap.size());
 
 		final String m = "Master";
 		masterMap = readMap(masterSource, model, maxChunkSize + 10, control, m);
+		logger.severe("LocalMasterMap: " + (dataStore == null ? "null" : masterMap));
+		logger.severe("GlobalMasterMap: " + (dataStore == null ? "null" : dataStore.masterMap));
 		logger.info("Master map size: " + masterMap.size());
 	}
 
