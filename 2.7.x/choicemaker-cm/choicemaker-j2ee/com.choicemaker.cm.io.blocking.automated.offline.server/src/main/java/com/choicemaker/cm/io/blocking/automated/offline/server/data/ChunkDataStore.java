@@ -48,9 +48,13 @@ public class ChunkDataStore {
 	 * This gets the single instance object.
 	 */
 	public static ChunkDataStore getInstance() {
-		logger.severe("dataStore: " + dataStore);
-		logger.severe("stageMap: " + (dataStore == null ? "null" : dataStore.stageMap));
-		logger.severe("masterMap: " + (dataStore == null ? "null" : dataStore.masterMap));
+		if (dataStore == null) {
+			throw new Error("null instance");
+		}
+		if (dataStore.stageMap == null || dataStore.masterMap == null) {
+			String msg = "ChunkDataStore is not initialized";
+			logger.info(msg);
+		}
 		return dataStore;
 	}
 
@@ -74,19 +78,16 @@ public class ChunkDataStore {
 			ImmutableProbabilityModel model, RecordSource masterSource,
 			int maxChunkSize, IControl control) throws BlockingException {
 
-		logger.severe("LocalDataStore: " + this);
-		logger.severe("GlobalDataStore: " + dataStore);
+		assert this == dataStore;
 
 		final String s = "Staging";
 		stageMap = readMap(stageSource, model, maxChunkSize + 10, control, s);
-		logger.severe("LocalStageMap: " + (dataStore == null ? "null" : stageMap));
-		logger.severe("GlobalStageMap: " + (dataStore == null ? "null" : dataStore.stageMap));
+		assert stageMap != null;
 		logger.info("Stage map size: " + stageMap.size());
 
 		final String m = "Master";
 		masterMap = readMap(masterSource, model, maxChunkSize + 10, control, m);
-		logger.severe("LocalMasterMap: " + (dataStore == null ? "null" : masterMap));
-		logger.severe("GlobalMasterMap: " + (dataStore == null ? "null" : dataStore.masterMap));
+		assert masterMap != null;
 		logger.info("Master map size: " + masterMap.size());
 	}
 
