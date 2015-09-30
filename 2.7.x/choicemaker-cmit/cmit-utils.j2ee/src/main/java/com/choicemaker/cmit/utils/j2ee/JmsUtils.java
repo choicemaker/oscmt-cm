@@ -23,8 +23,7 @@ public class JmsUtils {
 	/** A short time-out for receiving messages (1 second) */
 	public static final long SHORT_TIMEOUT_MILLIS = 1000;
 
-	/** A reasonably long time-out for receiving messages (20 seconds) */
-//	public static final long LONG_TIMEOUT_MILLIS = 20000;
+	/** A reasonably long time-out for receiving messages (60 seconds) */
 	public static final long LONG_TIMEOUT_MILLIS = 60000;
 
 	/**
