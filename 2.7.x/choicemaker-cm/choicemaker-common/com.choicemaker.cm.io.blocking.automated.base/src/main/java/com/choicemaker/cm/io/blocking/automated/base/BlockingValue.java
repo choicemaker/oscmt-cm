@@ -50,6 +50,7 @@ public class BlockingValue implements Comparable<IBlockingValue>, Cloneable,
 		this.value = ibv.getValue();
 		this.group = ibv.getGroup();
 		this.count = ibv.getCount();
+		this.tableSize = ibv.getTableSize();
 		this.groupTable = ibv.getGroupTable();
 	}
 
