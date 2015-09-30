@@ -559,16 +559,16 @@ public class BlockingSetFactory {
 		return retVal;
 	}
 
-	static void addToBlockingSets(List<IBlockingSet> blockingSets, IBlockingSet candidate) {
+	static void addToBlockingSets(List<IBlockingSet> blockingSets,
+			IBlockingSet candidate) {
 		boolean isCandidateAlreadyInBlockingSet = false;
-		for (IBlockingSet currentBlockingSet : blockingSets) {
+		for (Iterator<IBlockingSet> it = blockingSets.iterator(); it.hasNext();) {
+			final IBlockingSet currentBlockingSet = it.next();
 			if (candidate.returnsSupersetOf(currentBlockingSet)) {
-				logger.fine(
-					"Candidate blocking set is a superset of an existing blocking set");
-				blockingSets.remove(currentBlockingSet);
+				logger.fine("Candidate blocking set is a superset of an existing blocking set");
+				it.remove();
 			} else if (currentBlockingSet.returnsSupersetOf(candidate)) {
-				logger.fine(
-					"Candidate blocking set is a subset of an existing blocking set");
+				logger.fine("Candidate blocking set is a subset of an existing blocking set");
 				isCandidateAlreadyInBlockingSet = true;
 				break;
 			}
