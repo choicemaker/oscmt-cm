@@ -8,12 +8,12 @@
   <parent>
     <groupId>com.choicemaker.cm</groupId>
     <artifactId>choicemaker-cm</artifactId>
-    <version>2.7.1SNAPSHOT</version>
+    <version>2.7.1-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
   <artifactId>choicemaker-prerequisites</artifactId>
-  <version>2.7.2SNAPSHOT</version>
+  <version>2.7.2-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>ChoiceMaker Prerequisites</name>
