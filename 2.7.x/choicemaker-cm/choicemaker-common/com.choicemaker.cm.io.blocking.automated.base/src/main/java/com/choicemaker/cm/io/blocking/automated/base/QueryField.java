@@ -7,6 +7,8 @@
  *******************************************************************************/
 package com.choicemaker.cm.io.blocking.automated.base;
 
+import java.util.Arrays;
+
 import com.choicemaker.cm.io.blocking.automated.IField;
 import com.choicemaker.cm.io.blocking.automated.IQueryField;
 
@@ -27,4 +29,11 @@ public class QueryField extends Field implements IQueryField {
 	public QueryField(IField[][] illegalCombinations) {
 		super(illegalCombinations);
 	}
+
+	@Override
+	public String toString() {
+		return "QueryField [illegalCombinations="
+				+ Arrays.toString(getIllegalCombinations()) + "]";
+	}
+
 }

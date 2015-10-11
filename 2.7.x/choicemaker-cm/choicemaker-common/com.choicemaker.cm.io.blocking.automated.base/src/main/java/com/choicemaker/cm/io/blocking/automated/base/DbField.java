@@ -7,6 +7,8 @@
  *******************************************************************************/
 package com.choicemaker.cm.io.blocking.automated.base;
 
+import java.util.Arrays;
+
 import com.choicemaker.cm.io.blocking.automated.IDbField;
 import com.choicemaker.cm.io.blocking.automated.IDbTable;
 import com.choicemaker.cm.io.blocking.automated.IField;
@@ -113,7 +115,8 @@ public class DbField extends Field implements IDbField {
 	public String toString() {
 		return "DbField [number=" + number + ", name=" + name + ", type="
 				+ type + ", table=" + table + ", defaultCount=" + defaultCount
-				+ "]";
+				+ ", illegalCombinations="
+						+ Arrays.toString(getIllegalCombinations()) + "]";
 	}
 	
 }
