@@ -1423,20 +1423,17 @@
         <artifactId>choicemaker-assembly</artifactId>
         <version>${choicemaker.release.version}</version>
       </dependency>
-<!-- Excluded from the Community Edition due to licensing issues
       <dependency>
         <groupId>com.oracle</groupId>
         <artifactId>classes12</artifactId>
         <version>10.2.0.4</version>
       </dependency>
       <dependency>
-        <groupId>com.choicemaker.cm</groupId>
-        <artifactId>com.oracle.jdbc</artifactId>
-        <version>10.2.0.4</version>
-        <classifier>eclipse2prj</classifier>
-        <type>zip</type>
+        <groupId>com.microsoft.sqlserver</groupId>
+        <artifactId>sqljdbc4</artifactId>
+        <version>4.0.2206</version>
+        <scope>test</scope>
       </dependency>
-END: C-E Exclusion -->
       <dependency>
         <groupId>com.choicemaker.cmit</groupId>
         <artifactId>cmit-utils</artifactId>
