@@ -1016,9 +1016,11 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 					}
 					multiSourceLists[usedMultiSource] = sourceList;
 				} catch (IOException ex) {
-					throw new OperationFailedException(
-						ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.source.list.retrieve.error"),
-						ex);
+					String s = ex.toString();
+					String msg = ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.source.list.retrieve.error");
+					msg += ": " + s;
+					postInfo(msg);
+					throw new OperationFailedException(msg, ex);
 				}
 			} else {
 				sourceList = multiSourceLists[usedMultiSource];
