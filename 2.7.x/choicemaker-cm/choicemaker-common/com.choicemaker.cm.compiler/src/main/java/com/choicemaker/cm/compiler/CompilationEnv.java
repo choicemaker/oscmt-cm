@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -74,12 +74,12 @@ public class CompilationEnv {
 	/** the class repository
 	 */
 	public ClassRepository repository;
-	
+
 	/**
 	 *  packages  of source clue sets. will be created.
 	 */
 	public Set sourcePackages;
-	
+
 	private Writer w;
 
 	public CompilationEnv(CompilationArguments arguments, String defaultPath, Writer w) {
@@ -200,4 +200,13 @@ public class CompilationEnv {
 		}
 		return true;
 	}
+
+	public String toString() {
+		return "CompilationEnv [tabsize=" + tabsize + ", sourceEncoding="
+				+ sourceEncoding + ", targetEncoding=" + targetEncoding
+				+ ", verbose=" + verbose + ", nowarn=" + nowarn + ", debug="
+				+ debug + ", prompt=" + prompt + ", errors=" + errors
+				+ ", warnings=" + warnings + "]";
+	}
+
 }

@@ -75,6 +75,7 @@ public abstract class CMCompiler implements ICompiler {
 	}
 
 	protected static Logger logger = Logger.getLogger(CMCompiler.class.getName());
+	private static final String SRC = CMCompiler.class.getSimpleName();
 
 	protected static void usage() {
 		System.out.println(
@@ -120,18 +121,22 @@ public abstract class CMCompiler implements ICompiler {
 
 	public int generateJavaCode(CompilationArguments arguments,
 			Writer statusOutput) throws CompilerException {
+		final String METHOD = "generateJavaCode(CompilationArguments,Writer)";
 		ICompilationUnit unit = generateJavaCodeInternal(arguments,
 			statusOutput);
 		int retVal = unit.getErrors();
+		logger.exiting(SRC, METHOD, Integer.valueOf(retVal));
 		return retVal;
 	}
 
 	/**
 	 * Returns the number of ClueMaker errors
-	 * @throws CompilerException 
+	 * @throws CompilerException
 	 */
 	public ICompilationUnit generateJavaCodeInternal(CompilationArguments arguments,
 			Writer statusOutput) throws CompilerException {
+		final String METHOD = "generateJavaCodeInternal(CompilationArguments,Writer)";
+		logger.entering(SRC, METHOD, new Object[] {arguments,statusOutput});
 
 		String file = arguments.files()[0];
 		String defaultPath = getClassPath();
@@ -153,11 +158,14 @@ public abstract class CMCompiler implements ICompiler {
 			throw new CompilerException(msg,e);
 		}
 
+		logger.exiting(SRC, METHOD, retVal);
 		return retVal;
 	}
 
 	public String compile(CompilationArguments arguments,
 			final Writer statusOutput) throws CompilerException {
+		final String METHOD = "compile(CompilationArguments,Writer)";
+		logger.entering(SRC, METHOD, new Object[] {arguments,statusOutput});
 		ICompilationUnit unit =
 			generateJavaCodeInternal(arguments, statusOutput);
 		if (unit.getErrors() == 0) {
@@ -165,7 +173,7 @@ public abstract class CMCompiler implements ICompiler {
 			File targetDir =
 				new File(ConfigurationManager.getInstance().getCompiledCodeRoot());
 			targetDir.getAbsoluteFile().mkdirs();
-			
+
 			// Create the compilation arguments
 			String targetDirPath = targetDir.getAbsolutePath();
 			String classPath = getClassPath();
@@ -244,6 +252,8 @@ public abstract class CMCompiler implements ICompiler {
 
 	public boolean compile(IProbabilityModel model, Writer statusOutput)
 		throws CompilerException {
+		final String METHOD = "compile(IProbabilityModel,Writer)";
+		logger.entering(SRC, METHOD, new Object[] {model,statusOutput});
 		CompilationArguments arguments = new CompilationArguments();
 		String[] compilerArgs = new String[1];
 		compilerArgs[0] = model.getClueFilePath();
@@ -268,6 +278,8 @@ public abstract class CMCompiler implements ICompiler {
 	public ImmutableProbabilityModel compile(
 			ProbabilityModelSpecification spec, Writer statusOutput)
 			throws CompilerException {
+		final String METHOD = "compile(ProbabilityModelSpecification,Writer)";
+		logger.entering(SRC, METHOD, new Object[] {spec,statusOutput});
 		CompilationArguments arguments = new CompilationArguments();
 		String[] compilerArgs = new String[1];
 		compilerArgs[0] = spec.getClueFilePath();
