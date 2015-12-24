@@ -52,7 +52,6 @@ import com.choicemaker.cm.core.MarkedRecordPairSource;
 import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.base.MarkedRecordPairBinder;
 import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
-import com.choicemaker.cm.core.util.LogFrequencyPartitioner;
 import com.choicemaker.cm.core.xmlconf.MarkedRecordPairSourceXmlConf;
 import com.choicemaker.cm.core.xmlconf.RecordSourceXmlConf;
 import com.choicemaker.cm.gui.utils.dialogs.ErrorDialog;
@@ -65,6 +64,7 @@ import com.choicemaker.cm.mmdevtools.util.profiler.FieldAccessor;
 import com.choicemaker.cm.mmdevtools.util.profiler.FieldProfiler;
 import com.choicemaker.cm.modelmaker.filter.ModelMakerCollectionMRPairFilter;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
+import com.choicemaker.util.LogFrequencyPartitioner;
 
 /**
  * @author ajwinkel

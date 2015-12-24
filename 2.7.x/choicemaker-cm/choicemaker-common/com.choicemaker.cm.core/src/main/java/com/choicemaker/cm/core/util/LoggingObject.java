@@ -10,6 +10,8 @@
  */
 package com.choicemaker.cm.core.util;
 
+import com.choicemaker.util.MessageUtil;
+
 /**
  * A LoggingObject is a logging message that
  * can take parameters.

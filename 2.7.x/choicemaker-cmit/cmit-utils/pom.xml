@@ -55,6 +55,10 @@
 
   <dependencies>
     <dependency>
+      <groupId>com.choicemaker.util</groupId>
+      <artifactId>choicemaker-util</artifactId>
+    </dependency>
+    <dependency>
       <groupId>com.choicemaker.mvn.cluemaker</groupId>
       <artifactId>cluemaker-maven-plugin</artifactId>
     </dependency>

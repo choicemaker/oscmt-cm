@@ -1,14 +1,14 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
-package com.choicemaker.cm.core.util;
+package com.choicemaker.util;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -22,15 +22,22 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import com.choicemaker.cm.core.Constants;
-
 /**
- * Description
+ * Converts frequency counts into discrete logarithmic bins.
  *
- * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/27 21:19:22 $
+ * @author Martin Buechi (original version)
+ * @author Rick Hall (minor usability tweaks)
  */
 public class LogFrequencyPartitioner {
+
+	public static final String LINE_SEPARATOR = System
+			.getProperty("line.separator");
+
+	public static void missing_bin_count() {
+	}
+
+	public static void usage() {
+	}
 
 	public static void main(String[] args) throws IOException {
 		LogFrequencyPartitioner lfp = new LogFrequencyPartitioner();
@@ -96,7 +103,7 @@ public class LogFrequencyPartitioner {
 	}
 
 	public void writeFile(String fileName) throws IOException {
-		writeFile(fileName, Constants.LINE_SEPARATOR, Constants.LINE_SEPARATOR);
+		writeFile(fileName, LINE_SEPARATOR, LINE_SEPARATOR);
 	}
 
 	public void writeFile(String fileName, String elementSep, String lineSep) throws IOException {
@@ -112,7 +119,7 @@ public class LogFrequencyPartitioner {
 		w.close();
 		fs.close();
 	}
-	
+
 	private static class Pair {
 		final String val;
 		final int count;

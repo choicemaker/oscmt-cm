@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.util.MessageUtil;
 
 
 public class DefaultFileContentListener implements FileContentListener {

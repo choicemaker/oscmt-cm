@@ -1,4 +1,4 @@
-package com.choicemaker.cm.core.util;
+package com.choicemaker.util;
 
 import java.text.MessageFormat;
 import java.util.Locale;
@@ -11,7 +11,6 @@ import java.util.logging.Logger;
  * bundle.
  *
  * @author    Martin Buechi
- * @see ChoiceMakerCoreMessages
  */
 public class MessageUtil {
 

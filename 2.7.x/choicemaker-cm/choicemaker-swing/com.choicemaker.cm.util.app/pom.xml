@@ -66,6 +66,10 @@
 
   <dependencies>
     <dependency>
+      <groupId>com.choicemaker.util</groupId>
+      <artifactId>choicemaker-util</artifactId>
+    </dependency>
+    <dependency>
       <groupId>com.choicemaker.e2</groupId>
       <artifactId>com.choicemaker.e2</artifactId>
     </dependency>

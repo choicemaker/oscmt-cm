@@ -10,8 +10,8 @@ package com.choicemaker.cm.module.swing;
 import java.util.ResourceBundle;
 
 import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
-import com.choicemaker.cm.core.util.MessageUtil;
 import com.choicemaker.cm.module.IMessageSupport;
+import com.choicemaker.util.MessageUtil;
 
 /**
  * @author rphall

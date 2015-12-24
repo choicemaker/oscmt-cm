@@ -9,7 +9,7 @@ package com.choicemaker.cm.io.db.base.util;
 
 import java.util.ResourceBundle;
 
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.util.MessageUtil;
 
 /**
  *

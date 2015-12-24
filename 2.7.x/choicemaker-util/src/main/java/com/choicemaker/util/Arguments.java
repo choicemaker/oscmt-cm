@@ -15,10 +15,13 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * Managing of command line arguments.
+ * Management of command line arguments.
  *
  * @author   Matthias Zenger
- * @version  $Revision: 1.2 $ $Date: 2010/03/27 21:05:01 $
+ * @deprecated
+ * @see <a href="https://commons.apache.org/proper/commons-cli/index.html">Apache Commons CLI</a>
+ * @see <a href="http://args4j.kohsuke.org/index.html">Args4j</a>
+ * @see <a href="http://jcommander.org/">JCommander</a>
  */
 public class Arguments {
 
