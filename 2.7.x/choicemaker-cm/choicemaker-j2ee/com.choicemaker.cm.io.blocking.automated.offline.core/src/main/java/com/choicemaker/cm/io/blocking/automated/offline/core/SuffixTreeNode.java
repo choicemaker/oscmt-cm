@@ -217,18 +217,6 @@ public class SuffixTreeNode implements IIDSet {
 		sb.append(Constants.CLOSE_NODE);
 	}
 
-	/*
-	 * public String writeSuffixTree2 (String prefix) { StringBuffer sb = new
-	 * StringBuffer (prefix); sb.append(Constants.OPEN_NODE);
-	 * sb.append(recordId);
-	 * 
-	 * if (numKids > 0) { ArrayList children = getAllChildren(); for (int i=0;
-	 * i<children.size(); i++) { SuffixTreeNode kid = (SuffixTreeNode)
-	 * children.get(i); sb.append( kid.writeSuffixTree2("") ); } }
-	 * 
-	 * sb.append(Constants.CLOSE_NODE); return sb.toString(); }
-	 */
-
 	/**
 	 * Returns the child of this node with the specified record ID, or null if
 	 * this node has no such child.

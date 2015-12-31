@@ -18,7 +18,7 @@ import java.util.List;
  * Management of command line arguments.
  *
  * @author   Matthias Zenger
- * @deprecated
+ *
  * @see <a href="https://commons.apache.org/proper/commons-cli/index.html">Apache Commons CLI</a>
  * @see <a href="http://args4j.kohsuke.org/index.html">Args4j</a>
  * @see <a href="http://jcommander.org/">JCommander</a>
@@ -56,7 +56,7 @@ public class Arguments {
 		this.unknownOptionsHandling = a.unknownOptionsHandling;
 	}
 
-	/** define a new option; i.e. an argument that is either present *  or not */
+	/** define a new option; i.e. an argument that is either present or not */
 	public void addOption(String option) {
 		arguments.put(option, Boolean.FALSE);
 	}

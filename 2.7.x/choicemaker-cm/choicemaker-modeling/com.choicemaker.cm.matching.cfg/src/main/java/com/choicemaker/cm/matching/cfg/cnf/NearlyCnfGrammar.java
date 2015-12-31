@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-//import com.choicemaker.cm.core.util.*;
 import com.choicemaker.cm.matching.cfg.ContextFreeGrammar;
 import com.choicemaker.cm.matching.cfg.Rule;
 import com.choicemaker.cm.matching.cfg.TokenType;
@@ -228,8 +227,6 @@ public class NearlyCnfGrammar extends ContextFreeGrammar {
 			}
 		}
 
-		// 2014-04-24 rphall: Commented out unused local variable.
-//		PrefixTree pft = new PrefixTree(names);
 		String tempPrefix = "TEMP" + '_';
 		while (tempPrefix.length() < maxLength) {
 			tempPrefix += '_';
