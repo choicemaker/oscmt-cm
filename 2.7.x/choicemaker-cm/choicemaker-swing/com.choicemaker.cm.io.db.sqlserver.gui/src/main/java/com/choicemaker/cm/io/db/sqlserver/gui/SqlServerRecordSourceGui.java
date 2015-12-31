@@ -42,7 +42,6 @@ import com.choicemaker.cm.modelmaker.gui.utils.Enable;
 import com.choicemaker.cm.modelmaker.gui.utils.EnablednessGuard;
 
 /**
- * @version $Revision: 1.1.96.1 $ $Date: 2009/11/18 01:00:11 $
  */
 public class SqlServerRecordSourceGui extends RecordSourceGui implements Enable {
 

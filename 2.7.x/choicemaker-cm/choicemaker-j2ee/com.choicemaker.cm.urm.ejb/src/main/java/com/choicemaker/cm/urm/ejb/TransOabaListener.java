@@ -27,7 +27,6 @@ import com.choicemaker.cm.urm.exceptions.ModelException;
 
 /**
  * TODO
- * @version  $Revision: 1.5 $ $Date: 2010/10/27 22:19:50 $
  * @author   rphall
  */
 public class TransOabaListener extends WorkflowControlListener{

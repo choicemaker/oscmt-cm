@@ -22,7 +22,6 @@ import com.choicemaker.cm.core.xmlconf.XmlParserFactory;
  * Comment
  *
  * @author   Martin Buechi
- * @version  $Revision: 1.2 $ $Date: 2010/03/28 09:18:16 $
  */
 public class XmlSingleRecordReader implements RecordHandler {
 	private String profile;

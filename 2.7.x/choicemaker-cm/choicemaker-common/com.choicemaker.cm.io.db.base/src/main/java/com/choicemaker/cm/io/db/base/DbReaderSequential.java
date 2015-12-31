@@ -19,7 +19,6 @@ import com.choicemaker.cm.core.Record;
  * of holder class instances.
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/28 09:05:59 $
  */
 public interface DbReaderSequential extends DbReader {
 	/**

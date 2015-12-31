@@ -34,7 +34,6 @@ import com.choicemaker.e2.mbd.runtime.model.PluginRegistryModel;
  * Comment
  *
  * @author Martin Buechi
- * @version $Revision: 1.1 $ $Date: 2010/01/27 03:58:28 $
  */
 public class Platform {
 

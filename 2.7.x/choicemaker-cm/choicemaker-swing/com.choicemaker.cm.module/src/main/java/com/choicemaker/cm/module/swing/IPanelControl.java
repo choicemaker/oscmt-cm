@@ -13,7 +13,6 @@ import com.choicemaker.cm.module.IModuleController.IUserInterface;
 
 /**
  * @author rphall
- * @version $Revision: 1.1 $ $Date: 2010/03/27 19:27:57 $
  */
 public interface IPanelControl extends IUserInterface {
 	

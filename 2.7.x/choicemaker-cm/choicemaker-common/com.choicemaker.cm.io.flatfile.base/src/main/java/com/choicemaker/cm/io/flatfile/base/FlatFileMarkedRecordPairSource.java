@@ -26,7 +26,6 @@ import com.choicemaker.util.FileUtilities;
 /**
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/28 09:10:40 $
  */
 public class FlatFileMarkedRecordPairSource implements MarkedRecordPairSource {
 

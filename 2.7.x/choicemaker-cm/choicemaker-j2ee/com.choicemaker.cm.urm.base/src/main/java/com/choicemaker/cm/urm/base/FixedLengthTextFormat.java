@@ -12,7 +12,6 @@ package com.choicemaker.cm.urm.base;
  * <p>  
  *
  * @author emoussikaev
- * @version Revision: 2.5  Date: Nov 1, 2005 12:16:24 PM
  * @see
  */
 public class FixedLengthTextFormat implements ITextFormat {

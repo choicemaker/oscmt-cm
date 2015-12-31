@@ -14,7 +14,6 @@ package com.choicemaker.cm.urm.exceptions;
  * It is defined separately from <code>NotUniqueException</code>
  * in order to keep the URM interface independent of the core package.
  * @author rphall
- * @version 1.0.0
  * @since 2.5.206
  * @see com.choicemaker.cm.core.configure.NotUniqueException
  */

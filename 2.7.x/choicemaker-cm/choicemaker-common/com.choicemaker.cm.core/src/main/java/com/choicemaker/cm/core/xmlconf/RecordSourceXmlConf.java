@@ -24,7 +24,6 @@ import com.choicemaker.e2.E2Exception;
  * configurator in the respective io.type package.
  *
  * @author Martin Buechi
- * @version $Revision: 1.1 $ $Date: 2010/01/20 15:05:01 $
  */
 public class RecordSourceXmlConf {
 	public static final String EXTENSION_POINT =

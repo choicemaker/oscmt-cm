@@ -11,7 +11,6 @@ package com.choicemaker.cm.urm.exceptions;
  * Signals that an invaid argument was passed to an API method. 
  * 
  * @author emoussikaev
- * @version Revision: 2.5  Date: Sep 30, 2005 1:12:46 PM
  * @see
  */
 public class ArgumentException extends Exception {

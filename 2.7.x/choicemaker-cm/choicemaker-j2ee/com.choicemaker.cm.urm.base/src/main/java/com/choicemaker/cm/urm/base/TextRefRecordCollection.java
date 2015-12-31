@@ -14,7 +14,6 @@ import com.choicemaker.cm.urm.exceptions.RecordCollectionException;
  * <p>  
  *
  * @author emoussikaev
- * @version Revision: 2.5  Date: Nov 1, 2005 1:35:45 PM
  * @see
  */
 public class TextRefRecordCollection extends RefRecordCollection { //implements ITextRefRecordCollection {

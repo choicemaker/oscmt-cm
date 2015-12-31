@@ -13,7 +13,6 @@ import com.choicemaker.cm.io.db.base.DatabaseAbstraction;
  * Description
  * 
  * @author  Martin Buechi
- * @version $Revision: 1.1 $ $Date: 2003/04/29 19:38:12 $
  */
 public class SqlDatabaseAbstraction implements DatabaseAbstraction {
 

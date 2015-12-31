@@ -17,7 +17,6 @@ import com.choicemaker.cm.io.blocking.automated.IGroupTable;
 /**
  *
  * @author    mbuechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/28 09:31:09 $
  */
 public class BlockingValue implements Comparable<IBlockingValue>, Cloneable,
 		Serializable, IBlockingValue {

@@ -20,7 +20,6 @@ import com.choicemaker.cm.modelmaker.gui.utils.NullInteger;
 /**
  *
  * @author S. Yoakum-Stover
- * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:09 $
  */
 public class FilterClueTableRow extends ClTableRow {
 

@@ -14,7 +14,6 @@ import java.util.regex.Pattern;
  * Checks if a String matches any pattern in a set of patterns.
  *
  * @author rphall
- * @version $Revision: 1.2 $ $Date: 2010/03/29 14:45:31 $
  */
 public interface IPatternMatcher {
 

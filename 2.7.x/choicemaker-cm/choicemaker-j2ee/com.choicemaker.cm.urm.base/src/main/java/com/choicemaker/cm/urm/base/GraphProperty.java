@@ -29,7 +29,6 @@ import java.util.List;
  * <p>  
  *
  * @author emoussikaev
- * @version Revision: 2.5  Date: Nov 1, 2005 1:12:25 PM
  * @see
  */
 public class GraphProperty implements Serializable {

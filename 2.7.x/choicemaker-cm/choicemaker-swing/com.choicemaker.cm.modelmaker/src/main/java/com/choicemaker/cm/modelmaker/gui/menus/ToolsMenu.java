@@ -36,7 +36,6 @@ import com.choicemaker.e2.platform.CMPlatformUtils;
  * Description
  *
  * @author  Martin Buechi
- * @version $Revision: 1.2 $ $Date: 2010/03/29 13:16:21 $
  */
 public class ToolsMenu extends JMenu {
 	private static final long serialVersionUID = 1L;

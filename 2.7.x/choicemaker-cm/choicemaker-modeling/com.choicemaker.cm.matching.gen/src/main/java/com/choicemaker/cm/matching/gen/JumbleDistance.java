@@ -27,7 +27,6 @@ package com.choicemaker.cm.matching.gen;
  * examples from the NYC DOHMH MCI project).
  * 
  * @author Rick Hall
- * @version   $Revision: 1.1 $ $Date: 2010/03/27 22:22:06 $
  * @see EditDistance2
  */
 

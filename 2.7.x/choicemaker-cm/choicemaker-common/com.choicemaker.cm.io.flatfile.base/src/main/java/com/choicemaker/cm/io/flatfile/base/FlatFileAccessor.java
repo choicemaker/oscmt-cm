@@ -11,7 +11,6 @@ package com.choicemaker.cm.io.flatfile.base;
  * Description
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:57 $
  */
 public interface FlatFileAccessor {
 	int[] getDescWidths();

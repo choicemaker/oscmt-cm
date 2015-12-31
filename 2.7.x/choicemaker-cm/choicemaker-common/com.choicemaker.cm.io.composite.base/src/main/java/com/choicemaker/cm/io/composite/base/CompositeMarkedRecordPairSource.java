@@ -17,7 +17,6 @@ import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
  * A composite source is a collection of other sources.
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/28 08:56:16 $
  */
 public class CompositeMarkedRecordPairSource extends CompositeRecordPairSource implements MarkedRecordPairSource {
 	/**

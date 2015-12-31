@@ -38,7 +38,6 @@ import com.choicemaker.cm.matching.cfg.cyk.CykParser;
  * City, State, and Zip Codes.
  *
  * @author   Adam Winkel
- * @version  $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:02 $
  */
 public class AddressParser extends CykParser {
 	

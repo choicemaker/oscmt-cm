@@ -23,7 +23,6 @@ import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
  * Comment
  *
  * @author   Adam Winkel
- * @version  $Revision: 1.2 $ $Date: 2010/03/29 14:27:37 $
  */
 public class RsToMrpsAdapter implements MarkedRecordPairSource {
 

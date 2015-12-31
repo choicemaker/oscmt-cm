@@ -57,7 +57,6 @@ UNKNOWN
 
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/27 22:22:59 $
  */
 public final class Sets {
 

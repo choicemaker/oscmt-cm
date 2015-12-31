@@ -55,7 +55,6 @@ import com.choicemaker.util.FileUtilities;
  * @author S. Yoakum-Stover
  * @author rphall (Split ProbabilityModel into separate instance and manager
  *         types)
- * @version $Revision: 1.1 $ $Date: 2010/03/24 18:02:30 $
  * @see PMManager
  */
 public class MutableProbabilityModel implements IProbabilityModel {

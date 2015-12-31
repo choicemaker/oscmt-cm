@@ -20,7 +20,6 @@ import com.choicemaker.cm.core.base.RecordData;
  * The TableModel for the RecordTable.
  * 
  * @author S. Yoakum-Stover
- * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:46 $
  */
 public class RecordTableModel extends AbstractTableModel implements RepositoryChangeListener {
 	private static final long serialVersionUID = 1L;

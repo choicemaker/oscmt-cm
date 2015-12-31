@@ -19,7 +19,6 @@ import com.choicemaker.cm.core.Record;
  * generated holder classes.
  *
  * @author   Martin Buechi
- * @version  $Revision: 1.2 $ $Date: 2010/03/24 20:59:50 $
  */
 public class BeanProfile implements Profile {
 	private static final long serialVersionUID = 1L;

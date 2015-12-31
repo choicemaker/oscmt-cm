@@ -15,7 +15,6 @@ import com.choicemaker.cm.urm.IUpdateDerivedFieldsRegistration;
  * This class defines an instance of an eclipse-based registry
  * for derived-field updators.
  * @author rphall
- * @version $Revision: 1.1 $ $Date: 2010/03/25 00:17:22 $
  */
 public class DefaultUpdateDerivedFieldsRegistry
 	extends EclipseRegistry

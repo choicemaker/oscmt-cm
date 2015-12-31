@@ -14,7 +14,6 @@ import java.awt.Color;
  * that we can give it a different color when we go to display it in a table.
  * 
  * @author S. Yoakum-Stover
- * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:10 $
  */
 public class ValueError {
 

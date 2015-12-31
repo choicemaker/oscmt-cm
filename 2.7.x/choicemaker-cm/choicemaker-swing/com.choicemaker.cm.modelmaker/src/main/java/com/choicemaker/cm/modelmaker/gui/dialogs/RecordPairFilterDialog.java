@@ -28,7 +28,6 @@ import com.choicemaker.cm.modelmaker.gui.panels.FilterCluePanel;
 /**
  * @author S. Yoakum-Stover
  * @author Arturo Falck
- * @version $Revision: 1.2 $ $Date: 2010/03/29 12:46:11 $
  */
 public class RecordPairFilterDialog extends JDialog {
 	private static final long serialVersionUID = 1L;

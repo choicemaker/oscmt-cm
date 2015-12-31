@@ -17,7 +17,6 @@ package com.choicemaker.cm.core;
  * of its clues and rules. Instances of this class are immutable.
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.1 $ $Date: 2010/01/20 15:05:04 $
  */
 public class ClueDesc {
 	public static final int NONE = 0;

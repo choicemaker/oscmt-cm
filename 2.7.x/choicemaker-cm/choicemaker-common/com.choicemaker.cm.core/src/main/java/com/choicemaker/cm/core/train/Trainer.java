@@ -31,7 +31,6 @@ import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
  *
  * @author    Martin Buechi
  * @author    S. Yoakum-Stover
- * @version   $Revision: 1.2 $ $Date: 2010/03/24 20:49:13 $
  */
 
 public class Trainer /* implements ITrainer */ {

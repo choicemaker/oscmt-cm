@@ -32,7 +32,6 @@ import com.choicemaker.util.StringUtils;
  * unnecessary.
  *
  * @author   Adam Winkel
- * @version  $Revision: 1.2 $ $Date: 2010/03/27 22:09:21 $
  */
 public class ParsedData implements Serializable {
 

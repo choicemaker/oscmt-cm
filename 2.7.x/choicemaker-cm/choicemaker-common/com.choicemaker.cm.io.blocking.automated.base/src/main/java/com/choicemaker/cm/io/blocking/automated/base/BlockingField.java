@@ -15,7 +15,6 @@ import com.choicemaker.cm.io.blocking.automated.IField;
  * which is used for blocking.
  * 
  * @author mbuechi
- * @version $Revision: 1.2 $ $Date: 2010/03/28 09:29:54 $
  */
 public class BlockingField extends Field implements IBlockingField {
 	

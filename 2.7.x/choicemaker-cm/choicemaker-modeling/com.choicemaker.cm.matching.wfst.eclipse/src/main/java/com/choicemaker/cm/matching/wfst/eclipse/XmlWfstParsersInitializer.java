@@ -23,7 +23,6 @@ import com.choicemaker.cm.core.xmlconf.XmlModuleInitializer;
  * XML initializer for WfstParsers
  *
  * @author    Rick Hall
- * @version   $Revision: 1.2 $ $Date: 2010/03/27 22:30:22 $
  * @see       com.choicemaker.cm.matching.wfst.eclipse.WfstParsers
  */
 public class XmlWfstParsersInitializer implements XmlModuleInitializer {

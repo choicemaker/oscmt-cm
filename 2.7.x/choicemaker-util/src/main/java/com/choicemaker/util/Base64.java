@@ -35,7 +35,6 @@ import java.util.logging.Logger;
  *
  * @author Robert Harder
  * @author rob@iharder.net
- * @version 1.3.4
  */
 public class Base64 {
 	private static Logger logger = Logger.getLogger(Base64.class.getName());

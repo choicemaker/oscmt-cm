@@ -24,7 +24,6 @@ import java.util.logging.Logger;
  * definitive spot, namely the property file defined by {@link #PROPERTY_FILE}
  * 
  * @author rphall
- * @version $Revision: 1.1 $ $Date: 2010/03/25 00:17:22 $
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class MrpsRequestConfiguration implements IMrpsRequestConfiguration,

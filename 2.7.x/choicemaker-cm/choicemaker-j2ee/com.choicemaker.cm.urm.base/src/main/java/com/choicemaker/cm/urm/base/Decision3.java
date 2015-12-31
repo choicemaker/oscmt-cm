@@ -14,7 +14,6 @@ import java.io.Serializable;
  * <p>  
  *
  * @author emoussikaev
- * @version Revision: 2.5  Date: Nov 1, 2005 12:16:24 PM
  * @see
  */
 public class Decision3 implements Serializable {

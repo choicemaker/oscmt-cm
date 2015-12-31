@@ -25,7 +25,6 @@ import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 /**
  *
  * @author    
- * @version   $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:10 $
  */
 public class ThreadWatcher extends JDialog implements Runnable {
 	private static final long serialVersionUID = 1L;

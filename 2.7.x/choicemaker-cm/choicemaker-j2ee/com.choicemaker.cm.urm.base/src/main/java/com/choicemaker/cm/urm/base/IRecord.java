@@ -14,7 +14,6 @@ import java.io.Serializable;
  * <p>  
  *
  * @author emoussikaev
- * @version Revision: 2.5  Date: Nov 1, 2005 12:03:03 PM
  * @see
  */
 public interface IRecord extends Serializable{

@@ -20,7 +20,6 @@ import com.choicemaker.cm.core.Record;
 /**
  * TODO: remove this class
  * @author   Martin Buechi
- * @version  $Revision: 1.2 $ $Date: 2010/10/28 18:38:16 $
  * @deprecated Never used
  */
 public class GenericDescriptor implements Descriptor {

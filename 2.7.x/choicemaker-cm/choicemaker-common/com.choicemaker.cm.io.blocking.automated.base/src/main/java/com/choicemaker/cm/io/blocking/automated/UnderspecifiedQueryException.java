@@ -13,7 +13,6 @@ import java.io.IOException;
  * Comment
  *
  * @author Martin Buechi
- * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:47 $
  */
 public class UnderspecifiedQueryException extends IOException {
 	private static final long serialVersionUID = 1L;

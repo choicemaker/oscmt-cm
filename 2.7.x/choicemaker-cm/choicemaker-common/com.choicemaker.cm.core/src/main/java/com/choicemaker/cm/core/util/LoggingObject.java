@@ -17,7 +17,6 @@ import com.choicemaker.util.MessageUtil;
  * can take parameters.
  * 
  * @author   Adam Winkel
- * @version  $Revision: 1.2 $ $Date: 2010/03/27 21:20:20 $
  */
 public class LoggingObject {
 

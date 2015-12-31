@@ -16,7 +16,6 @@ import javax.ejb.EJBHome;
 
 /**
  * @author emoussikaev
- * @version Revision: 2.5  Date: Jul 7, 2005 9:25:22 AM
  */
 public interface TransSerializerHome extends EJBHome {
   String DEFAULT_EJB_REF_NAME = "ejb/TransSerializer";

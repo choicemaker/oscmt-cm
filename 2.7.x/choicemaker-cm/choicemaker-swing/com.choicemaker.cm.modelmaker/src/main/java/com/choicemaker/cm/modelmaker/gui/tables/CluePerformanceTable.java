@@ -27,7 +27,6 @@ import com.choicemaker.cm.modelmaker.gui.renderers.ColoredTableCellRenderer;
  * The active clues for a particular MarkedRecordPair.  Displayed on the DefaultPairReviewPanel.
  * 
  * @author S. Yoakum-Stover
- * @version $Revision: 1.2 $ $Date: 2010/03/29 13:35:52 $
  */
 public class CluePerformanceTable extends JTable {
 	private static final long serialVersionUID = 1L;

@@ -20,7 +20,6 @@ import java.util.StringTokenizer;
  * Comment
  *
  * @author Martin Buechi
- * @version $Revision: 1.1 $ $Date: 2010/01/27 03:58:28 $
  */
 public class EclipseRMIClassLoaderSpi extends RMIClassLoaderSpi {
 	private static ClassLoader classLoader;

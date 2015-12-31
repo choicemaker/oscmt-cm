@@ -30,7 +30,6 @@ import com.choicemaker.cm.modelmaker.gui.matcher.MatchDialogBlockerPlugin;
  * Description
  *
  * @author  Martin Buechi
- * @version $Revision: 1.2 $ $Date: 2010/03/28 09:40:53 $
  */
 public class InMemoryAutomatedBlockerDialogPlugin extends MatchDialogBlockerPlugin {
 

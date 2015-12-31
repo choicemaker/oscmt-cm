@@ -14,7 +14,6 @@ package com.choicemaker.cm.urm.base;
  * <p>  
  *
  * @author emoussikaev
- * @version Revision: 2.5  Date: Nov 1, 2005 12:08:29 PM
  * @see
  */
 public class RecordRef implements ISingleRecord {

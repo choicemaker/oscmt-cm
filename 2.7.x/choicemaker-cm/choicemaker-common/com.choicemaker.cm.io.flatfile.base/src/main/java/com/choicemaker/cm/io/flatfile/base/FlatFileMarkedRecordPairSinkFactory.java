@@ -20,7 +20,6 @@ import com.choicemaker.cm.core.Source;
  * Description
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/28 09:10:40 $
  */
 public class FlatFileMarkedRecordPairSinkFactory implements SinkFactory {
 	private String fileNameBase;

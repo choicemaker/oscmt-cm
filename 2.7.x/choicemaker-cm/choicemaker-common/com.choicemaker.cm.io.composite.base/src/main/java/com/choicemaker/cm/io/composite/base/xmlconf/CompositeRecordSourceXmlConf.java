@@ -29,7 +29,6 @@ import com.choicemaker.util.FileUtilities;
  * Handling of composite Marked Record Pair sources.
  *
  * @author    Adam Winkel
- * @version   $Revision: 1.2 $ $Date: 2010/03/28 08:56:16 $
  */
 public class CompositeRecordSourceXmlConf implements RecordSourceXmlConfigurator {
 	public static final String EXTENSION_POINT_ID = "com.choicemaker.cm.io.composite.base.compositeRsReader";

@@ -27,7 +27,6 @@ import com.choicemaker.e2.platform.CMPlatformUtils;
  * Comment
  *
  * @author Adam Winkel
- * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:59 $
  */
 public final class Parsers {
 	private static HashMap parsers = new HashMap();

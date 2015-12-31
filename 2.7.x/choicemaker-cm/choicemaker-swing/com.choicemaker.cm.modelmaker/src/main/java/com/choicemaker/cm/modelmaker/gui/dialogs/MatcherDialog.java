@@ -73,7 +73,6 @@ import com.choicemaker.e2.platform.CMPlatformUtils;
  * Description
  *
  * @author  Martin Buechi
- * @version $Revision: 1.2 $ $Date: 2010/03/29 12:44:29 $
  */
 public class MatcherDialog extends JDialog implements Enable {
 	private static final long serialVersionUID = 1L;

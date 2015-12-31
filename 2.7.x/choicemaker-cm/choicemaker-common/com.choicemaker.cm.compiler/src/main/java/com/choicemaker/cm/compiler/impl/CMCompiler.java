@@ -44,7 +44,6 @@ import com.choicemaker.cm.core.xmlconf.XmlConfigurator;
  *
  * @author    Matthias Zenger
  * @author    Martin Buechi
- * @version   $Revision: 1.1 $ $Date: 2010/03/24 20:10:52 $
  */
 public abstract class CMCompiler implements ICompiler {
 

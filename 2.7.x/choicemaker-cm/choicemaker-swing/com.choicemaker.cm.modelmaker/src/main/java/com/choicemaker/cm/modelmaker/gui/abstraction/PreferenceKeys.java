@@ -12,7 +12,6 @@ package com.choicemaker.cm.modelmaker.gui.abstraction;
 /**
  * Keys to values stored as Preferences
  * @author rphall
- * @version $Revision: 1.1 $ $Date: 2010/03/28 17:13:15 $
  */
 public class PreferenceKeys {
 	

@@ -15,7 +15,6 @@ import java.util.List;
  * Description
  * 
  * @author  Martin Buechi
- * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:54 $
  */
 public class PositionMap {
 	private List records;

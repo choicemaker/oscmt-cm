@@ -23,7 +23,6 @@ import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 /**
  * 
  * @author S. Yoakum-Stover
- * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:09 $
  */
 public class ViewMenu extends JMenu {
 	private static final long serialVersionUID = 1L;

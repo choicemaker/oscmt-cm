@@ -121,7 +121,6 @@ import com.choicemaker.cm.urm.exceptions.UrmUnderspecifiedQueryException;
  * the decision match or hold are returned.
  * 
  * @author emoussikaev
- * @version Revision: 2.5 Date: Jun 28, 2005 2:40:13 PM
  * @see
  */
 public interface OnlineRecordMatcher extends EJBObject {

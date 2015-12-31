@@ -43,7 +43,6 @@ import com.choicemaker.cm.io.db.base.DbReaderParallel;
  * </p>
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/24 22:36:05 $
  */
 public class OracleMarkedRecordPairSource2 implements MarkedRecordPairSource {
 	private static Logger logger = Logger.getLogger(OracleMarkedRecordPairSource2.class.getName());

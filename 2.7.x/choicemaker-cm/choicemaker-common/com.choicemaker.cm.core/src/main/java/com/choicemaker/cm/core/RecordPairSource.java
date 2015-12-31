@@ -16,7 +16,6 @@ import java.io.IOException;
  * Source of record pairs.
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/24 22:50:38 $
  */
 public interface RecordPairSource extends Source {
 	/**

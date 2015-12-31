@@ -10,7 +10,6 @@ package com.choicemaker.cm.modelmaker.stats;
 /**
  *
  * @author    
- * @version   $Revision: 1.2 $ $Date: 2010/03/29 12:24:49 $
  */
 public class StatPoint {
 	public float differThreshold = Float.NaN;

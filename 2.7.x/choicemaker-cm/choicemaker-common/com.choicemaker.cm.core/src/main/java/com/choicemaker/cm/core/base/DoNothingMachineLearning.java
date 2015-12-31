@@ -22,7 +22,6 @@ import com.choicemaker.cm.core.xmlconf.MlModelConf;
  * Description
  * 
  * @author  Martin Buechi
- * @version $Revision: 1.2 $ $Date: 2010/03/24 18:24:05 $
  */
 public class DoNothingMachineLearning implements MachineLearner {
 

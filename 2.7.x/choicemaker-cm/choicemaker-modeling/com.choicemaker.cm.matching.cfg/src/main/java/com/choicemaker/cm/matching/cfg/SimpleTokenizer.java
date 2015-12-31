@@ -38,7 +38,6 @@ import java.util.List;
  * configured to not do so.
  * 
  * @author   Adam Winkel
- * @version  $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:59 $
  */
 public class SimpleTokenizer implements Tokenizer {
 	

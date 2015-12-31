@@ -27,7 +27,6 @@ import com.choicemaker.util.Precondition;
 /**
  * XML configurator for XML configurable objects
  * @author rphall
- * @version 1.0.0
  * @since 2.5.206
  */
 public abstract class AbstractXmlSpecificationParser

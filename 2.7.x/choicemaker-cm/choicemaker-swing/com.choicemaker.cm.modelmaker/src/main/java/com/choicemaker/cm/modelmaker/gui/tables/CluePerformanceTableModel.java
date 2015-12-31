@@ -20,7 +20,6 @@ import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 /**
  * 
  * @author S. Yoakum-Stover
- * @version $Revision: 1.2 $ $Date: 2010/03/29 13:36:16 $
  */
 public class CluePerformanceTableModel extends AbstractTableModel {
 

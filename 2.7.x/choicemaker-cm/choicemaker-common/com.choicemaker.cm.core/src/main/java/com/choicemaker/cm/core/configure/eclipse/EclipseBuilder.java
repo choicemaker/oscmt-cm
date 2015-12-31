@@ -21,7 +21,6 @@ import com.choicemaker.cm.core.configure.xml.XmlSpecificationException;
 /**
  * Parses a fragment of plugin.xml files for extensions based on XmlConfigurable.
  * @author rphall
- * @version $Revision: 1.1 $ $Date: 2010/03/24 18:04:31 $
  */
 public class EclipseBuilder implements IBuilder {
 

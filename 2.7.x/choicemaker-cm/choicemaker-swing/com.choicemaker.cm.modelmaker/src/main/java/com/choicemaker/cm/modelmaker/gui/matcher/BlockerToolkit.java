@@ -13,7 +13,6 @@ import com.choicemaker.cm.core.ImmutableProbabilityModel;
  * Description
  * 
  * @author  Martin Buechi
- * @version $Revision: 1.2 $ $Date: 2010/03/29 12:39:59 $
  */
 public interface BlockerToolkit {
 	String toString();

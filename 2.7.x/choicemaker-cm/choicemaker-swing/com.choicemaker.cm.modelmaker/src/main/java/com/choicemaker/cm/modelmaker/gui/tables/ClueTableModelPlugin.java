@@ -16,7 +16,6 @@ import com.choicemaker.cm.core.ImmutableProbabilityModel;
  * Description
  * 
  * @author  Martin Buechi
- * @version $Revision: 1.2 $ $Date: 2010/03/29 13:42:20 $
  */
 public abstract class ClueTableModelPlugin extends AbstractTableModel {
 	private static final long serialVersionUID = 1L;

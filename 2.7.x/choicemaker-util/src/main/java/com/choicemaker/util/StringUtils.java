@@ -17,7 +17,6 @@ import java.util.StringTokenizer;
  * Utilities for dealing with <code>String</code>s.
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/27 21:26:11 $
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class StringUtils {

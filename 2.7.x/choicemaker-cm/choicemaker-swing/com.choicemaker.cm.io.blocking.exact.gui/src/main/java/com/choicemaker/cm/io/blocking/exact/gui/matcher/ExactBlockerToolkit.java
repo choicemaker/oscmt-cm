@@ -15,7 +15,6 @@ import com.choicemaker.cm.modelmaker.gui.matcher.MatchDialogBlockerPlugin;
  * Description
  * 
  * @author  Martin Buechi
- * @version $Revision: 1.2 $ $Date: 2010/03/28 15:39:27 $
  */
 public class ExactBlockerToolkit implements BlockerToolkit {
 	/**

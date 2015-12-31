@@ -18,7 +18,6 @@ import java.io.Serializable;
  * futures.
  *
  * @author Martin Buechi
- * @version $Revision: 1.2 $ $Date: 2010/03/27 21:33:06 $
  */
 
 public class Decision implements Serializable, Comparable {

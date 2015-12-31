@@ -25,7 +25,6 @@ import com.choicemaker.cm.module.swing.AbstractTabbedPanel;
  * statistics, and train the model.
  * 
  * @author S. Yoakum-Stover
- * @version $Revision: 1.1 $ $Date: 2010/03/28 17:13:15 $
  */
 public abstract class AbstractModelReviewPanel
 	extends AbstractTabbedPanel

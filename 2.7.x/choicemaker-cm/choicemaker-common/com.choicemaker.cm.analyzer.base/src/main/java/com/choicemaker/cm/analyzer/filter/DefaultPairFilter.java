@@ -25,7 +25,6 @@ import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
  * If <code>fromPercentage</code> is greater than <code>toPercentage</code>,
  * then no record pair will pass this filter.
  * @author rphall
- * @version $Revision: 1.2 $ $Date: 2010/03/29 14:36:26 $
  */
 public class DefaultPairFilter implements Filter {
 

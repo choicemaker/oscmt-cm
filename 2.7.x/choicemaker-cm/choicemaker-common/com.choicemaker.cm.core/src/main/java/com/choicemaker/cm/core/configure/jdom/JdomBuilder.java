@@ -25,7 +25,6 @@ import com.choicemaker.cm.core.xmlconf.XmlParserFactory;
 
 /**
  * @author rphall
- * @version $Revision: 1.1 $ $Date: 2010/03/24 18:04:30 $
  */
 public class JdomBuilder implements IBuilder {
 

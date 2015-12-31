@@ -38,7 +38,6 @@ import com.choicemaker.cm.core.IncompleteSpecificationException;
  * </a>.
  * </p>
  * @author rphall
- * @version 1.0.0
  * @since 2.5.206
  */
 public abstract class AbstractXmlSpecification implements XmlSpecification {

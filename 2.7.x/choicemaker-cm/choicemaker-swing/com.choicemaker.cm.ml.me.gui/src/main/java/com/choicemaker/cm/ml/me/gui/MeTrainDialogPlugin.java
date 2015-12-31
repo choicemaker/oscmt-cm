@@ -22,7 +22,6 @@ import com.choicemaker.cm.modelmaker.gui.utils.EnablednessGuard;
 /**
  *
  * @author    
- * @version   $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:06 $
  */
 public class MeTrainDialogPlugin extends TrainDialogPlugin {
 	private static final long serialVersionUID = 1L;

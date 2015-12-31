@@ -34,7 +34,6 @@ import com.choicemaker.cm.modelmaker.gui.listeners.TableColumnListener;
  *
  * @author S. Yoakum-Stover
  * @author Arturo Falck
- * @version $Revision: 1.2 $ $Date: 2010/03/29 12:53:36 $
  */
 public class FilterClueTable extends JTable{
 

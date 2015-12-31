@@ -16,7 +16,6 @@ import java.util.EventListener;
  *
  * @author  Martin Buechi
  * @author  S. Yoakum-Stover
- * @version $Revision: 1.1 $ $Date: 2010/01/20 15:05:04 $
  */
 public interface RepositoryChangeListener extends EventListener {
 	void setChanged(RepositoryChangeEvent evt);

@@ -14,7 +14,6 @@ import javax.swing.text.Document;
  * The panel which displays status messages to the user.
  * 
  * @author S. Yoakum-Stover
- * @version $Revision: 1.1 $ $Date: 2010/03/28 17:13:15 $
  */
 public abstract class AbstractMessagePanel extends JPanel {
 

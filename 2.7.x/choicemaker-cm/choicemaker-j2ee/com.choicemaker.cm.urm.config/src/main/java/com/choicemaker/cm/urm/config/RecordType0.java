@@ -13,7 +13,6 @@ import java.io.Serializable;
 /**
  * The 2.5 implementation of {@link RecordType} as a pseudo enum.
  * @author emoussikaev
- * @version Revision: 2.5 Date: Nov 1, 2005 2:09:30 PM
  */
 public class RecordType0 implements Serializable {
 

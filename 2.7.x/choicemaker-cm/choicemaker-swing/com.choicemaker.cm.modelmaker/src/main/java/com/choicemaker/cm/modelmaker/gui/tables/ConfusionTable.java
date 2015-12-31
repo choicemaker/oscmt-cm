@@ -31,7 +31,6 @@ import com.choicemaker.cm.modelmaker.gui.renderers.ColorTableErrorCellRenderer;
  * The TableModel for the confusion matrix in the DefaultTestingControlPanel.
  *
  * @author S. Yoakum-Stover
- * @version $Revision: 1.2 $ $Date: 2010/03/29 13:42:04 $
  */
 public class ConfusionTable extends JTable {
 

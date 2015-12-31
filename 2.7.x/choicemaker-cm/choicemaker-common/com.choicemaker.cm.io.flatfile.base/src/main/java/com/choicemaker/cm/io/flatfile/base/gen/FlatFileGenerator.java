@@ -29,7 +29,6 @@ import com.choicemaker.cm.core.gen.IGenerator;
  * Main generator plugin for Flat File IO.
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:58 $
  */
 public class FlatFileGenerator implements GeneratorPlugin {
 	public static final char DEFAULT_NULL_REPRESENTATION = ' ';

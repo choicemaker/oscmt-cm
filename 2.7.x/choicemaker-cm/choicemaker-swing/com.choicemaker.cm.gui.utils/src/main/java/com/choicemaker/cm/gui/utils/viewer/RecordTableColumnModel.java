@@ -24,7 +24,6 @@ import com.choicemaker.cm.core.Descriptor;
  * when they change (I don't know why the Table doesn't listen to those messages by default)
  * 
  * @author  Martin Buechi
- * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:46 $
  */
 public class RecordTableColumnModel extends DefaultTableColumnModel {
 	

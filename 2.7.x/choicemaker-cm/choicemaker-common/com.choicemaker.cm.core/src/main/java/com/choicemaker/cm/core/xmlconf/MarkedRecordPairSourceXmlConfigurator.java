@@ -25,7 +25,6 @@ import com.choicemaker.cm.core.XmlConfException;
  * must be intialized when the class is loaded.
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/24 21:10:43 $
  */
 public interface MarkedRecordPairSourceXmlConfigurator extends DynamicDispatchHandler {
 	/**

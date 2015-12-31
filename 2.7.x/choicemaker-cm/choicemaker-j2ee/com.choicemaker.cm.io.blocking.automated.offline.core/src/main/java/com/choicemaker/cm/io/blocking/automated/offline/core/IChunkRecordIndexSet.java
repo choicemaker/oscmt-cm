@@ -16,7 +16,6 @@ import com.choicemaker.cm.core.BlockingException;
  * is contained within a set of target indices (e.g. a chunk data set).
  * 
  * @author rphall
- * @version $Revision$ $Date$
  */
 public interface IChunkRecordIndexSet {
 	

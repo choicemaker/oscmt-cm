@@ -13,7 +13,6 @@ import java.util.Iterator;
  * Comment
  *
  * @author   Adam Winkel
- * @version  $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:05 $
  */
 public class TfIdfTokenDistance implements TokenDistanceFunction {
 

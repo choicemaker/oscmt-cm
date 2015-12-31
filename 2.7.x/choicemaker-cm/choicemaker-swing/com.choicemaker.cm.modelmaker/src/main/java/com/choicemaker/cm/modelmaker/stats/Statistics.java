@@ -26,7 +26,6 @@ import com.choicemaker.cm.core.base.Thresholds;
  * Not thread safe
  * fails for nohold rules
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/29 12:30:30 $
  */
 public final class Statistics implements IStatistics {
 	// types of pairs, depends upon active rules

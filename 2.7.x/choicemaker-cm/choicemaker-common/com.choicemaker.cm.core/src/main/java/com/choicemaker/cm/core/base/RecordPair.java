@@ -20,7 +20,6 @@ import com.choicemaker.cm.core.Record;
  * Use the MutableRecordPair class instead, or better yet,
  * reference the mutable or immutable record pair interface.
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/24 22:44:01 $
  * @deprecated
  * @see MutableRecordPair
  * @see IRecordPair

@@ -22,7 +22,6 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
  * than <code>toPercentage</code>, then no record pair will pass this filter.
  * 
  * @author rphall
- * @version $Revision: 1.1 $ $Date: 2010/03/28 15:45:19 $
  */
 public class DefaultMatchRecord2Filter<T extends Comparable<T>> implements
 		IMatchRecord2Filter<T> {

@@ -13,7 +13,6 @@ package com.choicemaker.cm.matching.gen;
  * letters count as a single edit rather than two.
  * 
  * @author Adam Winkel
- * @version   $Revision: 1.2 $ $Date: 2010/03/27 22:24:25 $
  * @see EditDistance
  */
 

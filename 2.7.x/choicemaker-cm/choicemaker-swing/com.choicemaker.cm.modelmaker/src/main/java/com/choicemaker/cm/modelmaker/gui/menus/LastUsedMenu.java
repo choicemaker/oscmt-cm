@@ -31,7 +31,6 @@ import com.choicemaker.cm.modelmaker.gui.ModelMaker;
  * used files.
  *
  * @author  Martin Buechi
- * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:09 $
  */
 public abstract class LastUsedMenu extends JMenu {
 	private static final long serialVersionUID = 1L;

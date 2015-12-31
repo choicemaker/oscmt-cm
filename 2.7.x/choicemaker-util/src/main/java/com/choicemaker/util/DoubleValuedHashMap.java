@@ -20,7 +20,6 @@ import java.util.Map;
  * .
  *
  * @author   Adam Winkel
- * @version  $Revision: 1.1 $ $Date: 2010/01/20 15:05:03 $
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class DoubleValuedHashMap extends HashMap {

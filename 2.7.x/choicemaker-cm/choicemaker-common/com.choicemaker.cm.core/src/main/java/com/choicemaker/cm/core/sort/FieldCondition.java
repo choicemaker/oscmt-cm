@@ -18,7 +18,6 @@ import com.choicemaker.cm.core.base.DescriptorCollection;
  * Comment
  *
  * @author   Martin Buechi
- * @version  $Revision: 1.1 $ $Date: 2010/01/20 15:05:06 $
  */
 public class FieldCondition implements Condition {
 	private Descriptor descriptor;

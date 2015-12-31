@@ -15,7 +15,6 @@ import java.io.Serializable;
  * <p>  
  *
  * @author emoussikaev
- * @version Revision: 2.5  Date: Nov 1, 2005 12:07:29 PM
  * @see
  */
 public interface IMatchScore extends Serializable{

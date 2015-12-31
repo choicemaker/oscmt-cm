@@ -30,7 +30,6 @@ import com.choicemaker.cm.gui.utils.viewer.RecordPairFrameModel;
 
 /**
  * @author Arturo Falck
- * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:46 $
  */
 public class FieldSelectorDialog extends JDialog {
 	private static final long serialVersionUID = 1L;

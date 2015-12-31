@@ -35,7 +35,6 @@ import com.choicemaker.cm.modelmaker.gui.utils.EnablednessGuard;
 /**
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/29 12:48:23 $
  */
 public class StartDialog extends JFrame implements Enable {
 	private static final long serialVersionUID = 1L;

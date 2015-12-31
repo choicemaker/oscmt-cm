@@ -24,7 +24,6 @@ import com.choicemaker.util.FileUtilities;
  * Comment
  *
  * @author   Adam Winkel
- * @version  $Revision: 1.2 $ $Date: 2010/03/29 13:48:43 $
  */
 public class RsToMrpsAdapterXmlConf implements MarkedRecordPairSourceXmlConfigurator {
 

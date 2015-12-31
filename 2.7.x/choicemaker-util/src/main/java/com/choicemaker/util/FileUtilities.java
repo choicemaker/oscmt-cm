@@ -30,7 +30,6 @@ import java.util.logging.Logger;
  * Description
  *
  * @author  Martin Buechi
- * @version $Revision: 1.1 $ $Date: 2010/01/20 15:05:03 $
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class FileUtilities {

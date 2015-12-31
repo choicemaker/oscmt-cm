@@ -16,7 +16,6 @@ import java.util.Properties;
 
 /**
  * @author rphall
- * @version $Revision: 1.1 $ $Date: 2010/03/24 17:00:57 $
  */
 public interface IRecordSourceSerializer extends Serializable {
 	

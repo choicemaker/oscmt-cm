@@ -21,7 +21,6 @@ import java.io.Serializable;
  * <p>  
  *
  * @author emoussikaev
- * @version Revision: 2.5  Date: Nov 1, 2005 2:09:30 PM
  * @see
  */
 public class RecordType implements Serializable {

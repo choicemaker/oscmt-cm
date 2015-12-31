@@ -31,7 +31,6 @@ import com.choicemaker.cm.gui.utils.viewer.dialog.InternalFrameDialog;
 import com.choicemaker.cm.gui.utils.viewer.dialog.TabRenameDialog;
 
 /**
- * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:46 $
  */
 public class DesktopPaneMouseListener extends MouseAdapter {
 	private static Logger logger = Logger.getLogger(DesktopPaneMouseListener.class.getName());

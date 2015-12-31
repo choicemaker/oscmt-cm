@@ -56,7 +56,6 @@ import com.choicemaker.cm.transitivity.util.CompositeTextSerializer;
 import com.choicemaker.cm.transitivity.util.CompositeXMLSerializer;
 
 /**
- * @version $Revision: 1.3 $ $Date: 2010/10/21 17:42:26 $
  */
 @MessageDriven(
 		activationConfig = {

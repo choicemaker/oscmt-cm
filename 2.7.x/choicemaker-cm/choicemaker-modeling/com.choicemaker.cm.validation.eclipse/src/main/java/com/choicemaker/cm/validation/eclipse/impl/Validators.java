@@ -28,7 +28,6 @@ import com.choicemaker.util.StringUtils;
  * collections.
  *
  * @author    Rick Hall
- * @version   $Revision: 1.2 $ $Date: 2010/03/29 14:44:29 $
  */
 public final class Validators {
 

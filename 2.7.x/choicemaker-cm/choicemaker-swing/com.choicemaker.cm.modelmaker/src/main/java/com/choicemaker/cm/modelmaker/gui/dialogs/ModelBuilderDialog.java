@@ -40,7 +40,6 @@ import com.choicemaker.util.FileUtilities;
  * Description
  * 
  * @author S. Yoakum-Stover
- * @version $Revision: 1.2 $ $Date: 2010/03/29 12:44:54 $
  */
 public class ModelBuilderDialog extends JDialog implements Enable {
 	private static final long serialVersionUID = 1L;

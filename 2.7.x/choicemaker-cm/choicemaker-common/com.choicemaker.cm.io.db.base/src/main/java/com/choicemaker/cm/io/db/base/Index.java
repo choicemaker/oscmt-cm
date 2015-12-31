@@ -11,7 +11,6 @@ package com.choicemaker.cm.io.db.base;
  * Comment
  *
  * @author   Martin Buechi
- * @version  $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:55 $
  */
 public class Index {
 	private String name;

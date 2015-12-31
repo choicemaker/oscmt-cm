@@ -24,7 +24,6 @@ import com.choicemaker.cm.urm.exceptions.ModelException;
 
 /**
  * TODO
- * @version  $Revision: 1.7 $ $Date: 2010/10/27 22:19:50 $
  * @author   rphall
  */
 public class BatchQueryListener extends WorkflowControlListener{

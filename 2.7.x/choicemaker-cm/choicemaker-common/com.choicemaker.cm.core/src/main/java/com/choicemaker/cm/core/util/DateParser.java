@@ -14,7 +14,6 @@ import java.util.Date;
 
 /**
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/27 21:12:38 $
  */
 public interface DateParser extends Cloneable {
 	Date parse(String s);

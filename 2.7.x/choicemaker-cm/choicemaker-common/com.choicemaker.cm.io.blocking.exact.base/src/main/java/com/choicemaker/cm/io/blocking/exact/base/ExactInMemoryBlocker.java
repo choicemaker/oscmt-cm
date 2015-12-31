@@ -23,7 +23,6 @@ import com.choicemaker.cm.core.base.RecordBinder;
  * Description
  * 
  * @author  Martin Buechi
- * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:54 $
  */
 public abstract class ExactInMemoryBlocker {
 	protected static final List EMPTY_LIST = new ArrayList(0);

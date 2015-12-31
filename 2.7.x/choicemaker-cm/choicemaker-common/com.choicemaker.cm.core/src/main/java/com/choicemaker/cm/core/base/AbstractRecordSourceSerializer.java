@@ -32,7 +32,6 @@ import com.choicemaker.util.Precondition;
  * Subclasses must implement a three-parameter constructor with the same signature
  * as the constructor for this class.
  * @author rphall
- * @version $Revision: 1.1 $ $Date: 2010/03/24 18:02:30 $
  */
 public abstract class AbstractRecordSourceSerializer
 	implements IRecordSourceSerializer {

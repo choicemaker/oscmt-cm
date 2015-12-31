@@ -16,7 +16,6 @@ import com.choicemaker.cm.core.Record;
  * Description
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:57 $
  */
 public interface FlatFileRecordOutputter {
 	void put(Writer[] ws, Record r) throws IOException;

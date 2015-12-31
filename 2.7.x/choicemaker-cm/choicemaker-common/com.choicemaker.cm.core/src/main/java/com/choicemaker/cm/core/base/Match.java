@@ -20,7 +20,6 @@ import com.choicemaker.cm.core.Record;
  * match probability.
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/27 21:35:15 $
  */
 public class Match implements /* ImmutableUnsafeMatch, */ Comparable {
 	

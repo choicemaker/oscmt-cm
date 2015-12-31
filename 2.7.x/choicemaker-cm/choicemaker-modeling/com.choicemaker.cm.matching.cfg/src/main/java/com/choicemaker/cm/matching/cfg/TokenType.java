@@ -53,7 +53,6 @@ package com.choicemaker.cm.matching.cfg;
  * String value of the Token passed to it.
  * 
  * @author   Adam Winkel
- * @version  $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:59 $
  * @see Variable
  * @see Token
  * @see Rule

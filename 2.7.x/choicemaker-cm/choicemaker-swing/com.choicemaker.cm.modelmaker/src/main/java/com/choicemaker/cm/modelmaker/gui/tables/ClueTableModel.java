@@ -43,7 +43,6 @@ import com.choicemaker.cm.modelmaker.gui.utils.NullInteger;
  * The TableModel for the ClueTable in the AbstractModelReviewPanel.  
  * 
  * @author S. Yoakum-Stover
- * @version $Revision: 1.2 $ $Date: 2010/03/29 13:41:27 $
  */
 public class ClueTableModel extends SortableTableModel {
 

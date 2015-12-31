@@ -16,7 +16,6 @@ import java.io.Serializable;
  * ClueSet types
  *
  * @author   rphall   
- * @version  $Revision: 1.2 $ $Date: 2010/03/27 21:29:47 $
  */
 public class ClueSetType implements Serializable {
 

@@ -19,7 +19,6 @@ import com.choicemaker.cm.modelmaker.gui.tables.ClueTableModelPlugin;
  * Description
  * 
  * @author  Martin Buechi
- * @version $Revision: 1.2 $ $Date: 2010/03/29 12:52:27 $
  */
 public abstract class MlGuiFactory implements DynamicDispatchHandler {
 	private static ClueTableModelPlugin clueTableModelPlugin;

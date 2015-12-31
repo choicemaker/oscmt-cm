@@ -16,7 +16,6 @@ import com.choicemaker.cm.urm.CmServerAdmin;
 
 /**
  * @author emoussikaev
- * @version Revision: 2.5  Date: Jul 7, 2005 9:33:48 AM
  * @see
  */
 public interface CmServerAdminHome extends EJBHome {

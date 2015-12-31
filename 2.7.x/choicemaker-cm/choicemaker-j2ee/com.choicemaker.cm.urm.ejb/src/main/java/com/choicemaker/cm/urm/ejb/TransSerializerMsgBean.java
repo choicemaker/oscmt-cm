@@ -36,7 +36,6 @@ import com.choicemaker.cm.urm.config.AnalysisResultFormat;
 import com.choicemaker.cm.urm.exceptions.ConfigException;
 
 /**
- * @version $Revision: 1.3 $ $Date: 2010/10/21 17:42:26 $
  */
 //@SuppressWarnings({ "rawtypes" })
 public class TransSerializerMsgBean implements MessageDrivenBean,

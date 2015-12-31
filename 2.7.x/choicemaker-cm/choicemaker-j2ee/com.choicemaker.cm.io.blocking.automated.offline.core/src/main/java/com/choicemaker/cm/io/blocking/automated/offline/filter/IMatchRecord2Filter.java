@@ -15,7 +15,6 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
  * Checks if a MatchRecord2 pair satisfies a filter constraint
  * 
  * @author rphall
- * @version $Revision: 1.1 $ $Date: 2010/03/28 15:45:19 $
  */
 public interface IMatchRecord2Filter<T extends Comparable<T>> extends
 		Serializable {

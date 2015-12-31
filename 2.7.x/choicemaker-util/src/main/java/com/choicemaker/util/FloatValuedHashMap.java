@@ -21,7 +21,6 @@ import java.util.Map;
  * .
  *
  * @author   Adam Winkel
- * @version  $Revision: 1.2 $ $Date: 2010/03/27 21:17:13 $
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class FloatValuedHashMap extends HashMap {

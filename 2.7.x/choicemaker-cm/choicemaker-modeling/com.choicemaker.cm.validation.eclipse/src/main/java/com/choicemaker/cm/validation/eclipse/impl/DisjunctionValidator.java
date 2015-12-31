@@ -25,7 +25,6 @@ import com.choicemaker.util.StringUtils;
  * method of at least one delegate must evalutate to <code>true</code>
  * in order for the method of this class to evaluate to <code>true</code>.
  * @author rphall
- * @version $Revision: 1.2 $ $Date: 2010/03/29 14:44:29 $
  */
 public class DisjunctionValidator extends AbstractAggregateValidator {
 	

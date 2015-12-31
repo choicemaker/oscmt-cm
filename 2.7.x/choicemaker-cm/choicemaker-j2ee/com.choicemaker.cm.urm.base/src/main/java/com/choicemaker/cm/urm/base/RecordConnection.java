@@ -15,7 +15,6 @@ import java.io.Serializable;
  * <p>
  *
  * @author emoussikaev
- * @version Revision: 2.5  Date: Nov 1, 2005 3:16:22 PM
  * @see
  */
 public class RecordConnection implements Serializable, IRecordConnection {

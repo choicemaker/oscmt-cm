@@ -16,7 +16,6 @@ import com.choicemaker.cm.urm.exceptions.RecordCollectionException;
  * with all necessary information to be able to retrieve records.
  * 
  * @author emoussikaev
- * @version Revision: 2.5  Date: Jul 15, 2005 2:51:48 PM
  * @see
  */
 public class SelfDescrRecordCollection extends RefRecordCollection {//implements ISelfDescrRecordCollection {

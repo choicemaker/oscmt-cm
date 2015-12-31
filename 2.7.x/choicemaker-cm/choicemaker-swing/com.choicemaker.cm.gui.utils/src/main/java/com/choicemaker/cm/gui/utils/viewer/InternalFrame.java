@@ -20,7 +20,6 @@ import com.choicemaker.cm.core.base.RecordData;
  * .
  *
  * @author   Arturo Falck
- * @version  $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:46 $
  */
 public abstract class InternalFrame extends JInternalFrame {
 	private static final long serialVersionUID = 1L;

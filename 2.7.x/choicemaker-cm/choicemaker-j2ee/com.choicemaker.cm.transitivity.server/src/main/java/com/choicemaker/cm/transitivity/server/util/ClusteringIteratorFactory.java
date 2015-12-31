@@ -12,7 +12,6 @@ import java.util.logging.Logger;
 
 /**
  * @author rphall
- * @version $Revision: 1.2 $ $Date: 2010/04/16 20:43:18 $
  */
 @SuppressWarnings({ "rawtypes" })
 public class ClusteringIteratorFactory {

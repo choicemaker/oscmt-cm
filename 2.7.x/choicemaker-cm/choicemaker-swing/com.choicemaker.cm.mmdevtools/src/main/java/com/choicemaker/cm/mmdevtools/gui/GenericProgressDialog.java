@@ -29,7 +29,6 @@ import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
  * Description
  * 
  * @author  Martin Buechi
- * @version $Revision: 1.2 $ $Date: 2010/03/29 14:29:52 $
  */
 public class GenericProgressDialog extends JDialog implements PropertyChangeListener {
 

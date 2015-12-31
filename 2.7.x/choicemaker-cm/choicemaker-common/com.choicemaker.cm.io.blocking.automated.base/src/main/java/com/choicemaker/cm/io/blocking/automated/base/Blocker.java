@@ -32,7 +32,6 @@ import com.choicemaker.cm.io.blocking.automated.util.PrintUtils;
 
 /**
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/24 21:32:37 $
  * @deprecated Returns sometimes erroneous blockingSets;
  * use {@link Blocker2} instead.
  */

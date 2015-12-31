@@ -15,7 +15,6 @@ import com.choicemaker.cm.urm.exceptions.RecordCollectionException;
  * <p>  
  *
  * @author emoussikaev
- * @version Revision: 2.5  Date: Nov 1, 2005 1:41:15 PM
  * @see
  */
 public class ValueRecordCollection implements IRecordCollection {

@@ -15,7 +15,6 @@ package com.choicemaker.cm.matching.cfg;
  * a ParsedDataHolder.
  * 
  * @author   Adam Winkel
- * @version  $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:59 $
  */
 public interface ParseTreeNodeStandardizer {
 	

@@ -28,7 +28,6 @@ import com.choicemaker.cm.modelmaker.gui.ModelMaker;
  * 
  * @author Martin Buechi
  * @author S. Yoakum-Stover
- * @version $Revision: 1.2 $ $Date: 2010/03/29 13:06:20 $
  */
 public class RecordPairViewerPanel implements RepositoryChangeListener, PropertyChangeListener {
 	public static RecordPairViewerPanel instance;

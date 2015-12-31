@@ -16,7 +16,6 @@ import com.choicemaker.cm.core.ImmutableProbabilityModel;
  * Comment
  *
  * @author   Martin Buechi
- * @version  $Revision: 1.2 $ $Date: 2010/03/24 21:06:10 $
  */
 public class MatchCandidateFactory {
 	public MatchCandidate createMatchCandidate(Match match, ImmutableProbabilityModel model) {

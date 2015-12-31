@@ -14,7 +14,6 @@ import java.util.Properties;
 
 /**
  * @author rphall
- * @version $Revision: 1.1 $  $Date: 2010/01/20 15:05:06 $
  * @deprecated see InstallableCompiler
  */
 public interface ICompilerFactory {

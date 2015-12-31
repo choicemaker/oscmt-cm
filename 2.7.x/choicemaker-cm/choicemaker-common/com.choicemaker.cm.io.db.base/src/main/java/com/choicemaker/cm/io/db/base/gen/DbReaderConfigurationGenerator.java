@@ -35,7 +35,6 @@ import com.choicemaker.cm.io.db.base.Index;
  * Description
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/28 09:06:55 $
  */
 public class DbReaderConfigurationGenerator {
 	private static final List EMPTY_LIST = new ArrayList(0);

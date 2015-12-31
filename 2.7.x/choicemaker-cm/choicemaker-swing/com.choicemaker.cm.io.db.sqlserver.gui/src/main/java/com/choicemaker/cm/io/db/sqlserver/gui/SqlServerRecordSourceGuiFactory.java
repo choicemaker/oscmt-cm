@@ -19,7 +19,6 @@ import com.choicemaker.cm.modelmaker.gui.sources.SourceGuiFactory;
  * Description
  *
  * @author   Adam Winkel
- * @version   $Revision: 1.1.96.1 $ $Date: 2009/11/18 01:00:11 $
  */
 public class SqlServerRecordSourceGuiFactory implements SourceGuiFactory {
 

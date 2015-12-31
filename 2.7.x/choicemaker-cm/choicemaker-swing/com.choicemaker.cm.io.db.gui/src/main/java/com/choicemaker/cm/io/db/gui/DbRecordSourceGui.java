@@ -40,7 +40,6 @@ import com.choicemaker.cm.modelmaker.gui.utils.Enable;
 import com.choicemaker.cm.modelmaker.gui.utils.EnablednessGuard;
 
 /**
- * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:56 $
  */
 public class DbRecordSourceGui extends RecordSourceGui implements Enable {
     private static final long serialVersionUID = 1L;

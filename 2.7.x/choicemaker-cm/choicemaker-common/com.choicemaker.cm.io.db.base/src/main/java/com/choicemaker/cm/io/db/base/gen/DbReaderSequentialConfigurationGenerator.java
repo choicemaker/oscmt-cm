@@ -33,7 +33,6 @@ import com.choicemaker.cm.core.gen.IGenerator;
  * Description
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/28 09:06:55 $
  */
 public class DbReaderSequentialConfigurationGenerator {
 //	private static final List EMPTY_LIST = new ArrayList(0);

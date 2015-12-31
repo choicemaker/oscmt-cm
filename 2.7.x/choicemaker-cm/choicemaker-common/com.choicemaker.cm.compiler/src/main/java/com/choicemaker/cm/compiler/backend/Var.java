@@ -23,7 +23,6 @@ import com.choicemaker.cm.compiler.Tree.VarDecl;
  * Helper class for Translator25.
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:36 $
  */
 class Var {
 	private static Tree INT_IDENT = new Ident(Location.NOPOS, "int");

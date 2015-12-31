@@ -18,7 +18,6 @@ import com.choicemaker.util.StringUtils;
  * Utilities for dealing with <code>Date</code>s.
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/27 22:24:58 $
  */
 public class DateUtils extends DateHelper {
 

@@ -18,7 +18,6 @@ import com.choicemaker.cm.validation.ValidatorCreationException;
  * Factory interface for creating validators.
  *
  * @author rphall
- * @version $Revision: 1.2 $ $Date: 2010/03/29 14:44:54 $
  */
 public interface IValidatorFactory {
 

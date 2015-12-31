@@ -14,7 +14,6 @@ package com.choicemaker.cm.validation.eclipse.impl;
  * @see StringPatternValidator
  *
  * @author rphall
- * @version $Revision: 1.2 $ $Date: 2010/03/29 14:44:29 $
  */
 public class StringPatternInvalidator extends StringPatternValidator {
 

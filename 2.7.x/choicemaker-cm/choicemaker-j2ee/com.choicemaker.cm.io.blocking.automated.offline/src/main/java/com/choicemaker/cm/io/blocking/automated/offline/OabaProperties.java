@@ -17,7 +17,6 @@ package com.choicemaker.cm.io.blocking.automated.offline;
  * values.
  * 
  * @author rphall
- * @version $Revision: 1.1 $ $Date: 2010/03/28 16:09:37 $
  */
 public class OabaProperties {
 

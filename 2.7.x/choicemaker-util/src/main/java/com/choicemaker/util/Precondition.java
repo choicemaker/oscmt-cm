@@ -12,7 +12,6 @@ package com.choicemaker.util;
 
 /**
  * @author rphall
- * @version $Revision: 1.1 $ $Date: 2010/03/24 17:11:35 $
  */
 public class Precondition {
 

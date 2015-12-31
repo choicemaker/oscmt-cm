@@ -23,7 +23,6 @@ import com.choicemaker.util.IntArrayList;
  * Java does not support parametric polymorphism in JDK &lt; 1.5.
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/28 08:56:16 $
  */
 public abstract class CompositeSource implements Source {
 	protected ArrayList sources;

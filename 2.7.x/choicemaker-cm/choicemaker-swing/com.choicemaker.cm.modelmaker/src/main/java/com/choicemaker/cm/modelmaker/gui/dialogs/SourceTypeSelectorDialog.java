@@ -43,7 +43,6 @@ import com.choicemaker.e2.platform.CMPlatformUtils;
  * Description
  *
  * @author S. Yoakum-Stover
- * @version $Revision: 1.2 $ $Date: 2010/03/29 12:47:39 $
  */
 public class SourceTypeSelectorDialog extends JDialog {
 

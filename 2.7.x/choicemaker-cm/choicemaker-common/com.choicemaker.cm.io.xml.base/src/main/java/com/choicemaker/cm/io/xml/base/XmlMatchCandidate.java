@@ -16,7 +16,6 @@ import com.choicemaker.cm.core.base.MatchCandidate;
  * for details of the format.
  *
  * @author   Martin Buechi
- * @version  $Revision: 1.2 $ $Date: 2010/03/28 09:18:16 $
  */
 public class XmlMatchCandidate extends MatchCandidate {
 	private static final long serialVersionUID = 1L;

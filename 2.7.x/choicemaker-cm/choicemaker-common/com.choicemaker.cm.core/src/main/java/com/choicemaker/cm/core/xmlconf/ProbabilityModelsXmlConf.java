@@ -52,7 +52,6 @@ import com.choicemaker.util.FileUtilities;
  * Handling of probability models in XML configuration.
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.3 $ $Date: 2011/09/14 00:14:15 $
  */
 public class ProbabilityModelsXmlConf {
 

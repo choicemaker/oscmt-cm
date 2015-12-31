@@ -37,7 +37,6 @@ import com.choicemaker.cm.gui.utils.viewer.event.DesktopPaneMouseListener;
  * .
  *
  * @author arturof
- * @version  $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:46 $
  */
 public class RecordPairViewer extends JPanel implements ObservableDataListener, PropertyChangeListener, Scrollable {
 

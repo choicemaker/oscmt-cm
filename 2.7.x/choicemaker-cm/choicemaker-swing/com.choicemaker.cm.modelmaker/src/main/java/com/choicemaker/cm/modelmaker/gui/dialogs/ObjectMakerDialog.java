@@ -46,7 +46,6 @@ import com.choicemaker.e2.platform.CMPlatformUtils;
 /**
  *
  * @author Adam Winkel
- * @version
  */
 public class ObjectMakerDialog extends JDialog implements Enable {
 

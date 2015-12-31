@@ -25,7 +25,6 @@ import com.choicemaker.cm.core.Decision;
  * </p>
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/28 09:04:53 $
  */
 public class OracleTakeSnapshot {
 	private static Logger logger = Logger.getLogger(OracleTakeSnapshot.class.getName());

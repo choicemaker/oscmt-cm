@@ -9,7 +9,6 @@ package com.choicemaker.cm.modelmaker;
 
 /**
  * @author rphall
- * @version $Revision: 1.1 $ $Date: 2010/03/28 17:14:24 $
  */
 public interface IRecordPairList {
 

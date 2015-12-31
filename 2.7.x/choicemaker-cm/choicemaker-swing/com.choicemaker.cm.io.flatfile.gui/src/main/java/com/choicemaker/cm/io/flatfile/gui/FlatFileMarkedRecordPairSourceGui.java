@@ -60,7 +60,6 @@ import com.choicemaker.util.FileUtilities;
  *
  * @author  Martin Buechi
  * @author  S. Yoakum-Stover
- * @version $Revision: 1.2 $ $Date: 2010/03/28 09:11:07 $
  */
 public class FlatFileMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui implements Enable {
 	private static final long serialVersionUID = 1L;

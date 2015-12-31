@@ -18,7 +18,6 @@ import com.choicemaker.cm.core.util.Signature;
  * Matches records and computes matching probabilities.
  *
  * @author Martin Buechi
- * @version $Revision: 1.3 $ $Date: 2010/09/02 00:05:52 $
  */
 public class MeEvaluator extends Evaluator {
 

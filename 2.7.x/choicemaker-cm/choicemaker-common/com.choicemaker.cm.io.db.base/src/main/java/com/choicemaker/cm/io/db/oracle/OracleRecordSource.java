@@ -33,7 +33,6 @@ import com.choicemaker.cm.io.db.base.DbReaderParallel;
  * </p>
  *
  * @author    Adam Winkel
- * @version   $Revision: 1.2 $ $Date: 2010/03/24 22:36:54 $
  */
 public class OracleRecordSource implements RecordSource {
 	private static Logger logger = Logger.getLogger(OracleRecordSource.class

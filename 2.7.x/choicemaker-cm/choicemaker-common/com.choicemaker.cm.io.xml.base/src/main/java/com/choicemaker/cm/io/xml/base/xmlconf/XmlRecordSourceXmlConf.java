@@ -26,7 +26,6 @@ import com.choicemaker.cm.io.xml.base.XmlRecordSource;
  * Handling of XML Marked Record Pair sources.
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/28 09:16:58 $
  */
 public class XmlRecordSourceXmlConf implements RecordSourceXmlConfigurator {
 	public static final String EXTENSION_POINT_ID = "com.choicemaker.cm.io.xml.base.xmlRsReader";

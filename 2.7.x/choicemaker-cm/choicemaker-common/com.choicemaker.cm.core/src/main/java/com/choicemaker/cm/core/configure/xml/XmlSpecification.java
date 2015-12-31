@@ -15,7 +15,6 @@ import java.net.URL;
 /**
  * A composite of XmlConfigurable instances
  * @author rphall
- * @version 1.0.0
  * @since 2.5.206
  */
 public interface XmlSpecification extends XmlConfigurable {

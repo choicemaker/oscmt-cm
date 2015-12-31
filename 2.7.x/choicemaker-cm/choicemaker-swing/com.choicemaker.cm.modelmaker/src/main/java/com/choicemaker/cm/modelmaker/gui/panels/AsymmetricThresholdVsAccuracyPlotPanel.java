@@ -27,7 +27,6 @@ import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
  * Hold percentage versus accuracy using a independent match/differ thresholds.
  * 
  * @author S. Yoakum-Stover
- * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:09 $
  */
 public class AsymmetricThresholdVsAccuracyPlotPanel extends JPanel {
 

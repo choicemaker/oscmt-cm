@@ -16,7 +16,6 @@ import java.io.IOException;
  * Sink of record pairs.
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/24 20:56:31 $
  */
 public interface RecordPairSink extends Sink {
 	/**

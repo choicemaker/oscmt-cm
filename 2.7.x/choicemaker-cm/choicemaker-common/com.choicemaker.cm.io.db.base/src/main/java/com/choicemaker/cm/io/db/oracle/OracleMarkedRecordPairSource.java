@@ -38,7 +38,6 @@ import com.choicemaker.cm.io.db.base.DbReaderParallel;
  * </p>
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/24 22:35:01 $
  * @deprecated use OracleMarkedRecordPairSource2 instead
  */
 class OracleMarkedRecordPairSource implements MarkedRecordPairSource {

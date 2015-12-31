@@ -20,7 +20,6 @@ import com.choicemaker.cm.matching.cfg.tokentype.WordTokenType;
  * relevant Variables and TokenTypes to itself automatically.
  *
  * @author   Adam Winkel
- * @version  $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:02 $
  */
 public class AddressSymbolFactory extends SimpleSymbolFactory {
 	

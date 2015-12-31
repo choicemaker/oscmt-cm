@@ -21,7 +21,6 @@ import com.choicemaker.cm.core.compiler.CompilerException;
  *
  * @author   Matthias Zenger
  * @author   Martin Buechi
- * @version  $Revision: 1.2 $ $Date: 2010/03/24 20:09:55 $
  */
 public abstract class Tree implements Tags {
 

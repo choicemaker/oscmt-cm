@@ -32,7 +32,6 @@ import com.choicemaker.util.FileUtilities;
 
 /**
  * @author Adam Winkel
- * @version
  */
 public class ModelArtifactBuilderApp implements CMPlatformRunnable {
 

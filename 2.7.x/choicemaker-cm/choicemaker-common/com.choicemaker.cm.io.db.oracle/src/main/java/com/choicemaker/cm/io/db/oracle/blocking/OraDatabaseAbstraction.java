@@ -13,7 +13,6 @@ import com.choicemaker.cm.io.db.base.DatabaseAbstraction;
  * Description
  * 
  * @author  Martin Buechi
- * @version $Revision: 1.1 $ $Date: 2010/01/28 02:02:10 $
  */
 public class OraDatabaseAbstraction implements DatabaseAbstraction {
 

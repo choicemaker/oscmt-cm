@@ -13,7 +13,6 @@ import org.xml.sax.helpers.DefaultHandler;
  * Description
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:58 $
  */
 public abstract class XmlReader extends DefaultHandler {
 	public abstract void open(RecordHandler rh);

@@ -17,7 +17,6 @@ import com.choicemaker.util.IntArrayList;
  * Description
  * 
  * @author  Martin Buechi
- * @version $Revision: 1.1 $ $Date: 2010/01/20 15:05:04 $
  */
 public class BooleanActiveClues extends ActiveClues {
 	// Use IntArrayList rather than ArrayList to avoid creation of Integer objects.

@@ -14,7 +14,6 @@ package com.choicemaker.cm.core.gen;
  * The interface of an extension that know how to generate a clue
  * for field in a ChoiceMaker record schema.
  * @author    rphall
- * @version   $Revision: 1.1 $ $Date: 2011/08/31 17:45:02 $
  */
 public interface IClueGeneratorPlugin {
 	void generate(IClueSetGenerator g) throws GenException;

@@ -33,7 +33,6 @@ import com.choicemaker.cm.matching.cfg.Variable;
  * <p>see com.choicemaker.cm.matching.en.us.name.NameStandardizer</p>
  *
  * @author   Adam Winkel
- * @version  $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:59 $
  */
 public class RecursiveStandardizer implements ParseTreeNodeStandardizer {
 

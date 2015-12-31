@@ -14,7 +14,6 @@ import java.util.Map;
  * to validate an object.
  *
  * @author rphall
- * @version $Revision: 1.2 $ $Date: 2010/03/29 14:45:31 $
  */
 public interface IAggregateValidator extends IValidator {
 

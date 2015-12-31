@@ -17,7 +17,6 @@ import com.choicemaker.cm.compiler.Tags;
  *
  * @author   Matthias Zenger
  * @author   Martin Buechi
- * @version  $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:36 $
  */
 public interface TargetTags extends Tags {
 	// tree tags

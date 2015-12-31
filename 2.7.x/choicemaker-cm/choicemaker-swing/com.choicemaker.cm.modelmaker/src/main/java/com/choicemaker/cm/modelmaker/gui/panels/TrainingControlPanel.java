@@ -32,7 +32,6 @@ import com.choicemaker.cm.modelmaker.gui.tables.ClueTablePanel;
  * statistics, and train the model.
  * 
  * @author S. Yoakum-Stover
- * @version $Revision: 1.2 $ $Date: 2010/03/29 13:04:44 $
  */
 public class TrainingControlPanel extends JPanel implements RepositoryChangeListener, PropertyChangeListener, EvaluationListener {
 

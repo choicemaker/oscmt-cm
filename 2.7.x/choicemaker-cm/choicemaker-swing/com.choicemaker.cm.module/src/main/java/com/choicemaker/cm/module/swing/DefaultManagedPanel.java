@@ -23,7 +23,6 @@ import com.choicemaker.e2.platform.CMPlatformUtils;
  * registry, or uses an instance of {@link #DefaultModule} if no
  * module configuration exists in the registry.
  * @author rphall
- * @version $Revision: 1.1 $ $Date: 2010/03/27 19:27:57 $
  */
 public class DefaultManagedPanel extends AbstractTabbedPanel implements IModelMakerAware {
 

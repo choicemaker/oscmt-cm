@@ -21,7 +21,6 @@ package com.choicemaker.cm.compiler.gen;
  * The original version implemented with the Jakarta ORO library.
  *
  * @author   Adam Winkel
- * @version  $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:36 $
  * @deprecated no longer used, not even for testing
  */
 class Perl5ValidConverter {

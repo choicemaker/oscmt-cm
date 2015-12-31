@@ -11,7 +11,6 @@ import com.choicemaker.cm.module.IModule.IEventModel;
 
 /**
  * @author rphall
- * @version $Revision: 1.1 $ $Date: 2010/03/27 19:27:56 $
  */
 public interface INamedEventControl extends IEventModel {
 	

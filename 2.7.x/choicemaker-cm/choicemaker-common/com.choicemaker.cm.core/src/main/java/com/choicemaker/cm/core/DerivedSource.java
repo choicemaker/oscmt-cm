@@ -39,7 +39,6 @@ import java.util.TreeSet;
  * Instances of this class are immutable. This class uses instance control.
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/27 21:33:20 $
  */
 public class DerivedSource implements Serializable {
 

@@ -14,7 +14,6 @@ import java.util.List;
  * returns the internal id of a specified record id.
  * 
  * @author rphall
- * @version $Revision$ $Date$
  */
 public interface ImmutableRecordIdTranslator<T extends Comparable<T>> {
 

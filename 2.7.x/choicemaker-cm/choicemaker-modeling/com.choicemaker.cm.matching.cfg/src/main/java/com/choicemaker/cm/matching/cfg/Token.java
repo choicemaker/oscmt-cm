@@ -24,7 +24,6 @@ package com.choicemaker.cm.matching.cfg;
  * implied rules.
  * 
  * @author   Adam Winkel
- * @version  $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:59 $
  * @see Symbol
  * @see TokenType
  * @see Rule

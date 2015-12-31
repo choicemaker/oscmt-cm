@@ -28,7 +28,6 @@ import com.choicemaker.cm.modelmaker.gui.ModelMaker;
  * The panel which displays status messages to the user.
  * 
  * @author S. Yoakum-Stover
- * @version $Revision: 1.2 $ $Date: 2010/03/29 13:05:38 $
  */
 public class MessagePanel extends JPanel {
 	private static final long serialVersionUID = 1L;

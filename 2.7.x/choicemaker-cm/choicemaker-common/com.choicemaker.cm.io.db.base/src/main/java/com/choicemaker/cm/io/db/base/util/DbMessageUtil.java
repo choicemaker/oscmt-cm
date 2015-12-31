@@ -14,7 +14,6 @@ import com.choicemaker.util.MessageUtil;
 /**
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/28 09:05:59 $
  */
 public class DbMessageUtil {
 	public static MessageUtil m = 

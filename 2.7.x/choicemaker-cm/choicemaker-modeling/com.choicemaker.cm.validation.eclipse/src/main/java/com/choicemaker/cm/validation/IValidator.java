@@ -11,7 +11,6 @@ package com.choicemaker.cm.validation;
  * Validation method for MCI names.
  *
  * @author rphall
- * @version $Revision: 1.2 $ $Date: 2010/03/29 14:45:31 $
  */
 public interface IValidator {
 

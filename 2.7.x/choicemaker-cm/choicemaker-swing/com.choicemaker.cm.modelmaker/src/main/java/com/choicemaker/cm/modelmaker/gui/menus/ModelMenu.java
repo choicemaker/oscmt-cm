@@ -41,7 +41,6 @@ import com.choicemaker.util.FileUtilities;
  * 
  * @author  S. Yoakum-Stover
  * @author  Martin Buechi
- * @version $Revision: 1.2 $ $Date: 2010/03/29 13:12:09 $
  */
 public class ModelMenu extends LastUsedMenu {
 	private static final long serialVersionUID = 1L;

@@ -16,7 +16,6 @@ package com.choicemaker.cm.matching.en;
  *
  * @author    Peining Tao
  * @author    Martin Buechi
- * @version   $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:01 $
  */
 public class Jaro {
 

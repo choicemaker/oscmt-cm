@@ -19,7 +19,6 @@ import java.util.Map;
  * methods.
  *
  * @author rphall
- * @version $Revision: 1.2 $ $Date: 2010/03/29 14:45:31 $
  */
 public abstract class AbstractAggregateValidator
 	implements IAggregateValidator {

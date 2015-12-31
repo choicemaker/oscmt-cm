@@ -24,7 +24,6 @@ import com.choicemaker.cm.urm.exceptions.RecordCollectionException;
  * 
  * 
  * @author emoussikaev
- * @version Revision: 2.5 Date: Jun 28, 2005 2:40:13 PM
  * @see
  */
 // TODO: code sample

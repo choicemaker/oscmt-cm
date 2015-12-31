@@ -37,7 +37,6 @@ import com.choicemaker.cm.io.blocking.automated.util.PrintUtils;
  * Creates blocking sets.
  * @author Martin Buechi (original Blocker code)
  * @author rphall (refactored to be testable)
- * @version $Revision: 1.1 $ $Date: 2010/03/24 21:30:24 $
  */
 public class BlockingSetFactory {
 

@@ -17,7 +17,6 @@ import java.util.WeakHashMap;
  * Notifies its listeners when observableData is added and removed from this composite.
  *
  * @author   Arturo Falck
- * @version  $Revision: 1.1 $ $Date: 2010/01/20 15:05:06 $
  */
 public abstract class DefaultCompositeObservableData extends DefaultObservableData implements CompositeObservableData {
 	

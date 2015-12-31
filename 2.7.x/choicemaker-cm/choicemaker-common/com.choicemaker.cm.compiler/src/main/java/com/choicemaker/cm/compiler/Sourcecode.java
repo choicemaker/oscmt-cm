@@ -24,7 +24,6 @@ import com.choicemaker.cm.core.Constants;
  * This class represents a single source code file
  *
  * @author   Matthias Zenger
- * @version  $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:36 $
  */
 public final class Sourcecode implements Characters {
 

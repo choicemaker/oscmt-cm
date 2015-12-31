@@ -12,7 +12,6 @@ package com.choicemaker.cm.urm.base;
  * <p>
  *
  * @author emoussikaev
- * @version Revision: 2.5  Date: Nov 1, 2005 1:32:59 PM
  * @see
  */
 public abstract class RefRecordCollection implements IRecordCollection{

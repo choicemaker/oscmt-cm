@@ -22,7 +22,6 @@ import com.choicemaker.cm.urm.exceptions.ConfigException;
 import com.choicemaker.cm.urm.exceptions.ModelException;
 
 /**
- * @version  $Revision: 1.5 $ $Date: 2010/10/27 22:19:50 $
  */
 public class TransSerializerListener extends WorkflowControlListener{
 

@@ -34,7 +34,6 @@ import com.choicemaker.cm.modelmaker.gui.ModelMaker;
  * and build SourceSources.
  *
  * @author S. Yoakum-Stover
- * @version $Revision: 1.2 $ $Date: 2010/03/29 12:47:04 $
  */
 public abstract class SourceGui extends JDialog {
 	private static final long serialVersionUID = 1L;

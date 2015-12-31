@@ -16,7 +16,6 @@ import com.choicemaker.cm.core.datamodel.DefaultObservableData;
  * 
  * 
  * @author  Arturo Falck
- * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:46 $
  */
 public class CompositeFrameModel extends DefaultObservableData implements InternalFrameModel {
 	

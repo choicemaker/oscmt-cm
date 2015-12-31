@@ -35,7 +35,6 @@ import javax.swing.plaf.metal.MetalLookAndFeel;
 
 /**
  * Class that manages a JLF title bar
- * @version 1.49 12/03/01
  * @author Steve Wilson
  * @author Brian Beck
  * @since 1.3

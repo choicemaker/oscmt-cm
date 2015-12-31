@@ -15,7 +15,6 @@ package com.choicemaker.cm.core.base;
  * 
  * @author Martin Buechi
  * @author rphall
- * @version $Revision: 1.2 $ $Date: 2010/03/27 21:35:15 $
  */
 public class Thresholds extends ImmutableThresholds implements Cloneable {
 

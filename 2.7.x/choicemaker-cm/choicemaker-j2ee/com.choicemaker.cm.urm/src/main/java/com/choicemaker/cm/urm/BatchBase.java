@@ -21,7 +21,6 @@ import com.choicemaker.cm.urm.exceptions.ConfigException;
  * resume, etc.
  * 
  * @author emoussikaev
- * @version Revision: 2.5 Date: Jun 28, 2005 2:40:13 PM
  */
 public interface BatchBase {
 

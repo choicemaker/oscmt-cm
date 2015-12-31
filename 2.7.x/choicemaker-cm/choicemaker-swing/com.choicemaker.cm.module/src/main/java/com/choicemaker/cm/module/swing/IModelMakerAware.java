@@ -15,7 +15,6 @@ package com.choicemaker.cm.module.swing;
  * references to ModelMaker. It should be possible to replace this interface
  * with a type-safe one by refactoring ModelMaker (quite) a bit.
  * @author rphall
- * @version $Revision: 1.1 $ $Date: 2010/03/27 19:27:57 $
  */
 public interface IModelMakerAware {
 

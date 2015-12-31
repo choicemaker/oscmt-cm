@@ -17,7 +17,6 @@ import javax.swing.plaf.metal.MetalLookAndFeel;
 /**
  * This is a dumping ground for random stuff we want to use in several places.
  *
- * @version 1.27 02/13/02
  * @author Steve Wilson
  */
 

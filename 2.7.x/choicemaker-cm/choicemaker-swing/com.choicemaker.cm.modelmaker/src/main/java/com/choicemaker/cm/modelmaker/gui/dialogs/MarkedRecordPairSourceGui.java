@@ -14,7 +14,6 @@ import com.choicemaker.cm.modelmaker.gui.ModelMaker;
  * Description
  * 
  * @author  Martin Buechi
- * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:08 $
  */
 public abstract class MarkedRecordPairSourceGui extends SourceGui {
 	private static final long serialVersionUID = 1L;

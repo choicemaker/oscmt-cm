@@ -17,7 +17,6 @@ package com.choicemaker.cm.core.configure.xml;
  * <code>configurable</code> element.
  * @see XmlConfigurable
  * @author rphall
- * @version $Revision: 1.1 $ $Date: 2010/03/24 18:04:31 $
  */
 public interface IDocument {
 

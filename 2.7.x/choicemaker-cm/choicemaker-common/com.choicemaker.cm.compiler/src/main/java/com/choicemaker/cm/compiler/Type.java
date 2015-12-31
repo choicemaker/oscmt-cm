@@ -15,7 +15,6 @@ package com.choicemaker.cm.compiler;
  * Types
  *
  * @author   Matthias Zenger
- * @version  $Revision: 1.2 $ $Date: 2010/03/24 20:09:46 $
  */
 public class Type implements SemanticTags {
 

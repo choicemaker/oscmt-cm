@@ -14,7 +14,6 @@ import com.choicemaker.e2.mbd.runtime.ISafeRunnable;
  * Comment
  *
  * @author   Martin Buechi
- * @version  $Revision: 1.1 $ $Date: 2010/01/27 03:58:28 $
  */
 public class InternalPlatform {
 	public static void run(ISafeRunnable code) {

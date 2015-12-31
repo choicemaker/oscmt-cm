@@ -17,7 +17,6 @@ import com.choicemaker.cm.io.blocking.automated.IField;
  * A field on a master record, against which query record are compared.
  * 
  * @author    mbuechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/28 09:31:50 $
  */
 public class DbField extends Field implements IDbField {
 	

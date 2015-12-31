@@ -39,7 +39,6 @@ import com.choicemaker.cm.modelmaker.stats.StatPoint;
  * Hold percentage versus accuracy using a symmetric match/differ threshold window.
  * 
  * @author S. Yoakum-Stover
- * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:09 $
  */
 public class HoldVsAccuracyPlotPanel extends JPanel {
 

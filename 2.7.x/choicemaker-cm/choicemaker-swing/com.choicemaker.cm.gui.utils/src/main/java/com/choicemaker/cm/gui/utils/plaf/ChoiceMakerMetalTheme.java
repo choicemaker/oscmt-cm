@@ -15,7 +15,6 @@ import javax.swing.plaf.metal.MetalLookAndFeel;
  * Description
  * 
  * @author  Martin Buechi
- * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:46 $
  */
 public class ChoiceMakerMetalTheme extends DefaultMetalTheme {
 	public static void init() {		

@@ -16,7 +16,6 @@ package com.choicemaker.cm.core;
  * used instead of project-specific models.
  * 
  * @author rphall
- * @version $Revision: 1.1 $ $Date: 2010/03/24 17:12:11 $
  */
 public interface AccessProvider {
 

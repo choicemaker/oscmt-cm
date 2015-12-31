@@ -15,7 +15,6 @@ import java.io.Serializable;
  * <p>  
  *
  * @author emoussikaev
- * @version Revision: 2.5  Date: Nov 1, 2005 1:28:34 PM
  * @see
  */
 public class EvaluatedRecordPair implements Serializable{

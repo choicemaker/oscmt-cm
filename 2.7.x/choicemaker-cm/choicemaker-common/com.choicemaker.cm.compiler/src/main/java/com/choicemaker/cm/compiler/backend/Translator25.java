@@ -73,7 +73,6 @@ import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
  *
  * @author    Martin Buechi
  * @author    Matthias Zenger
- * @version   $Revision: 1.2 $ $Date: 2010/03/24 20:00:54 $
  */
 public class Translator25 extends TreeGen implements TargetTags, Modifiers, ITranslator {
 	

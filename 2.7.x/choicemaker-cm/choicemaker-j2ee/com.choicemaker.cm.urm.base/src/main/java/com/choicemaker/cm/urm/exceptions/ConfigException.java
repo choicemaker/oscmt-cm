@@ -10,7 +10,6 @@ package com.choicemaker.cm.urm.exceptions;
 /**
  * Signals that a problem caused by an incorrect configuration has occurred.
  * @author emoussikaev
- * @version Revision: 2.5  Date: Sep 30, 2005 12:59:45 PM
  * @see
  */
 public class ConfigException extends Exception {

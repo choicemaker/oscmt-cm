@@ -20,7 +20,6 @@ import com.choicemaker.cm.urm.IUpdateDerivedFields;
  * {@link IUpdateDerivedFields.setProperties(Properties) setProperties(..)}
  * operations.
  * @author rphall
- * @version $Revision: 1.1 $ $Date: 2010/03/25 00:17:22 $
  */
 public abstract class AbstractUpdateDerivedFields
 	extends AbstractXmlSpecification

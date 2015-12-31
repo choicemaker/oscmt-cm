@@ -75,7 +75,6 @@ import com.choicemaker.util.StringUtils;
 
 /**
  * @author emoussikaev
- * @version Revision: 2.5  Date: Sep 29, 2005 3:27:49 PM
  * @see
  */
 @SuppressWarnings({"rawtypes"})

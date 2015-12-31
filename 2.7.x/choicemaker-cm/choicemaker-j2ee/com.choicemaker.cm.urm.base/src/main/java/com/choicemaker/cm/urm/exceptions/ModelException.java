@@ -11,7 +11,6 @@ package com.choicemaker.cm.urm.exceptions;
  * * Signals that a problem related to a matching probability model has occurred.
  * 
  * @author emoussikaev
- * @version Revision: 2.5  Date: Sep 9, 2005 4:04:46 PM
  * @see
  */
 public class ModelException extends Exception {

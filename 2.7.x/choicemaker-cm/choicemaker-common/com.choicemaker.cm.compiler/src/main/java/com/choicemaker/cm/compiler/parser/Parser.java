@@ -51,7 +51,6 @@ import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
  *
  * @author   Matthias Zenger
  * @author   Martin Buechi
- * @version  $Revision: 1.2 $ $Date: 2010/03/24 20:14:09 $
  */
 public final class Parser implements Tokens {
 

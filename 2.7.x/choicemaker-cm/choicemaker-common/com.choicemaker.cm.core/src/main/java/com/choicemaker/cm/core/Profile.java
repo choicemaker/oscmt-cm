@@ -16,7 +16,6 @@ import java.io.Serializable;
  * Base interface for all profiles describing a query record.
  *
  * @author   Martin Buechi
- * @version  $Revision: 1.2 $ $Date: 2010/03/24 20:59:50 $
  */
 public interface Profile extends Serializable {
 	Record getRecord(ImmutableProbabilityModel model) throws InvalidProfileException;

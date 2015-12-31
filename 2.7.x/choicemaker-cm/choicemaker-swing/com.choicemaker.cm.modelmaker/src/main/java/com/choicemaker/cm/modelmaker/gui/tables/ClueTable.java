@@ -21,7 +21,6 @@ import com.choicemaker.cm.modelmaker.gui.listeners.TableColumnListener;
  * The clueTable in the AbstractModelReviewPanel.  
  * 
  * @author S. Yoakum-Stover
- * @version $Revision: 1.2 $ $Date: 2010/03/29 13:37:08 $
  */
 public class ClueTable extends JTable {
 	private static final long serialVersionUID = 1L;

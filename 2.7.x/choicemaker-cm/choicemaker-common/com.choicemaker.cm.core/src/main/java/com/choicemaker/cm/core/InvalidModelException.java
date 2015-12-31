@@ -14,7 +14,6 @@ package com.choicemaker.cm.core;
  * Thrown when a Model is invalid, e.g., wrong XML representation.
  *
  * @author   Martin Buechi
- * @version  $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:13 $
  */
 public class InvalidModelException extends Exception {
 

@@ -18,7 +18,6 @@ import com.choicemaker.cm.modelmaker.gui.sources.SourceGuiFactory;
  * Description
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/28 09:04:00 $
  */
 public class DbMarkedRecordPairSourceGuiFactory implements SourceGuiFactory {
 	public String getName() {

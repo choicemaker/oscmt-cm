@@ -15,7 +15,6 @@ import com.choicemaker.cm.core.xmlconf.XmlModuleInitializer;
  * Description
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.1 $ $Date: 2010/01/28 02:02:09 $
  */
 public class OraXmlInitializer implements XmlModuleInitializer {
 	public static OraXmlInitializer instance = new OraXmlInitializer();

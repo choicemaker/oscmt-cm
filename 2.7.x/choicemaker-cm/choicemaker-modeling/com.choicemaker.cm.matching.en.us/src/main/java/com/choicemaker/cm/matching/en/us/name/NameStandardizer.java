@@ -27,7 +27,6 @@ import com.choicemaker.cm.matching.gen.Sets;
  * TODO: detail the workings on the class.
  * 
  * @author   Adam Winkel
- * @version  $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:02 $
  * @see com.choicemaker.cm.matching.cfg.standardizer.RecursiveStandardizer
  */
 public class NameStandardizer extends RecursiveStandardizer {

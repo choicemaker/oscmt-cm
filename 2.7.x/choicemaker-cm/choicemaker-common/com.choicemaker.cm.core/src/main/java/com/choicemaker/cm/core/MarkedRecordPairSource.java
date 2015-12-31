@@ -18,7 +18,6 @@ import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
  * Source of marked record pairs.
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/24 22:45:23 $
  */
 public interface MarkedRecordPairSource extends RecordPairSource {
 	/**

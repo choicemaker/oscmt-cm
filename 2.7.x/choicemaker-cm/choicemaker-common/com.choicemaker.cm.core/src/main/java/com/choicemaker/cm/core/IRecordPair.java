@@ -14,7 +14,6 @@ import com.choicemaker.cm.core.base.ActiveClues;
 
 /**
  * @author rphall
- * @version $Revision: 1.1 $ $Date: 2010/03/24 17:00:57 $
  */
 public interface IRecordPair extends ImmutableRecordPair {
 

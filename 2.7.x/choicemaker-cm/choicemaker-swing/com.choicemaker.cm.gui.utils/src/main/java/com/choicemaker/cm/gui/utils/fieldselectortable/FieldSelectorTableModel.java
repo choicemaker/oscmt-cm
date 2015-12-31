@@ -25,7 +25,6 @@ import com.choicemaker.cm.gui.utils.viewer.RecordTableColumnModel;
  * .  
  * 
  * @author  Arturo Falck
- * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:46 $
  */
 public class FieldSelectorTableModel extends DefaultTableModel implements TableColumnModelListener, PropertyChangeListener {
 

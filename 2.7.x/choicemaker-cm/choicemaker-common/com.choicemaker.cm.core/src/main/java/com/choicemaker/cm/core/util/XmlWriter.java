@@ -21,7 +21,6 @@ import com.choicemaker.cm.core.Constants;
  * Description
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/27 21:27:02 $
  */
 public class XmlWriter extends Writer {
 	private Writer w;

@@ -17,7 +17,6 @@ import com.choicemaker.e2.mbd.spi.EclipseRMIClassLoaderSpi;
  * Comment
  *
  * @author   Martin Buechi
- * @version  $Revision: 1.1 $ $Date: 2010/01/27 03:58:28 $
  */
 public class AllPluginsClassLoader {
 	private static final String RMI_CLASS_LOADER_SPI = "java.rmi.server.RMIClassLoaderSpi";

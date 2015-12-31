@@ -40,7 +40,6 @@ import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 /**
  *
  * @author
- * @version   $Revision: 1.2 $ $Date: 2010/03/29 12:53:08 $
  */
 public class HistoChartPanel extends ChartPanel {
 

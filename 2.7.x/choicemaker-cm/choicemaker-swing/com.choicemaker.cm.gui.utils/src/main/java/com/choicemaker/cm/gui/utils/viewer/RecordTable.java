@@ -35,7 +35,6 @@ import com.choicemaker.cm.gui.utils.viewer.event.RecordTableMouseListener;
  * 
  * @author Martin Buechi
  * @author S. Yoakum-Stover
- * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:46 $
  */
 public class RecordTable extends JTable {
 	private static final long serialVersionUID = 1L;

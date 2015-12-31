@@ -14,7 +14,6 @@ package com.choicemaker.cm.compiler;
  * Codes for special white space characters.
  *
  * @author   Matthias Zenger
- * @version  $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:35 $
  */
 public interface Characters {
 	char FE = 0x1A;

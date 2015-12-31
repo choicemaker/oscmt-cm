@@ -62,7 +62,6 @@ import com.choicemaker.util.SystemPropertyUtils;
  * </ul>
  *
  * @author Martin Buechi
- * @version $Revision: 1.2 $ $Date: 2010/03/24 18:57:16 $
  */
 public class XmlConfigurator implements ChoiceMakerConfigurator,
 		ChoiceMakerConfiguration {

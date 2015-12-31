@@ -17,7 +17,6 @@ import java.io.Serializable;
  *
  * @author   Martin Buechi
  * @author   S. Yoakum-Stover
- * @version  $Revision: 1.2 $ $Date: 2010/03/27 21:29:59 $
  */
 public class ColumnDefinition implements Serializable {
 

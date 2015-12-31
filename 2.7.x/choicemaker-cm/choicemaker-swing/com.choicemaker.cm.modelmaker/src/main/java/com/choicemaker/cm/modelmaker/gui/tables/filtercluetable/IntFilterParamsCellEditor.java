@@ -28,7 +28,6 @@ import com.choicemaker.cm.gui.utils.swing.IntegerField;
  * .
  *
  * @author   Arturo Falck
- * @version  $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:09 $
  */
 public class IntFilterParamsCellEditor extends AbstractCellEditor implements TableCellEditor {
 	private static final long serialVersionUID = 1L;

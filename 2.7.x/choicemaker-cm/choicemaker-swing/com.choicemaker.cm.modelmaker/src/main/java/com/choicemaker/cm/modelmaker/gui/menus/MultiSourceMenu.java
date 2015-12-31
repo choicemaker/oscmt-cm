@@ -40,7 +40,6 @@ import com.choicemaker.cm.modelmaker.gui.sources.SourceGuiFactory;
  * The menu from which a MarkedRecordPairSource is selected.
  *
  * @author S. Yoakum-Stover
- * @version $Revision: 1.2 $ $Date: 2010/03/29 13:12:51 $
  */
 public class MultiSourceMenu extends LastUsedMenu {
 	private static final long serialVersionUID = 1L;

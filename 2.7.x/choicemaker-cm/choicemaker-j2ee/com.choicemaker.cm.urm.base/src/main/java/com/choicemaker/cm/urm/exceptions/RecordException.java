@@ -11,7 +11,6 @@ package com.choicemaker.cm.urm.exceptions;
  * Signals that a problem accessing a record has occurred.
  * 
  * @author emoussikaev
- * @version Revision: 2.5  Date: Aug 23, 2005 2:15:07 PM
  * @see
  */
 public class RecordException extends Exception {

@@ -42,7 +42,6 @@ import com.choicemaker.util.Precondition;
 
 /**
  * @author emoussikaev
- * @version Revision: 2.5  Date: Jul 7, 2005 10:35:24 AM
  * @see
  */
 public class CmServerAdminBean implements SessionBean {

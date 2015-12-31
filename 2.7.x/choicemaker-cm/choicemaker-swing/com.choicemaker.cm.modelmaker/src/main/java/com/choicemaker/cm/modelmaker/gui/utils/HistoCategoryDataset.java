@@ -17,7 +17,6 @@ import org.jfree.data.general.AbstractDataset;
 import com.choicemaker.cm.core.Decision;
 
 /**
- * @version   $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:10 $
  */
 public class HistoCategoryDataset extends AbstractDataset implements CategoryDataset {
 

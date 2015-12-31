@@ -18,7 +18,6 @@ import com.choicemaker.cm.core.base.ActiveClues;
  * Description
  *
  * @author  Martin Buechi
- * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:33 $
  */
 public interface FilterCondition extends Serializable {
 	public static final FilterCondition NULL_FILTER_CONDITION = new FilterCondition() {

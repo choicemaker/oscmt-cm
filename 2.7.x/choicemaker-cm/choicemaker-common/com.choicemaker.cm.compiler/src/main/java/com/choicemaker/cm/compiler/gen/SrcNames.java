@@ -19,7 +19,6 @@ import com.choicemaker.cm.core.Constants;
 /**
  *
  * @author    
- * @version   $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:36 $
  */
 class SrcNames {
 	private int c;

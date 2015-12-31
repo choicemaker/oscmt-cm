@@ -15,7 +15,6 @@ import com.choicemaker.cm.matching.cfg.ParsedData;
  * well as some convenience methods.
  *
  * @author   Adam Winkel
- * @version  $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:02 $
  */
 public class ParsedAddress extends ParsedData {
 

@@ -35,7 +35,6 @@ import com.choicemaker.e2.platform.CMPlatformUtils;
  * expression or in a clue/rule.
  * 
  * @author  	Rick Hall
- * @version   $Revision: 1.2 $ $Date: 2010/03/27 22:30:39 $
  */
 public final class WfstParsers {
 

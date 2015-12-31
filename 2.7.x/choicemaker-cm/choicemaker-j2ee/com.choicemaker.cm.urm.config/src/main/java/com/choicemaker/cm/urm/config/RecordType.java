@@ -19,7 +19,6 @@ package com.choicemaker.cm.urm.config;
  * <p>
  *
  * @author emoussikaev
- * @version Revision: 2.5 Date: Nov 1, 2005 2:09:30 PM
  */
 public enum RecordType {
 	NONE, HOLDER, REF, GLOBAL_REF

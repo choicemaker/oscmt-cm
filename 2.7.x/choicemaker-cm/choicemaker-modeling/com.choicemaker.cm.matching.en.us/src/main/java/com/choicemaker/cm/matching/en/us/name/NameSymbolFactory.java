@@ -19,7 +19,6 @@ import com.choicemaker.cm.matching.gen.Maps;
  * Variable and Token types to itself.
  * 
  * @author   Adam Winkel
- * @version  $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:02 $
  */
 public class NameSymbolFactory extends SimpleSymbolFactory {
 

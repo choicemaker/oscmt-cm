@@ -20,7 +20,6 @@ import javax.swing.table.JTableHeader;
  * Rendered used to give different colors to the data in the RecordTables.
  * 
  * @author S. Yoakum-Stover
- * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 17:39:18 $
  */
 public class HeaderRenderer extends DefaultTableCellRenderer {
 	private static final long serialVersionUID = 1L;

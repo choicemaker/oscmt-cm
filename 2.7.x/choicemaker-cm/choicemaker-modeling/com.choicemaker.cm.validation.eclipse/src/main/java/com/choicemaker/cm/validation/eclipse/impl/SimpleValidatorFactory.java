@@ -16,7 +16,6 @@ import com.choicemaker.e2.CMConfigurationElement;
  * and don't require any initialization after construction.
  *
  * @author rphall
- * @version $Revision: 1.2 $ $Date: 2010/03/29 14:44:29 $
  */
 public class SimpleValidatorFactory extends AbstractValidatorFactory {
 

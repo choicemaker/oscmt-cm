@@ -28,7 +28,6 @@ import com.choicemaker.cm.io.blocking.automated.IGroupTable;
 /**
  *
  * @author    
- * @version   $Revision: 1.1 $ $Date: 2010/03/24 21:30:24 $
  * @deprecated Write a JUnit test instead of trying to use this one
  */
 public class TestDatabaseAccessor implements DatabaseAccessor {

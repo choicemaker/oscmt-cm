@@ -15,7 +15,6 @@ package com.choicemaker.cm.urm.base;
  * <p>  
  *
  * @author emoussikaev
- * @version Revision: 2.5  Date: Nov 1, 2005 1:23:03 PM
  * @see
  */
 public class LinkedRecordSet extends CompositeRecord {

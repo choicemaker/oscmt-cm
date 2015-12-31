@@ -16,7 +16,6 @@ import java.io.IOException;
  * Source of records.
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.1 $ $Date: 2010/01/20 15:05:04 $
  */
 
 public interface RecordSource extends Source {

@@ -57,7 +57,6 @@ import com.choicemaker.cm.modelmaker.gui.utils.EnablednessGuard;
 
 /**
  * @author   Adam Winkel
- * @version  $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:08 $
  */
 public class CollectionsDialog extends JDialog implements Enable {
 

@@ -27,7 +27,6 @@ import com.choicemaker.cm.urm.exceptions.ModelException;
 
 /**
  * @author emoussikaev
- * @version Revision: 2.5  Date: Jul 15, 2005 3:41:42 PM
  * @see
  */
 public class TransSerializerBean implements SessionBean {

@@ -63,7 +63,6 @@ import com.choicemaker.cm.modelmaker.gui.tables.ActiveClueTablePanel;
  * 
  * @author  S. Yoakum-Stover
  * @author  Martin Buechi
- * @version $Revision: 1.2 $ $Date: 2010/03/29 13:02:25 $
  */
 public class HumanReviewPanel
 	extends JPanel

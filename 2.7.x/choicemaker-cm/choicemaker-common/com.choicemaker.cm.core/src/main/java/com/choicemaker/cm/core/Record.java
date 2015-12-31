@@ -15,7 +15,6 @@ package com.choicemaker.cm.core;
  * Base interface for information about an entity.
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.1 $ $Date: 2010/01/20 15:05:04 $
  */
 public interface Record extends BaseRecord {
 

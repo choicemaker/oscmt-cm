@@ -16,7 +16,6 @@ import java.io.IOException;
  * Description
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.1 $ $Date: 2010/01/20 15:05:06 $
  */
 public interface Reporter {
 	void append(Report report) throws IOException;

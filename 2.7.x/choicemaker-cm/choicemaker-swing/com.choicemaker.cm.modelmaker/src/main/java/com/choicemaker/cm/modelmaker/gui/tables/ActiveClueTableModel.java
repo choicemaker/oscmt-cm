@@ -38,7 +38,6 @@ import com.choicemaker.cm.modelmaker.gui.utils.NullInteger;
  * Table model for the ActiveClueTable.
  * 
  * @author S. Yoakum-Stover
- * @version $Revision: 1.2 $ $Date: 2010/03/29 13:20:03 $
  */
 public class ActiveClueTableModel extends SortableTableModel {
 	private static final long serialVersionUID = 1L;

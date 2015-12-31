@@ -16,7 +16,6 @@ import com.choicemaker.util.StringUtils;
  * AbstractValidator, rather than implementing IValidator directly,
  * in order to test the AbstractValidator.equals(Object) method.
  * @author rphall
- * @version $Revision: 1.2 $ $Date: 2010/03/29 14:44:29 $
  */
 public class NonEmptyStringValidator extends AbstractValidator {
 

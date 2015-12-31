@@ -12,7 +12,6 @@ package com.choicemaker.cm.urm;
  * 
  * @see com.choicemaker.cm.core.configure.XmlConfigurablesRegistry
  * @author rphall
- * @version 1.0.0
  * @since 2.5.206
  */
 public interface IUpdateDerivedFieldsRegistration {

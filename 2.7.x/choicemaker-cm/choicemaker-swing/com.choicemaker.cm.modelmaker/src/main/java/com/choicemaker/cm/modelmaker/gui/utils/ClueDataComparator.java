@@ -15,7 +15,6 @@ import com.choicemaker.cm.modelmaker.gui.tables.ClTableRow;
  * Comparator used for sorting the rows of ClueTableRow in the ClueDataTable.
  * 
  * @author S. Yoakum-Stover
- * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:10 $
  */
 
 public class ClueDataComparator implements Comparator {

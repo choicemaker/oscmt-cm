@@ -22,7 +22,6 @@ import com.choicemaker.cm.matching.gen.Maps;
  * XML initializer for mapections (sets).
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:05 $
  * @see       com.choicemaker.cm.matching.gen.Maps
  */
 public class XmlMapsInitializer implements XmlModuleInitializer {

@@ -13,7 +13,6 @@ import java.io.Serializable;
  * A text format like xml, delimited format etc.   
  *
  * @author emoussikaev
- * @version Revision: 2.5  Date: Nov 1, 2005 1:30:27 PM
  * @see
  */
 public interface ITextFormat extends Serializable {

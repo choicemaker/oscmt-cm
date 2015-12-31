@@ -21,7 +21,6 @@ import java.security.NoSuchAlgorithmException;
  * Hashing_It_Out</a> by Brian Goetz.
  * 
  * @author rphall
- * @version $Revision: 1.1 $ $Date: 2010/03/24 18:06:02 $
  */
 public class HashUtils {
 

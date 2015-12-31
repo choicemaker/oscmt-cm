@@ -11,7 +11,6 @@ package com.choicemaker.cm.module;
 /**
  * Defines access to the functional domain components of a module.
  * @author rphall
- * @version $Revision: 1.1 $ $Date: 2010/03/27 19:27:56 $
  */
 public interface IModule {
 	

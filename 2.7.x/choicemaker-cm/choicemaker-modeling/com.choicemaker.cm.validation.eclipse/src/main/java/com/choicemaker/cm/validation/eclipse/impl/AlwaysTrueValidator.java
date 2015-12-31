@@ -15,7 +15,6 @@ import com.choicemaker.cm.validation.IValidator;
  * method. This can be useful in comparing the effect of other
  * validators on a matching model.
  * @author rphall
- * @version $Revision: 1.2 $ $Date: 2010/03/29 14:44:29 $
  */
 public class AlwaysTrueValidator extends AbstractValidator {
 

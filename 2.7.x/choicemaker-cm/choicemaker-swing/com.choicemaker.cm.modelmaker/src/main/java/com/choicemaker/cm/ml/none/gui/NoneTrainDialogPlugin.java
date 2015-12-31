@@ -20,7 +20,6 @@ import com.choicemaker.cm.modelmaker.gui.hooks.TrainDialogPlugin;
  * Description
  * 
  * @author  Martin Buechi
- * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:08 $
  */
 public class NoneTrainDialogPlugin extends TrainDialogPlugin {
 	private static final long serialVersionUID = 1L;

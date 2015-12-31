@@ -15,7 +15,6 @@ import java.io.IOException;
  * Base interface of record-related sources.
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/24 20:54:54 $
  */
 
 public interface Sink extends AutoCloseable {

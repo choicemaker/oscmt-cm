@@ -112,7 +112,6 @@ import com.choicemaker.util.IntArrayList;
  *
  * @author Martin Buechi
  * @author S. Yoakum-Stover
- * @version $Revision: 1.3 $ $Date: 2010/03/29 12:38:18 $
  */
 public class ModelMaker extends JFrame implements CMPlatformRunnable {
 

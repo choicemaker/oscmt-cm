@@ -9,7 +9,6 @@ package com.choicemaker.cm.urm.ejb;
 
 /**
  * @author emoussikaev
- * @version Revision: 2.5  Date: Oct 6, 2005 2:37:37 PM
  * @see
  */
 public class HorizontalPartitioner {

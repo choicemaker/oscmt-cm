@@ -21,7 +21,6 @@ import com.choicemaker.util.StringUtils;
  *
  * @author   Adam Winkel
  * @author   Rick Hall (removed dependence on javax.mail)
- * @version  $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:04 $
  * @deprecated
  */
 public final class Email {

@@ -19,7 +19,6 @@ import java.io.Reader;
  * to a pipe-delimited file
  *
  * @author    Adam Winkel
- * @version
  */
 public class CsvToPipe extends Reader {
 

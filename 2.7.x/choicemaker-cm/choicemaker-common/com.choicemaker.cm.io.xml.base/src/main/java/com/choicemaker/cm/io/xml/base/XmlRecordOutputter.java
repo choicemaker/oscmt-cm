@@ -17,7 +17,6 @@ import com.choicemaker.cm.core.Record;
  * Description
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:58 $
  */
 public interface XmlRecordOutputter extends Serializable {
 	void put(Writer w, Record r) throws IOException;

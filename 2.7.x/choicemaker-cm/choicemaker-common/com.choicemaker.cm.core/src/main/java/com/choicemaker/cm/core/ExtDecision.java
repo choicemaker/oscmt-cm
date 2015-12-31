@@ -17,7 +17,6 @@ import java.io.ObjectStreamException;
  * are used for rules only.
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/27 21:35:15 $
  */
 public class ExtDecision extends Decision {
 

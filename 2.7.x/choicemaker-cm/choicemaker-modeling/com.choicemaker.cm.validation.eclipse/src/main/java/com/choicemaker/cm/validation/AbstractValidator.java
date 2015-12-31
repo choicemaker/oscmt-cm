@@ -12,7 +12,6 @@ package com.choicemaker.cm.validation;
  * methods in the manner recommendedc by the IValidator documentation.
  *
  * @author rphall
- * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:21 $
  */
 public abstract class AbstractValidator implements IValidator {
 

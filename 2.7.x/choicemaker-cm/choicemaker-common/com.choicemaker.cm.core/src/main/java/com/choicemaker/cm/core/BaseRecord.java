@@ -18,7 +18,6 @@ import java.io.Serializable;
  * all nested record holder classes.
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.1 $ $Date: 2010/01/20 15:05:04 $
  */
 public interface BaseRecord extends Serializable {
 	/**

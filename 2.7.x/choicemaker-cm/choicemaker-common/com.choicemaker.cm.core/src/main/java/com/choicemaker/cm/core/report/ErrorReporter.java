@@ -15,7 +15,6 @@ import com.choicemaker.cm.core.Constants;
 /**
  * Reports exceptions thrown during matching.
  * @author    Rick Hall
- * @version   $Revision: 1.1 $ $Date: 2010/03/24 20:46:24 $
  */
 public class ErrorReporter implements ReporterPlugin {
 

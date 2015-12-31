@@ -39,7 +39,6 @@ import com.choicemaker.util.FileUtilities;
  * 
  * @author  S. Yoakum-Stover
  * @author  Martin Buechi
- * @version $Revision: 1.2 $ $Date: 2010/03/28 09:16:12 $
  */
 public class XmlRecordSourceGui extends RecordSourceGui implements Enable {
 	private static final long serialVersionUID = 1L;

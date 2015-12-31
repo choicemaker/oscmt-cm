@@ -23,7 +23,6 @@ import com.choicemaker.cm.modelmaker.gui.listeners.EvaluationListener;
  * Description
  * 
  * @author  Martin Buechi
- * @version $Revision: 1.2 $ $Date: 2010/03/29 13:43:03 $
  */
 public class ClueTablePanel extends JScrollPane implements PropertyChangeListener, EvaluationListener {
 	private static final long serialVersionUID = 1L;

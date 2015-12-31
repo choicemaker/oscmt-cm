@@ -27,7 +27,6 @@ import com.choicemaker.cm.io.db.base.DataSources;
  * XML configurator for Oracle Connection Cache.
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.1 $ $Date: 2010/01/28 02:02:09 $
  */
 public class OraConnectionCacheXmlConf {
 	private static Logger logger = Logger

@@ -22,7 +22,6 @@ import com.choicemaker.cm.urm.exceptions.UrmIncompleteSpecificationException;
  * {@line #updateDerivedFields(DataSource) updateDerivedFields}
  * method is invoked.
  * @author rphall
- * @version $Revision: 1.2 $ $Date: 2010/10/27 22:19:50 $
  */
 @SuppressWarnings({"rawtypes"})
 public class DoNothingUpdateDerivedFields extends AbstractUpdateDerivedFields {

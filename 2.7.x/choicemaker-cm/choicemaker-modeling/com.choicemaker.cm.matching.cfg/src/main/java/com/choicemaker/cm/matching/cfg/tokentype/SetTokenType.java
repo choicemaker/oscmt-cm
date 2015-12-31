@@ -24,7 +24,6 @@ import com.choicemaker.util.DoubleValuedHashMap;
  * are defined by Sets and Maps.
  *
  * @author   Adam Winkel
- * @version  $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:00 $
  */
 public class SetTokenType extends TokenType {
 

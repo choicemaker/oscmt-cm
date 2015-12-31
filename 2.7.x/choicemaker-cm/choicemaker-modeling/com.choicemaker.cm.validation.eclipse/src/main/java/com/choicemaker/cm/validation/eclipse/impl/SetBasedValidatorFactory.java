@@ -15,7 +15,6 @@ import com.choicemaker.e2.CMConfigurationElement;
  * Factory class for set-based validators.
  *
  * @author rphall
- * @version $Revision: 1.2 $ $Date: 2010/03/29 14:44:29 $
  */
 public class SetBasedValidatorFactory extends AbstractValidatorFactory {
 

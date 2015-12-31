@@ -19,7 +19,6 @@ import com.choicemaker.cm.core.Source;
 /**
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/28 09:18:16 $
  */
 
 public class XmlMarkedRecordPairSinkFactory implements SinkFactory {

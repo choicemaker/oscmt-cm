@@ -16,7 +16,6 @@ import com.choicemaker.cm.core.Record;
  * Comment
  *
  * @author   Martin Buechi
- * @version  $Revision: 1.1 $ $Date: 2010/01/20 15:05:06 $
  */
 public interface Condition {
 	boolean accept(Record r, int row, Object val);

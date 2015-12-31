@@ -12,7 +12,6 @@ import java.io.ObjectStreamException;
 /**
  * The 2.5 implementation of {@link AnalysisResultFormat} as a pseudo enum.
  * @author emoussikaev
- * @version Revision: 2.5 Date: Nov 1, 2005 12:00:14 PM
  */
 public class AnalysisResultFormat0 implements java.io.Serializable {
 

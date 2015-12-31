@@ -12,7 +12,6 @@ import java.io.ObjectStreamException;
 /**
  * The 2.5 implementation of {@link ScoreType} as a pseudo enum.
  * @author emoussikaev
- * @version Revision: 2.5 Date: Nov 1, 2005 1:46:30 PM
  */
 public class ScoreType0 implements java.io.Serializable {
 

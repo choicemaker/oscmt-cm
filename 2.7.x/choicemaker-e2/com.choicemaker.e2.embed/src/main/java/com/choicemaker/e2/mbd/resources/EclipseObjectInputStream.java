@@ -19,7 +19,6 @@ import java.lang.reflect.Proxy;
  * Comment
  *
  * @author   Martin Buechi
- * @version  $Revision: 1.1 $ $Date: 2010/01/27 03:58:28 $
  */
 public class EclipseObjectInputStream extends ObjectInputStream {
 	public EclipseObjectInputStream(InputStream in) throws IOException {

@@ -22,7 +22,6 @@ import com.choicemaker.cm.modelmaker.gui.panels.HumanReviewPanel;
 /**
  * 
  * @author S. Yoakum-Stover
- * @version $Revision: 1.2 $ $Date: 2010/03/29 13:09:43 $
  */
 public class FilterMenu extends JMenu implements ActionListener {
 

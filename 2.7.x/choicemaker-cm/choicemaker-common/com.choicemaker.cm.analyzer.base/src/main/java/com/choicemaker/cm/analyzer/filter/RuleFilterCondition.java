@@ -16,7 +16,6 @@ import com.choicemaker.cm.core.base.ActiveClues;
  * Description
  *
  * @author  Martin Buechi
- * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:08 $
  */
 public class RuleFilterCondition implements FilterCondition {
 	private static final long serialVersionUID = 1L;

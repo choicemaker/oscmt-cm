@@ -29,7 +29,6 @@ import com.choicemaker.cm.core.compiler.CompilerException;
  * Helper class for TypeChecker.
  *
  * @author   Matthias Zenger
- * @version  $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:36 $
  */
 public class DeriveType extends DefaultVisitor implements SemanticTags {
 

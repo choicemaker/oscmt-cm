@@ -15,7 +15,6 @@ import com.choicemaker.cm.core.base.RecordData;
 /**
  *
  * @author    Adam Winkel
- * @version   
  */
 public class RandomFilter implements Filter {
 

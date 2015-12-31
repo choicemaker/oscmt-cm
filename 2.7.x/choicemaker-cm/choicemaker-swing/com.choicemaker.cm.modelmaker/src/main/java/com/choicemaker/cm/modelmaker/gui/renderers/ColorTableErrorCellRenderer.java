@@ -17,7 +17,6 @@ import com.choicemaker.cm.modelmaker.gui.utils.ValueError;
  * Renderer used to give the ConfusionTable display its different colored text.
  * 
  * @author S. Yoakum-Stover
- * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 17:39:59 $
  */
 public class ColorTableErrorCellRenderer extends DefaultTableCellRenderer {
 	private static final long serialVersionUID = 1L;

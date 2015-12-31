@@ -19,7 +19,6 @@ import java.util.StringTokenizer;
  * Oversampling in a probability range.
  * 
  * @author  Martin Buechi
- * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:33 $
  */
 public class Limiter implements Serializable {
 	private static final long serialVersionUID = 1L;

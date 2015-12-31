@@ -25,7 +25,6 @@ import com.choicemaker.cm.io.flatfile.base.FlatFileMarkedRecordPairSource;
  * Handling of XML Marked Record Pair sources.
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/28 09:10:40 $
  */
 public class FlatFileMarkedRecordPairSourceXmlConf implements MarkedRecordPairSourceXmlConfigurator {
 	public static final String EXTENSION_POINT_ID = "com.choicemaker.cm.io.flatfile.base.flatfileMrpsReader";

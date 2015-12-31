@@ -13,7 +13,6 @@ package com.choicemaker.cm.core.base;
 /**
  *	Threshold values that can not be changed.
  * @author rphall 
- * @version $Revision: 1.1 $ $Date: 2010/03/24 17:00:57 $
  */
 public class ImmutableThresholds implements Cloneable {
 

@@ -23,7 +23,6 @@ import com.choicemaker.util.StringUtils;
  * any string in some set of strings. Null values are considered invalid.
  *
  * @author rphall
- * @version $Revision: 1.2 $ $Date: 2010/03/29 14:44:29 $
  */
 public class StringInvalidator extends AbstractSetBasedValidator {
 

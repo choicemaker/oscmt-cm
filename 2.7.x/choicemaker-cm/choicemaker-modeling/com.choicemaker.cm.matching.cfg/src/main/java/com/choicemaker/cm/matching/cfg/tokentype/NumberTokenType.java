@@ -20,7 +20,6 @@ import com.choicemaker.util.StringUtils;
  * in a standard form.
  *
  * @author   Adam Winkel
- * @version  $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:59 $
  * @see com.choicemaker.cm.matching.cfg.TokenType
  */
 public class NumberTokenType extends TokenType {

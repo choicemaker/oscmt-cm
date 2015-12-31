@@ -11,7 +11,6 @@ package com.choicemaker.cm.urm.base;
  * Xml format.
  * 
  * @author emoussikaev
- * @version Revision: 2.5  Date: Oct 17, 2005 9:27:30 AM
  * @see
  */
 public class XmlTextFormat implements ITextFormat {

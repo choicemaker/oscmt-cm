@@ -17,7 +17,6 @@ import com.choicemaker.cm.urm.exceptions.RecordCollectionException;
  * A base interface for all <code>RecordCollection</code> sub-classes.   
  *
  * @author emoussikaev
- * @version Revision: 2.5  Date: Nov 1, 2005 1:30:27 PM
  * @see
  */
 

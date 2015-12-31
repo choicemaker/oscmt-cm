@@ -22,7 +22,6 @@ import com.choicemaker.e2.platform.CMPlatformUtils;
 
 /**
  * @author  rphall
- * @version $Revision: 1.1 $ $Date: 2010/03/27 19:27:57 $
  */
 public class DefaultModuleMenu extends JMenu {
 	

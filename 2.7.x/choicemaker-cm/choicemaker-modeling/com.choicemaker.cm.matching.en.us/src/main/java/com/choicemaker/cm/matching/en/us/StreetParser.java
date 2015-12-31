@@ -24,7 +24,6 @@ import com.choicemaker.util.StringUtils;
  * @see com.choicemaker.cm.matching.cfg.Parsers
  * 
  * @author    S. Yoakum-Stover
- * @version   $Revision: 1.2 $ $Date: 2010/03/27 22:16:00 $
  */
 public class StreetParser {
 	public static Collection directions = new HashSet();

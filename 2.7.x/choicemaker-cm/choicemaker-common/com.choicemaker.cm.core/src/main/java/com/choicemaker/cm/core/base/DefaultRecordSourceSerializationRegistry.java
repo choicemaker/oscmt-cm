@@ -32,7 +32,6 @@ import com.choicemaker.util.StringUtils;
 /**
  * An eclipse-based registry of record source serializers.
  * @author rphall
- * @version $Revision: 1.1 $ $Date: 2010/03/24 18:02:23 $
  */
 public class DefaultRecordSourceSerializationRegistry
 	implements IRecordSourceSerializationRegistry {

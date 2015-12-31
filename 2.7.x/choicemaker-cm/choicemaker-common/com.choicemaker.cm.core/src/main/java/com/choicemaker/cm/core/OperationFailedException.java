@@ -14,7 +14,6 @@ package com.choicemaker.cm.core;
 /**
  *
  * @author    S. Yoakum-Stover
- * @version   $Revision: 1.1 $ $Date: 2010/01/20 15:05:03 $
  */
 public class OperationFailedException extends Exception {
 	private static final long serialVersionUID = 2L;

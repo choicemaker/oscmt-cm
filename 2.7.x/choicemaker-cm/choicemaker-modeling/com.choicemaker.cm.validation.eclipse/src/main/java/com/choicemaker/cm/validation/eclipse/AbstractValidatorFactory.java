@@ -27,7 +27,6 @@ import com.choicemaker.util.StringUtils;
  * A base class for validator factories.
  *
  * @author rphall
- * @version $Revision: 1.2 $ $Date: 2010/03/29 14:44:54 $
  */
 public abstract class AbstractValidatorFactory implements IValidatorFactory {
 

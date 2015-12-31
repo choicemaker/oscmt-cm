@@ -17,7 +17,6 @@ import com.choicemaker.cm.core.report.Reporter;
 /**
  * Manages a collection of IProbabilityModel instances.
  * @author rphall (Based on earlier PMManager and ProbabilityModel classes)
- * @version $Revision: 1.2 $ $Date: 2013/02/23 19:57:50 $
  */
 public interface IProbabilityModelManager {
 

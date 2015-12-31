@@ -22,7 +22,6 @@ import com.choicemaker.e2.platform.CMPlatformUtils;
  * Description
  * 
  * @author  Martin Buechi
- * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:09 $
  */
 public class MlGuiFactories {
 	public static final String EXTENSION_POINT = ChoiceMakerExtensionPoint.CM_MODELMAKER_MLTRAINGUIPLUGIN;

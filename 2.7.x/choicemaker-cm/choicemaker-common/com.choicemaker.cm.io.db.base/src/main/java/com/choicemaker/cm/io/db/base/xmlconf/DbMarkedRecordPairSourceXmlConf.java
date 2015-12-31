@@ -25,7 +25,6 @@ import com.choicemaker.cm.io.db.oracle.OracleMarkedRecordPairSource2;
  * Handling of Db Marked Record Pair sources.
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/24 22:39:47 $
  */
 public class DbMarkedRecordPairSourceXmlConf implements MarkedRecordPairSourceXmlConfigurator {
 	public static final String EXTENSION_POINT_ID = "com.choicemaker.cm.io.db.base.dbMrpsReader";

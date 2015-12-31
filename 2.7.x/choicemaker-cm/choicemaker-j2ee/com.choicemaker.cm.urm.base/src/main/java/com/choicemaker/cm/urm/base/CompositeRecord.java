@@ -13,7 +13,6 @@ package com.choicemaker.cm.urm.base;
  * <p>
  *
  * @author emoussikaev
- * @version Revision: 2.5  Date: Nov 1, 2005 12:06:00 PM
  * @see
  */
 public abstract class CompositeRecord implements IRecord {

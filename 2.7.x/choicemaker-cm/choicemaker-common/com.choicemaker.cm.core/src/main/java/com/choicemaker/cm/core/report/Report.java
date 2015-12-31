@@ -21,7 +21,6 @@ import com.choicemaker.cm.core.Record;
  * Comment
  *
  * @author   Martin Buechi
- * @version  $Revision: 1.2 $ $Date: 2010/03/24 20:47:35 $
  */
 public class Report {
 	private static final ReporterPlugin[] NO_PLUGINS = new ReporterPlugin[0];

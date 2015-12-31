@@ -42,7 +42,6 @@ import com.choicemaker.cm.matching.gen.Sets;
  * (Section 5.1) that are defined before the name parser initialization.
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/27 22:13:46 $
  * @see       com.choicemaker.cm.matching.en.us.NameParser
  */
 public class XmlNameParserInitializer implements XmlModuleInitializer {

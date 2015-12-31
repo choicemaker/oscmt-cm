@@ -48,7 +48,6 @@ import com.choicemaker.cm.modelmaker.gui.utils.EnablednessGuard;
  * and build CompositeMarkedRecordPairSource.
  *
  * @author S. Yoakum-Stover
- * @version $Revision: 1.2 $ $Date: 2010/03/28 08:56:49 $
  */
 public class CompositeMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui implements Enable {
     private static final long serialVersionUID = 1L;

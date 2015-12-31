@@ -28,7 +28,6 @@ import com.choicemaker.cm.io.db.sqlserver.SqlServerXmlUtils;
  * Handling of Db Marked Record Pair sources.
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.2.102.1 $ $Date: 2009/11/18 01:00:11 $
  */
 public class SqlServerMarkedRecordPairSourceXmlConf implements MarkedRecordPairSourceXmlConfigurator {
 	

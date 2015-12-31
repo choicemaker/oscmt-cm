@@ -23,7 +23,6 @@ import com.choicemaker.cm.core.RecordSink;
  * Description
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/28 09:18:16 $
  */
 public class XmlRecordSink implements RecordSink {
 	private String name;

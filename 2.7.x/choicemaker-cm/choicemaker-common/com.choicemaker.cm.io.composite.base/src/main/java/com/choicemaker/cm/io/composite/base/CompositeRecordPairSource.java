@@ -17,7 +17,6 @@ import com.choicemaker.cm.core.RecordPairSource;
  * A composite source is a collection of other sources.
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/28 08:56:16 $
  */
 
 public class CompositeRecordPairSource extends CompositeSource implements RecordPairSource {

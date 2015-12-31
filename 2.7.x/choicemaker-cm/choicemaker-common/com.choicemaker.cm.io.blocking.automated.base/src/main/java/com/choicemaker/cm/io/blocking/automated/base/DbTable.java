@@ -14,7 +14,6 @@ import com.choicemaker.cm.io.blocking.automated.IDbTable;
 /**
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:47 $
  */
 public class DbTable implements Serializable, IDbTable {
 	

@@ -15,7 +15,6 @@ import java.io.PrintWriter;
 /**
  *
  * @author    Adam Winkel
- * @version   
  */
 public class PipeToCsv {
 

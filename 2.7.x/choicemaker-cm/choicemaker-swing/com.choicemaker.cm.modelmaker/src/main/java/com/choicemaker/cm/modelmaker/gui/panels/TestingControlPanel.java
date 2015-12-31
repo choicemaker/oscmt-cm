@@ -41,7 +41,6 @@ import com.choicemaker.cm.modelmaker.stats.StatPoint;
  * statistical plots.
  * 
  * @author S. Yoakum-Stover
- * @version $Revision: 1.2 $ $Date: 2010/03/29 13:03:48 $
  */
 public class TestingControlPanel
 	extends JPanel

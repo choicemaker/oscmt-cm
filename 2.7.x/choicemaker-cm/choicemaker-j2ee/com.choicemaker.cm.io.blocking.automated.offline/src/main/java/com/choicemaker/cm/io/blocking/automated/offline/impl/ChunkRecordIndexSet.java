@@ -22,7 +22,6 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.ImmutableRecordIdTr
  * An implementation of IChunkRecordIndexSet that uses
  * {@link com.choicemaker.cm.io.blocking.automated.offline.impl.ChunkRecordIdSource ChunkRecordIdSource}.
  * @author rphall
- * @version $Revision$ $Date$
  */
 public class ChunkRecordIndexSet implements IChunkRecordIndexSet {
 	

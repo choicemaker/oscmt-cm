@@ -15,7 +15,6 @@ import com.choicemaker.cm.urm.exceptions.RecordCollectionException;
  * A record collection visitor.   
  *
  * @author emoussikaev
- * @version Revision: 2.5  Date: Nov 1, 2005 1:30:27 PM
  * @see
  */
 public interface IRecordCollectionVisitor extends Serializable {

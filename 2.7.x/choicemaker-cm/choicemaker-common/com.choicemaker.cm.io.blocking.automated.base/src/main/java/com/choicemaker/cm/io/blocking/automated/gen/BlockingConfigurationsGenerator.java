@@ -26,7 +26,6 @@ import com.choicemaker.cm.io.blocking.base.gen.BlockingTags;
  * Description
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/28 09:32:54 $
  */
 public class BlockingConfigurationsGenerator implements GeneratorPlugin {
 	public static BlockingConfigurationsGenerator instance = new BlockingConfigurationsGenerator();

@@ -14,7 +14,6 @@ package com.choicemaker.cm.core;
  * Thrown by a constructor or modifier if an object would be incompletely
  * specified after construction or modification.
  * @author rphall
- * @version 1.0.0
  * @since 2.5.206
  */
 public class IncompleteSpecificationException extends RuntimeException {

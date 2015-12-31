@@ -31,7 +31,6 @@ import com.choicemaker.util.StringUtils;
  * Description
  * 
  * @author  Martin Buechi
- * @version $Revision: 1.2 $ $Date: 2010/03/29 14:24:58 $
  */
 public class PiecewiseMatcher {
 

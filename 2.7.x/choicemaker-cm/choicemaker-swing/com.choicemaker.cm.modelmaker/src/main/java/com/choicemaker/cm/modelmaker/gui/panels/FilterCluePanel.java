@@ -37,7 +37,6 @@ import com.choicemaker.cm.modelmaker.gui.tables.filtercluetable.FilterClueTable;
  * .
  *
  * @author   Arturo Falck
- * @version  $Revision: 1.2 $ $Date: 2010/03/29 12:57:39 $
  */
 public class FilterCluePanel extends JPanel {
 	private static final long serialVersionUID = 1L;

@@ -27,7 +27,6 @@ import com.choicemaker.cm.core.DerivedSource;
  * Auxiliary methods for generators.
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/27 21:03:47 $
  */
 public class GeneratorHelper {
 	private static final List EMPTY_LIST = new ArrayList();

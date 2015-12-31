@@ -16,7 +16,6 @@ import java.io.Serializable;
  * <p>  
  *
  * @author emoussikaev
- * @version Revision: 2.5  Date: Nov 1, 2005 1:18:08 PM
  * @see
  */
 public class LinkCriteria implements Serializable {

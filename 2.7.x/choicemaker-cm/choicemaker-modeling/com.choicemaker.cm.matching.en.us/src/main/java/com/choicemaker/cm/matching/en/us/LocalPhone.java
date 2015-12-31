@@ -11,7 +11,6 @@ package com.choicemaker.cm.matching.en.us;
  * Returns the last 7 digits of a phone number.
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:02 $
  */
 public class LocalPhone {
 	private LocalPhone() {

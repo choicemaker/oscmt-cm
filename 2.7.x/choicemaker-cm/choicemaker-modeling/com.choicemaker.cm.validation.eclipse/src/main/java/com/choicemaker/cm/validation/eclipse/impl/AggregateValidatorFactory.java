@@ -18,7 +18,6 @@ import com.choicemaker.util.StringUtils;
  * Factory class for aggregate validators.
  *
  * @author rphall
- * @version $Revision: 1.2 $ $Date: 2010/03/29 14:44:29 $
  */
 public class AggregateValidatorFactory extends AbstractValidatorFactory {
 

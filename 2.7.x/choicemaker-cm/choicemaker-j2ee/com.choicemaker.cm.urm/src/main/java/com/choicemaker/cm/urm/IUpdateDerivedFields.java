@@ -24,7 +24,6 @@ import com.choicemaker.cm.urm.base.DbRecordCollection;
  * </p>
  * 
  * @author rphall
- * @version $Revision: 1.1 $ $Date: 2010/03/24 23:58:33 $
  */
 public interface IUpdateDerivedFields {
 

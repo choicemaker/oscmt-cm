@@ -20,7 +20,6 @@ import com.choicemaker.cm.io.blocking.automated.IBlockingValue;
  * Description
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/24 21:34:39 $
  */
 public class BlockingSetReporter implements ReporterPlugin {
 	private final AutomatedBlocker blocker;

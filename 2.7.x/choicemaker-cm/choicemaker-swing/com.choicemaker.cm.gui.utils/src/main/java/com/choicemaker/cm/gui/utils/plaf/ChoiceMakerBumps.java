@@ -26,7 +26,6 @@ import javax.swing.plaf.metal.MetalLookAndFeel;
 /**
  * Implements the bumps used throughout the Metal Look and Feel.
  * 
- * @version 1.22 12/03/01
  * @author Tom Santos
  * @author Steve Wilson
  */

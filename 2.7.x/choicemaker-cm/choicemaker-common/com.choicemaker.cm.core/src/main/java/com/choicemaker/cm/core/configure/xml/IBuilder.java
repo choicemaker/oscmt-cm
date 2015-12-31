@@ -16,7 +16,6 @@ import java.io.Reader;
 /**
  * Based on the public methods of org.jdom.input.SAXBuilder
  * @author rphall
- * @version $Revision: 1.1 $ $Date: 2010/03/24 18:04:31 $
  */
 public interface IBuilder {
 

@@ -15,7 +15,6 @@ package com.choicemaker.cm.compiler;
  * A class for representing symbol table entries
  *
  * @author   Matthias Zenger
- * @version  $Revision: 1.2 $ $Date: 2010/03/24 20:08:26 $
  */
 public class ScopeEntry {
 

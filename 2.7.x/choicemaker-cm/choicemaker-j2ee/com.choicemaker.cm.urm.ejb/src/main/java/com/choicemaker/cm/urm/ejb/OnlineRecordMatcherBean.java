@@ -38,7 +38,6 @@ import com.choicemaker.cm.urm.exceptions.UrmUnderspecifiedQueryException;
 
 /**
  * @author emoussikaev
- * @version Revision: 2.5  Date: Jul 15, 2005 3:40:43 PM
  * @see
  */
 @SuppressWarnings({"rawtypes"})

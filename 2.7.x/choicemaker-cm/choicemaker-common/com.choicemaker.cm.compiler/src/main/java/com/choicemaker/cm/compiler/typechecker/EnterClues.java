@@ -44,7 +44,6 @@ import com.choicemaker.cm.core.gen.GenException;
  * Type abstraction
  *
  * @author   Matthias Zenger
- * @version  $Revision: 1.2 $ $Date: 2010/03/24 20:14:09 $
  */
 public class EnterClues extends DefaultVisitor implements Tags {
 

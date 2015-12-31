@@ -17,7 +17,6 @@ import com.choicemaker.cm.urm.OnlineRecordMatcher;
 
 /**
  * @author emoussikaev
- * @version Revision: 2.5  Date: Jul 7, 2005 9:25:22 AM
  * @see
  */
 public interface OnlineRecordMatcherHome extends EJBHome {

@@ -18,7 +18,6 @@ import com.choicemaker.cm.core.gen.IGenerator;
  * Main generator plugin for XML IO.
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:58 $
  */
 public class XmlGenerator implements GeneratorPlugin {
 	public void generate(IGenerator g) throws GenException {

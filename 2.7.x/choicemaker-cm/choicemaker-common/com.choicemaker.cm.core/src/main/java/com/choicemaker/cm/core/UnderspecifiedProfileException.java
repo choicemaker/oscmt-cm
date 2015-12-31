@@ -15,7 +15,6 @@ package com.choicemaker.cm.core;
  * specifying only the gender in querying a large database.
  *
  * @author   Martin Buechi
- * @version  $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:13 $
  */
 public class UnderspecifiedProfileException extends Exception {
 

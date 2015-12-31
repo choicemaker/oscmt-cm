@@ -11,7 +11,6 @@ package com.choicemaker.cm.urm.exceptions;
  * Signals that a problem accessing a record collection has occurred.  
  * 
  * @author emoussikaev
- * @version Revision: 2.5  Date: Jul 21, 2005 12:32:32 PM
  * @see
  */
 public class RecordCollectionException extends Exception {

@@ -21,7 +21,6 @@ import com.choicemaker.cm.core.IncompleteSpecificationException;
  * <code>toXML()</code>, <code>getProperties()</code>
  * and <code>setProperties(..)</code> operations.
  * @author rphall
- * @version $Revision: 1.1 $ $Date: 2010/03/24 18:02:27 $
  */
 public abstract class AbstractSerializableRecordSource
 	implements ISerializableRecordSource {

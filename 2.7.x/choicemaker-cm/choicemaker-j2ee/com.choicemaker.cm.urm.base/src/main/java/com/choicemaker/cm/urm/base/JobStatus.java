@@ -13,7 +13,6 @@ import java.util.Date;
  * Represents the status of the matching process(job).
  * 
  * @author emoussikaev
- * @version Revision: 2.5  Date: Jul 1, 2005 1:04:14 PM
  * @see
  */
 public class JobStatus implements Serializable {

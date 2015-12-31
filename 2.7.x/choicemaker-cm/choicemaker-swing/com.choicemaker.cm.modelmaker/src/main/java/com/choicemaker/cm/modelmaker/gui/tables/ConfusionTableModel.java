@@ -18,7 +18,6 @@ import com.choicemaker.cm.modelmaker.gui.utils.ValueError;
  * The TableModel for the ConfusionTable. 
  * 
  * @author S. Yoakum-Stover
- * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:09 $
  */
 public class ConfusionTableModel extends AbstractTableModel {
 

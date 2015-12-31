@@ -34,7 +34,6 @@ import com.choicemaker.util.StringUtils;
  * Description
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:58 $
  */
 public class FlatFileMultiFileReaderGenerator implements GeneratorPlugin {
 	private static DerivedSource src = DerivedSource.valueOf("flatfile");

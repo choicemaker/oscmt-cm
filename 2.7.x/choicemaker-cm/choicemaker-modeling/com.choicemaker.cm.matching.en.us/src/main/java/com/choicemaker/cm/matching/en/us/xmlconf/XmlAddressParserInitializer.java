@@ -31,7 +31,6 @@ import com.choicemaker.cm.matching.gen.Sets;
 
 /**
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/27 22:14:03 $
  * @see       com.choicemaker.cm.matching.en.us.NameParser
  */
 public class XmlAddressParserInitializer implements XmlModuleInitializer {

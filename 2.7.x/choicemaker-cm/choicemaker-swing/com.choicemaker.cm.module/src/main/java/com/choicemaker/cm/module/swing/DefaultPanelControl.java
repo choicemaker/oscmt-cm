@@ -11,7 +11,6 @@ import javax.swing.JPanel;
 
 /**
  * @author rphall
- * @version $Revision: 1.1 $ $Date: 2010/03/27 19:27:57 $
  */
 public class DefaultPanelControl implements IPanelControl {
 	

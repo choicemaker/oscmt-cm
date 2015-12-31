@@ -21,7 +21,6 @@ import com.choicemaker.cm.analyzer.filter.RuleFilterCondition;
  * .
  *
  * @author   Arturo Falck
- * @version  $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:09 $
  */
 public class FilterConditionCellEditor extends DefaultCellEditor {
 

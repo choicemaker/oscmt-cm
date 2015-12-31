@@ -22,7 +22,6 @@ import com.choicemaker.cm.core.xmlconf.MlModelConf;
  * Description
  * 
  * @author  Martin Buechi
- * @version $Revision: 1.1 $ $Date: 2010/01/20 15:05:05 $
  */
 public class DoNothingMachineLearningPersistance implements MlModelConf {
 	public static DoNothingMachineLearningPersistance instance = new DoNothingMachineLearningPersistance();

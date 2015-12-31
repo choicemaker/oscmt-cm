@@ -15,7 +15,6 @@ import com.choicemaker.e2.mbd.runtime.Plugin;
  * Comment
  *
  * @author   Martin Buechi
- * @version  $Revision: 1.1 $ $Date: 2010/01/27 03:58:28 $
  */
 public class ResourcesPlugin extends Plugin {
 	public ResourcesPlugin(IPluginDescriptor descriptor) {

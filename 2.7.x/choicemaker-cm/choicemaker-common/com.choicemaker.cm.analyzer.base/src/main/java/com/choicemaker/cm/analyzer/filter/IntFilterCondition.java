@@ -17,7 +17,6 @@ import com.choicemaker.cm.core.base.IntActiveClues;
  * Description
  *
  * @author  Martin Buechi
- * @version $Revision: 1.3 $ $Date: 2010/03/29 14:36:26 $
  */
 public class IntFilterCondition implements FilterCondition {
 

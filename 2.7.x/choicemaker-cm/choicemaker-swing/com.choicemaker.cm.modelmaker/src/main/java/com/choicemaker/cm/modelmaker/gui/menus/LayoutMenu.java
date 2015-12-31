@@ -33,7 +33,6 @@ import com.choicemaker.cm.modelmaker.gui.panels.HumanReviewPanel;
  *
  * @author  S. Yoakum-Stover
  * @author  Martin Buechi
- * @version $Revision: 1.2 $ $Date: 2010/03/29 13:10:23 $
  */
 public class LayoutMenu extends LastUsedMenu {
 	private static final long serialVersionUID = 1L;

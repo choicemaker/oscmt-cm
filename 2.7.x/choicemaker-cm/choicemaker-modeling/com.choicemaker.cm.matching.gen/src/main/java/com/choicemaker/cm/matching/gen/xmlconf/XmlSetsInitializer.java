@@ -23,7 +23,6 @@ import com.choicemaker.cm.matching.gen.Sets;
  * <p>see com.choicemaker.cm.matching.gen.Colls</p>
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:05 $
  */
 public class XmlSetsInitializer implements XmlModuleInitializer {
 	public final static XmlSetsInitializer instance = new XmlSetsInitializer();

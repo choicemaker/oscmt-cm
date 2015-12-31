@@ -14,7 +14,6 @@ package com.choicemaker.cm.core.report;
  * Description
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.1 $ $Date: 2010/01/20 15:05:06 $
  */
 public interface ReporterPlugin {
 	void report(StringBuffer b, boolean newLines);

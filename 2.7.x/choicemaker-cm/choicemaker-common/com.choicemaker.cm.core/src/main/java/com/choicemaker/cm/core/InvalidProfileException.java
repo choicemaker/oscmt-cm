@@ -15,7 +15,6 @@ package com.choicemaker.cm.core;
  * Thrown when a profile is invalid, e.g., wrong XML representation.
  *
  * @author   Martin Buechi
- * @version  $Revision: 1.1 $ $Date: 2010/01/20 15:05:04 $
  */
 public class InvalidProfileException extends Exception {
 

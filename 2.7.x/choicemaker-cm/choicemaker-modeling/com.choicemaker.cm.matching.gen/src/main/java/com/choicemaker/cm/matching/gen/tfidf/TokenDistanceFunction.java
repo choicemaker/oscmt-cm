@@ -11,7 +11,6 @@ package com.choicemaker.cm.matching.gen.tfidf;
  * Comment
  *
  * @author   Adam Winkel
- * @version  $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:05 $
  */
 public interface TokenDistanceFunction {
 	public float distance(String s1, String s2);

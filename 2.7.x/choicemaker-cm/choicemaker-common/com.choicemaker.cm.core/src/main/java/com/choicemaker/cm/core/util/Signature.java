@@ -28,7 +28,6 @@ import com.choicemaker.util.Precondition;
 
 /**
  * @author rphall
- * @version $Revision: 1.1.2.4 $ $Date: 2010/03/12 18:23:09 $
  */
 public class Signature {
 

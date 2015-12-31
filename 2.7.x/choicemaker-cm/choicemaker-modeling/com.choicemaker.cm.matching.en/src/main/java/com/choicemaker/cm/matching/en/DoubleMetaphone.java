@@ -13,7 +13,6 @@ package com.choicemaker.cm.matching.en;
  * pronunciation, double metaphone returns two codes, a primary and an alternate.
  * 
  * @author    Martin Buechi
- * @version   $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:01 $
  */
 public final class DoubleMetaphone {
 	private final static char[] vowels = { 'A', 'E', 'I', 'O', 'U', 'Y' };

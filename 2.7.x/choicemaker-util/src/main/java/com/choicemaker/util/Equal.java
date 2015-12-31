@@ -14,7 +14,6 @@ package com.choicemaker.util;
  * Conjunction (and eventually, disjunction) utilities that can
  * be useful in equality tests.
  * @author rphall
- * @version $Revision: 1.1 $ $Date: 2010/03/24 18:06:02 $
  */
 public class Equal {
 

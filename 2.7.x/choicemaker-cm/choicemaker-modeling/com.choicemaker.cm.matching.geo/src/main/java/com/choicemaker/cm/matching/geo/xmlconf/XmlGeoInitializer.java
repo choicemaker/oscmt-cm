@@ -31,7 +31,6 @@ import com.choicemaker.util.StringUtils;
  * XML initializer for geo-entity maps .
  *
  * @author    Elmer Moussikaev
- * @version   $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:05 $
  */
 public class XmlGeoInitializer implements XmlModuleInitializer {
 	public final static XmlGeoInitializer instance = new XmlGeoInitializer();

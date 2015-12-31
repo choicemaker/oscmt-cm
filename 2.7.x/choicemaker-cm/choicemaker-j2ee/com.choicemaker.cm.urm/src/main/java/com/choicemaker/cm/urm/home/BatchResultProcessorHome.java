@@ -16,7 +16,6 @@ import com.choicemaker.cm.urm.BatchResultProcessor;
 
 /**
  * @author emoussikaev
- * @version Revision: 2.5  Date: Jul 7, 2005 9:25:22 AM
  */
 public interface BatchResultProcessorHome extends EJBHome {
   String DEFAULT_EJB_REF_NAME = "ejb/BatchResultProcessor";

@@ -26,7 +26,6 @@ import com.choicemaker.util.IntArrayList;
  * @author	Adam Winkel
  * @author  Martin Buechi
  * @author  S. Yoakum-Stover
- * @version $Revision: 1.2 $ $Date: 2010/03/24 23:17:38 $
  */
 public class MeEstimator {
 

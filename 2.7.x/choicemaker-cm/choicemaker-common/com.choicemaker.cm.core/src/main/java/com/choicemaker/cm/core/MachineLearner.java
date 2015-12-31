@@ -21,7 +21,6 @@ import com.choicemaker.cm.core.xmlconf.MlModelConf;
  * a machine learner and support training and evaluation.
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/24 18:16:14 $
  */
 public interface MachineLearner {
 	/**

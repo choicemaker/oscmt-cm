@@ -45,7 +45,6 @@ import com.choicemaker.cm.modelmaker.gui.listeners.EvaluationListener;
  * The menu from which a MarkedRecordPairSource is selected.
  *
  * @author S. Yoakum-Stover
- * @version $Revision: 1.3 $ $Date: 2010/03/29 13:14:25 $
  */
 public class SourceMenu extends JMenu {
 	private static final long serialVersionUID = 1L;

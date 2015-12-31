@@ -40,7 +40,6 @@ import com.choicemaker.cm.modelmaker.gui.utils.HistoChartPanel;
  * histogram listens for mouse clicks on its bars.
  *
  * @author S. Yoakum-Stover
- * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:09 $
  */
 public class StatisticsHistogramPanel extends JPanel {
 

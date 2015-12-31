@@ -22,7 +22,6 @@ import com.choicemaker.cm.core.compiler.ICompilerFeatureNames;
  * ClueMaker compiler.
  *
  * @author rphall
- * @version   $Revision: 1.1 $ $Date: 2010/03/24 20:12:05 $
  */
 public class Compiler26 extends CMCompiler {
 

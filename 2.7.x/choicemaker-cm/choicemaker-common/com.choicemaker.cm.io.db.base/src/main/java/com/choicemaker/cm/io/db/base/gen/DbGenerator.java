@@ -24,7 +24,6 @@ import com.choicemaker.cm.core.gen.IGenerator;
  * Main generator plugin for Db IO.
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/28 09:06:55 $
  */
 public class DbGenerator implements GeneratorPlugin {
 	static boolean filesAdded;

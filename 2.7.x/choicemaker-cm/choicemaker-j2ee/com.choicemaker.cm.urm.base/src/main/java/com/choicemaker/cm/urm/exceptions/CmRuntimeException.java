@@ -11,7 +11,6 @@ package com.choicemaker.cm.urm.exceptions;
  * Signals that a ChoiceMaker server runtime problem has occurred.
  * 
  * @author emoussikaev
- * @version Revision: 2.5  Date: Sep 30, 2005 1:00:31 PM
  * @see
  */
 public class CmRuntimeException extends Exception {

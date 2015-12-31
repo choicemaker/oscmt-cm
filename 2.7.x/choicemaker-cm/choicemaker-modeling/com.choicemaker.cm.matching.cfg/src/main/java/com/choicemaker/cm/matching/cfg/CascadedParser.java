@@ -14,7 +14,6 @@ import java.util.List;
  * Comment
  *
  * @author   Adam Winkel
- * @version  $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:59 $
  */
 public class CascadedParser implements Parser {
 	

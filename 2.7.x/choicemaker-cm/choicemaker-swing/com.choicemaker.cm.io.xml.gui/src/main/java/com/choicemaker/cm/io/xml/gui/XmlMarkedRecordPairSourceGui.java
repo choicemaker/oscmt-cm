@@ -56,7 +56,6 @@ import com.choicemaker.util.FileUtilities;
  *
  * @author  S. Yoakum-Stover
  * @author  Martin Buechi
- * @version $Revision: 1.3 $ $Date: 2010/03/28 09:15:52 $
  */
 public class XmlMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui implements Enable {
 	private static final long serialVersionUID = 1L;

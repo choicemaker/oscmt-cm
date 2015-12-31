@@ -13,7 +13,6 @@ import java.util.regex.Pattern;
 /**
  *
  * @author    Adam Winkel
- * @version   
  */
 public class Profile {
 
