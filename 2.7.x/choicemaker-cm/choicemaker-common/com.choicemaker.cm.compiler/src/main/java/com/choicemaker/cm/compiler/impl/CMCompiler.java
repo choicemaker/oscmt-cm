@@ -80,35 +80,10 @@ public abstract class CMCompiler implements ICompiler {
 		System.out.println(
 			ChoiceMakerCoreMessages.m.formatMessage(
 				"compiler.comp.usage",
-				"$Revision: 1.1 $, $Date: 2010/03/24 20:10:52 $"));
+				"2.7.1"));
 	}
 
 	protected String getClassPath() {
-//		String res = System.getProperty("java.class.path");
-//		try {
-//			Element e = XmlConfigurator.getInstance().getCore().getChild("classpath");
-//			if (e != null) {
-//				res += FileUtilities.toAbsoluteClasspath(e.getText());
-//			}
-//			e = XmlConfigurator.getInstance().getCore().getChild("reload");
-//			if (e != null) {
-//				e = e.getChild("classpath");
-//				if (e != null) {
-//					res += FileUtilities.toAbsoluteClasspath(e.getText());
-//				}
-//			}
-//		} catch (IOException ex) {
-//			logger.severe("Problem with classpath: " + ex);
-//		}
-//		IPluginDescriptor[] plugins =
-//			Platform.getPluginRegistry().getPluginDescriptors();
-//		for (int i = 0; i < plugins.length; i++) {
-//			URL[] ucp =
-//				((URLClassLoader) plugins[i].getPluginClassLoader()).getURLs();
-//			for (int j = 0; j < ucp.length; j++) {
-//				res += File.pathSeparator + ucp[j].getPath();
-//			}
-//		}
 		return ConfigurationManager.getInstance().getClassPath();
 	}
 

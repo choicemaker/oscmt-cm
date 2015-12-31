@@ -26,7 +26,6 @@ import com.choicemaker.cm.core.xmlconf.XmlModuleInitializer;
  * XML initializer for StringDistances
  *
  * @author    Rick Hall
- * @version   $Revision: 1.1 $ $Date: 2010/03/27 19:41:45 $
  * @see       com.wcohen.ss.eclipse.StringDistances
  */
 public class XmlStringDistanceInitializer implements XmlModuleInitializer {

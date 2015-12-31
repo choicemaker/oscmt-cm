@@ -17,7 +17,6 @@ import org.eclipse.core.internal.boot.PlatformURLHandler;
  * Comment
  *
  * @author   Martin Buechi
- * @version  $Revision: 1.1 $ $Date: 2003/05/09 00:02:26 $
  */
 public class Handler extends PlatformURLHandler {
 }
