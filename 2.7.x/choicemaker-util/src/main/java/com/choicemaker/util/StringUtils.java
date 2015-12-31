@@ -19,6 +19,7 @@ import java.util.StringTokenizer;
  * @author    Martin Buechi
  * @version   $Revision: 1.2 $ $Date: 2010/03/27 21:26:11 $
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class StringUtils {
 	/**
 	 * Returns <code>true</code> iff <code>s</code> is not null and

@@ -28,6 +28,7 @@ import java.util.List;
  * @author Martin Buechi (original version)
  * @author Rick Hall (minor usability tweaks)
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class LogFrequencyPartitioner {
 
 	public static final String LINE_SEPARATOR = System

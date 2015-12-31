@@ -32,6 +32,7 @@ import java.util.logging.Logger;
  * @author  Martin Buechi
  * @version $Revision: 1.1 $ $Date: 2010/01/20 15:05:03 $
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class FileUtilities {
 
     public static final String MD5_HASH_ALGORITHM = "MD5";

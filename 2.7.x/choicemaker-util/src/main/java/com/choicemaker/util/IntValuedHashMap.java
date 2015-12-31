@@ -21,6 +21,7 @@ import java.util.List;
  * @author   Adam Winkel
  * @version  $Revision: 1.1 $ $Date: 2010/01/20 15:05:03 $
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class IntValuedHashMap extends HashMap {
 	private static final long serialVersionUID = 1L;
 

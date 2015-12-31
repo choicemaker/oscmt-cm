@@ -23,6 +23,7 @@ import java.util.TreeMap;
  * @author   Adam Winkel
  * @version  $Revision: 1.2 $ $Date: 2010/03/27 21:24:22 $
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class PrefixTree {
 
 	TreeMap map = new TreeMap();

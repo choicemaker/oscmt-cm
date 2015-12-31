@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 import java.util.Random;
 import java.util.UUID;
 
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class ReflectionUtils {
 
 	private static final Random random = new Random();

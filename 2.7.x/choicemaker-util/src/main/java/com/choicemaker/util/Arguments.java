@@ -23,6 +23,7 @@ import java.util.List;
  * @see <a href="http://args4j.kohsuke.org/index.html">Args4j</a>
  * @see <a href="http://jcommander.org/">JCommander</a>
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class Arguments {
 
 	public static final String DEFAULT = "$default$";
