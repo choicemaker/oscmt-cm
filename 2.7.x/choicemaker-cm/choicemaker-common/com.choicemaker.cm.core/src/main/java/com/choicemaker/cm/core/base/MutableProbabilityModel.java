@@ -233,8 +233,10 @@ public class MutableProbabilityModel implements IProbabilityModel {
 		int start = cd.getStartLineNumber();
 		int end = cd.getEndLineNumber();
 		int len = end - start;
+		File clueFile = getClueFile();
+		String clueFilePath = clueFile.getAbsolutePath();
 		BufferedReader in =
-			new BufferedReader(new FileReader(getClueFilePath()));
+			new BufferedReader(new FileReader(clueFilePath));
 		for (int i = 1; i < start && in.ready(); ++i) {
 			in.readLine();
 		}
