@@ -11,7 +11,8 @@
 package com.choicemaker.cm.logfrequencypartitioner.app;
 
 import java.io.IOException;
-import java.util.Date;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -50,8 +51,10 @@ public class LogPartitionerApp {
 	 *             if the command line can not be parsed
 	 */
 	public static void main(String[] args) throws Exception {
+		PrintWriter console =
+			new PrintWriter(new OutputStreamWriter(System.out));
 		final LogPartitionerParams appParms =
-			LogPartitionerCommandLine.parseCommandLine(args);
+			LogPartitionerCommandLine.parseCommandLine(console, args);
 		final LogPartitionerApp app = new LogPartitionerApp(appParms);
 		app.createPartitions();
 		System.exit(STATUS_OK);
