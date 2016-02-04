@@ -10,9 +10,17 @@
  *******************************************************************************/
 package com.choicemaker.cm.logfrequencypartitioner.app;
 
+import java.io.IOException;
 import java.util.Date;
+import java.util.List;
+import java.util.logging.Logger;
 
 import org.apache.commons.cli.ParseException;
+
+import com.choicemaker.cm.logfrequencypartitioner.app.LogPartitionerParams.LOG_PARTITIONER_FILE_FORMAT;
+import com.choicemaker.util.LogFrequencyPartitioner;
+import com.choicemaker.util.LogFrequencyPartitioner.ValueCountPair;
+import com.choicemaker.util.LogFrequencyPartitioner.ValuePartitionPair;
 
 /**
  * Application that ...
@@ -21,9 +29,12 @@ import org.apache.commons.cli.ParseException;
  */
 public class LogPartitionerApp {
 
+	private static final Logger logger = Logger
+			.getLogger(LogPartitionerApp.class.getName());
+
 	public static final int STATUS_OK = 0;
 	public static final int ERROR_BAD_INPUT = 1;
-	
+
 	/**
 	 * Entry point for the application. Command line parameters:
 	 * <ul>
@@ -38,8 +49,7 @@ public class LogPartitionerApp {
 	 * @throws ParseException
 	 *             if the command line can not be parsed
 	 */
-	public static void main(String[] args) throws ParseException {
-
+	public static void main(String[] args) throws Exception {
 		final LogPartitionerParams appParms =
 			LogPartitionerCommandLine.parseCommandLine(args);
 		final LogPartitionerApp app = new LogPartitionerApp(appParms);
@@ -60,17 +70,35 @@ public class LogPartitionerApp {
 		return appParams;
 	}
 
-	public void createPartitions() {
+	public void createPartitions() throws IOException {
 
-		final long start = new Date().getTime();
 		try {
-
-
-		} catch (RuntimeException x) {
-			final long duration = new Date().getTime() - start;
+			List<ValueCountPair> input =
+				readInput(appParams.getInputFileName(),
+						appParams.getInputFormat(),
+						appParams.getInputCsvFieldSeparator());
+			List<ValuePartitionPair> output =
+				LogFrequencyPartitioner.partition(input,
+						appParams.getPartitionCount());
+			writeOutput(output, appParams.getOutputFileName(),
+					appParams.getOutputFormat(),
+					appParams.getOutputCsvFieldSeparator());
+		} catch (IOException x) {
+			logger.severe(x.toString());
 			throw x;
 		}
+	}
 
+	List<ValueCountPair> readInput(String fileName,
+			LOG_PARTITIONER_FILE_FORMAT fileFormat, char csvFieldSeparator)
+			throws IOException {
+		throw new Error("not yet implemented");
+	}
+
+	void writeOutput(List<ValuePartitionPair> output, String fileName,
+			LOG_PARTITIONER_FILE_FORMAT fileFormat, char csvFieldSeparator)
+			throws IOException {
+		throw new Error("not yet implemented");
 	}
 
 }
