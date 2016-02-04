@@ -81,7 +81,6 @@
     <dependency>
       <groupId>com.oracle</groupId>
       <artifactId>classes12</artifactId>
-      <version>10.2.0.5</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>
