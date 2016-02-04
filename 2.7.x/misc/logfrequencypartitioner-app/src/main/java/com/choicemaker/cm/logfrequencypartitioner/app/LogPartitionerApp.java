@@ -115,7 +115,7 @@ public class LogPartitionerApp {
 			LOG_PARTITIONER_FILE_FORMAT fileFormat, char csvFieldSeparator)
 			throws IOException {
 		LogFrequencyPartitioner.writeFile(output, fileName,
-				String.valueOf(getAppParams().getOutputCsvFieldSeparator()),
+				getAppParams().getOutputCsvFieldSeparator(),
 				EOL);
 	}
 

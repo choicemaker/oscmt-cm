@@ -1,9 +1,7 @@
 package com.choicemaker.util;
 
-import static com.choicemaker.util.LogFrequencyPartitioner.ValueCountPair;
-import static com.choicemaker.util.LogFrequencyPartitioner.ValuePartitionPair;
-import static com.choicemaker.util.LogFrequencyPartitioner.partition;
 import static com.choicemaker.util.LogFrequencyPartitioner.getPartitionIndex;
+import static com.choicemaker.util.LogFrequencyPartitioner.partition;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -11,6 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
+
+import com.choicemaker.util.LogFrequencyPartitioner.ValueCountPair;
+import com.choicemaker.util.LogFrequencyPartitioner.ValuePartitionPair;
 
 public class LogFrequencyPartitionerTest {
 
