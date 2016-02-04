@@ -22,6 +22,7 @@ import com.choicemaker.cm.logfrequencypartitioner.app.LogPartitionerParams.LOG_P
 import com.choicemaker.util.LogFrequencyPartitioner;
 import com.choicemaker.util.LogFrequencyPartitioner.ValueCountPair;
 import com.choicemaker.util.LogFrequencyPartitioner.ValuePartitionPair;
+import com.choicemaker.util.SystemPropertyUtils;
 
 /**
  * Application that ...
@@ -32,6 +33,8 @@ public class LogPartitionerApp {
 
 	private static final Logger logger = Logger
 			.getLogger(LogPartitionerApp.class.getName());
+
+	private static final String EOL = SystemPropertyUtils.PV_LINE_SEPARATOR;
 
 	public static final int STATUS_OK = 0;
 	public static final int ERROR_BAD_INPUT = 1;
@@ -77,31 +80,43 @@ public class LogPartitionerApp {
 
 		try {
 			List<ValueCountPair> input =
-				readInput(appParams.getInputFileName(),
-						appParams.getInputFormat(),
-						appParams.getInputCsvFieldSeparator());
+				readInput(getAppParams().getInputFileName(), getAppParams()
+						.getInputFormat(), getAppParams()
+						.getInputCsvFieldSeparator());
 			List<ValuePartitionPair> output =
-				LogFrequencyPartitioner.partition(input,
-						appParams.getPartitionCount());
-			writeOutput(output, appParams.getOutputFileName(),
-					appParams.getOutputFormat(),
-					appParams.getOutputCsvFieldSeparator());
+				LogFrequencyPartitioner.partition(input, getAppParams()
+						.getPartitionCount());
+			writeOutput(output, getAppParams().getOutputFileName(),
+					getAppParams().getOutputFormat(), getAppParams()
+							.getOutputCsvFieldSeparator());
 		} catch (IOException x) {
 			logger.severe(x.toString());
 			throw x;
 		}
 	}
 
-	List<ValueCountPair> readInput(String fileName,
+	public List<ValueCountPair> readInput(String fileName,
 			LOG_PARTITIONER_FILE_FORMAT fileFormat, char csvFieldSeparator)
 			throws IOException {
-		throw new Error("not yet implemented");
+		List<ValueCountPair> retVal = null;
+		switch (getAppParams().getInputFormat()) {
+		case CSV:
+			throw new Error("not yet implemented");
+			// break;
+		case ALT_LINES:
+		default:
+			retVal = LogFrequencyPartitioner.readFile(fileName);
+		}
+		assert retVal != null;
+		return retVal;
 	}
 
-	void writeOutput(List<ValuePartitionPair> output, String fileName,
+	public void writeOutput(List<ValuePartitionPair> output, String fileName,
 			LOG_PARTITIONER_FILE_FORMAT fileFormat, char csvFieldSeparator)
 			throws IOException {
-		throw new Error("not yet implemented");
+		LogFrequencyPartitioner.writeFile(output, fileName,
+				String.valueOf(getAppParams().getOutputCsvFieldSeparator()),
+				EOL);
 	}
 
 }

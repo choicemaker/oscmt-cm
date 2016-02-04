@@ -31,13 +31,6 @@ public class LogFrequencyPartitioner {
 
 	public static final String EOL = SystemPropertyUtils.PV_LINE_SEPARATOR;
 
-	// public static void main(String[] args) throws IOException {
-	// LogFrequencyPartitioner lfp = new LogFrequencyPartitioner();
-	// lfp.readFile(args[0]);
-	// lfp.computeBoundaries(Integer.parseInt(args[2]));
-	// lfp.writeFile(args[1]);
-	// }
-
 	public static final int MIN_MIN_FREQUENCY = 1;
 	public static final int MAX_MAX_FREQUENCY = Integer.MAX_VALUE;
 
@@ -138,7 +131,7 @@ public class LogFrequencyPartitioner {
 			throw new IllegalArgumentException("null or empty partition");
 		}
 
-		// Check element of the partition if asserts are enabled
+		// Check elements of the partition if asserts are enabled
 		boolean assertOn = false;
 		assert assertOn = true;
 		if (assertOn) {
@@ -159,26 +152,13 @@ public class LogFrequencyPartitioner {
 		return i;
 	}
 
-	// public void addPair(ValueCountPair pair) {
-	// if (pair == null) {
-	// throw new IllegalArgumentException("Null value-count pair");
-	// }
-	// if (pair.count > maxFrequency) {
-	// maxFrequency = pair.count;
-	// }
-	// if (pair.count < minFrequency) {
-	// minFrequency = pair.count;
-	// }
-	// valueCountPairs.add(pair);
-	// }
-	//
-	// public void addPair(String value, int count) {
-	// addPair(new ValueCountPair(value,count));
-	// }
-
 	/**
 	 * Reads a file in which values and counts are on alternate lines: values on
 	 * odd lines (1, 3, 5, ...) and counts on even lines (2, 4, 6, ...).
+	 * Equivalent to invoking
+	 * <pre>
+	 * readFile(filename, null, null)
+	 * </pre>
 	 * 
 	 * @param fileName
 	 *            name of an existing value-count file
@@ -191,43 +171,106 @@ public class LogFrequencyPartitioner {
 	 *             invalid value or non-positive count, or if the last value is
 	 *             not paired with a subsequent count.
 	 */
-	public List<ValueCountPair> readFile(String fileName) throws IOException {
+	public static List<ValueCountPair> readFile(String fileName)
+			throws IOException {
+		return readFile(fileName, null, null);
+	}
+
+	/**
+	 * Reads a file in which values and counts are separated by <code>elementSep</code>
+	 * and pairs are separated by <code>lineSep</code>.
+	 * 
+	 * @param fileName
+	 *            name of an existing value-count file
+	 * @param elementSep
+	 * 			separates the value from the count within a pair. If null,
+	 *          values and counts must appear on alternating lines, as if
+	 *          <code>lineSep</code> is also the element separator.
+	 * @param lineSep
+	 * 			separates pairs
+	 * @throws IOException
+	 *             if the file can not be found or opened
+	 * @throws NumberFormatException
+	 *             if any count is not a valid integer
+	 * @throws IllegalArgumentException
+	 *             if the fileName is null or any line in the file contains an
+	 *             invalid value or non-positive count, or if the last value is
+	 *             not paired with a subsequent count.
+	 */
+	public static List<ValueCountPair> readFile(String fileName,
+			Character elementSep, String lineSep) throws IOException {
 		if (fileName == null) {
 			throw new IllegalArgumentException("null file name");
 		}
+		if (lineSep == null) {
+			lineSep = EOL;
+		}
+		String sElementSep =
+			elementSep == null ? null : String.valueOf(elementSep);
 
 		List<ValueCountPair> retVal = new ArrayList<>();
-		FileReader fr = new FileReader(new File(fileName).getAbsoluteFile());
-		BufferedReader in = new BufferedReader(fr);
-		while (in.ready()) {
-			String value = in.readLine().trim();
-			int count = Integer.parseInt(in.readLine().trim());
-			ValueCountPair vcp = new ValueCountPair(value, count);
-			retVal.add(vcp);
+		BufferedReader in = null;
+		try {
+			FileReader fr =
+				new FileReader(new File(fileName).getAbsoluteFile());
+			in = new BufferedReader(fr);
+			String line = in.readLine();
+			while (line != null) {
+				String value = null;
+				String sCount = null;
+
+				if (sElementSep != null) {
+					// This simple algorithm will fail (or 'succeed'
+					// erroneously)
+					// if there are escaped element-separator tokens in the line
+					String[] tokens = line.split(sElementSep);
+					if (tokens.length != 2) {
+						String msg = "Invalid line: '" + line + "'";
+						throw new IllegalArgumentException(msg);
+					}
+					value = tokens[0].trim();
+					sCount = tokens[1].trim();
+
+				} else {
+					value = line.trim();
+					sCount = in.readLine();
+					if (sCount == null) {
+						String msg = "Missing count for value '" + value + "'";
+						throw new IllegalArgumentException(msg);
+					} else {
+						sCount = sCount.trim();
+					}
+				}
+
+				int count = 0;
+				try {
+					sCount = sCount.trim();
+					count = Integer.parseInt(sCount);
+				} catch (NumberFormatException x) {
+					String msg =
+						"Invalid count (" + sCount + ") for value '" + value
+								+ "'";
+					throw new IllegalArgumentException(msg);
+				}
+				if (count < 1) {
+					String msg =
+						"Non-positive count (" + count + ") for value '"
+								+ value + "'";
+					throw new IllegalArgumentException(msg);
+				}
+				ValueCountPair vcp = new ValueCountPair(value, count);
+				retVal.add(vcp);
+
+				line = in.readLine();
+			}
+		} finally {
+			if (in != null) {
+				in.close();
+			}
 		}
-		in.close();
-		fr.close();
 
 		return retVal;
 	}
-
-	// public void computeBoundaries(int numPartitions) {
-	// if (numPartitions < 1) {
-	// throw new IllegalArgumentException("non-positive number of paritions: " +
-	// numPartitions);
-	// }
-	// assert maxFrequency >= minFrequency;
-	// assert minFrequency >= DEFAULT_FREQUENCY;
-	// boundary = new int[numPartitions];
-	// double f = Math.pow(((double) maxFrequency) / minFrequency, 1.00d /
-	// numPartitions);
-	// double b = maxFrequency;
-	// for (int i = numPartitions - 1; i >= 0; --i) {
-	// boundary[i] = (int)(b + 0.5);
-	// //System.out.println(boundary[i]);
-	// b = b / f;
-	// }
-	// }
 
 	/**
 	 * Writes a file in which values and partition indices are on alternate
@@ -247,7 +290,7 @@ public class LogFrequencyPartitioner {
 	 */
 	public static void writeFile(List<ValuePartitionPair> pairs, String fileName)
 			throws IOException {
-		writeFile(pairs, fileName, EOL, EOL);
+		writeFile(pairs, fileName, null, null);
 	}
 
 	/**
@@ -258,24 +301,54 @@ public class LogFrequencyPartitioner {
 	 * @param fileName
 	 *            name of an existing value-count file
 	 * @param elementSep
-	 *            separates a value from a partition index
+	 *            separates a value from a partition index. If null, then values
+	 *            and partition indices are written on alternating lines, as if
+	 *            the element separator is the same as the line separator.
 	 * @param lineSep
-	 *            separates value-partition pairs from each other
+	 *            separates value-partition pairs from each other. If null, then
+	 *            the system default for the line separator is used.
 	 * @throws IOException
 	 *             if the file can not be created or written
 	 */
 	public static void writeFile(List<ValuePartitionPair> pairs,
-			String fileName, String elementSep, String lineSep)
+			String fileName, Character elementSep, String lineSep)
 			throws IOException {
-		FileOutputStream fs = new FileOutputStream(fileName);
-		Writer w = new OutputStreamWriter(new BufferedOutputStream(fs));
-		for (ValuePartitionPair p : pairs) {
-			w.write(p.value + elementSep);
-			w.write(p.partition + lineSep);
+		if (pairs == null) {
+			throw new IllegalArgumentException("null pairs");
 		}
-		w.flush();
-		w.close();
-		fs.close();
+		if (fileName == null) {
+			throw new IllegalArgumentException("null file name");
+		}
+		if (lineSep == null) {
+			lineSep = EOL;
+		}
+		FileOutputStream fs = null;
+		Writer w = null;
+		try {
+			fs = new FileOutputStream(fileName);
+			w = new OutputStreamWriter(new BufferedOutputStream(fs));
+			for (ValuePartitionPair p : pairs) {
+				w.write(p.value);
+				if (elementSep != null) {
+					w.write(elementSep);
+				} else {
+					w.write(lineSep);
+				}
+				w.write(p.partition + lineSep);
+			}
+		} finally {
+			if (w != null) {
+				w.flush();
+				w.close();
+				fs.close();
+				w = null;
+				fs = null;
+			}
+			if (fs != null) {
+				fs.close();
+				fs = null;
+			}
+		}
 	}
 
 	public static class ValueCountPair {
