@@ -114,16 +114,38 @@ public class LogFrequencyPartitioner {
 		return retVal;
 	}
 
+	/**
+	 * Returns an index between 0 and (partition.length - 1), inclusive
+	 * @param partition an array of positive counts arranged in increasing
+	 * order
+	 * @param c a positive count
+	 * @return the largest index for which c > partition[index]
+	 */
 	public static int getPartitionIndex(int[] partition, int c) {
-		if (partition == null) {
-			throw new IllegalArgumentException(
-					"null partition");
-		}
-		if (c < 0) {
+		if (c <= 0) {
 			throw new IllegalArgumentException("negative frequency count: " + c);
 		}
+		if (partition == null || partition.length == 0) {
+			throw new IllegalArgumentException(
+					"null or empty partition");
+		}
+
+		// Check element of the partition if asserts are enabled
+		boolean assertOn = false;
+		assert assertOn = true;
+		if (assertOn) {
+			for (int i = 0; i < partition.length; i++) {
+				if (partition[i] < 1) {
+					String msg =
+						"Non-positive count (" + partition[i]
+								+ ") at partition index " + i;
+					throw new IllegalArgumentException(msg);
+				}
+			}
+		}
+		
 		int i = 0;
-		while (i < partition.length && c > partition[i]) {
+		while (i < (partition.length-1) && c > partition[i]) {
 			++i;
 		}
 		return i;
