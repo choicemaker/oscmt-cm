@@ -37,10 +37,10 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ImmutableRecordIdTranslator;
-import com.choicemaker.cm.io.blocking.automated.offline.core.MutableRecordIdTranslator;
-import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE_ROLE;
+//import com.choicemaker.cm.io.blocking.automated.offline.core.MutableRecordIdTranslator;
+//import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE_ROLE;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RecordMatchingMode;
-import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
+//import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.IDSetSource;
 import com.choicemaker.cm.io.blocking.automated.offline.result.MatchToBlockTransformer2;
 import com.choicemaker.cm.io.blocking.automated.offline.result.Size2MatchProducer;
@@ -266,72 +266,73 @@ public class StartTransitivityMDB extends AbstractTransitivityMDB {
 				PN_REGULAR_CHUNK_FILE_COUNT, String.valueOf(numRegularChunks));
 	}
 
-	private ImmutableRecordIdTranslator createTranslator(BatchJob transJob,
-			IMatchRecord2Source mSource) throws BlockingException {
-
-		MutableRecordIdTranslator mrit =
-			this.getRecordIdController().createMutableRecordIdTranslator(
-					transJob);
-		try {
-			mrit.open();
-			try {
-				mSource.open();
-				while (mSource.hasNext()) {
-					MatchRecord2 mr = (MatchRecord2) mSource.next();
-					Comparable id1 = mr.getRecordID1();
-					@SuppressWarnings({
-							"unchecked", "unused" })
-					int unused1 = mrit.translate(id1);
-					RECORD_SOURCE_ROLE r2Role = mr.getRecord2Role();
-					switch (r2Role) {
-					case STAGING:
-					case SOURCE1_NODUPES:
-						Comparable id2 = mr.getRecordID2();
-						@SuppressWarnings({
-								"unchecked", "unused" })
-						int unused2 = mrit.translate(id2);
-						break;
-					case MASTER:
-					case SOURCE2_DUPES:
-						break;
-					default:
-						throw new Error("Unexpected role: " + r2Role);
-					}
-				}
-				mSource.close();
-				mrit.split();
-				mSource.open();
-				while (mSource.hasNext()) {
-					MatchRecord2 mr = (MatchRecord2) mSource.next();
-					RECORD_SOURCE_ROLE r2Role = mr.getRecord2Role();
-					switch (r2Role) {
-					case STAGING:
-					case SOURCE1_NODUPES:
-						break;
-					case MASTER:
-					case SOURCE2_DUPES:
-						Comparable id2 = mr.getRecordID2();
-						@SuppressWarnings({
-								"unchecked", "unused" })
-						int unused2 = mrit.translate(id2);
-						break;
-					default:
-						throw new Error("Unexpected role: " + r2Role);
-					}
-				}
-				mSource.close();
-			} finally {
-				mSource.close();
-			}
-		} finally {
-			mrit.close();
-		}
-
-		@SuppressWarnings("unchecked")
-		ImmutableRecordIdTranslator retVal =
-			this.getRecordIdController().toImmutableTranslator(mrit);
-		return retVal;
-	}
+//	@SuppressWarnings("unused")
+//	private ImmutableRecordIdTranslator createTranslator(BatchJob transJob,
+//			IMatchRecord2Source mSource) throws BlockingException {
+//
+//		MutableRecordIdTranslator mrit =
+//			this.getRecordIdController().createMutableRecordIdTranslator(
+//					transJob);
+//		try {
+//			mrit.open();
+//			try {
+//				mSource.open();
+//				while (mSource.hasNext()) {
+//					MatchRecord2 mr = (MatchRecord2) mSource.next();
+//					Comparable id1 = mr.getRecordID1();
+//					@SuppressWarnings({
+//							"unchecked", "unused" })
+//					int unused1 = mrit.translate(id1);
+//					RECORD_SOURCE_ROLE r2Role = mr.getRecord2Role();
+//					switch (r2Role) {
+//					case STAGING:
+//					case SOURCE1_NODUPES:
+//						Comparable id2 = mr.getRecordID2();
+//						@SuppressWarnings({
+//								"unchecked", "unused" })
+//						int unused2 = mrit.translate(id2);
+//						break;
+//					case MASTER:
+//					case SOURCE2_DUPES:
+//						break;
+//					default:
+//						throw new Error("Unexpected role: " + r2Role);
+//					}
+//				}
+//				mSource.close();
+//				mrit.split();
+//				mSource.open();
+//				while (mSource.hasNext()) {
+//					MatchRecord2 mr = (MatchRecord2) mSource.next();
+//					RECORD_SOURCE_ROLE r2Role = mr.getRecord2Role();
+//					switch (r2Role) {
+//					case STAGING:
+//					case SOURCE1_NODUPES:
+//						break;
+//					case MASTER:
+//					case SOURCE2_DUPES:
+//						Comparable id2 = mr.getRecordID2();
+//						@SuppressWarnings({
+//								"unchecked", "unused" })
+//						int unused2 = mrit.translate(id2);
+//						break;
+//					default:
+//						throw new Error("Unexpected role: " + r2Role);
+//					}
+//				}
+//				mSource.close();
+//			} finally {
+//				mSource.close();
+//			}
+//		} finally {
+//			mrit.close();
+//		}
+//
+//		@SuppressWarnings("unchecked")
+//		ImmutableRecordIdTranslator retVal =
+//			this.getRecordIdController().toImmutableTranslator(mrit);
+//		return retVal;
+//	}
 
 	/**
 	 * This method removes any pre-existing transMatch* files
