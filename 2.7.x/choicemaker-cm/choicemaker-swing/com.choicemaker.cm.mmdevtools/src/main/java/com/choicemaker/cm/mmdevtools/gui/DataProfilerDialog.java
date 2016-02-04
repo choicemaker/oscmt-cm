@@ -65,6 +65,7 @@ import com.choicemaker.cm.mmdevtools.util.profiler.FieldProfiler;
 import com.choicemaker.cm.modelmaker.filter.ModelMakerCollectionMRPairFilter;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.util.LogFrequencyPartitioner;
+import com.choicemaker.util.LogFrequencyPartitioner.ValueCountPair;
 
 /**
  * @author ajwinkel
@@ -876,21 +877,25 @@ public class DataProfilerDialog extends JDialog {
 		bw.close();
 	}
 
-	private static void createLogFreqFile(Object[][] data, int valueCol, int countCol, int minCount, int numBuckets,
-										  File output, String elementSep, String pairSep) throws IOException {
-		LogFrequencyPartitioner lfp = new LogFrequencyPartitioner();
+	private static void createLogFreqFile(Object[][] data, int valueCol,
+			int countCol, int minCount, int numBuckets, File output,
+			String elementSep, String pairSep) throws IOException {
+		List valueCountPairs = new ArrayList();
 		for (int i = 0, n = data.length; i < n; i++) {
 			Object val = data[i][valueCol];
-			int count = ((Integer)data[i][countCol]).intValue();
+			int count = ((Integer) data[i][countCol]).intValue();
 			if (val != null && count >= minCount) {
 				String sVal = val.toString();
 				if (sVal.length() > 0) {
-					lfp.addPair(sVal, count);
+					ValueCountPair vcp = new ValueCountPair(sVal, count);
+					valueCountPairs.add(vcp);
 				}
 			}
 		}
-		lfp.computeBoundaries(numBuckets);
-		lfp.writeFile(output.getAbsolutePath());
+		List valuePartitionPairs =
+			LogFrequencyPartitioner.partition(valueCountPairs, numBuckets);
+		LogFrequencyPartitioner.writeFile(valuePartitionPairs,
+				output.getAbsolutePath());
 	}
 
 }
