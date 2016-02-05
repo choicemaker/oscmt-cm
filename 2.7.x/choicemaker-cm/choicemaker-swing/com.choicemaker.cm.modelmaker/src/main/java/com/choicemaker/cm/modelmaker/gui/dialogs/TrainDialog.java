@@ -16,6 +16,7 @@ import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
+import java.util.logging.Logger;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -41,7 +42,11 @@ import com.choicemaker.cm.modelmaker.gui.utils.EnablednessGuard;
  * @author S. Yoakum-Stover
  */
 public class TrainDialog extends JDialog implements Enable {
+	
+	private static final Logger logger = Logger.getLogger(TrainDialog.class.getName());
+
 	private static final long serialVersionUID = 1L;
+
 //	private static int BASE_HEIGHT = 220;
 //	private static int MIN_WIDTH = 330;
 	private ModelMaker parent;
@@ -139,6 +144,9 @@ public class TrainDialog extends JDialog implements Enable {
 								Integer.parseInt(firingThresholdField.getText()),
 								andTest);
 						if (success) {
+							String msg = "Failed to train model: " + model;
+							logger.severe(msg);
+							parent.postUserMessage(msg);
 							dispose();
 						}
 					}
