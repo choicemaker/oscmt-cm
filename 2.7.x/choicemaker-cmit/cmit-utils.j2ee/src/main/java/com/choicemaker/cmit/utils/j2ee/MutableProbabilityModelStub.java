@@ -53,6 +53,7 @@ public class MutableProbabilityModelStub implements IProbabilityModel {
 	// Instance data that can be tweaked for testing
 	public String accessorClassName;
 	public String clueFilePath;
+	public String clueFileAbsolutePath;
 	public String modelFilePath;
 	public String trainingSource;
 
@@ -112,8 +113,8 @@ public class MutableProbabilityModelStub implements IProbabilityModel {
 
 	@Override
 	public String getClueFileAbsolutePath() {
-		log.exiting(CLASSNAME, "getClueFileAbsolutePath", null);
-		return null;
+		log.exiting(CLASSNAME, "getClueFileAbsolutePath", clueFileAbsolutePath);
+		return clueFileAbsolutePath;
 	}
 
 	@Override
