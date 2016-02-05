@@ -230,7 +230,7 @@ public abstract class CMCompiler implements ICompiler {
 		logger.entering(SRC, METHOD, new Object[] {model,statusOutput});
 		CompilationArguments arguments = new CompilationArguments();
 		String[] compilerArgs = new String[1];
-		compilerArgs[0] = model.getClueFilePath();
+		compilerArgs[0] = model.getClueFileAbsolutePath();
 		arguments.enter(compilerArgs);
 		String accessorClass = compile(arguments, statusOutput);
 		if (accessorClass != null) {
@@ -256,7 +256,7 @@ public abstract class CMCompiler implements ICompiler {
 		logger.entering(SRC, METHOD, new Object[] {spec,statusOutput});
 		CompilationArguments arguments = new CompilationArguments();
 		String[] compilerArgs = new String[1];
-		compilerArgs[0] = spec.getClueFilePath();
+		compilerArgs[0] = spec.getClueFileAbsolutePath();
 		arguments.enter(compilerArgs);
 		String accessorFQCN = compile(arguments, statusOutput);
 		ImmutableProbabilityModel retVal = null;
