@@ -17,17 +17,17 @@ public class LogFrequencyPartitionerTest {
 
 	public static final int[] ILLEGAL_PARTITION_NULL = null;
 	public static final int[] ILLEGAL_PARTITION_EMPTY = new int[] {};
-	public static final int[] ILLEGAL_PARTITION_INVALID = new int[] {0};
-	
+	public static final int[] ILLEGAL_PARTITION_INVALID = new int[] { 0 };
+
 	public static final int ILLEGAL_PARTITION_NUMBER_A = 0;
 
 	public static final int LEGAL_PARTITION_NUMBER_A = 1;
 	public static final int LEGAL_PARTITION_NUMBER_B = 2;
-	
+
 	public static final int ILLEGAL_FREQUENCY_COUNT_A = 0;
 
 	public static final int LEGAL_FREQUENCY_COUNT_A = 1;
-	
+
 	public static final int AN_ILLEGAL_PARTITION_IDX = -1;
 
 	@Test
@@ -38,12 +38,12 @@ public class LogFrequencyPartitionerTest {
 		int numPartitions = 1;
 		List<ValuePartitionPair> expected = new ArrayList<>();
 		expected.add(new ValuePartitionPair("value 1", 0));
-		
-		List<ValuePartitionPair> computed = partition(input1,numPartitions);
+
+		List<ValuePartitionPair> computed = partition(input1, numPartitions);
 		assertTrue(expected.equals(computed));
-		
+
 		numPartitions = 2;
-		computed = partition(input1,numPartitions);
+		computed = partition(input1, numPartitions);
 		assertTrue(expected.equals(computed));
 
 		List<ValueCountPair> input2 = new ArrayList<>();
@@ -62,9 +62,9 @@ public class LogFrequencyPartitionerTest {
 		expected.add(new ValuePartitionPair("value 3b", 0));
 		expected.add(new ValuePartitionPair("value 3c", 0));
 		expected.add(new ValuePartitionPair("value 4", 0));
-		computed = partition(input2,numPartitions);
+		computed = partition(input2, numPartitions);
 		assertTrue(expected.equals(computed));
-		
+
 		numPartitions = 2;
 		expected = new ArrayList<>();
 		expected.add(new ValuePartitionPair("value 1", 0));
@@ -73,9 +73,9 @@ public class LogFrequencyPartitionerTest {
 		expected.add(new ValuePartitionPair("value 3b", 1));
 		expected.add(new ValuePartitionPair("value 3c", 1));
 		expected.add(new ValuePartitionPair("value 4", 1));
-		computed = partition(input2,numPartitions);
+		computed = partition(input2, numPartitions);
 		assertTrue(expected.equals(computed));
-		
+
 		numPartitions = 3;
 		expected = new ArrayList<>();
 		expected.add(new ValuePartitionPair("value 1", 0));
@@ -84,9 +84,9 @@ public class LogFrequencyPartitionerTest {
 		expected.add(new ValuePartitionPair("value 3b", 1));
 		expected.add(new ValuePartitionPair("value 3c", 1));
 		expected.add(new ValuePartitionPair("value 4", 2));
-		computed = partition(input2,numPartitions);
+		computed = partition(input2, numPartitions);
 		assertTrue(expected.equals(computed));
-		
+
 		numPartitions = 5;
 		expected = new ArrayList<>();
 		expected.add(new ValuePartitionPair("value 1", 0));
@@ -95,9 +95,9 @@ public class LogFrequencyPartitionerTest {
 		expected.add(new ValuePartitionPair("value 3b", 2));
 		expected.add(new ValuePartitionPair("value 3c", 3));
 		expected.add(new ValuePartitionPair("value 4", 4));
-		computed = partition(input2,numPartitions);
+		computed = partition(input2, numPartitions);
 		assertTrue(expected.equals(computed));
-		
+
 	}
 
 	@Test
@@ -111,12 +111,13 @@ public class LogFrequencyPartitionerTest {
 		count = 2;
 		index = getPartitionIndex(partition, count);
 		assertTrue(index == 0);
-		
+
 		count = Integer.MAX_VALUE;
 		index = getPartitionIndex(partition, count);
 		assertTrue(index == 0);
 
-		partition = new int[] { 1, 10 };
+		partition = new int[] {
+				1, 10 };
 		count = 1;
 		index = getPartitionIndex(partition, count);
 		assertTrue(index == 0);
@@ -124,15 +125,15 @@ public class LogFrequencyPartitionerTest {
 		count = 2;
 		index = getPartitionIndex(partition, count);
 		assertTrue(index == 1);
-		
+
 		count = 9;
 		index = getPartitionIndex(partition, count);
 		assertTrue(index == 1);
-		
+
 		count = 10;
 		index = getPartitionIndex(partition, count);
 		assertTrue(index == 1);
-		
+
 		count = Integer.MAX_VALUE;
 		index = getPartitionIndex(partition, count);
 		assertTrue(index == 1);
@@ -146,7 +147,7 @@ public class LogFrequencyPartitionerTest {
 			// Computed value should not change from initial value
 			assertTrue(index == AN_ILLEGAL_PARTITION_IDX);
 		}
-		
+
 		index = AN_ILLEGAL_PARTITION_IDX;
 		try {
 			count = 1;
@@ -156,7 +157,7 @@ public class LogFrequencyPartitionerTest {
 			// Computed value should not change from initial value
 			assertTrue(index == AN_ILLEGAL_PARTITION_IDX);
 		}
-		
+
 		index = AN_ILLEGAL_PARTITION_IDX;
 		try {
 			count = 1;
@@ -181,7 +182,7 @@ public class LogFrequencyPartitionerTest {
 				assertTrue(index == AN_ILLEGAL_PARTITION_IDX);
 			}
 		}
-		
+
 	}
 
 }

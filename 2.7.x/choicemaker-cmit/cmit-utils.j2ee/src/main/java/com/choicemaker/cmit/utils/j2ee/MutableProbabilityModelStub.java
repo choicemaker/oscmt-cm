@@ -111,6 +111,12 @@ public class MutableProbabilityModelStub implements IProbabilityModel {
 	}
 
 	@Override
+	public String getClueFileAbsolutePath() {
+		log.exiting(CLASSNAME, "getClueFileAbsolutePath", null);
+		return null;
+	}
+
+	@Override
 	public ClueSet getClueSet() {
 		log.exiting(CLASSNAME, "getClueSet", null);
 		return null;

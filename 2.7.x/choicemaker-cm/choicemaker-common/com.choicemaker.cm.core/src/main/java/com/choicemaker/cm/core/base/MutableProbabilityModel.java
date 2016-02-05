@@ -211,8 +211,27 @@ public class MutableProbabilityModel implements IProbabilityModel {
 	// return clueSetPath;
 	// }
 
+	/**
+	 * Returns the file path of the clue definition file (*.clues) relative to
+	 * the clue weights file (*.model).
+	 * 
+	 * @see #getClueFileAbsolutePath()
+	 */
 	public String getClueFilePath() {
 		return clueFilePath;
+	}
+
+	/**
+	 * Returns an absolute path, if {@link #getClueFile()} is not null,
+	 * otherwise returns null.
+	 */
+	public String getClueFileAbsolutePath() {
+		String retVal = null;
+		File f = getClueFile();
+		if (f != null) {
+			retVal = f.getAbsolutePath();
+		}
+		return retVal;
 	}
 
 	public File getClueFile() {
@@ -233,8 +252,9 @@ public class MutableProbabilityModel implements IProbabilityModel {
 		int start = cd.getStartLineNumber();
 		int end = cd.getEndLineNumber();
 		int len = end - start;
-		File clueFile = getClueFile();
-		String clueFilePath = clueFile.getAbsolutePath();
+//		File clueFile = getClueFile();
+//		String clueFilePath = clueFile.getAbsolutePath();
+		String clueFilePath = getClueFileAbsolutePath();
 		BufferedReader in =
 			new BufferedReader(new FileReader(clueFilePath));
 		for (int i = 1; i < start && in.ready(); ++i) {

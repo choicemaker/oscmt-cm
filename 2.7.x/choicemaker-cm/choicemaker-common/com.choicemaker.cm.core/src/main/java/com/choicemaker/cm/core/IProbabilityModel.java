@@ -13,6 +13,12 @@ package com.choicemaker.cm.core;
 import java.util.Date;
 
 /**
+ * Extends the immutable interface of a ChoiceMaker matching model by adding
+ * operations that modify the model. (Because of the functionality that this
+ * interface defines, it could have been named IMutableProbabilityModel, but
+ * that name would have been too easily confused with the name of the immutable
+ * interface, ImmutableProbabilityModel.)
+ * 
  * @author rphall
  */
 public interface IProbabilityModel extends AccessProvider,
