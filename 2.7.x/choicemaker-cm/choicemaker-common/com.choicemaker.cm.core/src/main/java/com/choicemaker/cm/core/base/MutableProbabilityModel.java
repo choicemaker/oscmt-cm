@@ -558,12 +558,33 @@ public class MutableProbabilityModel implements IProbabilityModel {
 	 * {@link #getModelName() model configuration name} that is associated with
 	 * in the collection is not changed.
 	 * 
-	 * @param filePath
+	 * @param path
 	 *            The new file path.
 	 */
-	public void setModelFilePath(String filePath) {
-		this.modelFilePath = filePath;
-		setModelName(NameUtils.getNameFromFilePath(filePath));
+	public void setModelFilePath(String path) {
+		if (path == null) {
+			throw new IllegalArgumentException("null model file path");
+		} else {
+			path = path.trim();
+			if (path.isEmpty()) {
+				throw new IllegalArgumentException("empty model file path");
+			}
+		}
+		this.modelFilePath = path;
+		String name = NameUtils.getNameFromFilePath(path);
+		if (name == null || name.trim().isEmpty()) {
+			throw new IllegalArgumentException(
+					"Null or empty model name from file path '" + path + "'");
+		}
+		setModelName(name);
+
+		assert getModelFilePath() != null;
+		assert getModelFilePath().equals(getModelFilePath().trim());
+		assert !getModelFilePath().isEmpty();
+
+		assert getModelName() != null;
+		assert getModelName().equals(getModelName().trim());
+		assert !getModelName().isEmpty();
 	}
 
 	/**
@@ -597,7 +618,15 @@ public class MutableProbabilityModel implements IProbabilityModel {
 	}
 
 	public void setModelName(String name) {
-		String oldName = this.modelName;
+		if (name == null) {
+			throw new IllegalArgumentException("null model name");
+		} else {
+			name = name.trim();
+			if (name.isEmpty()) {
+				throw new IllegalArgumentException("blank model name");
+			}
+		}
+ 		String oldName = this.modelName;
 		this.modelName = name;
 		if (!multiPropertyChange) {
 			propertyChangeListeners.firePropertyChange(NAME, oldName, name);
