@@ -22,7 +22,6 @@ import com.choicemaker.cm.logfrequencypartitioner.app.LogPartitionerParams.LOG_P
 import com.choicemaker.util.LogFrequencyPartitioner;
 import com.choicemaker.util.LogFrequencyPartitioner.ValueCountPair;
 import com.choicemaker.util.LogFrequencyPartitioner.ValuePartitionPair;
-import com.choicemaker.util.SystemPropertyUtils;
 
 /**
  * Application that ...
@@ -33,8 +32,6 @@ public class LogPartitionerApp {
 
 	private static final Logger logger = Logger
 			.getLogger(LogPartitionerApp.class.getName());
-
-	private static final String EOL = SystemPropertyUtils.PV_LINE_SEPARATOR;
 
 	public static final int STATUS_OK = 0;
 	public static final int ERROR_BAD_INPUT = 1;
@@ -82,41 +79,53 @@ public class LogPartitionerApp {
 			List<ValueCountPair> input =
 				readInput(getAppParams().getInputFileName(), getAppParams()
 						.getInputFormat(), getAppParams()
-						.getInputCsvFieldSeparator());
+						.getInputCsvFieldSeparator(), getAppParams()
+						.getInputLineSeparator());
 			List<ValuePartitionPair> output =
 				LogFrequencyPartitioner.partition(input, getAppParams()
 						.getPartitionCount());
 			writeOutput(output, getAppParams().getOutputFileName(),
 					getAppParams().getOutputFormat(), getAppParams()
-							.getOutputCsvFieldSeparator());
+							.getOutputCsvFieldSeparator(), getAppParams()
+							.getOutputLineSeparator());
 		} catch (IOException x) {
 			logger.severe(x.toString());
 			throw x;
 		}
 	}
 
-	public List<ValueCountPair> readInput(String fileName,
-			LOG_PARTITIONER_FILE_FORMAT fileFormat, char csvFieldSeparator)
-			throws IOException {
+	public static List<ValueCountPair> readInput(String fileName,
+			LOG_PARTITIONER_FILE_FORMAT fileFormat, char csvFieldSeparator,
+			String lineSeparator) throws IOException {
 		List<ValueCountPair> retVal = null;
-		switch (getAppParams().getInputFormat()) {
+		switch (fileFormat) {
 		case CSV:
-			throw new Error("not yet implemented");
-			// break;
+			retVal =
+				LogFrequencyPartitioner.readFile(fileName, csvFieldSeparator,
+						lineSeparator);
+			break;
 		case ALT_LINES:
 		default:
-			retVal = LogFrequencyPartitioner.readFile(fileName);
+			retVal =
+				LogFrequencyPartitioner.readFile(fileName, null, lineSeparator);
 		}
 		assert retVal != null;
 		return retVal;
 	}
 
-	public void writeOutput(List<ValuePartitionPair> output, String fileName,
-			LOG_PARTITIONER_FILE_FORMAT fileFormat, char csvFieldSeparator)
-			throws IOException {
-		LogFrequencyPartitioner.writeFile(output, fileName,
-				getAppParams().getOutputCsvFieldSeparator(),
-				EOL);
+	public static void writeOutput(List<ValuePartitionPair> output,
+			String fileName, LOG_PARTITIONER_FILE_FORMAT fileFormat,
+			char csvFieldSeparator, String lineSeparator) throws IOException {
+		switch (fileFormat) {
+		case CSV:
+			LogFrequencyPartitioner.writeFile(output, fileName,
+					csvFieldSeparator, lineSeparator);
+			break;
+		case ALT_LINES:
+		default:
+			LogFrequencyPartitioner.writeFile(output, fileName, null,
+					lineSeparator);
+		}
 	}
 
 }

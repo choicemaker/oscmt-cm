@@ -47,7 +47,14 @@ public class LogPartitionerCommandLine {
 	public static final String ARG_INPUT_CSV_FIELD_SEP = "inputFieldSep";
 	public static final String DESC_INPUT_CSV_FIELD_SEP =
 		"Input field separator (optional): a single-charactor "
-				+ "(instead of a comma) for separating CSV fields";
+				+ "(instead of a comma) for separating CSV fields; "
+				+ "if no separator is specified, a comma is the default";
+
+	public static final String ARG_INPUT_LINE_SEP = "inputLineSep";
+	public static final String DESC_INPUT_LINE_SEP =
+		"Output line separator (optional): a charactor sequence for separating "
+				+ "input lines; if no separator is specified, the default for the "
+				+ "current system is used";
 
 	public static final String ARG_OUTPUT_FILE = "outputFile";
 	public static final String DESC_OUTPUT_FILE =
@@ -61,7 +68,14 @@ public class LogPartitionerCommandLine {
 	public static final String ARG_OUTPUT_CSV_FIELD_SEP = "outputFieldSep";
 	public static final String DESC_OUTPUT_CSV_FIELD_SEP =
 		"Output field separator (optional): a single-charactor "
-				+ "(instead of a comma) for separating CSV fields";
+				+ "(instead of a comma) for separating CSV fields; "
+				+ "if no separator is specified, a comma is the default";
+
+	public static final String ARG_OUTPUT_LINE_SEP = "outputLineSep";
+	public static final String DESC_OUTPUT_LINE_SEP =
+		"Output line separator (optional): a charactor sequence for separating "
+				+ "output lines; if no separator is specified, the default for the "
+				+ "current system is used";
 
 	public static final String ARG_PARTITION_COUNT = "numPartitions";
 	public static final String DESC_PARTITION_COUNT =
@@ -125,7 +139,7 @@ public class LogPartitionerCommandLine {
 	 * @return LogPartitioner parameters, or null if help is requested or errors
 	 *         are detected.
 	 * @throws ParseException
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public static LogPartitionerParams parseCommandLine(PrintWriter console,
 			String[] args) throws ParseException, IOException {
@@ -213,6 +227,14 @@ public class LogPartitionerCommandLine {
 				}
 			}
 
+			String inputLineSep = EOL;
+			String sInputLineSep = cl.getOptionValue(ARG_INPUT_LINE_SEP);
+			if (sInputLineSep != null) {
+				if (!sInputLineSep.isEmpty()) {
+					inputLineSep = sInputLineSep;
+				}
+			}
+
 			char outputFieldSep = COMMA;
 			String sOutputFieldSep =
 				cl.getOptionValue(ARG_OUTPUT_CSV_FIELD_SEP);
@@ -220,6 +242,14 @@ public class LogPartitionerCommandLine {
 				sOutputFieldSep = sOutputFieldSep.trim();
 				if (!sOutputFieldSep.isEmpty()) {
 					outputFieldSep = sOutputFieldSep.charAt(0);
+				}
+			}
+
+			String outputLineSep = EOL;
+			String sOutputLineSep = cl.getOptionValue(ARG_OUTPUT_LINE_SEP);
+			if (sOutputLineSep != null) {
+				if (!sOutputLineSep.isEmpty()) {
+					outputLineSep = sOutputLineSep;
 				}
 			}
 
@@ -233,8 +263,9 @@ public class LogPartitionerCommandLine {
 			} else {
 				retVal =
 					new LogPartitionerParams(inputFileName, inputFormat,
-							inputFieldSep, outputFileName, outputFormat,
-							outputFieldSep, partitionCount);
+							inputFieldSep, inputLineSep, outputFileName,
+							outputFormat, outputFieldSep, outputLineSep,
+							partitionCount);
 			}
 		}
 

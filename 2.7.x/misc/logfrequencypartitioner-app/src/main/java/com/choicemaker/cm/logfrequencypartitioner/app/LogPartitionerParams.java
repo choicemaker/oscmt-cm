@@ -13,8 +13,10 @@ package com.choicemaker.cm.logfrequencypartitioner.app;
 import java.io.File;
 import java.util.logging.Logger;
 
+import com.choicemaker.util.SystemPropertyUtils;
+
 public class LogPartitionerParams {
-	
+
 	private static final Logger logger = Logger
 			.getLogger(LogPartitionerParams.class.getName());
 
@@ -24,60 +26,102 @@ public class LogPartitionerParams {
 
 	/** Deprecated 2.5 standard */
 	@Deprecated
-	public static final LOG_PARTITIONER_FILE_FORMAT CM25_STANDARD = LOG_PARTITIONER_FILE_FORMAT.ALT_LINES;
-	
+	public static final LOG_PARTITIONER_FILE_FORMAT CM25_STANDARD =
+		LOG_PARTITIONER_FILE_FORMAT.ALT_LINES;
+
 	public static final char COMMA = ',';
 	public static final char PIPE = '|';
 	public static final char DEFAULT_CSV_FIELD_SEPARATOR = COMMA;
+	public static final String EOL = SystemPropertyUtils.PV_LINE_SEPARATOR;
 
 	private final int partitionCount;
+
 	private final String inputFileName;
 	private final File inputFile;
-	private final String outputFileName;
-	private final File outputFile;
 	private final LOG_PARTITIONER_FILE_FORMAT inputFormat;
 	private final char inputCsvFieldSeparator;
+	private final String inputLineSeparator;
+
+	private final String outputFileName;
+	private final File outputFile;
 	private final LOG_PARTITIONER_FILE_FORMAT outputFormat;
 	private final char outputCsvFieldSeparator;
-	
+	private final String outputLineSeparator;
+
 	/** Recommended constructor */
 	public LogPartitionerParams(String inputFileName, char csvFieldSeparator,
 			String outputFileName, int partitionCount) {
 		this(inputFileName, LOG_PARTITIONER_FILE_FORMAT.CSV, csvFieldSeparator,
-				outputFileName, LOG_PARTITIONER_FILE_FORMAT.CSV,
-				csvFieldSeparator, partitionCount);
+				EOL, outputFileName, LOG_PARTITIONER_FILE_FORMAT.CSV,
+				csvFieldSeparator, EOL, partitionCount);
 	}
-	
+
 	/** Full constructor */
 	public LogPartitionerParams(String inputFileName,
 			LOG_PARTITIONER_FILE_FORMAT inputFormat,
-			char inputCsvFieldSeparator, String outputFileName,
-			LOG_PARTITIONER_FILE_FORMAT outputFormat,
-			char outputCsvFieldSeparator, int partitionCount) {
+			char inputCsvFieldSeparator, String inputLineSeparator,
+			String outputFileName, LOG_PARTITIONER_FILE_FORMAT outputFormat,
+			char outputCsvFieldSeparator, String outputLineSeparator,
+			int partitionCount) {
 
-		if (inputFileName == null || inputFileName.trim().isEmpty()) {
+		if (inputFileName == null) {
 			throw new IllegalArgumentException(
-					"null or blank file name for input counts");
+					"null file name for input counts");
+		} else {
+			inputFileName = inputFileName.trim();
+			if (inputFileName.isEmpty()) {
+				throw new IllegalArgumentException(
+						"blank file name for input counts");
+			}
 		}
+
 		if (inputFormat == null) {
-			throw new IllegalArgumentException(
-					"null input file format");
+			throw new IllegalArgumentException("null input file format");
 		}
 
-		if ( outputFileName == null ||  outputFileName.trim().isEmpty()) {
+		if (inputLineSeparator == null) {
 			throw new IllegalArgumentException(
-					"null or blank file name for output partitions");
+					"null file name for input line separator");
+		} else {
+			inputLineSeparator = inputLineSeparator.trim();
+			if (inputLineSeparator.isEmpty()) {
+				throw new IllegalArgumentException(
+						"blank file name for input line separator");
+			}
 		}
-		if (outputFormat == null) {
+
+		if (outputFileName == null) {
 			throw new IllegalArgumentException(
-					"null output file format");
+					"null file name for output counts");
+		} else {
+			outputFileName = outputFileName.trim();
+			if (outputFileName.isEmpty()) {
+				throw new IllegalArgumentException(
+						"blank file name for output counts");
+			}
+		}
+
+		if (outputFormat == null) {
+			throw new IllegalArgumentException("null output file format");
+		}
+
+		if (outputLineSeparator == null) {
+			throw new IllegalArgumentException(
+					"null file name for output line separator");
+		} else {
+			outputLineSeparator = outputLineSeparator.trim();
+			if (outputLineSeparator.isEmpty()) {
+				throw new IllegalArgumentException(
+						"blank file name for output line separator");
+			}
 		}
 
 		if (partitionCount < 1) {
-			throw new IllegalArgumentException("non-postive partition count: " + partitionCount);
+			throw new IllegalArgumentException("non-postive partition count: "
+					+ partitionCount);
 		}
 
-		this.inputFileName =  inputFileName;
+		this.inputFileName = inputFileName;
 		this.inputFile = new File(this.inputFileName);
 		if (!this.inputFile.exists() || !this.inputFile.isFile()) {
 			String msg =
@@ -86,6 +130,7 @@ public class LogPartitionerParams {
 		}
 		this.inputFormat = inputFormat;
 		this.inputCsvFieldSeparator = inputCsvFieldSeparator;
+		this.inputLineSeparator = inputLineSeparator;
 
 		this.outputFileName = outputFileName;
 		this.outputFile = new File(this.outputFileName);
@@ -95,17 +140,19 @@ public class LogPartitionerParams {
 		}
 		this.outputFormat = outputFormat;
 		this.outputCsvFieldSeparator = outputCsvFieldSeparator;
-		
+		this.outputLineSeparator = outputLineSeparator;
+
 		this.partitionCount = partitionCount;
-		
+
 		logger.info(this.toString());
 	}
 
 	/** Deprecated ChoiceMaker 2.5 standard */
 	@Deprecated
-	public LogPartitionerParams(String inputFileName, String outputFileName, int partitionCount) {
-		this(inputFileName, CM25_STANDARD, COMMA, outputFileName,
-				CM25_STANDARD, COMMA, partitionCount);
+	public LogPartitionerParams(String inputFileName, String outputFileName,
+			int partitionCount) {
+		this(inputFileName, CM25_STANDARD, COMMA, EOL, outputFileName,
+				CM25_STANDARD, COMMA, EOL, partitionCount);
 	}
 
 	public char getInputCsvFieldSeparator() {
@@ -124,6 +171,10 @@ public class LogPartitionerParams {
 		return inputFormat;
 	}
 
+	public String getInputLineSeparator() {
+		return inputLineSeparator;
+	}
+
 	public char getOutputCsvFieldSeparator() {
 		return outputCsvFieldSeparator;
 	}
@@ -138,6 +189,10 @@ public class LogPartitionerParams {
 
 	public LOG_PARTITIONER_FILE_FORMAT getOutputFormat() {
 		return outputFormat;
+	}
+
+	public String getOutputLineSeparator() {
+		return outputLineSeparator;
 	}
 
 	public int getPartitionCount() {
