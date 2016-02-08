@@ -204,23 +204,23 @@ public class LogPartitionerCommandLine {
 			}
 
 			// Optional
+			char inputFieldSep = COMMA;
 			String sInputFieldSep = cl.getOptionValue(ARG_INPUT_CSV_FIELD_SEP);
 			if (sInputFieldSep != null) {
 				sInputFieldSep = sInputFieldSep.trim();
-			}
-			char inputFieldSep = COMMA;
-			if (!sInputFieldSep.isEmpty()) {
-				inputFieldSep = sInputFieldSep.charAt(0);
+				if (!sInputFieldSep.isEmpty()) {
+					inputFieldSep = sInputFieldSep.charAt(0);
+				}
 			}
 
+			char outputFieldSep = COMMA;
 			String sOutputFieldSep =
 				cl.getOptionValue(ARG_OUTPUT_CSV_FIELD_SEP);
 			if (sOutputFieldSep != null) {
 				sOutputFieldSep = sOutputFieldSep.trim();
-			}
-			char outputFieldSep = COMMA;
-			if (!sOutputFieldSep.isEmpty()) {
-				outputFieldSep = sOutputFieldSep.charAt(0);
+				if (!sOutputFieldSep.isEmpty()) {
+					outputFieldSep = sOutputFieldSep.charAt(0);
+				}
 			}
 
 			if (!errors.isEmpty()) {
