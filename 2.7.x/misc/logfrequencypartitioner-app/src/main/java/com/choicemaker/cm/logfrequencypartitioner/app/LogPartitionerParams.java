@@ -86,7 +86,7 @@ public class LogPartitionerParams {
 			inputLineSeparator = inputLineSeparator.trim();
 			if (inputLineSeparator.isEmpty()) {
 				throw new IllegalArgumentException(
-						"blank file name for input line separator");
+						"empty input line separator");
 			}
 		}
 
@@ -112,7 +112,7 @@ public class LogPartitionerParams {
 			outputLineSeparator = outputLineSeparator.trim();
 			if (outputLineSeparator.isEmpty()) {
 				throw new IllegalArgumentException(
-						"blank file name for output line separator");
+						"empty output line separator");
 			}
 		}
 

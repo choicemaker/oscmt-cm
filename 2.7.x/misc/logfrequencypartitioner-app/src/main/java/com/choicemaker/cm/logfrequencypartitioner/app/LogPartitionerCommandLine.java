@@ -30,7 +30,22 @@ import com.choicemaker.util.SystemPropertyUtils;
 
 public class LogPartitionerCommandLine {
 
-	private static final String EOL = SystemPropertyUtils.PV_LINE_SEPARATOR;
+	/** For testing */
+	public static class ParseResults {
+		boolean isHelp;
+		String inputFileName;
+		LOG_PARTITIONER_FILE_FORMAT inputFormat;
+		char inputFieldSep;
+		String inputLineSep;
+		String outputFileName;
+		LOG_PARTITIONER_FILE_FORMAT outputFormat;
+		char outputFieldSep;
+		String outputLineSep;
+		int partitionCount;
+		String errors;
+	}
+
+	public static final String EOL = SystemPropertyUtils.PV_LINE_SEPARATOR;
 
 	public static final String ARG_HELP = "help";
 	public static final String DESC_HELP = "Help (print this message)";
@@ -144,117 +159,16 @@ public class LogPartitionerCommandLine {
 	public static LogPartitionerParams parseCommandLine(PrintWriter console,
 			String[] args) throws ParseException, IOException {
 
-		boolean isHelp = false;
-		if (args == null || args.length == 0) {
-			isHelp = true;
-		}
-		Options options = createOptions();
-		CommandLineParser parser = new BasicParser();
-		CommandLine cl = parser.parse(options, args);
-
-		// Check for help
-		if (cl.hasOption(ARG_HELP)) {
-			isHelp = true;
-		}
+		ParseResults parsed = parseCommandLineInternal(console, args);
 
 		LogPartitionerParams retVal = null;
-		if (isHelp) {
+		if (parsed.isHelp) {
 			usage(console);
 			assert retVal == null;
 
 		} else {
-			String errors = "";
-
-			// Required
-			String inputFileName = cl.getOptionValue(ARG_INPUT_FILE);
-			if (inputFileName != null) {
-				inputFileName = inputFileName.trim();
-			}
-			if (inputFileName == null || inputFileName.isEmpty()) {
-				errors += missingArgument(ARG_INPUT_FILE) + EOL;
-			}
-
-			String sInputFormat = cl.getOptionValue(ARG_INPUT_FORMAT);
-			if (sInputFormat != null) {
-				sInputFormat = sInputFormat.trim().toUpperCase();
-			}
-			if (sInputFormat == null || sInputFormat.isEmpty()) {
-				errors += missingArgument(ARG_INPUT_FORMAT) + EOL;
-			}
-			LOG_PARTITIONER_FILE_FORMAT inputFormat = null;
-			try {
-				inputFormat = LOG_PARTITIONER_FILE_FORMAT.valueOf(sInputFormat);
-			} catch (IllegalArgumentException x) {
-				errors += invalidArgument(ARG_INPUT_FORMAT, sInputFormat);
-			}
-
-			String outputFileName = cl.getOptionValue(ARG_OUTPUT_FILE);
-			if (outputFileName != null) {
-				outputFileName = outputFileName.trim();
-			}
-			if (outputFileName == null || outputFileName.isEmpty()) {
-				errors += missingArgument(ARG_OUTPUT_FILE) + EOL;
-			}
-
-			String sOutputFormat = cl.getOptionValue(ARG_OUTPUT_FORMAT);
-			LOG_PARTITIONER_FILE_FORMAT outputFormat = null;
-			try {
-				outputFormat =
-					LOG_PARTITIONER_FILE_FORMAT.valueOf(sOutputFormat);
-			} catch (IllegalArgumentException x) {
-				errors += invalidArgument(ARG_OUTPUT_FORMAT, sOutputFormat);
-			}
-
-			String sPartitionCount = cl.getOptionValue(ARG_PARTITION_COUNT);
-			int partitionCount = 0;
-			try {
-				partitionCount = Integer.valueOf(sPartitionCount);
-			} catch (NumberFormatException x) {
-				errors += invalidArgument(ARG_PARTITION_COUNT, sPartitionCount);
-			}
-			if (partitionCount < 1) {
-				errors +=
-					"Non-positive partition number: " + partitionCount + EOL;
-			}
-
-			// Optional
-			char inputFieldSep = COMMA;
-			String sInputFieldSep = cl.getOptionValue(ARG_INPUT_CSV_FIELD_SEP);
-			if (sInputFieldSep != null) {
-				sInputFieldSep = sInputFieldSep.trim();
-				if (!sInputFieldSep.isEmpty()) {
-					inputFieldSep = sInputFieldSep.charAt(0);
-				}
-			}
-
-			String inputLineSep = EOL;
-			String sInputLineSep = cl.getOptionValue(ARG_INPUT_LINE_SEP);
-			if (sInputLineSep != null) {
-				if (!sInputLineSep.isEmpty()) {
-					inputLineSep = sInputLineSep;
-				}
-			}
-
-			char outputFieldSep = COMMA;
-			String sOutputFieldSep =
-				cl.getOptionValue(ARG_OUTPUT_CSV_FIELD_SEP);
-			if (sOutputFieldSep != null) {
-				sOutputFieldSep = sOutputFieldSep.trim();
-				if (!sOutputFieldSep.isEmpty()) {
-					outputFieldSep = sOutputFieldSep.charAt(0);
-				}
-			}
-
-			String outputLineSep = EOL;
-			String sOutputLineSep = cl.getOptionValue(ARG_OUTPUT_LINE_SEP);
-			if (sOutputLineSep != null) {
-				if (!sOutputLineSep.isEmpty()) {
-					outputLineSep = sOutputLineSep;
-				}
-			}
-
-			if (!errors.isEmpty()) {
-				printErrors(console, errors);
+			if (!parsed.errors.isEmpty()) {
+				printErrors(console, parsed.errors);
 				console.println();
 				usage(console);
 				console.println();
@@ -262,10 +176,128 @@ public class LogPartitionerCommandLine {
 
 			} else {
 				retVal =
-					new LogPartitionerParams(inputFileName, inputFormat,
-							inputFieldSep, inputLineSep, outputFileName,
-							outputFormat, outputFieldSep, outputLineSep,
-							partitionCount);
+					new LogPartitionerParams(parsed.inputFileName,
+							parsed.inputFormat, parsed.inputFieldSep,
+							parsed.inputLineSep, parsed.outputFileName,
+							parsed.outputFormat, parsed.outputFieldSep,
+							parsed.outputLineSep, parsed.partitionCount);
+			}
+		}
+
+		return retVal;
+	}
+
+	/** For testing */
+	public static ParseResults parseCommandLineInternal(PrintWriter console,
+			String[] args) throws ParseException, IOException {
+
+		ParseResults retVal = new ParseResults();
+
+		if (args == null || args.length == 0) {
+			retVal.isHelp = true;
+
+		} else {
+
+			Options options = createOptions();
+			CommandLineParser parser = new BasicParser();
+			CommandLine cl = parser.parse(options, args);
+
+			// Check for help
+			if (cl.hasOption(ARG_HELP)) {
+				retVal.isHelp = true;
+			}
+
+			retVal.errors = "";
+
+			// Required
+			retVal.inputFileName = cl.getOptionValue(ARG_INPUT_FILE);
+			if (retVal.inputFileName != null) {
+				retVal.inputFileName = retVal.inputFileName.trim();
+			}
+			if (retVal.inputFileName == null || retVal.inputFileName.isEmpty()) {
+				retVal.errors += missingArgument(ARG_INPUT_FILE) + EOL;
+			}
+
+			String sInputFormat = cl.getOptionValue(ARG_INPUT_FORMAT);
+			if (sInputFormat != null) {
+				sInputFormat = sInputFormat.trim().toUpperCase();
+			}
+			if (sInputFormat == null || sInputFormat.isEmpty()) {
+				retVal.errors += missingArgument(ARG_INPUT_FORMAT) + EOL;
+			}
+			try {
+				retVal.inputFormat =
+					LOG_PARTITIONER_FILE_FORMAT.valueOf(sInputFormat);
+			} catch (IllegalArgumentException x) {
+				retVal.errors +=
+					invalidArgument(ARG_INPUT_FORMAT, sInputFormat);
+			}
+
+			retVal.outputFileName = cl.getOptionValue(ARG_OUTPUT_FILE);
+			if (retVal.outputFileName != null) {
+				retVal.outputFileName = retVal.outputFileName.trim();
+			}
+			if (retVal.outputFileName == null
+					|| retVal.outputFileName.isEmpty()) {
+				retVal.errors += missingArgument(ARG_OUTPUT_FILE) + EOL;
+			}
+
+			String sOutputFormat = cl.getOptionValue(ARG_OUTPUT_FORMAT);
+			try {
+				retVal.outputFormat =
+					LOG_PARTITIONER_FILE_FORMAT.valueOf(sOutputFormat);
+			} catch (IllegalArgumentException x) {
+				retVal.errors +=
+					invalidArgument(ARG_OUTPUT_FORMAT, sOutputFormat);
+			}
+
+			String sPartitionCount = cl.getOptionValue(ARG_PARTITION_COUNT);
+			try {
+				retVal.partitionCount = Integer.valueOf(sPartitionCount);
+			} catch (NumberFormatException x) {
+				retVal.errors +=
+					invalidArgument(ARG_PARTITION_COUNT, sPartitionCount);
+			}
+			if (retVal.partitionCount < 1) {
+				retVal.errors +=
+					"Non-positive partition number: " + retVal.partitionCount
+							+ EOL;
+			}
+
+			// Optional
+			retVal.inputFieldSep = COMMA;
+			String sInputFieldSep = cl.getOptionValue(ARG_INPUT_CSV_FIELD_SEP);
+			if (sInputFieldSep != null) {
+				sInputFieldSep = sInputFieldSep.trim();
+				if (!sInputFieldSep.isEmpty()) {
+					retVal.inputFieldSep = sInputFieldSep.charAt(0);
+				}
+			}
+
+			retVal.inputLineSep = EOL;
+			String sInputLineSep = cl.getOptionValue(ARG_INPUT_LINE_SEP);
+			if (sInputLineSep != null) {
+				if (!sInputLineSep.isEmpty()) {
+					retVal.inputLineSep = sInputLineSep;
+				}
+			}
+
+			retVal.outputFieldSep = COMMA;
+			String sOutputFieldSep =
+				cl.getOptionValue(ARG_OUTPUT_CSV_FIELD_SEP);
+			if (sOutputFieldSep != null) {
+				sOutputFieldSep = sOutputFieldSep.trim();
+				if (!sOutputFieldSep.isEmpty()) {
+					retVal.outputFieldSep = sOutputFieldSep.charAt(0);
+				}
+			}
+
+			retVal.outputLineSep = EOL;
+			String sOutputLineSep = cl.getOptionValue(ARG_OUTPUT_LINE_SEP);
+			if (sOutputLineSep != null) {
+				if (!sOutputLineSep.isEmpty()) {
+					retVal.outputLineSep = sOutputLineSep;
+				}
 			}
 		}
 
