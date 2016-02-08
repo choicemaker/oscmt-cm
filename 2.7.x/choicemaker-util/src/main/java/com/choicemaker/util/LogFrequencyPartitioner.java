@@ -20,6 +20,7 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Converts frequency counts into discrete logarithmic bins.
@@ -205,8 +206,13 @@ public class LogFrequencyPartitioner {
 		if (lineSep == null) {
 			lineSep = EOL;
 		}
-		String sElementSep =
-			elementSep == null ? null : String.valueOf(elementSep);
+
+		Pattern p = null;
+		if (elementSep != null) {
+			String sElementSep = String.valueOf(elementSep);
+				String literal = Pattern.quote(sElementSep);
+				p = Pattern.compile(literal);
+		}
 
 		List<ValueCountPair> retVal = new ArrayList<>();
 		BufferedReader in = null;
@@ -219,11 +225,11 @@ public class LogFrequencyPartitioner {
 				String value = null;
 				String sCount = null;
 
-				if (sElementSep != null) {
+				if (p != null) {
 					// This simple algorithm will fail (or 'succeed'
 					// erroneously) if there are escaped element-separator
 					// tokens in the line
-					String[] tokens = line.split(sElementSep);
+					String[] tokens = p.split(line,-1);
 					if (tokens.length != 2) {
 						String msg = "Invalid line: '" + line + "'";
 						throw new IllegalArgumentException(msg);
@@ -244,7 +250,6 @@ public class LogFrequencyPartitioner {
 
 				int count = 0;
 				try {
-					sCount = sCount.trim();
 					count = Integer.parseInt(sCount);
 				} catch (NumberFormatException x) {
 					String msg =
