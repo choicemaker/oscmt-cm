@@ -221,8 +221,8 @@ public class LogFrequencyPartitioner {
 
 				if (sElementSep != null) {
 					// This simple algorithm will fail (or 'succeed'
-					// erroneously)
-					// if there are escaped element-separator tokens in the line
+					// erroneously) if there are escaped element-separator
+					// tokens in the line
 					String[] tokens = line.split(sElementSep);
 					if (tokens.length != 2) {
 						String msg = "Invalid line: '" + line + "'";
