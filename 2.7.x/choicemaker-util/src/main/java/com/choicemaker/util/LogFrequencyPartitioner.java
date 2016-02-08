@@ -312,10 +312,11 @@ public class LogFrequencyPartitioner {
 	 * @param lineSep
 	 *            separates value-partition pairs from each other. If null, then
 	 *            the system default for the line separator is used.
+	 * @return the number of values-partition pairs that were written
 	 * @throws IOException
 	 *             if the file can not be created or written
 	 */
-	public static void writeFile(List<ValuePartitionPair> pairs,
+	public static int writeFile(List<ValuePartitionPair> pairs,
 			String fileName, Character elementSep, String lineSep)
 			throws IOException {
 		if (pairs == null) {
@@ -327,6 +328,7 @@ public class LogFrequencyPartitioner {
 		if (lineSep == null) {
 			lineSep = EOL;
 		}
+		int retVal = 0;
 		FileOutputStream fs = null;
 		Writer w = null;
 		try {
@@ -340,6 +342,7 @@ public class LogFrequencyPartitioner {
 					w.write(lineSep);
 				}
 				w.write(p.partition + lineSep);
+				++retVal;
 			}
 		} finally {
 			if (w != null) {
@@ -354,6 +357,7 @@ public class LogFrequencyPartitioner {
 				fs = null;
 			}
 		}
+		return retVal;
 	}
 
 	public static class ValueCountPair {

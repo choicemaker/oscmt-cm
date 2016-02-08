@@ -11,6 +11,8 @@
 package com.choicemaker.cm.logfrequencypartitioner.app;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 import com.choicemaker.util.SystemPropertyUtils;
@@ -34,6 +36,9 @@ public class LogPartitionerParams {
 	public static final char DEFAULT_CSV_FIELD_SEPARATOR = COMMA;
 	public static final String EOL = SystemPropertyUtils.PV_LINE_SEPARATOR;
 
+	private final boolean isHelp;
+	private final List<String> errors = new ArrayList<>();
+
 	private final int partitionCount;
 
 	private final String inputFileName;
@@ -48,21 +53,55 @@ public class LogPartitionerParams {
 	private final char outputCsvFieldSeparator;
 	private final String outputLineSeparator;
 
-	/** Recommended constructor */
-	public LogPartitionerParams(String inputFileName, char csvFieldSeparator,
-			String outputFileName, int partitionCount) {
-		this(inputFileName, LOG_PARTITIONER_FILE_FORMAT.CSV, csvFieldSeparator,
-				EOL, outputFileName, LOG_PARTITIONER_FILE_FORMAT.CSV,
-				csvFieldSeparator, EOL, partitionCount);
+	/** Help constructor */
+	public LogPartitionerParams() {
+		this.isHelp = true;
+		this.inputFileName = null;
+		this.inputFile = null;
+		this.inputFormat = null;
+		this.inputCsvFieldSeparator = COMMA;
+		this.inputLineSeparator = null;
+		this.outputFileName = null;
+		this.outputFile = null;
+		this.outputFormat = null;
+		this.outputCsvFieldSeparator = COMMA;
+		this.outputLineSeparator = null;
+		this.partitionCount = 0;
+	}
+
+	/** Error constructor */
+	public LogPartitionerParams(boolean isHelp, List<String> errors) {
+		if (errors == null) {
+			throw new IllegalArgumentException("null error list");
+		}
+		this.isHelp = isHelp;
+		this.errors.addAll(errors);
+		this.inputFileName = null;
+		this.inputFile = null;
+		this.inputFormat = null;
+		this.inputCsvFieldSeparator = COMMA;
+		this.inputLineSeparator = null;
+		this.outputFileName = null;
+		this.outputFile = null;
+		this.outputFormat = null;
+		this.outputCsvFieldSeparator = COMMA;
+		this.outputLineSeparator = null;
+		this.partitionCount = 0;
 	}
 
 	/** Full constructor */
-	public LogPartitionerParams(String inputFileName,
-			LOG_PARTITIONER_FILE_FORMAT inputFormat,
+	public LogPartitionerParams(boolean isHelp, List<String> errors,
+			String inputFileName, LOG_PARTITIONER_FILE_FORMAT inputFormat,
 			char inputCsvFieldSeparator, String inputLineSeparator,
 			String outputFileName, LOG_PARTITIONER_FILE_FORMAT outputFormat,
 			char outputCsvFieldSeparator, String outputLineSeparator,
 			int partitionCount) {
+
+		this.isHelp = isHelp;
+
+		if (errors != null) {
+			this.errors.addAll(errors);
+		}
 
 		if (inputFileName == null) {
 			throw new IllegalArgumentException(
@@ -80,8 +119,7 @@ public class LogPartitionerParams {
 		}
 
 		if (inputLineSeparator == null) {
-			throw new IllegalArgumentException(
-					"null input line separator");
+			throw new IllegalArgumentException("null input line separator");
 		}
 
 		if (outputFileName == null) {
@@ -100,8 +138,7 @@ public class LogPartitionerParams {
 		}
 
 		if (outputLineSeparator == null) {
-			throw new IllegalArgumentException(
-					"null output line separator");
+			throw new IllegalArgumentException("null output line separator");
 		}
 
 		if (partitionCount < 1) {
@@ -132,15 +169,27 @@ public class LogPartitionerParams {
 
 		this.partitionCount = partitionCount;
 
-		logger.info(this.toString());
+		logger.fine(this.toString());
 	}
 
 	/** Deprecated ChoiceMaker 2.5 standard */
 	@Deprecated
 	public LogPartitionerParams(String inputFileName, String outputFileName,
 			int partitionCount) {
-		this(inputFileName, CM25_STANDARD, COMMA, EOL, outputFileName,
-				CM25_STANDARD, COMMA, EOL, partitionCount);
+		this(false, null, inputFileName, CM25_STANDARD, COMMA, EOL,
+				outputFileName, CM25_STANDARD, COMMA, EOL, partitionCount);
+	}
+
+	public boolean isHelp() {
+		return isHelp;
+	}
+	
+	public boolean hasErrors() {
+		return !errors.isEmpty();
+	}
+
+	public List<String> getErrors() {
+		return errors;
 	}
 
 	public char getInputCsvFieldSeparator() {
