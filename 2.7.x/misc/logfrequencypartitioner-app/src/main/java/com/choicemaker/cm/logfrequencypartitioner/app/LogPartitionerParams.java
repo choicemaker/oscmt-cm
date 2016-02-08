@@ -81,13 +81,7 @@ public class LogPartitionerParams {
 
 		if (inputLineSeparator == null) {
 			throw new IllegalArgumentException(
-					"null file name for input line separator");
-		} else {
-			inputLineSeparator = inputLineSeparator.trim();
-			if (inputLineSeparator.isEmpty()) {
-				throw new IllegalArgumentException(
-						"empty input line separator");
-			}
+					"null input line separator");
 		}
 
 		if (outputFileName == null) {
@@ -107,13 +101,7 @@ public class LogPartitionerParams {
 
 		if (outputLineSeparator == null) {
 			throw new IllegalArgumentException(
-					"null file name for output line separator");
-		} else {
-			outputLineSeparator = outputLineSeparator.trim();
-			if (outputLineSeparator.isEmpty()) {
-				throw new IllegalArgumentException(
-						"empty output line separator");
-			}
+					"null output line separator");
 		}
 
 		if (partitionCount < 1) {
