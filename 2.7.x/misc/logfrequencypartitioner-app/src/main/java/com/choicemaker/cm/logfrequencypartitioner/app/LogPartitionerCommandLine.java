@@ -15,6 +15,7 @@ import static com.choicemaker.cm.logfrequencypartitioner.app.LogPartitionerParam
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.cli.BasicParser;
@@ -286,14 +287,21 @@ public class LogPartitionerCommandLine {
 			}
 
 			assert errors != null;
-			if (errors.isEmpty()) {
+			if (args.length == 1 && isHelp) {
+				// Ignore errors if only help is requested
+				List<String> empty = Collections.emptyList();
+				retVal = new LogPartitionerParams(isHelp, empty);
+
+			} else if (!errors.isEmpty()) {
+				retVal = new LogPartitionerParams(isHelp, errors);
+
+			} else {
+				assert errors.isEmpty();
 				retVal =
 					new LogPartitionerParams(isHelp, errors, inputFileName,
 							inputFormat, inputFieldSep, inputLineSep,
 							outputFileName, outputFormat, outputFieldSep,
 							outputLineSep, partitionCount);
-			} else {
-				retVal = new LogPartitionerParams(isHelp, errors);
 			}
 
 		}
@@ -309,7 +317,7 @@ public class LogPartitionerCommandLine {
 	}
 
 	public static String missingArgument(String argName) {
-		String retVal = "Missng the required '" + argName + "' argument";
+		String retVal = "Missing the required '" + argName + "' argument";
 		return retVal;
 	}
 

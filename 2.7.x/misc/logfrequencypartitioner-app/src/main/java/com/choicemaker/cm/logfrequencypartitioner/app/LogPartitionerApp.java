@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -57,6 +58,8 @@ public class LogPartitionerApp {
 	 */
 	public static void main(String[] args) throws Exception {
 
+		logger.fine("LogPartitionerApp (main) args: " + Arrays.toString(args));
+
 		int exitCode = STATUS_OK;
 		PrintWriter console = null;
 		try {
@@ -87,6 +90,9 @@ public class LogPartitionerApp {
 				exitCode = STATUS_OK;
 			}
 			console.flush();
+
+		} catch (Exception x) {
+			x.printStackTrace(console);
 
 		} finally {
 			if (console != null) {
