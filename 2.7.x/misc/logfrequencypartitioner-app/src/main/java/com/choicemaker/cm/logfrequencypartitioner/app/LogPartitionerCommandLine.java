@@ -171,13 +171,14 @@ public class LogPartitionerCommandLine {
 			}
 			if (inputFileName == null || inputFileName.isEmpty()) {
 				errors.add(missingArgument(ARG_INPUT_FILE));
-			}
-			File f = new File(inputFileName);
-			if (!f.exists() || !f.isFile()) {
-				String msg =
-					"Input file '" + f.getAbsolutePath()
-							+ "' does not exist or is not a file";
-				errors.add(msg);
+			} else {
+				File f = new File(inputFileName);
+				if (!f.exists() || !f.isFile()) {
+					String msg =
+						"Input file '" + f.getAbsolutePath()
+								+ "' does not exist or is not a file";
+					errors.add(msg);
+				}
 			}
 
 			LOG_PARTITIONER_FILE_FORMAT inputFormat = null;
@@ -202,12 +203,14 @@ public class LogPartitionerCommandLine {
 			}
 			if (outputFileName == null || outputFileName.isEmpty()) {
 				errors.add(missingArgument(ARG_OUTPUT_FILE));
-			}
-			f = new File(outputFileName);
-			if (f.exists()) {
-				String msg =
-					"Output file '" + f.getAbsolutePath() + "' already exists";
-				errors.add(msg);
+			} else {
+				File f = new File(outputFileName);
+				if (f.exists()) {
+					String msg =
+						"Output file '" + f.getAbsolutePath()
+								+ "' already exists";
+					errors.add(msg);
+				}
 			}
 
 			LOG_PARTITIONER_FILE_FORMAT outputFormat = null;
