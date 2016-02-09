@@ -123,7 +123,7 @@ public class LogPartitionerApp {
 			List<ValueCountPair> input =
 				readInput(getAppParams().getInputFileName(), getAppParams()
 						.getInputFormat(), getAppParams()
-						.getInputCsvFieldSeparator(), getAppParams()
+						.getInputFieldSeparator(), getAppParams()
 						.getInputLineSeparator());
 			List<ValuePartitionPair> output =
 				LogFrequencyPartitioner.partition(input, getAppParams()
@@ -131,7 +131,7 @@ public class LogPartitionerApp {
 			retVal =
 				writeOutput(output, getAppParams().getOutputFileName(),
 						getAppParams().getOutputFormat(), getAppParams()
-								.getOutputCsvFieldSeparator(), getAppParams()
+								.getOutputFieldSeparator(), getAppParams()
 								.getOutputLineSeparator());
 		} catch (IOException x) {
 			logger.severe(x.toString());
@@ -141,13 +141,13 @@ public class LogPartitionerApp {
 	}
 
 	public static List<ValueCountPair> readInput(String fileName,
-			LOG_PARTITIONER_FILE_FORMAT fileFormat, char csvFieldSeparator,
+			LOG_PARTITIONER_FILE_FORMAT fileFormat, char fieldSeparator,
 			String lineSeparator) throws IOException {
 		List<ValueCountPair> retVal = null;
 		switch (fileFormat) {
-		case CSV:
+		case DELIMITED:
 			retVal =
-				LogFrequencyPartitioner.readFile(fileName, csvFieldSeparator,
+				LogFrequencyPartitioner.readFile(fileName, fieldSeparator,
 						lineSeparator);
 			break;
 		case ALT_LINES:
@@ -161,13 +161,13 @@ public class LogPartitionerApp {
 
 	public static int writeOutput(List<ValuePartitionPair> output,
 			String fileName, LOG_PARTITIONER_FILE_FORMAT fileFormat,
-			char csvFieldSeparator, String lineSeparator) throws IOException {
+			char fieldSeparator, String lineSeparator) throws IOException {
 		int retVal;
 		switch (fileFormat) {
-		case CSV:
+		case DELIMITED:
 			retVal =
 				LogFrequencyPartitioner.writeFile(output, fileName,
-						csvFieldSeparator, lineSeparator);
+						fieldSeparator, lineSeparator);
 			break;
 		case ALT_LINES:
 		default:

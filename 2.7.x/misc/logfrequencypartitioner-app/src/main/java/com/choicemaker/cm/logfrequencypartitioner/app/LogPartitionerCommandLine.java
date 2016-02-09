@@ -41,13 +41,13 @@ public class LogPartitionerCommandLine {
 
 	public static final String ARG_INPUT_FORMAT = "inputFormat";
 	public static final String DESC_INPUT_FORMAT =
-		"[REQUIRED] Input format: CSV (comma-separated values and counts) or "
+		"[REQUIRED] Input format: DELIMITED (comma-separated values and counts) or "
 				+ "ALT_LINES (values and counts on alternating lines)";
 
-	public static final String ARG_INPUT_CSV_FIELD_SEP = "inputFieldSep";
-	public static final String DESC_INPUT_CSV_FIELD_SEP =
+	public static final String ARG_INPUT_FIELD_SEP = "inputFieldSep";
+	public static final String DESC_INPUT_FIELD_SEP =
 		"[OPTIONAL] Input field separator: a single-charactor "
-				+ "(instead of a comma) for separating CSV fields; "
+				+ "(instead of a comma) for separating DELIMITED fields; "
 				+ "if no separator is specified, a comma is the default";
 
 	public static final String ARG_INPUT_LINE_SEP = "inputLineSep";
@@ -62,13 +62,13 @@ public class LogPartitionerCommandLine {
 
 	public static final String ARG_OUTPUT_FORMAT = "outputFormat";
 	public static final String DESC_OUTPUT_FORMAT =
-		"[REQUIRED] Output format: CSV (comma-separated values and counts) or "
+		"[REQUIRED] Output format: DELIMITED (comma-separated values and counts) or "
 				+ "ALT_LINES (values and counts on alternating lines)";
 
-	public static final String ARG_OUTPUT_CSV_FIELD_SEP = "outputFieldSep";
-	public static final String DESC_OUTPUT_CSV_FIELD_SEP =
+	public static final String ARG_OUTPUT_FIELD_SEP = "outputFieldSep";
+	public static final String DESC_OUTPUT_FIELD_SEP =
 		"[OPTIONAL] Output field separator: a single-charactor "
-				+ "(instead of a comma) for separating CSV fields; "
+				+ "(instead of a comma) for separating DELIMITED fields; "
 				+ "if no separator is specified, a comma is the default";
 
 	public static final String ARG_OUTPUT_LINE_SEP = "outputLineSep";
@@ -101,8 +101,8 @@ public class LogPartitionerCommandLine {
 		retVal.addOption(opt);
 
 		opt =
-			new Option(ARG_INPUT_CSV_FIELD_SEP, hasArg,
-					DESC_INPUT_CSV_FIELD_SEP);
+			new Option(ARG_INPUT_FIELD_SEP, hasArg,
+					DESC_INPUT_FIELD_SEP);
 		opt.setRequired(false);
 		retVal.addOption(opt);
 
@@ -119,8 +119,8 @@ public class LogPartitionerCommandLine {
 		retVal.addOption(opt);
 
 		opt =
-			new Option(ARG_OUTPUT_CSV_FIELD_SEP, hasArg,
-					DESC_OUTPUT_CSV_FIELD_SEP);
+			new Option(ARG_OUTPUT_FIELD_SEP, hasArg,
+					DESC_OUTPUT_FIELD_SEP);
 		opt.setRequired(false);
 		retVal.addOption(opt);
 
@@ -252,7 +252,7 @@ public class LogPartitionerCommandLine {
 
 			// Optional
 			char inputFieldSep = COMMA;
-			String sInputFieldSep = cl.getOptionValue(ARG_INPUT_CSV_FIELD_SEP);
+			String sInputFieldSep = cl.getOptionValue(ARG_INPUT_FIELD_SEP);
 			if (sInputFieldSep != null) {
 				sInputFieldSep = sInputFieldSep.trim();
 				if (!sInputFieldSep.isEmpty()) {
@@ -270,7 +270,7 @@ public class LogPartitionerCommandLine {
 
 			char outputFieldSep = COMMA;
 			String sOutputFieldSep =
-				cl.getOptionValue(ARG_OUTPUT_CSV_FIELD_SEP);
+				cl.getOptionValue(ARG_OUTPUT_FIELD_SEP);
 			if (sOutputFieldSep != null) {
 				sOutputFieldSep = sOutputFieldSep.trim();
 				if (!sOutputFieldSep.isEmpty()) {

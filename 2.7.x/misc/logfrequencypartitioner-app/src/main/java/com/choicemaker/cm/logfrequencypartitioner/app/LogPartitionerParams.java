@@ -23,7 +23,7 @@ public class LogPartitionerParams {
 			.getLogger(LogPartitionerParams.class.getName());
 
 	public static enum LOG_PARTITIONER_FILE_FORMAT {
-		CSV, ALT_LINES
+		DELIMITED, ALT_LINES
 	}
 
 	/** Deprecated 2.5 standard */
@@ -33,7 +33,7 @@ public class LogPartitionerParams {
 
 	public static final char COMMA = ',';
 	public static final char PIPE = '|';
-	public static final char DEFAULT_CSV_FIELD_SEPARATOR = COMMA;
+	public static final char DEFAULT_FIELD_SEPARATOR = COMMA;
 	public static final String EOL = SystemPropertyUtils.PV_LINE_SEPARATOR;
 
 	private final boolean isHelp;
@@ -44,13 +44,13 @@ public class LogPartitionerParams {
 	private final String inputFileName;
 	private final File inputFile;
 	private final LOG_PARTITIONER_FILE_FORMAT inputFormat;
-	private final char inputCsvFieldSeparator;
+	private final char inputFieldSeparator;
 	private final String inputLineSeparator;
 
 	private final String outputFileName;
 	private final File outputFile;
 	private final LOG_PARTITIONER_FILE_FORMAT outputFormat;
-	private final char outputCsvFieldSeparator;
+	private final char outputFieldSeparator;
 	private final String outputLineSeparator;
 
 	/** Help constructor */
@@ -59,12 +59,12 @@ public class LogPartitionerParams {
 		this.inputFileName = null;
 		this.inputFile = null;
 		this.inputFormat = null;
-		this.inputCsvFieldSeparator = COMMA;
+		this.inputFieldSeparator = COMMA;
 		this.inputLineSeparator = null;
 		this.outputFileName = null;
 		this.outputFile = null;
 		this.outputFormat = null;
-		this.outputCsvFieldSeparator = COMMA;
+		this.outputFieldSeparator = COMMA;
 		this.outputLineSeparator = null;
 		this.partitionCount = 0;
 	}
@@ -79,12 +79,12 @@ public class LogPartitionerParams {
 		this.inputFileName = null;
 		this.inputFile = null;
 		this.inputFormat = null;
-		this.inputCsvFieldSeparator = COMMA;
+		this.inputFieldSeparator = COMMA;
 		this.inputLineSeparator = null;
 		this.outputFileName = null;
 		this.outputFile = null;
 		this.outputFormat = null;
-		this.outputCsvFieldSeparator = COMMA;
+		this.outputFieldSeparator = COMMA;
 		this.outputLineSeparator = null;
 		this.partitionCount = 0;
 	}
@@ -92,9 +92,9 @@ public class LogPartitionerParams {
 	/** Full constructor */
 	public LogPartitionerParams(boolean isHelp, List<String> errors,
 			String inputFileName, LOG_PARTITIONER_FILE_FORMAT inputFormat,
-			char inputCsvFieldSeparator, String inputLineSeparator,
+			char inputFieldSeparator, String inputLineSeparator,
 			String outputFileName, LOG_PARTITIONER_FILE_FORMAT outputFormat,
-			char outputCsvFieldSeparator, String outputLineSeparator,
+			char outputFieldSeparator, String outputLineSeparator,
 			int partitionCount) {
 
 		this.isHelp = isHelp;
@@ -154,7 +154,7 @@ public class LogPartitionerParams {
 			throw new IllegalArgumentException(msg);
 		}
 		this.inputFormat = inputFormat;
-		this.inputCsvFieldSeparator = inputCsvFieldSeparator;
+		this.inputFieldSeparator = inputFieldSeparator;
 		this.inputLineSeparator = inputLineSeparator;
 
 		this.outputFileName = outputFileName;
@@ -164,7 +164,7 @@ public class LogPartitionerParams {
 			throw new IllegalArgumentException(msg);
 		}
 		this.outputFormat = outputFormat;
-		this.outputCsvFieldSeparator = outputCsvFieldSeparator;
+		this.outputFieldSeparator = outputFieldSeparator;
 		this.outputLineSeparator = outputLineSeparator;
 
 		this.partitionCount = partitionCount;
@@ -192,8 +192,8 @@ public class LogPartitionerParams {
 		return errors;
 	}
 
-	public char getInputCsvFieldSeparator() {
-		return inputCsvFieldSeparator;
+	public char getInputFieldSeparator() {
+		return inputFieldSeparator;
 	}
 
 	public File getInputFile() {
@@ -212,8 +212,8 @@ public class LogPartitionerParams {
 		return inputLineSeparator;
 	}
 
-	public char getOutputCsvFieldSeparator() {
-		return outputCsvFieldSeparator;
+	public char getOutputFieldSeparator() {
+		return outputFieldSeparator;
 	}
 
 	public File getOutputFile() {
@@ -242,16 +242,16 @@ public class LogPartitionerParams {
 				+ ", inputFileName=" + inputFileName + ", inputFile="
 				+ inputFile + ", outputFileName=" + outputFileName
 				+ ", outputFile=" + outputFile + ", inputFormat=" + inputFormat
-				+ ", inputCsvFieldSeparator=" + inputCsvFieldSeparator
+				+ ", inputFieldSeparator=" + inputFieldSeparator
 				+ ", outputFormat=" + outputFormat
-				+ ", outputCsvFieldSeparator=" + outputCsvFieldSeparator + "]";
+				+ ", outputFieldSeparator=" + outputFieldSeparator + "]";
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + inputCsvFieldSeparator;
+		result = prime * result + inputFieldSeparator;
 		result =
 			prime * result + ((inputFile == null) ? 0 : inputFile.hashCode());
 		result =
@@ -260,7 +260,7 @@ public class LogPartitionerParams {
 		result =
 			prime * result
 					+ ((inputFormat == null) ? 0 : inputFormat.hashCode());
-		result = prime * result + outputCsvFieldSeparator;
+		result = prime * result + outputFieldSeparator;
 		result =
 			prime * result + ((outputFile == null) ? 0 : outputFile.hashCode());
 		result =
@@ -286,7 +286,7 @@ public class LogPartitionerParams {
 			return false;
 		}
 		LogPartitionerParams other = (LogPartitionerParams) obj;
-		if (inputCsvFieldSeparator != other.inputCsvFieldSeparator) {
+		if (inputFieldSeparator != other.inputFieldSeparator) {
 			return false;
 		}
 		if (inputFile == null) {
@@ -306,7 +306,7 @@ public class LogPartitionerParams {
 		if (inputFormat != other.inputFormat) {
 			return false;
 		}
-		if (outputCsvFieldSeparator != other.outputCsvFieldSeparator) {
+		if (outputFieldSeparator != other.outputFieldSeparator) {
 			return false;
 		}
 		if (outputFile == null) {
