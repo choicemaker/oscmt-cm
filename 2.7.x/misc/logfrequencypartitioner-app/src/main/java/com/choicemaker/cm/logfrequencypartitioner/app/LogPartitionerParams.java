@@ -183,7 +183,7 @@ public class LogPartitionerParams {
 	public boolean isHelp() {
 		return isHelp;
 	}
-	
+
 	public boolean hasErrors() {
 		return !errors.isEmpty();
 	}
@@ -238,19 +238,22 @@ public class LogPartitionerParams {
 
 	@Override
 	public String toString() {
-		return "LogPartitionerParams [partitionCount=" + partitionCount
-				+ ", inputFileName=" + inputFileName + ", inputFile="
-				+ inputFile + ", outputFileName=" + outputFileName
-				+ ", outputFile=" + outputFile + ", inputFormat=" + inputFormat
-				+ ", inputFieldSeparator=" + inputFieldSeparator
-				+ ", outputFormat=" + outputFormat
-				+ ", outputFieldSeparator=" + outputFieldSeparator + "]";
+		return "LogPartitionerParams [isHelp=" + isHelp + ", errors=" + errors
+				+ ", partitionCount=" + partitionCount + ", inputFileName="
+				+ inputFileName + ", inputFile=" + inputFile + ", inputFormat="
+				+ inputFormat + ", inputFieldSeparator=" + inputFieldSeparator
+				+ ", inputLineSeparator=" + inputLineSeparator
+				+ ", outputFileName=" + outputFileName + ", outputFile="
+				+ outputFile + ", outputFormat=" + outputFormat
+				+ ", outputFieldSeparator=" + outputFieldSeparator
+				+ ", outputLineSeparator=" + outputLineSeparator + "]";
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((errors == null) ? 0 : errors.hashCode());
 		result = prime * result + inputFieldSeparator;
 		result =
 			prime * result + ((inputFile == null) ? 0 : inputFile.hashCode());
@@ -260,6 +263,12 @@ public class LogPartitionerParams {
 		result =
 			prime * result
 					+ ((inputFormat == null) ? 0 : inputFormat.hashCode());
+		result =
+			prime
+					* result
+					+ ((inputLineSeparator == null) ? 0 : inputLineSeparator
+							.hashCode());
+		result = prime * result + (isHelp ? 1231 : 1237);
 		result = prime * result + outputFieldSeparator;
 		result =
 			prime * result + ((outputFile == null) ? 0 : outputFile.hashCode());
@@ -270,6 +279,11 @@ public class LogPartitionerParams {
 		result =
 			prime * result
 					+ ((outputFormat == null) ? 0 : outputFormat.hashCode());
+		result =
+			prime
+					* result
+					+ ((outputLineSeparator == null) ? 0 : outputLineSeparator
+							.hashCode());
 		result = prime * result + partitionCount;
 		return result;
 	}
@@ -286,6 +300,13 @@ public class LogPartitionerParams {
 			return false;
 		}
 		LogPartitionerParams other = (LogPartitionerParams) obj;
+		if (errors == null) {
+			if (other.errors != null) {
+				return false;
+			}
+		} else if (!errors.equals(other.errors)) {
+			return false;
+		}
 		if (inputFieldSeparator != other.inputFieldSeparator) {
 			return false;
 		}
@@ -306,6 +327,16 @@ public class LogPartitionerParams {
 		if (inputFormat != other.inputFormat) {
 			return false;
 		}
+		if (inputLineSeparator == null) {
+			if (other.inputLineSeparator != null) {
+				return false;
+			}
+		} else if (!inputLineSeparator.equals(other.inputLineSeparator)) {
+			return false;
+		}
+		if (isHelp != other.isHelp) {
+			return false;
+		}
 		if (outputFieldSeparator != other.outputFieldSeparator) {
 			return false;
 		}
@@ -324,6 +355,13 @@ public class LogPartitionerParams {
 			return false;
 		}
 		if (outputFormat != other.outputFormat) {
+			return false;
+		}
+		if (outputLineSeparator == null) {
+			if (other.outputLineSeparator != null) {
+				return false;
+			}
+		} else if (!outputLineSeparator.equals(other.outputLineSeparator)) {
 			return false;
 		}
 		if (partitionCount != other.partitionCount) {

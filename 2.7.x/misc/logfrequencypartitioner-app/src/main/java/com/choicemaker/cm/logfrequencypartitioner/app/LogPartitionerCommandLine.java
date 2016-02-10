@@ -11,6 +11,7 @@
 package com.choicemaker.cm.logfrequencypartitioner.app;
 
 import static com.choicemaker.cm.logfrequencypartitioner.app.LogPartitionerParams.COMMA;
+import static com.choicemaker.cm.logfrequencypartitioner.app.LogPartitionerParams.EOL;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,11 +27,8 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
 import com.choicemaker.cm.logfrequencypartitioner.app.LogPartitionerParams.LOG_PARTITIONER_FILE_FORMAT;
-import com.choicemaker.util.SystemPropertyUtils;
 
 public class LogPartitionerCommandLine {
-
-	public static final String EOL = SystemPropertyUtils.PV_LINE_SEPARATOR;
 
 	public static final String ARG_HELP = "help";
 	public static final String DESC_HELP = "Help (print this message)";
@@ -100,9 +98,7 @@ public class LogPartitionerCommandLine {
 		opt.setRequired(false);
 		retVal.addOption(opt);
 
-		opt =
-			new Option(ARG_INPUT_FIELD_SEP, hasArg,
-					DESC_INPUT_FIELD_SEP);
+		opt = new Option(ARG_INPUT_FIELD_SEP, hasArg, DESC_INPUT_FIELD_SEP);
 		opt.setRequired(false);
 		retVal.addOption(opt);
 
@@ -118,9 +114,7 @@ public class LogPartitionerCommandLine {
 		opt.setRequired(false);
 		retVal.addOption(opt);
 
-		opt =
-			new Option(ARG_OUTPUT_FIELD_SEP, hasArg,
-					DESC_OUTPUT_FIELD_SEP);
+		opt = new Option(ARG_OUTPUT_FIELD_SEP, hasArg, DESC_OUTPUT_FIELD_SEP);
 		opt.setRequired(false);
 		retVal.addOption(opt);
 
@@ -138,7 +132,7 @@ public class LogPartitionerCommandLine {
 	/**
 	 * Parse the command line arguments into parameters for the
 	 * LogPartitionerApp.
-	 * 
+	 *
 	 * @param args
 	 *            non-null array of command-line arguments
 	 * @return LogPartitioner parameters, or null if help is requested or errors
@@ -269,8 +263,7 @@ public class LogPartitionerCommandLine {
 			}
 
 			char outputFieldSep = COMMA;
-			String sOutputFieldSep =
-				cl.getOptionValue(ARG_OUTPUT_FIELD_SEP);
+			String sOutputFieldSep = cl.getOptionValue(ARG_OUTPUT_FIELD_SEP);
 			if (sOutputFieldSep != null) {
 				sOutputFieldSep = sOutputFieldSep.trim();
 				if (!sOutputFieldSep.isEmpty()) {
@@ -318,6 +311,65 @@ public class LogPartitionerCommandLine {
 
 	public static String missingArgument(String argName) {
 		String retVal = "Missing the required '" + argName + "' argument";
+		return retVal;
+	}
+
+	protected static final String OPTION_FLAG = "-";
+
+	protected static final String MAGIC_DIVIDER = "__MAGIC_DIVIDER__";
+
+	protected static String booleanArg(boolean isSet, String arg) {
+		assert arg != null;
+		assert !arg.contains(MAGIC_DIVIDER);
+		String retVal = "";
+		if (isSet) {
+			retVal = OPTION_FLAG + arg + MAGIC_DIVIDER;
+		}
+		return retVal;
+	}
+
+	protected static String argWithQuotedValue(String arg, String value) {
+		assert arg != null;
+		assert !arg.contains(MAGIC_DIVIDER);
+		String retVal = "";
+		if (value != null) {
+			if (value.contains(MAGIC_DIVIDER)) {
+				throw new IllegalArgumentException(
+						"value contains the magic divider ('" + MAGIC_DIVIDER
+								+ "'): " + value);
+			}
+			retVal = OPTION_FLAG + arg + MAGIC_DIVIDER + value + MAGIC_DIVIDER;
+		}
+		return retVal;
+	}
+
+	public static String[] toCommandLine(LogPartitionerParams lpp) {
+		if (lpp == null) {
+			throw new IllegalArgumentException(
+					"null log partitioner parameters");
+		}
+
+		StringBuilder sb = new StringBuilder();
+		sb.append(booleanArg(lpp.isHelp(), ARG_HELP));
+		sb.append(argWithQuotedValue(ARG_INPUT_FILE, lpp.getInputFileName()));
+		sb.append(argWithQuotedValue(ARG_INPUT_FORMAT, lpp.getInputFormat()
+				.name()));
+		sb.append(argWithQuotedValue(ARG_INPUT_FIELD_SEP,
+				String.valueOf(lpp.getOutputFieldSeparator())));
+		sb.append(argWithQuotedValue(ARG_INPUT_LINE_SEP,
+				lpp.getInputLineSeparator()));
+		sb.append(argWithQuotedValue(ARG_OUTPUT_FILE, lpp.getOutputFileName()));
+		sb.append(argWithQuotedValue(ARG_OUTPUT_FORMAT, lpp.getOutputFormat()
+				.name()));
+		sb.append(argWithQuotedValue(ARG_OUTPUT_FIELD_SEP,
+				String.valueOf(lpp.getOutputFieldSeparator())));
+		sb.append(argWithQuotedValue(ARG_OUTPUT_LINE_SEP,
+				lpp.getOutputLineSeparator()));
+		sb.append(argWithQuotedValue(ARG_PARTITION_COUNT,
+				String.valueOf(lpp.getPartitionCount())));
+
+		String s = sb.toString();
+		String[] retVal = s.split(MAGIC_DIVIDER);
 		return retVal;
 	}
 

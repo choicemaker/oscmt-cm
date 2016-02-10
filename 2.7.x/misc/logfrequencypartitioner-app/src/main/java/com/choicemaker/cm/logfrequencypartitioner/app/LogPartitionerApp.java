@@ -30,8 +30,13 @@ import com.choicemaker.util.LogFrequencyPartitioner.ValueCountPair;
 import com.choicemaker.util.LogFrequencyPartitioner.ValuePartitionPair;
 
 /**
- * Application that ...
- * 
+ * Application that partitions values into evenly spaced, logarithmic bins based
+ * on the value frequency counts. For example, consider the following value-
+ * count pairs:
+ *
+ * A 10-bin logarithmic partition of the pairs would produce the following value-
+ * partition pairs:
+ *
  * @param args
  */
 public class LogPartitionerApp {
@@ -49,7 +54,7 @@ public class LogPartitionerApp {
 	 * <li>-outputPairs <output pair-wise results file (*.txt)> [Required]</li>
 	 * </ul>
 	 * The input and output file formats are documented in the package overview.
-	 * 
+	 *
 	 * @param args
 	 *            a String array of exactly 8 elements, corresponding to the
 	 *            parameters listed above.
