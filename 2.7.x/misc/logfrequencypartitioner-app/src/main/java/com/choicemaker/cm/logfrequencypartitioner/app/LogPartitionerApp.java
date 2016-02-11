@@ -163,7 +163,7 @@ public class LogPartitionerApp {
 		return retVal;
 	}
 
-	public static int writeOutput(List<ValueRank> output,
+	public static <T extends ValueRank> int writeOutput(List<T> output,
 			String fileName, LogPartitionerFileFormat fileFormat,
 			char fieldSeparator, String lineSeparator) throws IOException {
 		int retVal;

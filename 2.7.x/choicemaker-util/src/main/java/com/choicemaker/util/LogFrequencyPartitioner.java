@@ -346,7 +346,7 @@ public class LogFrequencyPartitioner {
 	 * @throws IOException
 	 *             if the file can not be created or written
 	 */
-	public static int writeFile(List<ValueRank> pairs, String fileName,
+	public static <T extends ValueRank> int writeFile(List<T> pairs, String fileName,
 			Character elementSep, String lineSep) throws IOException {
 		if (pairs == null) {
 			throw new IllegalArgumentException("null pairs");
