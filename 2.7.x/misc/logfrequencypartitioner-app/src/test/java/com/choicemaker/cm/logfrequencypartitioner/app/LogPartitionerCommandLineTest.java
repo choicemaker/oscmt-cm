@@ -71,16 +71,6 @@ public class LogPartitionerCommandLineTest {
 	}
 
 	@Test
-	public void testParseInvalidCommandLine() throws Exception {
-		LogPartitionerParams lpp0 = make(invalidParams);
-		String[] args = toCommandLine(lpp0);
-		LogPartitionerParams lpp =
-			LogPartitionerCommandLine.parseCommandLine(args);
-		assertTrue(lpp != null);
-		assertTrue(lpp.getErrors().size() == 2);
-	}
-
-	@Test
 	public void testParseValidCommandLine() throws Exception {
 		LogPartitionerParams lpp0 = make(validParams);
 		String[] args = toCommandLine(lpp0);
