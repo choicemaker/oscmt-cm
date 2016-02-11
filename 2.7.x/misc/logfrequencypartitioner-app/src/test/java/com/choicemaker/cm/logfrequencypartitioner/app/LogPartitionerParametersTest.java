@@ -1,15 +1,15 @@
 package com.choicemaker.cm.logfrequencypartitioner.app;
 
 import static com.choicemaker.cm.logfrequencypartitioner.app.ParameterMaker.BaseParams;
-import static com.choicemaker.cm.logfrequencypartitioner.app.ParameterMaker.inputFieldSeparator;
-import static com.choicemaker.cm.logfrequencypartitioner.app.ParameterMaker.inputFileName;
-import static com.choicemaker.cm.logfrequencypartitioner.app.ParameterMaker.inputFormat;
-import static com.choicemaker.cm.logfrequencypartitioner.app.ParameterMaker.inputLineSeparator;
-import static com.choicemaker.cm.logfrequencypartitioner.app.ParameterMaker.outputFieldSeparator;
-import static com.choicemaker.cm.logfrequencypartitioner.app.ParameterMaker.outputFileName;
-import static com.choicemaker.cm.logfrequencypartitioner.app.ParameterMaker.outputFormat;
-import static com.choicemaker.cm.logfrequencypartitioner.app.ParameterMaker.outputLineSeparator;
-import static com.choicemaker.cm.logfrequencypartitioner.app.ParameterMaker.partitionCount;
+import static com.choicemaker.cm.logfrequencypartitioner.app.UncheckedParameterMaker.inputFieldSeparator;
+import static com.choicemaker.cm.logfrequencypartitioner.app.UncheckedParameterMaker.inputFileName;
+import static com.choicemaker.cm.logfrequencypartitioner.app.UncheckedParameterMaker.inputFormat;
+import static com.choicemaker.cm.logfrequencypartitioner.app.UncheckedParameterMaker.inputLineSeparator;
+import static com.choicemaker.cm.logfrequencypartitioner.app.UncheckedParameterMaker.outputFieldSeparator;
+import static com.choicemaker.cm.logfrequencypartitioner.app.UncheckedParameterMaker.outputFileName;
+import static com.choicemaker.cm.logfrequencypartitioner.app.UncheckedParameterMaker.outputFormat;
+import static com.choicemaker.cm.logfrequencypartitioner.app.UncheckedParameterMaker.outputLineSeparator;
+import static com.choicemaker.cm.logfrequencypartitioner.app.UncheckedParameterMaker.partitionCount;
 import static com.natpryce.makeiteasy.MakeItEasy.a;
 import static com.natpryce.makeiteasy.MakeItEasy.make;
 import static com.natpryce.makeiteasy.MakeItEasy.with;
@@ -32,20 +32,6 @@ public class LogPartitionerParametersTest {
 	private static final Logger logger = Logger
 			.getLogger(LogPartitionerParametersTest.class.getName());
 
-	public static final String TEMP_PREFIX = "LogPartitionerTest_";
-	public static final String TEMP_SUFFIX = ".csv";
-
-	public static final String VALID_VALUE_INPUT_FORMAT = "AnInputFormat";
-	public static final String VALID_VALUE_INPUT_FIELD_SEP = "AnInputFieldSep";
-	public static final String VALID_VALUE_INPUT_LINE_SEP = "AnInputLineSep";
-
-	public static final String VALID_VALUE_OUTPUT_FILE = "AnOutputFile";
-	public static final String VALID_VALUE_OUTPUT_FORMAT = "AnOutputFormat";
-	public static final String VALID_VALUE_OUTPUT_FIELD_SEP =
-		"AnOutputFieldSep";
-	public static final String VALID_VALUE_OUTPUT_LINE_SEP = "AnOutputLineSep";
-	public static final String VALID_VALUE_PARTITION_COUNT = "7";
-
 	private File inputFile;
 	private Maker<LogPartitionerParams> baseParams;
 	private Maker<LogPartitionerParams> validParams;
@@ -54,13 +40,13 @@ public class LogPartitionerParametersTest {
 	@Before
 	public void setUp() throws Exception {
 
-		this.inputFile = File.createTempFile(TEMP_PREFIX, TEMP_SUFFIX);
+		this.inputFile = File.createTempFile(TestUtils.TEMP_PREFIX, TestUtils.TEMP_SUFFIX);
 
 		// Input file must exist (but may be empty)
 		assertTrue(inputFile.exists());
 
 		// Output file should be a valid path but must not exist
-		final Path outputPath = Files.createTempFile(TEMP_PREFIX, TEMP_SUFFIX);
+		final Path outputPath = Files.createTempFile(TestUtils.TEMP_PREFIX, TestUtils.TEMP_SUFFIX);
 		outputPath.toFile().delete();
 		assertTrue(!outputPath.toFile().exists());
 

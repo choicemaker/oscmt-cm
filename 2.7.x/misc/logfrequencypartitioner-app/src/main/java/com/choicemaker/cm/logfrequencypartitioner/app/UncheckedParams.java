@@ -22,17 +22,17 @@ class UncheckedParams {
 	private static final Logger logger = Logger
 			.getLogger(UncheckedParams.class.getName());
 
-	private final boolean isHelp;
-	private final List<String> errors = new ArrayList<>();
-	private final int partitionCount;
-	private final String inputFileName;
-	private final LogPartitionerFileFormat inputFormat;
-	private final char inputFieldSeparator;
-	private final String inputLineSeparator;
-	private final String outputFileName;
-	private final LogPartitionerFileFormat outputFormat;
-	private final char outputFieldSeparator;
-	private final String outputLineSeparator;
+	final boolean isHelp;
+	final List<String> errors = new ArrayList<>();
+	final int partitionCount;
+	final String inputFileName;
+	final LogPartitionerFileFormat inputFormat;
+	final char inputFieldSeparator;
+	final String inputLineSeparator;
+	final String outputFileName;
+	final LogPartitionerFileFormat outputFormat;
+	final char outputFieldSeparator;
+	final String outputLineSeparator;
 
 	public UncheckedParams(boolean isHelp, List<String> errors,
 			String inputFileName, LogPartitionerFileFormat inputFormat,
