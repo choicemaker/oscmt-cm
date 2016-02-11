@@ -16,21 +16,21 @@ import java.util.logging.Logger;
 
 import com.choicemaker.cm.logfrequencypartitioner.app.LogPartitionerParams.LOG_PARTITIONER_FILE_FORMAT;
 
-public class UncheckedParams {
+/**
+ * Unchecked base class for testing purposes.
+ */
+class UncheckedParams {
 
 	private static final Logger logger = Logger
 			.getLogger(UncheckedParams.class.getName());
 
 	private final boolean isHelp;
 	private final List<String> errors = new ArrayList<>();
-
 	private final int partitionCount;
-
 	private final String inputFileName;
 	private final LOG_PARTITIONER_FILE_FORMAT inputFormat;
 	private final char inputFieldSeparator;
 	private final String inputLineSeparator;
-
 	private final String outputFileName;
 	private final LOG_PARTITIONER_FILE_FORMAT outputFormat;
 	private final char outputFieldSeparator;
