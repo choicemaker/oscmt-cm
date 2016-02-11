@@ -10,8 +10,8 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.choicemaker.util.LogFrequencyPartitioner.ValueCountPair;
-import com.choicemaker.util.LogFrequencyPartitioner.ValuePartitionPair;
+import com.choicemaker.util.LogFrequencyPartitioner.ValueCount;
+import com.choicemaker.util.LogFrequencyPartitioner.ValueRank;
 
 public class LogFrequencyPartitionerTest {
 
@@ -32,69 +32,69 @@ public class LogFrequencyPartitionerTest {
 
 	@Test
 	public void testPartition() {
-		List<ValueCountPair> input1 = new ArrayList<>();
-		input1.add(new ValueCountPair("value 1", 1));
+		List<ValueCount> input1 = new ArrayList<>();
+		input1.add(new ValueCount("value 1", 1));
 
 		int numPartitions = 1;
-		List<ValuePartitionPair> expected = new ArrayList<>();
-		expected.add(new ValuePartitionPair("value 1", 0));
+		List<ValueRank> expected = new ArrayList<>();
+		expected.add(new ValueRank("value 1", 0));
 
-		List<ValuePartitionPair> computed = partition(input1, numPartitions);
+		List<ValueRank> computed = partition(input1, numPartitions);
 		assertTrue(expected.equals(computed));
 
 		numPartitions = 2;
 		computed = partition(input1, numPartitions);
 		assertTrue(expected.equals(computed));
 
-		List<ValueCountPair> input2 = new ArrayList<>();
-		input2.add(new ValueCountPair("value 1", 10));
-		input2.add(new ValueCountPair("value 2", 15));
-		input2.add(new ValueCountPair("value 3a", 39));
-		input2.add(new ValueCountPair("value 3b", 40));
-		input2.add(new ValueCountPair("value 3c", 41));
-		input2.add(new ValueCountPair("value 4", 100));
+		List<ValueCount> input2 = new ArrayList<>();
+		input2.add(new ValueCount("value 1", 10));
+		input2.add(new ValueCount("value 2", 15));
+		input2.add(new ValueCount("value 3a", 39));
+		input2.add(new ValueCount("value 3b", 40));
+		input2.add(new ValueCount("value 3c", 41));
+		input2.add(new ValueCount("value 4", 100));
 
 		numPartitions = 1;
 		expected = new ArrayList<>();
-		expected.add(new ValuePartitionPair("value 1", 0));
-		expected.add(new ValuePartitionPair("value 2", 0));
-		expected.add(new ValuePartitionPair("value 3a", 0));
-		expected.add(new ValuePartitionPair("value 3b", 0));
-		expected.add(new ValuePartitionPair("value 3c", 0));
-		expected.add(new ValuePartitionPair("value 4", 0));
+		expected.add(new ValueRank("value 1", 0));
+		expected.add(new ValueRank("value 2", 0));
+		expected.add(new ValueRank("value 3a", 0));
+		expected.add(new ValueRank("value 3b", 0));
+		expected.add(new ValueRank("value 3c", 0));
+		expected.add(new ValueRank("value 4", 0));
 		computed = partition(input2, numPartitions);
 		assertTrue(expected.equals(computed));
 
 		numPartitions = 2;
 		expected = new ArrayList<>();
-		expected.add(new ValuePartitionPair("value 1", 0));
-		expected.add(new ValuePartitionPair("value 2", 0));
-		expected.add(new ValuePartitionPair("value 3a", 1));
-		expected.add(new ValuePartitionPair("value 3b", 1));
-		expected.add(new ValuePartitionPair("value 3c", 1));
-		expected.add(new ValuePartitionPair("value 4", 1));
+		expected.add(new ValueRank("value 1", 0));
+		expected.add(new ValueRank("value 2", 0));
+		expected.add(new ValueRank("value 3a", 1));
+		expected.add(new ValueRank("value 3b", 1));
+		expected.add(new ValueRank("value 3c", 1));
+		expected.add(new ValueRank("value 4", 1));
 		computed = partition(input2, numPartitions);
 		assertTrue(expected.equals(computed));
 
 		numPartitions = 3;
 		expected = new ArrayList<>();
-		expected.add(new ValuePartitionPair("value 1", 0));
-		expected.add(new ValuePartitionPair("value 2", 0));
-		expected.add(new ValuePartitionPair("value 3a", 1));
-		expected.add(new ValuePartitionPair("value 3b", 1));
-		expected.add(new ValuePartitionPair("value 3c", 1));
-		expected.add(new ValuePartitionPair("value 4", 2));
+		expected.add(new ValueRank("value 1", 0));
+		expected.add(new ValueRank("value 2", 0));
+		expected.add(new ValueRank("value 3a", 1));
+		expected.add(new ValueRank("value 3b", 1));
+		expected.add(new ValueRank("value 3c", 1));
+		expected.add(new ValueRank("value 4", 2));
 		computed = partition(input2, numPartitions);
 		assertTrue(expected.equals(computed));
 
 		numPartitions = 5;
 		expected = new ArrayList<>();
-		expected.add(new ValuePartitionPair("value 1", 0));
-		expected.add(new ValuePartitionPair("value 2", 0));
-		expected.add(new ValuePartitionPair("value 3a", 2));
-		expected.add(new ValuePartitionPair("value 3b", 2));
-		expected.add(new ValuePartitionPair("value 3c", 3));
-		expected.add(new ValuePartitionPair("value 4", 4));
+		expected.add(new ValueRank("value 1", 0));
+		expected.add(new ValueRank("value 2", 0));
+		expected.add(new ValueRank("value 3a", 2));
+		expected.add(new ValueRank("value 3b", 2));
+		expected.add(new ValueRank("value 3c", 3));
+		expected.add(new ValueRank("value 4", 4));
 		computed = partition(input2, numPartitions);
 		assertTrue(expected.equals(computed));
 
@@ -142,7 +142,7 @@ public class LogFrequencyPartitionerTest {
 		try {
 			count = 0;
 			index = getPartitionIndex(partition, count);
-			fail("Failed to catch illegal count: " + count);
+			fail("Failed to catch illegal rank: " + count);
 		} catch (IllegalArgumentException x) {
 			// Computed value should not change from initial value
 			assertTrue(index == AN_ILLEGAL_PARTITION_IDX);

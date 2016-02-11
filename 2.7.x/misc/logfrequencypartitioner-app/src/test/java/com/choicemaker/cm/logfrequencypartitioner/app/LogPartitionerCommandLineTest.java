@@ -236,7 +236,7 @@ public class LogPartitionerCommandLineTest {
 	@Test
 	public void testInvalidPartitionCount() {
 
-		// Missing partition count
+		// Missing count
 		final int[] invalidParitionCounts = new int[] {
 				0, -1, -2, Integer.MIN_VALUE };
 		for (int invalidParitionCount : invalidParitionCounts) {

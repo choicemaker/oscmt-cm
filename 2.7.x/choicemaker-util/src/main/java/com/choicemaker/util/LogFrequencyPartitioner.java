@@ -32,10 +32,8 @@ public class LogFrequencyPartitioner {
 
 	public static final String EOL = SystemPropertyUtils.PV_LINE_SEPARATOR;
 
-	public static final int MIN_MIN_FREQUENCY = 1;
-	public static final int MAX_MAX_FREQUENCY = Integer.MAX_VALUE;
-
-	public static final int MIN_PARTITION_IDX = 0;
+	public static final int MIN_RANK = 0;
+	public static final int MIN_COUNT = 1;
 
 	private LogFrequencyPartitioner() {
 	}
@@ -50,7 +48,7 @@ public class LogFrequencyPartitioner {
 	 * { "value 1", 10}, {"value 2", 15}, { "value 3", 40}, { "value 4", 100}
 	 * </pre>
 	 * 
-	 * If the number of partition is 3, the partitions will be:
+	 * If the number of partitions is 3, the partitions will be:
 	 * 
 	 * <pre>
 	 * {10 to 21}, {22 to 46}, and {46 to 100}
@@ -69,46 +67,46 @@ public class LogFrequencyPartitioner {
 	 * @return Pairs of values and logarithmic partition indices. The indices
 	 *         will range from zero to <code>numPartitions</code>, inclusive.
 	 */
-	public static List<ValuePartitionPair> partition(
-			List<ValueCountPair> pairs, int numPartitions) {
+	public static List<ValueRank> partition(
+			List<ValueCount> pairs, int numPartitions) {
 		if (pairs == null) {
 			throw new IllegalArgumentException(
-					"null list of value-count valueCountPairs");
+					"null list of value-rank pairs");
 		}
 		if (numPartitions < 1) {
 			throw new IllegalArgumentException(
 					"non-positive number of paritions: " + numPartitions);
 		}
-		List<ValuePartitionPair> retVal = new ArrayList<>();
+		List<ValueRank> retVal = new ArrayList<>();
 		if (!pairs.isEmpty()) {
-			int minFrequency = MAX_MAX_FREQUENCY;
-			int maxFrequency = MIN_MIN_FREQUENCY;
-			for (ValueCountPair pair : pairs) {
-				if (pair.count > maxFrequency) {
-					maxFrequency = pair.count;
+			int minCount = Integer.MAX_VALUE;
+			int maxCount = MIN_COUNT;
+			for (ValueRank pair : pairs) {
+				if (pair.rank > maxCount) {
+					maxCount = pair.rank;
 				}
-				if (pair.count < minFrequency) {
-					minFrequency = pair.count;
+				if (pair.rank < minCount) {
+					minCount = pair.rank;
 				}
 			}
 
-			assert maxFrequency >= minFrequency;
-			assert minFrequency >= MIN_MIN_FREQUENCY;
+			assert maxCount >= minCount;
+			assert minCount >= MIN_COUNT;
 
 			int[] boundary = new int[numPartitions];
 			double f =
-				Math.pow(((double) maxFrequency) / minFrequency,
+				Math.pow(((double) maxCount) / minCount,
 						1.00d / numPartitions);
-			double b = maxFrequency;
+			double b = maxCount;
 			for (int i = numPartitions - 1; i >= 0; --i) {
 				boundary[i] = (int) (b + 0.5);
 				b = b / f;
 			}
 
-			for (ValueCountPair pair : pairs) {
-				int index = getPartitionIndex(boundary, pair.count);
-				ValuePartitionPair vp =
-					new ValuePartitionPair(pair.value, index);
+			for (ValueRank pair : pairs) {
+				int index = getPartitionIndex(boundary, pair.rank);
+				ValueRank vp =
+					new ValueRank(pair.value, index);
 				retVal.add(vp);
 			}
 		}
@@ -126,7 +124,7 @@ public class LogFrequencyPartitioner {
 	 */
 	public static int getPartitionIndex(int[] partition, int c) {
 		if (c <= 0) {
-			throw new IllegalArgumentException("negative frequency count: " + c);
+			throw new IllegalArgumentException("negative count: " + c);
 		}
 		if (partition == null || partition.length == 0) {
 			throw new IllegalArgumentException("null or empty partition");
@@ -172,7 +170,7 @@ public class LogFrequencyPartitioner {
 	 *             invalid value or non-positive count, or if the last value is
 	 *             not paired with a subsequent count.
 	 */
-	public static List<ValueCountPair> readFile(String fileName)
+	public static List<ValueCount> readFile(String fileName)
 			throws IOException {
 		return readFile(fileName, null, null);
 	}
@@ -198,7 +196,7 @@ public class LogFrequencyPartitioner {
 	 *             invalid value or non-positive count, or if the last value is
 	 *             not paired with a subsequent count.
 	 */
-	public static List<ValueCountPair> readFile(String fileName,
+	public static List<ValueCount> readFile(String fileName,
 			Character elementSep, String lineSep) throws IOException {
 		if (fileName == null) {
 			throw new IllegalArgumentException("null file name");
@@ -214,7 +212,7 @@ public class LogFrequencyPartitioner {
 				p = Pattern.compile(literal);
 		}
 
-		List<ValueCountPair> retVal = new ArrayList<>();
+		List<ValueCount> retVal = new ArrayList<>();
 		BufferedReader in = null;
 		try {
 			FileReader fr =
@@ -263,8 +261,8 @@ public class LogFrequencyPartitioner {
 								+ value + "'";
 					throw new IllegalArgumentException(msg);
 				}
-				ValueCountPair vcp = new ValueCountPair(value, count);
-				retVal.add(vcp);
+				ValueCount vc = new ValueCount(value, count);
+				retVal.add(vc);
 
 				line = in.readLine();
 			}
@@ -283,7 +281,7 @@ public class LogFrequencyPartitioner {
 	 * 6, ...).
 	 * 
 	 * @param fileName
-	 *            name of an existing value-count file
+	 *            name of the file (must not already exist)
 	 * @throws IOException
 	 *             if the file can not be found or opened
 	 * @throws NumberFormatException
@@ -293,7 +291,7 @@ public class LogFrequencyPartitioner {
 	 *             invalid value or non-positive count, or if the last value is
 	 *             not paired with a subsequent count.
 	 */
-	public static void writeFile(List<ValuePartitionPair> pairs, String fileName)
+	public static void writeFile(List<ValueRank> pairs, String fileName)
 			throws IOException {
 		writeFile(pairs, fileName, null, null);
 	}
@@ -304,7 +302,7 @@ public class LogFrequencyPartitioner {
 	 * the specified line separator.
 	 * 
 	 * @param fileName
-	 *            name of an existing value-count file
+	 *            name of the file (must not already exist)
 	 * @param elementSep
 	 *            separates a value from a partition index. If null, then values
 	 *            and partition indices are written on alternating lines, as if
@@ -316,7 +314,7 @@ public class LogFrequencyPartitioner {
 	 * @throws IOException
 	 *             if the file can not be created or written
 	 */
-	public static int writeFile(List<ValuePartitionPair> pairs,
+	public static int writeFile(List<ValueRank> pairs,
 			String fileName, Character elementSep, String lineSep)
 			throws IOException {
 		if (pairs == null) {
@@ -334,14 +332,14 @@ public class LogFrequencyPartitioner {
 		try {
 			fs = new FileOutputStream(fileName);
 			w = new OutputStreamWriter(new BufferedOutputStream(fs));
-			for (ValuePartitionPair p : pairs) {
+			for (ValueRank p : pairs) {
 				w.write(p.value);
 				if (elementSep != null) {
 					w.write(elementSep);
 				} else {
 					w.write(lineSep);
 				}
-				w.write(p.partition + lineSep);
+				w.write(p.rank + lineSep);
 				++retVal;
 			}
 		} finally {
@@ -360,27 +358,27 @@ public class LogFrequencyPartitioner {
 		return retVal;
 	}
 
-	public static class ValueCountPair {
+	public static class ValueRank {
 		public final String value;
-		public final int count;
+		public final int rank;
 
-		public ValueCountPair(String val, int count) {
+		public ValueRank(String val, int count) {
 			if (val == null) {
 				throw new IllegalArgumentException("null value");
 			}
-			if (count < LogFrequencyPartitioner.MIN_MIN_FREQUENCY) {
-				throw new IllegalArgumentException("non-positive count: "
+			if (count < LogFrequencyPartitioner.MIN_RANK) {
+				throw new IllegalArgumentException("non-positive rank: "
 						+ count);
 			}
 			this.value = val;
-			this.count = count;
+			this.rank = count;
 		}
 
 		@Override
 		public int hashCode() {
 			final int prime = 31;
 			int result = 1;
-			result = prime * result + count;
+			result = prime * result + rank;
 			result = prime * result + ((value == null) ? 0 : value.hashCode());
 			return result;
 		}
@@ -396,8 +394,8 @@ public class LogFrequencyPartitioner {
 			if (getClass() != obj.getClass()) {
 				return false;
 			}
-			ValueCountPair other = (ValueCountPair) obj;
-			if (count != other.count) {
+			ValueRank other = (ValueRank) obj;
+			if (rank != other.rank) {
 				return false;
 			}
 			if (value == null) {
@@ -412,33 +410,29 @@ public class LogFrequencyPartitioner {
 
 		@Override
 		public String toString() {
-			return "ValueCountPair [value=" + value + ", count=" + count + "]";
+			return "ValueCountPair [value=" + value + ", rank=" + rank + "]";
 		}
 	}
 
-	public static class ValuePartitionPair {
-		public final String value;
-		public final int partition;
+	/** A subclass of ValueRank in which the rank (a.k.a. count) must be positive */
+	public static class ValueCount extends ValueRank {
 
-		public ValuePartitionPair(String val, int partition) {
-			if (val == null) {
-				throw new IllegalArgumentException("null value");
+		public ValueCount(String val, int count) {
+			super(val,count);
+			if (count < LogFrequencyPartitioner.MIN_COUNT) {
+				throw new IllegalArgumentException("non-positive rank: "
+						+ count);
 			}
-			if (partition < 0) {
-				throw new IllegalArgumentException("negative partition: "
-						+ partition);
-			}
-			this.value = val;
-			this.partition = partition;
+		}
+
+		@Override
+		public String toString() {
+			return "ValueCount [value=" + value + ", count=" + rank + "]";
 		}
 
 		@Override
 		public int hashCode() {
-			final int prime = 31;
-			int result = 1;
-			result = prime * result + partition;
-			result = prime * result + ((value == null) ? 0 : value.hashCode());
-			return result;
+			return super.hashCode();
 		}
 
 		@Override
@@ -452,8 +446,10 @@ public class LogFrequencyPartitioner {
 			if (getClass() != obj.getClass()) {
 				return false;
 			}
-			ValuePartitionPair other = (ValuePartitionPair) obj;
-			if (partition != other.partition) {
+			return super.equals((ValueRank) obj);
+/*
+			ValueCount other = (ValueCount) obj;
+			if (rank != other.rank) {
 				return false;
 			}
 			if (value == null) {
@@ -464,13 +460,9 @@ public class LogFrequencyPartitioner {
 				return false;
 			}
 			return true;
+*/
 		}
 
-		@Override
-		public String toString() {
-			return "ValuePartitionPair [value=" + value + ", partition="
-					+ partition + "]";
-		}
 	}
 
 }

@@ -25,8 +25,8 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
 import com.choicemaker.util.LogFrequencyPartitioner;
-import com.choicemaker.util.LogFrequencyPartitioner.ValueCountPair;
-import com.choicemaker.util.LogFrequencyPartitioner.ValuePartitionPair;
+import com.choicemaker.util.LogFrequencyPartitioner.ValueCount;
+import com.choicemaker.util.LogFrequencyPartitioner.ValueRank;
 
 /**
  * Application that partitions values into evenly spaced, logarithmic bins based
@@ -124,12 +124,12 @@ public class LogPartitionerApp {
 
 		int retVal = 0;
 		try {
-			List<ValueCountPair> input =
+			List<ValueCount> input =
 				readInput(getAppParams().getInputFileName(), getAppParams()
 						.getInputFormat(), getAppParams()
 						.getInputFieldSeparator(), getAppParams()
 						.getInputLineSeparator());
-			List<ValuePartitionPair> output =
+			List<ValueRank> output =
 				LogFrequencyPartitioner.partition(input, getAppParams()
 						.getPartitionCount());
 			retVal =
@@ -144,10 +144,10 @@ public class LogPartitionerApp {
 		return retVal;
 	}
 
-	public static List<ValueCountPair> readInput(String fileName,
+	public static List<ValueCount> readInput(String fileName,
 			LogPartitionerFileFormat fileFormat, char fieldSeparator,
 			String lineSeparator) throws IOException {
-		List<ValueCountPair> retVal = null;
+		List<ValueCount> retVal = null;
 		switch (fileFormat) {
 		case DELIMITED:
 			retVal =
@@ -163,7 +163,7 @@ public class LogPartitionerApp {
 		return retVal;
 	}
 
-	public static int writeOutput(List<ValuePartitionPair> output,
+	public static int writeOutput(List<ValueRank> output,
 			String fileName, LogPartitionerFileFormat fileFormat,
 			char fieldSeparator, String lineSeparator) throws IOException {
 		int retVal;
