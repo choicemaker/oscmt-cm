@@ -25,7 +25,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.choicemaker.cm.logfrequencypartitioner.app.LogPartitionerParams.LOG_PARTITIONER_FILE_FORMAT;
 import com.natpryce.makeiteasy.Maker;
 
 public class LogPartitionerParametersTest {
@@ -116,7 +115,7 @@ public class LogPartitionerParametersTest {
 		// Missing inputFormat
 		Maker<LogPartitionerParams> invalidParams =
 			validParams.but(with(inputFormat,
-					(LOG_PARTITIONER_FILE_FORMAT) null));
+					(LogPartitionerFileFormat) null));
 		try {
 			make(invalidParams);
 			fail("Expected IllegalArgumentException");
@@ -142,7 +141,7 @@ public class LogPartitionerParametersTest {
 
 		try {
 			final LogPartitionerParams lpp = make(validParams);
-			LOG_PARTITIONER_FILE_FORMAT invalidFormat = null;
+			LogPartitionerFileFormat invalidFormat = null;
 			new LogPartitionerParams(lpp.isHelp(), lpp.getErrors(),
 					lpp.getInputFileName(), invalidFormat,
 					lpp.getInputFieldSeparator(), lpp.getInputLineSeparator(),
@@ -196,7 +195,7 @@ public class LogPartitionerParametersTest {
 		// Missing outputFormat
 		Maker<LogPartitionerParams> invalidParams =
 			validParams.but(with(outputFormat,
-					(LOG_PARTITIONER_FILE_FORMAT) null));
+					(LogPartitionerFileFormat) null));
 		try {
 			make(invalidParams);
 			fail("Expected IllegalArgumentException");
@@ -222,7 +221,7 @@ public class LogPartitionerParametersTest {
 
 		try {
 			final LogPartitionerParams lpp = make(validParams);
-			LOG_PARTITIONER_FILE_FORMAT invalidFormat = null;
+			LogPartitionerFileFormat invalidFormat = null;
 			new LogPartitionerParams(lpp.isHelp(), lpp.getErrors(),
 					lpp.getInputFileName(), lpp.getInputFormat(),
 					lpp.getInputFieldSeparator(), lpp.getInputLineSeparator(),

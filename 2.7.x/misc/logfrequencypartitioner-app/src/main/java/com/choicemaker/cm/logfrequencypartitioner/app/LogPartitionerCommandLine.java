@@ -26,8 +26,6 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
-import com.choicemaker.cm.logfrequencypartitioner.app.LogPartitionerParams.LOG_PARTITIONER_FILE_FORMAT;
-
 public class LogPartitionerCommandLine {
 
 	public static final String ARG_HELP = "help";
@@ -176,7 +174,7 @@ public class LogPartitionerCommandLine {
 				}
 			}
 
-			LOG_PARTITIONER_FILE_FORMAT inputFormat = null;
+			LogPartitionerFileFormat inputFormat = null;
 			String sInputFormat = cl.getOptionValue(ARG_INPUT_FORMAT);
 			if (sInputFormat != null) {
 				sInputFormat = sInputFormat.trim().toUpperCase();
@@ -186,7 +184,7 @@ public class LogPartitionerCommandLine {
 			} else {
 				try {
 					inputFormat =
-						LOG_PARTITIONER_FILE_FORMAT.valueOf(sInputFormat);
+						LogPartitionerFileFormat.valueOf(sInputFormat);
 				} catch (IllegalArgumentException x) {
 					errors.add(invalidArgument(ARG_INPUT_FORMAT, sInputFormat));
 				}
@@ -208,7 +206,7 @@ public class LogPartitionerCommandLine {
 				}
 			}
 
-			LOG_PARTITIONER_FILE_FORMAT outputFormat = null;
+			LogPartitionerFileFormat outputFormat = null;
 			String sOutputFormat = cl.getOptionValue(ARG_OUTPUT_FORMAT);
 			if (sOutputFormat != null) {
 				sOutputFormat = sOutputFormat.trim().toUpperCase();
@@ -218,7 +216,7 @@ public class LogPartitionerCommandLine {
 			} else {
 				try {
 					outputFormat =
-						LOG_PARTITIONER_FILE_FORMAT.valueOf(sOutputFormat);
+						LogPartitionerFileFormat.valueOf(sOutputFormat);
 				} catch (IllegalArgumentException x) {
 					errors.add(invalidArgument(ARG_OUTPUT_FORMAT, sOutputFormat));
 				}

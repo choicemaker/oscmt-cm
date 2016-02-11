@@ -14,8 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import com.choicemaker.cm.logfrequencypartitioner.app.LogPartitionerParams.LOG_PARTITIONER_FILE_FORMAT;
-
 /**
  * Unchecked base class for testing purposes.
  */
@@ -28,18 +26,18 @@ class UncheckedParams {
 	private final List<String> errors = new ArrayList<>();
 	private final int partitionCount;
 	private final String inputFileName;
-	private final LOG_PARTITIONER_FILE_FORMAT inputFormat;
+	private final LogPartitionerFileFormat inputFormat;
 	private final char inputFieldSeparator;
 	private final String inputLineSeparator;
 	private final String outputFileName;
-	private final LOG_PARTITIONER_FILE_FORMAT outputFormat;
+	private final LogPartitionerFileFormat outputFormat;
 	private final char outputFieldSeparator;
 	private final String outputLineSeparator;
 
 	public UncheckedParams(boolean isHelp, List<String> errors,
-			String inputFileName, LOG_PARTITIONER_FILE_FORMAT inputFormat,
+			String inputFileName, LogPartitionerFileFormat inputFormat,
 			char inputFieldSeparator, String inputLineSeparator,
-			String outputFileName, LOG_PARTITIONER_FILE_FORMAT outputFormat,
+			String outputFileName, LogPartitionerFileFormat outputFormat,
 			char outputFieldSeparator, String outputLineSeparator,
 			int partitionCount) {
 
@@ -82,7 +80,7 @@ class UncheckedParams {
 		return inputFileName;
 	}
 
-	public LOG_PARTITIONER_FILE_FORMAT getInputFormat() {
+	public LogPartitionerFileFormat getInputFormat() {
 		return inputFormat;
 	}
 
@@ -98,7 +96,7 @@ class UncheckedParams {
 		return outputFileName;
 	}
 
-	public LOG_PARTITIONER_FILE_FORMAT getOutputFormat() {
+	public LogPartitionerFileFormat getOutputFormat() {
 		return outputFormat;
 	}
 

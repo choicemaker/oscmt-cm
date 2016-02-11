@@ -24,7 +24,6 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
-import com.choicemaker.cm.logfrequencypartitioner.app.LogPartitionerParams.LOG_PARTITIONER_FILE_FORMAT;
 import com.choicemaker.util.LogFrequencyPartitioner;
 import com.choicemaker.util.LogFrequencyPartitioner.ValueCountPair;
 import com.choicemaker.util.LogFrequencyPartitioner.ValuePartitionPair;
@@ -146,7 +145,7 @@ public class LogPartitionerApp {
 	}
 
 	public static List<ValueCountPair> readInput(String fileName,
-			LOG_PARTITIONER_FILE_FORMAT fileFormat, char fieldSeparator,
+			LogPartitionerFileFormat fileFormat, char fieldSeparator,
 			String lineSeparator) throws IOException {
 		List<ValueCountPair> retVal = null;
 		switch (fileFormat) {
@@ -165,7 +164,7 @@ public class LogPartitionerApp {
 	}
 
 	public static int writeOutput(List<ValuePartitionPair> output,
-			String fileName, LOG_PARTITIONER_FILE_FORMAT fileFormat,
+			String fileName, LogPartitionerFileFormat fileFormat,
 			char fieldSeparator, String lineSeparator) throws IOException {
 		int retVal;
 		switch (fileFormat) {

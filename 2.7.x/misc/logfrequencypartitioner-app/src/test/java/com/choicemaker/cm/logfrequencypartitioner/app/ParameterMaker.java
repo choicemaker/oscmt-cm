@@ -2,10 +2,9 @@ package com.choicemaker.cm.logfrequencypartitioner.app;
 
 import static com.choicemaker.cm.logfrequencypartitioner.app.LogPartitionerParams.COMMA;
 import static com.choicemaker.cm.logfrequencypartitioner.app.LogPartitionerParams.EOL;
-import static com.choicemaker.cm.logfrequencypartitioner.app.LogPartitionerParams.LOG_PARTITIONER_FILE_FORMAT.ALT_LINES;
+import static com.choicemaker.cm.logfrequencypartitioner.app.LogPartitionerFileFormat.ALT_LINES;
 import static com.natpryce.makeiteasy.Property.newProperty;
 
-import com.choicemaker.cm.logfrequencypartitioner.app.LogPartitionerParams.LOG_PARTITIONER_FILE_FORMAT;
 import com.natpryce.makeiteasy.Instantiator;
 import com.natpryce.makeiteasy.Property;
 import com.natpryce.makeiteasy.PropertyLookup;
@@ -16,7 +15,7 @@ public class ParameterMaker {
 		newProperty();
 	public static final Property<LogPartitionerParams, String> inputFileName =
 		newProperty();
-	public static final Property<LogPartitionerParams, LOG_PARTITIONER_FILE_FORMAT> inputFormat =
+	public static final Property<LogPartitionerParams, LogPartitionerFileFormat> inputFormat =
 		newProperty();
 	public static final Property<LogPartitionerParams, Character> inputFieldSeparator =
 		newProperty();
@@ -24,7 +23,7 @@ public class ParameterMaker {
 		newProperty();
 	public static final Property<LogPartitionerParams, String> outputFileName =
 		newProperty();
-	public static final Property<LogPartitionerParams, LOG_PARTITIONER_FILE_FORMAT> outputFormat =
+	public static final Property<LogPartitionerParams, LogPartitionerFileFormat> outputFormat =
 		newProperty();
 	public static final Property<LogPartitionerParams, Character> outputFieldSeparator =
 		newProperty();
@@ -42,7 +41,7 @@ public class ParameterMaker {
 					new LogPartitionerParams(lookup.valueOf(help, false), null,
 							lookup.valueOf(inputFileName, (String) null),
 							lookup.valueOf(inputFormat,
-									LOG_PARTITIONER_FILE_FORMAT.DELIMITED),
+									LogPartitionerFileFormat.DELIMITED),
 							lookup.valueOf(inputFieldSeparator, COMMA),
 							lookup.valueOf(inputLineSeparator, EOL),
 							lookup.valueOf(outputFileName, (String) null),
