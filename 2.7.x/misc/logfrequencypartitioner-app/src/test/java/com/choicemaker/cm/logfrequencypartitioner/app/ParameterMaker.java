@@ -10,7 +10,7 @@ import com.natpryce.makeiteasy.Instantiator;
 import com.natpryce.makeiteasy.Property;
 import com.natpryce.makeiteasy.PropertyLookup;
 
-public class CommandLineMaker {
+public class ParameterMaker {
 
 	public static final Property<LogPartitionerParams, Boolean> help =
 		newProperty();
@@ -33,7 +33,7 @@ public class CommandLineMaker {
 	public static final Property<LogPartitionerParams, Integer> partitionCount =
 		newProperty();
 
-	public static final Instantiator<LogPartitionerParams> Params =
+	public static final Instantiator<LogPartitionerParams> BaseParams =
 		new Instantiator<LogPartitionerParams>() {
 			@Override
 			public LogPartitionerParams instantiate(
