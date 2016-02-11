@@ -32,11 +32,29 @@ import com.choicemaker.util.LogFrequencyPartitioner.ValueRank;
  * Application that partitions values into evenly spaced, logarithmic bins based
  * on the value frequency counts. For example, consider the following value-
  * count pairs:
+ * 
+ * <pre>
+ * { "value 1", 1 },
+ * { "value 3", 3 },
+ * { "value 4", 4 },
+ * { "value 10", 10 },
+ * { "value 31", 31 },
+ * { "value 32", 32 },
+ * { "value 100", 100 }
+ * </pre>
  *
- * A 10-bin logarithmic partition of the pairs would produce the following value-
+ * A 4-bin logarithmic partition of the pairs would produce the following value-
  * partition pairs:
- *
- * @param args
+ * 
+ * <pre>
+ * { "value 1", 0 },
+ * { "value 3", 0 },
+ * { "value 4", 0 },
+ * { "value 10", 1 },
+ * { "value 31", 1 },
+ * { "value 32", 2 },
+ * { "value 100", 3 }
+ * </pre>
  */
 public class LogPartitionerApp {
 
@@ -47,18 +65,14 @@ public class LogPartitionerApp {
 	public static final int ERROR_BAD_INPUT = 1;
 
 	/**
-	 * Entry point for the application. Command line parameters:
-	 * <ul>
-	 * <li>-inputPairs <input pair-wise results file (*.txt)> [Required]</li>
-	 * <li>-outputPairs <output pair-wise results file (*.txt)> [Required]</li>
-	 * </ul>
-	 * The input and output file formats are documented in the package overview.
-	 *
+	 * Entry point for the application. Command line parameters may be listed by
+	 * invoking main with empty args, or by specifying the '-help' option.
+	 * 
 	 * @param args
-	 *            a String array of exactly 8 elements, corresponding to the
-	 *            parameters listed above.
+	 *            a non-null arrray, possibly empty
 	 * @throws ParseException
 	 *             if the command line can not be parsed
+	 * @see LogPartitionerCommandLine
 	 */
 	public static void main(String[] args) throws Exception {
 

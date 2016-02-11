@@ -373,11 +373,11 @@ public class LogFrequencyPartitionerTest {
 
 		List<ValueCount> input = new ArrayList<>();
 		input.add(new ValueCount("value 1", 1));
-		input.add(new ValueCount("value 3", (int) sqrt10));
-		input.add(new ValueCount("value 4", 1 + (int) sqrt10));
+		input.add(new ValueCount("value 3", 3)); //(int) sqrt10));
+		input.add(new ValueCount("value 4", 4)); // 1 + (int) sqrt10
 		input.add(new ValueCount("value 10", 10));
-		input.add(new ValueCount("value 31", (int) (10. * sqrt10)));
-		input.add(new ValueCount("value 32", 1 + (int) (10. * sqrt10)));
+		input.add(new ValueCount("value 31", 31)); // (int) (10. * sqrt10);
+		input.add(new ValueCount("value 32", 32)); // 1 + (int) (10. * sqrt10);
 		input.add(new ValueCount("value 100", 100));
 		input.add(new ValueCount("value 101", 100));
 		input.add(new ValueCount("value 1000", 100));
