@@ -29,9 +29,11 @@ import com.choicemaker.util.LogFrequencyPartitioner.ValueCount;
 import com.choicemaker.util.LogFrequencyPartitioner.ValueRank;
 
 /**
- * Application that partitions values into evenly spaced, logarithmic bins based
- * on the value frequency counts. For example, consider the following value-
- * count pairs:
+ * LogPartitionerApp is an application that partitions values into evenly
+ * spaced, logarithmic bins based on value-frequency counts.
+ * <p/>
+ * Consider the following value- count pairs:
+ * <p/>
  * 
  * <pre>
  * { "value 1", 1 },
@@ -43,8 +45,18 @@ import com.choicemaker.util.LogFrequencyPartitioner.ValueRank;
  * { "value 100", 100 }
  * </pre>
  *
- * A 4-bin logarithmic partition of the pairs would produce the following value-
- * partition pairs:
+ * A 4-bin, evenly spaced logarithmic partition from the minimum count (1) to
+ * the maximum count (100) defines the following ranges:
+ * <p/>
+ * <ul>
+ * <li>Range 0: [1.00 - 3.16) <i>(least frequent)</i></li>
+ * <li>Range 1: [3.16 - 10.0)</li>
+ * <li>Range 2: [10.0 - 31.6)</li>
+ * <li>Range 3: [31.6 - 100.0] <i>(most frequent)</i></li>
+ * </ul>
+ * <p/>
+ * Each float-value range is rounded to an integer by adding 0.5 and then
+ * truncating. This produces the following value-partition pairs:
  * 
  * <pre>
  * { "value 1", 0 },
