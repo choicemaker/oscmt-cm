@@ -127,33 +127,56 @@ public class TrainDialog extends JDialog implements Enable {
 	private void addContentListeners() {
 		//trainButton
 		trainButton.addActionListener(new ActionListener() {
+
 			public void actionPerformed(ActionEvent e) {
-				try {
 					IProbabilityModel model = parent.getProbabilityModel();
 					MachineLearner cml = model.getMachineLearner();
 					if (ml != cml) {
 						model.setMachineLearner(ml);
 					}
+
+					String msg = null;
+					boolean shouldDispose = false;
 					if (trainDialogPlugin.isParametersValid()) {
-						trainDialogPlugin.set();
-						boolean success =
-							parent.train(
-								recompile.isSelected(),
-								enableClues.isSelected(),
-								enableRules.isSelected(),
-								Integer.parseInt(firingThresholdField.getText()),
-								andTest);
-						if (success) {
-							String msg = "Failed to train model: " + model;
+
+						String strFiringThreshold = firingThresholdField.getText();
+						try {
+							int firingThreshold = Integer.parseInt(strFiringThreshold);
+							trainDialogPlugin.set();
+							boolean success = parent.train(
+									recompile.isSelected(),
+									enableClues.isSelected(),
+									enableRules.isSelected(),
+									firingThreshold,
+									andTest);
+							if (success) {
+								msg = "Successfully trained model: " + model;
+								logger.info(msg);
+							} else {
+								msg = "Failed to train model: " + model;
+								logger.severe(msg);
+							}
+							shouldDispose = true;
+
+						} catch (NumberFormatException ex) {
+							msg = "Invalid firing threshold: " + strFiringThreshold;
 							logger.severe(msg);
-							parent.postUserMessage(msg);
-							dispose();
+							assert shouldDispose == false;
 						}
+
+					} else {
+						msg = "Training aborted: invalid training parameter(s)";
+						logger.severe(msg);
+						assert shouldDispose == false;
 					}
-				} catch (NumberFormatException ex) {
-					// ignore
-				}
-			}
+
+					assert msg != null ;
+					parent.postUserMessage(msg);
+					if (shouldDispose) {
+						dispose();
+					}
+			} // actionPerformed
+
 		});
 
 		//cancelButton
