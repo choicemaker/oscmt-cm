@@ -223,6 +223,7 @@ public class BlockingSetTest {
 			new BlockingField(bfNumber, queryField, dbField, group);
 		String value = null;
 		IBlockingValue[][] base = null;
+		@SuppressWarnings("unused")
 		IBlockingValue ibv1 = new BlockingValue(bf, value, base);
 
 	}

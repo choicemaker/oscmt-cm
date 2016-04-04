@@ -369,7 +369,7 @@ public class LogFrequencyPartitionerTest {
 		int numPartitions;
 		List<ValueRank> expected;
 		List<ValueRank> computed;
-		final double sqrt10 = Math.pow(10., 0.5); // 3.162...
+		// final double sqrt10 = Math.pow(10., 0.5); // 3.162...
 
 		List<ValueCount> input = new ArrayList<>();
 		input.add(new ValueCount("value 1", 1));

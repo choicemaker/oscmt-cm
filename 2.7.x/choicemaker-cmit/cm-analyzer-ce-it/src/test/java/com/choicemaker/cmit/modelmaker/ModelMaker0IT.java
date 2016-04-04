@@ -21,11 +21,11 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.choicemaker.cmit.util.Eclipse2BootLoader;
-import com.choicemaker.cmit.util.Eclipse2Utils;
+//import com.choicemaker.cmit.util.Eclipse2BootLoader;
+//import com.choicemaker.cmit.util.Eclipse2Utils;
 import com.choicemaker.cmit.util.Find;
 import com.choicemaker.cmit.util.Find.Finder;
-import com.choicemaker.e2.standard.StandardPlatform;
+//import com.choicemaker.e2.standard.StandardPlatform;
 
 public class ModelMaker0IT {
 	
@@ -61,9 +61,9 @@ public class ModelMaker0IT {
 	public static final String MISC_OPTS = "-noupdate";
 
 	// Copied from ModelMaker to avoid linking to that class
-	private static final int EXIT_OK = 0;
-	private static final String FQCN_MODELMAKER =
-		"com.choicemaker.cm.modelmaker.gui.ModelMakerStd";
+//	private static final int EXIT_OK = 0;
+//	private static final String FQCN_MODELMAKER =
+//		"com.choicemaker.cm.modelmaker.gui.ModelMakerStd";
 	private static final String APP_PLUGIN_ID =
 		"com.choicemaker.cm.modelmaker.ModelMakerStd";
 	
@@ -214,9 +214,9 @@ public class ModelMaker0IT {
 		m.invoke(null, parameters);
 	}
 
-	private Class<?> bootLoader;
-	private ClassLoader initialClassLoader;
-	private Object modelMaker;
+//	private Class<?> bootLoader;
+//	private ClassLoader initialClassLoader;
+//	private Object modelMaker;
 
 	@Before
 	public void setUp() throws Exception {
