@@ -403,5 +403,52 @@ public class DateUtils extends DateHelper {
 		return calendar.getTime();
 	}
 
+	public static boolean isOverlappingWithinMilliseconds(
+		Date startDate1,
+		Date endDate1,
+		Date startDate2,
+		Date endDate2,
+		long milliseconds
+		) {
+		if (milliseconds < 0) {
+			throw new IllegalArgumentException("milliseconds (" + milliseconds + ") must be non-negative");
+		}
+		boolean retVal = false;
+		if (startDate1 != null && endDate1 != null
+				&& startDate2 != null && endDate2 != null) {
+			long start1 = Math.min(startDate1.getTime(),endDate1.getTime());
+			long end1 = Math.max(startDate1.getTime(),endDate1.getTime());
+			long start2 = Math.min(startDate2.getTime(),endDate2.getTime());
+			long end2 = Math.max(startDate2.getTime(),endDate2.getTime());
+			retVal = (start1 - milliseconds <= start2 && start2 <= end1 + milliseconds)
+				|| (start1 - milliseconds <= end2 && end2 <= end1 + milliseconds)
+				|| (start2 - milliseconds <= start1 && start1 <= end2 + milliseconds)
+				|| (start2 - milliseconds <= end1 && end1 <= end2 + milliseconds);
+		}
+		return retVal;
+	}
+
+	public static boolean isOverlapping(
+		Date startDate1,
+		Date endDate1,
+		Date startDate2,
+		Date endDate2
+		) {
+		return isOverlappingWithinMilliseconds(startDate1,endDate1,startDate2,endDate2,0);
+	}
+
+	public final static long MILLIS_PER_DAY = 24 * 60 * 60 * 1000;
+
+	public static boolean isOverlappingWithinDays(
+		Date startDate1,
+		Date endDate1,
+		Date startDate2,
+		Date endDate2,
+		int days
+		) {
+		long millis = days * MILLIS_PER_DAY;
+		return isOverlappingWithinMilliseconds(startDate1,endDate1,startDate2,endDate2,millis);
+	}
+
 }
 
