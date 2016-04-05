@@ -546,7 +546,7 @@ public class BlockingConfigurationGenerator {
 								for (int i = 0; i < tbf.base.length; ++i) {
 									w.write((i != 0 ? " &&" : "") + " __l" + tbf.base[i].number + " != null");
 								}
-								w.write(" ? new BlockingValue[]{");
+								w.write(" ? new IBlockingValue[]{");
 								for (int i = 0; i < tbf.base.length; ++i) {
 									w.write((i != 0 ? "," : "") + " __l" + tbf.base[i].number);
 								}
