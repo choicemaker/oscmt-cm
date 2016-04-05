@@ -14,19 +14,19 @@ import com.choicemaker.cm.io.blocking.automated.IField;
 
 /**
  *
- * @author    mbuechi
+ * @author mbuechi
  */
 public abstract class Field implements Serializable, IField {
-	
+
 	private static final long serialVersionUID = 271;
 
 	protected static final Field[] N_FIELD = new Field[0];
 	protected static final Field[][] NN_FIELD = new Field[0][0];
 
-	private final IField[][] illegalCombinations;
+	private IField[][] illegalCombinations;
 
 	protected Field(IField[][] illegalCombos) {
-		this.illegalCombinations = illegalCombos;
+		setIllegalCombinations(illegalCombos);
 	}
 
 	@Override
@@ -39,6 +39,11 @@ public abstract class Field implements Serializable, IField {
 		}
 		assert retVal != null;
 		return retVal;
+	}
+
+	@Override
+	public void setIllegalCombinations(IField[][] illegalCombos) {
+		this.illegalCombinations = illegalCombos;
 	}
 
 	@Override

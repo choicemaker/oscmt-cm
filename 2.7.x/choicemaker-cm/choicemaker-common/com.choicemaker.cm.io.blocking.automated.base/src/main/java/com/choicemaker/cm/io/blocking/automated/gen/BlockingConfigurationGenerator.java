@@ -252,7 +252,7 @@ public class BlockingConfigurationGenerator {
 						+ dbC.number
 						+ "]."
 						+ f
-						+ ".illegalCombinations = new Field[][] {"
+						+ ".setIllegalCombinations(new IField[][] {"
 						+ Constants.LINE_SEPARATOR);
 				int si = f.illegal.size();
 				for (int i = 0; i < si; ++i) {
@@ -267,7 +267,7 @@ public class BlockingConfigurationGenerator {
 					}
 					w.write("}");
 				}
-				w.write(Constants.LINE_SEPARATOR + "};" + Constants.LINE_SEPARATOR);
+				w.write(Constants.LINE_SEPARATOR + "});" + Constants.LINE_SEPARATOR);
 			}
 		}
 	}

@@ -13,4 +13,6 @@ public interface IField extends Serializable {
 
 	IField[][] getIllegalCombinations();
 
+	void setIllegalCombinations(IField[][] illegalCombinations);
+
 }
