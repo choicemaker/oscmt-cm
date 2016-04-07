@@ -31,11 +31,12 @@ public class ModelMakerCollectionMRPairFilter extends
 	}
 
 	public ModelMakerCollectionMRPairFilter(ModelMaker modelMaker, Collection pairs) {
-		super(pairs);
+		super(null);
 		this.parent = modelMaker;
 		parent.addPropertyChangeListener(this);
 		parent.getProbabilityModelEventMultiplexer().addPropertyChangeListener(this);
 		reset();
+		setAcceptedPairs(pairs);
 	}
 
 	public void propertyChange(PropertyChangeEvent evt) {
