@@ -9,7 +9,9 @@ package com.choicemaker.cm.matching.cfg;
 
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import com.choicemaker.cm.matching.cfg.util.CfgUtils;
@@ -295,7 +297,7 @@ public abstract class AbstractParser implements Parser {
 	}
 
 	public List[] getAllTokenizations(String s) {
-		HashSet tokenizations = new HashSet();
+		Set tokenizations = new LinkedHashSet();
 		for (int i = 0; i < tokenizers.length; i++) {
 			List tokens = tokenizers[i].tokenize(s);
 			if (tokens.size() > 0) {
