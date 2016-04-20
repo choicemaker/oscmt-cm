@@ -22,7 +22,7 @@ import java.util.logging.Logger;
 
 import javax.sql.DataSource;
 
-import oracle.jdbc.driver.OracleTypes;
+import oracle.jdbc.OracleTypes;
 
 import com.choicemaker.cm.core.Accessor;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;

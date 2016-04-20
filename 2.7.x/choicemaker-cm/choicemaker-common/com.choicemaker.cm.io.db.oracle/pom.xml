@@ -80,7 +80,7 @@
     </dependency>
     <dependency>
       <groupId>com.oracle</groupId>
-      <artifactId>classes12</artifactId>
+      <artifactId>ojdbc6</artifactId>
       <scope>provided</scope>
     </dependency>
   </dependencies>
