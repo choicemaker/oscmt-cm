@@ -91,7 +91,7 @@ public class OracleSerialMRPSource implements MarkedRecordPairSource, Serializab
 //			conn.setAutoCommit(false); // 2015-04-01a EJB3 CHANGE rphall
 			//((OracleConnection) conn).setDefaultRowPrefetch(100);
 
-      OracleRemoteDebugging.doDebugging();
+			OracleRemoteDebugging.doDebugging(conn);
 
 			String sql = "call CMTTRAINING.ACCESS_SNAPSHOT (?,?,?,?)";
 			stmt = conn.prepareCall(sql);
@@ -100,7 +100,7 @@ public class OracleSerialMRPSource implements MarkedRecordPairSource, Serializab
 			stmt.registerOutParameter(3, CURSOR);
 			stmt.registerOutParameter(4, CURSOR);
 
-			logger.fine ("Oracle stored procedure: " " + sql);
+			logger.fine ("Oracle stored procedure: " + sql);
 			logger.fine("param1 (select): " + selection);
 			logger.fine("param2 (dbrName): " + dbr.getName());
 			logger.fine("param3 (cursor): " + CURSOR);

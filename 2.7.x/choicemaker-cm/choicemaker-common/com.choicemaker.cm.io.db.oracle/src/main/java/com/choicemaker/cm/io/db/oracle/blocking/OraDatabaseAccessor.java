@@ -150,7 +150,7 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 				}
 			}
 
-      OracleRemoteDebugging.doDebugging();
+			OracleRemoteDebugging.doDebugging(connection);
 
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine(

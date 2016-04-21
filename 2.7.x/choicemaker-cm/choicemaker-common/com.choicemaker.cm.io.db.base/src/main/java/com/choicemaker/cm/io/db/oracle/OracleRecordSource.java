@@ -85,7 +85,7 @@ public class OracleRecordSource implements RecordSource {
 			dbr = (dba).getDbReaderParallel(conf);
 			logger.fine (conf + " " + dbr);
 
-      OracleRemoteDebugging.doDebugging();
+			OracleRemoteDebugging.doDebugging(conn);
 
 			String sql = "call CMTTRAINING.RS_SNAPSHOT (?,?,?)";
 			stmt = conn.prepareCall(sql);
@@ -95,7 +95,7 @@ public class OracleRecordSource implements RecordSource {
 			stmt.setString(2, s);
 			stmt.registerOutParameter(3, CURSOR);
 
-			logger.fine ("Oracle stored procedure: " " + sql);
+			logger.fine ("Oracle stored procedure: " + sql);
 			logger.fine("param1 (select): " + selection);
 			logger.fine("param2 (dbrName): " + s);
 			logger.fine("param3 (cursor): " + CURSOR);
