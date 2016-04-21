@@ -104,8 +104,9 @@ class OracleMarkedRecordPairSource implements MarkedRecordPairSource {
 
 			conn = ds.getConnection();
 //			conn.setAutoCommit(false); // 2015-04-01a EJB3 CHANGE rphall
-			//((OracleConnection) conn).setDefaultRowPrefetch(100);
-			//String sql = "call CMTTRAINING.ACCESS_SNAPSHOT (?,?,?,?)"; // 4 params
+
+      OracleRemoteDebugging.doDebugging();
+
 			String sql = "call CMTTRAINING.MRPS_SNAPSHOT2 (?,?,?,?,?)"; // 5 params, part of BUGFIX
 			stmt = conn.prepareCall(sql);
 			stmt.setString(1, selection);

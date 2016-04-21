@@ -37,6 +37,7 @@ import com.choicemaker.cm.io.blocking.automated.IGroupTable;
 import com.choicemaker.cm.io.db.base.DbAccessor;
 import com.choicemaker.cm.io.db.base.DbReaderParallel;
 import com.choicemaker.cm.io.db.base.Index;
+import com.choicemaker.cm.io.db.oracle.OracleRemoteDebugging;
 
 public class OraDatabaseAccessor implements DatabaseAccessor {
 	private static final char BS_SEP = '^';
@@ -148,6 +149,8 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 					}
 				}
 			}
+
+      OracleRemoteDebugging.doDebugging();
 
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine(
