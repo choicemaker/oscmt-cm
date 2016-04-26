@@ -1,0 +1,157 @@
+<?xml version="1.0"?>
+<project
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+  xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+>
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.choicemaker.cmit</groupId>
+    <artifactId>cmit-jdbc</artifactId>
+    <version>2.7.1-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+
+  <artifactId>com.choicemaker.cmit.io.db.oracle</artifactId>
+  <packaging>jar</packaging>
+  <name>Integration Test: ChoiceMaker Oracle Plugin</name>
+
+  <properties>
+    <eclipse.plugin.runtime.library.name>oracle.jar</eclipse.plugin.runtime.library.name>
+    <eclipse.plugin.src.zip.name>oraclesrc.zip</eclipse.plugin.src.zip.name>
+<!-- TEMPORARY REMOVE -->
+    <eclipse.application.dir>${project.build.directory}/eclipse.application.dir</eclipse.application.dir>
+    <eclipse.application.lib.dir>${eclipse.application.dir}/lib</eclipse.application.lib.dir>
+    <eclipse.application.plugins.dir>${eclipse.application.dir}/plugins</eclipse.application.plugins.dir>
+<!-- END TEMPORARY REMOVE -->
+  </properties>
+
+  <build>
+    <plugins>
+<!-- TEMPORARY REMOVE -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>lib</id>
+            <phase>package</phase>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+              <excludeTransitive>false</excludeTransitive>
+              <overWrite>false</overWrite>
+              <outputDirectory>${eclipse.application.lib.dir}</outputDirectory>
+            </configuration>
+          </execution>
+<!-- REMOVE
+          <execution>
+            <id>plugins</id>
+            <phase>package</phase>
+            <goals>
+              <goal>unpack-dependencies</goal>
+            </goals>
+            <configuration>
+              <excludeTransitive>true</excludeTransitive>
+              <outputDirectory>${eclipse.application.plugins.dir}</outputDirectory>
+            </configuration>
+          </execution>
+END REMOVE -->
+        </executions>
+      </plugin>
+<!-- TEMPORARY REMOVE -->
+<!-- REMOVE NO_SOURCES
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <phase>package</phase>
+            <goals>
+              <goal>jar-no-fork</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>javadoc</id>
+            <phase>package</phase>
+            <configuration />
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+END REMOVE NO_SOURCES -->
+    </plugins>
+  </build>
+
+  <dependencies>
+    <!--
+    <dependency>
+      <groupId>com.choicemaker.util</groupId>
+      <artifactId>choicemaker-util</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.compiler</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.io.blocking.automated.base</artifactId>
+    </dependency>
+    -->
+    <dependency>
+      <groupId>com.choicemaker.e2</groupId>
+      <artifactId>com.choicemaker.e2.embed</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.io.db.oracle</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.io.db.base</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.ml.me.base</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.oracle</groupId>
+      <artifactId>ojdbc6</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.oracle</groupId>
+      <artifactId>ucp</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>simple-person-plugin</artifactId>
+<!--
+      <scope>test</scope>
+-->
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+</project>
