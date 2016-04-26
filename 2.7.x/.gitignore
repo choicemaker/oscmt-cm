@@ -17,3 +17,6 @@ build.xml
 
 .*.swp
 *.BAK-??
+
+*_local.properties
+*_local.xml
