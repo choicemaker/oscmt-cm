@@ -80,7 +80,7 @@ public class RecordSourceSnapshotApp {
 	public static final String PN_SQL_RECORD_SELECTION = "sqlRecordSelection";
 
 	public static final String DEFAULT_SQL_RECORD_SELECTION =
-		"select record_id as id from Person";
+		"select 100109 as ID, 118597 as ID_MATCHED, 'M' as decision from dual";
 
 	/*
 	 * public static final String PN_JDBC_GROW_BLOCK = "jdbcPoolGrowBlock";
