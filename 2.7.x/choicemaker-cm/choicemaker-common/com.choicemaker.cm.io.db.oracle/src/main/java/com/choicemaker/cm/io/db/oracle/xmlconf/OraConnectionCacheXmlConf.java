@@ -14,8 +14,10 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.logging.Logger;
 
-import oracle.jdbc.pool.OracleConnectionCache;
-import oracle.jdbc.pool.OracleConnectionCacheImpl;
+import javax.sql.DataSource;
+
+import oracle.ucp.jdbc.PoolDataSource;
+import oracle.ucp.jdbc.PoolDataSourceFactory;
 
 import org.jdom.Element;
 
@@ -26,7 +28,7 @@ import com.choicemaker.cm.io.db.base.DataSources;
 /**
  * XML configurator for Oracle Connection Cache.
  *
- * @author    Martin Buechi
+ * @author Martin Buechi
  */
 public class OraConnectionCacheXmlConf {
 	private static Logger logger = Logger
@@ -48,13 +50,17 @@ public class OraConnectionCacheXmlConf {
 	/**
 	 * Returns a connection corresponding to the specifications.
 	 *
-	 * @param   name  The name of the configuration.
-	 * @throws  SQLException  if an SQLException occurs in the creation of the connection cache.
-	 * @throws  XmlConfException  if there is a problem with the configuration file.
+	 * @param name
+	 *            The name of the configuration.
+	 * @throws SQLException
+	 *             if an SQLException occurs in the creation of the connection
+	 *             cache.
+	 * @throws XmlConfException
+	 *             if there is a problem with the configuration file.
 	 */
-	public static OracleConnectionCache getConnectionCache(String name)
-		throws java.sql.SQLException, XmlConfException {
-		OracleConnectionCache cc = (OracleConnectionCache) caches.get(name);
+	public static DataSource getConnectionCache(String name)
+			throws java.sql.SQLException, XmlConfException {
+		DataSource cc = (DataSource) caches.get(name);
 		if (cc != null) {
 			return cc;
 		} else {
@@ -68,39 +74,51 @@ public class OraConnectionCacheXmlConf {
 					}
 				}
 			}
-			throw new XmlConfException("Connection cache not found in configuration file: " + name);
+			throw new XmlConfException(
+					"Connection cache not found in configuration file: " + name);
 		}
 	}
 
 	/**
 	 * Returns a connection corresponding to the specifications.
 	 *
-	 * @param   element  The root element of the configuration cache configuration.
-	 * @throws  SQLException  if an SQLException occurs in the creation of the connection cache.
-	 * @throws  XmlConfException  if there is a problem with the configuration file.
+	 * @param element
+	 *            The root element of the configuration cache configuration.
+	 * @throws SQLException
+	 *             if an SQLException occurs in the creation of the connection
+	 *             cache.
+	 * @throws XmlConfException
+	 *             if there is a problem with the configuration file.
 	 */
-	private static OracleConnectionCache getConnectionCache(Element e) throws java.sql.SQLException {
-		OracleConnectionCacheImpl cc = new OracleConnectionCacheImpl();
+	private static DataSource getConnectionCache(Element e)
+			throws java.sql.SQLException {
 		String name = e.getAttributeValue("name");
 		String driverType = e.getChildText("driverType");
+		if (driverType != null) {
+			String msg = "Ignoring driverType ('" + driverType + "')";
+			logger.fine(msg);
+		}
 		String serverName = e.getChildText("serverName");
 		String networkProtocol = e.getChildText("networkProtocol");
 		String databaseName = e.getChildText("databaseName");
 		int portNumber = Integer.parseInt(e.getChildText("portNumber"));
 		String user = e.getChildText("user");
 		String password = e.getChildText("password");
-		int connectionLimit = Integer.parseInt(e.getChildText("connectionLimit"));
-		cc = new OracleConnectionCacheImpl();
-		cc.setDriverType(driverType);
+		int connectionLimit =
+			Integer.parseInt(e.getChildText("connectionLimit"));
+		// DataSource cc = new OracleConnectionCacheImpl();
+		PoolDataSource cc = PoolDataSourceFactory.getPoolDataSource();
+		// cc.setDriverType(driverType);
 		cc.setServerName(serverName);
 		cc.setNetworkProtocol(networkProtocol);
 		cc.setDatabaseName(databaseName);
 		cc.setPortNumber(portNumber);
 		cc.setUser(user);
 		cc.setPassword(password);
-		cc.setMaxLimit(connectionLimit);
+		// cc.setMaxLimit(connectionLimit);
+		cc.setMaxPoolSize(connectionLimit);
 		cc.setDataSourceName(name);
-		cc.setCacheScheme(OracleConnectionCacheImpl.FIXED_WAIT_SCHEME);
+		// cc.setCacheScheme(OracleConnectionCacheImpl.FIXED_WAIT_SCHEME);
 		caches.put(name, cc);
 		return cc;
 	}

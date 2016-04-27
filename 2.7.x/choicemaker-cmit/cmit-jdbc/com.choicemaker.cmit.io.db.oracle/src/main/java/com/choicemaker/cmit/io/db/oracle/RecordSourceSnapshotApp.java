@@ -22,6 +22,7 @@ import com.choicemaker.cm.core.ImmutableMarkedRecordPair;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.db.base.DbReaderParallel;
+import com.choicemaker.cm.io.db.oracle.OracleJdbcProperties;
 import com.choicemaker.cm.io.db.oracle.OracleRemoteDebugging;
 import com.choicemaker.cm.io.db.oracle.OracleSerialMRPSource;
 import com.choicemaker.e2.embed.EmbeddedPlatform;
@@ -32,67 +33,70 @@ public class RecordSourceSnapshotApp {
 	private static final Logger logger = Logger
 			.getLogger(RecordSourceSnapshotApp.class.getName());
 
-	public static final String PN_PROPERTY_FILE = "propertyFile";
-
-	public static final String DEFAULT_PROPERTY_FILE =
-		"oracle_jdbc_test_local.properties";
-
-	public static final String PN_POOL_NAME = "poolName";
-
-	public static final String PN_JDBC_DATASOURCE_CLASS = "jdbcDatasourceClass";
-
-	public static final String DEFAULT_JDBC_DATASOURCE_CLASS =
-		"oracle.jdbc.pool.OracleDataSource";
-
-	public static final String PN_JDBC_DRIVER = "jdbcDriver";
-
-	public static final String DEFAULT_JDBC_DRIVE_CLASS =
-		"oracle.jdbc.OracleDriver";
-
-	public static final String PN_JDBC_URL = "jdbcUrl";
-
 	public static final String DEFAULT_JDBC_URL =
-		"jdbc:oracle:thin:@localhost:1521/XE";
+	"jdbc:oracle:thin:@localhost:1521/XE";
 
-	public static final String PN_JDBC_USER = "jdbcUser";
+	public static final String PN_DATABASE_CONFIGURATION =
+			"databaseConfiguration";
 
-	public static final String PN_JDBC_PASSWORD = "jdbcPassword";
-
-	public static final String PN_JDBC_POOL_INITIAL_SIZE =
-		"jdbcPoolInitialSize";
-
-	public static final String DEFAULT_JDBC_POOL_INITIAL_SIZE = "2";
-
-	public static final String PN_JDBC_POOL_MAX_SIZE = "jdbcPoolMaxSize";
-
-	public static final String DEFAULT_JDBC_POOL_MAX_SIZE = "20";
+	public static final String DEFAULT_DATABASE_CONFIGURATION = "default";
 
 	public static final String PN_MODEL_NAME = "modelName";
 
 	public static final String DEFAULT_MODEL_NAME =
-		"com.choicemaker.cm.simplePersonMatching.Model1";
+	"com.choicemaker.cm.simplePersonMatching.Model1";
 
-	public static final String PN_DATABASE_CONFIGURATION =
-		"databaseConfiguration";
+	public static final String PN_PROPERTY_FILE = "propertyFile";
 
-	public static final String DEFAULT_DATABASE_CONFIGURATION = "default";
+	public static final String DEFAULT_PROPERTY_FILE =
+	"oracle_jdbc_test_local.properties";
 
 	public static final String PN_SQL_RECORD_SELECTION = "sqlRecordSelection";
 
 	public static final String DEFAULT_SQL_RECORD_SELECTION =
-		"select 100109 as ID, 118597 as ID_MATCHED, 'M' as decision from dual";
+	"select 100109 as ID, 118597 as ID_MATCHED, 'M' as decision from dual";
 
-	/*
-	 * public static final String PN_JDBC_GROW_BLOCK = "jdbcPoolGrowBlock";
-	 * 
-	 * public static final String DEFAULT_JDBC_GROW_BLOCK = "1";
-	 * 
-	 * public static final String PN_JDBC_CREATE_WAIT_TIME =
-	 * "jdbcCreateWaitTime";
-	 * 
-	 * / * * Milliseconds * / public static final String
-	 * DEFAULT_JDBC_CREATE_WAIT_TIME = "1000";
-	 */
+	public static DataSource configureDatasource(Properties p)
+			throws SQLException {
+		validateProperties(p);
+		PoolDataSource retVal = PoolDataSourceFactory.getPoolDataSource();
+
+		String key;
+		String value;
+		int intValue;
+
+		key = OracleJdbcProperties.PN_JDBC_DATASOURCE_CLASS;
+		value = p.getProperty(key, OracleJdbcProperties.DEFAULT_JDBC_DATASOURCE_CLASS);
+		logProperty(key, value);
+		retVal.setConnectionFactoryClassName(value);
+
+		key = OracleJdbcProperties.PN_JDBC_URL;
+		value = p.getProperty(key, RecordSourceSnapshotApp.DEFAULT_JDBC_URL);
+		logProperty(key, value);
+		retVal.setURL(value);
+
+		key = OracleJdbcProperties.PN_JDBC_USER;
+		value = p.getProperty(key);
+		assert value != null;
+		logSecurityCredential(key, value);
+		retVal.setUser(value);
+
+		key = OracleJdbcProperties.PN_JDBC_PASSWORD;
+		value = p.getProperty(key);
+		assert value != null;
+		logSecurityCredential(key, value);
+		retVal.setPassword(value);
+
+		key = OracleJdbcProperties.PN_JDBC_POOL_INITIAL_SIZE;
+		intValue = getPropertyIntValue(p, key, OracleJdbcProperties.DEFAULT_JDBC_POOL_INITIAL_SIZE);
+		retVal.setInitialPoolSize(intValue);
+
+		key = OracleJdbcProperties.PN_JDBC_POOL_MAX_SIZE;
+		intValue = getPropertyIntValue(p, key, OracleJdbcProperties.DEFAULT_JDBC_POOL_MAX_SIZE);
+		retVal.setMaxPoolSize(intValue);
+
+		return retVal;
+	}
 
 	public static String createPasswordHint(String password) {
 		final int PASSWORD_HINT_LENGTH = 3;
@@ -128,28 +132,10 @@ public class RecordSourceSnapshotApp {
 		return retVal;
 	}
 
-	public static void validateProperties(Properties p) {
-		if (p == null || p.isEmpty()) {
-			throw new IllegalArgumentException("null or empty properties");
-		}
-		if (null == p.getProperty(PN_JDBC_USER)) {
-			throw new IllegalArgumentException("null user name");
-		}
-		if (null == p.getProperty(PN_JDBC_PASSWORD)) {
-			throw new IllegalArgumentException("null password");
-		}
-	}
-
 	public static Properties loadProperties(Reader r) throws IOException {
 		Properties p = new Properties();
 		p.load(r);
 		return p;
-	}
-
-	private static void logSecurityCredential(String key, String value) {
-		value = createPasswordHint(value);
-		String msg = "Key '" + key + "': value '" + value + "'";
-		logger.info(msg);
 	}
 
 	private static void logProperty(String key, String value) {
@@ -157,46 +143,10 @@ public class RecordSourceSnapshotApp {
 		logger.info(msg);
 	}
 
-	public static DataSource configureDatasource(Properties p)
-			throws SQLException {
-		validateProperties(p);
-		PoolDataSource retVal = PoolDataSourceFactory.getPoolDataSource();
-
-		String key;
-		String value;
-		int intValue;
-
-		key = PN_JDBC_DATASOURCE_CLASS;
-		value = p.getProperty(key, DEFAULT_JDBC_DATASOURCE_CLASS);
-		logProperty(key, value);
-		retVal.setConnectionFactoryClassName(value);
-
-		key = PN_JDBC_URL;
-		value = p.getProperty(key, DEFAULT_JDBC_URL);
-		logProperty(key, value);
-		retVal.setURL(value);
-
-		key = PN_JDBC_USER;
-		value = p.getProperty(key);
-		assert value != null;
-		logSecurityCredential(key, value);
-		retVal.setUser(value);
-
-		key = PN_JDBC_PASSWORD;
-		value = p.getProperty(key);
-		assert value != null;
-		logSecurityCredential(key, value);
-		retVal.setPassword(value);
-
-		key = PN_JDBC_POOL_INITIAL_SIZE;
-		intValue = getPropertyIntValue(p, key, DEFAULT_JDBC_POOL_INITIAL_SIZE);
-		retVal.setInitialPoolSize(intValue);
-
-		key = PN_JDBC_POOL_MAX_SIZE;
-		intValue = getPropertyIntValue(p, key, DEFAULT_JDBC_POOL_MAX_SIZE);
-		retVal.setMaxPoolSize(intValue);
-
-		return retVal;
+	private static void logSecurityCredential(String key, String value) {
+		value = createPasswordHint(value);
+		String msg = "Key '" + key + "': value '" + value + "'";
+		logger.info(msg);
 	}
 
 	public static void main(String[] args) throws Exception {
@@ -206,21 +156,21 @@ public class RecordSourceSnapshotApp {
 		// CMPlatform cmp = InstallablePlatform.getInstance();
 
 		String propertyFileName =
-			System.getProperty(PN_PROPERTY_FILE, DEFAULT_PROPERTY_FILE);
+			System.getProperty(PN_PROPERTY_FILE, RecordSourceSnapshotApp.DEFAULT_PROPERTY_FILE);
 		FileReader fr = new FileReader(propertyFileName);
 		Properties p = loadProperties(fr);
 		DataSource ds = configureDatasource(p);
 
-		String modelName = p.getProperty(PN_MODEL_NAME, DEFAULT_MODEL_NAME);
+		String modelName = p.getProperty(PN_MODEL_NAME, RecordSourceSnapshotApp.DEFAULT_MODEL_NAME);
 		logProperty(PN_MODEL_NAME, modelName);
 
 		String databaseConfiguration =
 			p.getProperty(PN_DATABASE_CONFIGURATION,
-					DEFAULT_DATABASE_CONFIGURATION);
+					RecordSourceSnapshotApp.DEFAULT_DATABASE_CONFIGURATION);
 		logProperty(PN_DATABASE_CONFIGURATION, databaseConfiguration);
 
 		String selection =
-			p.getProperty(PN_SQL_RECORD_SELECTION, DEFAULT_SQL_RECORD_SELECTION);
+			p.getProperty(PN_SQL_RECORD_SELECTION, RecordSourceSnapshotApp.DEFAULT_SQL_RECORD_SELECTION);
 		logProperty(PN_SQL_RECORD_SELECTION, selection);
 
 		PMManager.loadModelPlugins();
@@ -270,6 +220,18 @@ public class RecordSourceSnapshotApp {
 		} while (currentPair != null);
 		System.out.println("Number of pairs: " + pairCount);
 
+	}
+
+	public static void validateProperties(Properties p) {
+		if (p == null || p.isEmpty()) {
+			throw new IllegalArgumentException("null or empty properties");
+		}
+		if (null == p.getProperty(OracleJdbcProperties.PN_JDBC_USER)) {
+			throw new IllegalArgumentException("null user name");
+		}
+		if (null == p.getProperty(OracleJdbcProperties.PN_JDBC_PASSWORD)) {
+			throw new IllegalArgumentException("null password");
+		}
 	}
 
 	// private DataSource dataSource;
