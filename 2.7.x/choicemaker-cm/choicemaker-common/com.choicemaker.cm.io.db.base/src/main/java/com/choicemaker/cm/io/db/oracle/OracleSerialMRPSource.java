@@ -39,18 +39,18 @@ import com.choicemaker.cm.io.db.base.DbReaderParallel;
  * </p>
  *
  * @author pcheung
+ * @author rphall (refactored)
  *
  */
 public class OracleSerialMRPSource implements MarkedRecordPairSource,
 		Serializable {
 
-	/* As of 2010-03-10 */
-	static final long serialVersionUID = 2592253692957626142L;
+	private static final long serialVersionUID = 271L;
 
 	private static Logger logger = Logger.getLogger(OracleSerialMRPSource.class
 			.getName());
 
-	// Serializable properties of this record source
+	// Properties
 	private String dataSourceName;
 	private String modelName;
 	private String selection;
@@ -79,7 +79,7 @@ public class OracleSerialMRPSource implements MarkedRecordPairSource,
 	/** Retrieved from the model */
 	private transient DbReaderParallel dbr;
 
-	/** The next pairs to be returned by this record source */
+	/** The next pair to be returned by this record source */
 	private transient MutableMarkedRecordPair currentPair;
 
 	/** A database cursor that iterates over record cursors */
@@ -134,6 +134,10 @@ public class OracleSerialMRPSource implements MarkedRecordPairSource,
 		} catch (java.sql.SQLException e) {
 			throw new IOException("", e);
 		}
+	}
+
+	public boolean hasNext() {
+		return currentPair != null;
 	}
 
 	public ImmutableRecordPair getNext() throws IOException {
@@ -214,10 +218,6 @@ public class OracleSerialMRPSource implements MarkedRecordPairSource,
 		}
 	}
 
-	public boolean hasNext() throws IOException {
-		return currentPair != null;
-	}
-
 	public ImmutableProbabilityModel getModel() {
 		if (model == null)
 			model = PMManager.getModelInstance(modelName);
@@ -236,10 +236,7 @@ public class OracleSerialMRPSource implements MarkedRecordPairSource,
 		return ds;
 	}
 
-	/**
-	 * These method below are not used.
-	 *
-	 */
+	// Unused methods
 
 	public void setModel(ImmutableProbabilityModel m) {
 	}
