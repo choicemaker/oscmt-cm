@@ -33,7 +33,7 @@
             name="DB"
             class="com.choicemaker.cm.io.db.base.xmlconf.DbMarkedRecordPairSourceXmlConf"
             backwardCompatibilityId="com.choicemaker.cm.plugin.db.xmlconf.DbMarkedRecordPairSourceXmlConf"
-            handledClass="com.choicemaker.cm.io.db.oracle.OracleMarkedRecordPairSource">
+            handledClass="com.choicemaker.cm.io.db.oracle.OracleMarkedRecordPairSource2">
       </handler>
    </extension>
    <extension
