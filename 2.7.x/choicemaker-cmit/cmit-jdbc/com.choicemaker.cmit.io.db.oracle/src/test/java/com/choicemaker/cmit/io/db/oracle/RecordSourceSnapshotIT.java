@@ -1,8 +1,5 @@
 package com.choicemaker.cmit.io.db.oracle;
 
-import static com.choicemaker.e2.platform.InstallablePlatform.INSTALLABLE_PLATFORM;
-
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.sql.SQLException;
@@ -19,11 +16,6 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.base.PMManager;
-import com.choicemaker.e2.embed.EmbeddedPlatform;
-import com.choicemaker.util.SystemPropertyUtils;
 
 public class RecordSourceSnapshotIT {
 
@@ -77,21 +69,6 @@ public class RecordSourceSnapshotIT {
 
 	public static final String SIMPLE_PERSON_MODEL = "Model1";
 
-	/*
-	public static final String PN_JDBC_GROW_BLOCK =
-			"jdbcPoolGrowBlock";
-
-	public static final String DEFAULT_JDBC_GROW_BLOCK =
-			"1";
-
-	public static final String PN_JDBC_CREATE_WAIT_TIME =
-			"jdbcCreateWaitTime";
-
-	/ * * Milliseconds * /
-	public static final String DEFAULT_JDBC_CREATE_WAIT_TIME =
-			"1000";
-	*/
-
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 /*
@@ -125,10 +102,10 @@ public class RecordSourceSnapshotIT {
 		return retVal;
 	}
 
-	private String jdbcUrl;
-	private String user;
-	private String password;
-	private DataSource dataSource;
+//	private String jdbcUrl;
+//	private String user;
+//	private String password;
+//	private DataSource dataSource;
 
 	private static int getPropertyIntValue(Properties p, String key, String defaultValue) {
 		assert p != null ;
