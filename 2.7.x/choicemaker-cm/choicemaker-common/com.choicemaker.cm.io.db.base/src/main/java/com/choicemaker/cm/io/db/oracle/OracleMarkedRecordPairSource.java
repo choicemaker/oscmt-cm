@@ -45,9 +45,9 @@ import com.choicemaker.cm.io.db.base.DbReaderParallel;
  *
  * @author    Martin Buechi
  */
-public class OracleMarkedRecordPairSource2 implements MarkedRecordPairSource {
+public class OracleMarkedRecordPairSource implements MarkedRecordPairSource {
 
-	private static Logger logger = Logger.getLogger(OracleMarkedRecordPairSource2.class.getName());
+	private static Logger logger = Logger.getLogger(OracleMarkedRecordPairSource.class.getName());
 	
 	static final int CURSOR = -10;
 
@@ -87,7 +87,7 @@ public class OracleMarkedRecordPairSource2 implements MarkedRecordPairSource {
 	/**
 	 * Creates an uninitialized instance.
 	 */
-	public OracleMarkedRecordPairSource2() {
+	public OracleMarkedRecordPairSource() {
 		name = "";
 		selection = "";
 	}
@@ -95,7 +95,7 @@ public class OracleMarkedRecordPairSource2 implements MarkedRecordPairSource {
 	/**
 	 * Constructor.
 	 */
-	public OracleMarkedRecordPairSource2(String fileName, String dataSourceName, ImmutableProbabilityModel model, String conf, String selection) {
+	public OracleMarkedRecordPairSource(String fileName, String dataSourceName, ImmutableProbabilityModel model, String conf, String selection) {
 		setFileName(fileName);
 		setDataSourceName(dataSourceName);
 		setModel(model);
@@ -104,7 +104,7 @@ public class OracleMarkedRecordPairSource2 implements MarkedRecordPairSource {
 	}
 
 
-	public OracleMarkedRecordPairSource2(String fileName, DataSource ds, ImmutableProbabilityModel model, String conf, String selection) {
+	public OracleMarkedRecordPairSource(String fileName, DataSource ds, ImmutableProbabilityModel model, String conf, String selection) {
 		setFileName(fileName);
 		this.dataSourceName = ds.toString();
 		this.ds = ds;

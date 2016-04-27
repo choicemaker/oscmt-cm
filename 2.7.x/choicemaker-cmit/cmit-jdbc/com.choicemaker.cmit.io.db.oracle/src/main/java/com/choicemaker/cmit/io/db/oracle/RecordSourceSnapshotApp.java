@@ -23,7 +23,7 @@ import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.db.base.DbReaderParallel;
 import com.choicemaker.cm.io.db.oracle.OracleJdbcProperties;
-import com.choicemaker.cm.io.db.oracle.OracleMarkedRecordPairSource2;
+import com.choicemaker.cm.io.db.oracle.OracleMarkedRecordPairSource;
 import com.choicemaker.cm.io.db.oracle.OracleRemoteDebugging;
 import com.choicemaker.e2.embed.EmbeddedPlatform;
 import com.choicemaker.util.SystemPropertyUtils;
@@ -179,7 +179,7 @@ public class RecordSourceSnapshotApp {
 		assert m1 != null : "null model";
 
 		DbReaderParallel dbr =
-			OracleMarkedRecordPairSource2.getDatabaseReader(m1, databaseConfiguration);
+			OracleMarkedRecordPairSource.getDatabaseReader(m1, databaseConfiguration);
 		final int noCursors = dbr.getNoCursors();
 
 		// Get a database connection (and optionally configure debugging)
@@ -189,24 +189,24 @@ public class RecordSourceSnapshotApp {
 		// Execute the stored procedure that retrieves records and marked
 		// pairs
 		CallableStatement stmt =
-			OracleMarkedRecordPairSource2.prepareCmtTrainingAccessSnaphot(conn);
-		OracleMarkedRecordPairSource2.executeCmtTrainingAccessSnaphot(stmt, selection,
+			OracleMarkedRecordPairSource.prepareCmtTrainingAccessSnaphot(conn);
+		OracleMarkedRecordPairSource.executeCmtTrainingAccessSnaphot(stmt, selection,
 				dbr);
 
 		// Update the result sets representing records and marked pairs
 		ResultSet markedPairs =
 			(ResultSet) stmt
-					.getObject(OracleMarkedRecordPairSource2.PARAM_IDX_PAIR_CURSOR);
+					.getObject(OracleMarkedRecordPairSource.PARAM_IDX_PAIR_CURSOR);
 		ResultSet cursorOfRecordCursors =
 			(ResultSet) stmt
-					.getObject(OracleMarkedRecordPairSource2.PARAM_IDX_RECORD_CURSOR_CURSOR);
+					.getObject(OracleMarkedRecordPairSource.PARAM_IDX_RECORD_CURSOR_CURSOR);
 		ResultSet[] recordCursors =
-			OracleMarkedRecordPairSource2.createRecordCursors(cursorOfRecordCursors,
+			OracleMarkedRecordPairSource.createRecordCursors(cursorOfRecordCursors,
 					noCursors);
 
 		// Create the map of record ids to full records
 		dbr.open(recordCursors);
-		Map<?, ?> recordMap = OracleMarkedRecordPairSource2.createRecordMap(dbr);
+		Map<?, ?> recordMap = OracleMarkedRecordPairSource.createRecordMap(dbr);
 		System.out.println("Number of records: " + recordMap.size());
 
 		// Get the first currentPair
@@ -215,7 +215,7 @@ public class RecordSourceSnapshotApp {
 		do {
 			++pairCount;
 			currentPair =
-				OracleMarkedRecordPairSource2.getNextPairInternal(recordMap,
+				OracleMarkedRecordPairSource.getNextPairInternal(recordMap,
 						markedPairs);
 		} while (currentPair != null);
 		System.out.println("Number of pairs: " + pairCount);

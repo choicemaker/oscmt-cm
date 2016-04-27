@@ -105,7 +105,7 @@ public class OracleSerialMRPSource implements MarkedRecordPairSource,
 	public void open() throws IOException {
 		try {
 			// Get the database reader for specified database configuration
-			dbr = OracleMarkedRecordPairSource2.getDatabaseReader(getModel(),conf);
+			dbr = OracleMarkedRecordPairSource.getDatabaseReader(getModel(),conf);
 			final int noCursors = dbr.getNoCursors();
 
 			// Get a database connection (and optionally configure debugging)
@@ -114,22 +114,22 @@ public class OracleSerialMRPSource implements MarkedRecordPairSource,
 
 			// Execute the stored procedure that retrieves records and marked
 			// pairs
-			stmt = OracleMarkedRecordPairSource2.prepareCmtTrainingAccessSnaphot(conn);
-			OracleMarkedRecordPairSource2.executeCmtTrainingAccessSnaphot(stmt, selection, dbr);
+			stmt = OracleMarkedRecordPairSource.prepareCmtTrainingAccessSnaphot(conn);
+			OracleMarkedRecordPairSource.executeCmtTrainingAccessSnaphot(stmt, selection, dbr);
 
 			// Update the result sets representing records and marked pairs
-			markedPairs = (ResultSet) stmt.getObject(OracleMarkedRecordPairSource2.PARAM_IDX_PAIR_CURSOR);
+			markedPairs = (ResultSet) stmt.getObject(OracleMarkedRecordPairSource.PARAM_IDX_PAIR_CURSOR);
 			cursorOfRecordCursors =
-				(ResultSet) stmt.getObject(OracleMarkedRecordPairSource2.PARAM_IDX_RECORD_CURSOR_CURSOR);
+				(ResultSet) stmt.getObject(OracleMarkedRecordPairSource.PARAM_IDX_RECORD_CURSOR_CURSOR);
 			recordCursors =
-				OracleMarkedRecordPairSource2.createRecordCursors(cursorOfRecordCursors, noCursors);
+				OracleMarkedRecordPairSource.createRecordCursors(cursorOfRecordCursors, noCursors);
 
 			// Create the map of record ids to full records
 			dbr.open(recordCursors);
-			this.recordMap = OracleMarkedRecordPairSource2.createRecordMap(dbr);
+			this.recordMap = OracleMarkedRecordPairSource.createRecordMap(dbr);
 
 			// Get the first currentPair
-			this.currentPair = OracleMarkedRecordPairSource2.getNextPairInternal(recordMap, markedPairs);
+			this.currentPair = OracleMarkedRecordPairSource.getNextPairInternal(recordMap, markedPairs);
 
 		} catch (java.sql.SQLException e) {
 			throw new IOException("", e);
@@ -142,7 +142,7 @@ public class OracleSerialMRPSource implements MarkedRecordPairSource,
 
 	public MutableMarkedRecordPair getNextMarkedRecordPair() throws IOException {
 		MutableMarkedRecordPair retVal = currentPair;
-		this.currentPair = OracleMarkedRecordPairSource2.getNextPairInternal(recordMap, markedPairs);
+		this.currentPair = OracleMarkedRecordPairSource.getNextPairInternal(recordMap, markedPairs);
 		return retVal;
 	}
 
