@@ -38,13 +38,10 @@ import com.choicemaker.cm.io.db.oracle.OracleRemoteDebugging;
 import com.choicemaker.e2.embed.EmbeddedPlatform;
 import com.choicemaker.util.SystemPropertyUtils;
 
-public class RecordSourceSnapshotApp {
+public class AccessSnapshotApp {
 
 	// private static final Logger logger = Logger
-	// .getLogger(RecordSourceSnapshotApp.class.getName());
-
-	private static final String SQL_CMT_TRAINING_RS_SNAPSHOT =
-		"call CMTTRAINING.RS_SNAPSHOT (?,?,?)";
+	// .getLogger(AccessSnapshotApp.class.getName());
 
 	public static void main(String[] args) throws Exception {
 

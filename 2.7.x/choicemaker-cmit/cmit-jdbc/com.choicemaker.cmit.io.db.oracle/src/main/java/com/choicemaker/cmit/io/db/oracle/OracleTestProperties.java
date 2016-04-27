@@ -1,6 +1,6 @@
 package com.choicemaker.cmit.io.db.oracle;
 
-public class RecordSourceSnapshotProperties {
+public class OracleTestProperties {
 
 	public static final String DEFAULT_JDBC_URL =
 	"jdbc:oracle:thin:@localhost:1521/XE";
@@ -25,7 +25,7 @@ public class RecordSourceSnapshotProperties {
 	public static final String DEFAULT_SQL_RECORD_SELECTION =
 	"select record_id as ID from Person";
 
-	private RecordSourceSnapshotProperties() {
+	private OracleTestProperties() {
 	}
 
 }
