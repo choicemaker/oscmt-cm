@@ -1,5 +1,14 @@
 package com.choicemaker.cmit.io.db.oracle;
 
+import static com.choicemaker.cm.io.db.oracle.OracleJdbcProperties.DEFAULT_JDBC_DATASOURCE_CLASS;
+import static com.choicemaker.cm.io.db.oracle.OracleJdbcProperties.DEFAULT_JDBC_POOL_INITIAL_SIZE;
+import static com.choicemaker.cm.io.db.oracle.OracleJdbcProperties.DEFAULT_JDBC_POOL_MAX_SIZE;
+import static com.choicemaker.cm.io.db.oracle.OracleJdbcProperties.PN_JDBC_DATASOURCE_CLASS;
+import static com.choicemaker.cm.io.db.oracle.OracleJdbcProperties.PN_JDBC_PASSWORD;
+import static com.choicemaker.cm.io.db.oracle.OracleJdbcProperties.PN_JDBC_POOL_INITIAL_SIZE;
+import static com.choicemaker.cm.io.db.oracle.OracleJdbcProperties.PN_JDBC_POOL_MAX_SIZE;
+import static com.choicemaker.cm.io.db.oracle.OracleJdbcProperties.PN_JDBC_URL;
+import static com.choicemaker.cm.io.db.oracle.OracleJdbcProperties.PN_JDBC_USER;
 import static com.choicemaker.e2.platform.InstallablePlatform.INSTALLABLE_PLATFORM;
 
 import java.io.FileReader;
@@ -22,7 +31,6 @@ import com.choicemaker.cm.core.ImmutableMarkedRecordPair;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.db.base.DbReaderParallel;
-import com.choicemaker.cm.io.db.oracle.OracleJdbcProperties;
 import com.choicemaker.cm.io.db.oracle.OracleMarkedRecordPairSource;
 import com.choicemaker.cm.io.db.oracle.OracleRemoteDebugging;
 import com.choicemaker.e2.embed.EmbeddedPlatform;
@@ -33,29 +41,6 @@ public class RecordSourceSnapshotApp {
 	private static final Logger logger = Logger
 			.getLogger(RecordSourceSnapshotApp.class.getName());
 
-	public static final String DEFAULT_JDBC_URL =
-	"jdbc:oracle:thin:@localhost:1521/XE";
-
-	public static final String PN_DATABASE_CONFIGURATION =
-			"databaseConfiguration";
-
-	public static final String DEFAULT_DATABASE_CONFIGURATION = "default";
-
-	public static final String PN_MODEL_NAME = "modelName";
-
-	public static final String DEFAULT_MODEL_NAME =
-	"com.choicemaker.cm.simplePersonMatching.Model1";
-
-	public static final String PN_PROPERTY_FILE = "propertyFile";
-
-	public static final String DEFAULT_PROPERTY_FILE =
-	"oracle_jdbc_test_local.properties";
-
-	public static final String PN_SQL_RECORD_SELECTION = "sqlRecordSelection";
-
-	public static final String DEFAULT_SQL_RECORD_SELECTION =
-	"select 100109 as ID, 118597 as ID_MATCHED, 'M' as decision from dual";
-
 	public static DataSource configureDatasource(Properties p)
 			throws SQLException {
 		validateProperties(p);
@@ -65,34 +50,35 @@ public class RecordSourceSnapshotApp {
 		String value;
 		int intValue;
 
-		key = OracleJdbcProperties.PN_JDBC_DATASOURCE_CLASS;
-		value = p.getProperty(key, OracleJdbcProperties.DEFAULT_JDBC_DATASOURCE_CLASS);
+		key = PN_JDBC_DATASOURCE_CLASS;
+		value = p.getProperty(key, DEFAULT_JDBC_DATASOURCE_CLASS);
 		logProperty(key, value);
 		retVal.setConnectionFactoryClassName(value);
 
-		key = OracleJdbcProperties.PN_JDBC_URL;
-		value = p.getProperty(key, RecordSourceSnapshotApp.DEFAULT_JDBC_URL);
+		key = PN_JDBC_URL;
+		value =
+			p.getProperty(key, RecordSourceSnapshotProperties.DEFAULT_JDBC_URL);
 		logProperty(key, value);
 		retVal.setURL(value);
 
-		key = OracleJdbcProperties.PN_JDBC_USER;
+		key = PN_JDBC_USER;
 		value = p.getProperty(key);
 		assert value != null;
 		logSecurityCredential(key, value);
 		retVal.setUser(value);
 
-		key = OracleJdbcProperties.PN_JDBC_PASSWORD;
+		key = PN_JDBC_PASSWORD;
 		value = p.getProperty(key);
 		assert value != null;
 		logSecurityCredential(key, value);
 		retVal.setPassword(value);
 
-		key = OracleJdbcProperties.PN_JDBC_POOL_INITIAL_SIZE;
-		intValue = getPropertyIntValue(p, key, OracleJdbcProperties.DEFAULT_JDBC_POOL_INITIAL_SIZE);
+		key = PN_JDBC_POOL_INITIAL_SIZE;
+		intValue = getPropertyIntValue(p, key, DEFAULT_JDBC_POOL_INITIAL_SIZE);
 		retVal.setInitialPoolSize(intValue);
 
-		key = OracleJdbcProperties.PN_JDBC_POOL_MAX_SIZE;
-		intValue = getPropertyIntValue(p, key, OracleJdbcProperties.DEFAULT_JDBC_POOL_MAX_SIZE);
+		key = PN_JDBC_POOL_MAX_SIZE;
+		intValue = getPropertyIntValue(p, key, DEFAULT_JDBC_POOL_MAX_SIZE);
 		retVal.setMaxPoolSize(intValue);
 
 		return retVal;
@@ -156,22 +142,30 @@ public class RecordSourceSnapshotApp {
 		// CMPlatform cmp = InstallablePlatform.getInstance();
 
 		String propertyFileName =
-			System.getProperty(PN_PROPERTY_FILE, RecordSourceSnapshotApp.DEFAULT_PROPERTY_FILE);
+			System.getProperty(RecordSourceSnapshotProperties.PN_PROPERTY_FILE,
+					RecordSourceSnapshotProperties.DEFAULT_PROPERTY_FILE);
 		FileReader fr = new FileReader(propertyFileName);
 		Properties p = loadProperties(fr);
 		DataSource ds = configureDatasource(p);
 
-		String modelName = p.getProperty(PN_MODEL_NAME, RecordSourceSnapshotApp.DEFAULT_MODEL_NAME);
-		logProperty(PN_MODEL_NAME, modelName);
+		String modelName =
+			p.getProperty(RecordSourceSnapshotProperties.PN_MODEL_NAME,
+					RecordSourceSnapshotProperties.DEFAULT_MODEL_NAME);
+		logProperty(RecordSourceSnapshotProperties.PN_MODEL_NAME, modelName);
 
 		String databaseConfiguration =
-			p.getProperty(PN_DATABASE_CONFIGURATION,
-					RecordSourceSnapshotApp.DEFAULT_DATABASE_CONFIGURATION);
-		logProperty(PN_DATABASE_CONFIGURATION, databaseConfiguration);
+			p.getProperty(
+					RecordSourceSnapshotProperties.PN_DATABASE_CONFIGURATION,
+					RecordSourceSnapshotProperties.DEFAULT_DATABASE_CONFIGURATION);
+		logProperty(RecordSourceSnapshotProperties.PN_DATABASE_CONFIGURATION,
+				databaseConfiguration);
 
 		String selection =
-			p.getProperty(PN_SQL_RECORD_SELECTION, RecordSourceSnapshotApp.DEFAULT_SQL_RECORD_SELECTION);
-		logProperty(PN_SQL_RECORD_SELECTION, selection);
+			p.getProperty(
+					RecordSourceSnapshotProperties.PN_SQL_RECORD_SELECTION,
+					RecordSourceSnapshotProperties.DEFAULT_SQL_RECORD_SELECTION);
+		logProperty(RecordSourceSnapshotProperties.PN_SQL_RECORD_SELECTION,
+				selection);
 
 		PMManager.loadModelPlugins();
 		ImmutableProbabilityModel m1 =
@@ -179,7 +173,8 @@ public class RecordSourceSnapshotApp {
 		assert m1 != null : "null model";
 
 		DbReaderParallel dbr =
-			OracleMarkedRecordPairSource.getDatabaseReader(m1, databaseConfiguration);
+			OracleMarkedRecordPairSource.getDatabaseReader(m1,
+					databaseConfiguration);
 		final int noCursors = dbr.getNoCursors();
 
 		// Get a database connection (and optionally configure debugging)
@@ -190,8 +185,8 @@ public class RecordSourceSnapshotApp {
 		// pairs
 		CallableStatement stmt =
 			OracleMarkedRecordPairSource.prepareCmtTrainingAccessSnaphot(conn);
-		OracleMarkedRecordPairSource.executeCmtTrainingAccessSnaphot(stmt, selection,
-				dbr);
+		OracleMarkedRecordPairSource.executeCmtTrainingAccessSnaphot(stmt,
+				selection, dbr);
 
 		// Update the result sets representing records and marked pairs
 		ResultSet markedPairs =
@@ -201,8 +196,8 @@ public class RecordSourceSnapshotApp {
 			(ResultSet) stmt
 					.getObject(OracleMarkedRecordPairSource.PARAM_IDX_RECORD_CURSOR_CURSOR);
 		ResultSet[] recordCursors =
-			OracleMarkedRecordPairSource.createRecordCursors(cursorOfRecordCursors,
-					noCursors);
+			OracleMarkedRecordPairSource.createRecordCursors(
+					cursorOfRecordCursors, noCursors);
 
 		// Create the map of record ids to full records
 		dbr.open(recordCursors);
@@ -226,10 +221,10 @@ public class RecordSourceSnapshotApp {
 		if (p == null || p.isEmpty()) {
 			throw new IllegalArgumentException("null or empty properties");
 		}
-		if (null == p.getProperty(OracleJdbcProperties.PN_JDBC_USER)) {
+		if (null == p.getProperty(PN_JDBC_USER)) {
 			throw new IllegalArgumentException("null user name");
 		}
-		if (null == p.getProperty(OracleJdbcProperties.PN_JDBC_PASSWORD)) {
+		if (null == p.getProperty(PN_JDBC_PASSWORD)) {
 			throw new IllegalArgumentException("null password");
 		}
 	}
