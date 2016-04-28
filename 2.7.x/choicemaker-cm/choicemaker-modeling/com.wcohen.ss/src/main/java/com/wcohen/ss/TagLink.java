@@ -54,8 +54,6 @@ private AbstractStringDistance tokenDistance;
 
   /**
    * TagLink constructor requires a character based string metric.
-   *
-   * @param characterBasedStringMetric CharacterBasedStringMetric
    */
   public TagLink(AbstractStringDistance tokenDistance) {
     super();
@@ -64,8 +62,6 @@ private AbstractStringDistance tokenDistance;
 
   /**
    * TagLink constructor requires a tokenizer and a tokenDistance metric
-   *
-   * @param trainDataObjectArray TrainDataObject[]
    */
   public TagLink(Tokenizer tokenizer, AbstractStringDistance tokenDistance) {
     super(tokenizer);
@@ -75,8 +71,6 @@ private AbstractStringDistance tokenDistance;
   /**
    * TagLink constructor requires dataset string array in order to compute the IDF
    * weights. Default character based string metric is TagLinkToken.
-   *
-   * @param dataSetArray String[]
    */
   public TagLink(String[] dataSetArray) {
     this(dataSetArray, DEFAULT_TOKEN_METRIC);
@@ -122,10 +116,6 @@ private AbstractStringDistance tokenDistance;
 
   /**
    * getStringMetric computes the similarity between a pair of strings T and U.
-   *
-   * @param T String
-   * @param U String
-   * @return double
    */
   public double score(StringWrapper s, StringWrapper t) {
 	checkTrainingHasHappened(s,t);
@@ -259,10 +249,6 @@ private AbstractStringDistance tokenDistance;
   /**
    * explainStringMetric gives a brief explanation of how the stringMetric was
    * computed.
-   *
-   * @param S String
-   * @param T String
-   * @return String
    */
   public String explainScore(StringWrapper s, StringWrapper t) {
     BagOfTokens sBag = (BagOfTokens) s;

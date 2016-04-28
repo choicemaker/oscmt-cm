@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.transitivity.server.impl;
 
 import java.io.PrintWriter;
@@ -31,9 +28,12 @@ import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.BatchJob;
+import com.choicemaker.cm.batch.OperationalPropertyController;
+import com.choicemaker.cm.io.blocking.automated.offline.core.RecordMatchingMode;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJobController;
@@ -53,10 +53,12 @@ public class TransitivityServiceBean implements TransitivityService {
 
 	protected static void logStartParameters(String externalID,
 			TransitivityParameters tp, BatchJob batchJob,
-			OabaParameters oabaParams, ServerConfiguration sc) {
+			OabaParameters oabaParams, ServerConfiguration sc,
+			RecordMatchingMode mode) {
 		final StringWriter sw = new StringWriter();
 		final PrintWriter pw = new PrintWriter(sw);
 		pw.println("External id: " + externalID);
+		pw.println("Record-matching mode: " + mode);
 		pw.println(TransitivityParametersEntity.dump(tp, batchJob, oabaParams));
 		pw.println(ServerConfigurationEntity.dump(sc));
 		String msg = sw.toString();
@@ -64,7 +66,8 @@ public class TransitivityServiceBean implements TransitivityService {
 	}
 
 	protected static void validateStartParameters(String externalID,
-			TransitivityParameters tp, BatchJob batchJob, ServerConfiguration sc) {
+			TransitivityParameters tp, BatchJob batchJob, ServerConfiguration sc,
+			RecordMatchingMode mode) {
 
 		// Create an empty list of invalid parameters
 		List<String> validityErrors = new LinkedList<>();
@@ -78,6 +81,9 @@ public class TransitivityServiceBean implements TransitivityService {
 		}
 		if (sc == null) {
 			validityErrors.add("null server configuration");
+		}
+		if (mode == null) {
+			validityErrors.add("null record-matching mode");
 		}
 		if (!validityErrors.isEmpty()) {
 			String msg =
@@ -94,6 +100,9 @@ public class TransitivityServiceBean implements TransitivityService {
 	@EJB
 	TransitivityJobController jobController;
 
+	@EJB
+	private OperationalPropertyController propController;
+
 	@Resource(name = "jms/transitivityQueue",
 			lookup = "java:/choicemaker/urm/jms/transitivityQueue")
 	private Queue queue;
@@ -106,16 +115,27 @@ public class TransitivityServiceBean implements TransitivityService {
 			TransitivityParameters batchParams, BatchJob batchJob,
 			OabaSettings settings, ServerConfiguration serverConfiguration,
 			BatchJob urmJob) throws ServerConfigurationException {
+		RecordMatchingMode mode =
+			BatchJobUtils.getRecordMatchingMode(propController, batchJob);
+		return startTransitivity(externalID, batchParams, batchJob, settings,
+				serverConfiguration, urmJob, mode);
+	}
+
+	@Override
+	public long startTransitivity(String externalID,
+			TransitivityParameters batchParams, BatchJob batchJob,
+			OabaSettings settings, ServerConfiguration serverConfiguration,
+			BatchJob urmJob, RecordMatchingMode mode) throws ServerConfigurationException {
 
 		final String METHOD = "startTransitivity";
 		log.entering(SOURCE_CLASS, METHOD);
 
-		validateStartParameters(externalID, batchParams, batchJob, serverConfiguration);
+		validateStartParameters(externalID, batchParams, batchJob, serverConfiguration, mode);
 
 		OabaParameters oabaParams =
 			oabaParamsController.findOabaParametersByBatchJobId(batchJob.getId());
 		logStartParameters(externalID, batchParams, batchJob, oabaParams,
-				serverConfiguration);
+				serverConfiguration, mode);
 
 		// Create and persist a transitivity job and its associated objects
 		BatchJob transJob =
@@ -123,6 +143,7 @@ public class TransitivityServiceBean implements TransitivityService {
 					batchJob, settings, serverConfiguration, urmJob);
 		assert transJob.isPersistent();
 		final long retVal = transJob.getId();
+		BatchJobUtils.setRecordMatchingMode(propController, transJob, mode);
 		log.info("Started transitivity analysis (job id: " + retVal + ")");
 
 		// Mark the job as queued and start processing by the

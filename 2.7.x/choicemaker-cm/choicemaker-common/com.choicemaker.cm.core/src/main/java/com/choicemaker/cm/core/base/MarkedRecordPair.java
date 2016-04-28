@@ -20,7 +20,6 @@ import com.choicemaker.cm.core.Record;
 /**
  * @deprecated use MutableMarkedRecordPair instead
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/27 21:35:15 $
  */
 public class MarkedRecordPair extends RecordPair implements IMarkedRecordPair {
 

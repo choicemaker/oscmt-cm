@@ -21,7 +21,6 @@ import com.choicemaker.cm.core.Constants;
  * Description
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/27 21:27:02 $
  */
 public class XmlWriter extends Writer {
 	private Writer w;
@@ -190,7 +189,7 @@ public class XmlWriter extends Writer {
 	 * XML element content.
 	 * </p>
 	 *
-	 * @param st <code>String</code> input to escape.
+	 * @param str <code>String</code> input to escape.
 	 * @return <code>String</code> with escaped content.
 	 */
 	public static String escapeElementEntities(String str) {

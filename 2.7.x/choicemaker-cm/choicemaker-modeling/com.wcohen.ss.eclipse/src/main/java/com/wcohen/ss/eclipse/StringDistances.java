@@ -43,7 +43,6 @@ import com.wcohen.ss.api.StringDistance;
  * in a clue/rule.
  * 
  * @author  	Rick Hall
- * @version   $Revision: 1.1 $ $Date: 2010/03/27 19:41:45 $
  */
 public final class StringDistances {
 

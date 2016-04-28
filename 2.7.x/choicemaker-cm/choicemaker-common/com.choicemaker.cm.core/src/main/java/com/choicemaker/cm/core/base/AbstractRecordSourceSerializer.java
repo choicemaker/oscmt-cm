@@ -27,14 +27,11 @@ import com.choicemaker.cm.core.util.DoNothingRecordSourceSerializer;
 import com.choicemaker.util.Precondition;
 
 /**
- * An eclipse-based abstract class that partially implements
- * {@link com.choicemaker.cm.core.base.IRecordSourceSerializer IRecordSourceSerializer}.
- * The class is designed to work with
- * {@link com.choicemaker.cm.core.base.DefaultRecordSourceSerializationRegistry DefaultRecordSourceSerializationRegistry}.
+ * An eclipse-based abstract class that partially implements IRecordSourceSerializer.
+ * The class is designed to work with an instance of DefaultRecordSourceSerializationRegistry.
  * Subclasses must implement a three-parameter constructor with the same signature
  * as the constructor for this class.
  * @author rphall
- * @version $Revision: 1.1 $ $Date: 2010/03/24 18:02:30 $
  */
 public abstract class AbstractRecordSourceSerializer
 	implements IRecordSourceSerializer {
@@ -70,14 +67,13 @@ public abstract class AbstractRecordSourceSerializer
 	 * A convenience method that instantiates a serializable record source
 	 * from  a standardized XML representation.
 	 * @param xml a non-null, non-blank String produced by the
-	 * {@link #toXML(ISerializableRecordSource) toXML method}.
+	 * <code>toXML</code> method}.
 	 * @return a non-null instance of ISerializableRecordSource
 	 * @throws XmlConfException if the XML can not be parsed;
 	 * i.e. if it is not produced by the <code>toXML</code> method.
 	 * @throws IncompleteSpecificationException if the XML
 	 * does not completely specify all the properties required to configure
 	 * the record source.
-	 * @see #toXML(ISerializableRecordSource)
 	 */
 	public static ISerializableRecordSource fromXML(String xml)
 		throws XmlConfException, IncompleteSpecificationException {
@@ -238,16 +234,11 @@ public abstract class AbstractRecordSourceSerializer
 	 * map to an ISerializableRecordSource instance. May be
 	 * null if the sublclass allows null values. If the array is non-null, then all
 	 * of the array elements should be non-null.
-	 * @param otherSerializerProperties other properties (besides the
-	 * {@link RECORDSOURCE_SERIALIZER_CLASS class},
-	 * {@link RECORDSOURCE_SERIALIZER_URI_PATTERN uriPattern} and
-	 * {@link RECORDSOURCE_SERIALIZER_HANDLED_CLASS handledClass}
-	 * attributes). May be null if the subclass does not require other properties.
 	 */
 	protected AbstractRecordSourceSerializer(
 		Pattern uriPattern,
 		Class[] handledClasses,
-		Properties otherSerializerProperties) {
+		Properties unused) {
 
 		// Preconditions
 		if (handledClasses != null) {
@@ -260,17 +251,8 @@ public abstract class AbstractRecordSourceSerializer
 
 		this.uriPattern = uriPattern;
 		this.handledClasses = handledClasses;
-//		if (otherSerializerProperties == null) {
-//			this.serializerProperties = new Properties();
-//		} else {
-//			this.serializerProperties =
-//				(Properties) otherSerializerProperties.clone();
-//		}
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.core.base.IRecordSourceSerializer#canSerialize(com.choicemaker.cm.core.base.RecordSource)
-	 */
 	public boolean canSerialize(RecordSource rs) {
 		boolean retVal = false;
 		Class[] classes = this.handledClasses;
@@ -282,9 +264,6 @@ public abstract class AbstractRecordSourceSerializer
 		return retVal;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.core.base.IRecordSourceSerializer#canSerialize(java.lang.String)
-	 */
 	public boolean canSerialize(String uri) {
 		boolean retVal = false;
 		if (this.getUriPattern() != null && uri != null) {

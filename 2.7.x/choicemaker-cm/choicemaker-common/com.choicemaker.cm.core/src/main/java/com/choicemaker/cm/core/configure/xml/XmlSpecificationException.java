@@ -14,7 +14,6 @@ package com.choicemaker.cm.core.configure.xml;
  * Indicates a Configurable object can not be recreated
  * from an XML specification.
  * @author rphall
- * @version $Revision: 1.1 $ $Date: 2010/03/24 18:04:31 $
  */
 public class XmlSpecificationException extends Exception {
 

@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.ml.me.base;
 
 import com.choicemaker.cm.core.Decision;
@@ -21,7 +18,6 @@ import com.choicemaker.cm.core.util.Signature;
  * Matches records and computes matching probabilities.
  *
  * @author Martin Buechi
- * @version $Revision: 1.3 $ $Date: 2010/09/02 00:05:52 $
  */
 public class MeEvaluator extends Evaluator {
 
@@ -124,7 +120,6 @@ public class MeEvaluator extends Evaluator {
 	 * @param a
 	 *            The active clues.
 	 * @return An XML fragment representing classification probabilities.
-	 * @author rphall
 	 * @since 2010-08-11
 	 */
 	public String getProbabilityDetails(ActiveClues a) {

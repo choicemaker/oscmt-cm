@@ -24,7 +24,6 @@ import com.choicemaker.cm.core.train.Trainer;
  * Description
  *
  * @author  Martin Buechi
- * @version $Revision: 1.2 $ $Date: 2010/03/24 20:53:30 $
  */
 public class Repository {
 	protected Source source;

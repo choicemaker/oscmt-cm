@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2001, 2013 ChoiceMaker Technologies, Inc. and others.
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.io.db.oracle;
 
 import java.io.IOException;
@@ -36,7 +33,6 @@ import com.choicemaker.cm.io.db.base.DbReaderParallel;
  * </p>
  *
  * @author    Adam Winkel
- * @version   $Revision: 1.2 $ $Date: 2010/03/24 22:36:54 $
  */
 public class OracleRecordSource implements RecordSource {
 	private static Logger logger = Logger.getLogger(OracleRecordSource.class
@@ -85,35 +81,11 @@ public class OracleRecordSource implements RecordSource {
 			conn = ds.getConnection();
 //			conn.setAutoCommit(false); // 2015-04-01a EJB3 CHANGE rphall
 
-//			System.out.println (" user: " + conn.getMetaData().getUserName());
-
 			DbAccessor dba = (DbAccessor) model.getAccessor();
 			dbr = (dba).getDbReaderParallel(conf);
-
 			logger.fine (conf + " " + dbr);
 
-			// Set _debugSql=true for SqlDeveloper debugging
-			//
-			// See Sue Harper, 2006-07-13, http://links.rph.cx/XyfaZ5,
-			// "Remote Debugging with SQL Developer"
-			//
-			// See Sanat Pattanaik, 2011-01-14, http://links.rph.cx/16ER9Dw,
-			// "Debugging PL-SQL calls from Java Session Using Eclipse and SQL Developer"
-			//
-			boolean _debugSql = false;
-			if (_debugSql) {
-				try {
-					String s =
-						"begin DBMS_DEBUG_JDWP.CONNECT_TCP( '127.0.0.1', 4000 ); end;";
-					logger.fine(s);
-					CallableStatement _stmt = conn.prepareCall(s);
-					_stmt.execute();
-					_stmt.close();
-				} catch (Exception _x) {
-					logger.warning(_x.toString());
-				}
-			}
-			// END SqlDeveloper debugging
+			OracleRemoteDebugging.doDebugging(conn);
 
 			String sql = "call CMTTRAINING.RS_SNAPSHOT (?,?,?)";
 			stmt = conn.prepareCall(sql);
@@ -123,8 +95,10 @@ public class OracleRecordSource implements RecordSource {
 			stmt.setString(2, s);
 			stmt.registerOutParameter(3, CURSOR);
 
-			logger.fine("select: " + selection);
-			logger.fine("dbrName: " + s);
+			logger.fine ("Oracle stored procedure: " + sql);
+			logger.fine("param1 (select): " + selection);
+			logger.fine("param2 (dbrName): " + s);
+			logger.fine("param3 (cursor): " + CURSOR);
 
 			stmt.execute();
 

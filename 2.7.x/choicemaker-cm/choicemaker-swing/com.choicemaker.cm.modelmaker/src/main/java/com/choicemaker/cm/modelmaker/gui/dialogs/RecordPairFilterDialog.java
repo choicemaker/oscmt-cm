@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.modelmaker.gui.dialogs;
 
 import java.awt.Dimension;
@@ -31,7 +28,6 @@ import com.choicemaker.cm.modelmaker.gui.panels.FilterCluePanel;
 /**
  * @author S. Yoakum-Stover
  * @author Arturo Falck
- * @version $Revision: 1.2 $ $Date: 2010/03/29 12:46:11 $
  */
 public class RecordPairFilterDialog extends JDialog {
 	private static final long serialVersionUID = 1L;

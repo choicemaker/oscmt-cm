@@ -1,43 +1,54 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.io.blocking.automated.offline.impl;
 
+import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.EXTERNAL_DATA_FORMAT;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ISink;
+import com.choicemaker.cm.io.blocking.automated.offline.core.SIMPLE_RESOURCE_STATE;
+import com.choicemaker.util.SystemPropertyUtils;
 
 /**
  * This is a generic file based implementation of ISink. Each descendant must
  * call init.
- * 
+ *
  * @author pcheung
  *
  */
 public abstract class BaseFileSink implements ISink {
+	
+	public static final int MAX_STACK_TRACE_DEPTH = 7;
+
+	private static final Logger logger = Logger.getLogger(BaseFileSink.class.getName());
+
+	private SIMPLE_RESOURCE_STATE simple_resource_state = SIMPLE_RESOURCE_STATE.INITIAL;
+	private String lastOpenedStackTrace;
 
 	protected DataOutputStream dos;
 	protected FileWriter fw;
 	protected int count = 0;
-	protected EXTERNAL_DATA_FORMAT type;
+	protected final EXTERNAL_DATA_FORMAT type;
 	protected String fileName;
 
 	/**
 	 * The descendants should call this method in their constructor.
-	 * 
+	 *
 	 * @param fileName
 	 *            - file name of the sink
 	 * @param type
@@ -50,6 +61,51 @@ public abstract class BaseFileSink implements ISink {
 		this.type = type;
 		assert this.type != null;
 		this.fileName = fileName;
+		this.simple_resource_state = SIMPLE_RESOURCE_STATE.CONSTRUCTED;
+	}
+
+	// Move this method to a shared utility class
+	public static String printStackTrace(String msg) {
+		StringWriter sw = new StringWriter();
+		PrintWriter pw = new PrintWriter(sw);
+		Throwable t = new RuntimeException(msg);
+		pw.println(msg);
+		t.printStackTrace(pw);
+
+		String s = sw.toString();
+		StringReader sr = new StringReader(s);
+		BufferedReader br = new BufferedReader(sr);
+
+		// Full stack is the fall-back value
+		String retVal = s;
+
+		// Try to truncate the stack and message to MAX_STACK_TRACE_DEPTH
+		try {
+			sw = new StringWriter();
+			pw = new PrintWriter(sw);
+			String line = br.readLine();
+			int lineCount = 0;
+			while (line != null && lineCount < MAX_STACK_TRACE_DEPTH) {
+				pw.println(line);
+				++lineCount;
+				line = br.readLine();
+			}
+			retVal = sw.toString();
+		} catch (IOException x) {
+			assert retVal.equals(s);
+		}
+
+		return retVal;
+	}
+
+	@Override
+	protected void finalize() throws Throwable {
+		if (this.simple_resource_state == SIMPLE_RESOURCE_STATE.OPEN) {
+			String msg = this.getClass().getName() + " instance left opened";
+			msg += SystemPropertyUtils.PV_LINE_SEPARATOR + this.lastOpenedStackTrace;
+			logger.warning(msg);
+		}
+		super.finalize();
 	}
 
 	@Override
@@ -73,6 +129,10 @@ public abstract class BaseFileSink implements ISink {
 			default:
 				throw new IllegalArgumentException("invalid type: " + type);
 			}
+			String msg = this.getClass().getName() + " opened";
+			this.lastOpenedStackTrace = printStackTrace(msg);
+			this.simple_resource_state = SIMPLE_RESOURCE_STATE.OPEN;
+
 		} catch (IOException ex) {
 			throw new BlockingException(ex.toString());
 		}
@@ -84,12 +144,24 @@ public abstract class BaseFileSink implements ISink {
 		switch (type) {
 		case STRING:
 			retVal = fw != null;
+			if (!retVal) {
+				// if fw doesn't exist for a STRING instance, it can't be open
+				assert this.simple_resource_state != SIMPLE_RESOURCE_STATE.OPEN;
+			}
 			break;
 		case BINARY:
 			retVal = dos != null;
+			if (!retVal) {
+				// if dos doesn't exist for a BINARY instance, it can't be open
+				assert this.simple_resource_state != SIMPLE_RESOURCE_STATE.OPEN;
+			}
 			break;
 		default:
 			throw new IllegalArgumentException("invalid type: " + type);
+		}
+		// if either is true, both are true
+		if (retVal || this.simple_resource_state == SIMPLE_RESOURCE_STATE.OPEN) {
+			assert (retVal && this.simple_resource_state == SIMPLE_RESOURCE_STATE.OPEN);
 		}
 		return retVal;
 	}
@@ -108,29 +180,43 @@ public abstract class BaseFileSink implements ISink {
 			default:
 				throw new IllegalArgumentException("invalid type: " + type);
 			}
+			String msg = this.getClass().getName() + " opened for appending";
+			this.lastOpenedStackTrace = printStackTrace(msg);
+			this.simple_resource_state = SIMPLE_RESOURCE_STATE.OPEN;
+
 		} catch (IOException ex) {
 			throw new BlockingException(ex.toString());
 		}
 	}
 
+	/**
+	 * The base implementation flushes the sink before closing it.
+	 */
 	@Override
 	public void close() throws BlockingException {
+		flush();
 		try {
 			switch (type) {
 			case STRING:
-				fw.close();
-				fw = null;
+				if (fw != null) {
+					fw.close();
+					fw = null;
+				}
 				break;
 			case BINARY:
-				dos.close();
-				dos = null;
+				if (dos != null) {
+					dos.close();
+					dos = null;
+				}
 				break;
 			default:
 				throw new IllegalArgumentException("invalid type: " + type);
 			}
+			this.simple_resource_state = SIMPLE_RESOURCE_STATE.CLOSED;
 		} catch (IOException ex) {
 			throw new BlockingException(ex.toString());
 		}
+		// count = 0;
 	}
 
 	@Override
@@ -155,10 +241,14 @@ public abstract class BaseFileSink implements ISink {
 		try {
 			switch (type) {
 			case STRING:
-				fw.flush();
+				if (fw != null) {
+					fw.flush();
+				}
 				break;
 			case BINARY:
-				dos.flush();
+				if (dos != null) {
+					dos.flush();
+				}
 				break;
 			default:
 				throw new IllegalArgumentException("invalid type: " + type);

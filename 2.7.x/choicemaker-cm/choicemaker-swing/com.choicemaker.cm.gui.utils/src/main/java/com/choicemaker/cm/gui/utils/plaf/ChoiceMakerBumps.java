@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.gui.utils.plaf;
 
 import java.awt.Color;
@@ -29,7 +26,6 @@ import javax.swing.plaf.metal.MetalLookAndFeel;
 /**
  * Implements the bumps used throughout the Metal Look and Feel.
  * 
- * @version 1.22 12/03/01
  * @author Tom Santos
  * @author Steve Wilson
  */

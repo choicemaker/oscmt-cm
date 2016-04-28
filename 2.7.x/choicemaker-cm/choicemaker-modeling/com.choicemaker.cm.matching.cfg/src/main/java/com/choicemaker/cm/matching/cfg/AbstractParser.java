@@ -1,18 +1,17 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.matching.cfg;
 
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import com.choicemaker.cm.matching.cfg.util.CfgUtils;
@@ -298,7 +297,7 @@ public abstract class AbstractParser implements Parser {
 	}
 
 	public List[] getAllTokenizations(String s) {
-		HashSet tokenizations = new HashSet();
+		Set tokenizations = new LinkedHashSet();
 		for (int i = 0; i < tokenizers.length; i++) {
 			List tokens = tokenizers[i].tokenize(s);
 			if (tokens.size() > 0) {

@@ -1,3 +1,10 @@
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *******************************************************************************/
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.RecordIdTranslationJPA.PN_TRANSLATEDID_DELETE_BY_JOBID_JOBID;
@@ -44,6 +51,13 @@ public class RecordIdControllerBean implements RecordIdController {
 	private static final Logger logger = Logger
 			.getLogger(RecordIdControllerBean.class.getName());
 
+	/**
+	 * The name of a system property that can be set to "true" to keep files
+	 * used in intermediate computations. By default, intermediate files are
+	 * removed once the chunk service has run.
+	 */
+	public static final String PN_KEEP_FILES = "oaba.RecordIdControllerBean.keepFiles";
+
 	public static final String BASENAME_RECORDID_TRANSLATOR = "translator";
 
 	public static final String BASENAME_RECORDID_STORE = "recordID";
@@ -68,6 +82,18 @@ public class RecordIdControllerBean implements RecordIdController {
 		return new RecordIdSinkSourceFactory(wd, BASENAME_RECORDID_STORE,
 				BatchJobFileUtils.TEXT_SUFFIX);
 	}
+
+	/**
+	 * Checks the system property {@link #PN_KEEP_FILES} and caches the result
+	 */
+	private boolean isKeepFilesRequested() {
+		String value = System.getProperty(PN_KEEP_FILES, "false");
+		Boolean _keepFiles = Boolean.valueOf(value);
+		boolean retVal = _keepFiles.booleanValue();
+		return retVal;
+	}
+
+	private boolean keepFiles = isKeepFilesRequested();
 
 	@PersistenceContext(unitName = "oaba")
 	private EntityManager em;
@@ -108,7 +134,7 @@ public class RecordIdControllerBean implements RecordIdController {
 		final RECORD_ID_TYPE expectedRecordIdType = null;
 		ImmutableRecordIdTranslatorImpl retVal =
 			ImmutableRecordIdTranslatorImpl.createTranslator(job,
-					expectedRecordIdType, translations);
+					expectedRecordIdType, translations, keepFiles);
 		return retVal;
 	}
 
@@ -170,13 +196,18 @@ public class RecordIdControllerBean implements RecordIdController {
 		ImmutableRecordIdTranslatorImpl retVal = null;
 		if (mrit.isClosed() && !mrit.doTranslatorCachesExist()) {
 			logger.finer("finding immutable translator");
-			assert mrit.isClosed() && !mrit.doTranslatorCachesExist();
 			retVal = findTranslatorImpl(job);
 			logger.finer("found immutable translator: " + retVal);
 
 		} else {
-			logger.fine("constructing immutable translator");
+			// In this branch, translators caches must exist, either because
+			// the mutable translator is still open, or because the cache have
+			// not been otherwise removed.
 			assert !mrit.isClosed() || mrit.doTranslatorCachesExist();
+			if (!mrit.isClosed()) {
+				assert mrit.doTranslatorCachesExist();
+			}
+			logger.fine("constructing immutable translator");
 			mrit.close();
 			final BatchJob j = mrit.getBatchJob();
 			final IRecordIdSource<?> s1 =
@@ -186,15 +217,16 @@ public class RecordIdControllerBean implements RecordIdController {
 
 			// Translator caches are removed by the constructor
 			// ImmutableRecordIdTranslatorImpl
-			retVal = new ImmutableRecordIdTranslatorImpl(j, s1, s2);
-			assert !mrit.doTranslatorCachesExist();
+			retVal = new ImmutableRecordIdTranslatorImpl(j, s1, s2, keepFiles);
+			assert !mrit.doTranslatorCachesExist() || keepFiles;
 			logger.fine("constructed immutable translator");
 
 			// Save the immutable translator to persistent storage
 			this.saveTranslatorImpl(job, retVal);
 		}
 		assert retVal != null;
-		assert mrit.isClosed() && !mrit.doTranslatorCachesExist();
+		assert mrit.isClosed();
+		assert !mrit.doTranslatorCachesExist() || keepFiles;
 
 		return retVal;
 	}
@@ -240,7 +272,7 @@ public class RecordIdControllerBean implements RecordIdController {
 
 		@SuppressWarnings("rawtypes")
 		MutableRecordIdTranslator retVal =
-			new MutableRecordIdTranslatorImpl(job, rFactory, sink1, sink2);
+			new MutableRecordIdTranslatorImpl(job, rFactory, sink1, sink2, keepFiles);
 		return retVal;
 	}
 
@@ -419,7 +451,7 @@ public class RecordIdControllerBean implements RecordIdController {
 			translations = findTranslationImpls(job);
 			retVal =
 				ImmutableRecordIdTranslatorImpl.createTranslator(job, dataType,
-						translations);
+						translations, keepFiles);
 			logger.fine("Returning new translator: " + retVal);
 		}
 		assert retVal != null;

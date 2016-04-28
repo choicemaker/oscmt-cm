@@ -1,20 +1,22 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+/*******************************************************************************
+ * Copyright (c) 2015, 2016 ChoiceMaker LLC and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.core;
 
 import java.util.Date;
 
 /**
+ * Extends the immutable interface of a ChoiceMaker matching model by adding
+ * operations that modify the model. (Because of the functionality that this
+ * interface defines, it could have been named IMutableProbabilityModel, but
+ * that name would have been too easily confused with the name of the immutable
+ * interface, ImmutableProbabilityModel.)
+ * 
  * @author rphall
- * @version $Revision: 1.1 $ $Date: 2010/03/24 17:00:57 $
  */
 public interface IProbabilityModel extends AccessProvider,
 		ImmutableProbabilityModel {
@@ -65,9 +67,9 @@ public interface IProbabilityModel extends AccessProvider,
 	 * does not get changed.
 	 * 
 	 * @param filePath
-	 *            The new name.
+	 *            A path to the model file
 	 */
-	void setModelFilePath(String fileName);
+	void setModelFilePath(String filePath);
 
 	/**
 	 * Set the value of firingThreshold.

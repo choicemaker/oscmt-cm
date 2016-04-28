@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.io.blocking.automated.offline.core;
 
 import com.choicemaker.cm.core.BlockingException;
@@ -40,8 +37,16 @@ public interface IChunkRecordIdSinkSourceFactory {
 	public IChunkRecordIdSink getSink(IChunkRecordIdSource source)
 			throws BlockingException;
 
+	/** Creates a set from a sink */
+	IChunkRecordIndexSet getChunkRecordIndexSet(IChunkRecordIdSink sink)
+			throws BlockingException;
+
+	/** Creates a set from a source */
+	IChunkRecordIndexSet getChunkRecordIndexSet(IChunkRecordIdSource source)
+			throws BlockingException;
+
 	/**
-	 * Removes this sink.
+	 * Removes a sink.
 	 * 
 	 * @param sink
 	 * @throws BlockingException
@@ -49,7 +54,7 @@ public interface IChunkRecordIdSinkSourceFactory {
 	public void removeSink(IChunkRecordIdSink sink) throws BlockingException;
 
 	/**
-	 * Removes this source.
+	 * Removes a source.
 	 * 
 	 * @param source
 	 * @throws BlockingException

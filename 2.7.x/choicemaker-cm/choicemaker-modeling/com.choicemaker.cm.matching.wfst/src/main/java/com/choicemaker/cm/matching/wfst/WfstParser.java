@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.matching.wfst;
 
 import java.io.BufferedReader;
@@ -27,14 +24,6 @@ public class WfstParser implements AmbiguousParser, Cloneable {
 	private Filter filter, grammar;
 	private Interpreter interpreter;
 
-	/**
-	 * @param s WFST states
-	 * @param i initial state
-	 * @param d delimiter token
-	 * @param e epsilon token
-	 * @param l left bracket token
-	 * @param r right bracket token
-	 */
 	public WfstParser(Filter filter, Filter grammar) {
 		this.filter = filter;
 		this.grammar = grammar;

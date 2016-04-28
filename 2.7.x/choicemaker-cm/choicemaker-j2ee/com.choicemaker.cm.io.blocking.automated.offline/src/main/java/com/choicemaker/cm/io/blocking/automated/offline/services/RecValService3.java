@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.io.blocking.automated.offline.services;
 
 import java.io.IOException;
@@ -35,6 +32,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.MutableRecordIdTran
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessingEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
+import com.choicemaker.cm.io.blocking.automated.offline.core.RecordMatchingMode;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.ControlChecker;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.MemoryEstimator;
 import com.choicemaker.util.IntArrayList;
@@ -85,6 +83,8 @@ public class RecValService3 {
 	private final ProcessingEventLog status;
 
 	private final IControl control;
+	
+	private final RecordMatchingMode mode;
 
 	private IRecValSink[] sinks;
 
@@ -122,8 +122,6 @@ public class RecValService3 {
 	 *            reference record source
 	 * @param model
 	 *            matching model
-	 * @param dbParams
-	 *            database and blocking configuration
 	 * @param rvFactory
 	 *            a factory for record-value sinks
 	 * @param recidFactory
@@ -140,7 +138,7 @@ public class RecValService3 {
 			String queryConf, String refConf,
 			IRecValSinkSourceFactory rvFactory, IRecordIdFactory recidFactory,
 			MutableRecordIdTranslator translator, ProcessingEventLog status,
-			IControl control) {
+			IControl control, RecordMatchingMode mode) {
 
 		this.stage = queryRS;
 		this.master = refRS;
@@ -153,6 +151,7 @@ public class RecValService3 {
 		this.recidFactory = recidFactory;
 		this.status = status;
 		this.control = control;
+		this.mode = mode;
 
 		BlockingAccessor ba0 = (BlockingAccessor) model.getAccessor();
 
@@ -303,71 +302,84 @@ public class RecValService3 {
 			// write the stage record source
 			if (stage != null) {
 				stage.setModel(model);
-				stage.open(); // FIXME! try { stage.open(); ... } finally{
-								// stage.close(); }
+				try {
+					stage.open();
+					BlockingAccessor ba =
+						(BlockingAccessor) model.getAccessor();
+					IBlockingConfiguration bc =
+						ba.getBlockingConfiguration(blockingConfiguration,
+								queryConfiguration);
 
-				BlockingAccessor ba = (BlockingAccessor) model.getAccessor();
-				IBlockingConfiguration bc =
-					ba.getBlockingConfiguration(blockingConfiguration,
-							queryConfiguration);
+					while (stage.hasNext() && !stop) {
+						count++;
+						if (count % OUTPUT_INTERVAL == 0) {
+							MemoryEstimator.writeMem();
+						}
 
-				while (stage.hasNext() && !stop) {
-					count++;
-					r = stage.getNext();
+						r = stage.getNext();
+						writeRecord(bc, r, model);
+						if (firstStage) {
+							Object O = r.getId();
+							recordIdType =
+								RECORD_ID_TYPE.fromInstance((Comparable) O);
+							firstStage = false;
+						}
 
-					if (count % OUTPUT_INTERVAL == 0)
-						MemoryEstimator.writeMem();
-
-					stop = ControlChecker.checkStop(control, count);
-
-					writeRecord(bc, r, model);
-
-					// This checks the id type
-					if (firstStage) {
-						Object O = r.getId();
-						recordIdType =
-							RECORD_ID_TYPE.fromInstance((Comparable) O);
-						firstStage = false;
+						stop = ControlChecker.checkStop(control, count);
 					}
 
-				} // end while
-				stage.close();
+				} finally {
+					stage.close();
+				}
 			}
 
 			log.info(count + " stage records read");
 
-			// write the master record source
-			if (master != null) {
+			// Conditionally write the master record source
+			if (master == null) {
+				log.fine("Skipping master records (no master record source)");
+			} else if (mode != RecordMatchingMode.BRM) {
+				assert master != null;
+				String name = mode == null ? "null" : mode.name();
+				String msg = "Skipping master records (mode: '" + name + "')";
+				log.fine(msg);
+			} else {
+				assert master != null;
+				assert mode == RecordMatchingMode.BRM;
+				log.fine("Reading master records (mode: '" + mode.name() + "')");
+
 				mutableTranslator.split();
 
-				master.open(); // FIXME! try { master.open(); ... } finally{
-								// master.close(); }
+				try {
+					master.open();
+					BlockingAccessor ba =
+						(BlockingAccessor) model.getAccessor();
+					IBlockingConfiguration bc =
+						ba.getBlockingConfiguration(blockingConfiguration,
+								referenceConfiguration);
 
-				BlockingAccessor ba = (BlockingAccessor) model.getAccessor();
-				IBlockingConfiguration bc =
-					ba.getBlockingConfiguration(blockingConfiguration,
-							referenceConfiguration);
+					while (master.hasNext() && !stop) {
+						count++;
+						if (count % OUTPUT_INTERVAL == 0) {
+							MemoryEstimator.writeMem();
+						}
 
-				// 2014-04-24 rphall: Commented out unused local variable.
-				// long lastID = Long.MIN_VALUE;
-				while (master.hasNext() && !stop) {
-					count++;
-					r = master.getNext();
+						r = master.getNext();
+						writeRecord(bc, r, model);
+						if (firstMaster) {
+							Object O = r.getId();
+							RECORD_ID_TYPE rit =
+								RECORD_ID_TYPE.fromInstance((Comparable) O);
+							assert rit == recordIdType;
+							firstMaster = false;
+						}
 
-					if (count % OUTPUT_INTERVAL == 0)
-						MemoryEstimator.writeMem();
-
-					stop = ControlChecker.checkStop(control, count);
-
-					writeRecord(bc, r, model);
-
-					// This checks the id type
-					if (firstMaster) {
-						firstMaster = false;
+						stop = ControlChecker.checkStop(control, count);
 					}
 
-				} // end while
-				master.close();
+				} finally {
+					master.close();
+				}
 			}
 
 			log.info(count + " total records read");
@@ -443,7 +455,6 @@ public class RecValService3 {
 	 *
 	 * @param bfs
 	 *            - array of BlockingFields
-	 * @return
 	 */
 	private int countFields(IBlockingField[] bfs) {
 		HashSet set = new HashSet();

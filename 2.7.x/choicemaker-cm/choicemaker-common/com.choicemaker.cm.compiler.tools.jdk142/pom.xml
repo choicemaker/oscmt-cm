@@ -24,34 +24,9 @@
   <build>
     <plugins>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>build-helper-maven-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>parse-version</id>
-            <goals>
-              <goal>parse-version</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-antrun-plugin</artifactId>
         <executions>
-          <execution>
-            <id>echo-params</id>
-            <phase>validate</phase>
-            <configuration>
-              <target>
-                <echo
-                  message="eclipse.plugin.runtime.library.name: ${eclipse.plugin.runtime.library.name}" />
-              </target>
-            </configuration>
-            <goals>
-              <goal>run</goal>
-            </goals>
-          </execution>
           <execution>
             <id>unpack-jar</id>
             <phase>compile</phase>
@@ -73,7 +48,7 @@
           <execution>
             <id>assembly</id>
             <phase>package</phase>
-            <configuration>
+            <configuration combine.self="override">
               <descriptor>src/main/assembly/assembly.xml</descriptor>
             </configuration>
             <goals>

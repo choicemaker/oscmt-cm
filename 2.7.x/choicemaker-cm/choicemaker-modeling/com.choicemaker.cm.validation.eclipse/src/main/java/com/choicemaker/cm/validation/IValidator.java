@@ -1,20 +1,16 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.validation;
 
 /**
  * Validation method for MCI names.
  *
  * @author rphall
- * @version $Revision: 1.2 $ $Date: 2010/03/29 14:45:31 $
  */
 public interface IValidator {
 
@@ -22,7 +18,7 @@ public interface IValidator {
 	 * Checks if two validators are functionally identical; i.e.
 	 * if they are implemented by the same class and
 	 * perform the validation checks.
-	 * @see hashCode()
+	 * @see #hashCode()
 	 */
 	public boolean equals(IValidator validator);
 
@@ -43,7 +39,7 @@ public interface IValidator {
 	 * perform the same validation checks. The hashcode should
 	 * be unique by implemenation class, and within an implementation
 	 * class, unique by the set of validation checks that are performed.
-	 * @see equals(IValidator)
+	 * @see #equals(IValidator)
 	 */
 	public int hashCode();
 

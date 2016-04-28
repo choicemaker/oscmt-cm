@@ -156,10 +156,7 @@ public class ActiveClueMarkedRecordPairSink implements MarkedRecordPairSink {
 	public String getName() { throw new UnsupportedOperationException(); }
 	public void setName(String name) { throw new UnsupportedOperationException(); }
 
-	/**
-	 * NOP for now
-	 * @see com.choicemaker.cm.Sink#flush()
-	 */
+	/** NOP for now */
 	public void flush() throws IOException {
 	}
 		

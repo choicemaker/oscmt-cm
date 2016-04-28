@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.transitivity.server.impl;
 
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_TRANSITIVITY_CACHED_PAIRS_FILE;
@@ -42,6 +39,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2Factory
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaFileUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJobController;
@@ -107,11 +105,12 @@ public class TransMatchDedupMDB extends AbstractTransitivityMDB {
 
 		log.fine("in handleMerge");
 
-		// get the number of processors
-		final int numProcessors = serverConfig.getMaxChoiceMakerThreads();
+		// get the number of intermediate files
+		final int numTempResults =
+			BatchJobUtils.getMaxTempPairwiseIndex(propController, transJob);
 
 		// now merge them all together
-		mergeMatches(numProcessors, transJob);
+		mergeMatches(numTempResults, transJob);
 
 		// mark as done
 		final Date now = new Date();

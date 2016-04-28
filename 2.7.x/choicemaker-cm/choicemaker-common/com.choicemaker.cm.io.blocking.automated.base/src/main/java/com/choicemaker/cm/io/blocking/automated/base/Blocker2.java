@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.io.blocking.automated.base;
 
 import java.io.IOException;
@@ -36,7 +33,6 @@ import com.choicemaker.cm.io.blocking.automated.IBlockingSet;
  * for improved testability.
  * @author Martin Buechi
  * @author rphall (refactoring)
- * @version   $Revision: 1.1 $ $Date: 2010/03/24 21:30:24 $
  */
 public class Blocker2 implements AutomatedBlocker {
 
@@ -79,16 +75,6 @@ public class Blocker2 implements AutomatedBlocker {
 	private int numberOfRecordsRetrieved;
 	private String name;
 
-	/**
-	 * @param databaseAccessor
-	 * @param model
-	 * @param q
-	 * @param dbConfigurationName
-	 * @param blockingConfigurationName
-	 * @see #createBlockingSets(BlockingConfiguration,Record,int,int,int,AbaStatistics)
-	 * for explanations of the limit parameters, return value, and possible
-	 * exceptions.
-	 */
 	public Blocker2(
 		DatabaseAccessor databaseAccessor,
 		ImmutableProbabilityModel model,

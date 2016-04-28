@@ -23,7 +23,6 @@ import java.util.jar.JarEntry;
  * Wrapper around ClueMaker source file.
  *
  * @author   Matthias Zenger
- * @version  $Revision: 1.2 $ $Date: 2010/03/24 20:07:28 $
  */
 public interface FileWrapper {
 

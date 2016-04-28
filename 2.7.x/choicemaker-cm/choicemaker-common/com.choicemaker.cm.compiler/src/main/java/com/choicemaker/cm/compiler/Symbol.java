@@ -30,7 +30,6 @@ import com.choicemaker.cm.compiler.Type.PackageType;
  * Symbols
  *
  * @author   Matthias Zenger   
- * @version  $Revision: 1.2 $ $Date: 2010/03/24 20:10:05 $
  */
 public class Symbol implements SemanticTags {
 

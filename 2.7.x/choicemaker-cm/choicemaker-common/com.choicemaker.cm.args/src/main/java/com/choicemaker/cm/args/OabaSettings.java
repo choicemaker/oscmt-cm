@@ -20,8 +20,6 @@ package com.choicemaker.cm.args;
  * particular model. In a J2EE environment, OABA statistics are cached in memory
  * by an EJB singleton service.
  * 
- * @see com.choicemaker.cm.io.blocking.automated.base.db.OabaSettingsEntity
- * 
  * @author rphall
  *
  */

@@ -28,7 +28,6 @@ import com.choicemaker.util.Precondition;
 
 /**
  * @author rphall
- * @version $Revision: 1.1.2.4 $ $Date: 2010/03/12 18:23:09 $
  */
 public class Signature {
 
@@ -42,17 +41,10 @@ public class Signature {
 	 * The byte encoding used to calculate signatures of Strings.
 	 * <code>char</code> values are converted to <code>byte</code> values using
 	 * this character set.
-	 * 
-	 * @see #calculateSignature(String,String)
 	 */
-	// public static final String CHARSET_NAME = ModelingConstants.CHARSET_NAME;
 	public static final String CHARSET_NAME = "UTF8"; //$NON-NLS-1$
 
-	/**
-	 * The hash algorithm used to calculate signatures of Strings.
-	 * 
-	 * @see #calculateSignature(String,String)
-	 */
+	/** The hash algorithm used to calculate signatures of Strings */
 	public static final String HASH_ALGORITHM = "SHA-1"; //$NON-NLS-1$
 
 	private static final Logger log = Logger.getLogger(Signature.class
@@ -129,7 +121,7 @@ public class Signature {
 	 * The input string is trimmed (or converted to an empty String if null).
 	 * The String is then converted to a byte array using a
 	 * {@link #CHARSET_NAME default encoding}. The byte array is hashed
-	 * using a {@link #HASH_ALGORITHM default algorithm, and the resulting
+	 * using a {@link #HASH_ALGORITHM default algorithm} and the resulting
 	 * bytes are converted to ASCII character values using Base64 encoding.
 	 * @return a String value about 60 charactes (or fewer) in length
 	 * @throws IllegalStateException if the {@link #HASH_ALGORITHM default algorithm}

@@ -21,7 +21,6 @@ public class ClueDebugUtils {
 	/**
 	 * Prints a message to standard out. Always returns true, so that this
 	 * method may be 'and-ed" into the body of a clue.
-	 * @author rphall
 	 */
 	public static boolean println(String msg) {
 		System.out.println(msg);

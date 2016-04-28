@@ -26,7 +26,6 @@ import com.choicemaker.cm.core.MarkedRecordPairSink;
  * Description
  * 
  * @author  Martin Buechi
- * @version $Revision: 1.2 $ $Date: 2010/03/29 13:48:14 $
  */
 public class SimpleRecordSink implements MarkedRecordPairSink {
 	private static DecimalFormat df = new DecimalFormat("##0.0000");

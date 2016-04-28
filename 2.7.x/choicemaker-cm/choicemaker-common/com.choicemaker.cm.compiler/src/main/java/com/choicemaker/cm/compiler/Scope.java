@@ -15,7 +15,6 @@ package com.choicemaker.cm.compiler;
  * Scope of symbol table.
  *
  * @author   Matthias Zenger
- * @version  $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:35 $
  */
 public class Scope {
 

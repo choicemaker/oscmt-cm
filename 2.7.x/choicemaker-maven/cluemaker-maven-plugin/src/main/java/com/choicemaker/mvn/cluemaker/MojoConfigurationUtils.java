@@ -10,7 +10,7 @@ import com.choicemaker.util.SystemPropertyUtils;
 class MojoConfigurationUtils {
 
 	private static final String PATH_SEPARATOR = System
-			.getProperty(SystemPropertyUtils.PATH_SEPARATOR);
+			.getProperty(SystemPropertyUtils.PN_PATH_SEPARATOR);
 
 	private MojoConfigurationUtils() {
 	}

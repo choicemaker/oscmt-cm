@@ -1,7 +1,5 @@
 package com.choicemaker.cm.batch.impl;
 
-import com.choicemaker.cm.batch.BatchJob;
-
 public interface BatchJobJPA {
 
 	/** Name of the table that persists batch job data */
@@ -75,17 +73,17 @@ public interface BatchJobJPA {
 	 * completion.
 	 */
 	String CN_FRACTION_COMPLETE = "FRACTION_COMPLETE";
+
 	/**
-	 * One of 8 possible values:
+	 * One of 7 possible values:
 	 * <ul>
-	 * <li>{@link BatchJob#STATUS_NEW}</li>
-	 * <li>{@link BatchJob#STATUS_QUEUED}</li>
-	 * <li>{@link BatchJob#STATUS_STARTED}</li>
-	 * <li>{@link BatchJob#STATUS_COMPLETED}</li>
-	 * <li>{@link BatchJob#STATUS_FAILED}</li>
-	 * <li>{@link BatchJob#STATUS_ABORT_REQUESTED}</li>
-	 * <li>{@link BatchJob#STATUS_ABORTED}</li>
-	 * <li>{@link BatchJob#MAGIC_DESCRIPTION_CLEAR}</li>
+	 * <li>{@link com.choicemaker.cm.batch.BatchJobStatus#NEW}</li>
+	 * <li>{@link com.choicemaker.cm.batch.BatchJobStatus#QUEUED}</li>
+	 * <li>{@link com.choicemaker.cm.batch.BatchJobStatus#PROCESSING}</li>
+	 * <li>{@link com.choicemaker.cm.batch.BatchJobStatus#COMPLETED}</li>
+	 * <li>{@link com.choicemaker.cm.batch.BatchJobStatus#FAILED}</li>
+	 * <li>{@link com.choicemaker.cm.batch.BatchJobStatus#ABORT_REQUESTED}</li>
+	 * <li>{@link com.choicemaker.cm.batch.BatchJobStatus#ABORTED}</li>
 	 * </ul>
 	 */
 	String CN_STATUS = "STATUS";

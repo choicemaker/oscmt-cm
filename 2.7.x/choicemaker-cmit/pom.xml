@@ -17,6 +17,7 @@
   <name>Integration tests: ChoiceMaker</name>
 
   <modules>
+    <module>cmit-jdbc</module>
     <module>cm-analyzer-ce-it</module>
     <module>cm-analyzer-ce-it2</module>
     <module>simple-person-plugin-it</module>

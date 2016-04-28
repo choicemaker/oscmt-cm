@@ -1,3 +1,10 @@
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *******************************************************************************/
 /*
  * Created on Aug 18, 2004
  *
@@ -323,11 +330,11 @@ public class SQLServerSerializableCompositeRecordSource implements
 	public String toXML() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(SqlServerXmlUtils.xmlElementStart(SqlServerXmlUtils.EN_SQLSERVERCOMPOSITERECORDSOURCE));
-		sb.append(SqlServerXmlUtils.xmlAttribute(SqlServerXmlUtils.AN_DATASOURCENAME,dsJNDIName));
-		sb.append(SqlServerXmlUtils.xmlAttribute(SqlServerXmlUtils.AN_MODEL,modelName));
-		sb.append(SqlServerXmlUtils.xmlAttribute(SqlServerXmlUtils.AN_DBCONFIGURATION,dbConfig));
-		sb.append(SqlServerXmlUtils.xmlAttribute(SqlServerXmlUtils.AN_IDSQUERY,sqlQuery));
-		sb.append(SqlServerXmlUtils.xmlAttribute(SqlServerXmlUtils.AN_MAXCOMPOSITESIZE,String.valueOf(maxCompositeSize)));
+		sb.append(SqlServerXmlUtils.xmlAttribute(SqlServerXmlUtils.AN_RS_DATASOURCENAME,dsJNDIName));
+		sb.append(SqlServerXmlUtils.xmlAttribute(SqlServerXmlUtils.AN_RS_MODEL,modelName));
+		sb.append(SqlServerXmlUtils.xmlAttribute(SqlServerXmlUtils.AN_RS_DBCONFIGURATION,dbConfig));
+		sb.append(SqlServerXmlUtils.xmlAttribute(SqlServerXmlUtils.AN_RS_IDSQUERY,sqlQuery));
+		sb.append(SqlServerXmlUtils.xmlAttribute(SqlServerXmlUtils.AN_RS_MAXCOMPOSITESIZE,String.valueOf(maxCompositeSize)));
 		sb.append(SqlServerXmlUtils.xmlElementEndInline());
 		return sb.toString();
 	}

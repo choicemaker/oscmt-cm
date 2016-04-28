@@ -36,7 +36,6 @@ import com.choicemaker.cm.core.blocking.InMemoryBlocker;
  * Description
  * 
  * @author  Martin Buechi
- * @version $Revision: 1.2 $ $Date: 2010/03/29 13:47:41 $
  */
 public class InMemoryMatcher {
 	public static final String NUM_RECORDS_FROM_SMALL = "numRecordsFromSmall";

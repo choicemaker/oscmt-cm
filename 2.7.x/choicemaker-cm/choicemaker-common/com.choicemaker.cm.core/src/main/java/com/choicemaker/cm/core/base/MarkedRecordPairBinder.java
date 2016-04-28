@@ -42,7 +42,6 @@ import com.choicemaker.cm.core.xmlconf.MarkedRecordPairSourceXmlConf;
  * </ol>
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.3 $ $Date: 2010/03/27 21:31:44 $
  */
 public class MarkedRecordPairBinder implements MarkedRecordPairSource {
 	private Collection c;

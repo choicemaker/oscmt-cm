@@ -16,7 +16,6 @@ import com.choicemaker.util.Arguments;
  * Command line arguments for compiler.
  * 
  * @author Matthias Zenger
- * @version $Revision: 1.1 $ $Date: 2010/01/20 15:05:06 $
  */
 public class CompilationArguments extends Arguments {
 

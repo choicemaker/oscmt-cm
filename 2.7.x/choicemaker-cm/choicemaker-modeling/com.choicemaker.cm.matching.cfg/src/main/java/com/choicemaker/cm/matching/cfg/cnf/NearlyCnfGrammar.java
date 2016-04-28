@@ -1,20 +1,16 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.matching.cfg.cnf;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-//import com.choicemaker.cm.core.util.*;
 import com.choicemaker.cm.matching.cfg.ContextFreeGrammar;
 import com.choicemaker.cm.matching.cfg.Rule;
 import com.choicemaker.cm.matching.cfg.TokenType;
@@ -231,8 +227,6 @@ public class NearlyCnfGrammar extends ContextFreeGrammar {
 			}
 		}
 
-		// 2014-04-24 rphall: Commented out unused local variable.
-//		PrefixTree pft = new PrefixTree(names);
 		String tempPrefix = "TEMP" + '_';
 		while (tempPrefix.length() < maxLength) {
 			tempPrefix += '_';

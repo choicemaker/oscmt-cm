@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.validation.eclipse.impl;
 
 import java.util.Collection;
@@ -31,7 +28,6 @@ import com.choicemaker.util.StringUtils;
  * collections.
  *
  * @author    Rick Hall
- * @version   $Revision: 1.2 $ $Date: 2010/03/29 14:44:29 $
  */
 public final class Validators {
 
@@ -55,7 +51,7 @@ public final class Validators {
 	 * @return a non-null, but possibly empty map
 	 * @throws ValidatorCreationException if the validator collection
 	 * managed by this class can not be created.
-	 * @see #createValidatorMap()
+	 * <p>see createValidatorMap()</p>
 	 */
 	public static Map getValidators() throws ValidatorCreationException {
 		if (validators == null) {

@@ -73,7 +73,7 @@
         <artifactId>maven-antrun-plugin</artifactId>
         <executions>
           <execution>
-            <id>echo-params</id>
+            <id>echo-db-params</id>
             <phase>initialize</phase>
             <configuration>
               <target>
@@ -405,7 +405,6 @@
     <dependency>
       <groupId>com.microsoft.sqlserver</groupId>
       <artifactId>sqljdbc4</artifactId>
-      <version>4.0.2206</version>
       <scope>test</scope>
     </dependency>
     <dependency>

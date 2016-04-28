@@ -28,7 +28,7 @@ public class BatchJobFileUtils {
 	public static final String DEFAULT_PREFIX = "job";
 
 	public static final String FILE_SEPARATOR = System
-			.getProperty(SystemPropertyUtils.FILE_SEPARATOR);
+			.getProperty(SystemPropertyUtils.PN_FILE_SEPARATOR);
 
 	public static final String FMT = "00000";
 
@@ -81,7 +81,7 @@ public class BatchJobFileUtils {
 		// FileAttribute<Set<PosixFilePermission>> attrs =
 		// PosixFilePermissions.asFileAttribute(permissions);
 		try {
-			String userHome = System.getProperty(SystemPropertyUtils.USER_HOME);
+			String userHome = System.getProperty(SystemPropertyUtils.PN_USER_HOME);
 			Path userPath = Paths.get(userHome);
 			retVal =
 				Files.createTempDirectory(userPath, TEMP_WORKING_DIR_PREFIX)

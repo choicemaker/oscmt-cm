@@ -141,19 +141,11 @@ public class MarkedRecordPairFilter implements Filter, IMarkedRecordPairFilter {
 
 	/**
 	 * Returns the limiters.
-	 * @return Sampler[]
 	 */
 	public Limiter[] getLimiters() {
 		return limiters;
 	}
 
-	/**
-	 *
-	 * 0-1:5:100, 1:10:20:100
-	 *
-	 * @param limiters
-	 * @return String
-	 */
 	public String getLimitersAsString(){
 		return Limiter.getLimitersAsString(limiters);
 	}
@@ -165,16 +157,16 @@ public class MarkedRecordPairFilter implements Filter, IMarkedRecordPairFilter {
 	 *
 	 * @param limiters The limiters to set
 	 */
-	public void setLimiters(String samplers) {
-		setLimiters(Limiter.limitersFromString(samplers));
+	public void setLimiters(String limiters) {
+		setLimiters(Limiter.limitersFromString(limiters));
 	}
 
 	/**
 	 * Sets the limiters.
 	 * @param limiters The limiters to set
 	 */
-	public void setLimiters(Limiter[] samplers) {
-		this.limiters = samplers;
+	public void setLimiters(Limiter[] limiters) {
+		this.limiters = limiters;
 	}
 
 	public void resetLimiters() {
@@ -237,16 +229,11 @@ public class MarkedRecordPairFilter implements Filter, IMarkedRecordPairFilter {
 		}
 		return result;
 	}
-	/**
-	 * @return
-	 */
+
 	public IntArrayList getCollection() {
 		return collection;
 	}
 
-	/**
-	 * @param list
-	 */
 	public void setCollection(IntArrayList list) {
 		collection = list;
 	}

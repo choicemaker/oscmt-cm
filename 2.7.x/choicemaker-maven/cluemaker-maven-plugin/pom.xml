@@ -17,16 +17,16 @@
 
   <distributionManagement>
     <repository>
-      <id>releases</id>
-      <name>releases</name>
+      <id>choicemaker_releases</id>
+      <name>ChoiceMaker Enterprise Releases</name>
       <url>
-      http://mavenrepo.rphall.com:8081/nexus/content/repositories/releases/</url>
+      https://dev.choicemaker.com:8443/nexus/content/repositories/choicemaker_releases/</url>
     </repository>
     <snapshotRepository>
-      <id>snapshots</id>
-      <name>Internal Snapshots</name>
+      <id>choicemaker_snapshots</id>
+      <name>ChoiceMaker Enterprise Snapshots</name>
       <url>
-      http://mavenrepo.rphall.com:8081/nexus/content/repositories/snapshots/</url>
+      https://dev.choicemaker.com:8443/nexus/content/repositories/choicemaker_snapshots/</url>
     </snapshotRepository>
   </distributionManagement>
 
@@ -68,6 +68,11 @@
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.compiler</artifactId>
+      <version>2.7.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.util</groupId>
+      <artifactId>choicemaker-util</artifactId>
       <version>2.7.1-SNAPSHOT</version>
     </dependency>
     <dependency>

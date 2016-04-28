@@ -44,7 +44,6 @@ import com.choicemaker.cm.core.compiler.CompilerException;
  * A framework for visitors with default clauses
  *
  * @author   Matthias Zenger
- * @version  $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:36 $
  */
 public abstract class DefaultVisitor implements Visitor {
 

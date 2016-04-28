@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_CHUNK_FILE_COUNT;
@@ -92,8 +89,16 @@ public class MatchSchedulerSingleton extends AbstractSchedulerSingleton {
 	@Resource(lookup = "java:/choicemaker/urm/jms/matcherQueue")
 	private Queue matcherQueue;
 
+	@Resource(lookup = "java:/choicemaker/urm/jms/singleMatchQueue")
+	private Queue singleMatchQueue;
+
 	@Inject
 	private JMSContext jmsContext;
+
+	@Override
+	protected JMSContext getJmsContext() {
+		return jmsContext;
+	}
 
 	// -- Callbacks
 
@@ -209,7 +214,7 @@ public class MatchSchedulerSingleton extends AbstractSchedulerSingleton {
 
 	@Override
 	protected void sendToMatcher(OabaJobMessage sd) {
-		MessageBeanUtils.sendStartData(sd, jmsContext, matcherQueue, log);
+		MessageBeanUtils.sendStartData(sd, getJmsContext(), matcherQueue, log);
 	}
 
 	@Override
@@ -221,7 +226,13 @@ public class MatchSchedulerSingleton extends AbstractSchedulerSingleton {
 
 	@Override
 	protected void sendToMatchDebup(BatchJob job, OabaJobMessage sd) {
-		MessageBeanUtils.sendStartData(sd, jmsContext, matchDedupQueue, log);
+		MessageBeanUtils.sendStartData(sd, getJmsContext(), matchDedupQueue, log);
+	}
+
+	@Override
+	protected void sendToSingleRecordMatching(BatchJob job, OabaJobMessage sd) {
+		MessageBeanUtils.sendStartData(sd, getJmsContext(), singleMatchQueue,
+				getLogger());
 	}
 
 }

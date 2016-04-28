@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2011 Rick Hall and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *     Rick Hall - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
 import static com.choicemaker.cm.io.blocking.automated.offline.core.ImmutableRecordIdTranslator.INVALID_INDEX;
@@ -38,7 +35,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.MutableRecord
  */
 @SuppressWarnings({
 		"rawtypes", "unchecked" })
-class MutableRecordIdTranslatorImpl implements MutableRecordIdTranslatorLocal {
+public class MutableRecordIdTranslatorImpl implements MutableRecordIdTranslatorLocal {
 
 	/**
 	 * For testing purposes only. Returns a list of map value in the order of
@@ -114,6 +111,9 @@ class MutableRecordIdTranslatorImpl implements MutableRecordIdTranslatorLocal {
 
 	private TRANSLATOR_STATE translatorState = TRANSLATOR_STATE.MUTABLE;
 
+	/** A flag indicating whether cached translator files are retained */
+	private final boolean keepFiles;
+
 	private final BatchJob batchJob;
 
 	private final IRecordIdSinkSourceFactory rFactory;
@@ -151,19 +151,26 @@ class MutableRecordIdTranslatorImpl implements MutableRecordIdTranslatorLocal {
 
 	private final Map<Comparable, Integer> seen = new HashMap<>();
 
-	MutableRecordIdTranslatorImpl(BatchJob job,
+	public MutableRecordIdTranslatorImpl(BatchJob job,
 			IRecordIdSinkSourceFactory factory, IRecordIdSink s1,
-			IRecordIdSink s2) throws BlockingException {
+			IRecordIdSink s2, boolean doKeepFiles) throws BlockingException {
 		if (job == null || factory == null || s1 == null || s2 == null) {
 			throw new IllegalArgumentException("null argument");
 		}
+		this.keepFiles = doKeepFiles;
 		if (s1.exists()) {
 			String msg = "translator cache already exists: " + s1;
-			throw new IllegalArgumentException(msg);
+			log.info(msg);
+			if (!keepFiles) {
+				throw new IllegalArgumentException(msg);
+			}
 		}
 		if (s2.exists()) {
 			String msg = "translator cache already exists: " + s2;
-			throw new IllegalArgumentException(msg);
+			log.info(msg);
+			if (!keepFiles) {
+				throw new IllegalArgumentException(msg);
+			}
 		}
 		this.batchJob = job;
 		this.rFactory = factory;
@@ -181,14 +188,18 @@ class MutableRecordIdTranslatorImpl implements MutableRecordIdTranslatorLocal {
 			getSink1().flush();
 			getSink1().close();
 			sink1State = SINK_STATE.CLOSED;
-			getSink1().remove();
+			if (!keepFiles) {
+				getSink1().remove();
+			}
 			sink1State = null;
 		}
 		if (getSink2().exists()) {
 			getSink2().flush();
 			getSink2().close();
 			sink2State = SINK_STATE.CLOSED;
-			getSink2().remove();
+			if (!keepFiles) {
+				getSink2().remove();
+			}
 			sink2State = null;
 		}
 	}

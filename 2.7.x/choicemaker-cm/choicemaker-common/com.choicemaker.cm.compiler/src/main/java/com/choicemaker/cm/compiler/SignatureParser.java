@@ -19,8 +19,6 @@ import com.choicemaker.cm.compiler.Type.MethodType;
  * Parsing of bytecode signatures
  *
  * @author   Matthias Zenger
- * @version  $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:35 $
- * @see      BCEL
  */
 public class SignatureParser {
 

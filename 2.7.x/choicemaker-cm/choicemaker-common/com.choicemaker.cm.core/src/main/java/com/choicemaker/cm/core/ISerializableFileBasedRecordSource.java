@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+/*******************************************************************************
+ * Copyright (c) 2015, 2016 ChoiceMaker LLC and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.core;
 
 
@@ -19,7 +16,7 @@ package com.choicemaker.cm.core;
  * constructor that takes a Properties object. Most serializable,
  * file-based record sources require at least 2 properties to be
  * configured before they are used:<ul>
- * <li/>{@line #PN_MODEL_NAME modelName}
+ * <li/>{@link #PN_MODEL_NAME modelName}
  * <li/>{@link #PN_DATA_FILE_NAME sqlQuery}</ul>
  * The parameterized constructor for a subclass should throw
  * a IncompleteSpecificationException if the specified set of

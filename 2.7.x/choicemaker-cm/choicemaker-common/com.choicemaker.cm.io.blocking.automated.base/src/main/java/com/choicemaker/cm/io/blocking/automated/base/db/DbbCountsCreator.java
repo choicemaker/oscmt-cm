@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.io.blocking.automated.base.db;
 
 import java.io.PrintWriter;
@@ -593,7 +590,23 @@ public class DbbCountsCreator {
 		int retVal = 0;
 		Integer s = (Integer) tableSizes.get(dbt);
 		if (s == null) {
-			logger.warning("Table size is null. Have ABA statistics been computed?");
+			String msg = "Table size is null. Have ABA statistics been computed?";
+			logger.severe(msg);
+//			throw new IllegalStateException(msg);
+		} else {
+			retVal = s.intValue();
+			if (retVal == 0) {
+				String msg = "Table size is zero. Have ABA statistics been computed?";
+				logger.severe(msg);
+//				throw new IllegalStateException(msg);
+			} else if (retVal < 0) {
+				String msg = "negative ABA table size: " + retVal;
+				logger.severe(msg);
+				throw new IllegalStateException(msg);
+			} else {
+				String msg = "ABA table size: " + retVal + " " + dbt.toString();
+				logger.fine(msg);
+			}
 		}
 		return retVal;
 	}

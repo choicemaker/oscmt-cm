@@ -1,13 +1,10 @@
-/*
- * @(#)$RCSfile: SqlServerRecordSourceGuiFactory.java,v $        $Revision: 1.1.96.1 $ $Date: 2009/11/18 01:00:11 $
- *
- * Copyright (c) 2001 ChoiceMaker Technologies, Inc.
- * 41 East 11th Street, New York, NY 10003
- * All rights reserved.
- *
- * This software is the confidential and proprietary information of
- * ChoiceMaker Technologies Inc. ("Confidential Information").
- */
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *******************************************************************************/
 
 package com.choicemaker.cm.io.db.sqlserver.gui;
 
@@ -22,7 +19,6 @@ import com.choicemaker.cm.modelmaker.gui.sources.SourceGuiFactory;
  * Description
  *
  * @author   Adam Winkel
- * @version   $Revision: 1.1.96.1 $ $Date: 2009/11/18 01:00:11 $
  */
 public class SqlServerRecordSourceGuiFactory implements SourceGuiFactory {
 

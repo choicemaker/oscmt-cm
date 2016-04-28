@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.io.blocking.automated.offline.impl;
 
 import static com.choicemaker.cm.io.blocking.automated.offline.core.Constants.EXPORT_FIELD_SEPARATOR;
@@ -115,9 +112,6 @@ public class MatchRecord2Sink extends BaseFileSink implements IMatchRecord2Sink 
 	/**
 	 * This method returns a string representation of MatchRecord2 to get
 	 * written to a FileWriter.
-	 * 
-	 * @param match
-	 * @return
 	 */
 	public static String getOutputString(MatchRecord2 match) {
 		StringBuffer sb = new StringBuffer();

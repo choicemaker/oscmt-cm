@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.io.blocking.automated.offline.services;
 
 import java.io.IOException;
@@ -45,6 +42,25 @@ import com.choicemaker.util.LongArrayList;
 @SuppressWarnings({
 		"rawtypes", "unchecked" })
 public class OABABlockingService {
+
+	/**
+	 * The name of a system property that can be set to "true" to keep files
+	 * used in intermediate computations. By default, intermediate files are
+	 * removed once the record-value service has run.
+	 */
+	public static final String PN_KEEP_FILES = "oaba.OABABlockingService.keepFiles";
+
+	/**
+	 * Checks the system property {@link #PN_KEEP_FILES} and caches the result
+	 */
+	private boolean isKeepFilesRequested() {
+		String value = System.getProperty(PN_KEEP_FILES, "false");
+		Boolean _keepFiles = Boolean.valueOf(value);
+		boolean retVal = _keepFiles.booleanValue();
+		return retVal;
+	}
+
+	private boolean keepFiles = isKeepFilesRequested();
 
 	private static final Logger log = Logger
 			.getLogger(OABABlockingService.class.getName());
@@ -109,8 +125,6 @@ public class OABABlockingService {
 	 *            - sink to save special oversized blocks
 	 * @param osDump
 	 *            - sink to save oversized block that the algorithm throws away
-	 * @param rvs
-	 *            - RecValService
 	 * @param validator
 	 *            - this defines what's a good block
 	 * @param status
@@ -481,10 +495,12 @@ public class OABABlockingService {
 	 * @throws IOException
 	 */
 	private void cleanUp() throws BlockingException {
-		// now delete the files
-		for (int i = 0; i < rvSources.length; i++) {
-			if (rvSources[i] != null)
-				rvSources[i].delete();
+		if (!keepFiles) {
+			// Delete the record-value files
+			for (int i = 0; i < rvSources.length; i++) {
+				if (rvSources[i] != null)
+					rvSources[i].delete();
+			}
 		}
 	}
 
@@ -673,7 +689,6 @@ public class OABABlockingService {
 	 *            - Oversized BlockSet sink
 	 * @param col
 	 *            - the column we are currently blocking on
-	 * @return
 	 */
 	private int writeBlocks(HashMap map, IBlockSink bSink,
 			IOversizedGroup osGroup, int col) throws BlockingException {
@@ -733,7 +748,6 @@ public class OABABlockingService {
 	 *            - Oversized BlockSet object to compare
 	 * @param map
 	 *            - map of record source.
-	 * @return
 	 */
 	private static HashMap findMatching(BlockSet bs, RecordValuesMap record) {
 		HashMap match = new HashMap();

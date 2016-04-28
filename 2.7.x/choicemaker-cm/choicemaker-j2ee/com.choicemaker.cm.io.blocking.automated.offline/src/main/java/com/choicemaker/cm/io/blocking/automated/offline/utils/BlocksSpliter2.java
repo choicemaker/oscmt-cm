@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.io.blocking.automated.offline.utils;
 
 import java.util.ArrayList;
@@ -88,7 +85,6 @@ public class BlocksSpliter2 {
 	 * interval. By default there is 1 bucket file per interval, but you can
 	 * increase that if there are a lot of blocks for a given size.
 	 * 
-	 * @param blockSize
 	 * @param num
 	 */
 	public void setSize(int interval, int num) {
@@ -186,7 +182,6 @@ public class BlocksSpliter2 {
 	 * return = floor (size - minSize)/interval
 	 * 
 	 * @param size
-	 * @return
 	 */
 	private int getBucket(int size) {
 		int i = (size - minSize) / interval;

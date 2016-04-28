@@ -1,3 +1,10 @@
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *******************************************************************************/
 /*
  * Created on Aug 18, 2004
  *
@@ -79,8 +86,7 @@ public class SQLServerSerializableParallelSerialRecordSource implements
 
 	/**
 	 * A constructor with unused parameters but the same signature as
-	 * {@link SQLServerSerializableCompositeRecordSource#SQLServerSerialRecordSource(String, String, String, String, String, int)
-	 * SQLServerSerializableCompositeRecordSource}
+	 * SQLServerSerializableCompositeRecordSource
 	 * 
 	 * @param dsJNDIName
 	 *            JNDI name of a configured data source

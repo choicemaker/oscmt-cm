@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.modelmaker.gui.dialogs;
 
 import java.awt.GridBagConstraints;
@@ -46,7 +43,6 @@ import com.choicemaker.e2.platform.CMPlatformUtils;
  * Description
  *
  * @author S. Yoakum-Stover
- * @version $Revision: 1.2 $ $Date: 2010/03/29 12:47:39 $
  */
 public class SourceTypeSelectorDialog extends JDialog {
 

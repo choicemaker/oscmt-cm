@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.io.blocking.automated.gen;
 
 import java.io.BufferedOutputStream;
@@ -41,7 +38,6 @@ import com.choicemaker.cm.io.db.base.gen.DbTags;
  * Description
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/28 09:32:54 $
  */
 public class BlockingConfigurationGenerator {
 	IGenerator g;
@@ -256,7 +252,7 @@ public class BlockingConfigurationGenerator {
 						+ dbC.number
 						+ "]."
 						+ f
-						+ ".illegalCombinations = new Field[][] {"
+						+ ".setIllegalCombinations(new IField[][] {"
 						+ Constants.LINE_SEPARATOR);
 				int si = f.illegal.size();
 				for (int i = 0; i < si; ++i) {
@@ -271,7 +267,7 @@ public class BlockingConfigurationGenerator {
 					}
 					w.write("}");
 				}
-				w.write(Constants.LINE_SEPARATOR + "};" + Constants.LINE_SEPARATOR);
+				w.write(Constants.LINE_SEPARATOR + "});" + Constants.LINE_SEPARATOR);
 			}
 		}
 	}
@@ -550,7 +546,7 @@ public class BlockingConfigurationGenerator {
 								for (int i = 0; i < tbf.base.length; ++i) {
 									w.write((i != 0 ? " &&" : "") + " __l" + tbf.base[i].number + " != null");
 								}
-								w.write(" ? new BlockingValue[]{");
+								w.write(" ? new IBlockingValue[]{");
 								for (int i = 0; i < tbf.base.length; ++i) {
 									w.write((i != 0 ? "," : "") + " __l" + tbf.base[i].number);
 								}

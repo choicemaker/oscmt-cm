@@ -26,7 +26,6 @@ import java.util.logging.Logger;
  * use of ThreadLocal variables
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/27 21:12:19 $
  */
 public class DateHelper {
 

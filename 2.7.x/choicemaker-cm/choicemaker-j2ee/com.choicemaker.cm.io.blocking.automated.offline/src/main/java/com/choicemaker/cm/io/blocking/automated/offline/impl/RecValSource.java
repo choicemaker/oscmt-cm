@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.io.blocking.automated.offline.impl;
 
 import java.io.EOFException;
@@ -44,9 +41,15 @@ public class RecValSource extends BaseFileSource<Long> implements IRecValSource 
 		super(fileName, type);
 	}
 
+	protected void resetNext() {
+		nextRecID = 0;
+		nextValues = null;
+		usedID = true;
+	}
+
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSource#hasNext
 	 * ()
@@ -110,7 +113,7 @@ public class RecValSource extends BaseFileSource<Long> implements IRecValSource 
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSource#
 	 * getNextRecID()
 	 */
@@ -134,7 +137,7 @@ public class RecValSource extends BaseFileSource<Long> implements IRecValSource 
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSource#
 	 * getNextValues()
 	 */

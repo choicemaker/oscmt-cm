@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.io.db.oracle;
 
 import java.io.IOException;
@@ -15,6 +12,11 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.sql.DataSource;
@@ -32,58 +34,218 @@ import com.choicemaker.cm.io.db.base.DbAccessor;
 import com.choicemaker.cm.io.db.base.DbReaderParallel;
 
 /**
- * Db 8i marked record pair source implementing
- * <code>MarkedRecordPairSource</code>. Used for reading training
- * data from a training database.
+ * Marked record source implementing <code>MarkedRecordPairSource</code>. Used
+ * for reading training data from a training database.
+ *
+ * This version fixes a problem with the getNextMethod. dbr and markedPairs are
+ * not necessarily in order so we need to put dbr records in a hashmap first.
  * <p>
- * FIXME: rename and move this Oracle-specific implementation
- * to the com.choicemaker.cm.io.db.oracle package
+ * FIXME: rename and move this Oracle-specific implementation to the
+ * com.choicemaker.cm.io.db.oracle package
  * </p>
  *
- * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/24 22:35:01 $
- * @deprecated use OracleMarkedRecordPairSource2 instead
+ * @author Martin Buechi
+ * @author rphall (refactored)
  */
-class OracleMarkedRecordPairSource implements MarkedRecordPairSource {
-	private static Logger logger = Logger.getLogger(OracleMarkedRecordPairSource.class.getName());
-	private static final int CURSOR = -10;
+public class OracleMarkedRecordPairSource implements MarkedRecordPairSource {
+
+	private static Logger logger = Logger
+			.getLogger(OracleMarkedRecordPairSource.class.getName());
+
+	static final int CURSOR = -10;
+
+	// SQL that invokes CMTTraining.Access_Snapshot */
+	public static final String SQL_CMT_TRAINING_ACCESS_SNAPSHOT =
+		"call CMTTRAINING.ACCESS_SNAPSHOT (?,?,?,?)";
+
+	// Indices of parameters used by CMTTraining.Access_Snapshot */
+	public static final int PARAM_IDX_PAIR_SELECTION_QUERY = 1;
+	public static final int PARAM_IDX_DB_CONFIGURATION_NAME = 2;
+	public static final int PARAM_IDX_PAIR_CURSOR = 3;
+	public static final int PARAM_IDX_RECORD_CURSOR_CURSOR = 4;
+
+	// Indices of fields returned by cursor for marked pairs
+	public static final int IDX_Q_RECORD = 1;
+	public static final int IDX_M_RECORD = 2;
+	public static final int IDX_DECISION = 3;
+
+	public static String getSqlCmtTrainingAccessSnaphot() {
+		return SQL_CMT_TRAINING_ACCESS_SNAPSHOT;
+	}
+
+	public static CallableStatement prepareCmtTrainingAccessSnaphot(
+			Connection conn) throws SQLException {
+		if (conn == null) {
+			throw new IllegalArgumentException("null JDBC connection");
+		}
+		String sql = getSqlCmtTrainingAccessSnaphot();
+		logger.fine("Oracle stored procedure: " + sql);
+		CallableStatement retVal = conn.prepareCall(sql);
+		return retVal;
+	}
+
+	public static void executeCmtTrainingAccessSnaphot(CallableStatement stmt,
+			String selection, DbReaderParallel dbr) throws SQLException {
+		if (stmt == null) {
+			throw new IllegalArgumentException("null JDBC statement");
+		}
+		if (selection == null || selection.isEmpty()) {
+			throw new IllegalArgumentException(
+					"null or blank SQL for record selection");
+		}
+		if (dbr == null) {
+			throw new IllegalArgumentException("null database reader");
+		}
+		String dbrName = dbr.getName();
+		stmt.setString(PARAM_IDX_PAIR_SELECTION_QUERY, selection);
+		stmt.setString(PARAM_IDX_DB_CONFIGURATION_NAME, dbrName);
+		stmt.registerOutParameter(PARAM_IDX_PAIR_CURSOR, CURSOR);
+		stmt.registerOutParameter(PARAM_IDX_RECORD_CURSOR_CURSOR, CURSOR);
+
+		logger.fine("Oracle stored procedure param1 (select): " + selection);
+		logger.fine("Oracle stored procedure param2 (dbrName): " + dbrName);
+		logger.fine("Oracle stored procedure param3 (cursor): " + CURSOR);
+		logger.fine("Oracle stored procedureparam4 (cursor): " + CURSOR);
+
+		stmt.execute();
+	}
+
+	public static ResultSet[] createRecordCursors(
+			ResultSet cursorOfRecordCursors, int noCursors) throws SQLException {
+		if (cursorOfRecordCursors == null) {
+			throw new IllegalArgumentException("null cursor of record cursors");
+		}
+		if (noCursors < 1) {
+			throw new IllegalArgumentException("invalid number of cursors: "
+					+ noCursors);
+		}
+		cursorOfRecordCursors.next();
+		ResultSet[] retVal = new ResultSet[noCursors];
+		if (noCursors == 1) {
+			retVal[0] = cursorOfRecordCursors;
+		} else {
+			for (int i = 0; i < noCursors; ++i) {
+				if (i == 0) {
+					logger.fine("Set record cursor: " + i);
+				} else {
+					logger.fine("Set sub-record cursor: " + i);
+				}
+				retVal[i] = (ResultSet) cursorOfRecordCursors.getObject(i + 1);
+			}
+		}
+		return retVal;
+	}
+
+	public static DbReaderParallel getDatabaseReader(
+			ImmutableProbabilityModel model, String databaseConfiguration) {
+		if (model == null) {
+			throw new IllegalArgumentException("null model");
+		}
+		if (databaseConfiguration == null || databaseConfiguration.isEmpty()) {
+			throw new IllegalArgumentException(
+					"null or blank database configuration recordSourceName");
+		}
+		DbReaderParallel retVal =
+			((DbAccessor) model.getAccessor())
+					.getDbReaderParallel(databaseConfiguration);
+		return retVal;
+	}
+
+	/**
+	 * This method loads the records into a map.
+	 *
+	 */
+	public static Map createRecordMap(DbReaderParallel recordReader)
+			throws SQLException {
+		Map retVal = new HashMap();
+		while (recordReader.hasNext()) {
+			Record q = recordReader.getNext();
+			retVal.put(q.getId().toString(), q);
+		}
+		return retVal;
+	}
+
+	public static MutableMarkedRecordPair getNextPairInternal(Map recordMap,
+			ResultSet markedPairs) throws IOException {
+		MutableMarkedRecordPair retVal = null;
+		try {
+			if (markedPairs.next()) {
+				Record q =
+					(Record) recordMap.get(markedPairs.getString(IDX_Q_RECORD));
+				Record m =
+					(Record) recordMap.get(markedPairs.getString(IDX_M_RECORD));
+				String d = markedPairs.getString(IDX_DECISION);
+				Decision decision = null;
+				if (d != null && d.length() > 0) {
+					decision = Decision.valueOf(d.charAt(0));
+				}
+				Date date = markedPairs.getDate(4);
+				String user = markedPairs.getString(5);
+				String src = markedPairs.getString(6);
+				String comment = markedPairs.getString(7);
+				retVal =
+					new MutableMarkedRecordPair(q, m, decision, date, user,
+							src, comment);
+			}
+		} catch (java.sql.SQLException e) {
+			throw new IOException("", e);
+		}
+		return retVal;
+	}
 
 	// Properties
-	private String fileName;
-	private String name;
-	private DataSource ds;
+	private String recordSourceName;
 	private String dataSourceName;
-	private ImmutableProbabilityModel model;
+	private String fileName;
 	private String selection;
 	private String conf = "";
 
+	/**
+	 * A (serializable) map of record ids to full records, computed when this
+	 * record source is opened.
+	 */
+	private Map recordMap;
+
 	// Cache
+
+	private DataSource ds;
+
+	/** Retrieved from the data source */
 	private Connection conn;
+
+	/** Created from the database connection */
 	private CallableStatement stmt;
-	private ResultSet[] rs;
-	private ResultSet outer;
+
+	private ImmutableProbabilityModel model;
+
+	/** Retrieved from the model */
 	private DbReaderParallel dbr;
-	// BUGFIX rphall 2008-07-14
-	// Need a separate set of cursors for id_matched
-	private ResultSet[] rs2;
-	private ResultSet outer2;
-	private DbReaderParallel dbr2;
-	// END BUGFIX
-	private ResultSet rsDecision;
-	private MutableMarkedRecordPair pair;
+
+	/** The next pair to be returned by this record source */
+	private MutableMarkedRecordPair currentPair;
+
+	/** A database cursor that iterates over record cursors */
+	private ResultSet cursorOfRecordCursors;
+
+	/** A database cursor that iterates over records (and sub-records) */
+	private ResultSet[] recordCursors;
+
+	/** A database cursor that iterates over marked pairs */
+	private ResultSet markedPairs;
 
 	/**
 	 * Creates an uninitialized instance.
 	 */
 	public OracleMarkedRecordPairSource() {
-		name = "";
+		recordSourceName = "";
 		selection = "";
 	}
 
 	/**
 	 * Constructor.
 	 */
-	public OracleMarkedRecordPairSource(String fileName, String dataSourceName, ImmutableProbabilityModel model, String conf, String selection) {
+	public OracleMarkedRecordPairSource(String fileName, String dataSourceName,
+			ImmutableProbabilityModel model, String conf, String selection) {
 		setFileName(fileName);
 		setDataSourceName(dataSourceName);
 		setModel(model);
@@ -91,71 +253,54 @@ class OracleMarkedRecordPairSource implements MarkedRecordPairSource {
 		this.conf = conf;
 	}
 
+	public OracleMarkedRecordPairSource(String fileName, DataSource ds,
+			ImmutableProbabilityModel model, String conf, String selection) {
+		setFileName(fileName);
+		this.dataSourceName = ds.toString();
+		this.ds = ds;
+		setModel(model);
+		this.selection = selection;
+		this.conf = conf;
+	}
+
 	public void open() throws IOException {
 		try {
-			dbr = ((DbAccessor) model.getAccessor()).getDbReaderParallel(conf);
-			final int numCursors = dbr.getNoCursors();
-			// BUGFIX rphall 2008-07-14
-			// Need a separate set of cursors for id_matched
-			dbr2 = ((DbAccessor) model.getAccessor()).getDbReaderParallel(conf);
-			if (dbr2.getNoCursors() != numCursors) {
-				throw new Error("Unexpected difference in number of cursors");
-			}
-			if (!dbr.getName().equals(dbr2.getName())) {
-				throw new Error("Unexpected difference in dbr names");
-			}
-			// END BUGFIX
+			// Get the database reader for specified database configuration
+			dbr = getDatabaseReader(getModel(), conf);
+			final int noCursors = dbr.getNoCursors();
 
-			conn = ds.getConnection();
-//			conn.setAutoCommit(false); // 2015-04-01a EJB3 CHANGE rphall
-			//((OracleConnection) conn).setDefaultRowPrefetch(100);
-			//String sql = "call CMTTRAINING.ACCESS_SNAPSHOT (?,?,?,?)"; // 4 params
-			String sql = "call CMTTRAINING.MRPS_SNAPSHOT2 (?,?,?,?,?)"; // 5 params, part of BUGFIX
-			stmt = conn.prepareCall(sql);
-			stmt.setString(1, selection);
-			stmt.setString(2, dbr.getName());
-			stmt.registerOutParameter(3, CURSOR);
-			stmt.registerOutParameter(4, CURSOR);
-			stmt.registerOutParameter(5, CURSOR); // part of BUGFIX
-			stmt.execute();
-			rsDecision = (ResultSet) stmt.getObject(3);
-			outer = (ResultSet) stmt.getObject(4);
-			outer.next();
-			rs = new ResultSet[numCursors];
-			if (numCursors == 1) {
-				rs[0] = outer;
-			} else {
-				for (int i = 0; i < numCursors; ++i) {
-					logger.fine("Get cursor: " + i);
-					rs[i] = (ResultSet) outer.getObject(i + 1);
-				}
-			}
-			dbr.open(rs);
+			// Get a database connection (and optionally configure debugging)
+			conn = getDataSource().getConnection();
+			OracleRemoteDebugging.doDebugging(conn);
 
-			// BUGFIX rphall 2008-07-14
-			// Need a separate set of cursors for id_matched
-			outer2 = (ResultSet) stmt.getObject(5);
-			outer2.next();
-			rs2 = new ResultSet[numCursors];
-			if (numCursors == 1) {
-				rs2[0] = outer2;
-			} else {
-				for (int i = 0; i < numCursors; ++i) {
-					logger.fine("Get cursor: " + i);
-					rs2[i] = (ResultSet) outer2.getObject(i + 1);
-				}
-			}
-			dbr2.open(rs2);
-			// END BUGFIX
+			// Execute the stored procedure that retrieves records and marked
+			// pairs
+			stmt = prepareCmtTrainingAccessSnaphot(conn);
+			executeCmtTrainingAccessSnaphot(stmt, selection, dbr);
 
-			getNextMain();
+			// Update the result sets representing records and marked pairs
+			markedPairs = (ResultSet) stmt.getObject(PARAM_IDX_PAIR_CURSOR);
+			cursorOfRecordCursors =
+				(ResultSet) stmt.getObject(PARAM_IDX_RECORD_CURSOR_CURSOR);
+			recordCursors =
+				createRecordCursors(cursorOfRecordCursors, noCursors);
+
+			// Create the map of record ids to full records
+			dbr.open(recordCursors);
+			this.recordMap = OracleMarkedRecordPairSource.createRecordMap(dbr);
+
+			// Get the first currentPair
+			this.currentPair =
+				OracleMarkedRecordPairSource.getNextPairInternal(recordMap,
+						markedPairs);
+
 		} catch (java.sql.SQLException e) {
 			throw new IOException("", e);
 		}
 	}
 
 	public boolean hasNext() {
-		return pair != null;
+		return currentPair != null;
 	}
 
 	public ImmutableRecordPair getNext() throws IOException {
@@ -163,87 +308,85 @@ class OracleMarkedRecordPairSource implements MarkedRecordPairSource {
 	}
 
 	public MutableMarkedRecordPair getNextMarkedRecordPair() throws IOException {
-		MutableMarkedRecordPair res = pair;
-		getNextMain();
-		return res;
-	}
-
-	private void getNextMain() throws IOException {
-		try {
-			boolean hasAnotherPair =
-				rsDecision.next() && dbr.hasNext() && dbr2.hasNext();
-			if (hasAnotherPair) {
-				Record q = dbr.getNext();
-				Record m = dbr2.getNext();
-				String d = rsDecision.getString(3);
-				Decision decision = null;
-				if (d != null && d.length() > 0) {
-					decision = Decision.valueOf(d.charAt(0));
-				}
-				Date date = rsDecision.getDate(4);
-				String user = rsDecision.getString(5);
-				String src = rsDecision.getString(6);
-				String comment = rsDecision.getString(7);
-				pair = new MutableMarkedRecordPair(q, m, decision, date, user, src, comment);
-			} else {
-				pair = null;
-			}
-		} catch (java.sql.SQLException e) {
-			throw new IOException("", e);
-		}
+		MutableMarkedRecordPair retVal = currentPair;
+		this.currentPair = getNextPairInternal(recordMap, markedPairs);
+		return retVal;
 	}
 
 	public void close() throws IOException {
-		Exception ex = null;
+		List exceptions = new ArrayList();
 		try {
-			rsDecision.close();
+			if (markedPairs != null)
+				markedPairs.close();
+			markedPairs = null;
 		} catch (java.sql.SQLException e) {
-			ex = e;
+			exceptions.add(e.toString());
 		}
 		try {
-			int noCursors = dbr.getNoCursors();
-			for (int i = 0; i < noCursors; ++i) {
-				rs[i].close();
-				rs2[i].close();
+			if (dbr != null) {
+				int noCursors = dbr.getNoCursors();
+				for (int i = 0; i < noCursors; ++i) {
+					if (recordCursors[i] != null) {
+						recordCursors[i].close();
+						recordCursors[i] = null;
+					}
+				}
 			}
+			dbr = null;
 		} catch (java.sql.SQLException e) {
-			ex = e;
+			exceptions.add(e.toString());
 		}
 		try {
-			outer.close();
-			outer2.close();
+			if (cursorOfRecordCursors != null)
+				cursorOfRecordCursors.close();
+			cursorOfRecordCursors = null;
 		} catch (java.sql.SQLException e) {
-			ex = e;
+			exceptions.add(e.toString());
+
 		}
 		try {
-			stmt.close();
+			if (stmt != null)
+				stmt.close();
+			stmt = null;
 		} catch (java.sql.SQLException e) {
-			ex = e;
+			exceptions.add(e.toString());
 		}
 		try {
-			conn.close();
+			if (conn != null)
+				conn.close();
+			conn = null;
 		} catch (java.sql.SQLException e) {
-			ex = e;
+			exceptions.add(e.toString());
 		}
-		if (ex != null) {
-			throw new IOException("", ex);
+
+		recordMap.clear();
+
+		assert exceptions != null;
+		if (!exceptions.isEmpty()) {
+			final int exceptionCount = exceptions.size();
+			assert exceptionCount > 0;
+			final int lastExceptionIndex = exceptionCount - 1;
+			assert exceptionCount >= 0;
+			StringBuilder details = new StringBuilder();
+			for (int i = 0; i < exceptionCount; i++) {
+				String exception = exceptions.get(i).toString();
+				details.append(exception);
+				if (i < lastExceptionIndex) {
+					details.append(", ");
+				}
+			}
+			String msg =
+				"Errors when record source was closed: [" + details + "]";
+			throw new IOException(msg);
 		}
 	}
 
-	/**
-	 * Get the value of name.
-	 * @return value of name.
-	 */
 	public String getName() {
-		return name;
+		return recordSourceName;
 	}
 
-	/**
-	 * Set the value of name.
-	 * @param v  Value to assign to name.
-	 */
 	public void setName(String v) {
-		this.name = v;
+		this.recordSourceName = v;
 	}
 
 	public void setFileName(String fileName) {
@@ -255,67 +398,35 @@ class OracleMarkedRecordPairSource implements MarkedRecordPairSource {
 		return fileName;
 	}
 
-	/**
-	 * Get the value of ds.
-	 * @return value of ds.
-	 */
-	public DataSource getDs() {
+	private DataSource getDataSource() {
 		return ds;
 	}
 
-	/**
-	 * Set the value of ds.
-	 * @param v  Value to assign to ds.
-	 */
-	public void setDs(DataSource v) {
+	public void setDataSource(DataSource v) {
 		this.ds = v;
 	}
 
-	/**
-	 * Get the value of dataSourceName.
-	 * @return value of dataSourceName.
-	 */
 	public String getDataSourceName() {
 		return dataSourceName;
 	}
 
-	/**
-	 * Set the value of dataSourceName.
-	 * @param v  Value to assign to dataSourceName.
-	 */
 	public void setDataSourceName(String v) {
 		this.dataSourceName = v;
 		this.ds = DataSources.getDataSource(dataSourceName);
 	}
 
-	/**
-	 * Get the value of model.
-	 * @return value of model.
-	 */
 	public ImmutableProbabilityModel getModel() {
 		return model;
 	}
 
-	/**
-	 * Set the value of model.
-	 * @param v  Value to assign to model.
-	 */
 	public void setModel(ImmutableProbabilityModel v) {
 		this.model = v;
 	}
 
-	/**
-	 * Get the value of selection.
-	 * @return value of selection.
-	 */
 	public String getSelection() {
 		return selection;
 	}
 
-	/**
-	 * Set the value of selection.
-	 * @param v  Value to assign to selection.
-	 */
 	public void setSelection(String v) {
 		this.selection = v;
 	}
@@ -329,7 +440,7 @@ class OracleMarkedRecordPairSource implements MarkedRecordPairSource {
 	}
 
 	public String toString() {
-		return name;
+		return recordSourceName;
 	}
 
 	public boolean hasSink() {
@@ -339,4 +450,5 @@ class OracleMarkedRecordPairSource implements MarkedRecordPairSource {
 	public Sink getSink() {
 		return null;
 	}
+
 }

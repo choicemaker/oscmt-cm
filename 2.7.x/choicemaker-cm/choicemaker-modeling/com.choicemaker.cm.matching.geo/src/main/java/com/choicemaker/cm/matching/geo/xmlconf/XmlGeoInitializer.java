@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.matching.geo.xmlconf;
 
 import java.io.BufferedReader;
@@ -34,7 +31,6 @@ import com.choicemaker.util.StringUtils;
  * XML initializer for geo-entity maps .
  *
  * @author    Elmer Moussikaev
- * @version   $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:05 $
  */
 public class XmlGeoInitializer implements XmlModuleInitializer {
 	public final static XmlGeoInitializer instance = new XmlGeoInitializer();

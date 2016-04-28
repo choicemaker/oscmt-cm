@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.io.blocking.automated.offline.impl;
 
 import java.io.EOFException;
@@ -34,11 +31,15 @@ public class SuffixTreeSource extends BaseFileSource<SuffixTreeNode> implements
 
 	/**
 	 * This constructor creates a string source with the given name.
-	 * 
+	 *
 	 * @param fileName
 	 */
 	public SuffixTreeSource(String fileName) {
 		super(fileName, EXTERNAL_DATA_FORMAT.STRING);
+	}
+
+	protected void resetNext() {
+		nextTree = null;
 	}
 
 	@Override
@@ -115,7 +116,7 @@ public class SuffixTreeSource extends BaseFileSource<SuffixTreeNode> implements
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.choicemaker.cm.io.blocking.automated.offline.core.ISource#hasNext()
 	 */
@@ -136,10 +137,9 @@ public class SuffixTreeSource extends BaseFileSource<SuffixTreeNode> implements
 	/**
 	 * This method returns the location of the next OPEN_NODE or CLOSE_NODE
 	 * starting from index from+1.
-	 * 
+	 *
 	 * @param str
 	 * @param from
-	 * @return
 	 */
 	private int getNextMarker(String str, int from) {
 		boolean found = false;

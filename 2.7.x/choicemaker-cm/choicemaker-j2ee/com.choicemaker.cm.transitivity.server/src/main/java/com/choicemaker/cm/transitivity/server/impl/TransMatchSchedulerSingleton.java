@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.transitivity.server.impl;
 
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_CHUNK_FILE_COUNT;
@@ -83,11 +80,11 @@ public class TransMatchSchedulerSingleton extends AbstractSchedulerSingleton {
 	@EJB
 	private ProcessingController processingController;
 
-	@Resource(lookup = "java:/choicemaker/urm/jms/matchDedupQueue")
-	private Queue matchDedupQueue;
-
 	@Resource(lookup = "java:/choicemaker/urm/jms/matcherQueue")
 	private Queue matcherQueue;
+
+	@Resource(lookup = "java:/choicemaker/urm/jms/singleMatchQueue")
+	private Queue singleMatchQueue;
 
 	@Inject
 	private JMSContext jmsContext;
@@ -98,7 +95,15 @@ public class TransMatchSchedulerSingleton extends AbstractSchedulerSingleton {
 	@Resource(lookup = "java:/choicemaker/urm/jms/transMatcherQueue")
 	private Queue transMatcherQueue;
 
+	@Resource(lookup = "java:/choicemaker/urm/jms/transSingleMatchQueue")
+	private Queue transSingleMatchQueue;
+
 	// -- Accessors
+
+	@Override
+	protected JMSContext getJmsContext() {
+		return jmsContext;
+	}
 
 	protected OabaParametersController getParametersControllerInternal() {
 		return paramsController;
@@ -210,13 +215,13 @@ public class TransMatchSchedulerSingleton extends AbstractSchedulerSingleton {
 
 	@Override
 	protected void sendToMatchDebup(BatchJob job, OabaJobMessage sd) {
-		MessageBeanUtils.sendStartData(sd, jmsContext, transMatchDedupQueue,
+		MessageBeanUtils.sendStartData(sd, getJmsContext(), transMatchDedupQueue,
 				log);
 	}
 
 	@Override
 	protected void sendToMatcher(OabaJobMessage sd) {
-		MessageBeanUtils.sendStartData(sd, jmsContext, transMatcherQueue, log);
+		MessageBeanUtils.sendStartData(sd, getJmsContext(), transMatcherQueue, log);
 	}
 
 	@Override
@@ -224,6 +229,12 @@ public class TransMatchSchedulerSingleton extends AbstractSchedulerSingleton {
 			Date timestamp, String info) {
 		getProcessingController().updateStatusWithNotification(job, event,
 				timestamp, info);
+	}
+
+	@Override
+	protected void sendToSingleRecordMatching(BatchJob job, OabaJobMessage sd) {
+		MessageBeanUtils.sendStartData(sd, getJmsContext(), transSingleMatchQueue,
+				getLogger());
 	}
 
 }

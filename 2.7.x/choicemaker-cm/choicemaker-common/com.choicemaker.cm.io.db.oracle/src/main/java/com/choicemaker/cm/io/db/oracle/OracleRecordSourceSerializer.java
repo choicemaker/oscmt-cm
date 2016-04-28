@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2008, 2010 Rick Hall and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *     Rick Hall - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.io.db.oracle;
 
 import java.io.NotSerializableException;
@@ -23,7 +20,6 @@ import com.choicemaker.util.Precondition;
 
 /**
  * @author rphall
- * @version $Revision: 1.1.2.2 $ $Date: 2010/03/16 03:23:01 $
  */
 public class OracleRecordSourceSerializer
 	extends AbstractRecordSourceSerializer {
@@ -43,11 +39,6 @@ public class OracleRecordSourceSerializer
 		super(URI_PATTERN, HANDLED_CLASSES, null);
 	}
 
-	/**
-	 * @param uriPattern
-	 * @param handledClass
-	 * @param properties
-	 */
 	public OracleRecordSourceSerializer(Properties ignored) {
 		this();
 		logIgnoredProperties(logger, Level.FINE, ignored);

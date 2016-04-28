@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Writer;
 import java.util.HashMap;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.Constants;
 
@@ -23,9 +24,11 @@ import com.choicemaker.cm.core.Constants;
  * This class represents a single source code file
  *
  * @author   Matthias Zenger
- * @version  $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:36 $
  */
 public final class Sourcecode implements Characters {
+
+	private static final Logger logger = Logger.getLogger(Sourcecode.class.getName());
+	private static final String SRC = Sourcecode.class.getSimpleName();
 
 	/** the filename
 	 */
@@ -53,6 +56,8 @@ public final class Sourcecode implements Characters {
 	/** create unknown SourceCode object
 	 */
 	public Sourcecode() {
+		final String METHOD = "Sourcecode()";
+		logger.entering(SRC, METHOD);
 		this.filename = "(sourcefile not available)";
 		this.shortname = "(unavailable)";
 		buf = new char[] { FE };
@@ -67,14 +72,16 @@ public final class Sourcecode implements Characters {
 	/** create SourceCode object for a given encoding
 	 */
 	public Sourcecode(String filename, String encoding, Writer w) throws IOException {
+		final String METHOD = "Sourcecode(String,String,Writer)";
+		logger.entering(SRC, METHOD, new Object[] { filename, encoding });
 		this.w = w;
 		File f = new File(filename).getAbsoluteFile();
 		this.filename = filename;
 		this.shortname = f.getName();
 		InputStreamReader in =
 			(encoding == null)
-				? new InputStreamReader(new FileInputStream(new File(filename).getAbsoluteFile()))
-				: new InputStreamReader(new FileInputStream(new File(filename).getAbsoluteFile()), encoding);
+				? new InputStreamReader(new FileInputStream(f))
+				: new InputStreamReader(new FileInputStream(f), encoding);
 		buf = new char[(int) (f.length() + 1)];
 		buf[in.read(buf)] = FE;
 		buf = Names.toInternal(buf, 0, buf.length);

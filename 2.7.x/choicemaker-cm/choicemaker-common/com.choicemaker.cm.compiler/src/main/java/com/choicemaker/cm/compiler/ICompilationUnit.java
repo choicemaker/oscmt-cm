@@ -25,7 +25,6 @@ import com.choicemaker.cm.core.compiler.CompilerException;
  * @author   Matthias Zenger
  * @author   Martin Buechi
  * @author   rphall
- * @version  $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:35 $
  */
 public interface ICompilationUnit {
 	public abstract void compile() throws CompilerException;
@@ -84,7 +83,7 @@ public interface ICompilationUnit {
 	public abstract void addNestedRecord(
 		String className,
 		String typeName,
-		String fieldName) throws CompilerException;
+		String recordName) throws CompilerException;
 	/**
 	 * Defines the type for Q and M.
 	 *

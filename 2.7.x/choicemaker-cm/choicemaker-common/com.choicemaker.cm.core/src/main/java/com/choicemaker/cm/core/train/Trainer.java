@@ -31,7 +31,6 @@ import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
  *
  * @author    Martin Buechi
  * @author    S. Yoakum-Stover
- * @version   $Revision: 1.2 $ $Date: 2010/03/24 20:49:13 $
  */
 
 public class Trainer /* implements ITrainer */ {
@@ -90,16 +89,7 @@ public class Trainer /* implements ITrainer */ {
 		this.src = src;
 	}
 
-	/**
-	 * Set the weights and clues to evaluate by training on the source.
-	 *
-	 * @param minClueFirings  The minimum number of times a clue must fire on the training set in order to
-	 *          be retained in the primed probability model.
-	 * @param numIterations  Number of iterations that the MaxumumEntropy estimater should execute.
-	 * @param fileNameBase  Name (up to the extension) given to the output files that are created for the
-	 *               MaximumEntropy estimator.
-	 * @throws IOException  if there is a problem reading from the source.
-	 */
+	/** Set the weights and clues to evaluate by training on the source */
 	public Object train() throws OperationFailedException {
 		computeFirings();
 		computeCounts();

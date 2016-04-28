@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.io.db.base.xmlconf;
 
 import java.io.File;
@@ -22,13 +19,12 @@ import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.MarkedRecordPairSource;
 import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.xmlconf.MarkedRecordPairSourceXmlConfigurator;
-import com.choicemaker.cm.io.db.oracle.OracleMarkedRecordPairSource2;
+import com.choicemaker.cm.io.db.oracle.OracleMarkedRecordPairSource;
 
 /**
  * Handling of Db Marked Record Pair sources.
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/24 22:39:47 $
  */
 public class DbMarkedRecordPairSourceXmlConf implements MarkedRecordPairSourceXmlConfigurator {
 	public static final String EXTENSION_POINT_ID = "com.choicemaker.cm.io.db.base.dbMrpsReader";
@@ -38,25 +34,15 @@ public class DbMarkedRecordPairSourceXmlConf implements MarkedRecordPairSourceXm
 	}
 
 	public Class getHandledType() {
-		return OracleMarkedRecordPairSource2.class;
+		return OracleMarkedRecordPairSource.class;
 	}
 
 	/**
 	 * Add a Db marked record pair source to the configuration.
-	 *
-	 * @param   name  The name of the source.
-	 * @param   probabilityModel  The name of the probability model.
-	 * @param   probabilityModelConfig  The name of the configuration containing the probability model.
-	 * @param   selection  The selection.
-	 * @param   connectionName  The name of the connection to access this source.
-	 * @param   replace  Whether an exiting probability model of the same name should be replaced.
-	 *            If the value of <code>replace</code> is <code>false</code> and a model of the
-	 *            same name already exists, an exception is thrown.
-	 * @throws  XmlConfException  if an exception occurs.
 	 */
 	public void add(MarkedRecordPairSource s) throws XmlConfException {
 		try {
-			OracleMarkedRecordPairSource2 src = (OracleMarkedRecordPairSource2) s;
+			OracleMarkedRecordPairSource src = (OracleMarkedRecordPairSource) s;
 			String fileName = src.getFileName();
 			Element e = new Element("MarkedRecordPairSource");
 			e.setAttribute("class", EXTENSION_POINT_ID);
@@ -78,6 +64,6 @@ public class DbMarkedRecordPairSourceXmlConf implements MarkedRecordPairSourceXm
 		String conf = e.getAttributeValue("conf");
 		String selection = e.getChildText("selection");
 		String connectionName = e.getChildText("connectionName");
-		return new OracleMarkedRecordPairSource2(fileName, connectionName, model, conf, selection);
+		return new OracleMarkedRecordPairSource(fileName, connectionName, model, conf, selection);
 	}
 }

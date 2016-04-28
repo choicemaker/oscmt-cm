@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.io.blocking.automated.offline.impl;
 
 import java.io.BufferedReader;
@@ -26,7 +23,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 
 /**
  * This object handles reading MatchRecord objects from a file.
- * 
+ *
  * @author pcheung
  *
  */
@@ -40,7 +37,7 @@ public class MatchRecord2Source<T extends Comparable<T>> extends
 	/**
 	 * This constructor takes in the filename of the source and an indicator
 	 * telling it if the data is stored as strings or binary.
-	 * 
+	 *
 	 * @param fileName
 	 * @param type
 	 */
@@ -51,6 +48,10 @@ public class MatchRecord2Source<T extends Comparable<T>> extends
 
 	public MatchRecord2Source(String fileName, EXTERNAL_DATA_FORMAT type) {
 		super(fileName, type);
+	}
+
+	protected void resetNext() {
+		next = null;
 	}
 
 	/**
@@ -80,7 +81,7 @@ public class MatchRecord2Source<T extends Comparable<T>> extends
 	/**
 	 * This checks o see if there is any more elements in the source. Always
 	 * call hasNext before calling getNext ().
-	 * 
+	 *
 	 * @return boolean - true if there are more elements in the source.
 	 */
 	@Override
@@ -100,9 +101,8 @@ public class MatchRecord2Source<T extends Comparable<T>> extends
 	/**
 	 * This method takes in a BufferedReader and reads the next MatchRecord2
 	 * object.
-	 * 
+	 *
 	 * @param reader
-	 * @return
 	 * @throws IOException
 	 */
 	public static MatchRecord2 readMatchRecord(BufferedReader reader)

@@ -23,7 +23,6 @@ package com.choicemaker.cm.args;
  * <p>
  *
  * @author emoussikaev
- * @version Revision: 2.5 Date: Nov 1, 2005 12:00:14 PM
  */
 public enum AnalysisResultFormat {
 

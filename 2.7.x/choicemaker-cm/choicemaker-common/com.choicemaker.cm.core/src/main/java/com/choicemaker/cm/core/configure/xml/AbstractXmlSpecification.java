@@ -26,8 +26,8 @@ import com.choicemaker.cm.core.IncompleteSpecificationException;
  * This class may be used as a subclass or delegate for classes that
  * implement either the Configurable or XmlSpecification interfaces.
  * However, if it is used as a base class for an AbstractConfigurable type,
- * the (@link #equals(Object) equals}, {@link #hashCode() hashCode},
- * and {@link #compareTo(Object) compareTo} methods should be overridden
+ * the (@link #equals(Object) equals}, and {@link #hashCode() hashCode}
+ * methods should be overridden
  * to account for any instance data that is not expressed as a property.
  * </p><p>
  * This class uses a versioning pattern discussed by Patrick Holthuizen
@@ -38,7 +38,6 @@ import com.choicemaker.cm.core.IncompleteSpecificationException;
  * </a>.
  * </p>
  * @author rphall
- * @version 1.0.0
  * @since 2.5.206
  */
 public abstract class AbstractXmlSpecification implements XmlSpecification {

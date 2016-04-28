@@ -22,7 +22,6 @@ import com.choicemaker.cm.core.base.AbstractRecordSourceSerializer;
 
 /**
  * @author rphall
- * @version $Revision: 1.1 $ $Date: 2010/03/24 18:07:22 $
  */
 public class DoNothingRecordSourceSerializer
 	extends AbstractRecordSourceSerializer {

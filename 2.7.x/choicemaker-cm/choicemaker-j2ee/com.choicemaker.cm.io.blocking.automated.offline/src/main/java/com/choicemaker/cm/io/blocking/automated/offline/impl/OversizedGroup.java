@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.io.blocking.automated.offline.impl;
 
 import java.util.ArrayList;
@@ -50,9 +47,6 @@ public class OversizedGroup implements IOversizedGroup {
 
 	/**
 	 * This method finds the maximum column id of the block set.
-	 *
-	 * @param bs
-	 * @return
 	 */
 	private int findMax(BlockSet bs) {
 		IntArrayList columns = bs.getColumns();

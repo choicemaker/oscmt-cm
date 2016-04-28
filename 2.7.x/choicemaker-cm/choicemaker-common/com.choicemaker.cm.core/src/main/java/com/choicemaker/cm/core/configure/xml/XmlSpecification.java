@@ -15,7 +15,6 @@ import java.net.URL;
 /**
  * A composite of XmlConfigurable instances
  * @author rphall
- * @version 1.0.0
  * @since 2.5.206
  */
 public interface XmlSpecification extends XmlConfigurable {
@@ -57,7 +56,6 @@ public interface XmlSpecification extends XmlConfigurable {
 	 *   &lt;/children&gt;
 	 * &lt;/configurable&gt;
 	 * </pre>
-	 * @return
 	 */
 	String toXML();
 
@@ -65,7 +63,5 @@ public interface XmlSpecification extends XmlConfigurable {
 	 * Adds an XmlConfigurable object to this specification.
 	 */
 	void add(XmlConfigurable child);
-
-	// TODO FIXME define other list operations
 
 }

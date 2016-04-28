@@ -16,7 +16,6 @@ import com.choicemaker.cm.core.Record;
  * Description
  * 
  * @author  Martin Buechi
- * @version $Revision: 1.1 $ $Date: 2010/01/20 15:05:04 $
  */
 public class RecordRecordData extends RecordData {
 	private Record record;

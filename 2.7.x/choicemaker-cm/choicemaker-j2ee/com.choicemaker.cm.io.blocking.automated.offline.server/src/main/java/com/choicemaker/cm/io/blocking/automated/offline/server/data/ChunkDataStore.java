@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.io.blocking.automated.offline.server.data;
 
 import java.io.IOException;
@@ -51,6 +48,13 @@ public class ChunkDataStore {
 	 * This gets the single instance object.
 	 */
 	public static ChunkDataStore getInstance() {
+		if (dataStore == null) {
+			throw new Error("null instance");
+		}
+		if (dataStore.stageMap == null || dataStore.masterMap == null) {
+			String msg = "ChunkDataStore is not initialized";
+			logger.info(msg);
+		}
 		return dataStore;
 	}
 
@@ -74,12 +78,16 @@ public class ChunkDataStore {
 			ImmutableProbabilityModel model, RecordSource masterSource,
 			int maxChunkSize, IControl control) throws BlockingException {
 
+		assert this == dataStore;
+
 		final String s = "Staging";
 		stageMap = readMap(stageSource, model, maxChunkSize + 10, control, s);
+		assert stageMap != null;
 		logger.info("Stage map size: " + stageMap.size());
 
 		final String m = "Master";
 		masterMap = readMap(masterSource, model, maxChunkSize + 10, control, m);
+		assert masterMap != null;
 		logger.info("Master map size: " + masterMap.size());
 	}
 

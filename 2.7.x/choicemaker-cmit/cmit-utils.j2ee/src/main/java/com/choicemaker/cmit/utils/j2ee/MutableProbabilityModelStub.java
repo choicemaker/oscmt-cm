@@ -48,11 +48,12 @@ public class MutableProbabilityModelStub implements IProbabilityModel {
 	public final String modelSignature = Signature.calculateSignature(
 			evaluatorSignature, cluesetSignature, schemaSignature);
 
-	private String userName = System.getProperty(SystemPropertyUtils.USER_NAME);
+	private String userName = System.getProperty(SystemPropertyUtils.PN_USER_NAME);
 
 	// Instance data that can be tweaked for testing
 	public String accessorClassName;
 	public String clueFilePath;
+	public String clueFileAbsolutePath;
 	public String modelFilePath;
 	public String trainingSource;
 
@@ -108,6 +109,12 @@ public class MutableProbabilityModelStub implements IProbabilityModel {
 	public String getClueFilePath() {
 		log.exiting(CLASSNAME, "getClueFilePath", clueFilePath);
 		return clueFilePath;
+	}
+
+	@Override
+	public String getClueFileAbsolutePath() {
+		log.exiting(CLASSNAME, "getClueFileAbsolutePath", clueFileAbsolutePath);
+		return clueFileAbsolutePath;
 	}
 
 	@Override

@@ -14,7 +14,6 @@ package com.choicemaker.cm.core.configure.xml;
  * Thrown by a constructor or modifier if an invalid property
  * value is specified for an object.
  * @author rphall
- * @version 1.0.0
  * @since 2.5.206
  */
 public class InvalidPropertyNameException extends RuntimeException {

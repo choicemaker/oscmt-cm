@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.io.blocking.automated.base;
 
 import java.io.IOException;
@@ -35,7 +32,6 @@ import com.choicemaker.cm.io.blocking.automated.util.PrintUtils;
 
 /**
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/24 21:32:37 $
  * @deprecated Returns sometimes erroneous blockingSets;
  * use {@link Blocker2} instead.
  */

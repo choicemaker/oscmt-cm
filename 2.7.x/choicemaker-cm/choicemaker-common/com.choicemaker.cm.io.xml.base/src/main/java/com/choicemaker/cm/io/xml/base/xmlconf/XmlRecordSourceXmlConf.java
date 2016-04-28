@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.io.xml.base.xmlconf;
 
 import java.io.File;
@@ -29,7 +26,6 @@ import com.choicemaker.cm.io.xml.base.XmlRecordSource;
  * Handling of XML Marked Record Pair sources.
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/28 09:16:58 $
  */
 public class XmlRecordSourceXmlConf implements RecordSourceXmlConfigurator {
 	public static final String EXTENSION_POINT_ID = "com.choicemaker.cm.io.xml.base.xmlRsReader";
@@ -44,11 +40,6 @@ public class XmlRecordSourceXmlConf implements RecordSourceXmlConfigurator {
 
 	/**
 	 * Add a XML marked record pair source to the configuration.
-	 *
-	 * @param   replace  Whether an exiting probability model of the same name should be replaced.
-	 *            If the value of <code>replace</code> is <code>false</code> and a model of the
-	 *            same name already exists, an exception is thrown.
-	 * @throws  XmlConfException  if an exception occurs.
 	 */
 	public void add(RecordSource s) throws XmlConfException {
 		try {

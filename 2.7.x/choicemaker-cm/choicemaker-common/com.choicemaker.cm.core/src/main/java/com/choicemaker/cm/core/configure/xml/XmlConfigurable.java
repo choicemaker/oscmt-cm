@@ -23,7 +23,6 @@ import java.net.URL;
  * AbstractXmlSpecification because it provides a template
  * for some best practices concerning serialization and versioning.
  * @author rphall
- * @version 1.0.0
  * @since 2.5.206
  */
 public interface XmlConfigurable
@@ -69,7 +68,6 @@ public interface XmlConfigurable
 	 *   &lt;/properties&gt;
 	 * &lt;/configurable&gt;
 	 * </pre>
-	 * @return
 	 */
 	String toXML();
 

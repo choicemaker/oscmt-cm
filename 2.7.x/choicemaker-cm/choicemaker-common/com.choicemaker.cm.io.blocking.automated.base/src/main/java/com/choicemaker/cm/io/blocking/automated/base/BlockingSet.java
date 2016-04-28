@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.io.blocking.automated.base;
 
 import java.io.Serializable;
@@ -16,6 +13,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.io.blocking.automated.IBlockingField;
 import com.choicemaker.cm.io.blocking.automated.IBlockingSet;
@@ -24,14 +22,10 @@ import com.choicemaker.cm.io.blocking.automated.IDbTable;
 import com.choicemaker.cm.io.blocking.automated.IField;
 import com.choicemaker.cm.io.blocking.automated.IGroupTable;
 
-/**
- *
- * @author    
- * @version   $Revision: 1.2 $ $Date: 2010/03/28 09:30:46 $
- */
 public class BlockingSet implements Serializable, IBlockingSet {
 	
 	private static final long serialVersionUID = 271;
+	private static final Logger logger = Logger.getLogger(BlockingSet.class.getName());
 
 	private final long mainTableSize;
 	private final ArrayList<IBlockingValue> blockingValues;
@@ -58,18 +52,32 @@ public class BlockingSet implements Serializable, IBlockingSet {
 		add(bv);
 	}
 
-	private void add(IBlockingValue ibv) {
+	/**
+	 * Do not invoke directly. (This method is public only for testing
+	 * purposes.) Use the {@link #BlockingSet(IBlockingSet, IBlockingValue)
+	 * two-parameter constructor} instead.
+	 * 
+	 * @param ibv
+	 *            non-null blocking value
+	 */
+	public void add(IBlockingValue ibv) {
+		if (ibv == null) {
+			throw new IllegalArgumentException("null blocking value");
+		}
 		BlockingValue bv = new BlockingValue((IBlockingValue) ibv.clone());
+		logger.fine(this.toString() + ": adding " + bv.toString());
 		blockingValues.add(bv);
 		IBlockingField bf = bv.getBlockingField();
 		String g = bf.getGroup();
 		IDbTable bt = bf.getDbField().getTable();
 		int size = tables.size();
+		logger.fine("Blocking set size: " + size);
 		int i = 0;
 		while (i < size) {
 			IGroupTable gt = (IGroupTable) tables.get(i);
 			if (gt.getTable() == bt && gt.getGroup() == g) {
 				bv.setGroupTable(gt);
+				logger.fine("Blocking value group table: " + gt);
 				break;
 			}
 			++i;
@@ -77,14 +85,19 @@ public class BlockingSet implements Serializable, IBlockingSet {
 		if (i == size) {
 			GroupTable gt = new GroupTable(bt, g, size);
 			bv.setGroupTable(gt);
+			logger.fine("Blocking value group table: " + gt);
 			tables.add(gt);
 			if (tables.size() > 1) {
 				expectedCount /= getMainTableSize();
+				logger.fine("blocking set normalization (" + i + ") == " + expectedCount);
 			}
 		} else {
 			expectedCount /= bv.getTableSize();
+			logger.fine("blocking set normalization (" + i + ") == " + expectedCount);
 		}
 		expectedCount *= bv.getCount();
+		logger.fine("blocking set expected count == " + expectedCount);
+		logger.fine(this.toString());
 	}
 
 	@Override

@@ -15,7 +15,6 @@ package com.choicemaker.cm.compiler;
  * positions consisting of line and column number into a single int value
  *
  * @author   Matthias Zenger
- * @version  $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:35 $
  */
 public final class Location {
 

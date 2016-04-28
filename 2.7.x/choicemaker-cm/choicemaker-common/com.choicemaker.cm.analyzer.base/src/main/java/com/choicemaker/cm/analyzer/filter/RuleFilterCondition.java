@@ -16,7 +16,6 @@ import com.choicemaker.cm.core.base.ActiveClues;
  * Description
  *
  * @author  Martin Buechi
- * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:08 $
  */
 public class RuleFilterCondition implements FilterCondition {
 	private static final long serialVersionUID = 1L;
@@ -62,9 +61,6 @@ public class RuleFilterCondition implements FilterCondition {
 		return clueNum;
 	}
 	
-	/**
-	 * @see com.choicemaker.cm.train.filter.FilterCondition#satisfy(com.choicemaker.cm.core.base.ActiveClues)
-	 */
 	public boolean satisfy(ActiveClues clues) {
 		return clues.containsRule(clueNum) == value.booleanValue();
 	}
@@ -77,12 +73,6 @@ public class RuleFilterCondition implements FilterCondition {
 		return value.booleanValue();
 	}
 
-	/**
-	 * @see com.choicemaker.cm.train.filter.FilterCondition#getConditionString()
-	 */
-	/**
-	 * @see com.choicemaker.cm.train.filter.FilterCondition#getConditionString()
-	 */
 	public String getConditionString() {
 		if (value == null){
 			return NULL_STRING;
@@ -90,9 +80,7 @@ public class RuleFilterCondition implements FilterCondition {
 			return isActive() ? ACTIVE_STRING : INACTIVE_STRING;
 		}
 	}
-	/**
-	 * @see com.choicemaker.cm.train.filter.FilterCondition#createFilterCondition(int)
-	 */
+
 	public FilterCondition createFilterCondition(int clueNum) {
 		return new RuleFilterCondition(clueNum, value);
 	}

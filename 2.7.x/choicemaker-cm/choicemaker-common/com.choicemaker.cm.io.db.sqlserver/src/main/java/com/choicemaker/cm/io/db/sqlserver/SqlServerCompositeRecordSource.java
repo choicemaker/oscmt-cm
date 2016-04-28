@@ -1,3 +1,10 @@
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *******************************************************************************/
 /*
  * Created on Sep 8, 2004
  *
@@ -59,7 +66,7 @@ public class SqlServerCompositeRecordSource implements RecordSource {
 	/** This constructor takes these arguments
 	 * 
 	 * @param ds - data source 
-	 * @param accessProvider - probability accessProvider
+	 * @param model - the probability model
 	 * @param idsQuery - the query to get the ids.
 	 * @param dbConfiguration - db configuration name in the schema file.
 	 * @param maxSize - maximum number of records in each of the composite.
@@ -78,7 +85,7 @@ public class SqlServerCompositeRecordSource implements RecordSource {
 	/** This constructor takes these arguments
 	 * 
 	 * @param dsName - data source name
-	 * @param accessProvider - probabiliyt accessProvider
+	 * @param model - the probability model
 	 * @param idsQuery - the query to get the ids.
 	 * @param dbConfiguration - db configuration name in the schema file.
 	 * @param maxSize - maximum number of records in each of the composite.

@@ -33,7 +33,7 @@ public interface OperationalPropertyJPA {
 	 */
 	String QN_OPPROP_FIND_BY_JOB_PNAME = "opPropFindByJobPname";
 
-	/** JPQL used to implement {@link #QN_OPPROP_FIND_BY_NAME} */
+	/** JPQL used to implement {@link #QN_OPPROP_FIND_BY_JOB_PNAME} */
 	String JPQL_OPPROP_FIND_BY_JOB_PNAME =
 		"Select ope from OperationalPropertyEntity ope "
 				+ "where ope.jobId = :jobId and ope.name = :name";
@@ -56,7 +56,7 @@ public interface OperationalPropertyJPA {
 	 */
 	String QN_OPPROP_FINDALL_BY_JOB = "opPropFindAllByJob";
 
-	/** JPQL used to implement {@link #QN_OPPROP_FINDALL_BY_NAME} */
+	/** JPQL used to implement {@link #QN_OPPROP_FINDALL_BY_JOB} */
 	String JPQL_OPPROP_FINDALL_BY_JOB =
 		"Select ope from OperationalPropertyEntity ope where ope.jobId = :jobId";
 

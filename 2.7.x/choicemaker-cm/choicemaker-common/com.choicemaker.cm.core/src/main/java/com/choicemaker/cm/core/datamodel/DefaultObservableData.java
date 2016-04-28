@@ -19,7 +19,6 @@ import java.beans.PropertyChangeSupport;
  * Abstraction for a data element that notifies listeners when its data changes.
  *
  * @author   Arturo Falck
- * @version  $Revision: 1.2 $ $Date: 2010/03/27 21:03:06 $
  */
 public abstract class DefaultObservableData implements ObservableData {
 

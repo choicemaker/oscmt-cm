@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.io.flatfile.base;
 
 import java.io.BufferedOutputStream;
@@ -27,7 +24,6 @@ import com.choicemaker.util.FileUtilities;
  * Description
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/28 09:10:40 $
  */
 public class FlatFileRecordSink implements RecordSink {
 
@@ -131,7 +127,7 @@ public class FlatFileRecordSink implements RecordSink {
 				}
 				// FIXME ??
 				FileOutputStream o = new FileOutputStream(f);
-				log.warning("BUG: does not handle unicode? " + o);
+				// log.warning("BUG: does not handle unicode? " + o);
 				// ENDFIXME
 				ws[i] = new OutputStreamWriter(new BufferedOutputStream(o));
 			}
@@ -144,7 +140,7 @@ public class FlatFileRecordSink implements RecordSink {
 			// FIXME ??
 			FileOutputStream o = new FileOutputStream(f);
 			BufferedOutputStream bos = new BufferedOutputStream(o);
-			log.warning("BUG: does not handle unicode? " + o);
+			// log.warning("BUG: does not handle unicode? " + o);
 			// ENDFIXME
 			Writer w = new OutputStreamWriter(bos);
 			for (int i = 0; i < n; ++i) {

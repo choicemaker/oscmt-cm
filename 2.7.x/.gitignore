@@ -17,3 +17,5 @@ build.xml
 .*.swp
 *.BAK-??
 pom_non-rc*.xml
+*_local.properties
+*_local.xml

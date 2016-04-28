@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.io.blocking.automated.base;
 
 import java.io.IOException;
@@ -40,7 +37,6 @@ import com.choicemaker.cm.io.blocking.automated.util.PrintUtils;
  * Creates blocking sets.
  * @author Martin Buechi (original Blocker code)
  * @author rphall (refactored to be testable)
- * @version $Revision: 1.1 $ $Date: 2010/03/24 21:30:24 $
  */
 public class BlockingSetFactory {
 
@@ -163,9 +159,6 @@ public class BlockingSetFactory {
 	 * count values
 	 * @param mainTableSize the normalization value by which count
 	 * values are divided to estimate field-value frequencies.
-	 * @see #createBlockingSets(BlockingConfiguration,Record,int,int,int,AbaStatistics)
-	 * for explanations of the limit parameters, return value, and possible
-	 * exceptions.
 	 */
 	public static List<IBlockingSet> createBlockingSetsInternal_1(
 		IBlockingValue[] blockingValues,
@@ -565,16 +558,16 @@ public class BlockingSetFactory {
 		return retVal;
 	}
 
-	static void addToBlockingSets(List<IBlockingSet> blockingSets, IBlockingSet candidate) {
+	static void addToBlockingSets(List<IBlockingSet> blockingSets,
+			IBlockingSet candidate) {
 		boolean isCandidateAlreadyInBlockingSet = false;
-		for (IBlockingSet currentBlockingSet : blockingSets) {
+		for (Iterator<IBlockingSet> it = blockingSets.iterator(); it.hasNext();) {
+			final IBlockingSet currentBlockingSet = it.next();
 			if (candidate.returnsSupersetOf(currentBlockingSet)) {
-				logger.fine(
-					"Candidate blocking set is a superset of an existing blocking set");
-				blockingSets.remove(currentBlockingSet);
+				logger.fine("Candidate blocking set is a superset of an existing blocking set");
+				it.remove();
 			} else if (currentBlockingSet.returnsSupersetOf(candidate)) {
-				logger.fine(
-					"Candidate blocking set is a subset of an existing blocking set");
+				logger.fine("Candidate blocking set is a subset of an existing blocking set");
 				isCandidateAlreadyInBlockingSet = true;
 				break;
 			}

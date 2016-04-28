@@ -19,7 +19,6 @@ import java.io.OutputStream;
  * Reads a stream and writes it to another stream or appends it to a string.
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.1 $ $Date: 2010/01/20 15:05:03 $
  */
 public class StreamRelayer extends Thread {
 	private InputStreamReader isr;

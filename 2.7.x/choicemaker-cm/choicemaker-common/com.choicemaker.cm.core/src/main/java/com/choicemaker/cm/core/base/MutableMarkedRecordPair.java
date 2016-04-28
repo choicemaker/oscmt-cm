@@ -22,7 +22,6 @@ import com.choicemaker.cm.core.Record;
  * marked training/testing pairs.
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.1 $ $Date: 2010/03/24 18:02:30 $
  */
 public class MutableMarkedRecordPair
 	extends MutableRecordPair

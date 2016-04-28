@@ -31,39 +31,6 @@
   <build>
     <plugins>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>build-helper-maven-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>parse-version</id>
-            <goals>
-              <goal>parse-version</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-antrun-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>echo-params</id>
-            <phase>validate</phase>
-            <configuration>
-              <target>
-                <echo
-                  message="eclipse.plugin.runtime.library.name: ${eclipse.plugin.runtime.library.name}" />
-                <echo
-                  message="eclipse.plugin.src.zip.name: ${eclipse.plugin.src.zip.name}" />
-              </target>
-            </configuration>
-            <goals>
-              <goal>run</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>
         <executions>
@@ -79,27 +46,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
-        <dependencies>
-          <dependency>
-            <groupId>com.choicemaker.cm</groupId>
-            <artifactId>choicemaker-assembly</artifactId>
-            <version>2.7.1-SNAPSHOT</version>
-          </dependency>
-        </dependencies>
-        <executions>
-          <execution>
-            <id>assembly</id>
-            <phase>package</phase>
-            <configuration>
-              <descriptorRefs>
-                <descriptorRef>cm-std-assembly</descriptorRef>
-              </descriptorRefs>
-            </configuration>
-            <goals>
-              <goal>single</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -119,6 +65,10 @@
   </build>
 
   <dependencies>
+    <dependency>
+      <groupId>com.choicemaker.util</groupId>
+      <artifactId>choicemaker-util</artifactId>
+    </dependency>
     <dependency>
       <groupId>com.choicemaker.e2</groupId>
       <artifactId>com.choicemaker.e2</artifactId>

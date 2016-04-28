@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MarkedRecordPairSource class="com.choicemaker.cm.io.db.sqlserver.sqlServerMrpsReader" conf="default">
+    <selection>
+			select id as id, id_matched as id_matched, decision as decision
+			-- from tb_cmt_pairs
+			from AUX_PERSON_PAIRS where group_id = 1
+		</selection>
+    <connectionName>localhost</connectionName>
+</MarkedRecordPairSource>
+

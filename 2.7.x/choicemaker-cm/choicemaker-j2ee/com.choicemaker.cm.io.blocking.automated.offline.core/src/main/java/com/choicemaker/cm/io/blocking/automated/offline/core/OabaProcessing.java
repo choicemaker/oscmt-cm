@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.io.blocking.automated.offline.core;
 
 import com.choicemaker.cm.args.BatchProcessing;
@@ -46,6 +43,7 @@ public interface OabaProcessing extends BatchProcessing {
 	int EVT_ALLOCATE_CHUNKS = 190;
 	int EVT_DONE_ALLOCATE_CHUNKS = 200;
 	int EVT_MATCHING_DATA = 210;
+	int EVT_DONE_MATCHING_CHUNKS = 215;
 	int EVT_DONE_MATCHING_DATA = 220;
 
 	int EVT_OUTPUT_DEDUP_MATCHES = 230;
@@ -77,6 +75,7 @@ public interface OabaProcessing extends BatchProcessing {
 	float PCT_ALLOCATE_CHUNKS = 0.48f;
 	float PCT_DONE_ALLOCATE_CHUNKS = 0.50f;
 	float PCT_MATCHING_DATA = 0.60f;
+	float PCT_DONE_MATCHING_CHUNKS = 0.80f;
 	float PCT_DONE_MATCHING_DATA = 0.90f;
 
 	float PCT_OUTPUT_DEDUP_MATCHES = 0.93f;

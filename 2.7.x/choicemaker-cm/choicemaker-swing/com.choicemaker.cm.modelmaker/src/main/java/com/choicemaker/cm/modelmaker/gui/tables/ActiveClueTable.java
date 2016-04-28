@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.modelmaker.gui.tables;
 
 import javax.swing.JTable;
@@ -28,7 +25,6 @@ import com.choicemaker.cm.modelmaker.gui.listeners.TableColumnListener;
  * The active clues for a particular MarkedRecordPair.  Displayed on the DefaultPairReviewPanel.
  * 
  * @author S. Yoakum-Stover
- * @version $Revision: 1.2 $ $Date: 2010/03/29 13:19:34 $
  */
 public class ActiveClueTable extends JTable implements RepositoryChangeListener {
 	private static final long serialVersionUID = 1L;

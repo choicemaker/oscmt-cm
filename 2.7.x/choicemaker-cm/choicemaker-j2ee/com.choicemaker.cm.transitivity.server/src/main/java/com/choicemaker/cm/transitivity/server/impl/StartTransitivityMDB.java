@@ -1,17 +1,16 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.transitivity.server.impl;
 
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_CHUNK_FILE_COUNT;
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_REGULAR_CHUNK_FILE_COUNT;
+import static com.choicemaker.cm.io.blocking.automated.offline.core.RecordMatchingMode.BRM;
+import static com.choicemaker.cm.io.blocking.automated.offline.core.RecordMatchingMode.SRM;
 import static com.choicemaker.cm.transitivity.core.TransitivityProcessingEvent.DONE_CREATE_CHUNK_DATA;
 import static com.choicemaker.cm.transitivity.core.TransitivityProcessingEvent.DONE_TRANS_DEDUP_OVERSIZED;
 
@@ -38,10 +37,15 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ImmutableRecordIdTranslator;
+//import com.choicemaker.cm.io.blocking.automated.offline.core.MutableRecordIdTranslator;
+//import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE_ROLE;
+import com.choicemaker.cm.io.blocking.automated.offline.core.RecordMatchingMode;
+//import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.IDSetSource;
 import com.choicemaker.cm.io.blocking.automated.offline.result.MatchToBlockTransformer2;
 import com.choicemaker.cm.io.blocking.automated.offline.result.Size2MatchProducer;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaFileUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.services.ChunkService3;
@@ -49,11 +53,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.utils.Transformer;
 import com.choicemaker.cm.transitivity.core.TransitivityProcessingEvent;
 
 /**
- * This message bean starts the Transitivity Engine. It assumes that it can
- * access the translator file.
- *
- * @author pcheung
- *
+ * This message bean starts the Transitivity Engine.
  */
 @SuppressWarnings({ "rawtypes" })
 @MessageDriven(activationConfig = {
@@ -70,6 +70,37 @@ public class StartTransitivityMDB extends AbstractTransitivityMDB {
 
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
 			+ StartTransitivityMDB.class.getName());
+
+	/**
+	 * The name of a system property that can be set to "true" to reuse the
+	 * translator created by the preceding OABA job, assuming that the OABA job
+	 * was run in BRM mode. If this property is false, or the OABA job was not
+	 * run in BRM mode, then a new translator is created from the pairwise
+	 * results of the OABA job. By default, if this property is not set, then
+	 * reuse is presumed; i.e. not setting this property is the same as setting
+	 * it to <code>true</code>. The only way to disable reuse is explicitly set
+	 * this property to <code>false</code>.
+	 */
+	public static final String PN_REUSE_BRM_TRANSLATOR =
+		"choicemaker.trans.ReuseBrmTranslator";
+
+	public static final String DEFAULT_REUSE_BRM_TRANSLATOR = "true";
+
+	/**
+	 * Checks the system property {@link #PN_REUSE_BRM_TRANSLATOR} and caches
+	 * the result
+	 */
+	private boolean isBrmTranslatorReuseRequested() {
+		String value =
+			System.getProperty(PN_REUSE_BRM_TRANSLATOR,
+					DEFAULT_REUSE_BRM_TRANSLATOR);
+		Boolean _reuse = Boolean.valueOf(value);
+		boolean retVal = _reuse.booleanValue();
+		return retVal;
+	}
+
+	private boolean isBrmTranslatorReuseRequested =
+		isBrmTranslatorReuseRequested();
 
 	@Resource(lookup = "java:/choicemaker/urm/jms/transMatchSchedulerQueue")
 	private Queue transMatchSchedulerQueue;
@@ -92,18 +123,40 @@ public class StartTransitivityMDB extends AbstractTransitivityMDB {
 	private void createChunks(BatchJob transJob, TransitivityParameters params,
 			OabaSettings oabaSettings, ServerConfiguration serverConfig)
 			throws BlockingException {
-	
+
 		// Get the parent/predecessor OABA job
-		long oabaJobId = transJob.getBatchParentId();
-		BatchJob oabaJob = this.getOabaJobController().findBatchJob(oabaJobId);
+		final long oabaJobId = transJob.getBatchParentId();
+		final BatchJob oabaJob =
+			this.getOabaJobController().findBatchJob(oabaJobId);
 
 		// Get the match record source from the OABA job
 		IMatchRecord2Source mSource =
 			OabaFileUtils.getCompositeMatchSource(oabaJob);
+		assert mSource != null;
 
-		// Recover the translator from the OABA job
-		ImmutableRecordIdTranslator translator =
-			this.getRecordIdController().findRecordIdTranslator(oabaJob);
+		// Create a translator for this job
+		RecordMatchingMode oabaMode =
+			BatchJobUtils.getRecordMatchingMode(getPropertyController(),
+					oabaJob);
+		ImmutableRecordIdTranslator currentTranslator = null;
+		if (isBrmTranslatorReuseRequested && oabaMode == BRM) {
+			currentTranslator =
+				this.getRecordIdController().findRecordIdTranslator(oabaJob);
+		} else {
+			assert oabaMode == SRM || !isBrmTranslatorReuseRequested;
+			// SRM mode is not working yet, nor is translator creation
+			// currentTranslator = createTranslator(transJob, mSource);
+			String msg;
+			if (oabaMode == SRM) {
+				msg = "SRM mode is not yet supported transitivity analysis";
+			} else {
+				msg =
+					"Translator reuse is currently required "
+							+ "during transitivity analysis in BRM mode";
+			}
+			log.severe(msg);
+			throw new BlockingException(msg);
+		}
 
 		// Create a block sink for the Transitivity job
 		IBlockSink bSink =
@@ -117,8 +170,8 @@ public class StartTransitivityMDB extends AbstractTransitivityMDB {
 			this.getRecordIdController().getRecordIdSinkSourceFactory(transJob);
 		IRecordIdSink idSink = idFactory.getNextSink();
 		MatchToBlockTransformer2 transformer =
-			new MatchToBlockTransformer2(mSource, mFactory, translator, bSink,
-					idSink);
+			new MatchToBlockTransformer2(mSource, mFactory, currentTranslator,
+					bSink, idSink);
 		int numRecords = transformer.process();
 		log.fine("Number of records: " + numRecords);
 
@@ -156,7 +209,7 @@ public class StartTransitivityMDB extends AbstractTransitivityMDB {
 
 		// create the oversized block transformer
 		Transformer transformerO =
-			new Transformer(translator,
+			new Transformer(currentTranslator,
 					OabaFileUtils.getComparisonArrayGroupFactoryOS(transJob,
 							numProcessors));
 
@@ -189,13 +242,15 @@ public class StartTransitivityMDB extends AbstractTransitivityMDB {
 			this.getProcessingController().getProcessingLog(transJob);
 		status.setCurrentProcessingEvent(DONE_TRANS_DEDUP_OVERSIZED);
 
+		final RecordMatchingMode mode = getRecordMatchingMode(transJob);
+
 		ChunkService3 chunkService =
 			new ChunkService3(source2, null, staging, master, model,
 					OabaFileUtils.getChunkIDFactory(transJob),
 					OabaFileUtils.getStageDataFactory(transJob, model),
 					OabaFileUtils.getMasterDataFactory(transJob, model),
-					translator.getSplitIndex(), transformerO, null, maxChunk,
-					numFiles, status, transJob);
+					currentTranslator, transformerO, null, maxChunk, numFiles,
+					status, transJob, mode);
 		chunkService.runService();
 		log.info("Done creating chunks " + chunkService.getTimeElapsed());
 
@@ -210,6 +265,74 @@ public class StartTransitivityMDB extends AbstractTransitivityMDB {
 		this.getPropertyController().setJobProperty(transJob,
 				PN_REGULAR_CHUNK_FILE_COUNT, String.valueOf(numRegularChunks));
 	}
+
+//	@SuppressWarnings("unused")
+//	private ImmutableRecordIdTranslator createTranslator(BatchJob transJob,
+//			IMatchRecord2Source mSource) throws BlockingException {
+//
+//		MutableRecordIdTranslator mrit =
+//			this.getRecordIdController().createMutableRecordIdTranslator(
+//					transJob);
+//		try {
+//			mrit.open();
+//			try {
+//				mSource.open();
+//				while (mSource.hasNext()) {
+//					MatchRecord2 mr = (MatchRecord2) mSource.next();
+//					Comparable id1 = mr.getRecordID1();
+//					@SuppressWarnings({
+//							"unchecked", "unused" })
+//					int unused1 = mrit.translate(id1);
+//					RECORD_SOURCE_ROLE r2Role = mr.getRecord2Role();
+//					switch (r2Role) {
+//					case STAGING:
+//					case SOURCE1_NODUPES:
+//						Comparable id2 = mr.getRecordID2();
+//						@SuppressWarnings({
+//								"unchecked", "unused" })
+//						int unused2 = mrit.translate(id2);
+//						break;
+//					case MASTER:
+//					case SOURCE2_DUPES:
+//						break;
+//					default:
+//						throw new Error("Unexpected role: " + r2Role);
+//					}
+//				}
+//				mSource.close();
+//				mrit.split();
+//				mSource.open();
+//				while (mSource.hasNext()) {
+//					MatchRecord2 mr = (MatchRecord2) mSource.next();
+//					RECORD_SOURCE_ROLE r2Role = mr.getRecord2Role();
+//					switch (r2Role) {
+//					case STAGING:
+//					case SOURCE1_NODUPES:
+//						break;
+//					case MASTER:
+//					case SOURCE2_DUPES:
+//						Comparable id2 = mr.getRecordID2();
+//						@SuppressWarnings({
+//								"unchecked", "unused" })
+//						int unused2 = mrit.translate(id2);
+//						break;
+//					default:
+//						throw new Error("Unexpected role: " + r2Role);
+//					}
+//				}
+//				mSource.close();
+//			} finally {
+//				mSource.close();
+//			}
+//		} finally {
+//			mrit.close();
+//		}
+//
+//		@SuppressWarnings("unchecked")
+//		ImmutableRecordIdTranslator retVal =
+//			this.getRecordIdController().toImmutableTranslator(mrit);
+//		return retVal;
+//	}
 
 	/**
 	 * This method removes any pre-existing transMatch* files

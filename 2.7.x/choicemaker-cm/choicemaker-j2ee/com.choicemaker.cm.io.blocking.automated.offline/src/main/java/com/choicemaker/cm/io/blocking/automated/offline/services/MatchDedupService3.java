@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.io.blocking.automated.offline.services;
 
 import java.io.IOException;
@@ -123,8 +120,6 @@ public class MatchDedupService3 {
 
 	/**
 	 * This returns the number of matches before the dedup.
-	 * 
-	 * @return
 	 */
 	public int getNumBefore() {
 		return numBefore;
@@ -132,8 +127,6 @@ public class MatchDedupService3 {
 
 	/**
 	 * This returns the number of matches after the dedup.
-	 * 
-	 * @return
 	 */
 	public int getNumAfter() {
 		return numAfter;

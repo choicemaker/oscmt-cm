@@ -1,13 +1,10 @@
-/*
- * @(#)$RCSfile: SqlDbObjectMaker.java,v $        $Revision: 1.9.100.3 $ $Date: 2010/03/16 13:07:26 $
- *
- * Copyright (c) 2002 ChoiceMaker Technologies, Inc.
- * 41 East 11th Street, New York, NY 10003
- * All rights reserved.
- *
- * This software is the confidential and proprietary information of
- * ChoiceMaker Technologies Inc. ("Confidential Information").
- */
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *******************************************************************************/
 
 package com.choicemaker.cm.io.db.sqlserver.dbom;
 
@@ -45,8 +42,6 @@ import com.choicemaker.e2.CMPlatformRunnable;
  * Writes a Sql Server script (SqlServer_Custom_Objects.txt) that creates DB
  * objects (views) based on the schemas of models specified in the
  * productionModels section of a CM Analyzer configuration file.
- * @author    
- * @version   $Revision: 1.9.100.3 $ $Date: 2010/03/16 13:07:26 $
  */
 public class SqlDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 

@@ -1,13 +1,10 @@
-/*
- * ScoreNoteType.java       Revision: 2.5  Date: Sep 9, 2005 3:25:10 PM 
- *
- * Copyright (c) 2001 ChoiceMaker Technologies, Inc.
- * 48 Wall Street, 11th Floor, New York, NY 10005
- * All rights reserved.
- *
- * This software is the confidential and proprietary information of
- * ChoiceMaker Technologies Inc. ("Confidential Information").
- */
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *******************************************************************************/
 package com.choicemaker.cm.urm.config;
 
 import java.io.ObjectStreamException;
@@ -15,7 +12,6 @@ import java.io.ObjectStreamException;
 /**
  * The 2.5 implementation of {@link ScoreType} as a pseudo enum.
  * @author emoussikaev
- * @version Revision: 2.5 Date: Nov 1, 2005 1:46:30 PM
  */
 public class ScoreType0 implements java.io.Serializable {
 

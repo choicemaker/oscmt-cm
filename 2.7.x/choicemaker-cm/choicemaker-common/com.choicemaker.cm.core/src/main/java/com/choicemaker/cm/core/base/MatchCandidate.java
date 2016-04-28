@@ -20,7 +20,6 @@ import com.choicemaker.cm.core.ImmutableProbabilityModel;
  * to the caller, a subclass instance must be used.
  *
  * @author   Martin Buechi
- * @version  $Revision: 1.2 $ $Date: 2010/03/24 21:05:49 $
  */
 public class MatchCandidate implements Serializable {
 

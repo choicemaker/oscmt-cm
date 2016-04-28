@@ -1,14 +1,13 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.io.blocking.automated.base;
+
+import java.util.Arrays;
 
 import com.choicemaker.cm.io.blocking.automated.IDbField;
 import com.choicemaker.cm.io.blocking.automated.IDbTable;
@@ -18,7 +17,6 @@ import com.choicemaker.cm.io.blocking.automated.IField;
  * A field on a master record, against which query record are compared.
  * 
  * @author    mbuechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/28 09:31:50 $
  */
 public class DbField extends Field implements IDbField {
 	
@@ -116,7 +114,8 @@ public class DbField extends Field implements IDbField {
 	public String toString() {
 		return "DbField [number=" + number + ", name=" + name + ", type="
 				+ type + ", table=" + table + ", defaultCount=" + defaultCount
-				+ "]";
+				+ ", illegalCombinations="
+						+ Arrays.toString(getIllegalCombinations()) + "]";
 	}
 	
 }

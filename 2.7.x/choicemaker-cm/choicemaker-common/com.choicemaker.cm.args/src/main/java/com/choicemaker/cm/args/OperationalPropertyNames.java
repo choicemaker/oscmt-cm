@@ -92,8 +92,39 @@ public interface OperationalPropertyNames {
 	// String PN_PROCESSING_INDEX = "PROCESSING_INDEX";
 
 	/**
+	 * The highest index (inclusive) of temporary match result files produced
+	 * by the OABA or Transitivity matching. This index is set or reset in a
+	 * few places:
+	 * <ul>
+	 * <li>AbstractScheduler</li>
+	 * <li>SingleRecordMatch</li>
+	 * </ul>
+	 * 
+	 * It is used in
+	 * <ul>
+	 * <li>MatchDedup</li>
+	 * </ul>
+	 */
+	String PN_MAX_TEMP_PAIRWISE_INDEX = "MAX_TEMP_PAIRWISE_INDEX";
+
+	/**
 	 * The name of an enum representing the type of the primary key for records
 	 * used in a batch job. The value is defined in
+	 * <ul>
+	 * <li>StartOabaMDB</li>
+	 * </ul>
+	 * 
+	 * It is used in
+	 * <ul>
+	 * <li>StartOabaMDB</li>
+	 * <li>MatchSchedulerMDB</li>
+	 * </ul>
+	 */
+	String PN_RECORD_MATCHING_MODE = "RECORD_MATCHING_MODE";
+
+	/**
+	 * The name of an enum representing the record-matching mode used to compare
+	 * query records to reference records. The value is defined in
 	 * <ul>
 	 * <li>StartOabaMDB</li>
 	 * </ul>

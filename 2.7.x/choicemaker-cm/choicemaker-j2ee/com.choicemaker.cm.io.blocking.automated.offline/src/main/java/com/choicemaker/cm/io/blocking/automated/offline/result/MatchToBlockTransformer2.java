@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.io.blocking.automated.offline.result;
 
 import java.util.HashMap;
@@ -155,46 +152,49 @@ public class MatchToBlockTransformer2 {
 		log.fine("stage size " + stageIDs.size());
 		log.fine("master size " + masterIDs.size());
 
-		IMatchRecord2Sink retVal = mFactory.getNextSink();
+		IMatchRecord2Sink retVal = null;
+		try {
+			retVal = mFactory.getNextSink();
+			mSource.open();
+			retVal.open();
 
-		mSource.open();
-		retVal.open();
+			// now write out the translated MatchRecord2
+			MatchRecord2<?> mr = null;
+			while (mSource.hasNext()) {
+				mr = (MatchRecord2) mSource.next();
 
-		// now write out the translated MatchRecord2
-		MatchRecord2<Integer> mr = null;
-		while (mSource.hasNext()) {
-			mr = (MatchRecord2) mSource.next();
+				Integer I1 = (Integer) stageIDs.get(mr.getRecordID1());
+				Integer I2 = null;
+				if (mr.getRecord2Role() == RECORD_SOURCE_ROLE.STAGING) {
+					I2 = (Integer) stageIDs.get(mr.getRecordID2());
+				} else {
+					I2 = (Integer) masterIDs.get(mr.getRecordID2());
+				}
 
-			Integer I1 = (Integer) stageIDs.get(mr.getRecordID1());
-			Integer I2 = null;
-			if (mr.getRecord2Role() == RECORD_SOURCE_ROLE.STAGING) {
-				I2 = (Integer) stageIDs.get(mr.getRecordID2());
-			} else {
-				I2 = (Integer) masterIDs.get(mr.getRecordID2());
+				if (I1 == null || I2 == null) {
+					throw new BlockingException("Could not translate "
+							+ mr.getRecordID1().toString() + " and "
+							+ mr.getRecordID2().toString());
+				}
+
+				final String noteInfo = mr.getNotesAsDelimitedString();
+				MatchRecord2<Integer> mr2 =
+					new MatchRecord2(I1, I2, mr.getRecord2Role(),
+							mr.getProbability(), mr.getMatchType(), noteInfo);
+
+				retVal.writeMatch(mr2);
 			}
 
-			if (I1 == null || I2 == null) {
-				throw new BlockingException("Could not translate "
-						+ mr.getRecordID1().toString() + " and "
-						+ mr.getRecordID2().toString());
+		} finally {
+			if (mSource != null) {
+				mSource.close();
 			}
-
-			// 2009-08-17 rphall
-			// BUG FIX? clue notes added here
-			final String noteInfo = mr.getNotesAsDelimitedString();
-			MatchRecord2 mr2 =
-				new MatchRecord2(I1, I2, mr.getRecord2Role(),
-						mr.getProbability(), mr.getMatchType(), noteInfo);
-			// END BUG FIX?
-
-			retVal.writeMatch(mr2);
+			if (retVal != null) {
+				retVal.close();
+			}
+			stageIDs = null;
+			masterIDs = null;
 		}
-
-		mSource.close();
-		retVal.close();
-
-		stageIDs = null;
-		masterIDs = null;
 
 		return retVal;
 	}

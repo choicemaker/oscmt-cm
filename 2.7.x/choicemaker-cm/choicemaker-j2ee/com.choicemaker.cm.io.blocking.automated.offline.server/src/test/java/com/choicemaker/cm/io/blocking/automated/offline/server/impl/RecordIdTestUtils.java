@@ -1,3 +1,10 @@
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *******************************************************************************/
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
 import static org.junit.Assert.fail;
@@ -7,8 +14,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
+import java.util.UUID;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
@@ -50,11 +60,13 @@ public class RecordIdTestUtils {
 	}
 
 	public static List<Integer> getIdentifiersAsIntegers(int maxCount) {
-		List<Integer> retVal = new ArrayList<>();
+		Set<Integer> s = new HashSet<>();
 		int count = Math.max(getRandomSize(maxCount), 2);
 		for (int i = 0; i < count; i++) {
-			retVal.add(random.nextInt());
+			s.add(random.nextInt());
 		}
+		List<Integer> retVal = new ArrayList<>();
+		retVal.addAll(s);
 		return Collections.unmodifiableList(retVal);
 	}
 
@@ -69,9 +81,9 @@ public class RecordIdTestUtils {
 
 	public static List<String> getIdentifiersAsStrings() {
 		List<String> retVal = new ArrayList<>();
-		for (Integer i : getIdentifiersAsIntegers()) {
-			String id = String.valueOf(i);
-			retVal.add(id);
+		int count = DEFAULT_MAX_COUNT;
+		for (int i = 0; i < count; i++) {
+			retVal.add(UUID.randomUUID().toString());
 		}
 		return Collections.unmodifiableList(retVal);
 	}

@@ -16,7 +16,6 @@ package com.choicemaker.cm.core.gen;
  * Generator exception.
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.1 $ $Date: 2010/01/20 15:05:06 $
  */
 public class GenException extends Exception {
 	private static final long serialVersionUID = 2L;

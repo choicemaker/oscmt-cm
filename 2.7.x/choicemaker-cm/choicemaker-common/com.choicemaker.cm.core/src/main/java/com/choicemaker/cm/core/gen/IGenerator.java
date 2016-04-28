@@ -39,8 +39,6 @@ public interface IGenerator {
 	 *
 	 * @return   The root directory for the generated source code.
 	 * @throws   GenException  if the data cannot be read.
-	 * @see      getSourceCodePackageRoot
-	 * @see      getPackage
 	 */
 	public abstract String getSourceCodeRoot() throws GenException;
 	/**

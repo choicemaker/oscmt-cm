@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.urm.ejb;
 
 import java.rmi.RemoteException;
@@ -27,7 +24,6 @@ import com.choicemaker.cm.urm.exceptions.ModelException;
 
 /**
  * TODO
- * @version  $Revision: 1.7 $ $Date: 2010/10/27 22:19:50 $
  * @author   rphall
  */
 public class BatchQueryListener extends WorkflowControlListener{

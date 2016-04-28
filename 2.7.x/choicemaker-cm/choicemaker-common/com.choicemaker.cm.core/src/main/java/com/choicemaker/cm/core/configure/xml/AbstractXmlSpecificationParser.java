@@ -27,7 +27,6 @@ import com.choicemaker.util.Precondition;
 /**
  * XML configurator for XML configurable objects
  * @author rphall
- * @version 1.0.0
  * @since 2.5.206
  */
 public abstract class AbstractXmlSpecificationParser
@@ -101,8 +100,7 @@ public abstract class AbstractXmlSpecificationParser
 	 * @see com.choicemaker.cm.configure.XmlSpecification#toXML()
 	 * @param classLoader the class loader to use when constructing
 	 * objects
-	 * @param configurable a non-null
-	 * {@link  com.choicemaker.cm.configure.XmlConfigurable#ELEMENT_CONFIGURABLE configurable element}
+	 * @param configurable a non-null configurable element
 	 * in the XML specification
 	 * @return a non-null XmlConfigurable object
 	 * @throws ClassNotFoundException
@@ -256,13 +254,11 @@ public abstract class AbstractXmlSpecificationParser
 	 * @see #fromXML(ClassLoader,IDocument)
 	 * @param classLoader the class loader to use when constructing
 	 * objects
-	 * @param builder a non-null builder
-	 * @param xml a non-empty String conforming to the expected
-	 * {@link  com.choicemaker.cm.configure.XmlConfigurable#XML_SPECIFICATION_SCHEMA expected schema}
+	 * @param xml a non-empty String conforming to an expected schema
 	 * @return a non-null XmlConfigurable object
 	 * @throws XmlSpecificationException if an error occurs.
 	 * An error may be caused by:<ul>
-	 * <li/> Any exception listed for {@link #fromXML(ClassLoader,IDocument)
+	 * <li/> Any exception listed for {@link #fromXML(ClassLoader,IDocument)}
 	 * <li/> IOException
 	 * -- (UNEXPECTED) The specified String could not be read
 	 * </ul>
@@ -293,11 +289,7 @@ public abstract class AbstractXmlSpecificationParser
 	 * Recreates an XML-configurable object from a document.
 	 * @param classLoader the class loader to use when constructing
 	 * objects
-	 * @param document a non-null document conforming to the expected
-	 * {@link  com.choicemaker.cm.configure.XmlConfigurable#XML_SPECIFICATION_SCHEMA expected schema}
-	 * @param configurable a non-null
-	 * {@link  com.choicemaker.cm.configure.XmlConfigurable#ELEMENT_CONFIGURABLE configurable element}
-	 * in the XML specification
+	 * @param document a non-null document conforming to an expected schema
 	 * @return a non-null XmlConfigurable object
 	 * @throws XmlSpecificationException if an error occurs.
 	 * An error may be caused by:<ul>

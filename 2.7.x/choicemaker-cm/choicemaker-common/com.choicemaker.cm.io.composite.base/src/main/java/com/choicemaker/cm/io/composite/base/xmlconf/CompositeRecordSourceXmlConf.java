@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.io.composite.base.xmlconf;
 
 import java.io.File;
@@ -32,7 +29,6 @@ import com.choicemaker.util.FileUtilities;
  * Handling of composite Marked Record Pair sources.
  *
  * @author    Adam Winkel
- * @version   $Revision: 1.2 $ $Date: 2010/03/28 08:56:16 $
  */
 public class CompositeRecordSourceXmlConf implements RecordSourceXmlConfigurator {
 	public static final String EXTENSION_POINT_ID = "com.choicemaker.cm.io.composite.base.compositeRsReader";
@@ -47,12 +43,7 @@ public class CompositeRecordSourceXmlConf implements RecordSourceXmlConfigurator
 
 	/**
 	 * Add a Composite record source to the configuration.
-	 *
 	 * @param   s  The composite record source.
-	 * @param   replace  Whether an exiting probability model of the same name should be replaced.
-	 *            If the value of <code>replace</code> is <code>false</code> and a model of the
-	 *            same name already exists, an exception is thrown.
-	 * @throws  XmlConfException  if an exception occurs.
 	 */
 	public void add(RecordSource s) throws XmlConfException {
 		try {

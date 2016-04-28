@@ -15,7 +15,6 @@ package com.choicemaker.cm.compiler;
  *
  * @author   Matthis Zenger
  * @author   Martin Buechi 
- * @version  $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:35 $
  */
 public interface Modifiers {
 	/** modifiers as defined by the JVM specification

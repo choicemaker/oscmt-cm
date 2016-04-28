@@ -1,17 +1,15 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_BLOCKING_FIELD_COUNT;
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_RECORD_ID_TYPE;
+import static com.choicemaker.cm.args.OperationalPropertyNames.PN_RECORD_MATCHING_MODE;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -40,6 +38,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.ImmutableRecordIdTr
 import com.choicemaker.cm.io.blocking.automated.offline.core.MutableRecordIdTranslator;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessingEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
+import com.choicemaker.cm.io.blocking.automated.offline.core.RecordMatchingMode;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.RecValSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ValidatorBase;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
@@ -70,9 +69,6 @@ public class StartOabaMDB extends AbstractOabaMDB {
 
 	@Resource(lookup = "java:/choicemaker/urm/jms/blockQueue")
 	private Queue blockQueue;
-
-	@Resource(lookup = "java:/choicemaker/urm/jms/singleMatchQueue")
-	private Queue singleMatchQueue;
 
 	@Override
 	public void onMessage(Message inMessage) {
@@ -159,65 +155,68 @@ public class StartOabaMDB extends AbstractOabaMDB {
 				}
 				assert staging != null;
 
-				if (!isMoreThanThreshold(staging, model,
-						oabaSettings.getMaxSingle())) {
+				RecordMatchingMode mode;
+				final int maxSingle = oabaSettings.getMaxSingle();
+				if (!isMoreThanThreshold(staging, model, maxSingle)) {
 					getLogger().info("Using single record matching");
-					sendToSingleRecordMatching(data);
+					mode = RecordMatchingMode.SRM;
+					configureRecordMatchingMode(batchJob, mode);
 
 				} else {
 					getLogger().info("Using batch record matching");
-
-					MutableRecordIdTranslator<?> translator =
-						getRecordIdController()
-								.createMutableRecordIdTranslator(batchJob);
-
-					// create rec_id, val_id files
-					String blockingConfiguration =
-						oabaParams.getBlockingConfiguration();
-					String queryConfiguration =
-						this.getParametersController()
-								.getQueryDatabaseConfiguration(oabaParams);
-					String referenceConfiguration =
-							this.getParametersController()
-									.getReferenceDatabaseConfiguration(oabaParams);
-					RecValSinkSourceFactory recvalFactory =
-						OabaFileUtils.getRecValFactory(batchJob);
-					RecValService3 rvService =
-						new RecValService3(staging, master, model,
-								blockingConfiguration, queryConfiguration,
-								referenceConfiguration, recvalFactory,
-								getRecordIdController(), translator,
-								processingEntry, batchJob);
-					rvService.runService();
-					getLogger().info(
-							"Done creating rec_id, val_id files: "
-									+ rvService.getTimeElapsed());
-
-					ImmutableRecordIdTranslator<?> immutableTranslator =
-						getRecordIdController().toImmutableTranslator(
-								translator);
-					final RECORD_ID_TYPE recordIdType =
-						immutableTranslator.getRecordIdType();
-					getPropertyController().setJobProperty(batchJob,
-							PN_RECORD_ID_TYPE, recordIdType.name());
-
-					final int numBlockFields = rvService.getNumBlockingFields();
-					getPropertyController().setJobProperty(batchJob,
-							PN_BLOCKING_FIELD_COUNT,
-							String.valueOf(numBlockFields));
-
-					// create the validator after rvService
-					// Validator validator = new Validator (true, translator);
-					ValidatorBase validator =
-						new ValidatorBase(true, immutableTranslator);
-					// FIXME move this parameter to a persistent operational
-					// object
-					data.validator = validator;
-
-					updateOabaProcessingStatus(batchJob,
-							OabaProcessingEvent.DONE_REC_VAL, new Date(), null);
-					sendToBlocking(data);
+					mode = RecordMatchingMode.BRM;
+					configureRecordMatchingMode(batchJob, mode);
 				}
+
+				MutableRecordIdTranslator<?> translator =
+					getRecordIdController().createMutableRecordIdTranslator(
+							batchJob);
+
+				// create rec_id, val_id files
+				String blockingConfiguration =
+					oabaParams.getBlockingConfiguration();
+				String queryConfiguration =
+					this.getParametersController()
+							.getQueryDatabaseConfiguration(oabaParams);
+				String referenceConfiguration =
+					this.getParametersController()
+							.getReferenceDatabaseConfiguration(oabaParams);
+				RecValSinkSourceFactory recvalFactory =
+					OabaFileUtils.getRecValFactory(batchJob);
+				RecValService3 rvService =
+					new RecValService3(staging, master, model,
+							blockingConfiguration, queryConfiguration,
+							referenceConfiguration, recvalFactory,
+							getRecordIdController(), translator,
+							processingEntry, batchJob, mode);
+				rvService.runService();
+				getLogger().info(
+						"Done creating rec_id, val_id files: "
+								+ rvService.getTimeElapsed());
+
+				ImmutableRecordIdTranslator<?> immutableTranslator =
+					getRecordIdController().toImmutableTranslator(translator);
+				final RECORD_ID_TYPE recordIdType =
+					immutableTranslator.getRecordIdType();
+				getPropertyController().setJobProperty(batchJob,
+						PN_RECORD_ID_TYPE, recordIdType.name());
+
+				final int numBlockFields = rvService.getNumBlockingFields();
+				getPropertyController()
+						.setJobProperty(batchJob, PN_BLOCKING_FIELD_COUNT,
+								String.valueOf(numBlockFields));
+
+				// create the validator after rvService
+				// Validator validator = new Validator (true, translator);
+				ValidatorBase validator =
+					new ValidatorBase(true, immutableTranslator);
+				// FIXME move this parameter to a persistent operational
+				// object
+				data.validator = validator;
+
+				updateOabaProcessingStatus(batchJob,
+						OabaProcessingEvent.DONE_REC_VAL, new Date(), null);
+				sendToBlocking(data);
 
 			} else {
 				getLogger().warning(
@@ -232,6 +231,11 @@ public class StartOabaMDB extends AbstractOabaMDB {
 			}
 		}
 		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
+	}
+
+	protected void configureRecordMatchingMode(BatchJob batchJob, RecordMatchingMode mode) {
+		getPropertyController().setJobProperty(batchJob,
+				PN_RECORD_MATCHING_MODE, mode.name());
 	}
 
 	protected String throwableToString(Throwable throwable) {
@@ -312,11 +316,6 @@ public class StartOabaMDB extends AbstractOabaMDB {
 
 	private void sendToBlocking(OabaJobMessage data) {
 		MessageBeanUtils.sendStartData(data, getJmsContext(), blockQueue,
-				getLogger());
-	}
-
-	private void sendToSingleRecordMatching(OabaJobMessage data) {
-		MessageBeanUtils.sendStartData(data, getJmsContext(), singleMatchQueue,
 				getLogger());
 	}
 

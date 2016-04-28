@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.modelmaker.gui.tables.filtercluetable;
 
 import java.awt.Component;
@@ -37,7 +34,6 @@ import com.choicemaker.cm.modelmaker.gui.listeners.TableColumnListener;
  *
  * @author S. Yoakum-Stover
  * @author Arturo Falck
- * @version $Revision: 1.2 $ $Date: 2010/03/29 12:53:36 $
  */
 public class FilterClueTable extends JTable{
 

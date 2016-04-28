@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.matching.en.us;
 
 import java.util.Collection;
@@ -27,7 +24,6 @@ import com.choicemaker.util.StringUtils;
  * @see com.choicemaker.cm.matching.cfg.Parsers
  * 
  * @author    S. Yoakum-Stover
- * @version   $Revision: 1.2 $ $Date: 2010/03/27 22:16:00 $
  */
 public class StreetParser {
 	public static Collection directions = new HashSet();
@@ -435,20 +431,9 @@ public class StreetParser {
 	 * "303VernonAve12B" becomes "303 Vernon Ave 12 B".
 	 * 
 	 * @param str
-	 * @return 
 	 */
 	private String unSmush(String str) {
 		int[] space = new int[str.length() + 1];
-		//         Collection streetTypes = Colls.getCollection("streetTypes");
-		//         Iterator it = streetTypes.iterator();
-		//         while (it.hasNext()) {
-		//             String type = (String)it.next();
-		//             int index = str.indexOf(type);
-		//             if (index >=0) {
-		//                 space[index] = 1;
-		//                 space[index + type.length()] = 1;
-		//             }
-		//         }
 
 		boolean[] numbers = StringUtils.findNumbers(str);
 		boolean previous = numbers[0];

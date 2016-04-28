@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
 import static com.choicemaker.cm.batch.impl.BatchJobFileUtils.BINARY_SUFFIX;
@@ -24,7 +21,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.BlockSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ChunkDataSinkSourceFactory;
-import com.choicemaker.cm.io.blocking.automated.offline.impl.ChunkRecordIDSinkSourceFactory;
+import com.choicemaker.cm.io.blocking.automated.offline.impl.ChunkRecordIdSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparisonArrayGroupSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparisonArraySinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparisonTreeGroupSinkSourceFactory;
@@ -118,9 +115,9 @@ public class OabaFileUtils {
 				BASENAME_COMPAREGROUP_STORE, BINARY_SUFFIX);
 	}
 
-	public static ChunkRecordIDSinkSourceFactory getChunkIDFactory(BatchJob job) {
+	public static ChunkRecordIdSinkSourceFactory getChunkIDFactory(BatchJob job) {
 		String wd = BatchJobFileUtils.getWorkingDir(job);
-		return new ChunkRecordIDSinkSourceFactory(wd, BASENAME_CHUNKROW_STORE,
+		return new ChunkRecordIdSinkSourceFactory(wd, BASENAME_CHUNKROW_STORE,
 				BINARY_SUFFIX);
 	}
 
@@ -181,7 +178,7 @@ public class OabaFileUtils {
 	@SuppressWarnings("rawtypes")
 	public static IMatchRecord2Sink getCompositeMatchSink(BatchJob job) {
 		String fileName = getCompositeMatchFileName(job);
-		return new MatchRecord2CompositeSink(fileName, "txt", MAX_FILE_SIZE);
+		return new MatchRecord2CompositeSink(fileName, TEXT_SUFFIX, MAX_FILE_SIZE);
 	}
 
 	/**

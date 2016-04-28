@@ -52,7 +52,7 @@ public class ClueMakerMojo extends AbstractMojo {
 	 */
 	public static final String CLUEMAKER_PATH = "src/main/cluemaker";
 
-	private static final String EOL = System.getProperty(SystemPropertyUtils.LINE_SEPARATOR);
+	private static final String EOL = System.getProperty(SystemPropertyUtils.PN_LINE_SEPARATOR);
 
 	/** File extension for model files */
 	public static final String MODEL_FILE_PATTERN = ".model";

@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
 import java.io.PrintWriter;
@@ -35,6 +32,7 @@ import com.choicemaker.cm.batch.ProcessingEventLog;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
+import com.choicemaker.cm.io.blocking.automated.offline.core.RecordMatchingMode;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.AbaStatisticsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
@@ -233,6 +231,17 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 			BatchProcessingEvent event, Date timestamp, String info) {
 		getProcessingController().updateStatusWithNotification(job, event,
 				timestamp, info);
+	}
+
+	protected RecordMatchingMode getRecordMatchingMode(final BatchJob job) {
+		RecordMatchingMode retVal =
+			BatchJobUtils.getRecordMatchingMode(getPropertyController(), job);
+		if (retVal == null) {
+			String msg = "Null record-matching mode for job " + job.getId();
+			throw new IllegalStateException(msg);
+		}
+		assert retVal != null;
+		return retVal;
 	}
 
 	// -- Abstract call-back methods

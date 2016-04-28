@@ -27,7 +27,6 @@ import com.choicemaker.cm.core.report.Reporter;
  * @author S. Yoakum-Stover
  * @author rphall (Split ProbabilityModel into separate instance and manager
  *         types)
- * @version $Revision: 1.2 $ $Date: 2013/02/23 19:57:50 $
  */
 public class PMManager {
 

@@ -12,7 +12,6 @@ package com.choicemaker.cm.core.compiler;
 
 /**
  * @author rphall
- * @version $Revision: 1.2 $  $Date: 2010/03/24 16:59:02 $
  */
 public class UnavailableCompilerFeaturesException extends Exception {
 

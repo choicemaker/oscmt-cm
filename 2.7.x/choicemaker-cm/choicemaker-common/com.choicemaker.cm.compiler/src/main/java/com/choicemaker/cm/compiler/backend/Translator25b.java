@@ -54,7 +54,6 @@ import com.choicemaker.cm.core.compiler.CompilerException;
  * Translator for CSE (Common Subexpression Elimination).
  *
  * @author    Matthias Zenger
- * @version   $Revision: 1.2 $ $Date: 2010/03/24 20:00:54 $
  */
 public class Translator25b extends Translator25 implements TargetTags, Modifiers, ITranslator {
 	

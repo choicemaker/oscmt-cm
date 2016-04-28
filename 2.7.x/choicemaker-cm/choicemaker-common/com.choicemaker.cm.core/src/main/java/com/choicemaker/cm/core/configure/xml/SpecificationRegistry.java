@@ -13,7 +13,6 @@ package com.choicemaker.cm.core.configure.xml;
 /**
  * A registry for xml-configurable objects.
  * @author rphall
- * @version 1.0.0
  * @since 2.5.206
  */
 public interface SpecificationRegistry {

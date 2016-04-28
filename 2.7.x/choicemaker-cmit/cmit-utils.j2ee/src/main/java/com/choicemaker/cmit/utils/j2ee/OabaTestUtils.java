@@ -16,11 +16,15 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.DefaultServer
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationEntity;
+import com.choicemaker.e2.ejb.EjbPlatform;
 
 /**
  * Standardized procedures for testing intermediate stages of OABA processing
@@ -81,7 +85,7 @@ public class OabaTestUtils {
 			te.add(_os0);
 		}
 		assertTrue(_os0 != null);
-		
+
 		// Update the default or generic settings using the test parameters
 		OabaSettings _os1 = updateSettings(_os0, test);
 		final OabaSettings updatedSettings;
@@ -92,7 +96,7 @@ public class OabaTestUtils {
 			updatedSettings = _os0;
 		}
 		assertTrue(updatedSettings != null);
-	
+
 		final String hostName =
 			ServerConfigurationControllerBean.computeHostName();
 		logger.info("Computed host name: " + hostName);
@@ -183,11 +187,11 @@ public class OabaTestUtils {
 		if (s0 == null || p == null) {
 			throw new IllegalArgumentException(LOG_SOURCE + ": null constructor arg");
 		}
-		
+
 		final WellKnownTestConfiguration c = p.getTestConfiguration();
 		final int maxSingle = c.getSingleRecordMatchingThreshold();
 		boolean isDifferent = s0.getMaxSingle() != maxSingle;
-		
+
 		OabaSettings retVal;
 		if (isDifferent) {
 			retVal = new OabaSettingsEntity(s0, maxSingle);
@@ -224,6 +228,68 @@ public class OabaTestUtils {
 				&& params.getModelConfigurationName().equals(
 						expected.getModelConfigurationName()));
 
+	}
+
+	public static BatchJob createPersistentOabaJob(
+			WellKnownTestConfiguration c, EjbPlatform e2service,
+			RecordSourceController rsController,
+			OabaSettingsController oabaSettingsController,
+			ServerConfigurationController serverController,
+			OabaJobController jobController, TestEntityCounts te)
+			throws ServerConfigurationException {
+
+		final String methodName = "createPersistentOabaJob";
+		logger.entering(LOG_SOURCE, methodName);
+
+		assertTrue(c != null);
+		assertTrue(e2service != null);
+		assertTrue(rsController != null);
+		assertTrue(oabaSettingsController != null);
+		assertTrue(serverController != null);
+		assertTrue(jobController != null);
+		assertTrue(te != null);
+
+		final String externalId =
+			EntityManagerUtils.createExternalId(methodName);
+
+		final PersistableRecordSource staging =
+			rsController.save(c.getQueryRecordSource());
+		te.add(staging);
+
+		final PersistableRecordSource master =
+			rsController.save(c.getReferenceRecordSource());
+		te.add(master);
+
+		final String dbConfig0 =
+			c.getQueryDatabaseConfiguration();
+		final String blkConf0 =
+			c.getBlockingConfiguration();
+		final String dbConfig1 =
+			c.getReferenceDatabaseConfiguration();
+
+		final OabaParameters bp =
+			new OabaParametersEntity(c.getModelConfigurationName(), c
+					.getThresholds().getDifferThreshold(), c.getThresholds()
+					.getMatchThreshold(), blkConf0, staging, dbConfig0, master,
+					dbConfig1, c.getOabaTask());
+		te.add(bp);
+
+		OabaSettings oabaSettings = new OabaSettingsEntity();
+		oabaSettings = oabaSettingsController.save(oabaSettings);
+		te.add(oabaSettings);
+
+		ServerConfiguration serverConfiguration =
+			serverController.computeGenericConfiguration();
+		serverConfiguration = serverController.save(serverConfiguration);
+		te.add(serverConfiguration);
+
+		BatchJob retVal =
+			jobController.createPersistentOabaJob(externalId, bp, oabaSettings,
+					serverConfiguration);
+		te.add(retVal);
+		assertTrue(te.contains(retVal));
+
+		return retVal;
 	}
 
 	private OabaTestUtils() {

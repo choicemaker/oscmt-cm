@@ -7,12 +7,9 @@ public interface PersistableSqlRecordSource extends PersistableRecordSource {
 	/**
 	 * Returns the fully qualified class name of an implementation of DbReader
 	 *
-	 * @return the FQCN of an implementation of
-	 *         {@link com.choicemaker.cm.io.db.base.DbReader DbReader},
-	 *         {@link com.choicemaker.cm.io.db.base.DbReaderSequential
-	 *         DbReaderSequential}, or
-	 *         {@link com.choicemaker.cm.io.db.base.DbReaderParallel
-	 *         DbReaderParallel}
+	 * @return the FQCN of an implementation of com.choicemaker.cm.io.db.base.DbReader,
+	 *         com.choicemaker.cm.io.db.base.DbReaderSequential, or
+	 *         com.choicemaker.cm.io.db.base.DbReaderParallel
 	 */
 	String getDatabaseReader();
 

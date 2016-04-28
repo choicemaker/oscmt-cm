@@ -25,7 +25,6 @@ import com.choicemaker.util.IntArrayList;
  * B number 1, and C number 2. 
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/24 20:59:11 $
  * @see       Decision
  */
 public abstract class ActiveClues {

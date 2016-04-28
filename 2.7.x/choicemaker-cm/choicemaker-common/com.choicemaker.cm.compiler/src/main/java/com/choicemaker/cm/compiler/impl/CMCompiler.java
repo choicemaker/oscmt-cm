@@ -44,7 +44,6 @@ import com.choicemaker.cm.core.xmlconf.XmlConfigurator;
  *
  * @author    Matthias Zenger
  * @author    Martin Buechi
- * @version   $Revision: 1.1 $ $Date: 2010/03/24 20:10:52 $
  */
 public abstract class CMCompiler implements ICompiler {
 
@@ -75,40 +74,16 @@ public abstract class CMCompiler implements ICompiler {
 	}
 
 	protected static Logger logger = Logger.getLogger(CMCompiler.class.getName());
+	private static final String SRC = CMCompiler.class.getSimpleName();
 
 	protected static void usage() {
 		System.out.println(
 			ChoiceMakerCoreMessages.m.formatMessage(
 				"compiler.comp.usage",
-				"$Revision: 1.1 $, $Date: 2010/03/24 20:10:52 $"));
+				"2.7.1"));
 	}
 
 	protected String getClassPath() {
-//		String res = System.getProperty("java.class.path");
-//		try {
-//			Element e = XmlConfigurator.getInstance().getCore().getChild("classpath");
-//			if (e != null) {
-//				res += FileUtilities.toAbsoluteClasspath(e.getText());
-//			}
-//			e = XmlConfigurator.getInstance().getCore().getChild("reload");
-//			if (e != null) {
-//				e = e.getChild("classpath");
-//				if (e != null) {
-//					res += FileUtilities.toAbsoluteClasspath(e.getText());
-//				}
-//			}
-//		} catch (IOException ex) {
-//			logger.severe("Problem with classpath: " + ex);
-//		}
-//		IPluginDescriptor[] plugins =
-//			Platform.getPluginRegistry().getPluginDescriptors();
-//		for (int i = 0; i < plugins.length; i++) {
-//			URL[] ucp =
-//				((URLClassLoader) plugins[i].getPluginClassLoader()).getURLs();
-//			for (int j = 0; j < ucp.length; j++) {
-//				res += File.pathSeparator + ucp[j].getPath();
-//			}
-//		}
 		return ConfigurationManager.getInstance().getClassPath();
 	}
 
@@ -120,18 +95,22 @@ public abstract class CMCompiler implements ICompiler {
 
 	public int generateJavaCode(CompilationArguments arguments,
 			Writer statusOutput) throws CompilerException {
+		final String METHOD = "generateJavaCode(CompilationArguments,Writer)";
 		ICompilationUnit unit = generateJavaCodeInternal(arguments,
 			statusOutput);
 		int retVal = unit.getErrors();
+		logger.exiting(SRC, METHOD, Integer.valueOf(retVal));
 		return retVal;
 	}
 
 	/**
 	 * Returns the number of ClueMaker errors
-	 * @throws CompilerException 
+	 * @throws CompilerException
 	 */
 	public ICompilationUnit generateJavaCodeInternal(CompilationArguments arguments,
 			Writer statusOutput) throws CompilerException {
+		final String METHOD = "generateJavaCodeInternal(CompilationArguments,Writer)";
+		logger.entering(SRC, METHOD, new Object[] {arguments,statusOutput});
 
 		String file = arguments.files()[0];
 		String defaultPath = getClassPath();
@@ -153,11 +132,14 @@ public abstract class CMCompiler implements ICompiler {
 			throw new CompilerException(msg,e);
 		}
 
+		logger.exiting(SRC, METHOD, retVal);
 		return retVal;
 	}
 
 	public String compile(CompilationArguments arguments,
 			final Writer statusOutput) throws CompilerException {
+		final String METHOD = "compile(CompilationArguments,Writer)";
+		logger.entering(SRC, METHOD, new Object[] {arguments,statusOutput});
 		ICompilationUnit unit =
 			generateJavaCodeInternal(arguments, statusOutput);
 		if (unit.getErrors() == 0) {
@@ -165,7 +147,7 @@ public abstract class CMCompiler implements ICompiler {
 			File targetDir =
 				new File(ConfigurationManager.getInstance().getCompiledCodeRoot());
 			targetDir.getAbsoluteFile().mkdirs();
-			
+
 			// Create the compilation arguments
 			String targetDirPath = targetDir.getAbsolutePath();
 			String classPath = getClassPath();
@@ -244,9 +226,11 @@ public abstract class CMCompiler implements ICompiler {
 
 	public boolean compile(IProbabilityModel model, Writer statusOutput)
 		throws CompilerException {
+		final String METHOD = "compile(IProbabilityModel,Writer)";
+		logger.entering(SRC, METHOD, new Object[] {model,statusOutput});
 		CompilationArguments arguments = new CompilationArguments();
 		String[] compilerArgs = new String[1];
-		compilerArgs[0] = model.getClueFilePath();
+		compilerArgs[0] = model.getClueFileAbsolutePath();
 		arguments.enter(compilerArgs);
 		String accessorClass = compile(arguments, statusOutput);
 		if (accessorClass != null) {
@@ -268,9 +252,11 @@ public abstract class CMCompiler implements ICompiler {
 	public ImmutableProbabilityModel compile(
 			ProbabilityModelSpecification spec, Writer statusOutput)
 			throws CompilerException {
+		final String METHOD = "compile(ProbabilityModelSpecification,Writer)";
+		logger.entering(SRC, METHOD, new Object[] {spec,statusOutput});
 		CompilationArguments arguments = new CompilationArguments();
 		String[] compilerArgs = new String[1];
-		compilerArgs[0] = spec.getClueFilePath();
+		compilerArgs[0] = spec.getClueFileAbsolutePath();
 		arguments.enter(compilerArgs);
 		String accessorFQCN = compile(arguments, statusOutput);
 		ImmutableProbabilityModel retVal = null;

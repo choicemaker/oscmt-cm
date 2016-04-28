@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.io.db.gui;
 
 import java.awt.Font;
@@ -36,7 +33,7 @@ import com.choicemaker.cm.gui.utils.JavaHelpUtils;
 import com.choicemaker.cm.gui.utils.dialogs.FileChooserFactory;
 import com.choicemaker.cm.io.db.base.DataSources;
 import com.choicemaker.cm.io.db.base.util.DbMessageUtil;
-import com.choicemaker.cm.io.db.oracle.OracleMarkedRecordPairSource2;
+import com.choicemaker.cm.io.db.oracle.OracleMarkedRecordPairSource;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cm.modelmaker.gui.dialogs.MarkedRecordPairSourceGui;
 import com.choicemaker.cm.modelmaker.gui.utils.Enable;
@@ -44,14 +41,13 @@ import com.choicemaker.cm.modelmaker.gui.utils.EnablednessGuard;
 //import db.jdbc.pool.*;
 
 /**
- * The MRPSGui associated the OracleMarkedRecordPairSource2.
+ * The MRPSGui associated the OracleMarkedRecordPairSource.
  * An objects of this class would be created by the
  * DbMarkedRecordPairSourceGuiFactory.  It is used
  * by the AbstractApplication so that users can easily configure
  * and build DbMarkedRecordPairSources.
  *
  * @author S. Yoakum-Stover
- * @version $Revision: 1.2 $ $Date: 2010/03/28 09:04:19 $
  */
 public class DbMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui implements Enable {
     private static final long serialVersionUID = 1L;
@@ -118,7 +114,7 @@ public class DbMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui imple
             return;
         }
         sourceFileName.setText(source.getFileName());
-        OracleMarkedRecordPairSource2 s = (OracleMarkedRecordPairSource2) source;
+        OracleMarkedRecordPairSource s = (OracleMarkedRecordPairSource) source;
 
         conf.setText(s.getConf());
         whereField.setText(s.getSelection());
@@ -244,10 +240,10 @@ public class DbMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui imple
     }
 
     /**
-     * Builds an OracleMarkedRecordPairSource2.
+     * Builds an OracleMarkedRecordPairSource.
      */
     public void buildSource() {
-        OracleMarkedRecordPairSource2 dbSource = (OracleMarkedRecordPairSource2) source;
+        OracleMarkedRecordPairSource dbSource = (OracleMarkedRecordPairSource) source;
 
         dbSource.setDataSourceName((String) dataSource.getSelectedItem());
         dbSource.setFileName(getSourceFileName());

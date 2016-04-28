@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.modelmaker.gui.dialogs;
 
 import java.awt.BorderLayout;
@@ -19,6 +16,7 @@ import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
+import java.util.logging.Logger;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -42,10 +40,13 @@ import com.choicemaker.cm.modelmaker.gui.utils.EnablednessGuard;
  * Description
  * 
  * @author S. Yoakum-Stover
- * @version $Revision: 1.2 $ $Date: 2010/03/29 12:50:36 $
  */
 public class TrainDialog extends JDialog implements Enable {
+	
+	private static final Logger logger = Logger.getLogger(TrainDialog.class.getName());
+
 	private static final long serialVersionUID = 1L;
+
 //	private static int BASE_HEIGHT = 220;
 //	private static int MIN_WIDTH = 330;
 	private ModelMaker parent;
@@ -126,30 +127,56 @@ public class TrainDialog extends JDialog implements Enable {
 	private void addContentListeners() {
 		//trainButton
 		trainButton.addActionListener(new ActionListener() {
+
 			public void actionPerformed(ActionEvent e) {
-				try {
 					IProbabilityModel model = parent.getProbabilityModel();
 					MachineLearner cml = model.getMachineLearner();
 					if (ml != cml) {
 						model.setMachineLearner(ml);
 					}
+
+					String msg = null;
+					boolean shouldDispose = false;
 					if (trainDialogPlugin.isParametersValid()) {
-						trainDialogPlugin.set();
-						boolean success =
-							parent.train(
-								recompile.isSelected(),
-								enableClues.isSelected(),
-								enableRules.isSelected(),
-								Integer.parseInt(firingThresholdField.getText()),
-								andTest);
-						if (success) {
-							dispose();
+
+						String strFiringThreshold = firingThresholdField.getText();
+						try {
+							int firingThreshold = Integer.parseInt(strFiringThreshold);
+							trainDialogPlugin.set();
+							boolean success = parent.train(
+									recompile.isSelected(),
+									enableClues.isSelected(),
+									enableRules.isSelected(),
+									firingThreshold,
+									andTest);
+							if (success) {
+								msg = "Successfully trained model: " + model;
+								logger.info(msg);
+							} else {
+								msg = "Failed to train model: " + model;
+								logger.severe(msg);
+							}
+							shouldDispose = true;
+
+						} catch (NumberFormatException ex) {
+							msg = "Invalid firing threshold: " + strFiringThreshold;
+							logger.severe(msg);
+							assert shouldDispose == false;
 						}
+
+					} else {
+						msg = "Training aborted: invalid training parameter(s)";
+						logger.severe(msg);
+						assert shouldDispose == false;
 					}
-				} catch (NumberFormatException ex) {
-					// ignore
-				}
-			}
+
+					assert msg != null ;
+					parent.postUserMessage(msg);
+					if (shouldDispose) {
+						dispose();
+					}
+			} // actionPerformed
+
 		});
 
 		//cancelButton

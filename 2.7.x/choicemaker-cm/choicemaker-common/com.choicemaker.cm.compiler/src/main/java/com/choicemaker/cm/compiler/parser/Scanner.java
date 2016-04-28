@@ -23,7 +23,6 @@ import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
  * The lexical analyzer of the ClueMaker compiler
  *
  * @author   Matthias Zenger
- * @version  $Revision: 1.2 $ $Date: 2010/03/24 20:14:09 $
  */
 public class Scanner implements Characters, Tokens {
 

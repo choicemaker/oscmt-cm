@@ -46,10 +46,9 @@ import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
  *
  * @author Matthias Zenger
  * @author Martin Buechi
- * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:36 $
  */
 abstract class CompilationUnit implements Tags, ICompilationUnit {
-	
+
 	private static final Logger logger = Logger.getLogger(CompilationUnit.class.getName());
 
 	/**
@@ -361,7 +360,7 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 	 *            The name of the record.
 	 */
 	public void addNestedRecord(String className, String typeName,
-			String fieldName) throws CompilerException {
+			String recordName) throws CompilerException {
 		// Do actual addition to symbol table.
 
 		// get the class symbol
@@ -370,13 +369,13 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 					+ "." + className);
 		// create a field symbol for the nested record
 		VarSymbol v =
-			new VarSymbol(fieldName.intern(), new Type.ArrayType(
+			new VarSymbol(recordName.intern(), new Type.ArrayType(
 					new DeriveType(this).typeOf(typeName)), Modifiers.PUBLIC, c);
 		// enter the field symbol into the member table of c
 		c.members().enter(v);
 
 		// System.out.println("Added nested record " + typeName + " " +
-		// fieldName +
+		// recordName +
 		// " to holder class " + className);
 	}
 
@@ -475,7 +474,7 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 
 	/**
 	 * Get the value of packageName.
-	 * 
+	 *
 	 * @return value of packageName.
 	 */
 	public String getPackageName() {
@@ -484,7 +483,7 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 
 	/**
 	 * Set the value of packageName.
-	 * 
+	 *
 	 * @param v
 	 *            Value to assign to packageName.
 	 */
@@ -637,24 +636,11 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 		return warnings;
 	}
 
-	// /**
-	// * Compiles a ClueMaker expression into a (sequence of) Java statement(s)
-	// * that assign the value of the expression to the variable.
-	// * Used for compiling validity, pre-condition, and derived fields.
-	// *
-	// * Might be better to create intermediate file.
-	// *
-	// * @param className The name of the class in which this expression occurs.
-	// * @param fieldName The name of the field to which this expression
-	// relates.
-	// * @param exp The ClueMaker expression to be compiled.
-	// * @param variableToAssignTo The name of the variable to which the
-	// * expression must be assigned.
-	// * @return Java statements suitable to be inserted into the class.
-	// * @throws SomeException if an error occurs during compilation.
-	// */
-	// public String compileExpression(String className, String exp, String
-	// variableToAssignTo) throws IllegalArgumentException {
-	// return "";
-	// }
+	public String toString() {
+		return "CompilationUnit [source=" + source + ", errors=" + errors
+				+ ", warnings=" + warnings + ", clueSetFileName="
+				+ clueSetFileName + ", packageName=" + packageName
+				+ ", schemaName=" + schemaName + "]";
+	}
+
 }

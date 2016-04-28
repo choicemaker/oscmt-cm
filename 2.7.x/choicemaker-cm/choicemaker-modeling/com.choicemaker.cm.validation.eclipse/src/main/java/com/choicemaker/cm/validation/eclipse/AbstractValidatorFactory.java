@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.validation.eclipse;
 
 import java.io.PrintWriter;
@@ -30,7 +27,6 @@ import com.choicemaker.util.StringUtils;
  * A base class for validator factories.
  *
  * @author rphall
- * @version $Revision: 1.2 $ $Date: 2010/03/29 14:44:54 $
  */
 public abstract class AbstractValidatorFactory implements IValidatorFactory {
 
@@ -213,7 +209,7 @@ public abstract class AbstractValidatorFactory implements IValidatorFactory {
 	}
 
 	/**
-	 * The {@link setHandledValidatorExtensionPoint(String)} method must be
+	 * The {@link #setHandledValidatorExtensionPoint(String)} method must be
 	 * called after construction and before other methods are used.
 	 */
 	public AbstractValidatorFactory() {
@@ -310,7 +306,7 @@ public abstract class AbstractValidatorFactory implements IValidatorFactory {
 	 * Abstract, factory-dependent method that must be implemented by
 	 * subclasses.
 	 * 
-	 * @param els
+	 * @param el
 	 *            ConfigurationElements associated with a validator extension.
 	 * @return the validator specified by the extension.
 	 * @throws Exception
@@ -423,7 +419,7 @@ public abstract class AbstractValidatorFactory implements IValidatorFactory {
 	 * Abstract, factory-dependent method that must be implemented by
 	 * subclasses.
 	 * 
-	 * @param els
+	 * @param el
 	 *            ConfigurationElements associated with a validator extension.
 	 * @return the plugin name of the validator
 	 * @throws Exception

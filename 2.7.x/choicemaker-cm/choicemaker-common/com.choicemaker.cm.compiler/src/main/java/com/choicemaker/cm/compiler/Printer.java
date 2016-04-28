@@ -52,7 +52,6 @@ import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
  * 
  * @author   Matthias Zenger
  * @author   Martin Buechi
- * @version  $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:35 $
  */
 public class Printer implements Visitor, Tags {
 
@@ -215,7 +214,7 @@ public class Printer implements Visitor, Tags {
 		println(
 			ChoiceMakerCoreMessages.m.formatMessage(
 				"compiler.printer.generated",
-				"$Revision: 1.1.1.1 $, $Date: 2009/05/03 16:02:35 $"));
+				"2.7.1"));
 		println(ChoiceMakerCoreMessages.m.formatMessage("compiler.printer.file", filename));
 		println(ChoiceMakerCoreMessages.m.formatMessage("compiler.printer.date", new Date()));
 		println();

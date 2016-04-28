@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.io.xml.base;
 
 import java.io.BufferedInputStream;
@@ -41,7 +38,6 @@ import com.choicemaker.util.FileUtilities;
  * Description
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/28 09:18:16 $
  */
 public class XmlMarkedRecordPairSource
 	extends XMLFilterImpl
@@ -359,7 +355,7 @@ public class XmlMarkedRecordPairSource
 
 	/**
 	 * Set the value of xmlFileName.
-	 * @param v  Value to assign to xmlFileName.
+	 * @param fn  Value to assign to xmlFileName.
 	 */
 	public void setRawXmlFileName(String fn) {
 		this.rawXmlFileName = fn;

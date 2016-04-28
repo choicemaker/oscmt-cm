@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.modelmaker.gui;
 
 // import static com.choicemaker.cm.core.PropertyNames.*;
@@ -115,22 +112,21 @@ import com.choicemaker.util.IntArrayList;
  *
  * @author Martin Buechi
  * @author S. Yoakum-Stover
- * @version $Revision: 1.3 $ $Date: 2010/03/29 12:38:18 $
  */
 public class ModelMaker extends JFrame implements CMPlatformRunnable {
 
 	private static final long serialVersionUID = 1L;
 
 	public static Logger logger = Logger.getLogger(ModelMaker.class.getName());
-	
+
 	public static String PLUGIN_APPLICATION_ID = "com.choicemaker.cm.modelmaker.ModelMaker";
 
 	public static final int CLUES = 1;
 	public static final int RULES = 2;
-	
+
 	public static final int EXIT_OK = 0;
 	public static final int EXIT_ERROR = 1;
-	
+
 	private final Object statusSynchronization = new Object();
 	private boolean isReady = false;
 	private boolean doWait = true;
@@ -165,7 +161,7 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 			return returnCode;
 		}
 	}
-	
+
 	protected void setReturnCode(int returnCode) {
 		if (returnCode != EXIT_OK && returnCode != EXIT_ERROR) {
 			logger.warning("Ignoring invalid return code: " + returnCode
@@ -704,38 +700,38 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 
 	public void postProbabilityModelInfo() {
 		if (probabilityModel != null) {
-			postInfo(ChoiceMakerCoreMessages.m.formatMessage(
+			postUserMessage(ChoiceMakerCoreMessages.m.formatMessage(
 					"train.gui.modelmaker.model.name",
 					probabilityModel.getModelName()));
-			postInfo(ChoiceMakerCoreMessages.m.formatMessage(
+			postUserMessage(ChoiceMakerCoreMessages.m.formatMessage(
 					"train.gui.modelmaker.model.clue.file.name",
 					probabilityModel.getClueFilePath()));
-			postInfo(ChoiceMakerCoreMessages.m.formatMessage(
+			postUserMessage(ChoiceMakerCoreMessages.m.formatMessage(
 					"train.gui.modelmaker.model.schema.file.name",
 					probabilityModel.getAccessor().getSchemaFileName()));
-			postInfo(ChoiceMakerCoreMessages.m.formatMessage(
+			postUserMessage(ChoiceMakerCoreMessages.m.formatMessage(
 					"train.gui.modelmaker.model.last.train.user",
 					probabilityModel.getUserName()));
-			postInfo(ChoiceMakerCoreMessages.m.formatMessage(
+			postUserMessage(ChoiceMakerCoreMessages.m.formatMessage(
 					"train.gui.modelmaker.model.last.train.date",
 					probabilityModel.getLastTrainingDate()));
-			postInfo(ChoiceMakerCoreMessages.m.formatMessage(
+			postUserMessage(ChoiceMakerCoreMessages.m.formatMessage(
 					"train.gui.modelmaker.model.last.train.source",
 					probabilityModel.getTrainingSource()));
-			postInfo(probabilityModel.isTrainedWithHolds() ? "Trained with holds"
+			postUserMessage(probabilityModel.isTrainedWithHolds() ? "Trained with holds"
 					: "Trained without holds");
-			postInfo(ChoiceMakerCoreMessages.m.formatMessage(
+			postUserMessage(ChoiceMakerCoreMessages.m.formatMessage(
 					"train.gui.modelmaker.model.last.train.firing.threshold",
 					new Integer(probabilityModel.getFiringThreshold())));
 			MachineLearner ml = probabilityModel.getMachineLearner();
 			if (ml != null && !(ml instanceof DoNothingMachineLearning)) {
-				postInfo(ChoiceMakerCoreMessages.m.formatMessage(
+				postUserMessage(ChoiceMakerCoreMessages.m.formatMessage(
 						"train.gui.modelmaker.model.last.train.ml",
 						MlGuiFactories.getGui(probabilityModel
 								.getMachineLearner())));
 				String modelInfo = ml.getModelInfo();
 				if (modelInfo != null) {
-					postInfo(modelInfo);
+					postUserMessage(modelInfo);
 				}
 			}
 		}
@@ -780,7 +776,7 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 		try {
 			ProbabilityModelsXmlConf.saveModel(pm);
 			// logger.info("Saved probability model to disk: " + pm.getName());
-			postInfo(ChoiceMakerCoreMessages.m.formatMessage(
+			postUserMessage(ChoiceMakerCoreMessages.m.formatMessage(
 					"train.gui.modelmaker.model.saved", pm.getModelName()));
 		} catch (ModelConfigurationException ex) {
 			throw new OperationFailedException(
@@ -803,6 +799,9 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 	}
 
 	public boolean buildProbabilityModel(IProbabilityModel pm) {
+		if (pm == null) {
+			throw new IllegalArgumentException("null probability model");
+		}
 		Cursor cursor = getCursor();
 		setCursor(new Cursor(Cursor.WAIT_CURSOR));
 		multiSourceLists[0] = null;
@@ -810,14 +809,15 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 		setEvaluated(false);
 		boolean success = false;
 		try {
-			CompilerFactory factory = CompilerFactory.getInstance ();
+			CompilerFactory factory = CompilerFactory.getInstance();
 			ICompiler compiler = factory.getDefaultCompiler();
 			success = compiler.compile(pm, messagePanel.getWriter());
 		} catch (CompilerException ex) {
 			// TODO FIXME error message for compiler exception
-			logger.severe(
-					new LoggingObject("TODO FIXME", probabilityModel
-							.getModelFilePath()).toString() + ": " + ex);
+			String msg =
+				"failed to build model: " + pm.toString() + ": "
+						+ ex.toString();
+			logger.severe(msg);
 		}
 		setCursor(cursor);
 		return success;
@@ -1019,9 +1019,11 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 					}
 					multiSourceLists[usedMultiSource] = sourceList;
 				} catch (IOException ex) {
-					throw new OperationFailedException(
-						ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.source.list.retrieve.error"),
-						ex);
+					String s = ex.toString();
+					String msg = ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.source.list.retrieve.error");
+					msg += ": " + s;
+					postUserMessage(msg);
+					throw new OperationFailedException(msg, ex);
 				}
 			} else {
 				sourceList = multiSourceLists[usedMultiSource];
@@ -1182,12 +1184,12 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.wait"),
 				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.evaluation.evaulate"));
 		if (interrupted) {
-			postInfo("Clue evaluation cancelled.");
+			postUserMessage("Clue evaluation cancelled.");
 			multiSourceLists[usedMultiSource] = null;
 			setEvaluated(false);
 		} else {
 			long deltaT = System.currentTimeMillis() - t0;
-			postInfo(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.evaluation.complete", new Long(deltaT)));
+			postUserMessage(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.evaluation.complete", new Long(deltaT)));
 			setEvaluated(haveSourceList());
 		}
 	}
@@ -1226,6 +1228,10 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 		int firingThreshold,
 		boolean andTest) {
 		//logger.fine("train called.");
+		if (this.probabilityModel == null) {
+			throw new IllegalStateException("null probability model");
+		}
+
 		long t0 = System.currentTimeMillis();
 		if (usedMultiSource == 1 && multiSources[0] != null) {
 			usedMultiSource = 0;
@@ -1236,6 +1242,9 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 		if (recompile && probabilityModel.needsRecompilation()) {
 			boolean success = buildProbabilityModel(probabilityModel);
 			if (!success) {
+				String msg = "Failed to build model: " + probabilityModel;
+				logger.severe(msg);
+				messagePanel.postMessage(msg);
 				return false;
 			}
 		}
@@ -1259,7 +1268,7 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 							// NOTE: to undo this, change "true" to "false".
 							Object ret = trainer.train();
 							if (true && ret != null) {
-								postInfo(ret.toString());
+								postUserMessage(ret.toString());
 							}
 						}
 					}
@@ -1276,7 +1285,7 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.wait"),
 				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.train.train"));
 		if (interrupted) {
-			postInfo("Training cancelled.");
+			postUserMessage("Training cancelled.");
 			probabilityModel.endMultiPropertyChange();
 			multiSourceLists[usedMultiSource] = null;
 			setEvaluated(false);
@@ -1288,7 +1297,7 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 				probabilityModel.setTrainedWithHolds(isIncludeHolds());
 				probabilityModel.setUserName(System.getProperty("user.name"));
 				long deltaT = System.currentTimeMillis() - t0;
-				postInfo(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.train.complete", new Long(deltaT)));
+				postUserMessage(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.train.complete", new Long(deltaT)));
 				probabilityModel.endMultiPropertyChange();
 				if (andTest && usedMultiSource == 0 && multiSources[1] != null) {
 					evaluateClues();
@@ -1457,10 +1466,13 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 	/**
 	 * Posts Info message to the MessagePanel.
 	 */
-	private void postInfo(String s) {
-//		String displayString =
-//			ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.message.info", s) + Constants.LINE_SEPARATOR;
-//		messagePanel.postMessage(displayString);
+	public void postUserMessage
+
+	(String s) {
+		// String displayString =
+		// ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.message.info",
+		// s) + Constants.LINE_SEPARATOR;
+		// messagePanel.postMessage(displayString);
 		this.getUserMessages().postInfo(s);
 	}
 
@@ -1588,7 +1600,7 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 	/**
 	 * Performs all initializations for an instance to that it is ready to
 	 * {@link run(Object) run}.
-	 * 
+	 *
 	 * @param args2
 	 *            typically a non-null String array. Other types, including
 	 *            null, are ignored.
@@ -1650,21 +1662,21 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 				JOptionPane.ERROR_MESSAGE);
 			programExit(EXIT_ERROR);
 		}
-		
+
 		// Set the default return code (it may overridden later)
 		setReturnCode(EXIT_OK);
-		
+
 		// Signal that the instance is ready to be displayed
 		setReady(true);
 
 		logger.info("ModelMaker startup complete");
 	}
-		
+
 	/**
 	 * Displays the GUI of an instance; waits for user input; and tears down the
 	 * GUI when the user indirectly invokes {@link #programExit(int)} through
 	 * some menu choice.
-	 * 
+	 *
 	 * @param args2
 	 *            typically a non-null String array. Other types, including
 	 *            null, are ignored.
@@ -1672,13 +1684,13 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 	 *         invoked.
 	 */
 	public Object run(Object args2) {
-		
+
 		// Get this instance ready to display a GUI
 		startup(args2);
 
 		// Display the GUI and wait for user input
 		display();
-		
+
 		// Wait for programExit(int) to be invoked
 		while(isWait()) {
 			synchronized(this) {
@@ -1691,7 +1703,7 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 				setWait(false);
 			}
 		}
-		
+
 		// Tear down the GUI
 		tearDown();
 

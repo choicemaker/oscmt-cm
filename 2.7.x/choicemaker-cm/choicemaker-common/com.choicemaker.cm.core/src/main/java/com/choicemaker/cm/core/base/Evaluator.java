@@ -22,7 +22,6 @@ import com.choicemaker.cm.core.Record;
  * by the Evaluator's specific to machine learning techniques.
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.3 $ $Date: 2010/09/02 00:05:53 $
  */
 public abstract class Evaluator {
 	/** The probability model. */
@@ -177,8 +176,6 @@ public abstract class Evaluator {
 	 * <p>
 	 * Subclasses should override the default, do-nothing method provided
 	 * by this class.
-	 * @author rphall
-	 * @since 2010-08-11
 	 */
 	public String getProbabilityDetails(ActiveClues a) {
 		return "";

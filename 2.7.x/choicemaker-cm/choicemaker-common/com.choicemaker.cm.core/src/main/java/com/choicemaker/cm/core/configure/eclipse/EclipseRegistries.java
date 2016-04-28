@@ -19,7 +19,6 @@ import com.choicemaker.util.Precondition;
 /**
  * A collection of eclipse-based registries.
  * @author rphall
- * @version $Revision: 1.1 $ $Date: 2010/03/24 18:04:31 $
  */
 public class EclipseRegistries {
 

@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+/*******************************************************************************
+ * Copyright (c) 2015, 2016 ChoiceMaker LLC and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.core;
 
 import java.beans.PropertyChangeListener;
@@ -19,7 +16,6 @@ import com.choicemaker.cm.core.report.Report;
 
 /**
  * @author rphall
- * @version $Revision: 1.1 $ $Date: 2010/03/24 17:00:57 $
  */
 public interface ImmutableProbabilityModel {
 	
@@ -72,12 +68,21 @@ public interface ImmutableProbabilityModel {
 	String getAccessorClassName();
 
 	/**
-	 * Returns the file path of the ClueMaker file that defines the ClueSet of
-	 * this model. In future versions of ChoiceMaker, models may not be
-	 * associated with schema ClueMaker files, if and when other languages
-	 * besides ClueMaker are used to define ClueSets.
+	 * Returns the file path of the clue definition file (*.clues) relative to
+	 * the clue weights file (*.model). (Caveat: In future versions of
+	 * ChoiceMaker, the extensions for clue and weight files may change, or
+	 * models may be persisted as database entries rather than files.)<br/>
+	 * <br/>
+	 * Note: The relative path is often problematic (although it is required in
+	 * some contexts). In many contexts, the absolute file path may be
+	 * preferred; see {@link #getClueFileAbsolutePath()}.
 	 */
 	String getClueFilePath();
+
+	/**
+	 * Returns an absolute path (possibly null) to the clue definition file.
+	 */
+	String getClueFileAbsolutePath();
 
 	/** Returns the clue set instance used by this model */
 	ClueSet getClueSet();
@@ -92,8 +97,6 @@ public interface ImmutableProbabilityModel {
 	 * correspondence is a convention enforced by the ClueMaker language, and it
 	 * may not be enforced in future versions of ChoiceMaker, if and when other
 	 * languages besides ClueMaker are used to define ClueSets.
-	 * 
-	 * @return
 	 */
 	String getClueSetName();
 
@@ -150,6 +153,15 @@ public interface ImmutableProbabilityModel {
 
 	/** Returns the path to the probability model weights file (*.model) */
 	String getModelFilePath();
+
+//	/**
+//	 * A path to the model weights file (*.model) relative to the application
+//	 * working directory.
+//	 */
+//	String getWeightFilePath();
+//
+//	/** An absolute path to the model weights file (*.model) */
+//	String getWeightFileAbsolutePath();
 
 	/**
 	 * Returns the configuration name of a probability model, as registered with

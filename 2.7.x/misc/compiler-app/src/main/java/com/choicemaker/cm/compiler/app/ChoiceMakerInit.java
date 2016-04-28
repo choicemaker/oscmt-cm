@@ -1,6 +1,4 @@
 /*
- * @(#)$RCSfile: ChoiceMakerInit.java,v $        $Revision: 1.6 $ $Date: 2006/01/28 14:32:25 $
- *
  * Copyright (c) 2006 ChoiceMaker Technologies, Inc.
  * 48 Wall Street, 11th Floor, New York, NY 10005
  * All rights reserved.

@@ -55,7 +55,6 @@ import com.choicemaker.util.FileUtilities;
  * @author S. Yoakum-Stover
  * @author rphall (Split ProbabilityModel into separate instance and manager
  *         types)
- * @version $Revision: 1.1 $ $Date: 2010/03/24 18:02:30 $
  * @see PMManager
  */
 public class MutableProbabilityModel implements IProbabilityModel {
@@ -212,8 +211,27 @@ public class MutableProbabilityModel implements IProbabilityModel {
 	// return clueSetPath;
 	// }
 
+	/**
+	 * Returns the file path of the clue definition file (*.clues) relative to
+	 * the clue weights file (*.model).
+	 * 
+	 * @see #getClueFileAbsolutePath()
+	 */
 	public String getClueFilePath() {
 		return clueFilePath;
+	}
+
+	/**
+	 * Returns an absolute path, if {@link #getClueFile()} is not null,
+	 * otherwise returns null.
+	 */
+	public String getClueFileAbsolutePath() {
+		String retVal = null;
+		File f = getClueFile();
+		if (f != null) {
+			retVal = f.getAbsolutePath();
+		}
+		return retVal;
 	}
 
 	public File getClueFile() {
@@ -234,8 +252,11 @@ public class MutableProbabilityModel implements IProbabilityModel {
 		int start = cd.getStartLineNumber();
 		int end = cd.getEndLineNumber();
 		int len = end - start;
+//		File clueFile = getClueFile();
+//		String clueFilePath = clueFile.getAbsolutePath();
+		String clueFilePath = getClueFileAbsolutePath();
 		BufferedReader in =
-			new BufferedReader(new FileReader(getClueFilePath()));
+			new BufferedReader(new FileReader(clueFilePath));
 		for (int i = 1; i < start && in.ready(); ++i) {
 			in.readLine();
 		}
@@ -537,12 +558,33 @@ public class MutableProbabilityModel implements IProbabilityModel {
 	 * {@link #getModelName() model configuration name} that is associated with
 	 * in the collection is not changed.
 	 * 
-	 * @param modelFilePath
+	 * @param path
 	 *            The new file path.
 	 */
-	public void setModelFilePath(String filePath) {
-		this.modelFilePath = filePath;
-		setModelName(NameUtils.getNameFromFilePath(filePath));
+	public void setModelFilePath(String path) {
+		if (path == null) {
+			throw new IllegalArgumentException("null model file path");
+		} else {
+			path = path.trim();
+			if (path.isEmpty()) {
+				throw new IllegalArgumentException("empty model file path");
+			}
+		}
+		this.modelFilePath = path;
+		String name = NameUtils.getNameFromFilePath(path);
+		if (name == null || name.trim().isEmpty()) {
+			throw new IllegalArgumentException(
+					"Null or empty model name from file path '" + path + "'");
+		}
+		setModelName(name);
+
+		assert getModelFilePath() != null;
+		assert getModelFilePath().equals(getModelFilePath().trim());
+		assert !getModelFilePath().isEmpty();
+
+		assert getModelName() != null;
+		assert getModelName().equals(getModelName().trim());
+		assert !getModelName().isEmpty();
 	}
 
 	/**
@@ -576,7 +618,15 @@ public class MutableProbabilityModel implements IProbabilityModel {
 	}
 
 	public void setModelName(String name) {
-		String oldName = this.modelName;
+		if (name == null) {
+			throw new IllegalArgumentException("null model name");
+		} else {
+			name = name.trim();
+			if (name.isEmpty()) {
+				throw new IllegalArgumentException("blank model name");
+			}
+		}
+ 		String oldName = this.modelName;
 		this.modelName = name;
 		if (!multiPropertyChange) {
 			propertyChangeListeners.firePropertyChange(NAME, oldName, name);

@@ -56,12 +56,7 @@ import com.choicemaker.cm.core.xmlconf.XmlParserFactory;
  *   <li>Generates holder classes.</li>
  *   <li>Soon: Will generate Accessor class.</li>
  * </ul>
- *
- * @todo      Type checking.
- * @todo      Name clashes (fields, records, keywords)
- * @todo      Generate accessor class.
  * @author    Martin Buechi
- * @version   $Revision: 1.3 $ $Date: 2010/03/24 20:05:32 $
  */
 public class GeneratorImpl implements IGenerator {
 
@@ -168,8 +163,6 @@ public class GeneratorImpl implements IGenerator {
 	 *
 	 * @return   The root directory for the generated source code.
 	 * @throws   GenException  if the data cannot be read.
-	 * @see      getSourceCodePackageRoot
-	 * @see      getPackage
 	 */
 	public String getSourceCodeRoot() throws GenException {
 		return ConfigurationManager.getInstance().getGeneratedSourceRoot();

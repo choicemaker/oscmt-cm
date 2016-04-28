@@ -10,12 +10,13 @@
  */
 package com.choicemaker.cm.core.util;
 
+import com.choicemaker.util.MessageUtil;
+
 /**
  * A LoggingObject is a logging message that
  * can take parameters.
  * 
  * @author   Adam Winkel
- * @version  $Revision: 1.2 $ $Date: 2010/03/27 21:20:20 $
  */
 public class LoggingObject {
 

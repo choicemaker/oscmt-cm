@@ -26,7 +26,6 @@ import com.choicemaker.cm.core.RecordSource;
  * Evaluation of matches.
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/24 21:06:47 $
  */
 public class RecordDecisionMaker {
 

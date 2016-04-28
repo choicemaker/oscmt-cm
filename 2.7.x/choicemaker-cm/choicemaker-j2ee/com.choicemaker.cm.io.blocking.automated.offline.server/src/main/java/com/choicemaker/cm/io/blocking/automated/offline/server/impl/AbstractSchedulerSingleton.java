@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_CHUNK_FILE_COUNT;
@@ -24,6 +21,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.ejb.FinderException;
+import javax.jms.JMSContext;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.ObjectMessage;
@@ -48,6 +46,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkDataSinkSourc
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessingEvent;
+import com.choicemaker.cm.io.blocking.automated.offline.core.RecordMatchingMode;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.ChunkDataStore;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.MatchWriterMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
@@ -69,43 +68,47 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 	private static final long serialVersionUID = 271L;
 
 	// FIXME REMOVEME (after operational properties are completed)
-	protected static final String DELIM = "|";
+	private static final String DELIM = "|";
 
 	// -- Session data
 
-	protected RecordSource[] stageRS = null;
+	private RecordSource[] stageRS = null;
 
-	protected RecordSource[] masterRS = null;
+	private RecordSource[] masterRS = null;
 
 	// This counts the number of messages sent to matcher and number of done
 	// messages got back.
-	protected int countMessages;
+	private int countMessages;
 
 	// this indicates which chunks is currently being processed.
-	protected int currentChunk = -1;
+	private int currentChunk = -1;
 
-	protected long numCompares;
+	private long numCompares;
 
-	protected long numMatches;
+	private long numMatches;
 
-	protected long currentJobID = -1;
+	private long currentJobID = -1;
 
 	// time trackers
-	protected long timeStart;
-	protected long timeReadData;
-	protected long timegc;
+	private long timeStart;
+	private long timeReadData;
+	private long timegc;
 
 	// array size = number of processors
 	// these time tracker are active only in getLogger() debug
-	protected long[] timeWriting;
-	protected long[] inHMLookUp;
-	protected long[] inCompare;
+	private long[] timeWriting;
+	private long[] inHMLookUp;
+	private long[] inCompare;
 
-	// number of processors to use
-	protected int numProcessors;
+	// number of processing threads to use -- write once
+	private int numProcessors;
+
+	private int getNumProcessors() {
+		return numProcessors;
+	}
 
 	// max chunk
-	protected int maxChunkSize;
+	private int maxChunkSize;
 
 	// -- Callbacks
 
@@ -121,6 +124,8 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 
 	protected abstract ProcessingController getProcessingController();
 
+	protected abstract JMSContext getJmsContext();
+
 	protected abstract Logger getLogger();
 
 	protected abstract Logger getJMSTrace();
@@ -134,6 +139,9 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 			ProcessingEvent event, Date timestamp, String info);
 
 	protected abstract void sendToMatchDebup(BatchJob job, OabaJobMessage sd);
+
+	protected abstract void sendToSingleRecordMatching(BatchJob job,
+			OabaJobMessage sd);
 
 	// -- Message processing
 
@@ -189,8 +197,10 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 					countMessages = 0;
 					maxChunkSize = oabaSettings.getMaxChunkSize();
 					numProcessors = serverConfig.getMaxChoiceMakerThreads();
+					setMaxTempPairwiseIndex(batchJob,numProcessors);
 					getLogger().info("Maximum chunk size: " + maxChunkSize);
-					getLogger().info("Number of processors: " + numProcessors);
+					getLogger().info("Number of processing threads: " + getNumProcessors());
+					getLogger().info("Max index for intermediate pairwise result files: " + getNumProcessors());
 
 					ProcessingEventLog processingLog =
 						getProcessingController().getProcessingLog(batchJob);
@@ -208,9 +218,9 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 							timeReadData = 0;
 							timegc = 0;
 
-							timeWriting = new long[numProcessors];
-							inCompare = new long[numProcessors];
-							inHMLookUp = new long[numProcessors];
+							timeWriting = new long[getNumProcessors()];
+							inCompare = new long[getNumProcessors()];
+							inHMLookUp = new long[getNumProcessors()];
 						}
 
 						// start matching
@@ -348,7 +358,7 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 
 					// writing out time break downs
 					if (getLogger().isLoggable(Level.FINE)) {
-						for (int i = 0; i < numProcessors; i++) {
+						for (int i = 0; i < getNumProcessors(); i++) {
 							getLogger().fine(
 									"Processor " + i + " writing time: "
 											+ timeWriting[i] + " lookup time: "
@@ -363,15 +373,42 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 		} // end if abort requested
 	}
 
+	protected RecordMatchingMode getRecordMatchingMode(final BatchJob job) {
+		RecordMatchingMode retVal =
+			BatchJobUtils.getRecordMatchingMode(getPropertyController(), job);
+		if (retVal == null) {
+			String msg = "Null record-matching mode for job " + job.getId();
+			throw new IllegalStateException(msg);
+		}
+		assert retVal != null;
+		return retVal;
+	}
+
 	/**
 	 * This method is called when all the chunks are done.
 	 */
 	protected final void nextSteps(final BatchJob job, OabaJobMessage sd)
 			throws BlockingException {
-		cleanUp(job, sd);
-		sendToUpdateStatus(job, OabaProcessingEvent.DONE_MATCHING_DATA,
+
+		// Update the processing status and remove intermediate files
+		sendToUpdateStatus(job, OabaProcessingEvent.DONE_MATCHING_CHUNKS,
 				new Date(), null);
-		sendToMatchDebup(job, sd);
+		cleanUp(job, sd);
+
+		// Next processing stage depends on the record-matching mode
+		RecordMatchingMode mode = getRecordMatchingMode(job);
+		switch (mode) {
+		case SRM:
+			sendToSingleRecordMatching(job, sd);
+			break;
+		case BRM:
+			sendToUpdateStatus(job, OabaProcessingEvent.DONE_MATCHING_DATA,
+					new Date(), null);
+			sendToMatchDebup(job, sd);
+			break;
+		default:
+			throw new Error("Unexpected mode: " + mode);
+		}
 	}
 
 	/**
@@ -465,7 +502,7 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 		BatchJob batchJob = getJobController().findBatchJob(jobId);
 
 		// This is because tree ids start with 1 and not 0.
-		for (int i = 1; i <= numProcessors; i++) {
+		for (int i = 1; i <= getNumProcessors(); i++) {
 			@SuppressWarnings("rawtypes")
 			IMatchRecord2Sink mSink =
 				OabaFileUtils.getMatchChunkFactory(batchJob).getSink(i);
@@ -517,13 +554,17 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 		MemoryEstimator.writeMem();
 
 		// Send messages to matchers. Matcher indices are one-based.
-		for (int i = 1; i <= numProcessors; i++) {
+		for (int i = 1; i <= getNumProcessors(); i++) {
 			OabaJobMessage sd2 = new OabaJobMessage(sd);
 			sd2.treeIndex = i;
 			countMessages++;
 			sendToMatcher(sd2);
 			getLogger().info("outstanding messages: " + countMessages);
 		}
+	}
+
+	private void setMaxTempPairwiseIndex(BatchJob job, int max) {
+		BatchJobUtils.setMaxTempPairwiseIndex(getPropertyController(), job, max);
 	}
 
 }

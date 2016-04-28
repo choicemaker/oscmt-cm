@@ -1,3 +1,10 @@
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *******************************************************************************/
 package com.choicemaker.cm.io.blocking.automated.offline.data;
 
 import static com.choicemaker.cm.core.Decision.HOLD;
@@ -77,9 +84,6 @@ public class MatchRecordUtils {
 	/**
 	 * This method concatenates the notes into a single string delimited by
 	 * Constants.EXPORT_NOTE_SEPARATOR.
-	 * 
-	 * @param notes
-	 * @return
 	 */
 	public static String getNotesAsDelimitedString(ActiveClues ac,
 			ImmutableProbabilityModel model) {
@@ -94,7 +98,6 @@ public class MatchRecordUtils {
 	 * Constants.EXPORT_NOTE_SEPARATOR.
 	 * 
 	 * @param notes
-	 * @return
 	 */
 	public static String getNotesAsDelimitedString(String[] notes) {
 		String retVal = null;

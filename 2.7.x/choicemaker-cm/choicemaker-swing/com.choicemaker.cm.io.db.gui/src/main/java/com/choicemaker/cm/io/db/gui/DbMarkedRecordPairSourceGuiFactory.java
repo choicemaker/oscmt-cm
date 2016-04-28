@@ -1,18 +1,15 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.io.db.gui;
 
 import com.choicemaker.cm.core.MarkedRecordPairSource;
 import com.choicemaker.cm.core.Source;
-import com.choicemaker.cm.io.db.oracle.OracleMarkedRecordPairSource2;
+import com.choicemaker.cm.io.db.oracle.OracleMarkedRecordPairSource;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cm.modelmaker.gui.dialogs.SourceGui;
 import com.choicemaker.cm.modelmaker.gui.sources.SourceGuiFactory;
@@ -21,7 +18,6 @@ import com.choicemaker.cm.modelmaker.gui.sources.SourceGuiFactory;
  * Description
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/28 09:04:00 $
  */
 public class DbMarkedRecordPairSourceGuiFactory implements SourceGuiFactory {
 	public String getName() {
@@ -33,7 +29,7 @@ public class DbMarkedRecordPairSourceGuiFactory implements SourceGuiFactory {
 	}
 
 	public SourceGui createGui(ModelMaker parent) {
-		return createGui(parent, new OracleMarkedRecordPairSource2());
+		return createGui(parent, new OracleMarkedRecordPairSource());
 	}
 
 	public SourceGui createSaveGui(ModelMaker parent) {
@@ -45,7 +41,7 @@ public class DbMarkedRecordPairSourceGuiFactory implements SourceGuiFactory {
 	}
 
 	public Class getHandledType() {
-		return OracleMarkedRecordPairSource2.class;
+		return OracleMarkedRecordPairSource.class;
 	}
 
 	public String toString() {

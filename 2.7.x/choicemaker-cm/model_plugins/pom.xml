@@ -57,6 +57,36 @@
       </resource>
     </resources>
 
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <dependencies>
+            <dependency>
+              <groupId>com.choicemaker.cm</groupId>
+              <artifactId>choicemaker-assembly</artifactId>
+              <version>2.7.1-SNAPSHOT</version>
+            </dependency>
+          </dependencies>
+          <executions>
+            <execution>
+              <id>assembly</id>
+              <phase>package</phase>
+              <configuration combine.self="override">
+                <descriptorRefs>
+                  <descriptorRef>cm-model-assembly</descriptorRef>
+                </descriptorRefs>
+              </configuration>
+              <goals>
+                <goal>single</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+
     <plugins>
 
       <plugin>

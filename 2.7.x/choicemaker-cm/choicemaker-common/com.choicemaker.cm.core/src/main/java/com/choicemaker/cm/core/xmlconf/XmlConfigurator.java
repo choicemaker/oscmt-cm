@@ -62,7 +62,6 @@ import com.choicemaker.util.SystemPropertyUtils;
  * </ul>
  *
  * @author Martin Buechi
- * @version $Revision: 1.2 $ $Date: 2010/03/24 18:57:16 $
  */
 public class XmlConfigurator implements ChoiceMakerConfigurator,
 		ChoiceMakerConfiguration {
@@ -486,7 +485,7 @@ public class XmlConfigurator implements ChoiceMakerConfigurator,
 
 	public String getJavaDocClasspath() {
 		String pathSeparator =
-			System.getProperty(SystemPropertyUtils.PATH_SEPARATOR);
+			System.getProperty(SystemPropertyUtils.PN_PATH_SEPARATOR);
 		Set urls = new LinkedHashSet();
 		CMPluginDescriptor[] plugins = CMPlatformUtils.getPluginDescriptors();
 		for (int i=0; i<plugins.length; i++) {
@@ -575,7 +574,6 @@ public class XmlConfigurator implements ChoiceMakerConfigurator,
 	 *
 	 * @param fn
 	 *            The name of the configuration file.
-	 * @return
 	 * @throws XmlConfException
 	 *             if any error occurs.
 	 */

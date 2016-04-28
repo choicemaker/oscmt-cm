@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.transitivity.server.ejb;
 
 import javax.ejb.Local;
@@ -16,6 +13,7 @@ import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.BatchJob;
+import com.choicemaker.cm.io.blocking.automated.offline.core.RecordMatchingMode;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
 
 /**
@@ -33,15 +31,25 @@ public interface TransitivityService {
 
 	/**
 	 * This method starts transitivity analysis of the specified OABA job. The
-	 * OABA job must have completed successfully.
+	 * OABA job must have completed successfully. Record matching is performed
+	 * in the same mode as was used for the OABA job.
 	 * @urmJob may be null
-	 * 
-	 * @throws ServerConfigurationException
 	 */
 	long startTransitivity(String externalID,
 			TransitivityParameters batchParams, BatchJob batchJob,
 			OabaSettings settings, ServerConfiguration serverConfiguration,
 			BatchJob urmJob) throws ServerConfigurationException;
+
+	/**
+	 * This method starts transitivity analysis of the specified OABA job, but
+	 * allows a different record-matching mode to be specified.
+	 * @urmJob may be null
+	 */
+	long startTransitivity(String externalID,
+			TransitivityParameters batchParams, BatchJob batchJob,
+			OabaSettings settings, ServerConfiguration serverConfiguration,
+			BatchJob urmJob, RecordMatchingMode mode)
+			throws ServerConfigurationException;
 
 	public BatchJob getTransitivityJob(long jobId);
 

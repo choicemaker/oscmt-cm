@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.matching.en;
 
 /**
@@ -16,7 +13,6 @@ package com.choicemaker.cm.matching.en;
  * pronunciation, double metaphone returns two codes, a primary and an alternate.
  * 
  * @author    Martin Buechi
- * @version   $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:01 $
  */
 public final class DoubleMetaphone {
 	private final static char[] vowels = { 'A', 'E', 'I', 'O', 'U', 'Y' };
@@ -111,7 +107,7 @@ public final class DoubleMetaphone {
 	 * equal. This includes equality between the getPrimary() code of one object
 	 * and the non-null getAlternate() of the other.
  	 * 
-	 * @param o
+	 * @param obj
 	 *            the object for comparison
  	 * @return the equality of the Object
  	 */

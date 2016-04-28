@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2011 Rick Hall and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *     Rick Hall - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
 import java.util.ArrayList;
@@ -98,7 +95,8 @@ class ImmutableRecordIdTranslatorImpl implements
 	 */
 	static <T extends Comparable<T>> ImmutableRecordIdTranslatorImpl createTranslator(
 			final BatchJob job, final RECORD_ID_TYPE expectedRecordIdType,
-			List<AbstractRecordIdTranslationEntity<T>> translations)
+			List<AbstractRecordIdTranslationEntity<T>> translations,
+			boolean doKeepFiles)
 			throws BlockingException {
 
 		if (job == null || !job.isPersistent()) {
@@ -207,7 +205,7 @@ class ImmutableRecordIdTranslatorImpl implements
 		ImmutableRecordIdTranslatorImpl irit =
 			new ImmutableRecordIdTranslatorImpl(job, recordIdType,
 					ids1_To_Indices, ids2_To_Indices, indices_To_Ids1,
-					indices_To_Ids2, splitIndex);
+					indices_To_Ids2, splitIndex, doKeepFiles);
 		return irit;
 	}
 
@@ -217,6 +215,9 @@ class ImmutableRecordIdTranslatorImpl implements
 		// Initialized on construction
 		assert onAssert = true;
 	}
+
+	/** A flag indicating whether cached translator files are retained */
+	private final boolean keepFiles;
 
 	private final BatchJob batchJob;
 
@@ -250,28 +251,13 @@ class ImmutableRecordIdTranslatorImpl implements
 	/** A map of indices for staging records to the ids of those records */
 	private final SortedMap indices_To_Ids2 = new TreeMap();
 
-	// public ImmutableRecordIdTranslatorImpl(BatchJob job)
-	// throws BlockingException {
-	// if (job == null) {
-	// throw new IllegalArgumentException("null batch job");
-	// }
-	// this.batchJob = job;
-	// RecordIdSinkSourceFactory rFactory = getTransIDFactory(job);
-	// final IRecordIdSink sink1 = rFactory.getNextSink();
-	// source1 = rFactory.getSource(sink1);
-	// log.info("Source 1: " + source1);
-	// final IRecordIdSink sink2 = rFactory.getNextSink();
-	// source2 = rFactory.getSource(sink2);
-	// log.info("Source 2: " + source2);
-	// initialize();
-	// }
-
 	public ImmutableRecordIdTranslatorImpl(final BatchJob job,
 			final RECORD_ID_TYPE recordIdType,
 			final Map<?, Integer> ids1_To_Indices,
 			final Map<?, Integer> ids2_To_Indices,
 			final SortedMap<Integer, ?> indices_To_Ids1,
-			final SortedMap<Integer, ?> indices_To_Ids2, int splitIndex)
+			final SortedMap<Integer, ?> indices_To_Ids2, int splitIndex,
+			boolean doKeepFiles)
 			throws BlockingException {
 		if (job == null) {
 			String msg = "null batch job";
@@ -288,6 +274,7 @@ class ImmutableRecordIdTranslatorImpl implements
 			log.severe(msg);
 			throw new IllegalArgumentException(msg);
 		}
+		this.keepFiles = doKeepFiles;
 		this.batchJob = job;
 		this.recordIdType = recordIdType;
 		this.splitIndex = splitIndex;
@@ -298,7 +285,7 @@ class ImmutableRecordIdTranslatorImpl implements
 	}
 
 	public ImmutableRecordIdTranslatorImpl(BatchJob job, IRecordIdSource s1,
-			IRecordIdSource s2) throws BlockingException {
+			IRecordIdSource s2, boolean doKeepFiles) throws BlockingException {
 		if (job == null) {
 			String msg = "null batch job";
 			log.severe(msg);
@@ -309,6 +296,7 @@ class ImmutableRecordIdTranslatorImpl implements
 			log.severe(msg);
 			throw new IllegalArgumentException(msg);
 		}
+		this.keepFiles = doKeepFiles;
 		this.batchJob = job;
 		INITIALIZATION_RETURN_VALUE irv = initializeFromSources(s1, s2);
 		this.splitIndex = irv.splitIndex;
@@ -423,7 +411,9 @@ class ImmutableRecordIdTranslatorImpl implements
 				}
 			}
 			source1.close();
-			source1.delete();
+			if (!keepFiles) {
+				source1.delete();
+			}
 		}
 		log.info("Number of ids from first source: " + (count + 1));
 
@@ -460,7 +450,9 @@ class ImmutableRecordIdTranslatorImpl implements
 				}
 			}
 			source2.close();
-			source2.delete();
+			if (!keepFiles) {
+				source2.delete();
+			}
 		}
 		log.info("Number of ids from second source: " + (count2));
 		log.info("Split index: " + retIDX);
@@ -476,7 +468,7 @@ class ImmutableRecordIdTranslatorImpl implements
 		if (recordID != null) {
 			Integer i = (Integer) this.ids2_To_Indices.get(recordID);
 			if (i != null) {
-				retVal = i.intValue();
+				retVal = i.intValue() + getSplitIndex();
 			}
 		}
 		return retVal;

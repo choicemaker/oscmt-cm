@@ -15,7 +15,6 @@ import java.util.Date;
 
 /**
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/27 21:16:34 $
  * @deprecated This class will cause silent problems in training data. Use
  * a DateFormat instance instead.
  */

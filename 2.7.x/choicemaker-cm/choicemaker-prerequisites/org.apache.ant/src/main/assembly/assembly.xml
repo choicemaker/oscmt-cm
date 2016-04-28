@@ -9,19 +9,19 @@
     <file>
       <source>
       ${project.build.directory}/${project.build.finalName}.${project.packaging}</source>
-      <outputDirectory>/</outputDirectory>
+      <outputDirectory></outputDirectory>
       <destName>${eclipse.plugin.runtime.library.name}</destName>
     </file>
     <file>
       <source>${eclipse.plugin.src.zip.download}</source>
-      <outputDirectory>/</outputDirectory>
+      <outputDirectory></outputDirectory>
       <destName>${eclipse.plugin.src.zip.name}</destName>
     </file>
   </files>
 	<fileSets>
 		<fileSet>
     <directory>src/main/eclipse2/plugin</directory>
-    <outputDirectory>/</outputDirectory>
+    <outputDirectory></outputDirectory>
 		</fileSet>
 	</fileSets>
 </assembly>

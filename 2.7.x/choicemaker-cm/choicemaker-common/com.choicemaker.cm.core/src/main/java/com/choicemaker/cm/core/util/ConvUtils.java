@@ -14,7 +14,6 @@ package com.choicemaker.cm.core.util;
  * Description
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.1 $ $Date: 2010/01/20 15:05:03 $
  */
 public class ConvUtils {
 	public static Object convertString2Object(String value, String type) {

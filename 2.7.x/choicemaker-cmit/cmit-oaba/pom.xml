@@ -22,9 +22,8 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <!-- JBoss dependency versions -->
     <version.org.jboss.as.plugins.maven.plugin>7.3.Final</version.org.jboss.as.plugins.maven.plugin>
-    <version.org.jboss.spec.jboss.javaee.6.0>3.0.0.Final</version.org.jboss.spec.jboss.javaee.6.0>
     <version.org.jboss.spec.jboss.javaee.7.0>1.0.0.Final</version.org.jboss.spec.jboss.javaee.7.0>
-    <version.wildfly>8.1.0.Final</version.wildfly>
+    <version.wildfly>8.2.0.Final</version.wildfly>
     <!-- other plugin versions -->
     <version.ejb.plugin>2.3</version.ejb.plugin>
   </properties>
@@ -160,7 +159,7 @@
     <dependency>
       <groupId>org.wildfly</groupId>
       <artifactId>wildfly-arquillian-container-remote</artifactId>
-      <version>8.1.0.Final</version>
+      <version>8.2.0.Final</version>
       <scope>test</scope>
     </dependency>
     <dependency>

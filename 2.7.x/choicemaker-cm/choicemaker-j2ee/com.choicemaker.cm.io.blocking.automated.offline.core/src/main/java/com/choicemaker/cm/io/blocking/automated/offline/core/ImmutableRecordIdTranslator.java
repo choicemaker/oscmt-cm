@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2009, 2010 Rick Hall and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *     Rick Hall - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.io.blocking.automated.offline.core;
 
 import java.util.List;
@@ -17,7 +14,6 @@ import java.util.List;
  * returns the internal id of a specified record id.
  * 
  * @author rphall
- * @version $Revision$ $Date$
  */
 public interface ImmutableRecordIdTranslator<T extends Comparable<T>> {
 
@@ -27,16 +23,10 @@ public interface ImmutableRecordIdTranslator<T extends Comparable<T>> {
 	 */
 	public static final int NOT_SPLIT = -1;
 
-	/**
-	 * Returned from {@link #lookup(Comparable) lookup} if no internal index
-	 * exists
-	 */
+	/** Returned from lookup if no internal index exists */
 	public int INVALID_INDEX = -1;
 
-	/**
-	 * Minimum valid index that will be returned by {@link #lookup(Comparable)
-	 * lookup}
-	 */
+	/** Minimum valid index that will be returned by lookup */
 	public int MINIMUM_VALID_INDEX = INVALID_INDEX + 1;
 
 	/** Returns the type of record identifier handled by this translator */

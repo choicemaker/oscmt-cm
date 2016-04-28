@@ -15,7 +15,6 @@ package com.choicemaker.cm.core.base;
  * 
  * @author Martin Buechi
  * @author rphall
- * @version $Revision: 1.2 $ $Date: 2010/03/27 21:35:15 $
  */
 public class Thresholds extends ImmutableThresholds implements Cloneable {
 
@@ -40,18 +39,16 @@ public class Thresholds extends ImmutableThresholds implements Cloneable {
 
 	/**
 	 * Sets the value of differThreshold in a forgivng manner.
-	 * <em>This method is different than the method for {@link IThresholds#setDifferThreshold(float)}:</em>
+	 * <em>This method is different than the method for <code>IThresholds.setDifferThreshold(float)</code></em>
 	 * <ul>
-	 * <li/>If the specified value is less than {@link IThresholds#MIN_VALUE
-	 * MIN_VALUE} then the specified threshold is set to <code>MIN_VALUE</code>.
-	 * <li/>If the specified value is greater than {@link IThresholds#MAX_VALUE
-	 * MAX_VALUE} then the specified threshold is set to <code>MAX_VALUE</code>.
+	 * <li/>If the specified value is less than <code>IThresholds.MIN_VALUE</code>
+	 * then the specified threshold is set to <code>MIN_VALUE</code>.
+	 * <li/>If the specified value is greater than <code>IThresholds.MAX_VALUE</code>
+	 * then the specified threshold is set to <code>MAX_VALUE</code>.
 	 * <li/>If the specified value is greater than
-	 * {@link IThresholds#getMatchThreshold() getMatchThreshold()} then the
-	 * match threshold is {@link IThresholds#setMatchThreshold(float) reset} to
-	 * the specified value.
-	 * <li/>The differ threshold is
-	 * {@link IThresholds#setDifferThreshold(float) set} to the specified value.
+	 * <code>IThresholds.getMatchThreshold()</code> then the
+	 * match threshold is <code>set</code> to the specified value.
+	 * <li/>The differ threshold is <code>set</code> to the specified value.
 	 * </ul>
 	 * 
 	 * @param v
@@ -77,19 +74,7 @@ public class Thresholds extends ImmutableThresholds implements Cloneable {
 
 	/**
 	 * Sets the value of matchThreshold.
-	 * <em>This method is different than the method for {@link IThresholds#setMatchThreshold(float)}:</em>
-	 * <ul>
-	 * <li/>If the specified value is greater than {@link IThresholds#MAX_VALUE
-	 * MAX_VALUE} then the specified threshold is set to <code>MAX_VALUE</code>.
-	 * <li/>If the specified value is less than {@link IThresholds#MIN_VALUE
-	 * MIN_VALUE} then the specified threshold is set to <code>MIN_VALUE</code>
-	 * <li/>If the specified value is less than
-	 * {@link IThresholds#getDifferThreshold() getDifferThreshold()} then the
-	 * differ threshold is {@link IThresholds#setDifferThreshold(float) reset}
-	 * to the specified value.
-	 * <li/>The match threshold is {@link IThresholds#setMatchThreshold(float)
-	 * set} to the specified value.
-	 * </ul>
+	 * <em>This method is different than the method for <code>IThresholdssetMatchThreshold(float)}</code>:</em>
 	 * 
 	 * @param v
 	 *            Value to assign to matchThreshold.

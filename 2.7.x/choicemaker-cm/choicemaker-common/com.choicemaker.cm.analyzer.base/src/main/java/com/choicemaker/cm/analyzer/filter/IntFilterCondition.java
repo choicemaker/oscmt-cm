@@ -17,7 +17,6 @@ import com.choicemaker.cm.core.base.IntActiveClues;
  * Description
  *
  * @author  Martin Buechi
- * @version $Revision: 1.3 $ $Date: 2010/03/29 14:36:26 $
  */
 public class IntFilterCondition implements FilterCondition {
 
@@ -89,9 +88,6 @@ public class IntFilterCondition implements FilterCondition {
 		}
 	}
 
-	/**
-	 * @see com.choicemaker.cm.train.filter.FilterCondition#satisfy(com.choicemaker.cm.core.base.ActiveClues)
-	 */
 	public boolean satisfy(ActiveClues clues) {
 		IntActiveClues intActiveClues = (IntActiveClues)clues;
 		boolean returnValue;
@@ -239,9 +235,7 @@ public class IntFilterCondition implements FilterCondition {
 			}
 		}
 	}
-	/**
-	 * @see com.choicemaker.cm.train.filter.FilterCondition#createFilterCondition(int)
-	 */
+
 	public FilterCondition createFilterCondition(int clueNum) {
 		return new IntFilterCondition(clueNum, condition, a, b);
 	}

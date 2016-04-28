@@ -1,13 +1,10 @@
-/**
- * @(#)$RCSfile: SqlDatabaseAbstraction.java,v $  $Revision: 1.1 $ $Date: 2003/04/29 19:38:12 $
- * 
- * Copyright (c) 2003 ChoiceMaker Technologies, Inc. 
- * 41 East 11th Street, New York, NY 10003 
- * All rights reserved.
- * 
- * This software is the confidential and proprietary information of 
- * ChoiceMaker Technologies Inc. ("Confidential Information"). 
- */
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *******************************************************************************/
 package com.choicemaker.cm.io.db.sqlserver.blocking;
 
 import com.choicemaker.cm.io.db.base.DatabaseAbstraction;
@@ -16,7 +13,6 @@ import com.choicemaker.cm.io.db.base.DatabaseAbstraction;
  * Description
  * 
  * @author  Martin Buechi
- * @version $Revision: 1.1 $ $Date: 2003/04/29 19:38:12 $
  */
 public class SqlDatabaseAbstraction implements DatabaseAbstraction {
 

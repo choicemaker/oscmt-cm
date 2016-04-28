@@ -44,7 +44,6 @@ import com.choicemaker.util.FileUtilities;
 
 /**
  * @author Adam Winkel
- * @version
  */
 public class ModelArtifactBuilder {
 
@@ -69,24 +68,14 @@ public class ModelArtifactBuilder {
 	 *            an array of non-null {@link ObjectMaker object makers} such
 	 *            as:
 	 *            <ul>
-	 *            <li>{@link #ProductionModelsBuilder} -- creates a JAR file
+	 *            <li>{@link ProductionModelsBuilder} -- creates a JAR file
 	 *            containing compiled ChoiceMaker models</li>
-	 *            <li>{@link #HolderClassesBuilder} -- creates a JAR file
+	 *            <li>{@link HolderClassesBuilder} -- creates a JAR file
 	 *            containing Bean classes representing records used by
 	 *            ChoiceMaker models</li>
-	 *            <li>{@link #ZippedJavadocBuilder} -- creates a ZIP file
+	 *            <li>{@link ZippedJavadocBuilder} -- creates a ZIP file
 	 *            containing Javadoc HTML documentation for the Bean classes
 	 *            representing records used by ChoiceMaker models.</li>
-	 *            <li>
-	 *            {@link com.choicemaker.cm.io.db.oracle.dbom.DbDbObjectMaker
-	 *            DbDbObjectMaker} -- creates a SQL script that generates view
-	 *            for an Oracle database that is used by Online ChoiceMaker
-	 *            matching</li>
-	 *            <li>
-	 *            {@link com.choicemaker.cm.io.db.sqlserver.dbom.SqlDbObjectMaker
-	 *            SqlDbObjectMaker} -- creates a SQL script that generates view
-	 *            for a Microsoft Sql Server database that is used by Online
-	 *            ChoiceMaker matching</li>
 	 *            </ul>
 	 */
 	public void run(String conf, File outDir, ObjectMaker[] objectMakers)

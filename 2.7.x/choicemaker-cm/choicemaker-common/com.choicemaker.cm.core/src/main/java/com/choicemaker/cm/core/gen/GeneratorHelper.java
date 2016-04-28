@@ -27,7 +27,6 @@ import com.choicemaker.cm.core.DerivedSource;
  * Auxiliary methods for generators.
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/27 21:03:47 $
  */
 public class GeneratorHelper {
 	private static final List EMPTY_LIST = new ArrayList();
@@ -113,7 +112,6 @@ public class GeneratorHelper {
 	 * @param src
 	 * @param field
 	 * @param confName
-	 * @return
 	 */
 	public static int filterFields2(List fields, DerivedSource src, String field, String confName) {
 		DerivedSource conf = DerivedSource.valueOf(confName);
@@ -518,12 +516,7 @@ public class GeneratorHelper {
 		}
 		return res;
 	}
-	/**
-	 * Method findNodeType.
-	 * @param element
-	 * @param targetNodeTypeName
-	 * @return Element
-	 */
+
 	public static Element findNodeType(Element node, String fqNodeTypeName) {
 		int pos = fqNodeTypeName.indexOf('.');
 		String s = pos == -1 ? fqNodeTypeName : fqNodeTypeName.substring(0, pos);
@@ -540,12 +533,7 @@ public class GeneratorHelper {
 		}
 		return null;
 	}
-	/**
-	 * Method findField.
-	 * @param nodeType
-	 * @param targetFieldName
-	 * @return Element
-	 */
+
 	public static Element findField(Element nodeType, String fieldName) {
 		List l = nodeType.getChildren(CoreTags.FIELD);
 		for (Iterator iL = l.iterator(); iL.hasNext();) {

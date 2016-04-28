@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.io.blocking.automated.offline.services;
 
 import java.io.IOException;
@@ -125,8 +122,6 @@ public class MatchDedupService2 {
 
 	/**
 	 * This returns the number of matches before the dedup.
-	 * 
-	 * @return
 	 */
 	public int getNumBefore() {
 		return numBefore;
@@ -134,8 +129,6 @@ public class MatchDedupService2 {
 
 	/**
 	 * This returns the number of matches after the dedup.
-	 * 
-	 * @return
 	 */
 	public int getNumAfter() {
 		return numAfter;
@@ -168,73 +161,76 @@ public class MatchDedupService2 {
 			return;
 
 		TreeSet matches = new TreeSet();
+		IMatchRecord2Sink tempSink = null;
 
-		IMatchRecord2Sink tempSink = mFactory.getNextSink();
-		tempSinks.add(tempSink);
-		tempSink.open();
+		try {
+			tempSink = mFactory.getNextSink();
+			tempSinks.add(tempSink);
 
-		mSource.open();
+			tempSink.open();
+			mSource.open();
 
-		numBefore = skip;
+			numBefore = skip;
+			for (int i = 0; i < skip; i++) {
+				mSource.hasNext();
+				mSource.next();
+			}
 
-		// skipping
-		for (int i = 0; i < skip; i++) {
-			mSource.hasNext();
-			mSource.next();
-		}
+			while (mSource.hasNext()) {
+				MatchRecord2 mr = (MatchRecord2) mSource.next();
+				numBefore++;
 
-		while (mSource.hasNext()) {
-			MatchRecord2 mr = (MatchRecord2) mSource.next();
-			numBefore++;
+				if (!matches.contains(mr)) {
+					matches.add(mr);
 
-			if (!matches.contains(mr)) {
-				matches.add(mr);
+					if (numBefore > 0 && numBefore % INTERVAL == 0
+							&& isFull(matches.size(), max)) {
+						log.info("writing out " + matches.size());
+						MemoryEstimator.writeMem();
 
-				if (numBefore > 0 && numBefore % INTERVAL == 0
-						&& isFull(matches.size(), max)) {
-					log.info("writing out " + matches.size());
-					MemoryEstimator.writeMem();
+						tempSink.writeMatches(matches.iterator());
+						tempSink.close();
 
-					tempSink.writeMatches(matches.iterator());
-					tempSink.close();
+						String temp =
+							Integer.toString(tempSinks.size())
+									+ OabaProcessing.DELIMIT
+									+ Integer.toString(numBefore);
+						status.setCurrentProcessingEvent(
+								OabaProcessingEvent.OUTPUT_DEDUP_MATCHES, temp);
 
-					String temp =
-						Integer.toString(tempSinks.size())
-								+ OabaProcessing.DELIMIT
-								+ Integer.toString(numBefore);
-					status.setCurrentProcessingEvent(OabaProcessingEvent.OUTPUT_DEDUP_MATCHES,
-							temp);
-
-					tempSink = mFactory.getNextSink();
-					tempSink.open();
-					tempSinks.add(tempSink);
-					matches = new TreeSet();
-
-					// if (true) throw new RuntimeException ("test fail");
+						tempSink = mFactory.getNextSink();
+						tempSink.open();
+						tempSinks.add(tempSink);
+						matches = new TreeSet();
+					}
 				}
-			} // if contains mr
+			}
+
+			// one last file
+			if (matches.size() > 0) {
+				log.info("writing out " + matches.size());
+				tempSink.writeMatches(matches.iterator());
+				String temp =
+					Integer.toString(tempSinks.size()) + OabaProcessing.DELIMIT
+							+ Integer.toString(numBefore);
+				status.setCurrentProcessingEvent(
+						OabaProcessingEvent.OUTPUT_DEDUP_MATCHES, temp);
+			}
+
+			status.setCurrentProcessingEvent(
+					OabaProcessingEvent.MERGE_DEDUP_MATCHES,
+					Integer.toString(tempSinks.size()));
+
+			log.info("total matches read " + numBefore);
+
+		} finally {
+			if (mSource != null) {
+				mSource.close();
+			}
+			if (tempSink != null) {
+				tempSink.close();
+			}
 		}
-
-		mSource.close();
-
-		// one last file
-		if (matches.size() > 0) {
-			log.info("writing out " + matches.size());
-
-			tempSink.writeMatches(matches.iterator());
-			tempSink.close();
-
-			String temp =
-				Integer.toString(tempSinks.size()) + OabaProcessing.DELIMIT
-						+ Integer.toString(numBefore);
-			status.setCurrentProcessingEvent(OabaProcessingEvent.OUTPUT_DEDUP_MATCHES, temp);
-		}
-
-		status.setCurrentProcessingEvent(OabaProcessingEvent.MERGE_DEDUP_MATCHES,
-				Integer.toString(tempSinks.size()));
-
-		log.info("total matches read " + numBefore);
-
 	}
 
 	/**
@@ -341,7 +337,6 @@ public class MatchDedupService2 {
 	 * @param max
 	 *            - maximum allowable size of the hash set, or if 0, check to
 	 *            see if 70% of the system memory is being used.
-	 * @return
 	 */
 	private static boolean isFull(int size, int max) {
 		boolean ret = false;
@@ -359,7 +354,6 @@ public class MatchDedupService2 {
 	 * compares both id1 and id2 of the MatchRecord.
 	 * 
 	 * @param records
-	 * @return
 	 */
 	private static int findMin(MatchRecord2[] records) {
 		Comparable min1 = null;

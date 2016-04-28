@@ -18,7 +18,6 @@ import com.choicemaker.cm.core.XmlConfException;
 /**
  *
  * @author    Adam Winkel
- * @version   
  */
 public interface ObjectMaker {
 	/**

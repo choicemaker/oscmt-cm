@@ -22,7 +22,6 @@ import com.choicemaker.cm.core.XmlConfException;
  * must be intialized when the class is loaded.
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.1 $ $Date: 2010/01/20 15:05:01 $
  */
 public interface XmlModuleInitializer {
 	/**

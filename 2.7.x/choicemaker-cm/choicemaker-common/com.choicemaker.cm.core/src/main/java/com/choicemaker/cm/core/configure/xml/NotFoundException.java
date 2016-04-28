@@ -14,7 +14,6 @@ package com.choicemaker.cm.core.configure.xml;
  * Thrown by a finder method if some specified object can not
  * be found.
  * @author rphall
- * @version 1.0.0
  * @since 2.5.206
  */
 public class NotFoundException extends Exception {

@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.urm.base;
 
 /**
@@ -15,7 +12,6 @@ package com.choicemaker.cm.urm.base;
  * <p>
  *
  * @author emoussikaev
- * @version Revision: 2.5  Date: Nov 1, 2005 1:32:59 PM
  * @see
  */
 public abstract class RefRecordCollection implements IRecordCollection{

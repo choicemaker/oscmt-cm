@@ -26,7 +26,6 @@ import com.choicemaker.e2.platform.CMPlatformUtils;
  * Managing of command line arguments.
  *
  * @author  Martin Buechi
- * @version $Revision: 1.2 $ $Date: 2010/03/27 21:11:09 $
  */
 public class CommandLineArguments {
 	private static final String NOT_DEFINED = "$NOT_DEFINED$";

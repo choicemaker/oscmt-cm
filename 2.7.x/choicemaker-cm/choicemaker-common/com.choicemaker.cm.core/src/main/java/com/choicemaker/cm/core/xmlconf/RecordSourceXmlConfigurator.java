@@ -25,15 +25,14 @@ import com.choicemaker.cm.core.XmlConfException;
  * must be intialized when the class is loaded.
  *
  * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/24 21:10:43 $
  */
 public interface RecordSourceXmlConfigurator extends DynamicDispatchHandler {
 	/**
 	 * Returns an instance of the description of the specified <code>MarkedRecordPairSource</code>.
 	 *
 	 * @param   e  The JDOM element containing the XML configuration information.
-	 * @param   pmDesc  The description of the probability model to be used.
-	 * @return  The description of the specified <code>MarkedRecordPairSource</code>.
+	 * @param   model  The description of the probability model to be used.
+	 * @return  The descriptor of the specified <code>MarkedRecordPairSource</code>.
 	 * @throws  XmlConfException  if any error occurs.
 	 */
 	RecordSource getRecordSource(String fileName, Element e, ImmutableProbabilityModel model) throws XmlConfException;

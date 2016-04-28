@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.io.flatfile.gui;
 
 import java.awt.GridBagConstraints;
@@ -45,7 +42,6 @@ import com.choicemaker.util.FileUtilities;
  * 
  * @author  Martin Buechi
  * @author  S. Yoakum-Stover
- * @version $Revision: 1.2 $ $Date: 2010/03/28 09:11:07 $
  */
 public class FlatFileRecordSourceGui extends RecordSourceGui implements Enable {
 	private static final long serialVersionUID = 1L;

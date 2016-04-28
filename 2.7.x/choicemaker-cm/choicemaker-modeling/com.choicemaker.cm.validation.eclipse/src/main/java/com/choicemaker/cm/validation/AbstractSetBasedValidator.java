@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Eclipse Public License
- * v1.0 which accompanies this distribution, and is available at
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *     ChoiceMaker Technologies, Inc. - initial API and implementation
- */
+ *******************************************************************************/
 package com.choicemaker.cm.validation;
 
 import java.util.Set;
@@ -20,7 +17,6 @@ import java.util.Set;
  * methods.
  *
  * @author rphall
- * @version $Revision: 1.2 $ $Date: 2010/03/29 14:45:31 $
  */
 public abstract class AbstractSetBasedValidator implements ISetBasedValidator {
 
@@ -35,9 +31,6 @@ public abstract class AbstractSetBasedValidator implements ISetBasedValidator {
 	public AbstractSetBasedValidator() {
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.validation.eclipse.IValidator#equals(IValidator)
-	 */
 	public boolean equals(IValidator validator) {
 		boolean retVal = false;
 		if (validator != null) {
@@ -61,9 +54,6 @@ public abstract class AbstractSetBasedValidator implements ISetBasedValidator {
 		return retVal;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.validation.eclipse.IValidator#hashCode()
-	 */
 	public int hashCode() {
 		// FIXME: this implementation is Eclipse-specific. Move it to an abstract
 		// class in com.choicemaker.cm.validation.eclipse or replace it
@@ -77,16 +67,13 @@ public abstract class AbstractSetBasedValidator implements ISetBasedValidator {
 	}
 
 	/**
-	 * Sets the name of the {@link com.choicemaker.cm.match.gen.Sets Sets instance}
+	 * Sets the name of the Sets instance
 	 * that holds the data used by this validator.
+	 * <p>see com.choicemaker.cm.match.gen.Sets</p>
 	 * @param setName the plugin name of the collection
-	 * @see com.choicemaker.cm.match.gen.Sets
 	 */
 	public abstract void setNamedSet(String setName);
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.validation.eclipse.IValidator#toString()
-	*/
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append(this.getClass().getName());
