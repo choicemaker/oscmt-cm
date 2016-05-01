@@ -36,7 +36,7 @@ public class LogPartitionerParams extends UncheckedParams {
 
 	/** Help constructor */
 	public LogPartitionerParams() {
-		super(false, null, null, null, COMMA, null, null, null, COMMA, null, 0);
+		super(true, null, null, null, COMMA, null, null, null, COMMA, null, 0);
 		this.inputFile = null;
 		this.outputFile = null;
 	}
