@@ -295,7 +295,7 @@ public class OracleMarkedRecordPairSource implements MarkedRecordPairSource {
 						markedPairs);
 
 		} catch (java.sql.SQLException e) {
-			throw new IOException("", e);
+			throw new IOException(e.toString(), e);
 		}
 	}
 
