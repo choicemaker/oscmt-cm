@@ -28,11 +28,41 @@ import com.choicemaker.cm.io.db.base.DataSources;
 /**
  * XML configurator for Oracle Connection Cache.
  *
- * @author Martin Buechi
+ * @author Martin Buechi (original version)
+ * @author rphall (rewrote for ODJBC6/UCP)
  */
 public class OraConnectionCacheXmlConf {
+
 	private static Logger logger = Logger
 			.getLogger(OraConnectionCacheXmlConf.class.getName());
+
+	public static final String PV_POOL_NAME = "name";
+
+	public static final String PV_DRIVER_TYPE = "driverType";
+
+	public static final String PV_SERVER_NAME = "serverName";
+
+	public static final String PV_NETWORK_PROTOCOL = "networkProtocol";
+
+	public static final String PV_DATABASE_NAME = "databaseName";
+
+	public static final String PV_PORT_NUMBER = "portNumber";
+
+	public static final String PV_USER_NAME = "user";
+
+	public static final String PV_PASSWORD = "password";
+
+	public static final String PV_JDBC_URL = "jdbcURL";
+
+	public static final String PV_CONNECTION_LIMIT = "connectionLimit";
+
+	public static final String DEFAULT_CONNECTION_FACTORY_CLASS_NAME =
+		"oracle.jdbc.pool.OracleDataSource";
+
+	public static final int MIN_CONNECTION_LIMIT = 1;
+
+	public static final int MIN_PORT_NUMBER = 1;
+	public static final int DEFAULT_PORT_NUMBER = 1521;
 
 	private static Map caches = new TreeMap();
 
@@ -69,7 +99,7 @@ public class OraConnectionCacheXmlConf {
 				Iterator i = o.getChildren("OraConnectionCache").iterator();
 				while (i.hasNext()) {
 					Element x = (Element) i.next();
-					if (name.equals(x.getAttributeValue("name"))) {
+					if (name.equals(x.getAttributeValue(PV_POOL_NAME))) {
 						return getConnectionCache(x);
 					}
 				}
@@ -92,36 +122,119 @@ public class OraConnectionCacheXmlConf {
 	 */
 	private static DataSource getConnectionCache(Element e)
 			throws java.sql.SQLException {
-		String name = e.getAttributeValue("name");
-		String driverType = e.getChildText("driverType");
-		if (driverType != null) {
-			String msg = "Ignoring driverType ('" + driverType + "')";
-			logger.fine(msg);
+
+		// Pool/cache name
+		String name = e.getAttributeValue(PV_POOL_NAME);
+		logProperty(PV_POOL_NAME, name);
+
+		// Host/server name
+		String serverName = e.getChildText(PV_SERVER_NAME);
+		logProperty(PV_SERVER_NAME, serverName);
+
+		// Database/SID
+		String databaseName = e.getChildText(PV_DATABASE_NAME);
+		logProperty(PV_DATABASE_NAME, databaseName);
+
+		// Port number
+		String sPortNumber = e.getChildText(PV_PORT_NUMBER);
+		logProperty(PV_PORT_NUMBER, sPortNumber);
+		int portNumber = DEFAULT_PORT_NUMBER;
+		try {
+			portNumber = Integer.parseInt(sPortNumber);
+		} catch (NumberFormatException x) {
+			logger.warning("Invalid port number: '" + sPortNumber + "':"
+					+ x.toString());
 		}
-		String serverName = e.getChildText("serverName");
-		String networkProtocol = e.getChildText("networkProtocol");
-		String databaseName = e.getChildText("databaseName");
-		int portNumber = Integer.parseInt(e.getChildText("portNumber"));
-		String user = e.getChildText("user");
-		String password = e.getChildText("password");
-		int connectionLimit =
-			Integer.parseInt(e.getChildText("connectionLimit"));
-		// DataSource cc = new OracleConnectionCacheImpl();
+		if (portNumber < MIN_PORT_NUMBER) {
+			logger.info("Resetting connection limit to: "
+					+ DEFAULT_PORT_NUMBER);
+		}
+
+		// JDBC URL
+		String jdbcUrl = e.getChildText(PV_JDBC_URL);
+		if (jdbcUrl == null || jdbcUrl.trim().isEmpty()) {
+			jdbcUrl = createJdbcUrl(serverName, portNumber, databaseName);
+		}
+		logProperty(PV_JDBC_URL, jdbcUrl);
+
+		// User name
+		String user = e.getChildText(PV_USER_NAME);
+		logProperty(PV_USER_NAME, user);
+
+		// Password
+		String password = e.getChildText(PV_PASSWORD);
+		logProperty(PV_PASSWORD, password);
+
+		// Connection limit
+		String sConnectionLimit = e.getChildText(PV_CONNECTION_LIMIT);
+		logProperty(PV_CONNECTION_LIMIT, sConnectionLimit);
+		int connectionLimit = MIN_CONNECTION_LIMIT;
+		try {
+			connectionLimit = Integer.parseInt(sConnectionLimit);
+		} catch (NumberFormatException x) {
+			logger.warning("Invalid connection limit: '" + sConnectionLimit
+					+ "':" + x.toString());
+		}
+		if (connectionLimit < MIN_CONNECTION_LIMIT) {
+			logger.info("Resetting connection limit to: "
+					+ MIN_CONNECTION_LIMIT);
+		}
+
+		// Network protocol
+		String protocol = e.getChildText(PV_NETWORK_PROTOCOL);
+		logProperty(PV_NETWORK_PROTOCOL, protocol);
+
+		// Ignored -- no longer needed
+		logIgnoredProperty(PV_DRIVER_TYPE, e);
+
 		PoolDataSource cc = PoolDataSourceFactory.getPoolDataSource();
-		cc.setConnectionFactoryClassName("oracle.jdbc.pool.OracleDataSource");
-		// cc.setDriverType(driverType);
+		cc.setDataSourceName(name);
+		cc.setConnectionFactoryClassName(DEFAULT_CONNECTION_FACTORY_CLASS_NAME);
+		cc.setURL(jdbcUrl);
 		cc.setServerName(serverName);
-		cc.setNetworkProtocol(networkProtocol);
-		cc.setDatabaseName(databaseName);
 		cc.setPortNumber(portNumber);
+		cc.setDatabaseName(databaseName);
 		cc.setUser(user);
 		cc.setPassword(password);
-		// cc.setMaxLimit(connectionLimit);
 		cc.setMaxPoolSize(connectionLimit);
-		cc.setDataSourceName(name);
-		// cc.setCacheScheme(OracleConnectionCacheImpl.FIXED_WAIT_SCHEME);
+		cc.setNetworkProtocol(protocol);
 		caches.put(name, cc);
 		return cc;
+	}
+
+	public static String createJdbcUrl(String host, int port, String database) {
+		// jdbc:oracle:thin:@<host>:<port>:<database>
+		StringBuilder sb = new StringBuilder("jdbc:oracle:thin:@");
+		sb.append(host).append(":").append(port).append(":").append(database);
+		String retVal = sb.toString();
+		return retVal;
+	}
+
+	/** Log a property value */
+	private static void logProperty(String pn, String pv) {
+		if (pn == null || pn.trim().isEmpty()) {
+			String msg = "Null or blank property name for value '" + pv + "'";
+			logger.warning(msg);
+		} else {
+			String msg = "Property '" + pn + "': value '" + pv + "'";
+			logger.info(msg);
+		}
+	}
+
+	/** Log if a property is ignored */
+	private static void logIgnoredProperty(String pn, Element e) {
+		if (pn != null && !pn.isEmpty() && e != null) {
+			String pv = e.getChildText(pn);
+			logIgnoredProperty(pn, pv);
+		}
+	}
+
+	/** Log if non-null, non-empty values of a property is ignored */
+	private static void logIgnoredProperty(String pn, String pv) {
+		if (pv != null && !pv.isEmpty()) {
+			String msg = "Ignoring property '" + pv + "': value '" + pn + "'";
+			logger.info(msg);
+		}
 	}
 
 	public static String[] list() throws XmlConfException {
@@ -133,7 +246,7 @@ public class OraConnectionCacheXmlConf {
 			Iterator iL = l.iterator();
 			while (iL.hasNext()) {
 				Element e = (Element) iL.next();
-				caches[i++] = e.getAttributeValue("name");
+				caches[i++] = e.getAttributeValue(PV_POOL_NAME);
 			}
 			return caches;
 		} else {
