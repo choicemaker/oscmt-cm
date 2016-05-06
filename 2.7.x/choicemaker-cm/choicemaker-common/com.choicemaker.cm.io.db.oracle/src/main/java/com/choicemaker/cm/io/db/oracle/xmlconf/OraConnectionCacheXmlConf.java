@@ -108,6 +108,7 @@ public class OraConnectionCacheXmlConf {
 			Integer.parseInt(e.getChildText("connectionLimit"));
 		// DataSource cc = new OracleConnectionCacheImpl();
 		PoolDataSource cc = PoolDataSourceFactory.getPoolDataSource();
+		cc.setConnectionFactoryClassName("oracle.jdbc.pool.OracleDataSource");
 		// cc.setDriverType(driverType);
 		cc.setServerName(serverName);
 		cc.setNetworkProtocol(networkProtocol);
