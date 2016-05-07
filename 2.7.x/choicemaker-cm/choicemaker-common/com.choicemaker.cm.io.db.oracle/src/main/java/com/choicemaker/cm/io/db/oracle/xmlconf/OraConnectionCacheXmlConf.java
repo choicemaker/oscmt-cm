@@ -7,7 +7,10 @@
  *******************************************************************************/
 package com.choicemaker.cm.io.db.oracle.xmlconf;
 
+import java.io.PrintWriter;
+import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.SQLFeatureNotSupportedException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -146,8 +149,7 @@ public class OraConnectionCacheXmlConf {
 					+ x.toString());
 		}
 		if (portNumber < MIN_PORT_NUMBER) {
-			logger.info("Resetting connection limit to: "
-					+ DEFAULT_PORT_NUMBER);
+			logger.info("Resetting connection limit to: " + DEFAULT_PORT_NUMBER);
 		}
 
 		// JDBC URL
@@ -198,8 +200,10 @@ public class OraConnectionCacheXmlConf {
 		cc.setPassword(password);
 		cc.setMaxPoolSize(connectionLimit);
 		cc.setNetworkProtocol(protocol);
-		caches.put(name, cc);
-		return cc;
+
+		DataSource retVal = new DataSourceWrapper(cc);
+		caches.put(name, retVal);
+		return retVal;
 	}
 
 	public static String createJdbcUrl(String host, int port, String database) {
@@ -257,4 +261,61 @@ public class OraConnectionCacheXmlConf {
 	public static void remove(String name) {
 		caches.remove(name);
 	}
+
+	/**
+	 * Wraps an existing data source to provide connections that have autoCommit
+	 * set to false, by default.
+	 */
+	public static class DataSourceWrapper implements DataSource {
+		private final DataSource ds;
+
+		public DataSourceWrapper(DataSource ds) {
+			if (ds == null) {
+				throw new IllegalArgumentException("null datasource");
+			}
+			this.ds = ds;
+		}
+
+		public PrintWriter getLogWriter() throws SQLException {
+			return ds.getLogWriter();
+		}
+
+		public Object unwrap(Class iface) throws SQLException {
+			return ds.unwrap(iface);
+		}
+
+		public void setLogWriter(PrintWriter out) throws SQLException {
+			ds.setLogWriter(out);
+		}
+
+		public boolean isWrapperFor(Class iface) throws SQLException {
+			return ds.isWrapperFor(iface);
+		}
+
+		public Connection getConnection() throws SQLException {
+			Connection retVal = ds.getConnection();
+			assert retVal != null;
+			retVal.setAutoCommit(false);
+			return retVal;
+		}
+
+		public void setLoginTimeout(int seconds) throws SQLException {
+			ds.setLoginTimeout(seconds);
+		}
+
+		public Connection getConnection(String username, String password)
+				throws SQLException {
+			return ds.getConnection(username, password);
+		}
+
+		public int getLoginTimeout() throws SQLException {
+			return ds.getLoginTimeout();
+		}
+
+		public Logger getParentLogger() throws SQLFeatureNotSupportedException {
+			return ds.getParentLogger();
+		}
+
+	}
+
 }
