@@ -170,10 +170,10 @@ public class OracleMarkedRecordPairSource implements MarkedRecordPairSource {
 		MutableMarkedRecordPair retVal = null;
 		try {
 			if (markedPairs.next()) {
-				Record q =
-					(Record) recordMap.get(markedPairs.getString(IDX_Q_RECORD));
-				Record m =
-					(Record) recordMap.get(markedPairs.getString(IDX_M_RECORD));
+				String qid = markedPairs.getString(IDX_Q_RECORD);
+				Record q = (Record) recordMap.get(qid);
+				String mid = markedPairs.getString(IDX_M_RECORD);
+				Record m = (Record) recordMap.get(mid);
 				String d = markedPairs.getString(IDX_DECISION);
 				Decision decision = null;
 				if (d != null && d.length() > 0) {
