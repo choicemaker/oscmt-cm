@@ -119,7 +119,8 @@ public class OracleMarkedRecordPairSource implements MarkedRecordPairSource {
 			throw new IllegalArgumentException("invalid number of cursors: "
 					+ noCursors);
 		}
-		cursorOfRecordCursors.next();
+		boolean hasMore = cursorOfRecordCursors.next();
+		logger.fine("hasMore: " + hasMore);
 		ResultSet[] retVal = new ResultSet[noCursors];
 		if (noCursors == 1) {
 			retVal[0] = cursorOfRecordCursors;
