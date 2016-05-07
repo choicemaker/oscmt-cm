@@ -10,40 +10,71 @@
  */
 package com.choicemaker.util;
 
+import java.util.logging.Logger;
+
 /**
  * @author rphall
  */
 public class Precondition {
 
+	private static final Logger logger = Logger.getLogger(Precondition.class
+			.getName());
+
 	/**
-	 * Default messsage about a false boolean argument.
-	 * This message should move to a resource bundle.
+	 * Default message about a false boolean argument. This message should move
+	 * to a resource bundle.
 	 */
 	public static final String MSG_FALSE_BOOLEAN = "precondition violated";
 
 	/**
-	 * Default messsage about invalid null method argument.
-	 * This message should move to a resource bundle.
+	 * Default message about a null or blank string. This message should move to
+	 * a resource bundle.
+	 */
+	public static final String MSG_NULL_OR_BLANK_STRING =
+		"null or blank String value";
+
+	/**
+	 * Default message about invalid null method argument. This message should
+	 * move to a resource bundle.
 	 */
 	public static final String MSG_NULL_OBJECT = "null argument";
 
 	public static void assertBoolean(boolean b) {
-		if (!b) {
-			throw new IllegalArgumentException(MSG_FALSE_BOOLEAN);
-		}
+		assertBoolean(MSG_FALSE_BOOLEAN, b);
 	}
 
 	public static void assertBoolean(String msg, boolean b) {
 		if (!b) {
 			msg = msg == null ? Precondition.MSG_FALSE_BOOLEAN : msg;
+			logger.severe(msg);
 			throw new IllegalArgumentException(msg);
 		}
 	}
 
-	public static void assertNonEmptyString(String s)
-		throws IllegalArgumentException {
-		if (!StringUtils.nonEmptyString(s)) {
-			throw new IllegalArgumentException("blank or null String value");
+	/**
+	 * @param sut
+	 *            String under test
+	 */
+	public static void assertNonEmptyString(String sut)
+			throws IllegalArgumentException {
+		assertNonEmptyString(Precondition.MSG_NULL_OR_BLANK_STRING, sut);
+	}
+
+	/**
+	 * Confusing signature! Message is first, string under test is second.
+	 * 
+	 * @param msg
+	 *            Message that will be logged if <code>sut<code> is null or
+	 * blank
+	 * @param sut
+	 *            String under test
+	 */
+	public static void assertNonEmptyString(String msg, String sut)
+			throws IllegalArgumentException {
+		if (!StringUtils.nonEmptyString(sut)) {
+			msg = msg == null ? Precondition.MSG_NULL_OR_BLANK_STRING : msg;
+			logger.severe(msg);
+			throw new IllegalArgumentException(msg);
 		}
 	}
 
@@ -54,6 +85,7 @@ public class Precondition {
 	public static void assertNonNullArgument(String msg, Object o) {
 		if (o == null) {
 			msg = msg == null ? Precondition.MSG_NULL_OBJECT : msg;
+			logger.severe(msg);
 			throw new IllegalArgumentException(msg);
 		}
 	}
