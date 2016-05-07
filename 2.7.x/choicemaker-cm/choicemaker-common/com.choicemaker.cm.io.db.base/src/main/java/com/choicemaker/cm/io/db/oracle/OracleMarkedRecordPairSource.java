@@ -32,12 +32,13 @@ import com.choicemaker.cm.core.util.NameUtils;
 import com.choicemaker.cm.io.db.base.DataSources;
 import com.choicemaker.cm.io.db.base.DbAccessor;
 import com.choicemaker.cm.io.db.base.DbReaderParallel;
+import com.choicemaker.util.Precondition;
 
 /**
  * Marked record source implementing <code>MarkedRecordPairSource</code>. Used
  * for reading training data from a training database.
  *
- * This version fixes a problem with the getNextMethod. dbr and markedPairs are
+ * This version fixes a problem with the getNextMethod. dbr and pairCursor are
  * not necessarily in order so we need to put dbr records in a hashmap first.
  * <p>
  * FIXME: rename and move this Oracle-specific implementation to the
@@ -225,14 +226,40 @@ public class OracleMarkedRecordPairSource implements MarkedRecordPairSource {
 	/** The next pair to be returned by this record source */
 	private MutableMarkedRecordPair currentPair;
 
-	/** A database cursor that iterates over record cursors */
-	private ResultSet cursorOfRecordCursors;
+	/**
+	 * A result set that iterates over a collection of table cursors, sometimes
+	 * described as a cursor of cursors. The table cursors are all ordered in a
+	 * consistent way, so that the <br/>
+	 * <p>
+	 * If the record layout does not define any stacked fields, then only one
+	 * cursor is returned; i.e. the top-level table cursor is this cursor.
+	 * </p>
+	 */
+	private ResultSet rsTableCursors;
 
-	/** A database cursor that iterates over records (and sub-records) */
+	/**
+	 * An array of database cursors that iterates over the tables that contain
+	 * record information. The top-level table is iterated by the first cursor
+	 * (array index 0). Tables representing stacked fields are iterated by the
+	 * remaining cursors (array index 1 and greater). The rows returned by each
+	 * table cursors are ordered in a way that is consistent across all the
+	 * cursors. As a parallel database reader iterates through the top-level
+	 * table, the reader is able to advance the stacked-field cursors as
+	 * appropriate. <br/>
+	 * <p>
+	 * If the record layout does not define any stacked fields, then only one
+	 * cursor is returned; i.e. the top-level table cursor is
+	 * {@link #rsTableCursors}
+	 * 
+	 * <pre>
+	 * recordCursors[0] = rsTableCursors
+	 * </pre>
+	 * </p>
+	 */
 	private ResultSet[] recordCursors;
 
 	/** A database cursor that iterates over marked pairs */
-	private ResultSet markedPairs;
+	private ResultSet pairCursor;
 
 	/**
 	 * Creates an uninitialized instance.
@@ -265,35 +292,105 @@ public class OracleMarkedRecordPairSource implements MarkedRecordPairSource {
 	}
 
 	public void open() throws IOException {
-		try {
-			// Get the database reader for specified database configuration
-			dbr = getDatabaseReader(getModel(), conf);
-			final int noCursors = dbr.getNoCursors();
+		// Check all implicit preconditions
+		Precondition.assertNonNullArgument("null model", getModel());
+		Precondition.assertNonEmptyString(
+				"null or blank database configuration", this.conf);
+		Precondition.assertNonEmptyString("null or blank SQL query",
+				this.selection);
+		Precondition.assertNonNullArgument("null datasource", getDataSource());
 
+		// Get the database reader for specified database configuration
+		dbr = getDatabaseReader(getModel(), conf);
+		Precondition.assertNonNullArgument("null database reader", dbr);
+
+		final int noCursors = dbr.getNoCursors();
+		Precondition.assertBoolean("Nonpositive number of cursors: "
+				+ noCursors, noCursors > 0);
+
+		try {
 			// Get a database connection (and optionally configure debugging)
 			conn = getDataSource().getConnection();
+			assert conn != null : "null connection";
+
 			OracleRemoteDebugging.doDebugging(conn);
+
+			// Check if autocommit is on. It should not be, because the
+			// stored procedure will work unexpectedly since it uses a
+			// global temporary that is emptied when the JDBC statement
+			// executes and autocommits the snapshot procedure.
+			//
+			// However, autocommit should not be set or unset here. This is
+			// an application configuration issue. The connection pool used
+			// by the datasource should ensure that autocommit is off for the
+			// connections used by this method.
+			boolean isAutoCommitEnabled = conn.getAutoCommit();
+			if (isAutoCommitEnabled) {
+				String msg =
+					"JDBC autocommit is enabled for connections "
+							+ "used in OracleMarkedRecordPairSource.open(). "
+							+ "The method will probably return no records "
+							+ "and only empty pairs.";
+				logger.warning(msg);
+			}
 
 			// Execute the stored procedure that retrieves records and marked
 			// pairs
 			stmt = prepareCmtTrainingAccessSnaphot(conn);
+			assert stmt != null : "null statement";
 			executeCmtTrainingAccessSnaphot(stmt, selection, dbr);
 
 			// Update the result sets representing records and marked pairs
-			markedPairs = (ResultSet) stmt.getObject(PARAM_IDX_PAIR_CURSOR);
-			cursorOfRecordCursors =
+			pairCursor = (ResultSet) stmt.getObject(PARAM_IDX_PAIR_CURSOR);
+			assert pairCursor != null : "null record-pair cursor";
+			rsTableCursors =
 				(ResultSet) stmt.getObject(PARAM_IDX_RECORD_CURSOR_CURSOR);
-			recordCursors =
-				createRecordCursors(cursorOfRecordCursors, noCursors);
+			assert rsTableCursors != null : "null result set for record cursors";
+			recordCursors = createRecordCursors(rsTableCursors, noCursors);
+			assert recordCursors != null : "null array of record cursors";
+			assert recordCursors.length > 0 : "empty array of record cursors";
+
+			// Check each cursor in the array.
+			// NOTE: the second assignment in the assert is deliberate. The
+			// second assignment executes only if assertions are enabled.
+			// This is the only way to check if assertions are enabled.
+			boolean _assertsEnabled = false;
+			assert _assertsEnabled = true;
+			if (_assertsEnabled) {
+				for (int _i = 0; _i < recordCursors.length; _i++) {
+					String msg = "invalid record cursor [" + _i + "]";
+					assert recordCursors[_i] != null : msg;
+				}
+			}
 
 			// Create the map of record ids to full records
 			dbr.open(recordCursors);
-			this.recordMap = OracleMarkedRecordPairSource.createRecordMap(dbr);
+			recordMap = OracleMarkedRecordPairSource.createRecordMap(dbr);
+			assert recordMap != null;
+			if (recordMap.isEmpty()) {
+				String msg = "Record map is empty";
+				logger.warning(msg);
+			}
 
-			// Get the first currentPair
+			// Get the first pair
 			this.currentPair =
 				OracleMarkedRecordPairSource.getNextPairInternal(recordMap,
-						markedPairs);
+						pairCursor);
+			if (this.currentPair == null) {
+				String msg = "No pairs found";
+				logger.warning(msg);
+			} else {
+				Record q = this.currentPair.getQueryRecord();
+				if (q == null) {
+					String msg = "Null query record in first pair";
+					logger.warning(msg);
+				}
+				Record m = this.currentPair.getMatchRecord();
+				if (m == null) {
+					String msg = "Null match record in first pair";
+					logger.warning(msg);
+				}
+			}
 
 		} catch (java.sql.SQLException e) {
 			throw new IOException(e.toString(), e);
@@ -310,16 +407,16 @@ public class OracleMarkedRecordPairSource implements MarkedRecordPairSource {
 
 	public MutableMarkedRecordPair getNextMarkedRecordPair() throws IOException {
 		MutableMarkedRecordPair retVal = currentPair;
-		this.currentPair = getNextPairInternal(recordMap, markedPairs);
+		this.currentPair = getNextPairInternal(recordMap, pairCursor);
 		return retVal;
 	}
 
 	public void close() throws IOException {
 		List exceptions = new ArrayList();
 		try {
-			if (markedPairs != null)
-				markedPairs.close();
-			markedPairs = null;
+			if (pairCursor != null)
+				pairCursor.close();
+			pairCursor = null;
 		} catch (java.sql.SQLException e) {
 			exceptions.add(e.toString());
 		}
@@ -338,9 +435,9 @@ public class OracleMarkedRecordPairSource implements MarkedRecordPairSource {
 			exceptions.add(e.toString());
 		}
 		try {
-			if (cursorOfRecordCursors != null)
-				cursorOfRecordCursors.close();
-			cursorOfRecordCursors = null;
+			if (rsTableCursors != null)
+				rsTableCursors.close();
+			rsTableCursors = null;
 		} catch (java.sql.SQLException e) {
 			exceptions.add(e.toString());
 
