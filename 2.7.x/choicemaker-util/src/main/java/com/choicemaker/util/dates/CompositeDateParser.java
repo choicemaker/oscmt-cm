@@ -25,6 +25,18 @@ public class CompositeDateParser implements IDateParser {
 		}
 	}
 
+	public CompositeDateParser(IDateParser[] dateParsers) {
+		Precondition.assertNonNullArgument("null array", dateParsers);
+
+		int idx = 0;
+		parsers = new ArrayList<>();
+		for (IDateParser p : dateParsers) {
+			Precondition.assertNonNullArgument("null parser, index " + idx, p);
+			parsers.add(p);
+			++idx;
+		}
+	}
+
 	/**
 	 * Iterates over the input list of parsers and returns at the first result
 	 * that is not a placeholder. NOTE: does not use the disjunction pattern nor
