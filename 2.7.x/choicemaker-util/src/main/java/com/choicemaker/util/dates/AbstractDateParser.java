@@ -143,7 +143,7 @@ public abstract class AbstractDateParser implements IDateParser {
 	}
 
 	/**
-	 * Converts a string like '9x24x1968' into year, month and day components.
+	 * Converts a string into year, month and day components.
 	 * If the input string can not be parsed, then a
 	 * {@link YearMonthDay#PLACEHOLDER placeholder} is returned.
 	 */
