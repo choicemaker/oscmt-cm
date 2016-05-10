@@ -555,8 +555,22 @@ public class StringUtils {
 		
 		return false;
 	}
-	
-	public static String trimLeadingZeros(String s) {
+
+	/**
+	 * Trims all leading zeros, even a terminal zero. NOTE: any leading white
+	 * space is NOT trimmed.
+	 * 
+	 * <pre>
+	 *       null --> null
+	 * "        " --> "        "
+	 * "       0" --> "       0"
+	 * "00000009" --> "9"
+	 * "00000000" --> ""
+	 * </pre>
+	 * 
+	 * @see #trimAndRemoveLeadingNonterminalZeros(String)
+	 */
+	public static String removeLeadingZeros(String s) {
 		if (s == null) {
 			return null;
 		} else {
@@ -564,15 +578,46 @@ public class StringUtils {
 			while (index < s.length() && s.charAt(index) == '0') {
 				index++;
 			}
-			
+
 			if (index > 0) {
-				return s.substring(index);	
+				return s.substring(index);
 			} else {
 				return s;
 			}
 		}
 	}
-	
+
+	/**
+	 * Trims the input string and strips all leading zeros, but leaves any
+	 * terminal zero. NOTE: any leading white
+	 * space is NOT trimmed.
+	 * 
+	 * <pre>
+	 *       null --> null
+	 * "        " --> "        "
+	 * "       0" --> "       0"
+	 * "00000009" --> "9"
+	 * "00000000" --> "0"
+	 * </pre>
+	 * 
+	 * @see #removeLeadingZeros(String)
+	 */
+	public static String removeLeadingNonterminalZeros(String s) {
+		String retVal = null;
+		if (s != null) {
+			/*
+			 * From StackOverflow,
+			 * "How to remove leading zeros from alphanumeric text?",
+			 * http://links.rph.cx/1T0rm1V. The ^ anchor ensures that the 0+
+			 * being matched is at the beginning of the input. The (?!$)
+			 * negative lookahead ensures that not the entire string will be
+			 * matched.
+			 */
+			retVal = s.replaceFirst("^0+(?!$)", "");
+		}
+		return retVal;
+	}
+
 	/**
 	 * Returns a version of <code>s</code> with zeros appended to the
 	 * left until it is at least <code>len</code> characters long.

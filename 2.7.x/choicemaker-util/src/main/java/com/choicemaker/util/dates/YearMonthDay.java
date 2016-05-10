@@ -12,10 +12,11 @@ import java.util.logging.Logger;
  * day ([1-31]).</li></ul>
  * @author rphall
  */
-public class YearMonthDay {
+public final class YearMonthDay {
 
 	private static Logger logger = Logger.getLogger(YearMonthDay.class.getName());
 
+	public final static int INVALID_DATE_COMPONENT = -1;
 	public final static int PLACEHOLDER_YEAR = 0;
 	public final static int PLACEHOLDER_MONTH = 0;
 	public final static int PLACEHOLDER_DAY = 0;
@@ -28,7 +29,7 @@ public class YearMonthDay {
 
 	private static final int YYYYMMDD_LENGTH = 8;
 
-	public static final YearMonthDay PLACEHOLDER_YYYYMMDD = new YearMonthDay(
+	public static final YearMonthDay PLACEHOLDER = new YearMonthDay(
 			PLACEHOLDER_YEAR, PLACEHOLDER_MONTH, PLACEHOLDER_DAY,
 			PLACEHOLDER_DATE, PLACEHOLDER_STRING);
 
