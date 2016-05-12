@@ -12,16 +12,15 @@ public final class DateParsers extends AbstractMap<String, IDateParser> {
 
 	private static final Logger logger = Logger.getLogger(DateParsers.class
 			.getName());
-	
+
 	private static final DateParsers instance = new DateParsers();
 
 	// Synchronized access
-	private final Map<String, IDateParser> namedParsers =
-		new Hashtable<>();
+	private final Map<String, IDateParser> namedParsers = new Hashtable<>();
 
 	private DateParsers() {
 	}
-	
+
 	public static DateParsers getInstance() {
 		return instance;
 	}
@@ -48,6 +47,11 @@ public final class DateParsers extends AbstractMap<String, IDateParser> {
 			logger.warning(msg);
 		}
 		return retVal;
+	}
+
+	@Override
+	public IDateParser put(String key, IDateParser p) {
+		return namedParsers.put(key, p);
 	}
 
 	@Override
