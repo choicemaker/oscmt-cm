@@ -6,7 +6,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.choicemaker.util.Precondition;
-import com.choicemaker.util.StringUtils;
 
 /**
  * Parses dates formatted like "DDMMMYYYY" such as "19711116".
