@@ -48,6 +48,12 @@
          </action>
       </action>
       <action
+            class="com.choicemaker.cm.mmdevtools.MciNameParserExportDialogAction">
+         <action
+               class="com.choicemaker.cm.mmdevtools.MciNameParserExportDialogAction$MciNameParserExportAction">
+         </action>
+      </action>
+      <action
             class="com.choicemaker.cm.mmdevtools.ParserUtilsAction">
          <action
                class="com.choicemaker.cm.mmdevtools.ParserUtilsAction$ParserTestAction">
