@@ -49,9 +49,12 @@ public interface ChoiceMakerExtensionPoint {
 		"com.choicemaker.cm.io.blocking.automated.base.databaseAccessor";
 
 	public static final String CM_MATCHING_CFG_CASCADEDPARSER =
-		"com.choicemaker.cm.matching.cfg.cascadedParser";
-	public static final String CM_MATCHING_CFG_PARSER =
-		"com.choicemaker.cm.matching.cfg.parser";
+		"com.choicemaker.cm.matching.en.us.nameParser0";
+
+	public static final String CM_MATCHING_NAMEPARSER0 =
+			"com.choicemaker.cm.matching.cfg.cascadedParser";
+		public static final String CM_MATCHING_CFG_PARSER =
+			"com.choicemaker.cm.matching.cfg.parser";
 
 	public static final String CM_MATCHING_GEN_MAP =
 		"com.choicemaker.cm.matching.gen.map";

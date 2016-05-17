@@ -78,6 +78,11 @@
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.matching.gen</artifactId>
     </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
 </project>

@@ -7,11 +7,13 @@
  *******************************************************************************/
 package com.choicemaker.cm.matching.en.us.xmlconf;
 
+import java.util.Collection;
+
 import org.jdom.Element;
 
 import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.xmlconf.XmlModuleInitializer;
-import com.choicemaker.cm.matching.en.us.NameParser;
+import com.choicemaker.cm.matching.en.us.NameParser0;
 import com.choicemaker.cm.matching.gen.Sets;
 
 /**
@@ -53,23 +55,28 @@ public class XmlNameParserInitializer implements XmlModuleInitializer {
 	public void init(Element e) throws XmlConfException {
 		String gfn = e.getChildText("genericFirstNames");
 		if (gfn != null) {
-			NameParser.genericFirstNames = Sets.getCollection(gfn);
+			Collection c = Sets.getCollection(gfn);
+			NameParser0.getDefaultInstance().setGenericFirstNames(c);
 		}
 		String coi = e.getChildText("childOfIndicators");
 		if (coi != null) {
-			NameParser.childOfIndicators = Sets.getCollection(coi);
+			Collection c = Sets.getCollection(coi);
+			NameParser0.getDefaultInstance().setChildOfIndicators(c);
 		}
 		String iln = e.getChildText("invalidLastNames");
 		if (iln != null) {
-			NameParser.invalidLastNames = Sets.getCollection(iln);
+			Collection c = Sets.getCollection(iln);
+			NameParser0.getDefaultInstance().setInvalidLastNames(c);
 		}
 		String nt = e.getChildText("nameTitles");
 		if (nt != null) {
-			NameParser.nameTitles = Sets.getCollection(nt);
+			Collection c = Sets.getCollection(nt);
+			NameParser0.getDefaultInstance().setNameTitles(c);
 		}
 		String lnp = e.getChildText("lastNamePrefixes");
 		if (lnp != null) {
-			NameParser.lastNamePrefixes = Sets.getCollection(lnp);
+			Collection c = Sets.getCollection(lnp);
+			NameParser0.getDefaultInstance().setLastNamePrefixes(c);
 		}
 	}
 }
