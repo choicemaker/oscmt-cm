@@ -17,7 +17,7 @@ public final class DoNothingPlatform implements CMPlatform {
 
 	@Override
 	public CMPluginRegistry getPluginRegistry() {
-		return null;
+		return DoNothingRegistry.getInstance();
 	}
 
 	@Override
