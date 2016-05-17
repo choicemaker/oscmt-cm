@@ -281,5 +281,14 @@
             file="etc/data/en.us.ny.nyc.commonCityAbbreviations.txt">
       </fileMap>
    </extension>
+   <extension
+         point="com.choicemaker.cm.matching.en.us.nameParser0">
+      <nameParser0
+            name="en.us.defaultNameParser0"
+            genericFirstNames="genericFirstNames"
+            invalidLastNames="invalidLastNames"
+            nameTitles="nameTitles"
+            lastNamePrefixes="lastNamePrefixes"/>
+   </extension>
 
 </plugin>
