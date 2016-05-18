@@ -28,8 +28,8 @@ public class ParsedName0 {
 	private String potentialMaidenName = EMPTY;
 	private String mothersFirstName = EMPTY;
 
-	/** Used by NameParser0 and parameterized constructor */
-	ParsedName0() {
+	public ParsedName0() {
+		this(EMPTY,EMPTY,EMPTY);
 	}
 
 	public ParsedName0(String f, String m, String l) {
