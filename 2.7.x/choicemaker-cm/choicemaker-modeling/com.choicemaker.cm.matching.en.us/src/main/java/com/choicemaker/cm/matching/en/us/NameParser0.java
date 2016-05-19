@@ -353,7 +353,7 @@ public class NameParser0 {
 
 		// If a name is compound, calculate maiden without regard for
 		// hyphenation
-		String tmpLast = chunks.getLastName();
+		String tmpLast = chunks.getFirstName();
 		String tmpMaiden = "";
 		StringTokenizer st = new StringTokenizer(chunks.getMiddleNames());
 		boolean isCompound = st.hasMoreTokens();
@@ -379,11 +379,11 @@ public class NameParser0 {
 		// If found separate names
 		if (!isCompound) {
 			int index =
-				Math.max(chunks.getLastName().indexOf('-'), chunks
-						.getLastName().indexOf('/'));
+				Math.max(chunks.getFirstName().indexOf('-'), chunks
+						.getFirstName().indexOf('/'));
 			if (index > 0) {
-				retVal.setLastName(chunks.getLastName().substring(index + 1));
-				retVal.setPotentialMaidenName(chunks.getLastName().substring(0,
+				retVal.setLastName(chunks.getFirstName().substring(index + 1));
+				retVal.setPotentialMaidenName(chunks.getFirstName().substring(0,
 						index));
 				// the first part becomes a potential maiden name
 			}
