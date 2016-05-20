@@ -3,27 +3,27 @@ package com.choicemaker.cm.matching.en.us;
 import junit.framework.TestCase;
 
 public class ParsedName0Test extends TestCase {
-	
+
 	public static final String SPACE = " ";
-	
+
 	public static final String FN = "Pete".intern();
 	public static final String MN = "Petey Petersen".intern();
 	public static final String LN = "Peters".intern();
 	public static final String TITLES = "Professor PhD".intern();
 	public static final String MOMFN = "Patricia".intern();
 	public static final String MAIDEN = "Peterson".intern();
-	
+
 	public static void assertEmptyField(String accessorName, String accessorValue) {
 		assert accessorName != null && !accessorName.isEmpty() ;
 		String msg;
-		
+
 		msg = "'" + accessorName + "' is null";
 		assertTrue(msg, accessorValue != null);
-		
+
 		msg = "'" + accessorName + "' is not empty";
 		assertTrue(msg, accessorValue.isEmpty());
 	}
-	
+
 	public static String pad(String s) {
 		String retVal;
 		if (s != null) {

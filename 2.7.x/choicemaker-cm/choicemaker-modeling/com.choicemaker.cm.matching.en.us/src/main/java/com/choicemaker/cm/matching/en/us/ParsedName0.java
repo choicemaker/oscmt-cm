@@ -18,7 +18,7 @@ package com.choicemaker.cm.matching.en.us;
  * @author rphall (refactored for CM 2.7)
  */
 public class ParsedName0 {
-	
+
 	public static final String EMPTY = "".intern();
 
 	private String firstName = EMPTY;
