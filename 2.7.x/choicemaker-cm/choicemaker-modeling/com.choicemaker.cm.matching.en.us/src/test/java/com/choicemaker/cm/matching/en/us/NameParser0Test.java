@@ -68,7 +68,7 @@ public class NameParser0Test extends TestCase {
 				iae = testData[i];
 				f = iae.first;
 				m = iae.middle;
-				l = iae.middle;
+				l = iae.last;
 				expected = iae.expected;
 				computed = np.parse(f, m, l);
 				assertTrue(computed != null);
