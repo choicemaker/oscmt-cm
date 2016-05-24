@@ -4,7 +4,6 @@ target-??/
 temp.folder/
 tmp/
 
-pom_non-rc1.xml
 project.t.xml
 cobertura.ser
 build.xml
@@ -17,6 +16,6 @@ build.xml
 
 .*.swp
 *.BAK-??
-
+pom_non-rc*.xml
 *_local.properties
 *_local.xml
