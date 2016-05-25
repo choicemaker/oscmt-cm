@@ -72,8 +72,9 @@
           <execution>
             <id>assembly</id>
             <phase>package</phase>
-            <configuration combine.self="override">
-              <descriptor>src/main/assembly/assembly.xml</descriptor>
+            <configuration>
+              <descriptor combine.self="override">src/main/assembly/assembly.xml</descriptor>
+              <descriptorRefs combine.self="override"/>
             </configuration>
             <goals>
               <goal>single</goal>

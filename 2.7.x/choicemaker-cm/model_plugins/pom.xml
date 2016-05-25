@@ -73,8 +73,8 @@
             <execution>
               <id>assembly</id>
               <phase>package</phase>
-              <configuration combine.self="override">
-                <descriptorRefs>
+              <configuration>
+                <descriptorRefs combine.self="override">
                   <descriptorRef>cm-model-assembly</descriptorRef>
                 </descriptorRefs>
               </configuration>

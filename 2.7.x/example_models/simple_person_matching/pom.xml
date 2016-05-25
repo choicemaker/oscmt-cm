@@ -25,9 +25,10 @@
           <execution>
             <id>assembly</id>
             <phase>package</phase>
-            <configuration combine.self="override">
-              <descriptor>src/main/assembly/assembly.xml</descriptor>
-              <finalName>simple_person_matching-${pom.version}</finalName>
+            <configuration>
+              <descriptor combine.self="override">src/main/assembly/assembly.xml</descriptor>
+              <descriptorRefs combine.self="override"/>
+              <finalName combine.self="override">simple_person_matching-${pom.version}</finalName>
             </configuration>
             <goals>
               <goal>single</goal>
