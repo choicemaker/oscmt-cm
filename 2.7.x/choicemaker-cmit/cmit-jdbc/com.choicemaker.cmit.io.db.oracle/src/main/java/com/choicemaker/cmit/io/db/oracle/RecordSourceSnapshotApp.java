@@ -43,8 +43,8 @@ public class RecordSourceSnapshotApp {
 	// private static final Logger logger = Logger
 	// .getLogger(RecordSourceSnapshotApp.class.getName());
 
-	private static final String SQL_CMT_TRAINING_RS_SNAPSHOT =
-		"call CMTTRAINING.RS_SNAPSHOT (?,?,?)";
+//	private static final String SQL_CMT_TRAINING_RS_SNAPSHOT =
+//		"call CMTTRAINING.RS_SNAPSHOT (?,?,?)";
 
 	public static void main(String[] args) throws Exception {
 
