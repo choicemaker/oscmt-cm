@@ -7,11 +7,12 @@
  *******************************************************************************/
 package com.choicemaker.cm.io.xml.base;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.util.Locale;
 
@@ -35,7 +36,7 @@ public class XmlMarkedRecordPairSink implements MarkedRecordPairSink {
 	private String rawXmlFileName;
 	private ImmutableProbabilityModel model;
 	private XmlRecordOutputter recordOutputter;
-	private FileOutputStream outFile;
+	private FileOutputStream outputStream;
 	private Writer writer;
 
 	private static String encoding;
@@ -70,13 +71,28 @@ public class XmlMarkedRecordPairSink implements MarkedRecordPairSink {
 		getWriter().write("<ChoiceMakerMarkedRecordPairs>" + Constants.LINE_SEPARATOR);
 	}
 
+	protected FileOutputStream createFileOutputStream()
+			throws FileNotFoundException {
+		FileOutputStream retVal = new FileOutputStream(
+				new File(xmlFileName).getAbsoluteFile());
+		return retVal;
+	}
+
+	protected Writer createWriter() throws FileNotFoundException,
+			UnsupportedEncodingException {
+		FileOutputStream os = createFileOutputStream();
+		Writer retVal = new OutputStreamWriter(os, getEncoding());
+		return retVal;
+	}
+
 	public void open() throws IOException {
 		recordOutputter = ((XmlAccessor) model.getAccessor()).getXmlRecordOutputter();
-		outFile = new FileOutputStream(new File(xmlFileName).getAbsoluteFile());
-		setWriter(new OutputStreamWriter(new BufferedOutputStream(outFile)));
+		FileOutputStream fos = createFileOutputStream();
+		setOutputStream(fos);
+		Writer w = createWriter();
+		setWriter(w);
 		getWriter().write("<?xml version=\"1.0\" encoding=\"" + encoding + "\"?>" + Constants.LINE_SEPARATOR);
 		startRootEntity();
-		// BUG: getWriter().write(">" + Constants.LINE_SEPARATOR);
 		getWriter().flush();
 	}
 
@@ -87,7 +103,7 @@ public class XmlMarkedRecordPairSink implements MarkedRecordPairSink {
 	public void close() throws IOException {
 		finishRootEntity();
 		getWriter().flush();
-		outFile.close();
+		getOutputStream().close();
 	}
 
 	public String getName() {
@@ -106,7 +122,15 @@ public class XmlMarkedRecordPairSink implements MarkedRecordPairSink {
 		this.xmlFileName = xmlFileName;
 	}
 
-	private void setWriter(Writer writer) {
+	private FileOutputStream getOutputStream() {
+		return outputStream;
+	}
+
+	private void setOutputStream(FileOutputStream outputStream) {
+		this.outputStream = outputStream;
+	}
+
+	protected void setWriter(Writer writer) {
 		this.writer = writer;
 	}
 

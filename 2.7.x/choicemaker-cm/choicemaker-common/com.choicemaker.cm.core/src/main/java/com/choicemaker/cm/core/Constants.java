@@ -41,6 +41,9 @@ public final class Constants {
 	/** The extension of marked record pair descriptors. */
 	public static final String MRPS_EXTENSION = "mrps";
 
+	/** The extension of encrypted marked record pair descriptors. */
+	public static final String ENCRYPTED_MRPS_EXTENSION = "emrps";
+
 	public static final String RPS_EXTENSION = "rps";
 
 	public static final String RS_EXTENSION = "rs";
@@ -57,6 +60,8 @@ public final class Constants {
 	public static final String CSV_EXTENSION = "csv";
 
 	public static final String XML_EXTENSION = "xml";
+
+	public static final String ENCRYPTED_XML_EXTENSION = "xmlenc";
 
 	public static final String LINE_SEPARATOR = System
 			.getProperty("line.separator");

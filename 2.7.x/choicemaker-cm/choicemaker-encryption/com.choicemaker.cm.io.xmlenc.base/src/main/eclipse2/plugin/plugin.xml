@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+   id="com.choicemaker.cm.io.xmlenc.base"
+   name="XMLENC IO Base Plug-in"
+   version="2.5.0"
+   provider-name="ChoiceMaker">
+
+   <runtime>
+      <library name="base.jar">
+         <export name="*"/>
+      </library>
+   </runtime>
+   <requires>
+      <import plugin="com.choicemaker.cm.core"/>
+   </requires>
+
+   <extension
+         id="xmlencMrpsReader"
+         name="xmlenc"
+         point="com.choicemaker.cm.core.mrpsReader">
+      <handler
+            name="XMLENC IO"
+            class="com.choicemaker.cm.io.xmlenc.base.xmlconf.XmlEncMarkedRecordPairSourceXmlConf"
+            handledClass="com.choicemaker.cm.io.xmlenc.base.XmlEncMarkedRecordPairSource">
+      </handler>
+   </extension>
+<!--
+   <extension
+         id="simpleXmlEncMrpsReader"
+         name="simpleXmlEncMrpsReader"
+         point="com.choicemaker.cm.core.fileMrpsReader">
+      <handler
+            class="com.choicemaker.cm.io.xmlenc.base.xmlconf.SimpleXmlEncMarkedRecordPairSourceXmlConf"
+            extension="xmlenc">
+      </handler>
+   </extension>
+   <extension
+         id="xmlenc"
+         name="xmlenc"
+         point="com.choicemaker.cm.core.generatorPlugin">
+      <plugin
+            name="XMLENC"
+            class="com.choicemaker.cm.io.xmlenc.base.gen.XmlEncGenerator">
+      </plugin>
+   </extension>
+   <extension
+         id="xmlencRsReader"
+         name="xmlencRsReader"
+         point="com.choicemaker.cm.core.rsReader">
+      <handler
+            name="XMLENC"
+            class="com.choicemaker.cm.io.xmlenc.base.xmlconf.XmlEncRecordSourceXmlConf"
+            backwardCompatibilityId="com.choicemaker.cm.io.xmlenc.xmlconf.XmlEncRecordSourceXmlConf"
+            handledClass="com.choicemaker.cm.io.xmlenc.base.XmlEncRecordSource">
+      </handler>
+   </extension>
+   <extension
+         id="xmlencMatchCandidate"
+         name="xmlencMatchCandidate"
+         point="com.choicemaker.cm.core.matchCandidate">
+      <matchCandidate
+            class="com.choicemaker.cm.io.xmlenc.base.XmlEncMatchCandidateFactory">
+      </matchCandidate>
+   </extension>
+   <extension
+         id="xmlencAccessor"
+         name="xmlencAccessor"
+         point="com.choicemaker.cm.core.accessor">
+      <accessor
+            class="com.choicemaker.cm.io.xmlenc.base.XmlEncAccessor">
+      </accessor>
+   </extension>
+   <extension
+         id="xmlencReporterAccessor"
+         name="xmlencReporterAccessor"
+         point="com.choicemaker.cm.core.accessor">
+      <accessor
+            class="com.choicemaker.cm.io.xmlenc.base.XmlEncReporterAccessor">
+      </accessor>
+   </extension>
+-->
+
+</plugin>

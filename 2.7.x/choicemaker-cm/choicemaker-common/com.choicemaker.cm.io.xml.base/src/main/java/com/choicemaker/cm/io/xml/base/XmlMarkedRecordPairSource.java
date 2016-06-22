@@ -39,11 +39,14 @@ import com.choicemaker.util.FileUtilities;
  *
  * @author    Martin Buechi
  */
-public class XmlMarkedRecordPairSource
-	extends XMLFilterImpl
-	implements RecordHandler, Runnable, MarkedRecordPairSource {
-	private static Logger logger = Logger.getLogger(XmlMarkedRecordPairSource.class.getName());
-	private final int BUF_SIZE = 1000;
+public class XmlMarkedRecordPairSource extends XMLFilterImpl implements
+		RecordHandler, Runnable, MarkedRecordPairSource {
+
+	private static Logger logger = Logger
+			.getLogger(XmlMarkedRecordPairSource.class.getName());
+
+	public static final int BUFFER_SIZE = 1000;
+
 	private String name;
 
 	// If the inputStream is null, the xmlFileName must not be null
@@ -61,7 +64,7 @@ public class XmlMarkedRecordPairSource
 	private static final int MR = 1;
 	private static final int MA = 2;
 	private static final int OUTSIDE = 3;
-	private MutableMarkedRecordPair[] pairs = new MutableMarkedRecordPair[BUF_SIZE];
+	private MutableMarkedRecordPair[] pairs = new MutableMarkedRecordPair[BUFFER_SIZE];
 	private MutableMarkedRecordPair cur;
 	private int out;
 	private int size;
@@ -75,17 +78,15 @@ public class XmlMarkedRecordPairSource
 	public XmlMarkedRecordPairSource() {
 	}
 
-	public XmlMarkedRecordPairSource(String fileName, String rawXmlFileName, ImmutableProbabilityModel model) {
-		setFileName(fileName);
-		//this.xmlFileName = xmlFileName;
-		setRawXmlFileName(rawXmlFileName);
-		setModel(model);
+	public XmlMarkedRecordPairSource(String fileName, String rawXmlFileName,
+			ImmutableProbabilityModel model) {
+		this(null, fileName, rawXmlFileName, model);
 	}
 
-	public XmlMarkedRecordPairSource(InputStream is, String fileName, String rawXmlFileName, ImmutableProbabilityModel model) {
-		this.inputStream = is;
+	public XmlMarkedRecordPairSource(InputStream is, String fileName,
+			String rawXmlFileName, ImmutableProbabilityModel model) {
+		this.setInputStream(is);
 		setFileName(fileName);
-		//this.xmlFileName = xmlFileName;
 		setRawXmlFileName(rawXmlFileName);
 		setModel(model);
 	}
@@ -99,48 +100,48 @@ public class XmlMarkedRecordPairSource
 	}
 
 	public void open() {
-		thrown = null;
+		setThrown(null);
 		DefaultHandler handler = ((XmlAccessor) model.getAccessor()).getXmlReader();
 		setContentHandler(handler);
 		((XmlReader) handler).open(this);
 		out = 0;
-		size = 0;
+		setSize(0);
 		depth = 0;
-		mayHaveMore = true;
-		readMore = true;
+		setMayHaveMore(true);
+		setReadMore(true);
 		thread = new Thread(this);
 		thread.start();
 	}
 
 	public synchronized boolean hasNext() throws IOException {
 		try {
-			while (size == 0 && mayHaveMore) {
+			while (getSize() == 0 && isMayHaveMore()) {
 				wait();
 			}
-			if (thrown != null) {
-				throw new IOException(thrown);
+			if (getThrown() != null) {
+				throw new IOException(getThrown());
 			}
-			return size != 0;
+			return getSize() != 0;
 		} catch (InterruptedException ex) {
-			readMore = false;
+			setReadMore(false);
 			return false;
 		}
 	}
 
 	public synchronized MutableMarkedRecordPair getNextMarkedRecordPair() throws IOException {
-		if (thrown != null) {
-			throw new IOException(thrown);
+		if (getThrown() != null) {
+			throw new IOException(getThrown());
 		}
 		try {
-			while (size == 0 && mayHaveMore) {
+			while (getSize() == 0 && isMayHaveMore()) {
 				wait();
 			}
 		} catch (InterruptedException ex) {
 			throw new IOException(ex.toString());
 		}
 		MutableMarkedRecordPair r = pairs[out];
-		--size;
-		out = (out + 1) % BUF_SIZE;
+		setSize(getSize() - 1);
+		out = (out + 1) % BUFFER_SIZE;
 		this.notifyAll();
 		return r;
 	}
@@ -150,12 +151,12 @@ public class XmlMarkedRecordPairSource
 	}
 
 	public void run() {
-		InputStream is = this.inputStream;
+		InputStream is = this.getInputStream();
 		try {
 			XMLReader reader = XmlParserFactory.createXMLReader();
 			reader.setContentHandler(this);
 			if (is == null) {
-				is = new FileInputStream(new File(xmlFileName).getAbsoluteFile());
+				is = new FileInputStream(new File(getXmlFileName()).getAbsoluteFile());
 			}
 			reader.parse(new InputSource(new BufferedInputStream(is)));
 		} catch (SAXException ex) {
@@ -166,12 +167,12 @@ public class XmlMarkedRecordPairSource
 						|| ex.toString().startsWith("org.xml.sax.SAXParseException: End of entity not allowed; an end tag is missing.") ||
 						ex.toString().startsWith("org.xml.sax.SAXParseException: XML document structures must start and end within the same entity."))) {
 					logger.severe(ex.toString());
-					thrown = ex;
+					setThrown(ex);
 				}
 			}
 		} catch (Exception ex) {
 			logger.severe("Error reading file referenced by " + fileName + ": " + ex);
-			thrown = ex;
+			setThrown(ex);
 		} finally {
 			try {
 				if (is != null) {
@@ -181,7 +182,7 @@ public class XmlMarkedRecordPairSource
 			}
 		}
 		synchronized (this) {
-			mayHaveMore = false;
+			setMayHaveMore(false);
 			this.notifyAll();
 		}
 	}
@@ -290,12 +291,12 @@ public class XmlMarkedRecordPairSource
 	private void putPair(MutableMarkedRecordPair pair) throws SAXException {
 		synchronized (this) {
 			try {
-				while (size == BUF_SIZE && readMore) {
+				while (getSize() == BUFFER_SIZE && isReadMore()) {
 					wait();
 				}
-				if (readMore) {
-					pairs[(out + size) % BUF_SIZE] = pair;
-					++size;
+				if (isReadMore()) {
+					pairs[(out + getSize()) % BUFFER_SIZE] = pair;
+					setSize(getSize() + 1);
 					notifyAll();
 				} else {
 					notifyAll();
@@ -324,9 +325,49 @@ public class XmlMarkedRecordPairSource
 	}
 
 	public synchronized void close() {
-		readMore = false;
-		mayHaveMore = false;
+		setReadMore(false);
+		setMayHaveMore(false);
 		this.notifyAll(); // make sure that thread ends
+	}
+
+	protected int getSize() {
+		return size;
+	}
+
+	protected void setSize(int size) {
+		this.size = size;
+	}
+
+	protected boolean isReadMore() {
+		return readMore;
+	}
+
+	protected void setReadMore(boolean readMore) {
+		this.readMore = readMore;
+	}
+
+	protected boolean isMayHaveMore() {
+		return mayHaveMore;
+	}
+
+	protected void setMayHaveMore(boolean mayHaveMore) {
+		this.mayHaveMore = mayHaveMore;
+	}
+
+	protected Throwable getThrown() {
+		return thrown;
+	}
+
+	protected void setThrown(Throwable thrown) {
+		this.thrown = thrown;
+	}
+
+	protected InputStream getInputStream() {
+		return inputStream;
+	}
+
+	protected void setInputStream(InputStream inputStream) {
+		this.inputStream = inputStream;
 	}
 
 	/**
@@ -352,6 +393,16 @@ public class XmlMarkedRecordPairSource
 	public String getXmlFileName() {
 		return xmlFileName;
 	}
+	
+	/**
+	 * This method is protected since the difference between "rawXmlFileName"
+	 * and "xmlFileName" is confusing and ambiguous.
+	 * 
+	 * @param s
+	 */
+	protected void setXmlFileName(String s) {
+		this.xmlFileName = s;
+	}
 
 	/**
 	 * Set the value of xmlFileName.
@@ -359,7 +410,8 @@ public class XmlMarkedRecordPairSource
 	 */
 	public void setRawXmlFileName(String fn) {
 		this.rawXmlFileName = fn;
-		this.xmlFileName = FileUtilities.getAbsoluteFile(new File(fileName).getParentFile(), fn).toString();
+		String s = FileUtilities.getAbsoluteFile(new File(fileName).getParentFile(), fn).toString();
+		setXmlFileName(s);
 	}
 
 	public String getRawXmlFileName() {
@@ -392,6 +444,6 @@ public class XmlMarkedRecordPairSource
 	}
 
 	public Sink getSink() {
-		return new XmlMarkedRecordPairSink(fileName, xmlFileName, model);
+		return new XmlMarkedRecordPairSink(fileName, getXmlFileName(), model);
 	}
 }

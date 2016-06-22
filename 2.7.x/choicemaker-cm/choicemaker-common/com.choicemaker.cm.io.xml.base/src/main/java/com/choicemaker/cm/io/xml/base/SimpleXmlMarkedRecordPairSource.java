@@ -18,8 +18,7 @@ public class SimpleXmlMarkedRecordPairSource extends XmlMarkedRecordPairSource {
 	public SimpleXmlMarkedRecordPairSource() { }
 
 	public SimpleXmlMarkedRecordPairSource(String xmlFileName, ImmutableProbabilityModel model) {
-		setFileName(xmlFileName);
-		setModel(model);
+		super(xmlFileName, xmlFileName, model);
 	}
 
 	public void setFileName(String fn) {
