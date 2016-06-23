@@ -202,7 +202,7 @@ public class RecordIdTranslatorIT {
 
 			str = br.readLine();
 			while (str != null) {
-				String id = dataType.idFromString(str);
+				Comparable<?> id = dataType.idFromString(str);
 				assertTrue(id.equals(str));
 				retVal.writeRecordID(id);
 				str = br.readLine();

@@ -85,7 +85,7 @@ public class RecordIdSource<T extends Comparable<T>> extends BaseFileSource<T>
 
 		str = br.readLine();
 		if (str != null && !str.equals("")) {
-			ret = dataType.idFromString(str);
+			ret = (T) dataType.idFromString(str);
 		} else {
 			throw new EOFException();
 		}
