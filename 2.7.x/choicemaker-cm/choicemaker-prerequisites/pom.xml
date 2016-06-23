@@ -57,7 +57,6 @@
   <modules>
     <module>org.apache.ant</module>
     <module>org.apache.bcel</module>
-    <module>org.apache.oro</module>
     <module>org.eclipse.ant.core</module>
     <module>org.eclipse.ant.internal.core</module>
     <module>org.eclipse.core.boot</module>
