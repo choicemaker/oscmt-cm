@@ -1,4 +1,4 @@
-package com.choicemaker.demo.simple_person_matching.fake;
+package com.choicemaker.demo.simple_person_matching;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

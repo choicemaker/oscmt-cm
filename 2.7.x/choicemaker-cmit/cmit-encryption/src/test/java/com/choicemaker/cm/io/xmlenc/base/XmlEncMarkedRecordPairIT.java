@@ -39,7 +39,7 @@ import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.xmlconf.XmlConfigurator;
 import com.choicemaker.cm.io.xml.base.XmlMarkedRecordPairSource;
-import com.choicemaker.demo.simple_person_matching.fake.PersonMrpListComparator;
+import com.choicemaker.demo.simple_person_matching.PersonMrpListComparator;
 import com.choicemaker.e2.embed.EmbeddedPlatform;
 import com.choicemaker.util.FileUtilities;
 import com.choicemaker.xmlencryption.AwsKmsUtils;

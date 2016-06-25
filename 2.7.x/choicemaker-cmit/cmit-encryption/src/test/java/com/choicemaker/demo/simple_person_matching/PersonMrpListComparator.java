@@ -1,4 +1,4 @@
-package com.choicemaker.demo.simple_person_matching.fake;
+package com.choicemaker.demo.simple_person_matching;
 
 import java.util.Iterator;
 import java.util.List;
