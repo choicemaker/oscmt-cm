@@ -71,17 +71,8 @@ public class XmlEncMarkedRecordPairIT {
 	 */
 	public static final String PN_CREDENTIALS = "cm.xmlenc.credentials";
 
-	/** Clear-text MRPS descriptor file */
-	public static final String MRPS_FILE = "/simple_person_matching/etc/traindata/generic_person/mrps/test-01.mrps";
-
 	/** Clear-text MRPS data file */
 	public static final String XML_FILE = "/simple_person_matching/etc/traindata/generic_person/mrps/test-01.xml";
-
-	/** Encrypted MRPS descriptor file */
-	public static final String EMRPS_FILE = "/simple_person_matching/etc/traindata/generic_person/mrps/test-01.emrps";
-
-	/** Encrypted MRPS data file */
-	public static final String XMLENC_FILE = "/simple_person_matching/etc/traindata/generic_person/mrps/test-01.xmlenc";
 
 	/** The name of the model used by this test */
 	public static final String MODEL = "com.choicemaker.cm.simplePersonMatching.Model1";
@@ -101,6 +92,102 @@ public class XmlEncMarkedRecordPairIT {
 	public static final String RECORD_CLASSNAME = "com.choicemaker.demo.simple_person_matching.gendata.gend.Person.Person";
 
 	private static Class<?> RECORD_CLASS;
+
+	public static File computeTargetDirectory(File f) throws IOException {
+		return new File(f, BUILD_DIRECTORY).getCanonicalFile();
+	}
+
+	protected static File createEncryptedXmlFile(DocumentEncryptor encryptor,
+			String content) {
+		File retVal = null;
+		FileOutputStream fos = null;
+		try {
+			InputStream is = XmlEncMarkedRecordPairIT.class
+					.getResourceAsStream(content);
+			DocumentBuilder builder = XMLUtils.createDocumentBuilder(false);
+			Document doc = builder.parse(is);
+			encryptor.encrypt(doc);
+			TransformerFactory tFactory = TransformerFactory.newInstance();
+			Transformer transformer = tFactory.newTransformer();
+			DOMSource source = new DOMSource(doc);
+			retVal = File.createTempFile("xmlenc-test", ".xmlenc");
+			fos = new FileOutputStream(retVal);
+			StreamResult result = new StreamResult(fos);
+			transformer.transform(source, result);
+		} catch (Exception x) {
+			fail(x.toString());
+		} finally {
+			if (fos != null) {
+				try {
+					fos.close();
+				} catch (IOException e) {
+					logger.warning(e.toString());
+					;
+				}
+			}
+			fos = null;
+		}
+		return retVal;
+	}
+
+	protected static List<ImmutableRecordPair> readClearTextMRPS(
+			String xmlFile, ImmutableProbabilityModel model) {
+		List<ImmutableRecordPair> retVal = new ArrayList<>();
+		XmlMarkedRecordPairSource clearSource = null;
+		try {
+			InputStream is = XmlEncMarkedRecordPairIT.class
+					.getResourceAsStream(xmlFile);
+			clearSource = new XmlMarkedRecordPairSource(is, "fake.mrps",
+					xmlFile, model);
+			clearSource.open();
+			while (clearSource.hasNext()) {
+				ImmutableRecordPair mrp = clearSource.getNext();
+				Record q = mrp.getQueryRecord();
+				assertTrue(RECORD_CLASS.isInstance(q));
+				Record m = mrp.getMatchRecord();
+				assertTrue(RECORD_CLASS.isInstance(m));
+				retVal.add(mrp);
+			}
+		} catch (Exception x) {
+			fail(x.toString());
+		} finally {
+			if (clearSource != null) {
+				clearSource.close();
+			}
+			clearSource = null;
+		}
+		return Collections.unmodifiableList(retVal);
+	}
+
+	protected static List<ImmutableRecordPair> readEncryptedMRPS(
+			DocumentDecryptor decryptor, String xmlencFile,
+			ImmutableProbabilityModel model) {
+		List<ImmutableRecordPair> retVal = new ArrayList<>();
+		XmlMarkedRecordPairSource clearSource = null;
+		try {
+			InputStream is = XmlEncMarkedRecordPairIT.class
+					.getResourceAsStream(xmlencFile);
+			clearSource = new XmlEncMarkedRecordPairSource(is, "fake",
+					xmlencFile, model, decryptor);
+			clearSource.open();
+			while (clearSource.hasNext()) {
+				ImmutableRecordPair mrp = clearSource.getNext();
+				Record q = mrp.getQueryRecord();
+				assertTrue(RECORD_CLASS.isInstance(q));
+				Record m = mrp.getMatchRecord();
+				assertTrue(RECORD_CLASS.isInstance(m));
+				retVal.add(mrp);
+			}
+		} catch (Exception x) {
+			fail(x.toString());
+		} finally {
+			if (clearSource != null) {
+				clearSource.close();
+			}
+			clearSource = null;
+		}
+		return Collections.unmodifiableList(retVal);
+	}
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -139,12 +226,46 @@ public class XmlEncMarkedRecordPairIT {
 		RECORD_CLASS = Class.forName(RECORD_CLASSNAME);
 	}
 
-	public static File computeTargetDirectory(File f) throws IOException {
-		return new File(f, BUILD_DIRECTORY).getCanonicalFile();
+	protected static File writeEncryptedMRPS(DocumentEncryptor encryptor,
+			List<ImmutableRecordPair> mrps, ImmutableProbabilityModel model)
+			throws IOException {
+
+		// Create the name of a temporary file (and delete the file)
+		final File tmp = File.createTempFile("xmlenc-test", ".xmlenc");
+		final String xmlencFileName = tmp.getAbsolutePath();
+		boolean deleted = tmp.delete();
+		assertTrue(deleted);
+
+		XmlEncMarkedRecordPairSink encSink = null;
+		try {
+			encSink = new XmlEncMarkedRecordPairSink("fake.mrps",
+					xmlencFileName, model, encryptor);
+			encSink.open();
+			for (ImmutableRecordPair mrp : mrps) {
+				encSink.put(mrp);
+			}
+
+		} catch (Exception x) {
+			fail(x.toString());
+
+		} finally {
+			if (encSink != null) {
+				encSink.close();
+			}
+			encSink = null;
+		}
+
+		File retVal = new File(xmlencFileName);
+		assertTrue(retVal.exists());
+		assertTrue(retVal.canRead());
+
+		return retVal;
 	}
 
 	private File workingDir;
+
 	private DocumentDecryptor decryptor;
+
 	private DocumentEncryptor encryptor;
 
 	@Before
@@ -182,8 +303,8 @@ public class XmlEncMarkedRecordPairIT {
 			final boolean isHelp = false;
 			final List<String> errors = Collections.emptyList();
 			final File inputFile = null;
-			final EncryptionParameters params = new EncryptionParameters(isHelp,
-					errors, credProps, inputFile);
+			final EncryptionParameters params = new EncryptionParameters(
+					isHelp, errors, credProps, inputFile);
 			final AWSCredentials creds = new BasicAWSCredentials(
 					params.getAwsAccessKey(), params.getAwsSecretkey());
 			final SecretKeyInfoFactory skif = new SecretKeyInfoFactory(
@@ -198,8 +319,6 @@ public class XmlEncMarkedRecordPairIT {
 		}
 
 	}
-	
-	
 
 	@Test
 	public void testDecryption() throws NoSuchMethodException {
@@ -212,286 +331,56 @@ public class XmlEncMarkedRecordPairIT {
 		assertTrue(model != null);
 
 		// Read in a list of MRP's from a clear text file
-		final List<ImmutableRecordPair> mrps = readClearTextMRPS(MRPS_FILE, XML_FILE, model);
+		final List<ImmutableRecordPair> mrps = readClearTextMRPS(XML_FILE,
+				model);
 
 		// Encrypt the file
 		final File encryptedFile = createEncryptedXmlFile(encryptor, XML_FILE);
 		final String xmlencFileName = encryptedFile.getAbsolutePath();
 
 		// Read in a list of MRP's from the encrypted file
-		final List<ImmutableRecordPair> emrps = readEncryptedMRPS(decryptor, EMRPS_FILE, xmlencFileName, model);
+		final List<ImmutableRecordPair> emrps = readEncryptedMRPS(decryptor,
+				xmlencFileName, model);
 
 		// Compare the MRP lists
 		PersonMrpListComparator mrpsComparator = new PersonMrpListComparator();
 		boolean equalLists = mrpsComparator.areEqual(mrps, emrps);
 		assertTrue(equalLists);
 
-//
-//		// 1. Are the lists the same size
-//		// 2. Do the record ids in each pair of the list from the encrypted file
-//		//    match the record ids in the "same" pair of the list from the clear-
-//		//    text file?
-//		// 3. [DEFERRED] Do the pairs in the lists "equal" each other? [HARD]
-//
-//		List<ImmutableRecordPair> _mrps;
-//
-//		final File xmlenc = createEncryptedXmlFile(encryptor, XML_FILE);
-//		assertTrue(xmlenc != null && xmlenc.canRead());
-//
-//		_mrps = new ArrayList<>();
-//		XmlMarkedRecordPairSource clearSource = null;
-//		try {
-//			InputStream is = XmlEncMarkedRecordPairIT.class
-//					.getResourceAsStream(XML_FILE);
-//			clearSource = new XmlMarkedRecordPairSource(is, MRPS_FILE,
-//					XML_FILE, model);
-//			clearSource.open();
-//			while (clearSource.hasNext()) {
-//				ImmutableRecordPair mrp = clearSource.getNext();
-//				Record q = mrp.getQueryRecord();
-//				assertTrue(RECORD_CLASS.isInstance(q));
-//				Record m = mrp.getMatchRecord();
-//				assertTrue(RECORD_CLASS.isInstance(m));
-//				_mrps.add(mrp);
-//				_mrps.add(mrp);
-//			}
-//		} catch (Exception x) {
-//			fail(x.toString());
-//		} finally {
-//			if (clearSource != null) {
-//				clearSource.close();
-//			}
-//			clearSource = null;
-//		}
-//
-//		File _xmlenc = null;
-//		XmlEncMarkedRecordPairSink encSink = null;
-//		try {
-//			_xmlenc = File.createTempFile("xmlenc-test", ".xmlenc");
-//		} catch (Exception x) {
-//			fail(x.toString());
-//		} finally {
-//			if (encSink != null) {
-//				try {
-//					encSink.close();
-//				} catch (IOException e) {
-//					logger.warning(e.toString());
-//				}
-//			}
-//			encSink = null;
-//		}
-//		assertTrue(_xmlenc != null && _xmlenc.canWrite() && _xmlenc.canRead());
-//		final File xmlenc = _xmlenc;
-//
-//		// Minimal checks on equality
-//		assertTrue(_mrps.size() > 0);
-//		assertTrue(_mrps.size() == emrps.size());
-
 		logger.exiting(SIMPLE_CLASS, METHOD);
 	}
 
-	protected static File createEncryptedXmlFile(DocumentEncryptor encryptor, String content) {
-		File retVal = null;
-		FileOutputStream fos = null;
-		try {
-			InputStream is = XmlEncMarkedRecordPairIT.class
-					.getResourceAsStream(content);
-			DocumentBuilder builder = XMLUtils.createDocumentBuilder(false);
-			Document doc = builder.parse(is);
-			encryptor.encrypt(doc);
-			TransformerFactory tFactory = TransformerFactory.newInstance();
-			Transformer transformer = tFactory.newTransformer();
-			DOMSource source = new DOMSource(doc);
-			retVal = File.createTempFile("xmlenc-test", ".xmlenc");
-			fos = new FileOutputStream(retVal);
-			StreamResult result = new StreamResult(fos);
-			transformer.transform(source, result);
-		} catch (Exception x) {
-			fail(x.toString());
-		} finally {
-			if (fos != null) {
-				try {
-					fos.close();
-				} catch (IOException e) {
-					logger.warning(e.toString());
-					;
-				}
-			}
-			fos = null;
-		}
-		return retVal;
-	}
-
+	/**
+	 * Implicitly assumes {@link #testDecryption() decryption} is already
+	 * tested.
+	 */
 	@Test
-	public void testEncryption() {
+	public void testEncryption() throws IOException, Exception {
 		final String METHOD = "testSqlServerExtensions";
 		logger.entering(SIMPLE_CLASS, METHOD);
 
-//		// Retrieve the model for the marked record pairs
-//		ImmutableProbabilityModel model = PMManager
-//				.getImmutableModelInstance(MODEL);
-//		assertTrue(model != null);
-//
-//		// Read in a list of MRP's from a clear text file
-//		final List<ImmutableRecordPair> mrps = readClearTextMRPS(MRPS_FILE, XML_FILE, model);
-//
-//		// Write the MRP's to an encrypted file
-//		final File encryptedFile = writeEncryptedMRPS(encryptor);
-//		final String xmlencFileName = encryptedFile.getAbsolutePath();
-//
-//		// Decrypt the file
-//		final File decryptedFile = createDecryptedXmlFile(decryptor, xmlencFileName);
-//		final String decryptedFileName = encryptedFile.getAbsolutePath();
+		// Retrieve the model for the marked record pairs
+		ImmutableProbabilityModel model = PMManager
+				.getImmutableModelInstance(MODEL);
+		assertTrue(model != null);
 
-		// Read in a list of MRP's from the decrypted file
+		// Read in a list of MRP's from a clear text file
+		final List<ImmutableRecordPair> mrps = readClearTextMRPS(XML_FILE,
+				model);
+
+		// Write the MRP's to an encrypted file
+		final File encryptedFile = writeEncryptedMRPS(encryptor, mrps, model);
+		final String xmlencFileName = encryptedFile.getAbsolutePath();
+
+		// Read in a list of MRP's from the encrypted file
+		final List<ImmutableRecordPair> emrps = readEncryptedMRPS(decryptor,
+				xmlencFileName, model);
+
 		// Compare the MRP lists
-		// 1. Are the lists the same size
-		// 2. Do the record ids in each pair of the list from the decrypted file
-		//    match the record ids in the "same" pair of the list from the clear-
-		//    text file?
-		// 3. [DEFERRED] Do the pairs in the lists "equal" each other? [HARD]
-		
-//		{
-//			// Retrieve the model for the marked record pairs
-//			ImmutableProbabilityModel model = PMManager
-//					.getImmutableModelInstance(MODEL);
-//			assertTrue(model != null);
-//
-//			// Encrypt the file
-//			final File encryptedFile = createEncryptedXmlFile(encryptor, XML_FILE);
-//			final String xmlencFileName = encryptedFile.getAbsolutePath();
-//
-//			// Read in a list of MRP's from the encrypted file
-//			final List<ImmutableRecordPair> emrps = readEncryptedMRPS(decryptor, EMRPS_FILE, xmlencFileName, model);
-//
-//			// Compare the MRP lists
-//			PersonMrpListComparator mrpsComparator = new PersonMrpListComparator();
-//			boolean equalLists = mrpsComparator.areEqual(mrps, emrps);
-//			assertTrue(equalLists);
-//		}
-
-//		ImmutableProbabilityModel model = PMManager
-//				.getImmutableModelInstance(MODEL);
-//		assertTrue(model != null);
-//
-//		List<ImmutableRecordPair> _mrps = new ArrayList<>();
-//		XmlMarkedRecordPairSource clearSource = null;
-//		List<ImmutableRecordPair> mrps = readClearTextMRPS(MRPS_FILE,
-//				XML_FILE, model);
-//		_mrps = null;
-//
-//		File _xmlenc = null;
-//		XmlEncMarkedRecordPairSink encSink = null;
-//		try {
-//			_xmlenc = File.createTempFile("xmlenc-test", ".xmlenc");
-//		} catch (Exception x) {
-//			fail(x.toString());
-//		} finally {
-//			if (encSink != null) {
-//				try {
-//					encSink.close();
-//				} catch (IOException e) {
-//					logger.warning(e.toString());
-//				}
-//			}
-//			encSink = null;
-//		}
-//		assertTrue(_xmlenc != null && _xmlenc.canWrite() && _xmlenc.canRead());
-//		final File xmlenc = _xmlenc;
-//
-//		_mrps = new ArrayList<>();
-//		XmlEncMarkedRecordPairSource encSource = null;
-//		try {
-//			InputStream is = XmlEncMarkedRecordPairIT.class
-//					.getResourceAsStream(XMLENC_FILE);
-//			encSource = new XmlEncMarkedRecordPairSource(is, EMRPS_FILE,
-//					XMLENC_FILE, model, decryptor);
-//			encSource.open();
-//			while (encSource.hasNext()) {
-//				ImmutableRecordPair mrp = encSource.getNext();
-//				Record q = mrp.getQueryRecord();
-//				assertTrue(RECORD_CLASS.isInstance(q));
-//				Record m = mrp.getMatchRecord();
-//				assertTrue(RECORD_CLASS.isInstance(m));
-//				_mrps.add(mrp);
-//			}
-//		} catch (Exception x) {
-//			fail(x.toString());
-//		} finally {
-//			if (encSource != null) {
-//				encSource.close();
-//			}
-//			encSource = null;
-//		}
-//		List<ImmutableRecordPair> emrps = Collections.unmodifiableList(_mrps);
-//
-//		// Minimal checks on equality
-//		assertTrue(_mrps.size() > 0);
-//		assertTrue(_mrps.size() == emrps.size());
+		PersonMrpListComparator mrpsComparator = new PersonMrpListComparator();
+		boolean equalLists = mrpsComparator.areEqual(mrps, emrps);
+		assertTrue(equalLists);
 
 		logger.exiting(SIMPLE_CLASS, METHOD);
-	}
-
-//	private File writeEncryptedMRPS(DocumentEncryptor encryptor2) {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
-
-	protected static List<ImmutableRecordPair> readClearTextMRPS(String mrpsFile,
-			String xmlFile, ImmutableProbabilityModel model) {
-		List<ImmutableRecordPair> retVal = new ArrayList<>();
-		XmlMarkedRecordPairSource clearSource = null;
-		try {
-			InputStream is = XmlEncMarkedRecordPairIT.class
-					.getResourceAsStream(xmlFile);
-			clearSource = new XmlMarkedRecordPairSource(is, mrpsFile,
-					xmlFile, model);
-			clearSource.open();
-			while (clearSource.hasNext()) {
-				ImmutableRecordPair mrp = clearSource.getNext();
-				Record q = mrp.getQueryRecord();
-				assertTrue(RECORD_CLASS.isInstance(q));
-				Record m = mrp.getMatchRecord();
-				assertTrue(RECORD_CLASS.isInstance(m));
-				retVal.add(mrp);
-			}
-		} catch (Exception x) {
-			fail(x.toString());
-		} finally {
-			if (clearSource != null) {
-				clearSource.close();
-			}
-			clearSource = null;
-		}
-		return Collections.unmodifiableList(retVal);
-	}
-
-	protected static List<ImmutableRecordPair> readEncryptedMRPS(DocumentDecryptor decryptor, String emrpsFile,
-			String xmlencFile, ImmutableProbabilityModel model) {
-		List<ImmutableRecordPair> retVal = new ArrayList<>();
-		XmlMarkedRecordPairSource clearSource = null;
-		try {
-			InputStream is = XmlEncMarkedRecordPairIT.class
-					.getResourceAsStream(xmlencFile);
-			clearSource = new XmlEncMarkedRecordPairSource(is, emrpsFile,
-					xmlencFile, model, decryptor);
-			clearSource.open();
-			while (clearSource.hasNext()) {
-				ImmutableRecordPair mrp = clearSource.getNext();
-				Record q = mrp.getQueryRecord();
-				assertTrue(RECORD_CLASS.isInstance(q));
-				Record m = mrp.getMatchRecord();
-				assertTrue(RECORD_CLASS.isInstance(m));
-				retVal.add(mrp);
-			}
-		} catch (Exception x) {
-			fail(x.toString());
-		} finally {
-			if (clearSource != null) {
-				clearSource.close();
-			}
-			clearSource = null;
-		}
-		return Collections.unmodifiableList(retVal);
 	}
 }
