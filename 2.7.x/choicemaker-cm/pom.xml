@@ -55,6 +55,7 @@
   <modules>
     <module>choicemaker-prerequisites</module>
     <module>choicemaker-common</module>
+    <module>choicemaker-encryption</module>
     <module>choicemaker-modeling</module>
     <module>choicemaker-swing</module>
     <module>choicemaker-j2ee</module>

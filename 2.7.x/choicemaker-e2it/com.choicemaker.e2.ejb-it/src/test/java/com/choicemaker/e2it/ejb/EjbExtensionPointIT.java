@@ -27,7 +27,7 @@ import com.choicemaker.e2.ejb.EjbPlatform;
 import com.choicemaker.e2it.ExtensionPointTest;
 
 @RunWith(Arquillian.class)
-public class EjbExtensionPointTest {
+public class EjbExtensionPointIT {
 
 	private static final String MAVEN_COORDINATE_SEPARATOR = ":";
 
@@ -49,7 +49,7 @@ public class EjbExtensionPointTest {
 	@Deployment
 	public static EnterpriseArchive createEarArchive() {
 		List<Class<?>> testClasses = new ArrayList<>();
-		testClasses.add(EjbExtensionPointTest.class);
+		testClasses.add(EjbExtensionPointIT.class);
 		testClasses.add(ExtensionPointTest.class);
 
 		JavaArchive ejb =
