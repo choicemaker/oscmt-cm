@@ -24,6 +24,7 @@
     <module>cmit-utils</module>
     <module>cmit-utils.j2ee</module>
     <module>cmit-objectmakers</module>
+    <module>cmit-encryption</module>
     <module>cmit-aba</module>
     <module>cmit-oaba</module>
     <module>cmit-transitivity</module>
