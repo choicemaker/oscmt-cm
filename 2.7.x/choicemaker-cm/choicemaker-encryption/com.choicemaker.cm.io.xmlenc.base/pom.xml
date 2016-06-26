@@ -65,7 +65,6 @@
     <dependency>
 	    <groupId>com.choicemaker.xml</groupId>
 	    <artifactId>santuario-kms</artifactId>
-	    <version>0.1.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
@@ -74,6 +73,10 @@
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.io.xml.base</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>org.jdom</artifactId>
     </dependency>
   </dependencies>
 
