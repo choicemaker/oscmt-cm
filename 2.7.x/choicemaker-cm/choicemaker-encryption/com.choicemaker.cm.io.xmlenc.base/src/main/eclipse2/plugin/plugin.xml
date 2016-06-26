@@ -35,15 +35,6 @@
       </handler>
    </extension>
    <extension
-         id="xmlenc"
-         name="xmlenc"
-         point="com.choicemaker.cm.core.generatorPlugin">
-      <plugin
-            name="XMLENC"
-            class="com.choicemaker.cm.io.xmlenc.base.gen.XmlEncGenerator">
-      </plugin>
-   </extension>
-   <extension
          id="xmlencRsReader"
          name="xmlencRsReader"
          point="com.choicemaker.cm.core.rsReader">
@@ -53,30 +44,6 @@
             backwardCompatibilityId="com.choicemaker.cm.io.xmlenc.xmlconf.XmlEncRecordSourceXmlConf"
             handledClass="com.choicemaker.cm.io.xmlenc.base.XmlEncRecordSource">
       </handler>
-   </extension>
-   <extension
-         id="xmlencMatchCandidate"
-         name="xmlencMatchCandidate"
-         point="com.choicemaker.cm.core.matchCandidate">
-      <matchCandidate
-            class="com.choicemaker.cm.io.xmlenc.base.XmlEncMatchCandidateFactory">
-      </matchCandidate>
-   </extension>
-   <extension
-         id="xmlencAccessor"
-         name="xmlencAccessor"
-         point="com.choicemaker.cm.core.accessor">
-      <accessor
-            class="com.choicemaker.cm.io.xmlenc.base.XmlEncAccessor">
-      </accessor>
-   </extension>
-   <extension
-         id="xmlencReporterAccessor"
-         name="xmlencReporterAccessor"
-         point="com.choicemaker.cm.core.accessor">
-      <accessor
-            class="com.choicemaker.cm.io.xmlenc.base.XmlEncReporterAccessor">
-      </accessor>
    </extension>
 -->
 
