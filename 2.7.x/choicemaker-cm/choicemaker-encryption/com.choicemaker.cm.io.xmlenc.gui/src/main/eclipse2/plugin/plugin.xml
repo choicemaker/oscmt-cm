@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+   id="com.choicemaker.cm.io.xmlenc.gui"
+   name="XMLENC IO Gui Plug-in"
+   version="2.5.0"
+   provider-name="ChoiceMaker">
+
+   <runtime>
+      <library name="gui.jar"/>
+   </runtime>
+   <requires>
+      <import plugin="com.choicemaker.cm.core"/>
+      <import plugin="com.choicemaker.cm.io.xmlenc.base"/>
+      <import plugin="com.choicemaker.cm.io.xml.base"/>
+      <import plugin="com.choicemaker.cm.modelmaker"/>
+      <import plugin="com.choicemaker.cm.gui.utils"/>
+   </requires>
+
+
+   <extension
+         id="xmlencMrpsReaderGui"
+         name="xmlencMrpsReaderGui"
+         point="com.choicemaker.cm.modelmaker.mrpsReaderGui">
+      <gui
+            hasSink="true"
+            name="XML"
+            class="com.choicemaker.cm.io.xmlenc.gui.XmlEncMarkedRecordPairSourceGuiFactory"
+            handledClass="com.choicemaker.cm.io.xmlenc.base.XmlEncMarkedRecordPairSource">
+      </gui>
+   </extension>
+<!--
+   <extension
+         id="xmlencRsReaderGui"
+         name="xmlencRsReaderGui"
+         point="com.choicemaker.cm.modelmaker.rsReaderGui">
+      <gui
+            hasSink="true"
+            name="XML"
+            class="com.choicemaker.cm.io.xmlenc.gui.XmlEncRecordSourceGuiFactory"
+            handledClass="com.choicemaker.cm.io.xmlenc.base.XmlEncRecordSource">
+      </gui>
+   </extension>
+-->
+
+</plugin>

@@ -12,32 +12,16 @@
     <relativePath>../pom.xml</relativePath>
   </parent>
 
-  <artifactId>com.choicemaker.cm.io.xmlenc.base</artifactId>
+  <artifactId>com.choicemaker.cm.io.xmlenc.gui</artifactId>
   <packaging>jar</packaging>
-  <name>ChoiceMaker Encryption: XML Base</name>
+  <name>ChoiceMaker IO Plug-in (XML GUI)</name>
 
   <properties>
-    <eclipse.plugin.runtime.library.name>base.jar</eclipse.plugin.runtime.library.name>
-    <eclipse.plugin.src.zip.name>basesrc.zip</eclipse.plugin.src.zip.name>
+    <eclipse.plugin.runtime.library.name>gui.jar</eclipse.plugin.runtime.library.name>
+    <eclipse.plugin.src.zip.name>guisrc.zip</eclipse.plugin.src.zip.name>
   </properties>
 
   <build>
-	<pluginManagement>
-		<plugins>
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.3</version>
-				<configuration>
-					<verbose>true</verbose>
-					<fork>true</fork>
-					<compilerVersion>1.7</compilerVersion>
-					<source>1.7</source>
-					<target>1.7</target>
-					<compilerArgument>-g</compilerArgument>
-				</configuration>
-			</plugin>
-		</plugins>
-	</pluginManagement>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -79,20 +63,20 @@
       <artifactId>choicemaker-util</artifactId>
     </dependency>
     <dependency>
-	    <groupId>com.choicemaker.xml</groupId>
-	    <artifactId>santuario-kms</artifactId>
-    </dependency>
-    <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.core</artifactId>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.io.xml.base</artifactId>
+      <artifactId>com.choicemaker.cm.gui.utils</artifactId>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
-      <artifactId>org.jdom</artifactId>
+      <artifactId>com.choicemaker.cm.io.xmlenc.base</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.modelmaker</artifactId>
     </dependency>
   </dependencies>
 

@@ -24,6 +24,7 @@
 
   <modules>
     <module>com.choicemaker.cm.io.xmlenc.base</module>
+    <module>com.choicemaker.cm.io.xmlenc.gui</module>
   </modules>
 
   <build>
