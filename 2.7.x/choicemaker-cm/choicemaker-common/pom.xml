@@ -39,7 +39,7 @@
     <module>com.choicemaker.cm.ml.me.base</module>
     <module>com.choicemaker.cm.compiler</module>
     <!-- module>com.choicemaker.cm.persist</module -->
-    <module>com.choicemaker.cm.compiler.tools.jdk170</module>
+    <module>com.choicemaker.cm.compiler.tools.jdk180</module>
   </modules>
 
   <build>

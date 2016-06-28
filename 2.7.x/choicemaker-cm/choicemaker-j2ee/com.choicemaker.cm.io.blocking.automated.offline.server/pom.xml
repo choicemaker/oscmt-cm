@@ -21,11 +21,12 @@
     <version.org.jboss.as.plugins.maven.plugin>7.3.Final</version.org.jboss.as.plugins.maven.plugin>
     <version.org.jboss.spec.jboss.javaee.6.0>3.0.0.Final</version.org.jboss.spec.jboss.javaee.6.0>
 
-		<!-- maven-compiler-plugin -->
+		<!-- maven-compiler-plugin
     <plugin.maven-compiler.version>3.1</plugin.maven-compiler.version>
     <plugin.maven-compiler.compilerVersion>1.7</plugin.maven-compiler.compilerVersion>
     <plugin.maven-compiler.source>1.7</plugin.maven-compiler.source>
     <plugin.maven-compiler.target>1.7</plugin.maven-compiler.target>
+    -->
 
 		<!-- other plugin versions -->
     <plugin.ejb.version>2.3</plugin.ejb.version>
@@ -39,6 +40,7 @@
   <build>
     <plugins>
 
+      <!--
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
@@ -46,6 +48,7 @@
           <target>1.7</target>
         </configuration>
       </plugin>
+      -->
 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

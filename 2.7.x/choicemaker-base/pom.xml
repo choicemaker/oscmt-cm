@@ -63,9 +63,9 @@
     <plugin.maven-checkstyle.version>2.11</plugin.maven-checkstyle.version>
 
     <plugin.maven-compiler.version>3.3</plugin.maven-compiler.version>
-    <plugin.maven-compiler.compilerVersion>1.7</plugin.maven-compiler.compilerVersion>
-    <plugin.maven-compiler.source>1.4</plugin.maven-compiler.source>
-    <plugin.maven-compiler.target>1.4</plugin.maven-compiler.target>
+    <plugin.maven-compiler.compilerVersion>1.8</plugin.maven-compiler.compilerVersion>
+    <plugin.maven-compiler.source>1.8</plugin.maven-compiler.source>
+    <plugin.maven-compiler.target>1.8</plugin.maven-compiler.target>
 
     <plugin.maven-dependency.version>2.10</plugin.maven-dependency.version>
     <plugin.maven-deploy.version>2.8.1</plugin.maven-deploy.version>

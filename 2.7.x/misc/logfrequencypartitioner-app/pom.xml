@@ -19,14 +19,17 @@
   <properties>
     <maven.site.skip>false</maven.site.skip>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <plugin.maven-compiler.version>3.1</plugin.maven-compiler.version>
-    <plugin.maven-compiler.compilerVersion>1.7</plugin.maven-compiler.compilerVersion>
-    <plugin.maven-compiler.source>1.7</plugin.maven-compiler.source>
-    <plugin.maven-compiler.target>1.7</plugin.maven-compiler.target>
+<!-- -->
+    <plugin.maven-compiler.version>3.3</plugin.maven-compiler.version>
+    <plugin.maven-compiler.compilerVersion>1.8</plugin.maven-compiler.compilerVersion>
+    <plugin.maven-compiler.source>1.8</plugin.maven-compiler.source>
+    <plugin.maven-compiler.target>1.8</plugin.maven-compiler.target>
+<!-- -->
   </properties>
 
   <build>
     <plugins>
+      <!-- -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -34,13 +37,13 @@
         <configuration>
           <verbose>true</verbose>
           <fork>true</fork>
-          <!-- executable>${java.home}/bin/javac</executable -->
             <compilerVersion>${plugin.maven-compiler.compilerVersion}</compilerVersion>
           <source>${plugin.maven-compiler.source}</source>
           <target>${plugin.maven-compiler.target}</target>
           <compilerArgument>-g</compilerArgument>
         </configuration>
       </plugin>
+      <!-- -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>

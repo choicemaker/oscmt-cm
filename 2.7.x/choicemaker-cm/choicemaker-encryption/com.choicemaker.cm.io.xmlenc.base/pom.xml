@@ -24,6 +24,7 @@
   <build>
 	<pluginManagement>
 		<plugins>
+			<!--
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.3</version>
@@ -36,6 +37,7 @@
 					<compilerArgument>-g</compilerArgument>
 				</configuration>
 			</plugin>
+			-->
 		</plugins>
 	</pluginManagement>
     <plugins>

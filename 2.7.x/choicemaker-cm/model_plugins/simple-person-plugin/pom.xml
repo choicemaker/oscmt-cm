@@ -27,6 +27,7 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
       </plugin>
+      <!--
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -37,6 +38,7 @@
           <compilerArgument>-g</compilerArgument>
         </configuration>
       </plugin>
+      -->
       <plugin>
         <groupId>com.choicemaker.mvn.cluemaker</groupId>
         <artifactId>cluemaker-maven-plugin</artifactId>

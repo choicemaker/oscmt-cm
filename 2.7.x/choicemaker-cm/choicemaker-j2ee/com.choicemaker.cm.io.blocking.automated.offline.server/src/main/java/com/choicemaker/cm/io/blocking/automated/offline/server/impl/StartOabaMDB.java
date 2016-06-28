@@ -42,6 +42,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.RecordMatchingMode;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.RecValSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ValidatorBase;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordIdController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.services.RecValService3;
 
@@ -168,8 +169,9 @@ public class StartOabaMDB extends AbstractOabaMDB {
 					configureRecordMatchingMode(batchJob, mode);
 				}
 
+				final RecordIdController ric =getRecordIdController();
 				MutableRecordIdTranslator<?> translator =
-					getRecordIdController().createMutableRecordIdTranslator(
+					ric.createMutableRecordIdTranslator(
 							batchJob);
 
 				// create rec_id, val_id files
@@ -187,15 +189,16 @@ public class StartOabaMDB extends AbstractOabaMDB {
 					new RecValService3(staging, master, model,
 							blockingConfiguration, queryConfiguration,
 							referenceConfiguration, recvalFactory,
-							getRecordIdController(), translator,
+							ric, translator,
 							processingEntry, batchJob, mode);
 				rvService.runService();
 				getLogger().info(
 						"Done creating rec_id, val_id files: "
 								+ rvService.getTimeElapsed());
 
-				ImmutableRecordIdTranslator<?> immutableTranslator =
-					getRecordIdController().toImmutableTranslator(translator);
+				@SuppressWarnings("rawtypes")
+				ImmutableRecordIdTranslator immutableTranslator =
+					ric.toImmutableTranslator(translator);
 				final RECORD_ID_TYPE recordIdType =
 					immutableTranslator.getRecordIdType();
 				getPropertyController().setJobProperty(batchJob,
