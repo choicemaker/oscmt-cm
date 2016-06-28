@@ -37,47 +37,65 @@ import com.choicemaker.cm.core.util.LoggingObject;
 import com.choicemaker.cm.core.xmlconf.MarkedRecordPairSourceXmlConf;
 import com.choicemaker.cm.gui.utils.JavaHelpUtils;
 import com.choicemaker.cm.gui.utils.dialogs.FileChooserFactory;
-import com.choicemaker.cm.io.xml.base.XmlMarkedRecordPairSink;
-import com.choicemaker.cm.io.xml.base.XmlMarkedRecordPairSinkFactory;
-import com.choicemaker.cm.io.xml.base.XmlMarkedRecordPairSource;
+import com.choicemaker.cm.io.xmlenc.base.XmlEncMarkedRecordPairSink;
+import com.choicemaker.cm.io.xmlenc.base.XmlEncMarkedRecordPairSinkFactory;
+import com.choicemaker.cm.io.xmlenc.base.XmlEncMarkedRecordPairSource;
+import com.choicemaker.cm.io.xmlenc.base.xmlconf.EncryptionCredential;
+import com.choicemaker.cm.io.xmlenc.base.xmlconf.EncryptionPolicy;
+import com.choicemaker.cm.io.xmlenc.base.xmlconf.InMemoryXmlEncManager;
+import com.choicemaker.cm.io.xmlenc.base.xmlconf.XmlEncryptionManager;
 import com.choicemaker.cm.io.xmlenc.res.XmlEncMessageUtil;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cm.modelmaker.gui.dialogs.MarkedRecordPairSourceGui;
 import com.choicemaker.cm.modelmaker.gui.utils.Enable;
 import com.choicemaker.cm.modelmaker.gui.utils.EnablednessGuard;
 import com.choicemaker.util.FileUtilities;
+import com.choicemaker.util.MessageUtil;
 
 /**
- * The MRPSGui associated the XmlMarkedRecordPairSource.
- * An objects of this class would be created by the
- * XmlMarkedRecordPairSourceGuiFactory.  It is used
- * by the AbstractApplication so that users can easily configure
- * and build XmlMarkedRecordPairSources.
+ * The MRPSGui associated the XmlEncMarkedRecordPairSource. An objects of this
+ * class would be created by the XmlEncMarkedRecordPairSourceGuiFactory. It is
+ * used by the AbstractApplication so that users can easily configure and build
+ * XmlEncMarkedRecordPairSources.
  *
- * @author  S. Yoakum-Stover
- * @author  Martin Buechi
+ * @author rphall
+ * @see com.choicemaker.cm.io.xml.gui.XmlMarkedRecordPairSourceGui
  */
-public class XmlEncMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui implements Enable {
-	private static final long serialVersionUID = 1L;
-	private static Logger logger = Logger.getLogger(XmlEncMarkedRecordPairSourceGui.class.getName());
+public class XmlEncMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui
+		implements Enable {
+
+	private static final long serialVersionUID = 271L;
+	private static Logger logger = Logger
+			.getLogger(XmlEncMarkedRecordPairSourceGui.class.getName());
+
+	private static final MessageUtil m = XmlEncMessageUtil.m;
+	private static String FRAME_TITLE = m.formatMessage("io.xmlenc.gui.label");
 	private static String GENERATE_MODE_LABEL = "Generate new source file";
 	private static String CREATE_MODE_LABEL = "Use existing source file";
-	private static String RELATIVE = XmlEncMessageUtil.m
+	private static String RELATIVE = m
 			.formatMessage("io.common.gui.source.file.relative");
-	private static String ABSOLUTE = XmlEncMessageUtil.m
+	private static String ABSOLUTE = m
 			.formatMessage("io.common.gui.source.file.absolute");
 	private static Dimension CREATE_DIMENSION = new Dimension(500, 140);
 	private static Dimension GENERATE_DIMENSION = new Dimension(500, 400);
+
+	private final XmlEncryptionManager crdsMgr = InMemoryXmlEncManager
+			.getInstance();
+
 	private JComponent[] generateComponents;
 	private JButton modeButton;
 	private JLabel sourceFileNameLabel;
 	private JLabel xmlFileNameLabel;
 	private JTextField xmlFileName;
 	private JButton browseButton;
+	private JLabel encPoliciesLabel;
+	private JComboBox<String> encPoliciesBox;
+	private JLabel encCredentialsLabel;
+	private JComboBox<String> encCredentialsBox;
 	private JLabel xmlFileRelativeLabel;
-	private JComboBox xmlFileRelativeBox;
+	private JComboBox<String> xmlFileRelativeBox;
 	private JLabel sourcesListLabel;
-	private JList sourcesList;
+	private JList<String> sourcesList;
 	private JScrollPane sourcesListScrollPane;
 	private JButton addButton;
 	private JButton removeButton;
@@ -90,8 +108,9 @@ public class XmlEncMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui i
 	private String extension;
 	private boolean save;
 
-	public XmlEncMarkedRecordPairSourceGui(ModelMaker parent, MarkedRecordPairSource s, boolean save) {
-		super(parent, XmlEncMessageUtil.m.formatMessage("io.xmlenc.gui.label"));
+	public XmlEncMarkedRecordPairSourceGui(ModelMaker parent,
+			MarkedRecordPairSource s, boolean save) {
+		super(parent, FRAME_TITLE);
 		this.save = save;
 		init(s);
 	}
@@ -105,16 +124,16 @@ public class XmlEncMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui i
 	}
 
 	public void setFields() {
-		if(!save) {
+		if (!save) {
 			distributeOver.setText("1");
 			maxPairsPerFile.setText("0");
 		}
-		if (source != null) {
-			XmlMarkedRecordPairSource s = (XmlMarkedRecordPairSource) source;
+		if (getSource() != null) {
+			XmlEncMarkedRecordPairSource s = (XmlEncMarkedRecordPairSource) getSource();
 			sourceFileName.setText(s.getFileName());
 			xmlFileName.setText(s.getXmlFileName());
-			if (s.getRawXmlFileName() != null &&
-				FileUtilities.isFileAbsolute(s.getRawXmlFileName())) {
+			if (s.getRawXmlFileName() != null
+					&& FileUtilities.isFileAbsolute(s.getRawXmlFileName())) {
 				xmlFileRelativeBox.setSelectedItem(ABSOLUTE);
 			} else {
 				xmlFileRelativeBox.setSelectedItem(RELATIVE);
@@ -135,11 +154,13 @@ public class XmlEncMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui i
 	}
 
 	public void setEnabledness() {
-		boolean ok = xmlFileName.getText().length() > 0 && sourceFileName.getText().length() > 0;
+		boolean ok = xmlFileName.getText().length() > 0
+				&& sourceFileName.getText().length() > 0;
 		if (mode == CREATE) {
 			okayButton.setEnabled(ok);
 		} else {
-			boolean generate = ok && sourcesList.getModel().getSize() > 0 && parent.haveProbabilityModel();
+			boolean generate = ok && sourcesList.getModel().getSize() > 0
+					&& parent.haveProbabilityModel();
 			try {
 				int d = Integer.parseInt(distributeOver.getText());
 				int s = Integer.parseInt(maxPairsPerFile.getText());
@@ -149,13 +170,13 @@ public class XmlEncMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui i
 			}
 			okayButton.setEnabled(generate);
 		}
-		if(!save) {
+		if (!save) {
 			removeButton.setEnabled(!sourcesList.isSelectionEmpty());
 		}
 	}
 
 	public void buildSource() {
-		XmlMarkedRecordPairSource xmlSource = (XmlMarkedRecordPairSource) source;
+		XmlEncMarkedRecordPairSource xmlSource = (XmlEncMarkedRecordPairSource) getSource();
 		xmlSource.setFileName(getSourceFileName());
 		xmlSource.setRawXmlFileName(getSaveXmlFileName());
 	}
@@ -164,14 +185,18 @@ public class XmlEncMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui i
 		if (xmlFileRelativeBox.getSelectedItem().equals(ABSOLUTE)) {
 			return getAbsoluteXmlFileName();
 		} else {
-			File rel = new File(sourceFileName.getText().trim()).getAbsoluteFile().getParentFile();
-			return FileUtilities.getRelativeFile(rel, getAbsoluteXmlFileName()).toString();
+			File rel = new File(sourceFileName.getText().trim())
+					.getAbsoluteFile().getParentFile();
+			return FileUtilities.getRelativeFile(rel, getAbsoluteXmlFileName())
+					.toString();
 		}
 	}
 
 	private String getAbsoluteXmlFileName() {
-		File rel = new File(sourceFileName.getText().trim()).getAbsoluteFile().getParentFile();
-		return FileUtilities.getAbsoluteFile(rel, xmlFileName.getText().trim()).toString();
+		File rel = new File(sourceFileName.getText().trim()).getAbsoluteFile()
+				.getParentFile();
+		return FileUtilities.getAbsoluteFile(rel, xmlFileName.getText().trim())
+				.toString();
 	}
 
 	/**
@@ -179,38 +204,39 @@ public class XmlEncMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui i
 	 */
 	public void buildContent() {
 		sourceFileNameLabel = new JLabel(
-				XmlEncMessageUtil.m
-						.formatMessage("train.gui.modelmaker.dialog.source.name"));
+				m.formatMessage("train.gui.modelmaker.dialog.source.name"));
 		sourceFileName = new JTextField(35);
-		sourceFileBrowseButton = new JButton(
-				XmlEncMessageUtil.m.formatMessage("browse.elipsis"));
+		sourceFileBrowseButton = new JButton(m.formatMessage("browse.elipsis"));
 
 		xmlFileNameLabel = new JLabel(
-				XmlEncMessageUtil.m
-						.formatMessage("io.xmlenc.guilsource.file"));
+				m.formatMessage("io.xmlenc.guilsource.file"));
 		xmlFileName = new JTextField(10);
-		browseButton = new JButton(
-				XmlEncMessageUtil.m.formatMessage("browse.elipsis"));
+		browseButton = new JButton(m.formatMessage("browse.elipsis"));
+
+		encPoliciesLabel = new JLabel(
+				m.formatMessage("io.xmlenc.gui.encryption.policy"));
+		encPoliciesBox = new JComboBox<>();
+
+		encCredentialsLabel = new JLabel(
+				m.formatMessage("io.xmlenc.gui.encryption.credentials"));
+		encCredentialsBox = new JComboBox<>();
 
 		xmlFileRelativeLabel = new JLabel(
-				XmlEncMessageUtil.m
-						.formatMessage("io.common.gui.save.source.file.as"));
-		xmlFileRelativeBox = new JComboBox();
+				m.formatMessage("io.common.gui.save.source.file.as"));
+		xmlFileRelativeBox = new JComboBox<>();
 		xmlFileRelativeBox.addItem(RELATIVE);
 		xmlFileRelativeBox.addItem(ABSOLUTE);
 
-		okayButton = new JButton(XmlEncMessageUtil.m.formatMessage("ok"));
-		cancelButton = new JButton(
-				XmlEncMessageUtil.m.formatMessage("cancel"));
+		okayButton = new JButton(m.formatMessage("ok"));
+		cancelButton = new JButton(m.formatMessage("cancel"));
 
 		if (!save) {
 			modeButton = new JButton(GENERATE_MODE_LABEL);
 			generateComponents = new JComponent[8];
 			sourcesListLabel = new JLabel(
-					XmlEncMessageUtil.m
-							.formatMessage("io.common.gui.source.sources"));
+					m.formatMessage("io.common.gui.source.sources"));
 			generateComponents[0] = sourcesListLabel;
-			sourcesList = new JList(new DefaultListModel());
+			sourcesList = new JList<>(new DefaultListModel<String>());
 			sourcesListScrollPane = new JScrollPane();
 			sourcesListScrollPane.getViewport().add(sourcesList);
 			sourcesListScrollPane.setPreferredSize(new Dimension(50, 100));
@@ -220,14 +246,12 @@ public class XmlEncMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui i
 			removeButton = new JButton("Remove");
 			generateComponents[3] = removeButton;
 			distributeOverLabel = new JLabel(
-					XmlEncMessageUtil.m
-							.formatMessage("io.common.gui.distribute.roundrobin"));
+					m.formatMessage("io.common.gui.distribute.roundrobin"));
 			generateComponents[4] = distributeOverLabel;
 			distributeOver = new JTextField(5);
 			generateComponents[5] = distributeOver;
 			maxPairsPerFileLabel = new JLabel(
-					XmlEncMessageUtil.m
-							.formatMessage("io.common.gui.distribute.maxpairsperfile"));
+					m.formatMessage("io.common.gui.distribute.maxpairsperfile"));
 			generateComponents[6] = maxPairsPerFileLabel;
 			maxPairsPerFile = new JTextField(5);
 			generateComponents[7] = maxPairsPerFile;
@@ -239,7 +263,7 @@ public class XmlEncMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui i
 		super.addContentListeners();
 		EnablednessGuard dl = new EnablednessGuard(this);
 
-		//sourceFileBrowseButton
+		// sourceFileBrowseButton
 		sourceFileBrowseButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
 				File f = FileChooserFactory.selectMrpsFile(parent);
@@ -249,7 +273,7 @@ public class XmlEncMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui i
 			}
 		});
 
-		//browsebutton
+		// browsebutton
 		browseButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
 				File f = FileChooserFactory.selectXmlFile(parent);
@@ -263,7 +287,8 @@ public class XmlEncMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui i
 			// removeButton
 			removeButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent ev) {
-					DefaultListModel m = (DefaultListModel) sourcesList.getModel();
+					DefaultListModel<String> m = (DefaultListModel<String>) sourcesList
+							.getModel();
 					int[] si = sourcesList.getSelectedIndices();
 					for (int i = si.length - 1; i >= 0; --i) {
 						m.removeElementAt(si[i]);
@@ -272,11 +297,12 @@ public class XmlEncMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui i
 				}
 			});
 
-			//addButton
+			// addButton
 			addButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent ev) {
 					File[] fs = FileChooserFactory.selectMrpsFiles(parent);
-					DefaultListModel m = (DefaultListModel) sourcesList.getModel();
+					DefaultListModel<String> m = (DefaultListModel<String>) sourcesList
+							.getModel();
 					for (int i = 0; i < fs.length; ++i) {
 						m.addElement(fs[i].getAbsolutePath());
 					}
@@ -296,7 +322,7 @@ public class XmlEncMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui i
 						setSize(CREATE_DIMENSION);
 					}
 					setGenerateComponentsVisibility();
-					//validate();
+					// validate();
 					pack();
 					setEnabledness();
 				}
@@ -318,7 +344,8 @@ public class XmlEncMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui i
 	}
 
 	protected void generate() {
-		Object[] sources = ((DefaultListModel) sourcesList.getModel()).toArray();
+		Object[] sources = ((DefaultListModel<?>) sourcesList.getModel())
+				.toArray();
 		String[] sourceNames = new String[sources.length];
 		System.arraycopy(sources, 0, sourceNames, 0, sources.length);
 		try {
@@ -327,28 +354,34 @@ public class XmlEncMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui i
 			if (s == 0) {
 				s = Integer.MAX_VALUE;
 			}
+			final EncryptionPolicy<?> ep = createEncryptionPolicy();
+			final EncryptionCredential ec = createEncryptionCredential();
 			if (d == 1 && s == Integer.MAX_VALUE) {
-				XmlMarkedRecordPairSink sink =
-					new XmlMarkedRecordPairSink(
-						getSourceFileName(),
-						getSaveXmlFileName(),
-						parent.getProbabilityModel());
-				MarkedRecordPairBinder.store(sourceNames, parent.getProbabilityModel(), sink);
+				XmlEncMarkedRecordPairSink sink = new XmlEncMarkedRecordPairSink(
+						getSourceFileName(), getSaveXmlFileName(),
+						parent.getProbabilityModel(), ep, ec, crdsMgr);
+				MarkedRecordPairBinder.store(sourceNames,
+						parent.getProbabilityModel(), sink);
 				buildSource();
 			} else {
 				computeFileNameAndExtension();
 				String fileNameBase = getSourceFileName();
-				fileNameBase = fileNameBase.substring(0, fileNameBase.length() - Constants.MRPS_EXTENSION.length() - 1);
-				XmlMarkedRecordPairSinkFactory sinkFactory =
-					new XmlMarkedRecordPairSinkFactory(fileNameBase, fileN, extension, parent.getProbabilityModel());
-				MarkedRecordPairBinder.store(sourceNames, parent.getProbabilityModel(), sinkFactory, d, s);
+				fileNameBase = fileNameBase.substring(0, fileNameBase.length()
+						- Constants.MRPS_EXTENSION.length() - 1);
+				XmlEncMarkedRecordPairSinkFactory sinkFactory = new XmlEncMarkedRecordPairSinkFactory(
+						fileNameBase, fileN, extension,
+						parent.getProbabilityModel(), ep, ec, crdsMgr);
+				MarkedRecordPairBinder.store(sourceNames,
+						parent.getProbabilityModel(), sinkFactory, d, s);
 				Source[] srcs = sinkFactory.getSources();
-				source = srcs[0];
+				setSource(srcs[0]);
 				for (int i = 1; i < srcs.length; ++i) {
 					try {
-						MarkedRecordPairSourceXmlConf.add((MarkedRecordPairSource) srcs[i]);
+						MarkedRecordPairSourceXmlConf
+								.add((MarkedRecordPairSource) srcs[i]);
 					} catch (XmlConfException ex) {
-						logger.severe(new LoggingObject("CM-020001", srcs[i]).toString() + ": " + ex);
+						logger.severe(new LoggingObject("CM-020001", srcs[i])
+								.toString() + ": " + ex);
 					}
 				}
 			}
@@ -362,22 +395,33 @@ public class XmlEncMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui i
 		dispose();
 	}
 
+	private EncryptionCredential createEncryptionCredential() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private EncryptionPolicy<?> createEncryptionPolicy() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	private void layoutContent() {
-		//Layout content
+		// Layout content
 		GridBagLayout layout = new GridBagLayout();
 		content.setLayout(layout);
-		layout.columnWeights = new double[] {0, 1, 0};
-		layout.rowWeights = new double[] {0, 0, 0, 0, 0, 0, 1, 0, 0};
+		layout.columnWeights = new double[] { 0, 1, 0 };
+		layout.rowWeights = new double[] { 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0 };
 		GridBagConstraints c = new GridBagConstraints();
 		c.insets = new Insets(2, 2, 5, 5);
 
-		//row 0........................................
+		// row 0........................................
 		c.gridy = 0;
 		c.gridx = 0;
 		c.gridwidth = 1;
 		c.anchor = GridBagConstraints.WEST;
-		if(!save) {
-			sourceFileNameLabel.setPreferredSize(maxPairsPerFileLabel.getPreferredSize());
+		if (!save) {
+			sourceFileNameLabel.setPreferredSize(maxPairsPerFileLabel
+					.getPreferredSize());
 		}
 		content.add(sourceFileNameLabel, c);
 		c.gridx = 1;
@@ -390,7 +434,7 @@ public class XmlEncMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui i
 		layout.setConstraints(sourceFileBrowseButton, c);
 		content.add(sourceFileBrowseButton);
 
-		//row 1........................................
+		// row 1........................................
 		c.gridy = 1;
 		c.gridx = 0;
 		content.add(xmlFileNameLabel, c);
@@ -401,7 +445,36 @@ public class XmlEncMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui i
 		c.gridx = 3;
 		content.add(browseButton, c);
 
+		// row 2........................................
 		c.gridy = 2;
+		c.gridx = 1;
+		c.fill = GridBagConstraints.NONE;
+		c.anchor = GridBagConstraints.EAST;
+		content.add(encPoliciesLabel, c);
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.anchor = GridBagConstraints.WEST;
+
+		c.gridx = 2;
+		c.fill = GridBagConstraints.NONE;
+		content.add(encPoliciesBox, c);
+		c.fill = GridBagConstraints.HORIZONTAL;
+
+		// row 3........................................
+		c.gridy = 3;
+		c.gridx = 1;
+		c.fill = GridBagConstraints.NONE;
+		c.anchor = GridBagConstraints.EAST;
+		content.add(encCredentialsLabel, c);
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.anchor = GridBagConstraints.WEST;
+
+		c.gridx = 2;
+		c.fill = GridBagConstraints.NONE;
+		content.add(encCredentialsBox, c);
+		c.fill = GridBagConstraints.HORIZONTAL;
+
+		// row 4........................................
+		c.gridy = 4;
 		c.gridx = 1;
 		c.fill = GridBagConstraints.NONE;
 		c.anchor = GridBagConstraints.EAST;
@@ -414,7 +487,8 @@ public class XmlEncMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui i
 		content.add(xmlFileRelativeBox, c);
 		c.fill = GridBagConstraints.HORIZONTAL;
 
-		c.gridy = 3;
+		// row 5........................................
+		c.gridy = 5;
 		c.gridx = 0;
 		c.fill = GridBagConstraints.NONE;
 		if (!save) {
@@ -429,12 +503,12 @@ public class XmlEncMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui i
 		content.add(cancelButton, c);
 
 		if (!save) {
-			c.gridy = 4;
+			c.gridy = 6;
 			c.gridx = 0;
 			content.add(sourcesListLabel, c);
 
-			//row 1--------------------------
-			c.gridy = 5;
+			// row 7--------------------------
+			c.gridy = 7;
 			c.fill = GridBagConstraints.BOTH;
 			c.gridwidth = 3;
 			c.gridheight = 3;
@@ -446,12 +520,11 @@ public class XmlEncMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui i
 			c.fill = GridBagConstraints.HORIZONTAL;
 			content.add(addButton, c);
 
-			c.gridy = 6;
+			c.gridy = 8;
 			content.add(removeButton, c);
 
-
-			//row 3--------------------------
-			c.gridy = 8;
+			// row 3--------------------------
+			c.gridy = 10;
 			c.gridx = 0;
 			c.gridwidth = 1;
 			c.anchor = GridBagConstraints.WEST;
@@ -460,8 +533,8 @@ public class XmlEncMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui i
 			c.gridx = 1;
 			content.add(distributeOver, c);
 
-			//row 4--------------------------
-			c.gridy = 9;
+			// row 4--------------------------
+			c.gridy = 11;
 			c.gridx = 0;
 			content.add(maxPairsPerFileLabel, c);
 			c.gridx = 1;
