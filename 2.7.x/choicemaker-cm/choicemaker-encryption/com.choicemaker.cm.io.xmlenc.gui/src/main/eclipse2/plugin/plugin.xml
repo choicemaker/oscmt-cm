@@ -23,7 +23,7 @@
          point="com.choicemaker.cm.modelmaker.mrpsReaderGui">
       <gui
             hasSink="true"
-            name="XML"
+            name="Encrypted XML"
             class="com.choicemaker.cm.io.xmlenc.gui.XmlEncMarkedRecordPairSourceGuiFactory"
             handledClass="com.choicemaker.cm.io.xmlenc.base.XmlEncMarkedRecordPairSource">
       </gui>

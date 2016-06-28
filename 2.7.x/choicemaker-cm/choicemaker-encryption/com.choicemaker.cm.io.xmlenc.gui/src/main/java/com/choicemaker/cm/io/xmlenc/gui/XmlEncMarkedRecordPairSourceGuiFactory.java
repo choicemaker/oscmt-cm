@@ -21,7 +21,7 @@ import com.choicemaker.cm.modelmaker.gui.sources.SourceGuiFactory;
  */
 public class XmlEncMarkedRecordPairSourceGuiFactory implements SourceGuiFactory {
 	public String getName() {
-		return "XML";
+		return "XML ENC";
 	}
 
 	public SourceGui createGui(ModelMaker parent, Source s) {
@@ -45,7 +45,7 @@ public class XmlEncMarkedRecordPairSourceGuiFactory implements SourceGuiFactory 
 	}
 
 	public String toString() {
-		return "XML MRPS";
+		return "XML EMRPS";
 	}
 
 	public boolean hasSink() {
