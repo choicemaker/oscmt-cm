@@ -39,14 +39,17 @@ import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.xmlconf.XmlConfigurator;
 import com.choicemaker.cm.io.xml.base.XmlMarkedRecordPairSource;
+import com.choicemaker.cm.io.xmlenc.base.xmlconf.DefaultAWSEncryptionCredential;
+import com.choicemaker.cm.io.xmlenc.base.xmlconf.DefaultEncryptionPolicy;
+import com.choicemaker.cm.io.xmlenc.base.xmlconf.EncryptionCredential;
+import com.choicemaker.cm.io.xmlenc.base.xmlconf.EncryptionPolicy;
+import com.choicemaker.cm.io.xmlenc.base.xmlconf.InMemoryXmlEncManager;
+import com.choicemaker.cm.io.xmlenc.base.xmlconf.XmlEncryptionManager;
 import com.choicemaker.demo.simple_person_matching.PersonMrpListComparator;
 import com.choicemaker.e2.embed.EmbeddedPlatform;
 import com.choicemaker.util.FileUtilities;
-import com.choicemaker.xmlencryption.AwsKmsUtils;
-import com.choicemaker.xmlencryption.DocumentDecryptor;
 import com.choicemaker.xmlencryption.DocumentEncryptor;
 import com.choicemaker.xmlencryption.EncryptionParameters;
-import com.choicemaker.xmlencryption.SecretKeyInfoFactory;
 
 public class XmlEncMarkedRecordPairIT {
 
@@ -55,6 +58,8 @@ public class XmlEncMarkedRecordPairIT {
 
 	private static final String SIMPLE_CLASS = XmlEncMarkedRecordPairIT.class
 			.getSimpleName();
+
+	private static final String CREDENTIAL_NAME = "alice";
 
 	/**
 	 * The properties file that holds security credentials used in this test.
@@ -160,15 +165,16 @@ public class XmlEncMarkedRecordPairIT {
 	}
 
 	protected static List<ImmutableRecordPair> readEncryptedMRPS(
-			DocumentDecryptor decryptor, String xmlencFile,
-			ImmutableProbabilityModel model) {
+			String xmlencFile, ImmutableProbabilityModel model,
+			EncryptionPolicy<?> policy, EncryptionCredential credential,
+			XmlEncryptionManager xmlEncMgr) {
 		List<ImmutableRecordPair> retVal = new ArrayList<>();
 		XmlMarkedRecordPairSource clearSource = null;
 		try {
 			InputStream is = XmlEncMarkedRecordPairIT.class
 					.getResourceAsStream(xmlencFile);
 			clearSource = new XmlEncMarkedRecordPairSource(is, "fake",
-					xmlencFile, model, decryptor);
+					xmlencFile, model, policy, credential, xmlEncMgr);
 			clearSource.open();
 			while (clearSource.hasNext()) {
 				ImmutableRecordPair mrp = clearSource.getNext();
@@ -226,8 +232,9 @@ public class XmlEncMarkedRecordPairIT {
 		RECORD_CLASS = Class.forName(RECORD_CLASSNAME);
 	}
 
-	protected static File writeEncryptedMRPS(DocumentEncryptor encryptor,
-			List<ImmutableRecordPair> mrps, ImmutableProbabilityModel model)
+	protected static File writeEncryptedMRPS(List<ImmutableRecordPair> mrps,
+			ImmutableProbabilityModel model, EncryptionPolicy<?> policy,
+			EncryptionCredential credential, XmlEncryptionManager xmlEncMgr)
 			throws IOException {
 
 		// Create the name of a temporary file (and delete the file)
@@ -239,7 +246,7 @@ public class XmlEncMarkedRecordPairIT {
 		XmlEncMarkedRecordPairSink encSink = null;
 		try {
 			encSink = new XmlEncMarkedRecordPairSink("fake.mrps",
-					xmlencFileName, model, encryptor);
+					xmlencFileName, model, policy, credential, xmlEncMgr);
 			encSink.open();
 			for (ImmutableRecordPair mrp : mrps) {
 				encSink.put(mrp);
@@ -264,7 +271,10 @@ public class XmlEncMarkedRecordPairIT {
 
 	private File workingDir;
 
-	private DocumentDecryptor decryptor;
+	private final XmlEncryptionManager xmlEncMgr = InMemoryXmlEncManager
+			.getInstance();
+	private final EncryptionPolicy<?> policy = new DefaultEncryptionPolicy();
+	private EncryptionCredential credential;
 
 	private DocumentEncryptor encryptor;
 
@@ -307,13 +317,13 @@ public class XmlEncMarkedRecordPairIT {
 					isHelp, errors, credProps, inputFile);
 			final AWSCredentials creds = new BasicAWSCredentials(
 					params.getAwsAccessKey(), params.getAwsSecretkey());
-			final SecretKeyInfoFactory skif = new SecretKeyInfoFactory(
-					params.getAwsMasterKeyId(),
-					AwsKmsUtils.DEFAULT_AWS_KEY_ENCRYPTION_ALGORITHM,
-					params.getAwsEndpoint(), creds);
-
-			decryptor = new DocumentDecryptor(params.getAwsEndpoint(), creds);
-			encryptor = new DocumentEncryptor(skif);
+			/*
+			 * public DefaultAWSEncryptionCredential(AWSCredentials aws, String
+			 * name, String masterKeyId, String endpoint) {
+			 */
+			this.credential = new DefaultAWSEncryptionCredential(creds,
+					CREDENTIAL_NAME, params.getAwsMasterKeyId(),
+					params.getAwsEndpoint());
 		} catch (Exception x) {
 			fail(x.toString());
 		}
@@ -339,8 +349,8 @@ public class XmlEncMarkedRecordPairIT {
 		final String xmlencFileName = encryptedFile.getAbsolutePath();
 
 		// Read in a list of MRP's from the encrypted file
-		final List<ImmutableRecordPair> emrps = readEncryptedMRPS(decryptor,
-				xmlencFileName, model);
+		final List<ImmutableRecordPair> emrps = readEncryptedMRPS(
+				xmlencFileName, model, policy, credential, xmlEncMgr);
 
 		// Compare the MRP lists
 		PersonMrpListComparator mrpsComparator = new PersonMrpListComparator();
@@ -369,12 +379,13 @@ public class XmlEncMarkedRecordPairIT {
 				model);
 
 		// Write the MRP's to an encrypted file
-		final File encryptedFile = writeEncryptedMRPS(encryptor, mrps, model);
+		final File encryptedFile = writeEncryptedMRPS(mrps, model, policy,
+				credential, xmlEncMgr);
 		final String xmlencFileName = encryptedFile.getAbsolutePath();
 
 		// Read in a list of MRP's from the encrypted file
-		final List<ImmutableRecordPair> emrps = readEncryptedMRPS(decryptor,
-				xmlencFileName, model);
+		final List<ImmutableRecordPair> emrps = readEncryptedMRPS(
+				xmlencFileName, model, policy, credential, xmlEncMgr);
 
 		// Compare the MRP lists
 		PersonMrpListComparator mrpsComparator = new PersonMrpListComparator();

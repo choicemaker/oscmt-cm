@@ -6,7 +6,7 @@ import com.choicemaker.cm.core.Record;
 import com.choicemaker.demo.simple_person_matching.gendata.gend.Person.PersonBase;
 
 public class PersonMrpComparator {
-	
+
 	public static final float FLOATING_POINT_PRECISION = 0.000001f;
 
 	private final DeclaredAccessorComparator<Record> recordComparator = new DeclaredAccessorComparator<>(
