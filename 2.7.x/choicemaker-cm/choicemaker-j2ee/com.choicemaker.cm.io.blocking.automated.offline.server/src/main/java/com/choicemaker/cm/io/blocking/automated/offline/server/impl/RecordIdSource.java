@@ -64,6 +64,7 @@ public class RecordIdSource<T extends Comparable<T>> extends BaseFileSource<T>
 		return retVal;
 	}
 
+	@SuppressWarnings("unchecked")
 	private T readNext() throws EOFException, IOException {
 		assert getType() == EXTERNAL_DATA_FORMAT.STRING;
 
