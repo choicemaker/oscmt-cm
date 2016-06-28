@@ -26,7 +26,7 @@ import org.w3c.dom.Document;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.io.xml.base.XmlMarkedRecordPairSink;
 import com.choicemaker.cm.io.xmlenc.base.xmlconf.EncryptionCredential;
-import com.choicemaker.cm.io.xmlenc.base.xmlconf.EncryptionPolicy;
+import com.choicemaker.cm.io.xmlenc.base.xmlconf.EncryptionScheme;
 import com.choicemaker.cm.io.xmlenc.base.xmlconf.XmlEncryptionManager;
 import com.choicemaker.utilcopy01.Precondition;
 import com.choicemaker.xmlencryption.DocumentEncryptor;
@@ -38,13 +38,13 @@ import com.choicemaker.xmlencryption.DocumentEncryptor;
  */
 public class XmlEncMarkedRecordPairSink extends XmlMarkedRecordPairSink {
 
-	private final EncryptionPolicy<?> policy;
+	private final EncryptionScheme policy;
 	private final EncryptionCredential credential;
-	private DocumentEncryptor encryptor;
+	private final XmlEncryptionManager xmlEncMgr;
 	private StringWriter docWriter;
 
 	public XmlEncMarkedRecordPairSink(String name, String rawXmlFileName,
-			ImmutableProbabilityModel model, EncryptionPolicy<?> ep,
+			ImmutableProbabilityModel model, EncryptionScheme ep,
 			EncryptionCredential ec, XmlEncryptionManager xcm) {
 		super(name, rawXmlFileName, model);
 		Precondition.assertNonNullArgument("null policy", ep);
@@ -52,13 +52,13 @@ public class XmlEncMarkedRecordPairSink extends XmlMarkedRecordPairSink {
 		Precondition.assertNonNullArgument("null encryption manager", xcm);
 		this.policy = ep;
 		this.credential = ec;
-		this.encryptor = xcm.getDocumentEncryptor(ep, ec);
+		this.xmlEncMgr = xcm;
 		this.docWriter = new StringWriter();
 		super.setWriter(docWriter);
 	}
 
 	public String getPolicyId() {
-		return policy.getPolicyId();
+		return policy.getSchemeId();
 	}
 
 	public String getCredentialName() {
@@ -75,6 +75,7 @@ public class XmlEncMarkedRecordPairSink extends XmlMarkedRecordPairSink {
 		super.getWriter().flush();
 		String docString = docWriter.toString();
 		FileOutputStream fos = createFileOutputStream();
+		DocumentEncryptor encryptor = xmlEncMgr.getDocumentEncryptor(policy, credential);
 		encrypt(encryptor, docString, fos);
 		finishRootEntity();
 		fos.close();

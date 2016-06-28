@@ -4,15 +4,15 @@ import com.amazonaws.auth.AWSCredentials;
 import com.choicemaker.util.Precondition;
 import com.choicemaker.xmlencryption.AwsKmsUtils;
 
-public class DefaultAWSEncryptionCredential extends EncryptionCredential {
+public class AwsKmsEncryptionCredential extends EncryptionCredential {
 
-	public DefaultAWSEncryptionCredential(String name, String masterKeyId,
+	public AwsKmsEncryptionCredential(String name, String masterKeyId,
 			String endpoint) {
 		this(AwsKmsUtils.getDefaultAWSCredentials(), name, masterKeyId,
 				endpoint);
 	}
 
-	public DefaultAWSEncryptionCredential(AWSCredentials aws, String name,
+	public AwsKmsEncryptionCredential(AWSCredentials aws, String name,
 			String masterKeyId, String endpoint) {
 		super(name);
 		Precondition.assertNonNullArgument("null AWS credentials", aws);
@@ -26,12 +26,12 @@ public class DefaultAWSEncryptionCredential extends EncryptionCredential {
 		}
 
 		String secretKeyId = aws.getAWSAccessKeyId();
-		this.put(DefaultEncryptionPolicy.PN_SECRETKEY, secretKeyId);
+		this.put(AwsKmsEncryptionScheme.PN_SECRETKEY, secretKeyId);
 		String accessKeyId = aws.getAWSAccessKeyId();
-		this.put(DefaultEncryptionPolicy.PN_ACCESSKEY, accessKeyId);
-		this.put(DefaultEncryptionPolicy.PN_MASTERKEY, masterKeyId);
+		this.put(AwsKmsEncryptionScheme.PN_ACCESSKEY, accessKeyId);
+		this.put(AwsKmsEncryptionScheme.PN_MASTERKEY, masterKeyId);
 		if (endpoint != null) {
-			this.put(DefaultEncryptionPolicy.PN_ENDPOINT, endpoint);
+			this.put(AwsKmsEncryptionScheme.PN_ENDPOINT, endpoint);
 		}
 	}
 

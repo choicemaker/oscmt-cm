@@ -59,7 +59,7 @@ public class XmlEncMarkedRecordPairSourceXmlConf implements
 			String fileName = src.getFileName();
 			Element e = new Element("MarkedRecordPairSource");
 			e.setAttribute("class", EXTENSION_POINT_ID);
-			e.setAttribute("policyId", src.getPolicyId());
+			e.setAttribute("schemeId", src.getPolicyId());
 			e.setAttribute("credentialName", src.getCredentialName());
 			// e.addContent(new
 			// Element("fileName").setText(src.getXmlFileName()));
@@ -79,8 +79,8 @@ public class XmlEncMarkedRecordPairSourceXmlConf implements
 	public MarkedRecordPairSource getMarkedRecordPairSource(String fileName,
 			Element e, ImmutableProbabilityModel model) throws XmlConfException {
 		String xmlFileName = e.getChildText("fileName");
-		String policyName = e.getChildText("policyId");
-		EncryptionPolicy<?> ep = this.crdsMgr.getEncryptionPolicy(policyName);
+		String schemeId = e.getChildText("schemeId");
+		EncryptionScheme ep = this.crdsMgr.getEncryptionScheme(schemeId);
 		String credentialName = e.getChildText("credentialName");
 		EncryptionCredential ec = this.crdsMgr
 				.getEncryptionCredential(credentialName);

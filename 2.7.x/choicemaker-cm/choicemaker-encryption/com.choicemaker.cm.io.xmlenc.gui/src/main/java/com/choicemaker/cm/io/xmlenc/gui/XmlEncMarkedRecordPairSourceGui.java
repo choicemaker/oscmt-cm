@@ -41,7 +41,7 @@ import com.choicemaker.cm.io.xmlenc.base.XmlEncMarkedRecordPairSink;
 import com.choicemaker.cm.io.xmlenc.base.XmlEncMarkedRecordPairSinkFactory;
 import com.choicemaker.cm.io.xmlenc.base.XmlEncMarkedRecordPairSource;
 import com.choicemaker.cm.io.xmlenc.base.xmlconf.EncryptionCredential;
-import com.choicemaker.cm.io.xmlenc.base.xmlconf.EncryptionPolicy;
+import com.choicemaker.cm.io.xmlenc.base.xmlconf.EncryptionScheme;
 import com.choicemaker.cm.io.xmlenc.base.xmlconf.InMemoryXmlEncManager;
 import com.choicemaker.cm.io.xmlenc.base.xmlconf.XmlEncryptionManager;
 import com.choicemaker.cm.io.xmlenc.res.XmlEncMessageUtil;
@@ -354,7 +354,7 @@ public class XmlEncMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui
 			if (s == 0) {
 				s = Integer.MAX_VALUE;
 			}
-			final EncryptionPolicy<?> ep = createEncryptionPolicy();
+			final EncryptionScheme ep = createEncryptionPolicy();
 			final EncryptionCredential ec = createEncryptionCredential();
 			if (d == 1 && s == Integer.MAX_VALUE) {
 				XmlEncMarkedRecordPairSink sink = new XmlEncMarkedRecordPairSink(
@@ -400,7 +400,7 @@ public class XmlEncMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui
 		return null;
 	}
 
-	private EncryptionPolicy<?> createEncryptionPolicy() {
+	private EncryptionScheme createEncryptionPolicy() {
 		// TODO Auto-generated method stub
 		return null;
 	}

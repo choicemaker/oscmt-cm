@@ -3,8 +3,6 @@ package com.choicemaker.cm.io.xmlenc.base.xmlconf;
 import java.util.List;
 import java.util.logging.Logger;
 
-import com.amazonaws.encryptionsdk.MasterKey;
-import com.amazonaws.encryptionsdk.MasterKeyProvider;
 import com.choicemaker.xmlencryption.DocumentDecryptor;
 import com.choicemaker.xmlencryption.DocumentEncryptor;
 
@@ -28,18 +26,18 @@ public class InMemoryXmlEncManager implements XmlEncryptionManager {
 			.getInstance();
 
 	@Override
-	public List<EncryptionPolicy<?>> getEncryptionPolicies() {
-		return delegate.getEncryptionPolicies();
+	public List<EncryptionScheme> getEncryptionSchemes() {
+		return delegate.getEncryptionSchemes();
 	}
 
 	@Override
-	public EncryptionPolicy<?> getEncryptionPolicy(String name) {
-		return delegate.getEncryptionPolicy(name);
+	public EncryptionScheme getEncryptionScheme(String name) {
+		return delegate.getEncryptionScheme(name);
 	}
 
 	@Override
-	public void putEncryptionPolicy(EncryptionPolicy<?> ep) {
-		delegate.putEncryptionPolicy(ep);
+	public void putEncryptionScheme(EncryptionScheme ep) {
+		delegate.putEncryptionScheme(ep);
 	}
 
 	@Override
@@ -58,30 +56,52 @@ public class InMemoryXmlEncManager implements XmlEncryptionManager {
 	}
 
 	@Override
-	public <K extends MasterKey<K>> MasterKeyProvider<K> createMasterKeyProvider(
-			EncryptionPolicy<K> ep, EncryptionCredential ec) {
-		return delegate.createMasterKeyProvider(ep, ec);
+	public DocumentEncryptor getDocumentEncryptor(EncryptionScheme encPolicy,
+			EncryptionCredential encCredential) {
+		final String METHOD = "getDocumentEncryptor";
+		logger.entering(SOURCE_CLASS, METHOD);
+		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public DocumentDecryptor getDocumentDecryptor(EncryptionPolicy<?> unused,
+	public DocumentDecryptor getDocumentDecryptor(EncryptionScheme encPolicy,
 			EncryptionCredential encCredential) {
 		final String METHOD = "getDocumentDecryptor";
 		logger.entering(SOURCE_CLASS, METHOD);
 		// TODO Auto-generated method stub
-		throw new Error("not yet implemented");
 	}
 
-	@Override
-	public DocumentEncryptor getDocumentEncryptor(
-			EncryptionPolicy<?> encPolicy, EncryptionCredential encCredential) {
-		final String METHOD = "getDocumentEncryptor";
-		logger.entering(SOURCE_CLASS, METHOD);
-		MasterKeyProvider<?> mkp = encPolicy
-				.getMasterKeyProvider(encCredential);
+//	@Override
+//	public DocumentDecryptor getDocumentDecryptor(EncryptionScheme ep,
+//			EncryptionCredential ec) {
+//		final String METHOD = "getDocumentDecryptor";
+//		logger.entering(SOURCE_CLASS, METHOD);
+//      final SecretKeyInfoFactory skif = new AwsKmsSecretKeyInfoFactory(
+//      params.getAwsMasterKeyId(),
+//      AwsKmsUtils.DEFAULT_AWS_KEY_ENCRYPTION_ALGORITHM,
+//      params.getAwsEndpoint(), creds);
+////
+////decryptor = new DocumentDecryptor(params.getAwsEndpoint(), creds);
+////encryptor = new DocumentEncryptor(skif);
+//		throw new Error("not yet implemented");
+//	}
 
-		// TODO Auto-generated method stub
-		throw new Error("not yet implemented");
-	}
+//	@Override
+//	public DocumentEncryptor getDocumentEncryptor(
+//			EncryptionScheme encPolicy, EncryptionCredential encCredential) {
+//		final String METHOD = "getDocumentEncryptor";
+//		logger.entering(SOURCE_CLASS, METHOD);
+//		MasterKeyProvider<?> mkp = encPolicy
+//				.getMasterKeyProvider(encCredential);
+//
+////      final SecretKeyInfoFactory skif = new SecretKeyInfoFactory(
+////      params.getAwsMasterKeyId(),
+////      AwsKmsUtils.DEFAULT_AWS_KEY_ENCRYPTION_ALGORITHM,
+////      params.getAwsEndpoint(), creds);
+////
+////decryptor = new DocumentDecryptor(params.getAwsEndpoint(), creds);
+////encryptor = new DocumentEncryptor(skif);
+//		throw new Error("not yet implemented");
+//	}
 
 }

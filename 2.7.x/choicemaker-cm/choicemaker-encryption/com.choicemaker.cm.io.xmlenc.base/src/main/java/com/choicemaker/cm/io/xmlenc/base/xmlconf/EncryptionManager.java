@@ -2,20 +2,17 @@ package com.choicemaker.cm.io.xmlenc.base.xmlconf;
 
 import java.util.List;
 
-import com.amazonaws.encryptionsdk.MasterKey;
-import com.amazonaws.encryptionsdk.MasterKeyProvider;
-
 public interface EncryptionManager {
 
 	// int getTimeToLive();
 
 	// void setTimeToLive(int millisecs);
 
-	List<EncryptionPolicy<?>> getEncryptionPolicies();
+	List<EncryptionScheme> getEncryptionSchemes();
 
-	EncryptionPolicy<?> getEncryptionPolicy(String name);
+	EncryptionScheme getEncryptionScheme(String name);
 
-	void putEncryptionPolicy(EncryptionPolicy<?> ep);
+	void putEncryptionScheme(EncryptionScheme ep);
 
 	List<EncryptionCredential> getEncryptionCredentials();
 
@@ -23,7 +20,7 @@ public interface EncryptionManager {
 
 	void putEncryptionCredential(EncryptionCredential ec);
 
-	public <K extends MasterKey<K>> MasterKeyProvider<K> createMasterKeyProvider(
-			EncryptionPolicy<K> ep, EncryptionCredential ec);
+//	public <K extends MasterKey<K>> MasterKeyProvider<K> createMasterKeyProvider(
+//			EncryptionScheme ep, EncryptionCredential ec);
 
 }

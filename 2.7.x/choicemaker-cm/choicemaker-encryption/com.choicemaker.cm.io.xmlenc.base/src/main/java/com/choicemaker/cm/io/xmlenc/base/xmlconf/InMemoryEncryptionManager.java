@@ -30,36 +30,36 @@ public class InMemoryEncryptionManager implements EncryptionManager {
 		return instance;
 	}
 
-	private final Map<String, EncryptionPolicy<?>> encPolicies = new HashMap<>();
+	private final Map<String, EncryptionScheme> encPolicies = new HashMap<>();
 	private final Map<String, EncryptionCredential> encCredentials = new HashMap<>();
 
 	private InMemoryEncryptionManager() {
 	}
 
 	@Override
-	public List<EncryptionPolicy<?>> getEncryptionPolicies() {
+	public List<EncryptionScheme> getEncryptionSchemes() {
 		final String METHOD = "getEncryptionPolicies";
 		logger.entering(SOURCE_CLASS, METHOD);
-		List<EncryptionPolicy<?>> retVal = new ArrayList<>();
+		List<EncryptionScheme> retVal = new ArrayList<>();
 		retVal.addAll(encPolicies.values());
 		return Collections.unmodifiableList(retVal);
 	}
 
 	@Override
-	public EncryptionPolicy<?> getEncryptionPolicy(String name) {
+	public EncryptionScheme getEncryptionScheme(String name) {
 		final String METHOD = "getEncryptionPolicy";
 		logger.entering(SOURCE_CLASS, METHOD);
 		Precondition.assertNonEmptyString("null or blank name", name);
-		EncryptionPolicy<?> retVal = encPolicies.get(name);
-		assert name.equals(retVal.getPolicyId());
+		EncryptionScheme retVal = encPolicies.get(name);
+		assert name.equals(retVal.getSchemeId());
 		return retVal;
 	}
 
 	@Override
-	public void putEncryptionPolicy(EncryptionPolicy<?> ep) {
+	public void putEncryptionScheme(EncryptionScheme ep) {
 		final String METHOD = "putEncryptionPolicy";
 		logger.entering(SOURCE_CLASS, METHOD);
-		String name = ep.getPolicyId();
+		String name = ep.getSchemeId();
 		encPolicies.put(name, ep);
 	}
 
@@ -88,17 +88,6 @@ public class InMemoryEncryptionManager implements EncryptionManager {
 		logger.entering(SOURCE_CLASS, METHOD);
 		String name = ec.getCredentialName();
 		encCredentials.put(name, ec);
-	}
-
-	@Override
-	public <K extends MasterKey<K>> MasterKeyProvider<K> createMasterKeyProvider(
-			EncryptionPolicy<K> ep, EncryptionCredential ec) {
-		final String METHOD = "createMasterKeyProvider";
-		logger.entering(SOURCE_CLASS, METHOD);
-		Precondition.assertNonNullArgument("null policy", ep);
-		Precondition.assertNonNullArgument("null credential", ec);
-		MasterKeyProvider<K> retVal = ep.getMasterKeyProvider(ec);
-		return retVal;
 	}
 
 }

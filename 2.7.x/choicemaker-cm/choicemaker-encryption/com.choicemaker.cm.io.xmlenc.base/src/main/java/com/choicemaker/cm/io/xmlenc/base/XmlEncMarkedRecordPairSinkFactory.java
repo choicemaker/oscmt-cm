@@ -16,13 +16,13 @@ import com.choicemaker.cm.core.Sink;
 import com.choicemaker.cm.core.SinkFactory;
 import com.choicemaker.cm.core.Source;
 import com.choicemaker.cm.io.xmlenc.base.xmlconf.EncryptionCredential;
-import com.choicemaker.cm.io.xmlenc.base.xmlconf.EncryptionPolicy;
+import com.choicemaker.cm.io.xmlenc.base.xmlconf.EncryptionScheme;
 import com.choicemaker.cm.io.xmlenc.base.xmlconf.XmlEncryptionManager;
 import com.choicemaker.utilcopy01.Precondition;
 
 public class XmlEncMarkedRecordPairSinkFactory implements SinkFactory {
 
-	private final EncryptionPolicy<?> policy;
+	private final EncryptionScheme policy;
 	private final EncryptionCredential credential;
 	private final XmlEncryptionManager crdsMgr;
 
@@ -35,7 +35,7 @@ public class XmlEncMarkedRecordPairSinkFactory implements SinkFactory {
 
 	public XmlEncMarkedRecordPairSinkFactory(String fileNameBase,
 			String xmlFileName, String extension,
-			ImmutableProbabilityModel model, EncryptionPolicy<?> ep,
+			ImmutableProbabilityModel model, EncryptionScheme ep,
 			EncryptionCredential ec, XmlEncryptionManager xcm) {
 		Precondition.assertNonNullArgument("null policy", ep);
 		Precondition.assertNonNullArgument("null credential", ec);

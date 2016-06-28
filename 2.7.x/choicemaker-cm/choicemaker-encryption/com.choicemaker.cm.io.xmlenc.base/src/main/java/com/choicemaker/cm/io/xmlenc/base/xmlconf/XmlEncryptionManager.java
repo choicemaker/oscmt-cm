@@ -5,10 +5,10 @@ import com.choicemaker.xmlencryption.DocumentEncryptor;
 
 public interface XmlEncryptionManager extends EncryptionManager {
 
-	DocumentEncryptor getDocumentEncryptor(EncryptionPolicy<?> encPolicy,
+	DocumentEncryptor getDocumentEncryptor(EncryptionScheme encPolicy,
 			EncryptionCredential encCredential);
 
-	DocumentDecryptor getDocumentDecryptor(EncryptionPolicy<?> encPolicy,
+	DocumentDecryptor getDocumentDecryptor(EncryptionScheme encPolicy,
 			EncryptionCredential encCredential);
 
 }

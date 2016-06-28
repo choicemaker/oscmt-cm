@@ -39,10 +39,10 @@ import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.xmlconf.XmlConfigurator;
 import com.choicemaker.cm.io.xml.base.XmlMarkedRecordPairSource;
-import com.choicemaker.cm.io.xmlenc.base.xmlconf.DefaultAWSEncryptionCredential;
-import com.choicemaker.cm.io.xmlenc.base.xmlconf.DefaultEncryptionPolicy;
+import com.choicemaker.cm.io.xmlenc.base.xmlconf.AwsKmsEncryptionCredential;
+import com.choicemaker.cm.io.xmlenc.base.xmlconf.AwsKmsEncryptionScheme;
 import com.choicemaker.cm.io.xmlenc.base.xmlconf.EncryptionCredential;
-import com.choicemaker.cm.io.xmlenc.base.xmlconf.EncryptionPolicy;
+import com.choicemaker.cm.io.xmlenc.base.xmlconf.EncryptionScheme;
 import com.choicemaker.cm.io.xmlenc.base.xmlconf.InMemoryXmlEncManager;
 import com.choicemaker.cm.io.xmlenc.base.xmlconf.XmlEncryptionManager;
 import com.choicemaker.demo.simple_person_matching.PersonMrpListComparator;
@@ -166,18 +166,18 @@ public class XmlEncMarkedRecordPairIT {
 
 	protected static List<ImmutableRecordPair> readEncryptedMRPS(
 			String xmlencFile, ImmutableProbabilityModel model,
-			EncryptionPolicy<?> policy, EncryptionCredential credential,
+			EncryptionScheme policy, EncryptionCredential credential,
 			XmlEncryptionManager xmlEncMgr) {
 		List<ImmutableRecordPair> retVal = new ArrayList<>();
-		XmlMarkedRecordPairSource clearSource = null;
+		XmlMarkedRecordPairSource encSource = null;
 		try {
 			InputStream is = XmlEncMarkedRecordPairIT.class
 					.getResourceAsStream(xmlencFile);
-			clearSource = new XmlEncMarkedRecordPairSource(is, "fake",
+			encSource = new XmlEncMarkedRecordPairSource(is, "fake",
 					xmlencFile, model, policy, credential, xmlEncMgr);
-			clearSource.open();
-			while (clearSource.hasNext()) {
-				ImmutableRecordPair mrp = clearSource.getNext();
+			encSource.open();
+			while (encSource.hasNext()) {
+				ImmutableRecordPair mrp = encSource.getNext();
 				Record q = mrp.getQueryRecord();
 				assertTrue(RECORD_CLASS.isInstance(q));
 				Record m = mrp.getMatchRecord();
@@ -187,10 +187,10 @@ public class XmlEncMarkedRecordPairIT {
 		} catch (Exception x) {
 			fail(x.toString());
 		} finally {
-			if (clearSource != null) {
-				clearSource.close();
+			if (encSource != null) {
+				encSource.close();
 			}
-			clearSource = null;
+			encSource = null;
 		}
 		return Collections.unmodifiableList(retVal);
 	}
@@ -233,7 +233,7 @@ public class XmlEncMarkedRecordPairIT {
 	}
 
 	protected static File writeEncryptedMRPS(List<ImmutableRecordPair> mrps,
-			ImmutableProbabilityModel model, EncryptionPolicy<?> policy,
+			ImmutableProbabilityModel model, EncryptionScheme policy,
 			EncryptionCredential credential, XmlEncryptionManager xmlEncMgr)
 			throws IOException {
 
@@ -273,7 +273,7 @@ public class XmlEncMarkedRecordPairIT {
 
 	private final XmlEncryptionManager xmlEncMgr = InMemoryXmlEncManager
 			.getInstance();
-	private final EncryptionPolicy<?> policy = new DefaultEncryptionPolicy();
+	private final EncryptionScheme policy = new AwsKmsEncryptionScheme();
 	private EncryptionCredential credential;
 
 	private DocumentEncryptor encryptor;
@@ -317,11 +317,18 @@ public class XmlEncMarkedRecordPairIT {
 					isHelp, errors, credProps, inputFile);
 			final AWSCredentials creds = new BasicAWSCredentials(
 					params.getAwsAccessKey(), params.getAwsSecretkey());
+//                       final SecretKeyInfoFactory skif = new SecretKeyInfoFactory(
+//                                       params.getAwsMasterKeyId(),
+//                                       AwsKmsUtils.DEFAULT_AWS_KEY_ENCRYPTION_ALGORITHM,
+//                                       params.getAwsEndpoint(), creds);
+//
+//                       decryptor = new DocumentDecryptor(params.getAwsEndpoint(), creds);
+//                       encryptor = new DocumentEncryptor(skif);
 			/*
 			 * public DefaultAWSEncryptionCredential(AWSCredentials aws, String
 			 * name, String masterKeyId, String endpoint) {
 			 */
-			this.credential = new DefaultAWSEncryptionCredential(creds,
+			this.credential = new AwsKmsEncryptionCredential(creds,
 					CREDENTIAL_NAME, params.getAwsMasterKeyId(),
 					params.getAwsEndpoint());
 		} catch (Exception x) {
