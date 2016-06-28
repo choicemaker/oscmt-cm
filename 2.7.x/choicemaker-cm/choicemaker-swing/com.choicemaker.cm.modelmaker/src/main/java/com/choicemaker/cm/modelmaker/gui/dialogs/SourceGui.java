@@ -45,7 +45,7 @@ public abstract class SourceGui extends JDialog {
 
 	protected ModelMaker parent;
 	protected JPanel content;
-	protected Source source;
+	private Source source;
 	protected JButton okayButton;
 	protected JButton cancelButton;
 	protected boolean isNewSource;
@@ -56,7 +56,7 @@ public abstract class SourceGui extends JDialog {
 
 	public Source define() {
 		setVisible(true);
-		return source;
+		return getSource();
 	}
 
 	/**
@@ -68,13 +68,13 @@ public abstract class SourceGui extends JDialog {
 		isNewSource = true;
 		addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent evt) {
-				source = null;
+				setSource(null);
 			}
 		});
 	}
 
 	protected void init(Source s) {
-		source = s;
+		setSource(s);
 		content = new JPanel();
 		setContentPane(content);
 		buildContent();
@@ -133,7 +133,7 @@ public abstract class SourceGui extends JDialog {
 		//cancelButton
 		cancelButton.addActionListener(new ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent ev) {
-				source = null;
+				setSource(null);
 				dispose();
 			}
 		});
@@ -164,6 +164,14 @@ public abstract class SourceGui extends JDialog {
 			n += "." + extension;
 		}
 		return n;
+	}
+
+	protected Source getSource() {
+		return source;
+	}
+
+	protected void setSource(Source source) {
+		this.source = source;
 	}
 
 }

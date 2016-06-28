@@ -110,11 +110,11 @@ public class DbMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui imple
     }
 
     private void setFields() {
-        if (source == null) {
+        if (getSource() == null) {
             return;
         }
-        sourceFileName.setText(source.getFileName());
-        OracleMarkedRecordPairSource s = (OracleMarkedRecordPairSource) source;
+        sourceFileName.setText(getSource().getFileName());
+        OracleMarkedRecordPairSource s = (OracleMarkedRecordPairSource) getSource();
 
         conf.setText(s.getConf());
         whereField.setText(s.getSelection());
@@ -243,7 +243,7 @@ public class DbMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui imple
      * Builds an OracleMarkedRecordPairSource.
      */
     public void buildSource() {
-        OracleMarkedRecordPairSource dbSource = (OracleMarkedRecordPairSource) source;
+        OracleMarkedRecordPairSource dbSource = (OracleMarkedRecordPairSource) getSource();
 
         dbSource.setDataSourceName((String) dataSource.getSelectedItem());
         dbSource.setFileName(getSourceFileName());

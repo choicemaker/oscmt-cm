@@ -82,8 +82,8 @@ public class FlatFileRecordSourceGui extends RecordSourceGui implements Enable {
 	}
 
 	public void setFields() {
-		sourceFileName.setText(source.getFileName());
-		FlatFileRecordSource s = (FlatFileRecordSource) source;
+		sourceFileName.setText(getSource().getFileName());
+		FlatFileRecordSource s = (FlatFileRecordSource) getSource();
 		fileName.setText(s.getFileNamePrefix() + s.getFileNameSuffix());
 		if (s.getRawFileNamePrefix() != null &&
 			FileUtilities.isFileAbsolute(s.getRawFileNamePrefix())) {
@@ -142,7 +142,7 @@ public class FlatFileRecordSourceGui extends RecordSourceGui implements Enable {
 	}
 
 	public void buildSource() {
-		FlatFileRecordSource ffSource = (FlatFileRecordSource) source;
+		FlatFileRecordSource ffSource = (FlatFileRecordSource) getSource();
 		ffSource.setFileName(getSourceFileName());
 		computeFileNameAndExtension();
 		ffSource.setRawFileNamePrefix(saveFileN);

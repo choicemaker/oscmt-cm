@@ -77,7 +77,7 @@ public class SqlServerRecordSourceGui extends RecordSourceGui implements Enable 
 	}
 
 	public void buildSource() {
-		SqlServerRecordSource dbSource = (SqlServerRecordSource) source;
+		SqlServerRecordSource dbSource = (SqlServerRecordSource) getSource();
 
 		dbSource.setFileName(getSourceFileName());
 		
@@ -109,9 +109,9 @@ public class SqlServerRecordSourceGui extends RecordSourceGui implements Enable 
     }
 
     private void setFields() {
-        if (source != null) {
-	        sourceFileName.setText(source.getFileName());
-	        SqlServerRecordSource s = (SqlServerRecordSource) source;
+        if (getSource() != null) {
+	        sourceFileName.setText(getSource().getFileName());
+	        SqlServerRecordSource s = (SqlServerRecordSource) getSource();
 
 			String dsn = s.getDataSourceName();
 			if (dsn != null) {

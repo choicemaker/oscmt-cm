@@ -129,8 +129,8 @@ public class FlatFileMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui
 			distributeOver.setText("1");
 			maxPairsPerFile.setText("0");
 		}
-		sourceFileName.setText(source.getFileName());
-		FlatFileMarkedRecordPairSource s = (FlatFileMarkedRecordPairSource) source;
+		sourceFileName.setText(getSource().getFileName());
+		FlatFileMarkedRecordPairSource s = (FlatFileMarkedRecordPairSource) getSource();
 		fileName.setText(s.getFileNamePrefix() + s.getFileNameSuffix());
 		if (s.getRawFileNamePrefix() != null &&
 			FileUtilities.isFileAbsolute(s.getRawFileNamePrefix())) {
@@ -212,7 +212,7 @@ public class FlatFileMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui
 	}
 
 	public void buildSource() {
-		FlatFileMarkedRecordPairSource ffSource = (FlatFileMarkedRecordPairSource) source;
+		FlatFileMarkedRecordPairSource ffSource = (FlatFileMarkedRecordPairSource) getSource();
 		ffSource.setFileName(getSourceFileName());
 		computeFileNameAndExtension();
 		ffSource.setRawFileNamePrefix(saveFileN);
@@ -440,7 +440,7 @@ public class FlatFileMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui
 						parent.getProbabilityModel());
 				MarkedRecordPairBinder.store(sourceNames, parent.getProbabilityModel(), sinkFactory, d, s);
 				Source[] srcs = sinkFactory.getSources();
-				source = srcs[0];
+				setSource(srcs[0]);
 				for (int i = 1; i < srcs.length; ++i) {
 					try {
 						MarkedRecordPairSourceXmlConf.add((MarkedRecordPairSource) srcs[i]);

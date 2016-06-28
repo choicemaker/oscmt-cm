@@ -77,10 +77,10 @@ public class CompositeRecordSourceGui extends RecordSourceGui implements Enable 
     }
 
     public void setFields() {
-        if (source == null) {
+        if (getSource() == null) {
             return;
         }
-        CompositeRecordSource compSource = (CompositeRecordSource) source;
+        CompositeRecordSource compSource = (CompositeRecordSource) getSource();
         sourceFileName.setText(compSource.getFileName());
         DefaultTableModel m = (DefaultTableModel) sourcesTable.getModel();
         int c = compSource.getNumSources();
@@ -97,7 +97,7 @@ public class CompositeRecordSourceGui extends RecordSourceGui implements Enable 
     }
 
     public void buildSource() {
-        CompositeRecordSource compSource = (CompositeRecordSource) source;
+        CompositeRecordSource compSource = (CompositeRecordSource) getSource();
         compSource.removeAll();
         compSource.setFileName(getSourceFileName());
         for (int i = 0; i < sourcesTable.getRowCount(); i++) {

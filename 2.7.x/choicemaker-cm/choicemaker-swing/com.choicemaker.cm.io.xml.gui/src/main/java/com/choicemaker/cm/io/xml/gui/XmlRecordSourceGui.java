@@ -65,8 +65,8 @@ public class XmlRecordSourceGui extends RecordSourceGui implements Enable {
 	}
 
 	public void setFields() {
-		if (source != null) {
-			XmlRecordSource s = (XmlRecordSource) source;
+		if (getSource() != null) {
+			XmlRecordSource s = (XmlRecordSource) getSource();
 			sourceFileName.setText(s.getFileName());
 			xmlFileName.setText(s.getXmlFileName());
 			if (s.getRawXmlFileName() != null &&
@@ -84,7 +84,7 @@ public class XmlRecordSourceGui extends RecordSourceGui implements Enable {
 	}
 
 	public void buildSource() {
-		XmlRecordSource xmlSource = (XmlRecordSource) source;
+		XmlRecordSource xmlSource = (XmlRecordSource) getSource();
 		xmlSource.setFileName(getSourceFileName());
 		xmlSource.setRawXmlFileName(getSaveXmlFileName());
 	}

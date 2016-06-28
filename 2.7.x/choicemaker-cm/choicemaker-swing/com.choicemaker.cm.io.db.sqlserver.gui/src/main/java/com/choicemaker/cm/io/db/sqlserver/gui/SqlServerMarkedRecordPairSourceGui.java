@@ -76,7 +76,7 @@ public class SqlServerMarkedRecordPairSourceGui extends MarkedRecordPairSourceGu
 	}
 
 	public void buildSource() {
-		SqlServerMarkedRecordPairSource dbSource = (SqlServerMarkedRecordPairSource) source;
+		SqlServerMarkedRecordPairSource dbSource = (SqlServerMarkedRecordPairSource) getSource();
 
 		dbSource.setFileName(getSourceFileName());
 		
@@ -107,9 +107,9 @@ public class SqlServerMarkedRecordPairSourceGui extends MarkedRecordPairSourceGu
     }
 
     private void setFields() {
-        if (source != null) {
-	        sourceFileName.setText(source.getFileName());
-	        SqlServerMarkedRecordPairSource s = (SqlServerMarkedRecordPairSource) source;
+        if (getSource() != null) {
+	        sourceFileName.setText(getSource().getFileName());
+	        SqlServerMarkedRecordPairSource s = (SqlServerMarkedRecordPairSource) getSource();
 
 			String dsn = s.getDataSourceName();
 			if (dsn != null) {

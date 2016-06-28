@@ -107,8 +107,8 @@ public class XmlMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui impl
 			distributeOver.setText("1");
 			maxPairsPerFile.setText("0");
 		}
-		if (source != null) {
-			XmlMarkedRecordPairSource s = (XmlMarkedRecordPairSource) source;
+		if (getSource() != null) {
+			XmlMarkedRecordPairSource s = (XmlMarkedRecordPairSource) getSource();
 			sourceFileName.setText(s.getFileName());
 			xmlFileName.setText(s.getXmlFileName());
 			if (s.getRawXmlFileName() != null &&
@@ -153,7 +153,7 @@ public class XmlMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui impl
 	}
 
 	public void buildSource() {
-		XmlMarkedRecordPairSource xmlSource = (XmlMarkedRecordPairSource) source;
+		XmlMarkedRecordPairSource xmlSource = (XmlMarkedRecordPairSource) getSource();
 		xmlSource.setFileName(getSourceFileName());
 		xmlSource.setRawXmlFileName(getSaveXmlFileName());
 	}
@@ -326,7 +326,7 @@ public class XmlMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui impl
 					new XmlMarkedRecordPairSinkFactory(fileNameBase, fileN, extension, parent.getProbabilityModel());
 				MarkedRecordPairBinder.store(sourceNames, parent.getProbabilityModel(), sinkFactory, d, s);
 				Source[] srcs = sinkFactory.getSources();
-				source = srcs[0];
+				setSource(srcs[0]);
 				for (int i = 1; i < srcs.length; ++i) {
 					try {
 						MarkedRecordPairSourceXmlConf.add((MarkedRecordPairSource) srcs[i]);

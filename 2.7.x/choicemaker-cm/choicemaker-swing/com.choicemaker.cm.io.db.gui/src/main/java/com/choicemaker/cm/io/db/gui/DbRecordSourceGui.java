@@ -104,11 +104,11 @@ public class DbRecordSourceGui extends RecordSourceGui implements Enable {
     }
 
     private void setFields() {
-        if (source == null) {
+        if (getSource() == null) {
             return;
         }
-        sourceFileName.setText(source.getFileName());
-        OracleRecordSource s = (OracleRecordSource) source;
+        sourceFileName.setText(getSource().getFileName());
+        OracleRecordSource s = (OracleRecordSource) getSource();
 
         conf.setText(s.getConf());
         whereField.setText(s.getSelection());
@@ -237,7 +237,7 @@ public class DbRecordSourceGui extends RecordSourceGui implements Enable {
      * Builds an OracleRecordSource.
      */
     public void buildSource() {
-        OracleRecordSource dbSource = (OracleRecordSource) source;
+        OracleRecordSource dbSource = (OracleRecordSource) getSource();
 
         dbSource.setDataSourceName((String) dataSource.getSelectedItem());
         dbSource.setFileName(getSourceFileName());

@@ -77,10 +77,10 @@ public class CompositeMarkedRecordPairSourceGui extends MarkedRecordPairSourceGu
     }
 
     public void setFields() {
-        if (source == null) {
+        if (getSource() == null) {
             return;
         }
-        CompositeMarkedRecordPairSource compSource = (CompositeMarkedRecordPairSource) source;
+        CompositeMarkedRecordPairSource compSource = (CompositeMarkedRecordPairSource) getSource();
         sourceFileName.setText(compSource.getFileName());
         DefaultTableModel m = (DefaultTableModel) sourcesTable.getModel();
         int c = compSource.getNumSources();
@@ -97,7 +97,7 @@ public class CompositeMarkedRecordPairSourceGui extends MarkedRecordPairSourceGu
     }
 
     public void buildSource() {
-        CompositeMarkedRecordPairSource compSource = (CompositeMarkedRecordPairSource) source;
+        CompositeMarkedRecordPairSource compSource = (CompositeMarkedRecordPairSource) getSource();
         compSource.removeAll();
         compSource.setFileName(getSourceFileName());
         for (int i = 0; i < sourcesTable.getRowCount(); i++) {
