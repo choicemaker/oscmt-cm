@@ -15,33 +15,49 @@ import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Sink;
 import com.choicemaker.cm.core.SinkFactory;
 import com.choicemaker.cm.core.Source;
-import com.choicemaker.cm.io.xml.base.XmlMarkedRecordPairSink;
-import com.choicemaker.cm.io.xml.base.XmlMarkedRecordPairSource;
+import com.choicemaker.cm.io.xmlenc.base.xmlconf.EncryptionCredential;
+import com.choicemaker.cm.io.xmlenc.base.xmlconf.EncryptionPolicy;
+import com.choicemaker.cm.io.xmlenc.base.xmlconf.XmlEncryptionManager;
+import com.choicemaker.utilcopy01.Precondition;
 
 public class XmlEncMarkedRecordPairSinkFactory implements SinkFactory {
+
+	private final EncryptionPolicy<?> policy;
+	private final EncryptionCredential credential;
+	private final XmlEncryptionManager crdsMgr;
+
 	private String fileNameBase;
 	private String xmlFileName;
 	private String extension;
 	private ImmutableProbabilityModel model;
 	private int num;
-	private List sources;
+	private List<Source> sources;
 
 	public XmlEncMarkedRecordPairSinkFactory(String fileNameBase,
 			String xmlFileName, String extension,
-			ImmutableProbabilityModel model) {
+			ImmutableProbabilityModel model, EncryptionPolicy<?> ep,
+			EncryptionCredential ec, XmlEncryptionManager xcm) {
+		Precondition.assertNonNullArgument("null policy", ep);
+		Precondition.assertNonNullArgument("null credential", ec);
+		Precondition.assertNonNullArgument("null encryption manager", xcm);
+		this.policy = ep;
+		this.credential = ec;
+		this.crdsMgr = xcm;
 		this.fileNameBase = fileNameBase;
 		this.xmlFileName = xmlFileName;
 		this.extension = extension;
 		this.model = model;
-		this.sources = new ArrayList();
+		this.sources = new ArrayList<>();
 	}
 
 	public Sink getSink() {
-		String tName = fileNameBase + num + "." + Constants.ENCRYPTED_MRPS_EXTENSION;
+		String tName = fileNameBase + num + "." + Constants.MRPS_EXTENSION;
 		String tFileName = xmlFileName + num + extension;
 		++num;
-		sources.add(new XmlMarkedRecordPairSource(tName, tFileName, model));
-		return new XmlMarkedRecordPairSink(tName, tFileName, model);
+		sources.add(new XmlEncMarkedRecordPairSource(tName, tFileName, model,
+				policy, credential, crdsMgr));
+		return new XmlEncMarkedRecordPairSink(tName, tFileName, model, policy,
+				credential, crdsMgr);
 	}
 
 	public Source[] getSources() {

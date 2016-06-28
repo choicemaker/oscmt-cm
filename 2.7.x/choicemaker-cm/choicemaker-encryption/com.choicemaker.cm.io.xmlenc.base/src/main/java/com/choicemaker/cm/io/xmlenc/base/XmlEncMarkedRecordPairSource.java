@@ -26,34 +26,49 @@ import org.w3c.dom.Document;
 
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.io.xml.base.XmlMarkedRecordPairSource;
+import com.choicemaker.cm.io.xmlenc.base.xmlconf.EncryptionCredential;
+import com.choicemaker.cm.io.xmlenc.base.xmlconf.EncryptionPolicy;
+import com.choicemaker.cm.io.xmlenc.base.xmlconf.XmlEncryptionManager;
 import com.choicemaker.util.Precondition;
 import com.choicemaker.xmlencryption.DocumentDecryptor;
 
 /**
- * Description
- *
- * @author Martin Buechi
+ * @author rphall
  */
 public class XmlEncMarkedRecordPairSource extends XmlMarkedRecordPairSource {
 
 	private static final Logger logger = Logger
 			.getLogger(XmlEncMarkedRecordPairSource.class.getName());
 
+	private final EncryptionPolicy<?> policy;
+	private final EncryptionCredential credential;
 	private final DocumentDecryptor decryptor;
 
 	public XmlEncMarkedRecordPairSource(String fileName, String rawXmlFileName,
-			ImmutableProbabilityModel model, DocumentDecryptor decryptor) {
-		super(fileName, rawXmlFileName, model);
-		Precondition.assertNonNullArgument("null decryptor", decryptor);
-		this.decryptor = decryptor;
+			ImmutableProbabilityModel model, EncryptionPolicy<?> ep,
+			EncryptionCredential ec, XmlEncryptionManager xcm) {
+		this(null, fileName, rawXmlFileName, model, ep, ec, xcm);
 	}
 
 	public XmlEncMarkedRecordPairSource(InputStream is, String fileName,
 			String rawXmlFileName, ImmutableProbabilityModel model,
-			DocumentDecryptor decryptor) {
+			EncryptionPolicy<?> ep, EncryptionCredential ec,
+			XmlEncryptionManager xcm) {
 		super(is, fileName, rawXmlFileName, model);
-		Precondition.assertNonNullArgument("null decryptor", decryptor);
-		this.decryptor = decryptor;
+		Precondition.assertNonNullArgument("null policy", ep);
+		Precondition.assertNonNullArgument("null credential", ec);
+		Precondition.assertNonNullArgument("null encryption manager", xcm);
+		this.policy = ep;
+		this.credential = ec;
+		this.decryptor = xcm.getDocumentDecryptor(ep, ec);
+	}
+
+	public String getPolicyId() {
+		return policy.getPolicyId();
+	}
+
+	public String getCredentialName() {
+		return credential.getCredentialName();
 	}
 
 	public void open() {

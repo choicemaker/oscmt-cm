@@ -13,9 +13,9 @@ import com.choicemaker.util.MessageUtil;
 
 /**
  *
- * @author    Martin Buechi
+ * @author Martin Buechi
  */
 public class XmlEncMessageUtil {
-	public static MessageUtil m = 
-		new MessageUtil(ResourceBundle.getBundle("com.choicemaker.cm.io.xmlenc.res.XmlEnc"));
+	public static MessageUtil m = new MessageUtil(
+			ResourceBundle.getBundle("com.choicemaker.cm.io.xmlenc.res.XmlEnc"));
 }
