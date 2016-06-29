@@ -40,8 +40,6 @@ import com.choicemaker.cm.gui.utils.dialogs.FileChooserFactory;
 import com.choicemaker.cm.io.xmlenc.base.XmlEncMarkedRecordPairSink;
 import com.choicemaker.cm.io.xmlenc.base.XmlEncMarkedRecordPairSinkFactory;
 import com.choicemaker.cm.io.xmlenc.base.XmlEncMarkedRecordPairSource;
-import com.choicemaker.cm.io.xmlenc.base.xmlconf.EncryptionCredential;
-import com.choicemaker.cm.io.xmlenc.base.xmlconf.EncryptionScheme;
 import com.choicemaker.cm.io.xmlenc.base.xmlconf.InMemoryXmlEncManager;
 import com.choicemaker.cm.io.xmlenc.base.xmlconf.XmlEncryptionManager;
 import com.choicemaker.cm.io.xmlenc.res.XmlEncMessageUtil;
@@ -51,6 +49,8 @@ import com.choicemaker.cm.modelmaker.gui.utils.Enable;
 import com.choicemaker.cm.modelmaker.gui.utils.EnablednessGuard;
 import com.choicemaker.util.FileUtilities;
 import com.choicemaker.util.MessageUtil;
+import com.choicemaker.xmlencryption.CredentialSet;
+import com.choicemaker.xmlencryption.EncryptionScheme;
 
 /**
  * The MRPSGui associated the XmlEncMarkedRecordPairSource. An objects of this
@@ -214,7 +214,7 @@ public class XmlEncMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui
 		browseButton = new JButton(m.formatMessage("browse.elipsis"));
 
 		encPoliciesLabel = new JLabel(
-				m.formatMessage("io.xmlenc.gui.encryption.policy"));
+				m.formatMessage("io.xmlenc.gui.encryption.scheme"));
 		encPoliciesBox = new JComboBox<>();
 
 		encCredentialsLabel = new JLabel(
@@ -355,7 +355,7 @@ public class XmlEncMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui
 				s = Integer.MAX_VALUE;
 			}
 			final EncryptionScheme ep = createEncryptionPolicy();
-			final EncryptionCredential ec = createEncryptionCredential();
+			final CredentialSet ec = createEncryptionCredential();
 			if (d == 1 && s == Integer.MAX_VALUE) {
 				XmlEncMarkedRecordPairSink sink = new XmlEncMarkedRecordPairSink(
 						getSourceFileName(), getSaveXmlFileName(),
@@ -395,7 +395,7 @@ public class XmlEncMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui
 		dispose();
 	}
 
-	private EncryptionCredential createEncryptionCredential() {
+	private CredentialSet createEncryptionCredential() {
 		// TODO Auto-generated method stub
 		return null;
 	}

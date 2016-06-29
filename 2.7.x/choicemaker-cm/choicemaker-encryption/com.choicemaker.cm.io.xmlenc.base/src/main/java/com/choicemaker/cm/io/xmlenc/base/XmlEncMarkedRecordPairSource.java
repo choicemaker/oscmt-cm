@@ -26,11 +26,11 @@ import org.w3c.dom.Document;
 
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.io.xml.base.XmlMarkedRecordPairSource;
-import com.choicemaker.cm.io.xmlenc.base.xmlconf.EncryptionCredential;
-import com.choicemaker.cm.io.xmlenc.base.xmlconf.EncryptionScheme;
 import com.choicemaker.cm.io.xmlenc.base.xmlconf.XmlEncryptionManager;
 import com.choicemaker.util.Precondition;
+import com.choicemaker.xmlencryption.CredentialSet;
 import com.choicemaker.xmlencryption.DocumentDecryptor;
+import com.choicemaker.xmlencryption.EncryptionScheme;
 
 /**
  * @author rphall
@@ -40,31 +40,30 @@ public class XmlEncMarkedRecordPairSource extends XmlMarkedRecordPairSource {
 	private static final Logger logger = Logger
 			.getLogger(XmlEncMarkedRecordPairSource.class.getName());
 
-	private final EncryptionScheme policy;
-	private final EncryptionCredential credential;
+	private final EncryptionScheme scheme;
+	private final CredentialSet credential;
 	private final XmlEncryptionManager xmlEncMgr;
 
 	public XmlEncMarkedRecordPairSource(String fileName, String rawXmlFileName,
 			ImmutableProbabilityModel model, EncryptionScheme ep,
-			EncryptionCredential ec, XmlEncryptionManager xcm) {
+			CredentialSet ec, XmlEncryptionManager xcm) {
 		this(null, fileName, rawXmlFileName, model, ep, ec, xcm);
 	}
 
 	public XmlEncMarkedRecordPairSource(InputStream is, String fileName,
 			String rawXmlFileName, ImmutableProbabilityModel model,
-			EncryptionScheme ep, EncryptionCredential ec,
-			XmlEncryptionManager xcm) {
+			EncryptionScheme ep, CredentialSet ec, XmlEncryptionManager xcm) {
 		super(is, fileName, rawXmlFileName, model);
-		Precondition.assertNonNullArgument("null policy", ep);
+		Precondition.assertNonNullArgument("null scheme", ep);
 		Precondition.assertNonNullArgument("null credential", ec);
 		Precondition.assertNonNullArgument("null encryption manager", xcm);
-		this.policy = ep;
+		this.scheme = ep;
 		this.credential = ec;
 		this.xmlEncMgr = xcm;
 	}
 
 	public String getPolicyId() {
-		return policy.getSchemeId();
+		return scheme.getSchemeId();
 	}
 
 	public String getCredentialName() {
@@ -79,7 +78,7 @@ public class XmlEncMarkedRecordPairSource extends XmlMarkedRecordPairSource {
 		try {
 			final XmlEncryptionManager xcm = getXmlEncryptionManager();
 			final DocumentDecryptor decryptor = xcm.getDocumentDecryptor(
-					policy, credential);
+					scheme, credential);
 			InputStream sourceDocument = null;
 			if (getInputStream() != null) {
 				sourceDocument = getInputStream();

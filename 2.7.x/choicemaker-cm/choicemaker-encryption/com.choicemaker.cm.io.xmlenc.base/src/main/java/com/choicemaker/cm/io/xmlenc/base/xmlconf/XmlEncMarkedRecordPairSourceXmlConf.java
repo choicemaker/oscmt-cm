@@ -21,6 +21,8 @@ import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.xmlconf.MarkedRecordPairSourceXmlConfigurator;
 import com.choicemaker.cm.io.xmlenc.base.XmlEncMarkedRecordPairSource;
 import com.choicemaker.utilcopy01.Precondition;
+import com.choicemaker.xmlencryption.CredentialSet;
+import com.choicemaker.xmlencryption.EncryptionScheme;
 
 /**
  * Handling of encrypted XML Marked Record Pair sources.
@@ -82,8 +84,7 @@ public class XmlEncMarkedRecordPairSourceXmlConf implements
 		String schemeId = e.getChildText("schemeId");
 		EncryptionScheme ep = this.crdsMgr.getEncryptionScheme(schemeId);
 		String credentialName = e.getChildText("credentialName");
-		EncryptionCredential ec = this.crdsMgr
-				.getEncryptionCredential(credentialName);
+		CredentialSet ec = this.crdsMgr.getEncryptionCredential(credentialName);
 		XmlEncMarkedRecordPairSource retVal = new XmlEncMarkedRecordPairSource(
 				fileName, xmlFileName, model, ep, ec, this.crdsMgr);
 		return retVal;

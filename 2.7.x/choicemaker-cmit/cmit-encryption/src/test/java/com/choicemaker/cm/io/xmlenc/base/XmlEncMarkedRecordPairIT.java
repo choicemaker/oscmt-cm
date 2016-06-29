@@ -39,17 +39,17 @@ import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.xmlconf.XmlConfigurator;
 import com.choicemaker.cm.io.xml.base.XmlMarkedRecordPairSource;
-import com.choicemaker.cm.io.xmlenc.base.xmlconf.AwsKmsEncryptionCredential;
-import com.choicemaker.cm.io.xmlenc.base.xmlconf.AwsKmsEncryptionScheme;
-import com.choicemaker.cm.io.xmlenc.base.xmlconf.EncryptionCredential;
-import com.choicemaker.cm.io.xmlenc.base.xmlconf.EncryptionScheme;
 import com.choicemaker.cm.io.xmlenc.base.xmlconf.InMemoryXmlEncManager;
 import com.choicemaker.cm.io.xmlenc.base.xmlconf.XmlEncryptionManager;
 import com.choicemaker.demo.simple_person_matching.PersonMrpListComparator;
 import com.choicemaker.e2.embed.EmbeddedPlatform;
 import com.choicemaker.util.FileUtilities;
+import com.choicemaker.xmlencryption.AwsKmsCredentialSet;
+import com.choicemaker.xmlencryption.AwsKmsEncryptionScheme;
 import com.choicemaker.xmlencryption.DocumentEncryptor;
+import com.choicemaker.xmlencryption.CredentialSet;
 import com.choicemaker.xmlencryption.EncryptionParameters;
+import com.choicemaker.xmlencryption.EncryptionScheme;
 
 public class XmlEncMarkedRecordPairIT {
 
@@ -166,7 +166,7 @@ public class XmlEncMarkedRecordPairIT {
 
 	protected static List<ImmutableRecordPair> readEncryptedMRPS(
 			String xmlencFile, ImmutableProbabilityModel model,
-			EncryptionScheme policy, EncryptionCredential credential,
+			EncryptionScheme policy, CredentialSet credential,
 			XmlEncryptionManager xmlEncMgr) {
 		List<ImmutableRecordPair> retVal = new ArrayList<>();
 		XmlMarkedRecordPairSource encSource = null;
@@ -234,7 +234,7 @@ public class XmlEncMarkedRecordPairIT {
 
 	protected static File writeEncryptedMRPS(List<ImmutableRecordPair> mrps,
 			ImmutableProbabilityModel model, EncryptionScheme policy,
-			EncryptionCredential credential, XmlEncryptionManager xmlEncMgr)
+			CredentialSet credential, XmlEncryptionManager xmlEncMgr)
 			throws IOException {
 
 		// Create the name of a temporary file (and delete the file)
@@ -274,7 +274,7 @@ public class XmlEncMarkedRecordPairIT {
 	private final XmlEncryptionManager xmlEncMgr = InMemoryXmlEncManager
 			.getInstance();
 	private final EncryptionScheme policy = new AwsKmsEncryptionScheme();
-	private EncryptionCredential credential;
+	private CredentialSet credential;
 
 	private DocumentEncryptor encryptor;
 
@@ -328,7 +328,7 @@ public class XmlEncMarkedRecordPairIT {
 			 * public DefaultAWSEncryptionCredential(AWSCredentials aws, String
 			 * name, String masterKeyId, String endpoint) {
 			 */
-			this.credential = new AwsKmsEncryptionCredential(creds,
+			this.credential = new AwsKmsCredentialSet(creds,
 					CREDENTIAL_NAME, params.getAwsMasterKeyId(),
 					params.getAwsEndpoint());
 		} catch (Exception x) {

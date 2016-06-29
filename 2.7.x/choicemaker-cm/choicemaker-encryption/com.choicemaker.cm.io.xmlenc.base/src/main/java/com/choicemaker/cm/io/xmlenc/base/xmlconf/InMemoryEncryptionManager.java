@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import com.amazonaws.encryptionsdk.MasterKey;
-import com.amazonaws.encryptionsdk.MasterKeyProvider;
 import com.choicemaker.utilcopy01.Precondition;
+import com.choicemaker.xmlencryption.CredentialSet;
+import com.choicemaker.xmlencryption.EncryptionScheme;
 
 /**
  * An in-memory implementation of an EncryptionManager. This class is a
@@ -31,7 +31,7 @@ public class InMemoryEncryptionManager implements EncryptionManager {
 	}
 
 	private final Map<String, EncryptionScheme> encPolicies = new HashMap<>();
-	private final Map<String, EncryptionCredential> encCredentials = new HashMap<>();
+	private final Map<String, CredentialSet> encCredentials = new HashMap<>();
 
 	private InMemoryEncryptionManager() {
 	}
@@ -64,26 +64,26 @@ public class InMemoryEncryptionManager implements EncryptionManager {
 	}
 
 	@Override
-	public List<EncryptionCredential> getEncryptionCredentials() {
+	public List<CredentialSet> getEncryptionCredentials() {
 		final String METHOD = "getEncryptionCredentials";
 		logger.entering(SOURCE_CLASS, METHOD);
-		List<EncryptionCredential> retVal = new ArrayList<>();
+		List<CredentialSet> retVal = new ArrayList<>();
 		retVal.addAll(encCredentials.values());
 		return Collections.unmodifiableList(retVal);
 	}
 
 	@Override
-	public EncryptionCredential getEncryptionCredential(String name) {
+	public CredentialSet getEncryptionCredential(String name) {
 		final String METHOD = "getEncryptionCredentials(String)";
 		logger.entering(SOURCE_CLASS, METHOD);
 		Precondition.assertNonEmptyString("null or blank name", name);
-		EncryptionCredential retVal = encCredentials.get(name);
+		CredentialSet retVal = encCredentials.get(name);
 		assert name.equals(retVal.getCredentialName());
 		return retVal;
 	}
 
 	@Override
-	public void putEncryptionCredential(EncryptionCredential ec) {
+	public void putEncryptionCredential(CredentialSet ec) {
 		final String METHOD = "putEncryptionCredential";
 		logger.entering(SOURCE_CLASS, METHOD);
 		String name = ec.getCredentialName();

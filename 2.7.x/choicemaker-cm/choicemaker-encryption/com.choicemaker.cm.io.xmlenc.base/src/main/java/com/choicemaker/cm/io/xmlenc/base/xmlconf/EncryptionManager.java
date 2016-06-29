@@ -2,6 +2,9 @@ package com.choicemaker.cm.io.xmlenc.base.xmlconf;
 
 import java.util.List;
 
+import com.choicemaker.xmlencryption.CredentialSet;
+import com.choicemaker.xmlencryption.EncryptionScheme;
+
 public interface EncryptionManager {
 
 	// int getTimeToLive();
@@ -14,13 +17,14 @@ public interface EncryptionManager {
 
 	void putEncryptionScheme(EncryptionScheme ep);
 
-	List<EncryptionCredential> getEncryptionCredentials();
+	List<CredentialSet> getEncryptionCredentials();
 
-	EncryptionCredential getEncryptionCredential(String name);
+	CredentialSet getEncryptionCredential(String name);
 
-	void putEncryptionCredential(EncryptionCredential ec);
+	void putEncryptionCredential(CredentialSet ec);
 
-//	public <K extends MasterKey<K>> MasterKeyProvider<K> createMasterKeyProvider(
-//			EncryptionScheme ep, EncryptionCredential ec);
+	// public <K extends MasterKey<K>> MasterKeyProvider<K>
+	// createMasterKeyProvider(
+	// EncryptionScheme ep, EncryptionCredential ec);
 
 }

@@ -15,15 +15,15 @@ import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Sink;
 import com.choicemaker.cm.core.SinkFactory;
 import com.choicemaker.cm.core.Source;
-import com.choicemaker.cm.io.xmlenc.base.xmlconf.EncryptionCredential;
-import com.choicemaker.cm.io.xmlenc.base.xmlconf.EncryptionScheme;
 import com.choicemaker.cm.io.xmlenc.base.xmlconf.XmlEncryptionManager;
 import com.choicemaker.utilcopy01.Precondition;
+import com.choicemaker.xmlencryption.CredentialSet;
+import com.choicemaker.xmlencryption.EncryptionScheme;
 
 public class XmlEncMarkedRecordPairSinkFactory implements SinkFactory {
 
-	private final EncryptionScheme policy;
-	private final EncryptionCredential credential;
+	private final EncryptionScheme scheme;
+	private final CredentialSet credential;
 	private final XmlEncryptionManager crdsMgr;
 
 	private String fileNameBase;
@@ -36,11 +36,11 @@ public class XmlEncMarkedRecordPairSinkFactory implements SinkFactory {
 	public XmlEncMarkedRecordPairSinkFactory(String fileNameBase,
 			String xmlFileName, String extension,
 			ImmutableProbabilityModel model, EncryptionScheme ep,
-			EncryptionCredential ec, XmlEncryptionManager xcm) {
-		Precondition.assertNonNullArgument("null policy", ep);
+			CredentialSet ec, XmlEncryptionManager xcm) {
+		Precondition.assertNonNullArgument("null scheme", ep);
 		Precondition.assertNonNullArgument("null credential", ec);
 		Precondition.assertNonNullArgument("null encryption manager", xcm);
-		this.policy = ep;
+		this.scheme = ep;
 		this.credential = ec;
 		this.crdsMgr = xcm;
 		this.fileNameBase = fileNameBase;
@@ -55,8 +55,8 @@ public class XmlEncMarkedRecordPairSinkFactory implements SinkFactory {
 		String tFileName = xmlFileName + num + extension;
 		++num;
 		sources.add(new XmlEncMarkedRecordPairSource(tName, tFileName, model,
-				policy, credential, crdsMgr));
-		return new XmlEncMarkedRecordPairSink(tName, tFileName, model, policy,
+				scheme, credential, crdsMgr));
+		return new XmlEncMarkedRecordPairSink(tName, tFileName, model, scheme,
 				credential, crdsMgr);
 	}
 

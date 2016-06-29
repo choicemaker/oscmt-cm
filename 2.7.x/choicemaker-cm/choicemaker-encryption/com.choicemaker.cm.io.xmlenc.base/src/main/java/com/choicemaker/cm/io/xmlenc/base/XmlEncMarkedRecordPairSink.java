@@ -13,8 +13,6 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.util.Collections;
-import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.transform.Transformer;
@@ -27,11 +25,11 @@ import org.w3c.dom.Document;
 
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.io.xml.base.XmlMarkedRecordPairSink;
-import com.choicemaker.cm.io.xmlenc.base.xmlconf.EncryptionCredential;
-import com.choicemaker.cm.io.xmlenc.base.xmlconf.EncryptionScheme;
 import com.choicemaker.cm.io.xmlenc.base.xmlconf.XmlEncryptionManager;
 import com.choicemaker.utilcopy01.Precondition;
+import com.choicemaker.xmlencryption.CredentialSet;
 import com.choicemaker.xmlencryption.DocumentEncryptor;
+import com.choicemaker.xmlencryption.EncryptionScheme;
 
 /**
  * XML sink that encrypts its output
@@ -40,19 +38,19 @@ import com.choicemaker.xmlencryption.DocumentEncryptor;
  */
 public class XmlEncMarkedRecordPairSink extends XmlMarkedRecordPairSink {
 
-	private final EncryptionScheme policy;
-	private final EncryptionCredential credential;
+	private final EncryptionScheme scheme;
+	private final CredentialSet credential;
 	private final XmlEncryptionManager xmlEncMgr;
 	private StringWriter docWriter;
 
 	public XmlEncMarkedRecordPairSink(String name, String rawXmlFileName,
 			ImmutableProbabilityModel model, EncryptionScheme ep,
-			EncryptionCredential ec, XmlEncryptionManager xcm) {
+			CredentialSet ec, XmlEncryptionManager xcm) {
 		super(name, rawXmlFileName, model);
-		Precondition.assertNonNullArgument("null policy", ep);
+		Precondition.assertNonNullArgument("null scheme", ep);
 		Precondition.assertNonNullArgument("null credential", ec);
 		Precondition.assertNonNullArgument("null encryption manager", xcm);
-		this.policy = ep;
+		this.scheme = ep;
 		this.credential = ec;
 		this.xmlEncMgr = xcm;
 		this.docWriter = new StringWriter();
@@ -60,7 +58,7 @@ public class XmlEncMarkedRecordPairSink extends XmlMarkedRecordPairSink {
 	}
 
 	public String getPolicyId() {
-		return policy.getSchemeId();
+		return scheme.getSchemeId();
 	}
 
 	public String getCredentialName() {
@@ -77,10 +75,8 @@ public class XmlEncMarkedRecordPairSink extends XmlMarkedRecordPairSink {
 		super.getWriter().flush();
 		String docString = docWriter.toString();
 		FileOutputStream fos = createFileOutputStream();
-		String algorithmName = policy.getDefaultAlgorithmName();
-		Map<String, String> EMPTY = Collections.emptyMap();
-		DocumentEncryptor encryptor = xmlEncMgr.getDocumentEncryptor(policy,
-				algorithmName, credential, EMPTY);
+		DocumentEncryptor encryptor = xmlEncMgr.getDocumentEncryptor(scheme,
+				credential);
 		encrypt(encryptor, docString, fos);
 		finishRootEntity();
 		fos.close();
