@@ -35,7 +35,7 @@ public class XmlEncMarkedRecordPairSourceXmlConf implements
 	// private static final Logger logger =
 	// Logger.getLogger(XmlEncMarkedRecordPairSourceXmlConf.class.getName());
 
-	public static final String EXTENSION_POINT_ID = "com.choicemaker.cm.io.xml.base.xmlencMrpsReader";
+	public static final String EXTENSION_POINT_ID = "com.choicemaker.cm.io.xmlenc.base.xmlencMrpsReader";
 
 	private final XmlEncryptionManager crdsMgr;
 
@@ -85,9 +85,9 @@ public class XmlEncMarkedRecordPairSourceXmlConf implements
 	public MarkedRecordPairSource getMarkedRecordPairSource(String fileName,
 			Element e, ImmutableProbabilityModel model) throws XmlConfException {
 		String xmlFileName = e.getChildText("fileName");
-		String schemeId = e.getChildText("schemeId");
+		String schemeId = e.getAttributeValue("schemeId");
 		EncryptionScheme ep = this.crdsMgr.getEncryptionScheme(schemeId);
-		String credentialName = e.getChildText("credentialName");
+		String credentialName = e.getAttributeValue("credentialName");
 		CredentialSet ec = this.crdsMgr.getEncryptionCredential(credentialName);
 		XmlEncMarkedRecordPairSource retVal = new XmlEncMarkedRecordPairSource(
 				fileName, xmlFileName, model, ep, ec, this.crdsMgr);
