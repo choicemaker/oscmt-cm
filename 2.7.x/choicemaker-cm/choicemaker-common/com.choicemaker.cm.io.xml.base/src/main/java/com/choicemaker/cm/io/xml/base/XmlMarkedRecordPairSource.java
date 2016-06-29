@@ -54,7 +54,7 @@ public class XmlMarkedRecordPairSource extends XMLFilterImpl implements
 	private String xmlFileName;
 
 	private String rawXmlFileName;
-	private String fileName;
+	protected String fileName;
 	private boolean report;
 	private Date curDate;
 	private Record curQ;
@@ -72,7 +72,7 @@ public class XmlMarkedRecordPairSource extends XMLFilterImpl implements
 	private boolean mayHaveMore;
 	private boolean readMore;
 	private Thread thread;
-	private ImmutableProbabilityModel model;
+	protected ImmutableProbabilityModel model;
 	private volatile Throwable thrown;
 
 	public XmlMarkedRecordPairSource() {

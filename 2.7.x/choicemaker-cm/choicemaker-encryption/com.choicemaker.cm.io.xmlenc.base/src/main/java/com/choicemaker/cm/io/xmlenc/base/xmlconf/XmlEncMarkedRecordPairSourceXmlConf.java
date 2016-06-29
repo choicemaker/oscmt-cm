@@ -39,6 +39,10 @@ public class XmlEncMarkedRecordPairSourceXmlConf implements
 
 	private final XmlEncryptionManager crdsMgr;
 
+	public XmlEncMarkedRecordPairSourceXmlConf() {
+		this(InMemoryXmlEncManager.getInstance());
+	}
+
 	public XmlEncMarkedRecordPairSourceXmlConf(XmlEncryptionManager cm) {
 		Precondition.assertNonNullArgument("null credentials manager", cm);
 		this.crdsMgr = cm;

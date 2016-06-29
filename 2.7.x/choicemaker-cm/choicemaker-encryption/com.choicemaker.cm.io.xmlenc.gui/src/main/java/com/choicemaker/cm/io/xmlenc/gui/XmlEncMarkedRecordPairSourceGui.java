@@ -15,6 +15,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.swing.DefaultListModel;
@@ -88,8 +89,8 @@ public class XmlEncMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui
 	private JLabel xmlFileNameLabel;
 	private JTextField xmlFileName;
 	private JButton browseButton;
-	private JLabel encPoliciesLabel;
-	private JComboBox<String> encPoliciesBox;
+	private JLabel encSchemesLabel;
+	private JComboBox<String> encSchemesBox;
 	private JLabel encCredentialsLabel;
 	private JComboBox<String> encCredentialsBox;
 	private JLabel xmlFileRelativeLabel;
@@ -213,13 +214,23 @@ public class XmlEncMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui
 		xmlFileName = new JTextField(10);
 		browseButton = new JButton(m.formatMessage("browse.elipsis"));
 
-		encPoliciesLabel = new JLabel(
+		encSchemesLabel = new JLabel(
 				m.formatMessage("io.xmlenc.gui.encryption.scheme"));
-		encPoliciesBox = new JComboBox<>();
+		encSchemesBox = new JComboBox<>();
+		List<EncryptionScheme> schemes = crdsMgr.getEncryptionSchemes();
+		for (EncryptionScheme scheme : schemes) {
+			String id = scheme.getSchemeId();
+			encSchemesBox.addItem(id);
+		}
 
 		encCredentialsLabel = new JLabel(
 				m.formatMessage("io.xmlenc.gui.encryption.credentials"));
 		encCredentialsBox = new JComboBox<>();
+		List<CredentialSet> credentials = crdsMgr.getEncryptionCredentials();
+		for (CredentialSet scheme : credentials) {
+			String id = scheme.getCredentialName();
+			encCredentialsBox.addItem(id);
+		}
 
 		xmlFileRelativeLabel = new JLabel(
 				m.formatMessage("io.common.gui.save.source.file.as"));
@@ -450,13 +461,13 @@ public class XmlEncMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui
 		c.gridx = 1;
 		c.fill = GridBagConstraints.NONE;
 		c.anchor = GridBagConstraints.EAST;
-		content.add(encPoliciesLabel, c);
+		content.add(encSchemesLabel, c);
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.anchor = GridBagConstraints.WEST;
 
 		c.gridx = 2;
 		c.fill = GridBagConstraints.NONE;
-		content.add(encPoliciesBox, c);
+		content.add(encSchemesBox, c);
 		c.fill = GridBagConstraints.HORIZONTAL;
 
 		// row 3........................................

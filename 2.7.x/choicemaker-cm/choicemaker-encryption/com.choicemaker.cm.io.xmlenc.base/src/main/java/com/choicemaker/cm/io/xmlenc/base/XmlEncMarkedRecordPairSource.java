@@ -25,6 +25,7 @@ import org.apache.xml.security.utils.XMLUtils;
 import org.w3c.dom.Document;
 
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.Sink;
 import com.choicemaker.cm.io.xml.base.XmlMarkedRecordPairSource;
 import com.choicemaker.cm.io.xmlenc.base.xmlconf.XmlEncryptionManager;
 import com.choicemaker.util.Precondition;
@@ -43,6 +44,17 @@ public class XmlEncMarkedRecordPairSource extends XmlMarkedRecordPairSource {
 	private final EncryptionScheme scheme;
 	private final CredentialSet credential;
 	private final XmlEncryptionManager xmlEncMgr;
+
+	public XmlEncMarkedRecordPairSource(EncryptionScheme ep, CredentialSet ec,
+			XmlEncryptionManager xcm) {
+		super();
+		Precondition.assertNonNullArgument("null scheme", ep);
+		Precondition.assertNonNullArgument("null credential", ec);
+		Precondition.assertNonNullArgument("null encryption manager", xcm);
+		this.scheme = ep;
+		this.credential = ec;
+		this.xmlEncMgr = xcm;
+	}
 
 	public XmlEncMarkedRecordPairSource(String fileName, String rawXmlFileName,
 			ImmutableProbabilityModel model, EncryptionScheme ep,
@@ -124,6 +136,13 @@ public class XmlEncMarkedRecordPairSource extends XmlMarkedRecordPairSource {
 		byte[] b = boas.toByteArray();
 		ByteArrayInputStream retVal = new ByteArrayInputStream(b);
 
+		return retVal;
+	}
+
+	public Sink getSink() {
+		XmlEncMarkedRecordPairSink retVal = new XmlEncMarkedRecordPairSink(
+				fileName, getXmlFileName(), model, scheme, credential,
+				xmlEncMgr);
 		return retVal;
 	}
 }
