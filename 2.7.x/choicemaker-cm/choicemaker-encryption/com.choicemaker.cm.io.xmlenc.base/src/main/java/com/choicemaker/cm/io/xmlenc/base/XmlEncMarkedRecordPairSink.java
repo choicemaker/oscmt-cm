@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.Collections;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.transform.Transformer;
@@ -75,7 +77,10 @@ public class XmlEncMarkedRecordPairSink extends XmlMarkedRecordPairSink {
 		super.getWriter().flush();
 		String docString = docWriter.toString();
 		FileOutputStream fos = createFileOutputStream();
-		DocumentEncryptor encryptor = xmlEncMgr.getDocumentEncryptor(policy, credential);
+		String algorithmName = policy.getDefaultAlgorithmName();
+		Map<String, String> EMPTY = Collections.emptyMap();
+		DocumentEncryptor encryptor = xmlEncMgr.getDocumentEncryptor(policy,
+				algorithmName, credential, EMPTY);
 		encrypt(encryptor, docString, fos);
 		finishRootEntity();
 		fos.close();
