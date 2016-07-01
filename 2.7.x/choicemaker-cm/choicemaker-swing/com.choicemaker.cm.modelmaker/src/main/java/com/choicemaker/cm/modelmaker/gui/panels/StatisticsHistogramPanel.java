@@ -11,7 +11,6 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.Paint;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -23,12 +22,8 @@ import javax.swing.JTextField;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.CategoryAxis;
-//import org.jfree.chart.axis.HorizontalCategoryAxis;
 import org.jfree.chart.plot.CategoryPlot;
-//import org.jfree.chart.renderer.CategoryItemRenderer;
 import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.renderer.category.CategoryItemRenderer;
-//import org.jfree.data.category.CategoryDataset;
 
 import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
@@ -53,9 +48,8 @@ public class StatisticsHistogramPanel extends JPanel {
 	private JTextField binWidthField;
 	private float binWidth = 5.0f;
 	private boolean dirty;
-	private static final String[] SERIES = { "human differ", "human hold", "human match" };
-	private Paint[] whSeriesPaint;
-	private Paint[] wohSeriesPaint;
+	private static final String[] SERIES = { "human differ", "human hold",
+			"human match" };
 
 	public StatisticsHistogramPanel(TestingControlPanel g) {
 		super();
@@ -86,24 +80,11 @@ public class StatisticsHistogramPanel extends JPanel {
 		histogram.setBackgroundPaint(getBackground());
 		CategoryPlot plot = (CategoryPlot) histogram.getPlot();
 		plot.setForegroundAlpha(0.9f);
-//		HorizontalCategoryAxis axis = (HorizontalCategoryAxis) plot.getDomainAxis();
 		CategoryAxis axis = plot.getDomainAxis();
 		axis.setLowerMargin(0.02);
 		axis.setUpperMargin(0.02);
 		axis.setCategoryMargin(0.2);
-//		axis.setVerticalCategoryLabels(true);
-		CategoryItemRenderer renderer = plot.getRenderer();
-		whSeriesPaint = new Paint[3];
-		for (int i = 0; i < whSeriesPaint.length; ++i) {
-//			whSeriesPaint[i] = renderer.getSeriesPaint(0, i);
-			whSeriesPaint[i] = renderer.getSeriesPaint(i);
-		}
-		wohSeriesPaint = new Paint[2];
-		wohSeriesPaint[0] = whSeriesPaint[0];
-		wohSeriesPaint[1] = whSeriesPaint[2];
-		//	plot.setRangeAxis(new VerticalLogarithmicAxis());
 		histoPanel = new HistoChartPanel(histogram, false, false, false, true, true, parent.getModelMaker());
-		//	histoPanel.setEnabled(false);
 
 		binWidthLabel = new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.histogram.binwidth"));
 		binWidthField = new JTextField(Float.toString(binWidth), 4);
@@ -202,13 +183,6 @@ public class StatisticsHistogramPanel extends JPanel {
 				for (int j = 0; j < len; ++j) {
 					vi[j] = new Integer(hi[j]);
 				}
-			}
-			boolean ih = mm.isIncludeHolds();
-			data.setIncludeHolds(ih);
-			CategoryItemRenderer renderer = ((CategoryPlot) histogram.getPlot()).getRenderer();
-			for(int i = 0; i < (ih ? 3 : 2); ++i) {
-//				renderer.setSeriesPaint(0, i, ih ? whSeriesPaint[i] : wohSeriesPaint[i]);
-				renderer.setSeriesPaint(i, ih ? whSeriesPaint[i] : wohSeriesPaint[i]);
 			}
 			data.setData(v);
 		}
