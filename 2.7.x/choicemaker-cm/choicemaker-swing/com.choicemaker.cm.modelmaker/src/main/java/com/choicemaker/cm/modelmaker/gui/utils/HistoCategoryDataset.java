@@ -71,9 +71,9 @@ public class HistoCategoryDataset extends AbstractDataset implements CategoryDat
 				Decision decision = Decision.valueOf(decisionMap(i));
 				if (includeHolds || decision != Decision.HOLD) {
 					Number[] d = dd[i];
-					Comparable r = seriesNames[i];
+					Comparable<String> r = seriesNames[i];
 					for (int j = 0; j < d.length; j++) {
-						Comparable c = categories[j];
+						Comparable<String> c = categories[j];
 						setValue(d[j], r, c);
 					}
 				}
@@ -134,7 +134,7 @@ public class HistoCategoryDataset extends AbstractDataset implements CategoryDat
 	 *
 	 * @return the row key.
 	 */
-	public Comparable getRowKey(int row) {
+	public Comparable<?> getRowKey(int row) {
 		return this.data.getRowKey(row);
 	}
 
@@ -145,6 +145,7 @@ public class HistoCategoryDataset extends AbstractDataset implements CategoryDat
 	 *
 	 * @return the row index.
 	 */
+	@SuppressWarnings("rawtypes")
 	public int getRowIndex(Comparable key) {
 		return this.data.getRowIndex(key);
 	}
@@ -154,7 +155,7 @@ public class HistoCategoryDataset extends AbstractDataset implements CategoryDat
 	 *
 	 * @return the keys.
 	 */
-	public List getRowKeys() {
+	public List<?> getRowKeys() {
 		return this.data.getRowKeys();
 	}
 
@@ -165,7 +166,7 @@ public class HistoCategoryDataset extends AbstractDataset implements CategoryDat
 	 *
 	 * @return the column key.
 	 */
-	public Comparable getColumnKey(int column) {
+	public Comparable<?> getColumnKey(int column) {
 		return this.data.getColumnKey(column);
 	}
 
@@ -176,6 +177,7 @@ public class HistoCategoryDataset extends AbstractDataset implements CategoryDat
 	 *
 	 * @return the column index.
 	 */
+	@SuppressWarnings("rawtypes")
 	public int getColumnIndex(Comparable key) {
 		return this.data.getColumnIndex(key);
 	}
@@ -185,7 +187,7 @@ public class HistoCategoryDataset extends AbstractDataset implements CategoryDat
 	 *
 	 * @return the keys.
 	 */
-	public List getColumnKeys() {
+	public List<?> getColumnKeys() {
 		return this.data.getColumnKeys();
 	}
 
@@ -199,6 +201,7 @@ public class HistoCategoryDataset extends AbstractDataset implements CategoryDat
 	 *
 	 * @return the value.
 	 */
+	@SuppressWarnings("rawtypes")
 	public Number getValue(Comparable rowKey, Comparable columnKey) {
 		return this.data.getValue(rowKey, columnKey);
 	}
@@ -210,7 +213,7 @@ public class HistoCategoryDataset extends AbstractDataset implements CategoryDat
 	 * @param rowKey  the row key.
 	 * @param columnKey  the column key.
 	 */
-	public void addValue(Number value, Comparable rowKey, Comparable columnKey) {
+	public void addValue(Number value, Comparable<?> rowKey, Comparable<?> columnKey) {
 		this.data.addValue(value, rowKey, columnKey);
 		fireDatasetChanged();
 	}
@@ -222,7 +225,7 @@ public class HistoCategoryDataset extends AbstractDataset implements CategoryDat
 	 * @param rowKey  the row key.
 	 * @param columnKey  the column key.
 	 */
-	public void addValue(double value, Comparable rowKey, Comparable columnKey) {
+	public void addValue(double value, Comparable<?> rowKey, Comparable<?> columnKey) {
 		this.addValue(new Double(value), rowKey, columnKey);
 	}
 
@@ -233,7 +236,7 @@ public class HistoCategoryDataset extends AbstractDataset implements CategoryDat
 	 * @param rowKey  the row key.
 	 * @param columnKey  the column key.
 	 */
-	public void setValue(Number value, Comparable rowKey, Comparable columnKey) {
+	public void setValue(Number value, Comparable<?> rowKey, Comparable<?> columnKey) {
 		this.data.setValue(value, rowKey, columnKey);
 		fireDatasetChanged();
 	}
@@ -245,7 +248,7 @@ public class HistoCategoryDataset extends AbstractDataset implements CategoryDat
 	 * @param rowKey  the row key.
 	 * @param columnKey  the column key.
 	 */
-	public void setValue(double value, Comparable rowKey, Comparable columnKey) {
+	public void setValue(double value, Comparable<?> rowKey, Comparable<?> columnKey) {
 		this.setValue(new Double(value), rowKey, columnKey);
 	}
 
@@ -255,7 +258,7 @@ public class HistoCategoryDataset extends AbstractDataset implements CategoryDat
 	 * @param rowKey  the row key.
 	 * @param columnKey  the column key.
 	 */
-	public void removeValue(Comparable rowKey, Comparable columnKey) {
+	public void removeValue(Comparable<?> rowKey, Comparable<?> columnKey) {
 		this.data.removeValue(rowKey, columnKey);
 		fireDatasetChanged();
 	}
@@ -275,7 +278,7 @@ public class HistoCategoryDataset extends AbstractDataset implements CategoryDat
 	 * 
 	 * @param rowKey  the row key.
 	 */
-	public void removeRow(Comparable rowKey) {
+	public void removeRow(Comparable<?> rowKey) {
 		this.data.removeRow(rowKey);
 		fireDatasetChanged();
 	}
@@ -295,7 +298,7 @@ public class HistoCategoryDataset extends AbstractDataset implements CategoryDat
 	 * 
 	 * @param columnKey  the column key.
 	 */
-	public void removeColumn(Comparable columnKey) {
+	public void removeColumn(Comparable<?> columnKey) {
 		this.data.removeColumn(columnKey);
 		fireDatasetChanged();
 	}

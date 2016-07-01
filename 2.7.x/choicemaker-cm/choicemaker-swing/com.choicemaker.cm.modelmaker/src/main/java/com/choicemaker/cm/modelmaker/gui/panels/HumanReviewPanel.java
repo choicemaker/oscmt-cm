@@ -79,7 +79,7 @@ public class HumanReviewPanel
 	private ModelMaker parent;
 	private RecordPairViewerPanel viewer;
 	private JScrollPane viewerScrollPane;
-	private JComboBox markedDecisionComboBox;
+	private JComboBox<String> markedDecisionComboBox;
 	private JTextField choiceMakerDecisionField;
 	private JTextField choiceMakerProbabilityField;
 	private JTextField user;
@@ -99,7 +99,7 @@ public class HumanReviewPanel
 	private JButton stepBackButton;
 	private JSlider recordPairSlider;
 	private JTextField currentRecord;
-	private Hashtable labelTable;
+	private Hashtable<Integer, JLabel> labelTable;
 	private Integer zero = new Integer(0);
 	private JPanel cmDecisionPanel;
 	private ActiveClueTablePanel activeClueTablePanel;
@@ -195,7 +195,7 @@ public class HumanReviewPanel
 		for (int i = 0; i < Decision.NUM_DECISIONS; ++i) {
 			decisionValues[i] = Decision.valueOf(i).toString();
 		}
-		markedDecisionComboBox = new JComboBox(decisionValues);
+		markedDecisionComboBox = new JComboBox<>(decisionValues);
 		if (!parent.isIncludeHolds()) {
 			markedDecisionComboBox.removeItem(Decision.HOLD.toString());
 		}
@@ -256,7 +256,8 @@ public class HumanReviewPanel
 		//markedDecisionComboBox
 		markedDecisionComboBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
-				JComboBox cb = (JComboBox) ev.getSource();
+				@SuppressWarnings("unchecked")
+				JComboBox<String> cb = (JComboBox<String>) ev.getSource();
 				Decision d = Decision.valueOf((String) cb.getSelectedItem());
 				if (markedRP != null) {
 					Decision oldDecision = markedRP.getMarkedDecision();
@@ -505,7 +506,7 @@ public class HumanReviewPanel
 		int numRecordPairs = parent.getSourceList().size();
 
 		Integer max = new Integer(numRecordPairs - 1);
-		labelTable = new Hashtable(2);
+		labelTable = new Hashtable<>(2);
 		labelTable.clear();
 		labelTable.put(zero, new JLabel(zero.toString()));
 		labelTable.put(max, new JLabel(max.toString()));
