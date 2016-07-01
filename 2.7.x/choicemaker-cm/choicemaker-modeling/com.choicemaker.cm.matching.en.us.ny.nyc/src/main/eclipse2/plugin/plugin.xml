@@ -286,6 +286,7 @@
       <nameParser0
             name="en.us.defaultNameParser0"
             genericFirstNames="genericFirstNames"
+            childOfIndicators="childOfIndicators"
             invalidLastNames="invalidLastNames"
             nameTitles="nameTitles"
             lastNamePrefixes="lastNamePrefixes"/>
