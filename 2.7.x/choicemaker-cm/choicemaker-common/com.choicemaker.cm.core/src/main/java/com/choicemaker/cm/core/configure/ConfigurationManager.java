@@ -1,10 +1,7 @@
 package com.choicemaker.cm.core.configure;
 
-import java.util.List;
 import java.util.logging.Logger;
 
-import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.MachineLearner;
 import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.compiler.ICompiler;
 
@@ -43,15 +40,15 @@ public class ConfigurationManager {
 		return InstallableConfigurator.getInstance();
 	}
 
-	public ProbabilityModelPersistence getModelPersistence(
-			ImmutableProbabilityModel model) {
-		return getConfiguration().getModelPersistence(model);
-	}
+//	public ProbabilityModelPersistence getModelPersistence(
+//			ImmutableProbabilityModel model) {
+//		return getConfiguration().getModelPersistence(model);
+//	}
 
-	public MachineLearnerPersistence getMachineLearnerPersistence(
-			MachineLearner model) {
-		return getConfiguration().getMachineLearnerPersistence(model);
-	}
+//	public MachineLearnerPersistence getMachineLearnerPersistence(
+//			MachineLearner model) {
+//		return getConfiguration().getMachineLearnerPersistence(model);
+//	}
 
 	public ClassLoader getClassLoader() {
 		return getConfiguration().getClassLoader();
@@ -61,17 +58,17 @@ public class ConfigurationManager {
 		return getConfiguration().getRmiClassLoader();
 	}
 
-	public List getProbabilityModelConfigurations() {
-		return getConfiguration().getProbabilityModelConfigurations();
-	}
+//	public List getProbabilityModelConfigurations() {
+//		return getConfiguration().getProbabilityModelConfigurations();
+//	}
 
 	public String getClassPath() {
 		return getConfiguration().getClassPath();
 	}
 
-	public String getReloadClassPath() {
-		return getConfiguration().getReloadClassPath();
-	}
+//	public String getReloadClassPath() {
+//		return getConfiguration().getReloadClassPath();
+//	}
 
 	public String getJavaDocClasspath() {
 		return getConfiguration().getJavaDocClasspath();
@@ -101,9 +98,9 @@ public class ConfigurationManager {
 		getConfiguration().deleteGeneratedCode();
 	}
 
-	public String toXml() {
-		return getConfiguration().toXml();
-	}
+//	public String toXml() {
+//		return getConfiguration().toXml();
+//	}
 
 	public String getFileName() {
 		return getConfiguration().getFileName();

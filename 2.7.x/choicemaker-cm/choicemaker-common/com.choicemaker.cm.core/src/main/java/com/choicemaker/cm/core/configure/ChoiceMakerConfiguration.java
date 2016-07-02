@@ -65,14 +65,14 @@ public interface ChoiceMakerConfiguration {
 
 	String getJavaDocClasspath();
 
-	MachineLearnerPersistence getMachineLearnerPersistence(MachineLearner model);
+//	MachineLearnerPersistence getMachineLearnerPersistence(MachineLearner model);
 
-	ProbabilityModelPersistence getModelPersistence(
-			ImmutableProbabilityModel model);
+//	ProbabilityModelPersistence getModelPersistence(
+//			ImmutableProbabilityModel model);
 
-	List getProbabilityModelConfigurations();
+//	List getProbabilityModelConfigurations();
 
-	String getReloadClassPath();
+//	String getReloadClassPath();
 
 	ClassLoader getRmiClassLoader();
 
@@ -80,6 +80,6 @@ public interface ChoiceMakerConfiguration {
 
 	void reloadClasses() throws UnsupportedOperationException, XmlConfException;
 
-	String toXml();
+//	String toXml();
 
 }

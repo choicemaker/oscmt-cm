@@ -6,13 +6,9 @@ import java.util.List;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.project.MavenProject;
 
-import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.MachineLearner;
 import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.compiler.ICompiler;
 import com.choicemaker.cm.core.configure.ChoiceMakerConfiguration;
-import com.choicemaker.cm.core.configure.MachineLearnerPersistence;
-import com.choicemaker.cm.core.configure.ProbabilityModelPersistence;
 
 public class MojoConfiguration implements ChoiceMakerConfiguration {
 
@@ -44,6 +40,37 @@ public class MojoConfiguration implements ChoiceMakerConfiguration {
 	}
 
 	@Override
+	public String getClassPath() {
+		if (classpath == null) {
+			classpath = MojoConfigurationUtils.computeClasspath(artifacts);
+		}
+		assert classpath != null;
+		return classpath;
+	}
+
+	@Override
+	public String getGeneratedSourceRoot() {
+		return this.generatedSourceDirectory.getAbsolutePath();
+	}
+
+	@Override
+	public String getClueMakerSourceRoot() {
+		return this.cluemakerDirectory.getAbsolutePath();
+	}
+
+	@Override
+	public String getCompiledCodeRoot() {
+		return this.compiledCodeDirectory.getAbsolutePath();
+	}
+
+	// -- Not yet implemented
+
+	@Override
+	public String getPackagedCodeRoot() {
+		throw new Error("not yet implemented");
+	}
+
+	@Override
 	public void deleteGeneratedCode() {
 		throw new Error("not yet implemented");
 	}
@@ -59,44 +86,12 @@ public class MojoConfiguration implements ChoiceMakerConfiguration {
 	}
 
 	@Override
-	public String getClassPath() {
-		if (classpath == null) {
-			classpath = MojoConfigurationUtils.computeClasspath(artifacts);
-		}
-		assert classpath != null;
-		return classpath;
-	}
-
-	@Override
 	public String getFileName() {
 		throw new Error("not yet implemented");
 	}
 
 	@Override
 	public String getJavaDocClasspath() {
-		throw new Error("not yet implemented");
-	}
-
-	@Override
-	public MachineLearnerPersistence getMachineLearnerPersistence(
-			MachineLearner model) {
-		throw new Error("not yet implemented");
-	}
-
-	@Override
-	public ProbabilityModelPersistence getModelPersistence(
-			ImmutableProbabilityModel model) {
-		throw new Error("not yet implemented");
-	}
-
-	@Override
-	@SuppressWarnings("rawtypes")
-	public List getProbabilityModelConfigurations() {
-		throw new Error("not yet implemented");
-	}
-
-	@Override
-	public String getReloadClassPath() {
 		throw new Error("not yet implemented");
 	}
 
@@ -115,29 +110,32 @@ public class MojoConfiguration implements ChoiceMakerConfiguration {
 		throw new Error("not yet implemented");
 	}
 
-	@Override
-	public String toXml() {
-		throw new Error("not yet implemented");
-	}
+//	@Override
+//	public MachineLearnerPersistence getMachineLearnerPersistence(
+//			MachineLearner model) {
+//		throw new Error("not yet implemented");
+//	}
 
-	@Override
-	public String getClueMakerSourceRoot() {
-		return this.cluemakerDirectory.getAbsolutePath();
-	}
+//	@Override
+//	public ProbabilityModelPersistence getModelPersistence(
+//			ImmutableProbabilityModel model) {
+//		throw new Error("not yet implemented");
+//	}
 
-	@Override
-	public String getGeneratedSourceRoot() {
-		return this.generatedSourceDirectory.getAbsolutePath();
-	}
+//	@Override
+//	@SuppressWarnings("rawtypes")
+//	public List getProbabilityModelConfigurations() {
+//		throw new Error("not yet implemented");
+//	}
 
-	@Override
-	public String getCompiledCodeRoot() {
-		return this.compiledCodeDirectory.getAbsolutePath();
-	}
+//	@Override
+//	public String getReloadClassPath() {
+//		throw new Error("not yet implemented");
+//	}
 
-	@Override
-	public String getPackagedCodeRoot() {
-		throw new Error("not yet implemented");
-	}
+//	@Override
+//	public String toXml() {
+//		throw new Error("not yet implemented");
+//	}
 
 }

@@ -11,10 +11,7 @@
 package com.choicemaker.cm.core.configure;
 
 import java.io.File;
-import java.util.List;
 
-import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.MachineLearner;
 import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.compiler.ICompiler;
 
@@ -59,17 +56,17 @@ final class InstalledConfiguration implements
 		return delegate;
 	}
 
-	@Override
-	public ProbabilityModelPersistence getModelPersistence(
-			ImmutableProbabilityModel model) {
-		return getDelegate().getModelPersistence(model);
-	}
+//	@Override
+//	public ProbabilityModelPersistence getModelPersistence(
+//			ImmutableProbabilityModel model) {
+//		return getDelegate().getModelPersistence(model);
+//	}
 
-	@Override
-	public MachineLearnerPersistence getMachineLearnerPersistence(
-			MachineLearner machineLearner) {
-		return getDelegate().getMachineLearnerPersistence(machineLearner);
-	}
+//	@Override
+//	public MachineLearnerPersistence getMachineLearnerPersistence(
+//			MachineLearner machineLearner) {
+//		return getDelegate().getMachineLearnerPersistence(machineLearner);
+//	}
 
 	@Override
 	public ClassLoader getClassLoader() {
@@ -81,20 +78,20 @@ final class InstalledConfiguration implements
 		return getDelegate().getRmiClassLoader();
 	}
 
-	@Override
-	public List getProbabilityModelConfigurations() {
-		return getDelegate().getProbabilityModelConfigurations();
-	}
+//	@Override
+//	public List getProbabilityModelConfigurations() {
+//		return getDelegate().getProbabilityModelConfigurations();
+//	}
 
 	@Override
 	public String getClassPath() {
 		return getDelegate().getClassPath();
 	}
 
-	@Override
-	public String getReloadClassPath() {
-		return getDelegate().getReloadClassPath();
-	}
+//	@Override
+//	public String getReloadClassPath() {
+//		return getDelegate().getReloadClassPath();
+//	}
 
 	@Override
 	public String getJavaDocClasspath() {
@@ -111,10 +108,10 @@ final class InstalledConfiguration implements
 		getDelegate().reloadClasses();
 	}
 
-	@Override
-	public String toXml() {
-		return getDelegate().toXml();
-	}
+//	@Override
+//	public String toXml() {
+//		return getDelegate().toXml();
+//	}
 
 	@Override
 	public String getFileName() {

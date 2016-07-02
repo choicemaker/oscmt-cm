@@ -74,12 +74,16 @@ public class ConfigurationUtils {
 		return getRoot(document).getChild(CONFIGURATION_CORE_ELEMENT);
 	}
 
-	public static List getModules(Document document) {
-		return getCore(document).getChildren(CONFIGURATION_MODULE_ELEMENT);
+	public static List<Element> getModules(Document document) {
+		@SuppressWarnings("unchecked")
+		List<Element> retVal = getCore(document).getChildren(
+				CONFIGURATION_MODULE_ELEMENT);
+		return retVal;
 	}
 
-	public static List getReloadModules(Document document) {
-		List retVal = Collections.EMPTY_LIST;
+	@SuppressWarnings("unchecked")
+	public static List<Element> getReloadModules(Document document) {
+		List<Element> retVal = Collections.EMPTY_LIST;
 		Element e = getCore(document).getChild(CONFIGURATION_RELOAD_ELEMENT);
 		if (e != null) {
 			retVal = e.getChildren(CONFIGURATION_MODULE_ELEMENT);

@@ -1,13 +1,10 @@
 package com.choicemaker.cm.core.configure;
 
 import java.io.File;
-import java.util.List;
 import java.util.logging.Logger;
 
 import org.jdom.Document;
 
-import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.MachineLearner;
 import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.compiler.ICompiler;
 import com.choicemaker.cm.core.compiler.InstallableCompiler;
@@ -105,31 +102,27 @@ class ListBackedConfiguration implements ChoiceMakerConfiguration {
 		return getClassPath();
 	}
 
-	@Override
-	public MachineLearnerPersistence getMachineLearnerPersistence(
-			MachineLearner model) {
-		// FIXME non-functional method stub
-		throw new Error("not yet implemented");
-	}
+//	@Override
+//	public MachineLearnerPersistence getMachineLearnerPersistence(
+//			MachineLearner model) {
+//		throw new Error("not yet implemented");
+//	}
 
-	@Override
-	public ProbabilityModelPersistence getModelPersistence(
-			ImmutableProbabilityModel model) {
-		// FIXME non-functional method stub
-		throw new Error("not yet implemented");
-	}
+//	@Override
+//	public ProbabilityModelPersistence getModelPersistence(
+//			ImmutableProbabilityModel model) {
+//		throw new Error("not yet implemented");
+//	}
 
-	@Override
-	public List getProbabilityModelConfigurations() {
-		// FIXME non-functional method stub
-		throw new Error("not yet implemented");
-	}
+//	@Override
+//	public List getProbabilityModelConfigurations() {
+//		throw new Error("not yet implemented");
+//	}
 
-	@Override
-	public String getReloadClassPath() {
-		// FIXME non-functional method stub
-		throw new Error("not yet implemented");
-	}
+//	@Override
+//	public String getReloadClassPath() {
+//		throw new Error("not yet implemented");
+//	}
 
 	@Override
 	public ClassLoader getRmiClassLoader() {
@@ -147,15 +140,13 @@ class ListBackedConfiguration implements ChoiceMakerConfiguration {
 		throw new Error("not yet implemented");
 	}
 
-	@Override
-	public String toXml() {
-		// FIXME non-functional method stub
-		throw new Error("not yet implemented");
-	}
+//	@Override
+//	public String toXml() {
+//		throw new Error("not yet implemented");
+//	}
 
 	@Override
 	public String getClueMakerSourceRoot() {
-		// FIXME non-functional method stub
 		throw new Error("not yet implemented");
 	}
 

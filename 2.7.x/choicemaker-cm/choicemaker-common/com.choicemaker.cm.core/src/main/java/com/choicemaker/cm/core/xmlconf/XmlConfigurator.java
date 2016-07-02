@@ -110,7 +110,7 @@ public class XmlConfigurator implements ChoiceMakerConfigurator,
 	}
 
 	void set(Method method, Object obj, String value) throws Exception {
-		Class paramType = method.getParameterTypes()[0];
+		Class<?> paramType = method.getParameterTypes()[0];
 		Object param = value;
 		logger.info(obj.getClass().getName() + "." + method.getName() + "("
 				+ value + ")");
@@ -196,12 +196,12 @@ public class XmlConfigurator implements ChoiceMakerConfigurator,
 			throw new IllegalArgumentException(msg);
 		}
 		try {
-			List modules = ConfigurationUtils.getModules(document);
-			Iterator i = modules.iterator();
+			List<Element> modules = ConfigurationUtils.getModules(document);
+			Iterator<Element> i = modules.iterator();
 			while (i.hasNext()) {
 				Element e = (Element) i.next();
 				String className = e.getAttributeValue("class");
-				Class clazz = Class.forName(className, true, cl);
+				Class<?> clazz = Class.forName(className, true, cl);
 				XmlModuleInitializer m =
 					(XmlModuleInitializer) clazz.getDeclaredField("instance")
 							.get(null);
@@ -537,31 +537,27 @@ public class XmlConfigurator implements ChoiceMakerConfigurator,
 		return res;
 	}
 
-	@Override
-	public MachineLearnerPersistence getMachineLearnerPersistence(
-			MachineLearner model) {
-		// FIXME non-functional method stub
-		throw new Error("not yet implemented");
-	}
-
-	@Override
-	public ProbabilityModelPersistence getModelPersistence(
-			ImmutableProbabilityModel model) {
-		// FIXME non-functional method stub
-		throw new Error("not yet implemented");
-	}
-
-	@Override
-	public List getProbabilityModelConfigurations() {
-		// FIXME non-functional method stub
-		throw new Error("not yet implemented");
-	}
-
-	@Override
-	public String getReloadClassPath() {
-		// FIXME non-functional method stub
-		throw new Error("not yet implemented");
-	}
+//	@Override
+//	public MachineLearnerPersistence getMachineLearnerPersistence(
+//			MachineLearner model) {
+//		throw new Error("not yet implemented");
+//	}
+//
+//	@Override
+//	public ProbabilityModelPersistence getModelPersistence(
+//			ImmutableProbabilityModel model) {
+//		throw new Error("not yet implemented");
+//	}
+//
+//	@Override
+//	public List getProbabilityModelConfigurations() {
+//		throw new Error("not yet implemented");
+//	}
+//
+//	@Override
+//	public String getReloadClassPath() {
+//		throw new Error("not yet implemented");
+//	}
 
 	@Override
 	public ClassLoader getRmiClassLoader() {
@@ -578,11 +574,10 @@ public class XmlConfigurator implements ChoiceMakerConfigurator,
 		this.reloadClassLoader = reload();
 	}
 
-	@Override
-	public String toXml() {
-		// FIXME non-functional method stub
-		throw new Error("not yet implemented");
-	}
+//	@Override
+//	public String toXml() {
+//		throw new Error("not yet implemented");
+//	}
 
 	/**
 	 * Initializes ChoiceMaker from an XML configuration file. Reads the XML
@@ -642,7 +637,6 @@ public class XmlConfigurator implements ChoiceMakerConfigurator,
 
 	@Override
 	public String getClueMakerSourceRoot() {
-		// FIXME non-functional method stub
 		throw new Error("not yet implemented");
 	}
 
