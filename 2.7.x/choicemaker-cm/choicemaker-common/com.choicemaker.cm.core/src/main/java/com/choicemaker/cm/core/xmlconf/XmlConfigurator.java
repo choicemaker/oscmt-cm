@@ -355,6 +355,7 @@ public class XmlConfigurator implements ChoiceMakerConfigurator,
 		 * 
 		 * @see java.lang.ClassLoader#findClass(java.lang.String)
 		 */
+		@Override
 		public Class loadClass(String name) throws ClassNotFoundException {
 			Class c = null;
 			for (int i = 0; i < parents.length; i++) {
@@ -432,6 +433,7 @@ public class XmlConfigurator implements ChoiceMakerConfigurator,
 		return res;
 	}
 
+	@Override
 	public ChoiceMakerConfiguration init(String fn, boolean reload,
 			boolean initGui) throws XmlConfException {
 		return init(fn, null, reload, initGui);
@@ -440,6 +442,7 @@ public class XmlConfigurator implements ChoiceMakerConfigurator,
 	XmlConfigurator() {
 	}
 
+	@Override
 	public void deleteGeneratedCode() {
 		File f;
 		f = new File(getGeneratedSourceRoot()).getAbsoluteFile();
@@ -462,14 +465,17 @@ public class XmlConfigurator implements ChoiceMakerConfigurator,
 		}
 	}
 
+	@Override
 	public ICompiler getChoiceMakerCompiler() {
 		return InstallableCompiler.getInstance();
 	}
 
+	@Override
 	public ClassLoader getClassLoader() {
 		return classLoader;
 	}
 
+	@Override
 	public String getClassPath() {
 		return classpath;
 	}
@@ -479,10 +485,12 @@ public class XmlConfigurator implements ChoiceMakerConfigurator,
 	}
 
 	/** Returns the configuration file name */
+	@Override
 	public String getFileName() {
 		return fileName;
 	}
 
+	@Override
 	public String getJavaDocClasspath() {
 		String pathSeparator =
 			System.getProperty(SystemPropertyUtils.PN_PATH_SEPARATOR);
@@ -529,40 +537,48 @@ public class XmlConfigurator implements ChoiceMakerConfigurator,
 		return res;
 	}
 
+	@Override
 	public MachineLearnerPersistence getMachineLearnerPersistence(
 			MachineLearner model) {
 		// FIXME non-functional method stub
 		throw new Error("not yet implemented");
 	}
 
+	@Override
 	public ProbabilityModelPersistence getModelPersistence(
 			ImmutableProbabilityModel model) {
 		// FIXME non-functional method stub
 		throw new Error("not yet implemented");
 	}
 
+	@Override
 	public List getProbabilityModelConfigurations() {
 		// FIXME non-functional method stub
 		throw new Error("not yet implemented");
 	}
 
+	@Override
 	public String getReloadClassPath() {
 		// FIXME non-functional method stub
 		throw new Error("not yet implemented");
 	}
 
+	@Override
 	public ClassLoader getRmiClassLoader() {
 		return new PpsClassLoader(new URL[0], null);
 	}
 
+	@Override
 	public File getWorkingDirectory() {
 		return workingDirectory;
 	}
 
+	@Override
 	public void reloadClasses() throws XmlConfException {
 		this.reloadClassLoader = reload();
 	}
 
+	@Override
 	public String toXml() {
 		// FIXME non-functional method stub
 		throw new Error("not yet implemented");
@@ -577,6 +593,7 @@ public class XmlConfigurator implements ChoiceMakerConfigurator,
 	 * @throws XmlConfException
 	 *             if any error occurs.
 	 */
+	@Override
 	public ChoiceMakerConfiguration init(String fn, String logConfName,
 			boolean reload, boolean initGui) throws XmlConfException {
 
@@ -614,6 +631,7 @@ public class XmlConfigurator implements ChoiceMakerConfigurator,
 		return this;
 	}
 
+	@Override
 	public ChoiceMakerConfiguration init() throws XmlConfException {
 		String fn =
 			System.getProperty(PropertyNames.CHOICEMAKER_CONFIGURATION_FILE);
@@ -622,19 +640,23 @@ public class XmlConfigurator implements ChoiceMakerConfigurator,
 		return init(fn, reload, initGui);
 	}
 
+	@Override
 	public String getClueMakerSourceRoot() {
 		// FIXME non-functional method stub
 		throw new Error("not yet implemented");
 	}
 
+	@Override
 	public String getGeneratedSourceRoot() {
 		return getCodeRoot() + File.separator + SOURCE_DIRECTORY;
 	}
 
+	@Override
 	public String getCompiledCodeRoot() {
 		return getCodeRoot() + File.separator + CLASSES_DIRECTORY;
 	}
 
+	@Override
 	public String getPackagedCodeRoot() {
 		return getCodeRoot() + File.separator + PACKAGES_DIRECTORY;
 	}
