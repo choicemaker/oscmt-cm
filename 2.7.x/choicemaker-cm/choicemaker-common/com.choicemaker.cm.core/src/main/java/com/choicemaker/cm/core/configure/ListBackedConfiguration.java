@@ -57,6 +57,7 @@ class ListBackedConfiguration implements ChoiceMakerConfiguration {
 		this.generatedSourceRoot = ConfigurationUtils.getCodeRoot(this.workingDirectory, document);
 	}
 
+	@Override
 	public void deleteGeneratedCode() {
 		File f = new File(getGeneratedSourceRoot()).getAbsoluteFile();
 		if (f.exists()) {
@@ -75,14 +76,17 @@ class ListBackedConfiguration implements ChoiceMakerConfiguration {
 		}
 	}
 
+	@Override
 	public ICompiler getChoiceMakerCompiler() {
 		return InstallableCompiler.getInstance();
 	}
 
+	@Override
 	public ClassLoader getClassLoader() {
 		return ListBackedConfiguration.class.getClassLoader();
 	}
 
+	@Override
 	public String getClassPath() {
 		return this.classpath;
 	}
@@ -91,67 +95,81 @@ class ListBackedConfiguration implements ChoiceMakerConfiguration {
 		return this.generatedSourceRoot;
 	}
 
+	@Override
 	public String getFileName() {
 		return filePath;
 	}
 
+	@Override
 	public String getJavaDocClasspath() {
 		return getClassPath();
 	}
 
+	@Override
 	public MachineLearnerPersistence getMachineLearnerPersistence(
 			MachineLearner model) {
 		// FIXME non-functional method stub
 		throw new Error("not yet implemented");
 	}
 
+	@Override
 	public ProbabilityModelPersistence getModelPersistence(
 			ImmutableProbabilityModel model) {
 		// FIXME non-functional method stub
 		throw new Error("not yet implemented");
 	}
 
+	@Override
 	public List getProbabilityModelConfigurations() {
 		// FIXME non-functional method stub
 		throw new Error("not yet implemented");
 	}
 
+	@Override
 	public String getReloadClassPath() {
 		// FIXME non-functional method stub
 		throw new Error("not yet implemented");
 	}
 
+	@Override
 	public ClassLoader getRmiClassLoader() {
 		return getClassLoader();
 	}
 
+	@Override
 	public File getWorkingDirectory() {
 		return this.workingDirectory;
 	}
 
+	@Override
 	public void reloadClasses() {
 		// FIXME non-functional method stub
 		throw new Error("not yet implemented");
 	}
 
+	@Override
 	public String toXml() {
 		// FIXME non-functional method stub
 		throw new Error("not yet implemented");
 	}
 
+	@Override
 	public String getClueMakerSourceRoot() {
 		// FIXME non-functional method stub
 		throw new Error("not yet implemented");
 	}
 
+	@Override
 	public String getGeneratedSourceRoot() {
 		return getCodeRoot() + File.separator + SOURCE_DIRECTORY;
 	}
 
+	@Override
 	public String getCompiledCodeRoot() {
 		return getCodeRoot() + File.separator + CLASSES_DIRECTORY;
 	}
 
+	@Override
 	public String getPackagedCodeRoot() {
 		return getCodeRoot() + File.separator + PACKAGES_DIRECTORY;
 	}

@@ -35,6 +35,7 @@ public class ListBackedConfigurator implements ChoiceMakerConfigurator {
 	 *             if no System property has been set for
 	 *             {@link PropertyNames#CHOICEMAKER_CONFIGURATION_FILE}
 	 */
+	@Override
 	public ChoiceMakerConfiguration init() throws XmlConfException {
 		String fn = System.getProperty(PropertyNames.CHOICEMAKER_CONFIGURATION_FILE);
 		boolean reload = DEFAULT_RELOAD;
@@ -42,6 +43,7 @@ public class ListBackedConfigurator implements ChoiceMakerConfigurator {
 		return init(fn, reload, initGui);
 	}
 
+	@Override
 	public ChoiceMakerConfiguration init(String fn, boolean reload,
 			boolean initGui) throws XmlConfException {
 		SystemPropertyUtils.setPropertyIfMissing(
@@ -56,6 +58,7 @@ public class ListBackedConfigurator implements ChoiceMakerConfigurator {
 	 * <code>logConfName</code> parameter is ignored. Equivalent to invoking
 	 * <code>init(fn, reload, initGui)</code>.
 	 */
+	@Override
 	public ChoiceMakerConfiguration init(String fn, String logConfName,
 			boolean reload, boolean initGui) throws XmlConfException {
 		return init(fn, reload, initGui);

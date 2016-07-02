@@ -28,15 +28,18 @@ public final class InstallableConfigurator implements ChoiceMakerConfigurator {
 		// FIXME Auto-generated method stub
 		return new ChoiceMakerConfigurator() {
 
+			@Override
 			public ChoiceMakerConfiguration init(String fn, boolean reload,
 					boolean initGui) throws XmlConfException {
 				return null;
 			}
 
+			@Override
 			public ChoiceMakerConfiguration init() {
 				return null;
 			}
 
+			@Override
 			public ChoiceMakerConfiguration init(String fn,
 					String logConfName, boolean reload, boolean initGui)
 					throws XmlConfException {
@@ -94,15 +97,18 @@ public final class InstallableConfigurator implements ChoiceMakerConfigurator {
 		return delegate;
 	}
 
+	@Override
 	public ChoiceMakerConfiguration init(String fn, boolean reload,
 			boolean initGui) throws XmlConfException {
 		return getDelegate().init(fn, reload, initGui);
 	}
 
+	@Override
 	public ChoiceMakerConfiguration init() throws XmlConfException {
 		return getDelegate().init();
 	}
 
+	@Override
 	public ChoiceMakerConfiguration init(String fn, String logConfName,
 			boolean reload, boolean initGui) throws XmlConfException {
 		return getDelegate().init(fn, logConfName, reload, initGui);

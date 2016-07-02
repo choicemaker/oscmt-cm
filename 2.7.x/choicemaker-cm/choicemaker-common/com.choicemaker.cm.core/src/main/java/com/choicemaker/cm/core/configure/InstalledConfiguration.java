@@ -59,76 +59,94 @@ final class InstalledConfiguration implements
 		return delegate;
 	}
 
+	@Override
 	public ProbabilityModelPersistence getModelPersistence(
 			ImmutableProbabilityModel model) {
 		return getDelegate().getModelPersistence(model);
 	}
 
+	@Override
 	public MachineLearnerPersistence getMachineLearnerPersistence(
 			MachineLearner machineLearner) {
 		return getDelegate().getMachineLearnerPersistence(machineLearner);
 	}
 
+	@Override
 	public ClassLoader getClassLoader() {
 		return getDelegate().getClassLoader();
 	}
 
+	@Override
 	public ClassLoader getRmiClassLoader() {
 		return getDelegate().getRmiClassLoader();
 	}
 
+	@Override
 	public List getProbabilityModelConfigurations() {
 		return getDelegate().getProbabilityModelConfigurations();
 	}
 
+	@Override
 	public String getClassPath() {
 		return getDelegate().getClassPath();
 	}
 
+	@Override
 	public String getReloadClassPath() {
 		return getDelegate().getReloadClassPath();
 	}
 
+	@Override
 	public String getJavaDocClasspath() {
 		return getDelegate().getJavaDocClasspath();
 	}
 
+	@Override
 	public ICompiler getChoiceMakerCompiler() {
 		return getDelegate().getChoiceMakerCompiler();
 	}
 
+	@Override
 	public void reloadClasses() throws XmlConfException {
 		getDelegate().reloadClasses();
 	}
 
+	@Override
 	public String toXml() {
 		return getDelegate().toXml();
 	}
 
+	@Override
 	public String getFileName() {
 		return getDelegate().getFileName();
 	}
 
+	@Override
 	public File getWorkingDirectory() {
 		return getDelegate().getWorkingDirectory();
 	}
 
+	@Override
 	public String getClueMakerSourceRoot() {
 		return getDelegate().getClueMakerSourceRoot();
 	}
 
+	@Override
 	public String getGeneratedSourceRoot() {
 		return getDelegate().getGeneratedSourceRoot();
 	}
 
+	@Override
 	public String getCompiledCodeRoot() {
 		return getDelegate().getCompiledCodeRoot();
 	}
 
+	@Override
 	public String getPackagedCodeRoot() {
 		return getDelegate().getPackagedCodeRoot();
 	}
 
+	@Override
 	public void deleteGeneratedCode() {
 		getDelegate().deleteGeneratedCode();
 	}
