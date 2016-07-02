@@ -43,18 +43,22 @@ public class MojoConfiguration implements ChoiceMakerConfiguration {
 		this.artifacts = a;
 	}
 
+	@Override
 	public void deleteGeneratedCode() {
 		throw new Error("not yet implemented");
 	}
 
+	@Override
 	public ICompiler getChoiceMakerCompiler() {
 		throw new Error("not yet implemented");
 	}
 
+	@Override
 	public ClassLoader getClassLoader() {
 		throw new Error("not yet implemented");
 	}
 
+	@Override
 	public String getClassPath() {
 		if (classpath == null) {
 			classpath = MojoConfigurationUtils.computeClasspath(artifacts);
@@ -63,61 +67,75 @@ public class MojoConfiguration implements ChoiceMakerConfiguration {
 		return classpath;
 	}
 
+	@Override
 	public String getFileName() {
 		throw new Error("not yet implemented");
 	}
 
+	@Override
 	public String getJavaDocClasspath() {
 		throw new Error("not yet implemented");
 	}
 
+	@Override
 	public MachineLearnerPersistence getMachineLearnerPersistence(
 			MachineLearner model) {
 		throw new Error("not yet implemented");
 	}
 
+	@Override
 	public ProbabilityModelPersistence getModelPersistence(
 			ImmutableProbabilityModel model) {
 		throw new Error("not yet implemented");
 	}
 
+	@Override
 	@SuppressWarnings("rawtypes")
 	public List getProbabilityModelConfigurations() {
 		throw new Error("not yet implemented");
 	}
 
+	@Override
 	public String getReloadClassPath() {
 		throw new Error("not yet implemented");
 	}
 
+	@Override
 	public ClassLoader getRmiClassLoader() {
 		throw new Error("not yet implemented");
 	}
 
+	@Override
 	public File getWorkingDirectory() {
 		throw new Error("not yet implemented");
 	}
 
+	@Override
 	public void reloadClasses() throws XmlConfException {
 		throw new Error("not yet implemented");
 	}
 
+	@Override
 	public String toXml() {
 		throw new Error("not yet implemented");
 	}
 
+	@Override
 	public String getClueMakerSourceRoot() {
 		return this.cluemakerDirectory.getAbsolutePath();
 	}
 
+	@Override
 	public String getGeneratedSourceRoot() {
 		return this.generatedSourceDirectory.getAbsolutePath();
 	}
 
+	@Override
 	public String getCompiledCodeRoot() {
 		return this.compiledCodeDirectory.getAbsolutePath();
 	}
 
+	@Override
 	public String getPackagedCodeRoot() {
 		throw new Error("not yet implemented");
 	}

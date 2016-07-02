@@ -198,7 +198,8 @@ public abstract class AbstractMavenIntegrationTestCase
         }
     }
 
-    protected void runTest()
+    @Override
+	protected void runTest()
         throws Throwable
     {
         String line = getTestName();

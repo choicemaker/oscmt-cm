@@ -177,6 +177,7 @@ public class SmokeTest extends AbstractMavenIntegrationTestCase {
 		super("(1.0,)"); // only test in 1.0+
 	}
 
+	@Override
 	public void setUp() {
 		// Set up the working directory for a test
 		Class<? extends SmokeTest> c = getClass();

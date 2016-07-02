@@ -36,6 +36,7 @@ public class MojoConfigurator implements ChoiceMakerConfigurator {
 		this.artifacts = a;
 	}
 
+	@Override
 	public ChoiceMakerConfiguration init() throws XmlConfException {
 		return new MojoConfiguration(project, cluemakerDirectory, generatedSourceDirectory, compiledCodeDirectory, artifacts);
 	}
@@ -45,6 +46,7 @@ public class MojoConfigurator implements ChoiceMakerConfigurator {
 	 * without any parameters.
 	 * @param fn may be null
 	 */
+	@Override
 	public ChoiceMakerConfiguration init(String fn, boolean reload,
 			boolean initGui) throws XmlConfException {
 		return init();
@@ -56,6 +58,7 @@ public class MojoConfigurator implements ChoiceMakerConfigurator {
 	 * @param fn may be null
 	 * @param logConfName may be null
 	 */
+	@Override
 	public ChoiceMakerConfiguration init(String fn, String logConfName,
 			boolean reload, boolean initGui) throws XmlConfException {
 		return init();

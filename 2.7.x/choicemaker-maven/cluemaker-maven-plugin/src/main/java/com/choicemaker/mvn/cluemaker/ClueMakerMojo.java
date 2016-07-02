@@ -137,6 +137,7 @@ public class ClueMakerMojo extends AbstractMojo {
 
 	static final String SP2 = "  ";
 
+	@Override
 	public void execute() throws MojoExecutionException {
 
 		if (getLog().isDebugEnabled()) {
@@ -182,6 +183,7 @@ public class ClueMakerMojo extends AbstractMojo {
 
 		// Read the ClueMaker model files
 		FileFilter ff = new FileFilter() {
+			@Override
 			public boolean accept(File pathname) {
 				boolean retVal = pathname.isFile();
 				retVal =

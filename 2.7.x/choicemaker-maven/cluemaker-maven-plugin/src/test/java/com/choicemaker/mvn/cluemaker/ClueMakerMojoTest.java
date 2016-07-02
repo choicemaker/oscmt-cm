@@ -25,11 +25,13 @@ public class ClueMakerMojoTest extends AbstractMojoTestCase {
 			"pom-3.xml", "pom-4.xml" };
 
 	/** {@inheritDoc} */
+	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 	}
 
 	/** {@inheritDoc} */
+	@Override
 	protected void tearDown() throws Exception {
 		super.tearDown();
 	}
