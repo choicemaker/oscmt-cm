@@ -27,7 +27,7 @@ import org.w3c.dom.Document;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Sink;
 import com.choicemaker.cm.io.xml.base.XmlMarkedRecordPairSource;
-import com.choicemaker.cm.io.xmlenc.base.xmlconf.XmlEncryptionManager;
+import com.choicemaker.cm.io.xmlenc.xmlconf.XmlEncryptionManager;
 import com.choicemaker.util.Precondition;
 import com.choicemaker.xmlencryption.CredentialSet;
 import com.choicemaker.xmlencryption.DocumentDecryptor;

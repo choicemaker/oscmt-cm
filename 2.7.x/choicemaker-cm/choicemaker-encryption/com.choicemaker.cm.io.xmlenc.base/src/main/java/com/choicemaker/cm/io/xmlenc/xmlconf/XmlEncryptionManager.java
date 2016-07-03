@@ -1,4 +1,4 @@
-package com.choicemaker.cm.io.xmlenc.base.xmlconf;
+package com.choicemaker.cm.io.xmlenc.xmlconf;
 
 import com.choicemaker.xmlencryption.CredentialSet;
 import com.choicemaker.xmlencryption.DocumentDecryptor;

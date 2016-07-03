@@ -5,7 +5,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *******************************************************************************/
-package com.choicemaker.cm.io.xmlenc.base.xmlconf;
+package com.choicemaker.cm.io.xmlenc.xmlconf;
 
 import java.io.File;
 import java.io.FileOutputStream;
