@@ -253,16 +253,17 @@ public class ProbabilityModelsXmlConf {
 			if (clueDesc == null) {
 				throw new ModelConfigurationException("no clue descriptors");
 			}
-			Map cm = new HashMap();
+			Map<String, Integer> cm = new HashMap<>();
 			for (int i = 0; i < clueDesc.length; ++i) {
 				cm.put(clueDesc[i].getName(), new Integer(i));
 			}
 			boolean[] cluesToEvaluate =
 				ArrayHelper.getTrueArray(clueDesc.length);
-			List cl = m.getChildren("clue");
+			@SuppressWarnings("unchecked")
+			List<Element> cl = m.getChildren("clue");
 			int[] oldClueNums = new int[cl.size()];
 			int i = 0;
-			Iterator iCl = cl.iterator();
+			Iterator<Element> iCl = cl.iterator();
 			while (iCl.hasNext()) {
 				Element c = (Element) iCl.next();
 				String name = c.getAttributeValue("name");

@@ -323,61 +323,73 @@ class LazyMap implements Map {
 		}
 	}
 
+	@Override
 	public int size() {
 		init();
 		return store.size();
 	}
 
+	@Override
 	public boolean isEmpty() {
 		init();
 		return store.isEmpty();
 	}
 
+	@Override
 	public boolean containsKey(Object key) {
 		init();
 		return store.containsKey(key);
 	}
 
+	@Override
 	public boolean containsValue(Object value) {
 		init();
 		return store.containsValue(value);
 	}
 
+	@Override
 	public Object get(Object key) {
 		init();
 		return store.get(key);
 	}
 
+	@Override
 	public Object put(Object key, Object value) {
 		init();
 		return store.put(key, value);
 	}
 
+	@Override
 	public Object remove(Object key) {
 		init();
 		return store.remove(key);
 	}
 
+	@Override
 	public void putAll(Map t) {
 		init();
 		store.putAll(t);
 	}
 
+	@Override
 	public void clear() {
 		init();
 		store.clear();
 	}
 
+	@Override
 	public Set keySet() {
 		init();
 		return store.keySet();
 	}
 
+	@Override
 	public Collection values() {
 		init();
 		return store.values();
 	}
 
+	@Override
 	public Set entrySet() {
 		init();
 		return store.entrySet();

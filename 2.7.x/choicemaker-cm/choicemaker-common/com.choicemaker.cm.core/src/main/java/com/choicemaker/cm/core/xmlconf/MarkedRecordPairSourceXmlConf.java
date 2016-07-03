@@ -41,7 +41,7 @@ public class MarkedRecordPairSourceXmlConf {
 	public static final String EXTENSION_POINT_2 =
 		ChoiceMakerExtensionPoint.CM_CORE_FILEMRPSREADER;
 
-	public static HashMap fileMrpsReaders;
+	public static HashMap<String, Class<?>> fileMrpsReaders;
 
 	public static void add(MarkedRecordPairSource src) throws XmlConfException {
 		try {
@@ -68,7 +68,7 @@ public class MarkedRecordPairSourceXmlConf {
 				if (fileMrpsReaders == null) {
 					initFileMrpsReaders();
 				}
-				Class cls = (Class) fileMrpsReaders.get(extension);
+				Class<?> cls = (Class<?>) fileMrpsReaders.get(extension);
 				if (cls != null) {
 					MarkedRecordPairSourceXmlConfigurator c =
 						(MarkedRecordPairSourceXmlConfigurator) cls
@@ -92,7 +92,7 @@ public class MarkedRecordPairSourceXmlConf {
 	}
 
 	public static void initFileMrpsReaders() {
-		fileMrpsReaders = new HashMap();
+		fileMrpsReaders = new HashMap<>();
 
 		CMExtension[] extensions =
 			CMPlatformUtils.getExtensions(EXTENSION_POINT_2);
@@ -115,10 +115,10 @@ public class MarkedRecordPairSourceXmlConf {
 			initFileMrpsReaders();
 		}
 
-		List extensions = new ArrayList();
+		List<String> extensions = new ArrayList<>();
 		extensions.add("mrps");
 
-		Set keys = fileMrpsReaders.keySet();
+		Set<String> keys = fileMrpsReaders.keySet();
 		if (keys.contains("mrps")) {
 			keys.remove("mrps");
 		}

@@ -28,11 +28,12 @@ public class MeModelConf implements MlModelConf {
 		this.ml = ml;
 	}
 
-	public MachineLearner readMachineLearner(Element e, Accessor acc, List clues, int[] oldClueNums) {
+	public MachineLearner readMachineLearner(Element e, Accessor acc, List<?> clues, int[] oldClueNums) {
 		MaximumEntropy me = new MaximumEntropy();
 		me.setTrainingIterations(Integer.parseInt(e.getAttributeValue("trainingIterations")));
 		float[] weights = ArrayHelper.getOneArray(acc.getClueSet().size());
-		Iterator iClues = clues.iterator();
+		@SuppressWarnings("unchecked")
+		Iterator<Element> iClues = (Iterator<Element>) clues.iterator();
 		int i = 0;
 		while (iClues.hasNext()) {
 			int clueNum = oldClueNums[i];

@@ -29,7 +29,7 @@ public class DoNothingMachineLearningPersistance implements MlModelConf {
 	public DoNothingMachineLearningPersistance() {
 	}
 
-	public MachineLearner readMachineLearner(Element e, Accessor acc, List clues, int[] oldClueNums) {
+	public MachineLearner readMachineLearner(Element e, Accessor acc, List<?> clues, int[] oldClueNums) {
 		return new DoNothingMachineLearning();
 	}
 

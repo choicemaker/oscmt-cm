@@ -60,7 +60,7 @@ UNKNOWN
  */
 public final class Sets {
 
-	private static Map colls = new HashMap();
+	private static Map<String, Collection<String>> colls = new HashMap<>();
 
 	private Sets() { }
 
@@ -79,7 +79,7 @@ public final class Sets {
 	public static boolean includes(String name, Object value) {
 		boolean retVal = false;
 		if (name != null && value!=null) {
-			Collection c = (Collection) colls.get(name);
+			Collection<String> c = colls.get(name);
 			if (c !=null) {
 				retVal = c.contains(value);
 			} else {
@@ -97,7 +97,7 @@ public final class Sets {
 	 * @param   coll  The collection to be added.
 	 *
 	 */
-	public static void addCollection(String name, Collection coll) {
+	public static void addCollection(String name, Collection<String> coll) {
 		colls.put(name, coll);
 	}
 
@@ -107,12 +107,12 @@ public final class Sets {
 	 * @param name the name of the Collection to return
 	 * @return the Collection named by <code>name</code>
 	 */
-	public static Collection getCollection(String name) {
-		Set s = (Set) colls.get(name);
+	public static Collection<String> getCollection(String name) {
+		Set<String> s = (Set<String>) colls.get(name);
 		if (s instanceof LazySet) {
 			((LazySet)s).init();
 		}
-		return (Set) colls.get(name);
+		return colls.get(name);
 	}
 
 	/**
@@ -120,7 +120,7 @@ public final class Sets {
 	 *
 	 * @return a collections of all registered Collections
 	 */
-	public static Collection getCollectionNames() {
+	public static Collection<String> getCollectionNames() {
 		return colls.keySet();
 	}
 
@@ -138,10 +138,10 @@ public final class Sets {
 	 * @return the Set built from the specified file
 	 * @throws IOException if there is a problem reading the set
 	 */
-	public static Set readFileSet(String fileName)throws IOException {
+	public static Set<String> readFileSet(String fileName)throws IOException {
 		InputStream fis =
 			new FileInputStream(new File(fileName).getAbsoluteFile());
-		Set s = readFileSet(fis);
+		Set<String> s = readFileSet(fis);
 		fis.close();
 		return s;
 	}
@@ -160,8 +160,8 @@ public final class Sets {
 	 * @return the Set
 	 * @throws IOException if there is a problem reading the set
 	 */
-	public static Set readFileSet(InputStream stream) throws IOException {
-		Set s = new HashSet();
+	public static Set<String> readFileSet(InputStream stream) throws IOException {
+		Set<String> s = new HashSet<>();
 		InputStreamReader reader = new InputStreamReader(stream);
 		BufferedReader in = new BufferedReader(reader);
 		while (in.ready()) {
@@ -202,9 +202,9 @@ public final class Sets {
 	 * @return a Set with the appropriate entries.
 	 * @throws IOException if there is a problem reading the set
 	 */
-	public static Set readSingleLineSet(String fileName) throws IOException {
+	public static Set<String> readSingleLineSet(String fileName) throws IOException {
 		InputStream fis = new FileInputStream(new File(fileName).getAbsoluteFile());
-		Set s = readSingleLineSet(fis);
+		Set<String> s = readSingleLineSet(fis);
 		fis.close();
 		return s;
 	}
@@ -236,8 +236,8 @@ public final class Sets {
 	 * @return a Set
 	 * @throws IOException if there is a problem reading the set
 	 */
-	public static Set readSingleLineSet(InputStream stream) throws IOException {
-		Set s = new HashSet();
+	public static Set<String> readSingleLineSet(InputStream stream) throws IOException {
+		Set<String> s = new HashSet<>();
 		InputStreamReader reader = new InputStreamReader(stream);
 		BufferedReader in = new BufferedReader(reader);
 		while (in.ready()) {
@@ -289,16 +289,6 @@ public final class Sets {
 
 				String name = el.getAttribute("name");
 				String file = el.getAttribute("file");
-				// 2014-04-24 rphall: Commented out unused local variables.
-//				boolean lazy = true;
-//				if (el.getAttribute("lazy") != null) {
-//					lazy = Boolean.getBoolean(el.getAttribute("lazy"));
-//				}
-//
-//				boolean reload = true;
-//				if (el.getAttribute("reload") != null) {
-//					reload = Boolean.getBoolean(el.getAttribute("reload"));
-//				}
 
 				boolean singleLine = false;
 				if (el.getAttribute("singleLine") != null) {
@@ -318,13 +308,13 @@ public final class Sets {
 
 }
 
-class LazySet implements Set {
+class LazySet implements Set<String> {
 
 	private String name;
 	private URL url;
 	private boolean singleLine;
 
-	private Set store;
+	private Set<String> store;
 
 	public LazySet(String name, URL url) {
 		this(name, url, false);
@@ -352,66 +342,79 @@ class LazySet implements Set {
 		}
 	}
 
+	@Override
 	public int size() {
 		init();
 		return store.size();
 	}
 
+	@Override
 	public boolean isEmpty() {
 		init();
 		return store.isEmpty();
 	}
 
+	@Override
 	public boolean contains(Object o) {
 		init();
 		return store.contains(o);
 	}
 
-	public Iterator iterator() {
+	@Override
+	public Iterator<String> iterator() {
 		init();
 		return store.iterator();
 	}
 
-	public Object[] toArray() {
+	@Override
+	public String[] toArray() {
 		init();
-		return store.toArray();
+		return (String[]) store.toArray();
 	}
 
-	public Object[] toArray(Object[] a) {
+	@Override
+	public <T> T[] toArray(T[] a) {
 		init();
 		return store.toArray(a);
 	}
 
-	public boolean add(Object o) {
+	@Override
+	public boolean add(String o) {
 		init();
 		return store.add(o);
 	}
 
+	@Override
 	public boolean remove(Object o) {
 		init();
 		return store.remove(o);
 	}
 
-	public boolean containsAll(Collection c) {
+	@Override
+	public boolean containsAll(Collection<?> c) {
 		init();
 		return store.containsAll(c);
 	}
 
-	public boolean addAll(Collection c) {
+	@Override
+	public boolean addAll(Collection<? extends String> c) {
 		init();
 		return store.addAll(c);
 	}
 
-	public boolean retainAll(Collection c) {
+	@Override
+	public boolean retainAll(Collection<?> c) {
 		init();
 		return store.retainAll(c);
 	}
 
-	public boolean removeAll(Collection c) {
+	@Override
+	public boolean removeAll(Collection<?> c) {
 		init();
 		return store.removeAll(c);
 	}
 
+	@Override
 	public void clear() {
 		init();
 		store.clear();

@@ -48,7 +48,7 @@ public class ExtensionPointMapper {
 		}
 	}
 
-	public static Object getInstance(String extensionPoint, Class handledClass)
+	public static Object getInstance(String extensionPoint, Class<?> handledClass)
 		throws E2Exception {
 		try {
 			String handledClassName = handledClass.getName();
@@ -68,7 +68,7 @@ public class ExtensionPointMapper {
 	}
 
 	public static Object[] getAllInstances(CMPlugin plugin, String extensionPoint) {
-		List l = new ArrayList();
+		List<Object> l = new ArrayList<>();
 		CMExtensionPoint pt = plugin.getDescriptor().getExtensionPoint(extensionPoint);
 		CMExtension[] extensions = pt.getExtensions();
 		for (int i = 0; i < extensions.length; i++) {

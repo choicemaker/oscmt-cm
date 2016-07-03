@@ -38,7 +38,7 @@ public class NameParser0 {
 
 	public static final String DEFAULT_NAMEPARSER0 = "en.us.defaultNameParser0";
 
-	private static final AtomicReference instance = new AtomicReference();
+	private static final AtomicReference<NameParser0> instance = new AtomicReference<>();
 
 	public static NameParser0 getDefaultInstance() {
 		if (instance.get() == null) {
@@ -56,9 +56,9 @@ public class NameParser0 {
 			retVal = new NameParser0();
 			retVal.setName(DEFAULT_NAMEPARSER0);
 			NameParsers0.put(DEFAULT_NAMEPARSER0, retVal);
-			String msg =
-				"No-data parser registered under '" + DEFAULT_NAMEPARSER0
-						+ "'; using do-nothing parser: " + retVal.toString();
+			String msg = "No-data parser registered under '"
+					+ DEFAULT_NAMEPARSER0 + "'; using do-nothing parser: "
+					+ retVal.toString();
 			logger.warning(msg);
 		}
 		return retVal;
@@ -126,7 +126,7 @@ public class NameParser0 {
 			if (count == 1) {
 				retVal = tokens.trim();
 			} else {
-				Set seen = new HashSet();
+				Set<String> seen = new HashSet<>();
 				while (st.hasMoreTokens()) {
 					String token = st.nextToken();
 					boolean isNew = seen.add(token);
@@ -232,23 +232,31 @@ public class NameParser0 {
 		}
 	}
 
+	/** The name of this parser */
 	private String name;
-	private Collection genericFirstNames = new HashSet();
-	private Collection childOfIndicators = new HashSet();
-	private Collection invalidLastNames = new HashSet();
-	private Collection nameTitles = new HashSet();
-	private Collection lastNamePrefixes = new HashSet();
+
+	/** Generic first names */
+	private Collection<String> gfn = new HashSet<>();
+
+	/** Child-of indicators */
+	private Collection<String> coi = new HashSet<>();
+
+	/** Invalid last names */
+	private Collection<String> iln = new HashSet<>();
+
+	/** Name titles */
+	private Collection<String> nt = new HashSet<>();
+
+	/** Last name prefixes */
+	private Collection<String> lnp = new HashSet<>();
 
 	public ParsedName0 parse(String f, String m, String l) {
-		String first =
-			StringUtils.nonEmptyString(f) ? StringUtils.removePunctuation(f)
-					: "";
-		String middle =
-			StringUtils.nonEmptyString(m) ? StringUtils.removePunctuation(m)
-					: "";
-		String last =
-			StringUtils.nonEmptyString(l) ? StringUtils.removePunctuation(l)
-					: "";
+		String first = StringUtils.nonEmptyString(f) ? StringUtils
+				.removePunctuation(f) : "";
+		String middle = StringUtils.nonEmptyString(m) ? StringUtils
+				.removePunctuation(m) : "";
+		String last = StringUtils.nonEmptyString(l) ? StringUtils
+				.removePunctuation(l) : "";
 		// BUGFIX rphall 2008-07-13
 		// StringUtils.removePunctuation sometimes does not remove trailing
 		// space
@@ -292,19 +300,17 @@ public class NameParser0 {
 		if (StringUtils.nonEmptyString(middle)) {
 			ParsedName0 tmpMiddles = chunkUpNameString(middle, false);
 			if (StringUtils.nonEmptyString(tmpMiddles.getFirstName())) {
-				String s =
-					concatWithSeparator(retVal.getMiddleNames(),
-							tmpMiddles.getFirstName(), " ");
+				String s = concatWithSeparator(retVal.getMiddleNames(),
+						tmpMiddles.getFirstName(), " ");
 				retVal.setMiddleNames(s);
 			}
 			if (StringUtils.nonEmptyString(tmpMiddles.getMiddleNames())) {
-				String s =
-					concatWithSeparator(retVal.getMiddleNames(),
-							tmpMiddles.getMiddleNames(), " ");
+				String s = concatWithSeparator(retVal.getMiddleNames(),
+						tmpMiddles.getMiddleNames(), " ");
 				retVal.setMiddleNames(s);
 			}
-			tmpTitles =
-				concatWithSeparator(tmpTitles, tmpMiddles.getTitles(), " ");
+			tmpTitles = concatWithSeparator(tmpTitles, tmpMiddles.getTitles(),
+					" ");
 		}
 
 		// chunk up the last name
@@ -378,13 +384,12 @@ public class NameParser0 {
 		// If not compound, look for a hyphen in the last name.
 		// If found separate names
 		if (!isCompound) {
-			int index =
-				Math.max(chunks.getFirstName().indexOf('-'), chunks
-						.getFirstName().indexOf('/'));
+			int index = Math.max(chunks.getFirstName().indexOf('-'), chunks
+					.getFirstName().indexOf('/'));
 			if (index > 0) {
 				retVal.setLastName(chunks.getFirstName().substring(index + 1));
-				retVal.setPotentialMaidenName(chunks.getFirstName().substring(0,
-						index));
+				retVal.setPotentialMaidenName(chunks.getFirstName().substring(
+						0, index));
 				// the first part becomes a potential maiden name
 			}
 		}
@@ -424,13 +429,11 @@ public class NameParser0 {
 					StringTokenizer st = new StringTokenizer(tmp);
 					while (st.hasMoreTokens()) {
 						String token = st.nextToken();
-						boolean isGenericFirstName =
-							getGenericFirstNames().contains(token);
+						boolean isGenericFirstName = getGenericFirstNames()
+								.contains(token);
 						if (!isGenericFirstName) {
-							String s2 =
-								concatWithSeparator(
-										retVal.getMothersFirstName(), token,
-										" ");
+							String s2 = concatWithSeparator(
+									retVal.getMothersFirstName(), token, " ");
 							if (s2 != null) {
 								retVal.setMothersFirstName(retVal
 										.getMothersFirstName() + s2);
@@ -457,8 +460,7 @@ public class NameParser0 {
 		for (int iTok = 0; iTok < numToks; iTok++) {
 			String nameTok = sTok.nextToken();
 			if (getNameTitles().contains(nameTok)) {
-				String s =
-					concatWithSeparator(retVal.getTitles(), nameTok, " ");
+				String s = concatWithSeparator(retVal.getTitles(), nameTok, " ");
 				retVal.setTitles(s);
 			}
 			// if we don't already have a "first name" this is it.
@@ -467,8 +469,8 @@ public class NameParser0 {
 			}
 			// otherwise add it to the list of middle names.
 			else {
-				String s =
-					concatWithSeparator(retVal.getMiddleNames(), nameTok, " ");
+				String s = concatWithSeparator(retVal.getMiddleNames(),
+						nameTok, " ");
 				retVal.setMiddleNames(s);
 			}
 		}
@@ -483,92 +485,75 @@ public class NameParser0 {
 		this.name = name;
 	}
 
-	public Collection getGenericFirstNames() {
-		assert genericFirstNames != null;
-		return genericFirstNames;
+	public Collection<String> getGenericFirstNames() {
+		assert gfn != null;
+		return gfn;
 	}
 
-	public void setGenericFirstNames(Collection firstNames) {
+	public void setGenericFirstNames(Collection<String> firstNames) {
 		if (firstNames != null) {
-			this.genericFirstNames.clear();
-			this.genericFirstNames.addAll(firstNames);
+			this.gfn.clear();
+			this.gfn.addAll(firstNames);
 		}
 	}
 
-	public Collection getChildOfIndicators() {
-		assert childOfIndicators != null;
-		return childOfIndicators;
+	public Collection<String> getChildOfIndicators() {
+		assert coi != null;
+		return coi;
 	}
 
-	public void setChildOfIndicators(Collection childIndicators) {
+	public void setChildOfIndicators(Collection<String> childIndicators) {
 		if (childIndicators != null) {
-			this.childOfIndicators.clear();
-			this.childOfIndicators.addAll(childIndicators);
+			this.coi.clear();
+			this.coi.addAll(childIndicators);
 		}
 	}
 
-	public Collection getInvalidLastNames() {
-		assert invalidLastNames != null;
-		return invalidLastNames;
+	public Collection<String> getInvalidLastNames() {
+		assert iln != null;
+		return iln;
 	}
 
-	public void setInvalidLastNames(Collection lastNames) {
+	public void setInvalidLastNames(Collection<String> lastNames) {
 		if (lastNames != null) {
-			this.invalidLastNames.clear();
-			this.invalidLastNames.addAll(lastNames);
+			this.iln.clear();
+			this.iln.addAll(lastNames);
 		}
 	}
 
-	public Collection getNameTitles() {
-		assert nameTitles != null;
-		return nameTitles;
+	public Collection<String> getNameTitles() {
+		assert nt != null;
+		return nt;
 	}
 
-	public void setNameTitles(Collection titles) {
+	public void setNameTitles(Collection<String> titles) {
 		if (titles != null) {
-			this.nameTitles.clear();
-			this.nameTitles.addAll(titles);
+			this.nt.clear();
+			this.nt.addAll(titles);
 		}
 	}
 
-	public Collection getLastNamePrefixes() {
-		assert lastNamePrefixes != null;
-		return lastNamePrefixes;
+	public Collection<String> getLastNamePrefixes() {
+		assert lnp != null;
+		return lnp;
 	}
 
-	public void setLastNamePrefixes(Collection prefixes) {
+	public void setLastNamePrefixes(Collection<String> prefixes) {
 		if (prefixes != null) {
-			this.lastNamePrefixes.clear();
-			this.lastNamePrefixes.addAll(prefixes);
+			this.lnp.clear();
+			this.lnp.addAll(prefixes);
 		}
 	}
 
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result =
-			prime
-					* result
-					+ ((childOfIndicators == null) ? 0 : childOfIndicators
-							.hashCode());
-		result =
-			prime
-					* result
-					+ ((genericFirstNames == null) ? 0 : genericFirstNames
-							.hashCode());
-		result =
-			prime
-					* result
-					+ ((invalidLastNames == null) ? 0 : invalidLastNames
-							.hashCode());
-		result =
-			prime
-					* result
-					+ ((lastNamePrefixes == null) ? 0 : lastNamePrefixes
-							.hashCode());
+		result = prime * result + ((coi == null) ? 0 : coi.hashCode());
+		result = prime * result + ((gfn == null) ? 0 : gfn.hashCode());
+		result = prime * result + ((iln == null) ? 0 : iln.hashCode());
+		result = prime * result + ((lnp == null) ? 0 : lnp.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result =
-			prime * result + ((nameTitles == null) ? 0 : nameTitles.hashCode());
+		result = prime * result + ((nt == null) ? 0 : nt.hashCode());
 		return result;
 	}
 
@@ -583,32 +568,32 @@ public class NameParser0 {
 			return false;
 		}
 		NameParser0 other = (NameParser0) obj;
-		if (childOfIndicators == null) {
-			if (other.childOfIndicators != null) {
+		if (coi == null) {
+			if (other.coi != null) {
 				return false;
 			}
-		} else if (!childOfIndicators.equals(other.childOfIndicators)) {
+		} else if (!coi.equals(other.coi)) {
 			return false;
 		}
-		if (genericFirstNames == null) {
-			if (other.genericFirstNames != null) {
+		if (gfn == null) {
+			if (other.gfn != null) {
 				return false;
 			}
-		} else if (!genericFirstNames.equals(other.genericFirstNames)) {
+		} else if (!gfn.equals(other.gfn)) {
 			return false;
 		}
-		if (invalidLastNames == null) {
-			if (other.invalidLastNames != null) {
+		if (iln == null) {
+			if (other.iln != null) {
 				return false;
 			}
-		} else if (!invalidLastNames.equals(other.invalidLastNames)) {
+		} else if (!iln.equals(other.iln)) {
 			return false;
 		}
-		if (lastNamePrefixes == null) {
-			if (other.lastNamePrefixes != null) {
+		if (lnp == null) {
+			if (other.lnp != null) {
 				return false;
 			}
-		} else if (!lastNamePrefixes.equals(other.lastNamePrefixes)) {
+		} else if (!lnp.equals(other.lnp)) {
 			return false;
 		}
 		if (name == null) {
@@ -618,17 +603,17 @@ public class NameParser0 {
 		} else if (!name.equals(other.name)) {
 			return false;
 		}
-		if (nameTitles == null) {
-			if (other.nameTitles != null) {
+		if (nt == null) {
+			if (other.nt != null) {
 				return false;
 			}
-		} else if (!nameTitles.equals(other.nameTitles)) {
+		} else if (!nt.equals(other.nt)) {
 			return false;
 		}
 		return true;
 	}
 
-	public String toShortString(Collection c) {
+	public String toShortString(Collection<String> c) {
 		String retVal = null;
 		if (c != null && c.size() <= 3) {
 			retVal = c.toString();
@@ -637,7 +622,7 @@ public class NameParser0 {
 			StringBuilder sb = new StringBuilder();
 			sb.append("[");
 			int count = 0;
-			for (Iterator it = c.iterator(); it.hasNext();) {
+			for (Iterator<String> it = c.iterator(); it.hasNext();) {
 				count++;
 				if (count > 3) {
 					break;
@@ -652,11 +637,10 @@ public class NameParser0 {
 
 	public String toString() {
 		return "NameParser0 [name=" + name + ", genericFirstNames="
-				+ toShortString(genericFirstNames) + ", childOfIndicators="
-				+ toShortString(childOfIndicators) + ", invalidLastNames="
-				+ toShortString(invalidLastNames) + ", nameTitles="
-				+ toShortString(nameTitles) + ", lastNamePrefixes="
-				+ toShortString(lastNamePrefixes) + "]";
+				+ toShortString(gfn) + ", childOfIndicators="
+				+ toShortString(coi) + ", invalidLastNames="
+				+ toShortString(iln) + ", nameTitles=" + toShortString(nt)
+				+ ", lastNamePrefixes=" + toShortString(lnp) + "]";
 	}
 
 }

@@ -137,10 +137,10 @@ public class AddressParser extends CykParser {
 	 * @param state the state
 	 * @param zip the zip 
 	 */
-	public List getAllParsedAddresses(String street, String city, String state, String zip) {
+	public List<ParsedData> getAllParsedAddresses(String street, String city, String state, String zip) {
 		ParsedData[] parses = getAllParses(street);
 
-		List ret = new ArrayList(parses.length);
+		List<ParsedData> ret = new ArrayList<>(parses.length);
 		for (int i = 0; i < parses.length; i++) {
 			parses[i].put(ParsedAddress.CITY, city);
 			parses[i].put(ParsedAddress.STATE, state);

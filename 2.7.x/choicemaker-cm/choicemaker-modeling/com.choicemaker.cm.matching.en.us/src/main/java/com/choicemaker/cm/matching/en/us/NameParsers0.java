@@ -32,7 +32,7 @@ public final class NameParsers0 {
 	private static final Logger logger = Logger.getLogger(NameParsers0.class
 			.getName());
 
-	private static HashMap parsers = new HashMap();
+	private static HashMap<String, NameParser0> parsers = new HashMap<>();
 
 	public static final String COMMENT_FLAG = "#";
 
@@ -54,7 +54,7 @@ public final class NameParsers0 {
 		return retVal;
 	}
 
-	public static Set getParserKeys() {
+	public static Set<String> getParserKeys() {
 		return parsers.keySet();
 	}
 
@@ -88,11 +88,11 @@ public final class NameParsers0 {
 				String nt = getRequiredAttribute(el, "nameTitles");
 				String lnp = getRequiredAttribute(el, "lastNamePrefixes");
 
-				Set setGFN = initializeSetAndContents(gfn);
-				Set setCOI = initializeSetAndContents(coi);
-				Set setILN = initializeSetAndContents(iln);
-				Set setNT = initializeSetAndContents(nt);
-				Set setLNP = initializeSetAndContents(lnp);
+				Set<String> setGFN = initializeSetAndContents(gfn);
+				Set<String> setCOI = initializeSetAndContents(coi);
+				Set<String> setILN = initializeSetAndContents(iln);
+				Set<String> setNT = initializeSetAndContents(nt);
+				Set<String> setLNP = initializeSetAndContents(lnp);
 
 				NameParser0 np = new NameParser0();
 				np.setName(name);
@@ -126,21 +126,22 @@ public final class NameParsers0 {
 		return retVal;
 	}
 
-	private static Set initializeSetAndContents(String _setName) {
+	private static Set<String> initializeSetAndContents(String _setName) {
 
 		// Preconditions
 		if (!StringUtils.nonEmptyString(_setName)) {
 			throw new IllegalArgumentException("null or blank set name");
 		}
-		Collection c = Sets.getCollection(_setName);
+		@SuppressWarnings("unchecked")
+		Collection<String> c = Sets.getCollection(_setName);
 		if (c == null) {
 			String msg = "No set named '" + _setName + "'";
 			logger.severe(msg);
 			throw new IllegalArgumentException(msg);
 		}
 
-		Set retVal = new HashSet();
-		for (Iterator i = c.iterator(); i.hasNext();) {
+		Set<String> retVal = new HashSet<>();
+		for (Iterator<String> i = c.iterator(); i.hasNext();) {
 			String s = (String) i.next();
 			boolean nonEmpty = StringUtils.nonEmptyString(s);
 			if (nonEmpty && !s.startsWith(COMMENT_FLAG)) {
