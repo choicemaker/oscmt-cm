@@ -46,6 +46,12 @@ public final class InstallableConfigurator implements ChoiceMakerConfigurator {
 				return null;
 			}
 
+			@Override
+			public ChoiceMakerConfiguration init(String fn, boolean reload,
+					boolean initGui, char[] password) throws XmlConfException {
+				return null;
+			}
+
 		};
 	}
 
@@ -112,6 +118,12 @@ public final class InstallableConfigurator implements ChoiceMakerConfigurator {
 	public ChoiceMakerConfiguration init(String fn, String logConfName,
 			boolean reload, boolean initGui) throws XmlConfException {
 		return getDelegate().init(fn, logConfName, reload, initGui);
+	}
+
+	@Override
+	public ChoiceMakerConfiguration init(String fn, boolean reload,
+			boolean initGui, char[] password) throws XmlConfException {
+		return getDelegate().init(fn, reload, initGui, password);
 	}
 
 	/** For testing only; otherwise treat as private */

@@ -3,6 +3,7 @@ package com.choicemaker.cm.core.configure;
 import java.io.File;
 import java.util.logging.Logger;
 
+import org.jasypt.encryption.StringEncryptor;
 import org.jdom.Document;
 
 import com.choicemaker.cm.core.XmlConfException;
@@ -12,7 +13,7 @@ import com.choicemaker.util.FileUtilities;
 
 class ListBackedConfiguration implements ChoiceMakerConfiguration {
 
-//	private static final FileUtils FILE_UTILS = FileUtils.newFileUtils();
+	// private static final FileUtils FILE_UTILS = FileUtils.newFileUtils();
 
 	private static final Logger logger = Logger
 			.getLogger(ListBackedConfiguration.class.getName());
@@ -26,8 +27,8 @@ class ListBackedConfiguration implements ChoiceMakerConfiguration {
 	/** The class path */
 	private final String classpath;
 
-//	/** The directory where ClueMaker code is located */
-//	private final String cluemakerRoot;
+	// /** The directory where ClueMaker code is located */
+	// private final String cluemakerRoot;
 
 	/** The directory where generated code is created */
 	private final String generatedSourceRoot;
@@ -38,37 +39,73 @@ class ListBackedConfiguration implements ChoiceMakerConfiguration {
 	/** The working directory for the configuration */
 	private final File workingDirectory;
 
+	/** An encryptor for handling sensitive values */
+	private StringEncryptor encryptor;
+
 	/**
+	 * Equivalent to:
+	 * 
+	 * <pre>
+	 * ListBackedConfiguration(filename, null);
+	 * </pre>
 	 *
 	 * @param filePath
 	 *            an absolute or relative path to the configuration file name.
 	 * @throws XmlConfException
 	 */
 	public ListBackedConfiguration(String fileName) throws XmlConfException {
-		this.filePath = new File(fileName).getAbsolutePath();
+		this(fileName, null);
+	}
 
-		Document document = ConfigurationUtils.readConfigurationFile(this.filePath);
-		this.workingDirectory = ConfigurationUtils.getWorkingDirectory(this.filePath, document);
-		System.setProperty(ConfigurationUtils.SYSTEM_USER_DIR, this.workingDirectory.toString());
-		this.classpath = ConfigurationUtils.getClassPath(this.workingDirectory, document);
-		this.generatedSourceRoot = ConfigurationUtils.getCodeRoot(this.workingDirectory, document);
+	/**
+	 *
+	 * @param filePath
+	 *            an absolute or relative path to the configuration file name.
+	 * @param password
+	 *            an optional password that protects sensitive values. May be
+	 *            null.
+	 * @throws XmlConfException
+	 */
+	public ListBackedConfiguration(String fileName, char[] pw)
+			throws XmlConfException {
+		this.filePath = new File(fileName).getAbsolutePath();
+		Document document = ConfigurationUtils
+				.readConfigurationFile(this.filePath);
+		this.encryptor = null;
+		if (pw != null && pw.length > 0) {
+			if (ConfigurationUtils.isEncryptionEnabled(document)) {
+				this.encryptor = ConfigurationUtils.createTextEncryptor(pw);
+			}
+		}
+
+		this.workingDirectory = ConfigurationUtils.getWorkingDirectory(
+				this.filePath, document, encryptor);
+		System.setProperty(ConfigurationUtils.SYSTEM_USER_DIR,
+				this.workingDirectory.toString());
+		this.classpath = ConfigurationUtils.getClassPath(this.workingDirectory,
+				document, encryptor);
+		this.generatedSourceRoot = ConfigurationUtils.getCodeRoot(
+				this.workingDirectory, document, encryptor);
 	}
 
 	@Override
 	public void deleteGeneratedCode() {
 		File f = new File(getGeneratedSourceRoot()).getAbsoluteFile();
 		if (f.exists()) {
-			logger.info("Deleting generatedSourceRoot('" + f.getAbsoluteFile() + "')");
+			logger.info("Deleting generatedSourceRoot('" + f.getAbsoluteFile()
+					+ "')");
 			FileUtilities.removeChildren(f);
 		}
 		f = new File(getCompiledCodeRoot()).getAbsoluteFile();
 		if (f.exists()) {
-			logger.info("Deleting generatedSourceRoot('" + f.getAbsoluteFile() + "')");
+			logger.info("Deleting generatedSourceRoot('" + f.getAbsoluteFile()
+					+ "')");
 			FileUtilities.removeChildren(f);
 		}
 		f = new File(getPackagedCodeRoot()).getAbsoluteFile();
 		if (f.exists()) {
-			logger.info("Deleting generatedSourceRoot('" + f.getAbsoluteFile() + "')");
+			logger.info("Deleting generatedSourceRoot('" + f.getAbsoluteFile()
+					+ "')");
 			FileUtilities.removeChildren(f);
 		}
 	}
@@ -102,27 +139,27 @@ class ListBackedConfiguration implements ChoiceMakerConfiguration {
 		return getClassPath();
 	}
 
-//	@Override
-//	public MachineLearnerPersistence getMachineLearnerPersistence(
-//			MachineLearner model) {
-//		throw new Error("not yet implemented");
-//	}
+	// @Override
+	// public MachineLearnerPersistence getMachineLearnerPersistence(
+	// MachineLearner model) {
+	// throw new Error("not yet implemented");
+	// }
 
-//	@Override
-//	public ProbabilityModelPersistence getModelPersistence(
-//			ImmutableProbabilityModel model) {
-//		throw new Error("not yet implemented");
-//	}
+	// @Override
+	// public ProbabilityModelPersistence getModelPersistence(
+	// ImmutableProbabilityModel model) {
+	// throw new Error("not yet implemented");
+	// }
 
-//	@Override
-//	public List getProbabilityModelConfigurations() {
-//		throw new Error("not yet implemented");
-//	}
+	// @Override
+	// public List getProbabilityModelConfigurations() {
+	// throw new Error("not yet implemented");
+	// }
 
-//	@Override
-//	public String getReloadClassPath() {
-//		throw new Error("not yet implemented");
-//	}
+	// @Override
+	// public String getReloadClassPath() {
+	// throw new Error("not yet implemented");
+	// }
 
 	@Override
 	public ClassLoader getRmiClassLoader() {
@@ -140,10 +177,10 @@ class ListBackedConfiguration implements ChoiceMakerConfiguration {
 		throw new Error("not yet implemented");
 	}
 
-//	@Override
-//	public String toXml() {
-//		throw new Error("not yet implemented");
-//	}
+	// @Override
+	// public String toXml() {
+	// throw new Error("not yet implemented");
+	// }
 
 	@Override
 	public String getClueMakerSourceRoot() {

@@ -18,8 +18,8 @@ public class ListBackedConfigurator implements ChoiceMakerConfigurator {
 
 	/**
 	 * Looks for the name of a configuration file stored as a System property
-	 * under the key {@link PropertyNames#CHOICEMAKER_CONFIGURATION_FILE}. Uses this
-	 * value to invoke {@link #init(String, boolean, boolean)} with default
+	 * under the key {@link PropertyNames#CHOICEMAKER_CONFIGURATION_FILE}. Uses
+	 * this value to invoke {@link #init(String, boolean, boolean)} with default
 	 * values {@link #DEFAULT_RELOAD} and {@link #DEFAULT_INIT_GUI} for
 	 * <code>reload</code> and <code>initGui</code>, respectively. Equivalent to
 	 * the following code:
@@ -37,7 +37,8 @@ public class ListBackedConfigurator implements ChoiceMakerConfigurator {
 	 */
 	@Override
 	public ChoiceMakerConfiguration init() throws XmlConfException {
-		String fn = System.getProperty(PropertyNames.CHOICEMAKER_CONFIGURATION_FILE);
+		String fn = System
+				.getProperty(PropertyNames.CHOICEMAKER_CONFIGURATION_FILE);
 		boolean reload = DEFAULT_RELOAD;
 		boolean initGui = DEFAULT_INIT_GUI;
 		return init(fn, reload, initGui);
@@ -46,11 +47,7 @@ public class ListBackedConfigurator implements ChoiceMakerConfigurator {
 	@Override
 	public ChoiceMakerConfiguration init(String fn, boolean reload,
 			boolean initGui) throws XmlConfException {
-		SystemPropertyUtils.setPropertyIfMissing(
-				PropertyNames.INSTALLABLE_GENERATOR_PLUGIN_FACTORY,
-				WellKnownPropertyValues.LIST_BACKED_GENERATOR_PLUGIN_FACTORY);
-		ChoiceMakerConfiguration retVal = new ListBackedConfiguration(fn);
-		return retVal;
+		return init(fn, reload, initGui, (char[]) null);
 	}
 
 	/**
@@ -62,6 +59,17 @@ public class ListBackedConfigurator implements ChoiceMakerConfigurator {
 	public ChoiceMakerConfiguration init(String fn, String logConfName,
 			boolean reload, boolean initGui) throws XmlConfException {
 		return init(fn, reload, initGui);
+	}
+
+	@Override
+	public ChoiceMakerConfiguration init(String fn, boolean reload,
+			boolean initGui, char[] password) throws XmlConfException {
+		SystemPropertyUtils.setPropertyIfMissing(
+				PropertyNames.INSTALLABLE_GENERATOR_PLUGIN_FACTORY,
+				WellKnownPropertyValues.LIST_BACKED_GENERATOR_PLUGIN_FACTORY);
+		ChoiceMakerConfiguration retVal = new ListBackedConfiguration(fn,
+				password);
+		return retVal;
 	}
 
 }
