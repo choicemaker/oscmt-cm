@@ -10,15 +10,18 @@
  */
 package com.choicemaker.cm.core.xmlconf;
 
+import org.jasypt.encryption.StringEncryptor;
 import org.jdom.Element;
 
+import com.choicemaker.cm.core.XmlConfException;
+import com.choicemaker.cm.core.configure.ConfigurationUtils;
 import com.choicemaker.cm.core.util.DateHelper;
 import com.choicemaker.cm.core.util.FastDateParser;
 
 /**
  * XML initializer for collections (sets).
  *
- * @author    Martin Buechi
+ * @author Martin Buechi
  */
 public class XmlFastDateParserInitializer implements XmlModuleInitializer {
 	public final static XmlFastDateParserInitializer instance = new XmlFastDateParserInitializer();
@@ -26,13 +29,27 @@ public class XmlFastDateParserInitializer implements XmlModuleInitializer {
 	private XmlFastDateParserInitializer() {
 	}
 
-	public void init(Element e) {
+	@Override
+	public void init(Element e, StringEncryptor encryptor)
+			throws XmlConfException {
 		int centuryTurn = 20;
-		String ct = e.getChildText("centuryTurn");
-		if (ct != null) {
-			centuryTurn = Integer.parseInt(ct);
+		Element c = e.getChild("centuryTurn");
+		if (c != null) {
+			String ct = ConfigurationUtils.getTextValue(c, encryptor);
+			if (ct != null) {
+				centuryTurn = Integer.parseInt(ct);
+			}
+			Element c2 = e.getChild("dmy");
+			if (c2 != null) {
+				String ct2 = ConfigurationUtils.getTextValue(c2, encryptor);
+				boolean dmy = "true".equals(ct2);
+				DateHelper.setDateParser(new FastDateParser(centuryTurn, dmy));
+			}
 		}
-		boolean dmy = "true".equals(e.getChildText("dmy"));
-		DateHelper.setDateParser(new FastDateParser(centuryTurn, dmy));
+	}
+
+	@Override
+	public void init(Element e) throws XmlConfException {
+		init(e, null);
 	}
 }

@@ -10,9 +10,11 @@ package com.choicemaker.cm.io.db.base.xmlconf;
 import java.util.Iterator;
 import java.util.logging.Logger;
 
+import org.jasypt.encryption.StringEncryptor;
 import org.jdom.Document;
 import org.jdom.Element;
 
+import com.choicemaker.cm.core.configure.ConfigurationUtils;
 import com.choicemaker.cm.core.xmlconf.XmlConfigurator;
 import com.choicemaker.cm.io.db.base.DataSources;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
@@ -31,67 +33,87 @@ public class ConnectionPoolDataSourceXmlConf {
 	public static final int DEFAULT_AQUIRE_RETRY_DELAY = 1500;
 
 	/** Default overall limit to connection checkout (msec) */
-	public static final int DEFAULT_CHECKOUT_TIME =
-		DEFAULT_ACQUIRE_RETRY_ATTEMPTS * DEFAULT_AQUIRE_RETRY_DELAY;
+	public static final int DEFAULT_CHECKOUT_TIME = DEFAULT_ACQUIRE_RETRY_ATTEMPTS
+			* DEFAULT_AQUIRE_RETRY_DELAY;
 
 	private static Logger logger = Logger
 			.getLogger(ConnectionPoolDataSourceXmlConf.class.getName());
 
 	private static boolean alreadyInited = false;
-	
+
 	public static void init() {
+		StringEncryptor encryptor = XmlConfigurator.getInstance().getStringEncryptor();
 		Document d = XmlConfigurator.getInstance().getDocument();
-		init(d);
+		init(d, encryptor);
 	}
 
-	public static void init(Document d) {
+	public static void init(StringEncryptor encryptor) {
+		Document d = XmlConfigurator.getInstance().getDocument();
+		init(d, encryptor);
+	}
+
+	public static void init(Document d, StringEncryptor encryptor) {
 		Element db = XmlConfigurator.getPlugin(d, "db");
-		init(db);
+		init(db, encryptor);
 	}
 
-	public static void init(Element db) {
+	public static void init(Element db, StringEncryptor encryptor) {
 		if (db != null) {
 			Iterator i = db.getChildren("ConnectionPool").iterator();
 			while (i.hasNext()) {
 				try {
-					Element cp = (Element) i.next();
+					Element e = (Element) i.next();
 					ComboPooledDataSource cpds = new ComboPooledDataSource();
 
-					// the underlying driver
-					final String jdbcDriver = cp.getChildText("driver");
-					cpds.setDriverClass(jdbcDriver); // loads the jdbc driver
+					// set and load the underlying driver
+					final String jdbcDriver = ConfigurationUtils.getChildText(
+							e, "driver", encryptor);
+					cpds.setDriverClass(jdbcDriver);
 
 					// the URL to connect the underlyng driver with the server
-					final String jdbcURL = cp.getChildText("url");
+					final String jdbcURL = ConfigurationUtils.getChildText(e,
+							"url", encryptor);
 					cpds.setJdbcUrl(jdbcURL);
 
 					// security credentials
-					final String user = cp.getChildText("user");
+					final String user = ConfigurationUtils.getChildText(e,
+							"user", encryptor);
 					cpds.setUser(user);
-					final String password = cp.getChildText("password");
+
+					final String password = ConfigurationUtils.getChildText(e,
+							"password", encryptor);
 					cpds.setPassword(password);
 
 					// the initial size of the pool.
-					final Integer poolInitialSize =
-						new Integer(cp.getChildText("initialSize"));
-					cpds.setMinPoolSize(poolInitialSize.intValue());
+					String clearText = ConfigurationUtils.getChildText(e,
+							"initialSize", encryptor);
+					if (clearText != null) {
+						Integer poolInitialSize = Integer.valueOf(clearText);
+						cpds.setMinPoolSize(poolInitialSize.intValue());
+					}
 
 					// the maximum size the pool can grow to.
-					final Integer poolMaxSize =
-						new Integer(cp.getChildText("maxSize"));
-					cpds.setMaxPoolSize(poolMaxSize.intValue());
+					clearText = ConfigurationUtils.getChildText(e, "maxSize",
+							encryptor);
+					if (clearText != null) {
+						Integer poolMaxSize = Integer.valueOf(clearText);
+						cpds.setMaxPoolSize(poolMaxSize.intValue());
+					}
 
 					// each time the pool grows, it grows by this many
 					// connections
-					final Integer poolGrowBack =
-						new Integer(cp.getChildText("growBlock"));
-					cpds.setAcquireIncrement(poolGrowBack.intValue());
+					clearText = ConfigurationUtils.getChildText(e, "growBlock",
+							encryptor);
+					if (clearText != null) {
+						Integer poolGrowBack = Integer.valueOf(clearText);
+						cpds.setAcquireIncrement(poolGrowBack.intValue());
+					}
 
 					cpds.setAcquireRetryAttempts(DEFAULT_ACQUIRE_RETRY_ATTEMPTS);
 					cpds.setAcquireRetryDelay(DEFAULT_AQUIRE_RETRY_DELAY);
 					cpds.setCheckoutTimeout(DEFAULT_CHECKOUT_TIME);
 
-					final String name = cp.getAttributeValue("name");
+					final String name = e.getAttributeValue("name");
 					DataSources.addDataSource(name, cpds);
 
 				} catch (Exception ex) {

@@ -10,6 +10,7 @@
  */
 package com.choicemaker.cm.core.xmlconf;
 
+import org.jasypt.encryption.StringEncryptor;
 import org.jdom.Element;
 
 import com.choicemaker.cm.core.XmlConfException;
@@ -17,18 +18,34 @@ import com.choicemaker.cm.core.XmlConfException;
 /**
  * Base interface for all XML module initializers.
  *
- * Classes that implement this interface should be singletons. The single instance
- * should be accessible as a public (final) static field <code>instance</code>. This field
- * must be intialized when the class is loaded.
+ * Classes that implement this interface should be singletons. The single
+ * instance should be accessible as a public (final) static field
+ * <code>instance</code>. This field must be intialized when the class is
+ * loaded.
  *
- * @author    Martin Buechi
+ * @author Martin Buechi
  */
 public interface XmlModuleInitializer {
+
+	/**
+	 * Initializes the non-GUI parts of the module. Equivalent to:
+	 * 
+	 * <pre>
+	 * init(e, null)
+	 * </pre>
+	 */
+	void init(Element e) throws XmlConfException;
+
 	/**
 	 * Initializes the non-GUI parts of the module.
 	 *
-	 * @param   e  The JDOM element for the module from the configuration file.
-	 * @throws  XmlConfException  if any error occurs during the configuration.
+	 * @param e
+	 *            The JDOM element for the module from the configuration file.
+	 * @param pw
+	 *            An optional password that protects sensitive information.
+	 * @throws XmlConfException
+	 *             if any error occurs during the configuration.
 	 */
-	void init(Element e) throws XmlConfException;
+	void init(Element e, StringEncryptor encryptor) throws XmlConfException;
+
 }

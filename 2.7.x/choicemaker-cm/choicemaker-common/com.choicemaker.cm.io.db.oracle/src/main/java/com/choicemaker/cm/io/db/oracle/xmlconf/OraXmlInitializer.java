@@ -7,14 +7,16 @@
  *******************************************************************************/
 package com.choicemaker.cm.io.db.oracle.xmlconf;
 
+import org.jasypt.encryption.StringEncryptor;
 import org.jdom.Element;
 
+import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.xmlconf.XmlModuleInitializer;
 
 /**
  * Description
  *
- * @author    Martin Buechi
+ * @author Martin Buechi
  */
 public class OraXmlInitializer implements XmlModuleInitializer {
 	public static OraXmlInitializer instance = new OraXmlInitializer();
@@ -22,7 +24,13 @@ public class OraXmlInitializer implements XmlModuleInitializer {
 	private OraXmlInitializer() {
 	}
 
-	public void init(Element e) {
-		OraConnectionCacheXmlConf.init();
+	@Override
+	public void init(Element e) throws XmlConfException {
+		init(e, null);
+	}
+
+	@Override
+	public void init(Element e, StringEncryptor encryptor) throws XmlConfException {
+		OraConnectionCacheXmlConf.init(encryptor);
 	}
 }

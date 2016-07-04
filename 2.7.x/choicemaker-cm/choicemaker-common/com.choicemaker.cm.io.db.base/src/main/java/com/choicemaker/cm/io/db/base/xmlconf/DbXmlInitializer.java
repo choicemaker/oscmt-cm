@@ -7,17 +7,27 @@
  *******************************************************************************/
 package com.choicemaker.cm.io.db.base.xmlconf;
 
+import org.jasypt.encryption.StringEncryptor;
 import org.jdom.Element;
 
+import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.xmlconf.XmlModuleInitializer;
 
 /**
  * Description
  *
- * @author    Martin Buechi
+ * @author Martin Buechi
  */
 public class DbXmlInitializer implements XmlModuleInitializer {
-	public void init(Element e) {
-		ConnectionPoolDataSourceXmlConf.init();
+
+	@Override
+	public void init(Element e) throws XmlConfException {
+		init(e,null);
+	}
+
+	@Override
+	public void init(Element e, StringEncryptor encryptor)
+			throws XmlConfException {
+		ConnectionPoolDataSourceXmlConf.init(e, encryptor);
 	}
 }

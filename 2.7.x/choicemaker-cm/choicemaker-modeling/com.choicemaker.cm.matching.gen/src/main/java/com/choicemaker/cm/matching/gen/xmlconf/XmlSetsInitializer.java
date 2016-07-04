@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.jasypt.encryption.StringEncryptor;
 import org.jdom.Element;
 
 import com.choicemaker.cm.core.XmlConfException;
@@ -20,30 +21,41 @@ import com.choicemaker.cm.matching.gen.Sets;
 
 /**
  * XML initializer for collections (sets).
- * <p>see com.choicemaker.cm.matching.gen.Colls</p>
+ * <p>
+ * see com.choicemaker.cm.matching.gen.Colls
+ * </p>
  *
- * @author    Martin Buechi
+ * @author Martin Buechi
  */
 public class XmlSetsInitializer implements XmlModuleInitializer {
 	public final static XmlSetsInitializer instance = new XmlSetsInitializer();
 
-	private XmlSetsInitializer() { }
+	private XmlSetsInitializer() {
+	}
 
+	@Override
 	public void init(Element e) throws XmlConfException {
-		List colls = e.getChildren();
-		Iterator iColls = colls.iterator();
+		init(e, null);
+	}
+
+	@Override
+	public void init(Element e, StringEncryptor encryptor) throws XmlConfException {
+		List<?> colls = e.getChildren();
+		Iterator<?> iColls = colls.iterator();
 		while (iColls.hasNext()) {
 			Element c = (Element) iColls.next();
 			if (!c.getName().equals("fileSet")) {
-				throw new XmlConfException("Only file sets are currently supported.");
+				throw new XmlConfException(
+						"Only file sets are currently supported.");
 			}
 			String name = c.getAttributeValue("name");
 			String fileName = c.getAttributeValue("file");
 			try {
-				Set s = Sets.readFileSet(fileName);
+				Set<String> s = Sets.readFileSet(fileName);
 				Sets.addCollection(name, s);
 			} catch (IOException ex) {
-				throw new XmlConfException("Error reading file: " + fileName, ex);	
+				throw new XmlConfException("Error reading file: " + fileName,
+						ex);
 			}
 		}
 	}

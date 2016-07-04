@@ -7,7 +7,6 @@
  *******************************************************************************/
 package com.choicemaker.cm.io.xmlenc.xmlconf;
 
-import java.util.Iterator;
 import java.util.logging.Logger;
 
 import org.jdom.Document;
@@ -33,61 +32,21 @@ public class XmlEncInitializer {
 	}
 
 	public static void init(Document d) {
-		Element db = XmlConfigurator.getPlugin(d, "db");
+		Element db = XmlConfigurator.getPlugin(d, "xmlenc");
 		init(db);
 	}
 
 	public static void init(Element db) {
 		if (db != null) {
-			Iterator i = db.getChildren("ConnectionPool").iterator();
-			while (i.hasNext()) {
+			for (Object o : db.getChildren("credentialSet")) {
 				try {
-					Element cp = (Element) i.next();
-					ComboPooledDataSource cpds = new ComboPooledDataSource();
-
-					// the underlying driver
-					final String jdbcDriver = cp.getChildText("driver");
-					cpds.setDriverClass(jdbcDriver); // loads the jdbc driver
-
-					// the URL to connect the underlyng driver with the server
-					final String jdbcURL = cp.getChildText("url");
-					cpds.setJdbcUrl(jdbcURL);
-
-					// security credentials
-					final String user = cp.getChildText("user");
-					cpds.setUser(user);
-					final String password = cp.getChildText("password");
-					cpds.setPassword(password);
-
-					// the initial size of the pool.
-					final Integer poolInitialSize =
-						new Integer(cp.getChildText("initialSize"));
-					cpds.setMinPoolSize(poolInitialSize.intValue());
-
-					// the maximum size the pool can grow to.
-					final Integer poolMaxSize =
-						new Integer(cp.getChildText("maxSize"));
-					cpds.setMaxPoolSize(poolMaxSize.intValue());
-
-					// each time the pool grows, it grows by this many
-					// connections
-					final Integer poolGrowBack =
-						new Integer(cp.getChildText("growBlock"));
-					cpds.setAcquireIncrement(poolGrowBack.intValue());
-
-					cpds.setAcquireRetryAttempts(DEFAULT_ACQUIRE_RETRY_ATTEMPTS);
-					cpds.setAcquireRetryDelay(DEFAULT_AQUIRE_RETRY_DELAY);
-					cpds.setCheckoutTimeout(DEFAULT_CHECKOUT_TIME);
-
-					final String name = cp.getAttributeValue("name");
-					DataSources.addDataSource(name, cpds);
-
+					@SuppressWarnings("unused")
+					Element cp = (Element) o;
 				} catch (Exception ex) {
-					logger.warning("Error creating connection pool: " + ex);
+					logger.warning("Error creating credential set: " + ex);
 				}
 			}
 		}
-
 		alreadyInited = true;
 	}
 

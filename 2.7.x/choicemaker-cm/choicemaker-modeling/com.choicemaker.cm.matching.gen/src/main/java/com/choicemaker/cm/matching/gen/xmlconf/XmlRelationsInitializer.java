@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
+import org.jasypt.encryption.StringEncryptor;
 import org.jdom.Element;
 
 import com.choicemaker.cm.core.XmlConfException;
@@ -21,31 +22,41 @@ import com.choicemaker.cm.matching.gen.Relations;
 /**
  * XML initializer for relations.
  *
- * @author    Martin Buechi
- * @see       com.choicemaker.cm.matching.gen.Relations
+ * @author Martin Buechi
+ * @see com.choicemaker.cm.matching.gen.Relations
  */
 public class XmlRelationsInitializer implements XmlModuleInitializer {
 	public final static XmlRelationsInitializer instance = new XmlRelationsInitializer();
 
-	private XmlRelationsInitializer() { }
+	private XmlRelationsInitializer() {
+	}
 
+	@Override
 	public void init(Element e) throws XmlConfException {
-		List relations = e.getChildren("fileRelation");
-		Iterator iRelations = relations.iterator();
+		init(e, null);
+	}
+
+	@Override
+	public void init(Element e, StringEncryptor encryptor)
+			throws XmlConfException {
+		List<?> relations = e.getChildren("fileRelation");
+		Iterator<?> iRelations = relations.iterator();
 		while (iRelations.hasNext()) {
 			Element c = (Element) iRelations.next();
 			String name = c.getAttributeValue("name");
 			String fileName = c.getAttributeValue("file");
 			String keyType = c.getAttributeValue("keyType").intern();
 			String valueType = c.getAttributeValue("valueType").intern();
-			boolean reflexive = Boolean.valueOf(c.getAttributeValue("reflexive")).booleanValue();
+			boolean reflexive = Boolean.valueOf(
+					c.getAttributeValue("reflexive")).booleanValue();
 			try {
-				Relation r = Relations.readFileRelation(fileName, keyType, valueType, reflexive);
+				Relation r = Relations.readFileRelation(fileName, keyType,
+						valueType, reflexive);
 				Relations.add(name, r);
 			} catch (IOException ex) {
 				throw new XmlConfException("Internal error.", ex);
 			}
 		}
 	}
-	
+
 }

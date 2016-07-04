@@ -16,9 +16,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.jasypt.encryption.StringEncryptor;
 import org.jdom.Element;
 
 import com.choicemaker.cm.core.XmlConfException;
+import com.choicemaker.cm.core.configure.ConfigurationUtils;
 import com.choicemaker.cm.core.util.NamedResources;
 import com.choicemaker.cm.core.xmlconf.XmlModuleInitializer;
 import com.choicemaker.cm.matching.cfg.ContextFreeGrammar;
@@ -30,42 +32,41 @@ import com.choicemaker.cm.matching.en.us.address.AddressTokenizer;
 import com.choicemaker.cm.matching.gen.Sets;
 
 /**
- * @author    Martin Buechi
- * @see       com.choicemaker.cm.matching.en.us.NameParser
+ * @author Martin Buechi
+ * @see com.choicemaker.cm.matching.en.us.NameParser
  */
 public class XmlAddressParserInitializer implements XmlModuleInitializer {
 
-	private static Logger logger = Logger.getLogger(XmlAddressParserInitializer.class.getName());
+	private static Logger logger = Logger
+			.getLogger(XmlAddressParserInitializer.class.getName());
 
 	public final static XmlAddressParserInitializer instance = new XmlAddressParserInitializer();
 
-	private XmlAddressParserInitializer() { }
+	private XmlAddressParserInitializer() {
+	}
 
-	public void init(Element e) throws XmlConfException {
+	@Override
+	public void init(Element e, StringEncryptor encryptor)
+			throws XmlConfException {
 
 		try {
 
-			Class[] argTypes = new Class[1];
+			Class<?>[] argTypes = new Class[1];
 			Object[] args = new Object[1];
 
-			// 2014-04-24 rphall: Commented out unused local variable.
-//			Element nameElement = e.getChild("name");
-//			String name = null;
-//			if (nameElement != null)
-//				name = nameElement.getAttributeValue("value");
-//			else
-//				name = "DEFAULT";
-
 			// Tokenizer(s)
-			List tokenizerElements = e.getChildren("tokenizer");
-			AddressTokenizer[] tokenizers = new AddressTokenizer[tokenizerElements.size()];
+			@SuppressWarnings("unchecked")
+			List<Element> tokenizerElements = e.getChildren("tokenizer");
+			AddressTokenizer[] tokenizers = new AddressTokenizer[tokenizerElements
+					.size()];
 			for (int i = 0; i < tokenizers.length; i++) {
 				Element tokElement = (Element) tokenizerElements.get(i);
 				AddressTokenizer t = new AddressTokenizer();
 
-				String preDirs = tokElement.getChildText("preDirections");
+				String preDirs = ConfigurationUtils.getChildText(tokElement,
+						"preDirections", encryptor);
 				if (preDirs != null) {
-					Collection dirs = Sets.getCollection(preDirs);
+					Collection<String> dirs = Sets.getCollection(preDirs);
 					if (dirs != null) {
 						t.setSplitPreDirections(dirs);
 					} else {
@@ -73,9 +74,10 @@ public class XmlAddressParserInitializer implements XmlModuleInitializer {
 					}
 				}
 
-				String suffixes = tokElement.getChildText("streetSuffixes");
+				String suffixes = ConfigurationUtils.getChildText(tokElement,
+						"streetSuffixes", encryptor);
 				if (suffixes != null) {
-					Collection suffs = Sets.getCollection(suffixes);
+					Collection<String> suffs = Sets.getCollection(suffixes);
 					if (suffs != null) {
 						t.setSplitSuffixes(suffs);
 					} else {
@@ -83,9 +85,9 @@ public class XmlAddressParserInitializer implements XmlModuleInitializer {
 					}
 				}
 
-				String postDirs = tokElement.getChildText("postDirections");
+				String postDirs = ConfigurationUtils.getChildText(tokElement, "postDirections", encryptor);
 				if (postDirs != null) {
-					Collection c = Sets.getCollection(postDirs);
+					Collection<String> c = Sets.getCollection(postDirs);
 					if (c != null) {
 						t.setSplitPostDirections(c);
 					} else {
@@ -93,9 +95,9 @@ public class XmlAddressParserInitializer implements XmlModuleInitializer {
 					}
 				}
 
-				String aptTypes = tokElement.getChildText("aptTypes");
+				String aptTypes = ConfigurationUtils.getChildText(tokElement, "aptTypes", encryptor);
 				if (aptTypes != null) {
-					Collection c = Sets.getCollection(aptTypes);
+					Collection<String> c = Sets.getCollection(aptTypes);
 					if (c != null) {
 						t.setSplitAptTypes(c);
 					} else {
@@ -103,10 +105,13 @@ public class XmlAddressParserInitializer implements XmlModuleInitializer {
 					}
 				}
 
-				Element splitDigitsElement = tokElement.getChild("splitDigitStrings");
+				Element splitDigitsElement = tokElement
+						.getChild("splitDigitStrings");
 				if (splitDigitsElement != null) {
-					String minE = splitDigitsElement.getAttributeValue("minLength");
-					String lhsE = splitDigitsElement.getAttributeValue("lhsLength");
+					String minE = splitDigitsElement
+							.getAttributeValue("minLength");
+					String lhsE = splitDigitsElement
+							.getAttributeValue("lhsLength");
 
 					if (minE != null && lhsE != null) {
 						int min = Integer.parseInt(minE);
@@ -115,7 +120,8 @@ public class XmlAddressParserInitializer implements XmlModuleInitializer {
 					}
 				}
 
-				Element legalPuncElement = tokElement.getChild("legalPunctuation");
+				Element legalPuncElement = tokElement
+						.getChild("legalPunctuation");
 				if (legalPuncElement != null) {
 					String punc = legalPuncElement.getAttributeValue("value");
 					if (punc == null) {
@@ -130,26 +136,32 @@ public class XmlAddressParserInitializer implements XmlModuleInitializer {
 			// SymbolFactory
 			Element factoryElement = e.getChild("symbolFactory");
 			String factoryClassName = factoryElement.getAttributeValue("class");
-			Class factoryClass = Class.forName(factoryClassName);
+			Class<?> factoryClass = Class.forName(factoryClassName);
 			SymbolFactory factory = (SymbolFactory) factoryClass.newInstance();
 
 			// Grammar
 			Element grammarElement = e.getChild("grammar");
-			//String grammarFile = grammarElement.getAttributeValue("file");
-			String grammarResource = grammarElement.getAttributeValue("resource");
-			InputStream grammarStream = NamedResources.getNamedResource(grammarResource);
+			// String grammarFile = grammarElement.getAttributeValue("file");
+			String grammarResource = grammarElement
+					.getAttributeValue("resource");
+			InputStream grammarStream = NamedResources
+					.getNamedResource(grammarResource);
 			ContextFreeGrammar grammar =
-				//ProbabalisticContextFreeGrammar.readFromFile(grammarFile, factory);
-				ContextFreeGrammarXmlConf.readFromStream(grammarStream, factory);
+			// ProbabalisticContextFreeGrammar.readFromFile(grammarFile,
+			// factory);
+			ContextFreeGrammarXmlConf.readFromStream(grammarStream, factory);
 
 			// Standardizer
 			Element standardizerElement = e.getChild("standardizer");
-			String standardizerClassName = standardizerElement.getAttributeValue("class");
-			Class standardizerClass = Class.forName(standardizerClassName);
+			String standardizerClassName = standardizerElement
+					.getAttributeValue("class");
+			Class<?> standardizerClass = Class.forName(standardizerClassName);
 			argTypes[0] = SymbolFactory.class;
-			Constructor constructor = standardizerClass.getConstructor(argTypes);
+			Constructor<?> constructor = standardizerClass
+					.getConstructor(argTypes);
 			args[0] = factory;
-			AddressStandardizer standardizer = (AddressStandardizer) constructor.newInstance(args);
+			AddressStandardizer standardizer = (AddressStandardizer) constructor
+					.newInstance(args);
 
 			// AddressParser automatically saves it as the default parser.
 			// 2014-04-24 rphall: Commented out unused local variable.
@@ -172,5 +184,10 @@ public class XmlAddressParserInitializer implements XmlModuleInitializer {
 		} catch (ParseException ex) {
 			throw new XmlConfException("Problem parsing grammar", ex);
 		}
+	}
+
+	@Override
+	public void init(Element e) throws XmlConfException {
+		init(e, null);
 	}
 }

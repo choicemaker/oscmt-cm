@@ -11,7 +11,6 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -22,9 +21,11 @@ import javax.sql.DataSource;
 import oracle.ucp.jdbc.PoolDataSource;
 import oracle.ucp.jdbc.PoolDataSourceFactory;
 
+import org.jasypt.encryption.StringEncryptor;
 import org.jdom.Element;
 
 import com.choicemaker.cm.core.XmlConfException;
+import com.choicemaker.cm.core.configure.ConfigurationUtils;
 import com.choicemaker.cm.core.xmlconf.XmlConfigurator;
 import com.choicemaker.cm.io.db.base.DataSources;
 
@@ -59,21 +60,20 @@ public class OraConnectionCacheXmlConf {
 
 	public static final String PV_CONNECTION_LIMIT = "connectionLimit";
 
-	public static final String DEFAULT_CONNECTION_FACTORY_CLASS_NAME =
-		"oracle.jdbc.pool.OracleDataSource";
+	public static final String DEFAULT_CONNECTION_FACTORY_CLASS_NAME = "oracle.jdbc.pool.OracleDataSource";
 
 	public static final int MIN_CONNECTION_LIMIT = 1;
 
 	public static final int MIN_PORT_NUMBER = 1;
 	public static final int DEFAULT_PORT_NUMBER = 1521;
 
-	private static Map caches = new TreeMap();
+	private static Map<String, DataSource> caches = new TreeMap<>();
 
-	public static void init() {
+	public static void init(StringEncryptor encryptor) {
 		try {
-			String[] l = list();
-			for (int i = 0; i < l.length; ++i) {
-				DataSources.addDataSource(l[i], getConnectionCache(l[i]));
+			for (String name : list()) {
+				DataSource ds = getConnectionCache(name, encryptor);
+				DataSources.addDataSource(name, ds);
 			}
 		} catch (Exception ex) {
 			logger.severe(ex.toString());
@@ -91,19 +91,21 @@ public class OraConnectionCacheXmlConf {
 	 * @throws XmlConfException
 	 *             if there is a problem with the configuration file.
 	 */
-	public static DataSource getConnectionCache(String name)
-			throws java.sql.SQLException, XmlConfException {
-		DataSource cc = (DataSource) caches.get(name);
+	public static DataSource getConnectionCache(String name,
+			StringEncryptor encryptor) throws java.sql.SQLException,
+			XmlConfException {
+		DataSource cc = caches.get(name);
 		if (cc != null) {
 			return cc;
 		} else {
-			Element o = XmlConfigurator.getInstance().getPlugin("oracle");
-			if (o != null) {
-				Iterator i = o.getChildren("OraConnectionCache").iterator();
-				while (i.hasNext()) {
-					Element x = (Element) i.next();
+			Element e = XmlConfigurator.getInstance().getPlugin("oracle");
+			if (e != null) {
+				@SuppressWarnings("rawtypes")
+				List children = e.getChildren("OraConnectionCache");
+				for (Object o : children) {
+					Element x = (Element) o;
 					if (name.equals(x.getAttributeValue(PV_POOL_NAME))) {
-						return getConnectionCache(x);
+						return getConnectionCache(x, encryptor);
 					}
 				}
 			}
@@ -123,8 +125,8 @@ public class OraConnectionCacheXmlConf {
 	 * @throws XmlConfException
 	 *             if there is a problem with the configuration file.
 	 */
-	private static DataSource getConnectionCache(Element e)
-			throws java.sql.SQLException {
+	private static DataSource getConnectionCache(Element e,
+			StringEncryptor encryptor) throws java.sql.SQLException {
 
 		// Pool/cache name
 		String name = e.getAttributeValue(PV_POOL_NAME);
@@ -135,11 +137,12 @@ public class OraConnectionCacheXmlConf {
 		logProperty(PV_SERVER_NAME, serverName);
 
 		// Database/SID
-		String databaseName = e.getChildText(PV_DATABASE_NAME);
+		String databaseName = ConfigurationUtils.getChildText(e,
+				PV_DATABASE_NAME, encryptor);
 		logProperty(PV_DATABASE_NAME, databaseName);
 
 		// Port number
-		String sPortNumber = e.getChildText(PV_PORT_NUMBER);
+		String sPortNumber = ConfigurationUtils.getChildText(e, PV_PORT_NUMBER, encryptor);
 		logProperty(PV_PORT_NUMBER, sPortNumber);
 		int portNumber = DEFAULT_PORT_NUMBER;
 		try {
@@ -153,22 +156,22 @@ public class OraConnectionCacheXmlConf {
 		}
 
 		// JDBC URL
-		String jdbcUrl = e.getChildText(PV_JDBC_URL);
+		String jdbcUrl = ConfigurationUtils.getChildText(e, PV_JDBC_URL, encryptor);
 		if (jdbcUrl == null || jdbcUrl.trim().isEmpty()) {
 			jdbcUrl = createJdbcUrl(serverName, portNumber, databaseName);
 		}
 		logProperty(PV_JDBC_URL, jdbcUrl);
 
 		// User name
-		String user = e.getChildText(PV_USER_NAME);
+		String user = ConfigurationUtils.getChildText(e, PV_USER_NAME, encryptor);
 		logProperty(PV_USER_NAME, user);
 
 		// Password
-		String password = e.getChildText(PV_PASSWORD);
+		String password = ConfigurationUtils.getChildText(e, PV_PASSWORD, encryptor);
 		logProperty(PV_PASSWORD, password);
 
 		// Connection limit
-		String sConnectionLimit = e.getChildText(PV_CONNECTION_LIMIT);
+		String sConnectionLimit = ConfigurationUtils.getChildText(e, PV_CONNECTION_LIMIT, encryptor);
 		logProperty(PV_CONNECTION_LIMIT, sConnectionLimit);
 		int connectionLimit = MIN_CONNECTION_LIMIT;
 		try {
@@ -183,7 +186,7 @@ public class OraConnectionCacheXmlConf {
 		}
 
 		// Network protocol
-		String protocol = e.getChildText(PV_NETWORK_PROTOCOL);
+		String protocol = ConfigurationUtils.getChildText(e, PV_NETWORK_PROTOCOL, encryptor);
 		logProperty(PV_NETWORK_PROTOCOL, protocol);
 
 		// Ignored -- no longer needed
@@ -242,15 +245,15 @@ public class OraConnectionCacheXmlConf {
 	}
 
 	public static String[] list() throws XmlConfException {
-		Element o = XmlConfigurator.getInstance().getPlugin("oracle");
-		if (o != null) {
-			List l = o.getChildren("OraConnectionCache");
-			String[] caches = new String[l.size()];
+		Element e = XmlConfigurator.getInstance().getPlugin("oracle");
+		if (e != null) {
+			@SuppressWarnings("rawtypes")
+			List children = e.getChildren("OraConnectionCache");
+			String[] caches = new String[children.size()];
 			int i = 0;
-			Iterator iL = l.iterator();
-			while (iL.hasNext()) {
-				Element e = (Element) iL.next();
-				caches[i++] = e.getAttributeValue(PV_POOL_NAME);
+			for (Object o : children) {
+				Element x = (Element) o;
+				caches[i++] = x.getAttributeValue(PV_POOL_NAME);
 			}
 			return caches;
 		} else {
@@ -276,22 +279,27 @@ public class OraConnectionCacheXmlConf {
 			this.ds = ds;
 		}
 
+		@Override
 		public PrintWriter getLogWriter() throws SQLException {
 			return ds.getLogWriter();
 		}
 
-		public Object unwrap(Class iface) throws SQLException {
+		@Override
+		public <T> T unwrap(Class<T> iface) throws SQLException {
 			return ds.unwrap(iface);
 		}
 
+		@Override
 		public void setLogWriter(PrintWriter out) throws SQLException {
 			ds.setLogWriter(out);
 		}
 
-		public boolean isWrapperFor(Class iface) throws SQLException {
-			return ds.isWrapperFor(iface);
+		@Override
+		public boolean isWrapperFor(Class<?> iface) throws SQLException {
+			return isWrapperFor(iface);
 		}
 
+		@Override
 		public Connection getConnection() throws SQLException {
 			Connection retVal = ds.getConnection();
 			assert retVal != null;
@@ -299,19 +307,23 @@ public class OraConnectionCacheXmlConf {
 			return retVal;
 		}
 
+		@Override
 		public void setLoginTimeout(int seconds) throws SQLException {
 			ds.setLoginTimeout(seconds);
 		}
 
+		@Override
 		public Connection getConnection(String username, String password)
 				throws SQLException {
 			return ds.getConnection(username, password);
 		}
 
+		@Override
 		public int getLoginTimeout() throws SQLException {
 			return ds.getLoginTimeout();
 		}
 
+		@Override
 		public Logger getParentLogger() throws SQLFeatureNotSupportedException {
 			return ds.getParentLogger();
 		}
