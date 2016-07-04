@@ -41,7 +41,7 @@ public interface ChoiceMakerConfigurator {
 	 * Equivalent to invoking:
 	 *
 	 * <pre>
-	 * init(fn, reload, initGui)
+	 * init(fn, reload, initGui, (char[]) null)
 	 * </pre>
 	 *
 	 * @param fn
@@ -50,11 +50,17 @@ public interface ChoiceMakerConfigurator {
 	 *            ignored with a warning message
 	 * @param reload
 	 * @param initGui
+	 * @param password
+	 *            an optional password for decrypting sensitive configuration
+	 *            values. If null or empty, the password is ignored.
 	 * @return A non-null, valid ChoiceMaker configuration
 	 * @throws XmlConfException
 	 *             if a valid configuration can not be created and initialized
 	 */
 	ChoiceMakerConfiguration init(String fn, String logConfName,
 			boolean reload, boolean initGui) throws XmlConfException;
+
+	ChoiceMakerConfiguration init(String fn, boolean reload, boolean initGui,
+			char[] password) throws XmlConfException;
 
 }
