@@ -23,6 +23,7 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
@@ -34,29 +35,38 @@ import com.choicemaker.cm.modelmaker.gui.utils.EnablednessGuard;
 
 /**
  *
- * @author    Martin Buechi
+ * @author Martin Buechi
  */
 public class StartDialog extends JFrame implements Enable {
 	private static final long serialVersionUID = 1L;
-
 
 	private JPanel content;
 	private JLabel configurationLabel;
 	private JTextField configuration;
 	private JButton configurationBrowse;
+	private JLabel passwordLabel;
+	private JPasswordField password;
 	private JButton ok;
 	private JButton cancel;
 	private boolean res;
 
 	public StartDialog(String confText) {
 		super();
-		setTitle(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.dialog.launchpad.label"));
-		setIconImage(new ImageIcon(ModelMaker.class.getResource("images/cmIcon.gif")).getImage());
+		setTitle(ChoiceMakerCoreMessages.m
+				.formatMessage("train.gui.modelmaker.dialog.launchpad.label"));
+		setIconImage(new ImageIcon(
+				ModelMaker.class.getResource("images/cmIcon.gif")).getImage());
 		content = new JPanel();
-		configurationLabel =
-			new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.dialog.launchpad.configurationfile"));
+		configurationLabel = new JLabel(
+				ChoiceMakerCoreMessages.m
+						.formatMessage("train.gui.modelmaker.dialog.launchpad.configurationfile"));
 		configuration = new JTextField(confText);
-		configurationBrowse = new JButton(ChoiceMakerCoreMessages.m.formatMessage("browse.elipsis"));
+		configurationBrowse = new JButton(
+				ChoiceMakerCoreMessages.m.formatMessage("browse.elipsis"));
+		passwordLabel = new JLabel(
+				ChoiceMakerCoreMessages.m
+						.formatMessage("train.gui.modelmaker.dialog.launchpad.password"));
+		password = new JPasswordField();
 		ok = new JButton(ChoiceMakerCoreMessages.m.formatMessage("ok"));
 		cancel = new JButton(ChoiceMakerCoreMessages.m.formatMessage("cancel"));
 		layoutContent();
@@ -87,36 +97,41 @@ public class StartDialog extends JFrame implements Enable {
 
 		// 2009-07-06 rphall
 		// Removed license validation for open-source release
-//		//Row 0 ........................................
-//		c.gridy = 0;
-//		c.gridx = 0;
-//		c.anchor = GridBagConstraints.WEST;
-//		content.add(new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.dialog.launchpad.licensed.to")), c);
-//		c.gridx = 1;
-//		c.gridwidth = 2;
-//		content.add(
-//			new JLabel(
-//				ChoiceMakerCoreMessages.m.formatMessage(
-//					"train.gui.modelmaker.dialog.launchpad.licensee",
-//					LicenseManager.getString("name"),
-//					LicenseManager.getString("company"))),
-//			c);
-//
-//		c.gridy = 1;
-//		c.gridx = 0;
-//		c.gridwidth = 1;
-//		c.anchor = GridBagConstraints.WEST;
-//		content.add(new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.dialog.launchpad.expires")), c);
-//		c.gridx = 1;
-//		c.gridwidth = 2;
-//		content.add(
-//			new JLabel(
-//				ChoiceMakerCoreMessages.m.formatMessage(
-//					"train.gui.modelmaker.dialog.launchpad.expiration",
-//					java.sql.Date.valueOf(LicenseManager.getString("expiration")))),
-//			c);
-//		c.gridwidth = 1;
+		// //Row 0 ........................................
+		// c.gridy = 0;
+		// c.gridx = 0;
+		// c.anchor = GridBagConstraints.WEST;
+		// content.add(new
+		// JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.dialog.launchpad.licensed.to")),
+		// c);
+		// c.gridx = 1;
+		// c.gridwidth = 2;
+		// content.add(
+		// new JLabel(
+		// ChoiceMakerCoreMessages.m.formatMessage(
+		// "train.gui.modelmaker.dialog.launchpad.licensee",
+		// LicenseManager.getString("name"),
+		// LicenseManager.getString("company"))),
+		// c);
+		//
+		// c.gridy = 1;
+		// c.gridx = 0;
+		// c.gridwidth = 1;
+		// c.anchor = GridBagConstraints.WEST;
+		// content.add(new
+		// JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.dialog.launchpad.expires")),
+		// c);
+		// c.gridx = 1;
+		// c.gridwidth = 2;
+		// content.add(
+		// new JLabel(
+		// ChoiceMakerCoreMessages.m.formatMessage(
+		// "train.gui.modelmaker.dialog.launchpad.expiration",
+		// java.sql.Date.valueOf(LicenseManager.getString("expiration")))),
+		// c);
+		// c.gridwidth = 1;
 
+		// Row 0 ........................................
 		c.gridy = 2;
 		c.gridx = 0;
 		c.anchor = GridBagConstraints.WEST;
@@ -129,8 +144,18 @@ public class StartDialog extends JFrame implements Enable {
 		c.weightx = 0;
 		content.add(configurationBrowse, c);
 
-		//Row 1
+		// Row 1 ........................................
 		c.gridy = 3;
+		c.gridx = 0;
+		c.anchor = GridBagConstraints.WEST;
+		content.add(passwordLabel, c);
+		c.gridx = 1;
+		c.weightx = 1;
+		c.fill = GridBagConstraints.HORIZONTAL;
+		content.add(password, c);
+
+		// Row 2 ........................................
+		c.gridy = 4;
 		c.gridx = 1;
 		c.anchor = GridBagConstraints.EAST;
 		c.fill = GridBagConstraints.NONE;
@@ -172,7 +197,8 @@ public class StartDialog extends JFrame implements Enable {
 
 		configurationBrowse.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
-				File file = FileChooserFactory.selectConfFile(null, new File(configuration.getText()));
+				File file = FileChooserFactory.selectConfFile(null, new File(
+						configuration.getText()));
 				if (file != null) {
 					configuration.setText(file.getAbsolutePath());
 				} else {
