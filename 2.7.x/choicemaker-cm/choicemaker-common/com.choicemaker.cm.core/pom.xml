@@ -75,6 +75,11 @@
       <artifactId>org.jdom</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.jasypt</groupId>
+      <artifactId>jasypt</artifactId>
+      <classifier>lite</classifier>
+    </dependency>
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <scope>test</scope>
