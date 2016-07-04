@@ -64,4 +64,10 @@ public class MojoConfigurator implements ChoiceMakerConfigurator {
 		return init();
 	}
 
+	@Override
+	public ChoiceMakerConfiguration init(String fn, boolean reload,
+			boolean initGui, char[] password) throws XmlConfException {
+		return init();
+	}
+
 }

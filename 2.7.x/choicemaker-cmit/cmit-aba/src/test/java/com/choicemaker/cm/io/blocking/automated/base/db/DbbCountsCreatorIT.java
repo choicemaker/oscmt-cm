@@ -110,7 +110,7 @@ public class DbbCountsCreatorIT {
 			// fail(e.toString());
 			throw e;
 		}
-		ConnectionPoolDataSourceXmlConf.init(d);
+		ConnectionPoolDataSourceXmlConf.init(d, null);
 		
 		int count = 0;
 		for (Object o : DataSources.getDataSourceNames()) {
