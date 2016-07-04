@@ -19,7 +19,9 @@ import com.choicemaker.cm.core.MachineLearner;
 import com.choicemaker.cm.core.XmlConfException;
 
 public interface MachineLearnerPersistence {
-	public MachineLearner readMachineLearner(Element e, Accessor acc, List clues, int[] oldClueNums) throws XmlConfException;
+
+	public MachineLearner readMachineLearner(Element e, Accessor acc,
+			List clues, int[] oldClueNums) throws XmlConfException;
 
 	public void saveMachineLearner(Element e) throws XmlConfException;
 
