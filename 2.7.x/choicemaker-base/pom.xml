@@ -1523,13 +1523,6 @@
         <classifier>sources</classifier>
       </dependency>
       <dependency>
-        <groupId>com.choicemaker.cm</groupId>
-        <artifactId>com.mchange.c3p0</artifactId>
-        <version>0.9.2.2-SNAPSHOT</version>
-        <classifier>eclipse2prj</classifier>
-        <type>zip</type>
-      </dependency>
-      <dependency>
         <groupId>org.jfree</groupId>
         <artifactId>jcommon</artifactId>
         <version>1.0.21</version>
