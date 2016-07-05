@@ -113,6 +113,12 @@
       <groupId>com.choicemaker.e2</groupId>
       <artifactId>com.choicemaker.e2.std</artifactId>
     </dependency>
+    <dependency>
+      <groupId>com.choicemaker.e2</groupId>
+      <artifactId>com.choicemaker.e2.std</artifactId>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
+    </dependency>
 
     <dependency>
       <groupId>junit</groupId>
@@ -133,6 +139,12 @@
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.modelmaker</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.modelmaker.std</artifactId>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
