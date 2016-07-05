@@ -395,109 +395,16 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>com.choicemaker.xml</groupId>
-        <artifactId>santuario-kms</artifactId>
-        <version>${santuario-kms.version}</version>
-      </dependency>
-      <dependency>
         <groupId>com.choicemaker.cm</groupId>
-        <artifactId>org.apache.ant</artifactId>
-        <version>1.5.4-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>com.choicemaker.cm</groupId>
-        <artifactId>org.apache.bcel</artifactId>
-        <version>5.0.1-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>com.choicemaker.cm</groupId>
-        <artifactId>org.eclipse.ant.core</artifactId>
-        <version>2.1.2-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>com.choicemaker.cm</groupId>
-        <artifactId>org.eclipse.ant.internal.core</artifactId>
-        <version>2.1.2-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>com.choicemaker.cm</groupId>
-        <artifactId>org.eclipse.core.boot</artifactId>
-        <version>2.1.2-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>com.choicemaker.cm</groupId>
-        <artifactId>org.eclipse.core.launcher</artifactId>
-        <version>${plugin.eclipse.core.launcher.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.choicemaker.cm</groupId>
-        <artifactId>org.eclipse.core.resources</artifactId>
-        <version>2.1.2-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>com.choicemaker.cm</groupId>
-        <artifactId>org.eclipse.core.resources.ant</artifactId>
-        <version>2.1.2-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>com.choicemaker.cm</groupId>
-        <artifactId>org.eclipse.core.runtime</artifactId>
-        <version>2.1.2-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>com.choicemaker.cm</groupId>
-        <artifactId>org.jdom</artifactId>
-        <version>0.9.1-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>com.choicemaker.util</groupId>
-        <artifactId>choicemaker-util</artifactId>
+        <artifactId>choicemaker-assembly</artifactId>
         <version>${choicemaker.release.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.choicemaker.e2</groupId>
-        <artifactId>com.choicemaker.e2</artifactId>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>cm-analyzer-ce</artifactId>
         <version>${choicemaker.release.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.choicemaker.e2</groupId>
-        <artifactId>com.choicemaker.e2.ejb</artifactId>
-        <version>${choicemaker.release.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.choicemaker.e2</groupId>
-        <artifactId>com.choicemaker.e2.embed</artifactId>
-        <version>${choicemaker.release.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.choicemaker.e2</groupId>
-        <artifactId>com.choicemaker.e2.std</artifactId>
-        <version>${choicemaker.release.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.choicemaker.utilit</groupId>
-        <artifactId>choicemaker-utilit</artifactId>
-        <version>${choicemaker.release.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.choicemaker.e2it</groupId>
-        <artifactId>com.choicemaker.e2it</artifactId>
-        <version>${choicemaker.release.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.choicemaker.e2it</groupId>
-        <artifactId>com.choicemaker.e2it.ejb</artifactId>
-        <version>${choicemaker.release.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.choicemaker.e2it</groupId>
-        <artifactId>com.choicemaker.e2it.embed</artifactId>
-        <version>${choicemaker.release.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.choicemaker.e2it</groupId>
-        <artifactId>com.choicemaker.e2it.std</artifactId>
-        <version>${choicemaker.release.version}</version>
+        <classifier>distrib</classifier>
+        <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
@@ -521,18 +428,13 @@
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
-        <artifactId>com.choicemaker.cm.core</artifactId>
-        <version>${choicemaker.release.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.compiler</artifactId>
         <version>${choicemaker.release.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
-        <artifactId>com.sun.tools</artifactId>
-        <version>1.8.0-SNAPSHOT</version>
+        <artifactId>com.choicemaker.cm.core</artifactId>
+        <version>${choicemaker.release.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
@@ -542,91 +444,6 @@
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.gui.utils</artifactId>
-        <version>${choicemaker.release.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.choicemaker.cm</groupId>
-        <artifactId>com.choicemaker.cm.matching.cfg</artifactId>
-        <version>${choicemaker.release.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.choicemaker.cm</groupId>
-        <artifactId>com.choicemaker.cm.matching.en</artifactId>
-        <version>${choicemaker.release.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.choicemaker.cm</groupId>
-        <artifactId>com.choicemaker.cm.matching.en.au</artifactId>
-        <version>${choicemaker.release.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.choicemaker.cm</groupId>
-        <artifactId>com.choicemaker.cm.matching.en.us</artifactId>
-        <version>${choicemaker.release.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.choicemaker.cm</groupId>
-        <artifactId>com.choicemaker.cm.matching.en.us.ny.nyc</artifactId>
-        <version>${choicemaker.release.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.choicemaker.cm</groupId>
-        <artifactId>com.choicemaker.cm.matching.en.us.train</artifactId>
-        <version>${choicemaker.release.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.choicemaker.cm</groupId>
-        <artifactId>com.choicemaker.cm.matching.gen</artifactId>
-        <version>${choicemaker.release.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.choicemaker.cm</groupId>
-        <artifactId>com.choicemaker.cm.matching.geo</artifactId>
-        <version>${choicemaker.release.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.choicemaker.cm</groupId>
-        <artifactId>com.choicemaker.cm.matching.intl</artifactId>
-        <version>${choicemaker.release.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.choicemaker.cm</groupId>
-        <artifactId>com.choicemaker.cm.matching.wfst</artifactId>
-        <version>${choicemaker.release.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.choicemaker.cm</groupId>
-        <artifactId>com.choicemaker.cm.matching.wfst.eclipse</artifactId>
-        <version>${choicemaker.release.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.choicemaker.cm</groupId>
-        <artifactId>com.choicemaker.cm.modelmaker</artifactId>
-        <version>${choicemaker.release.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.choicemaker.cm</groupId>
-        <artifactId>com.choicemaker.cm.modelmaker.std</artifactId>
-        <version>${choicemaker.release.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.choicemaker.cm</groupId>
-        <artifactId>com.choicemaker.cm.mmdevtools</artifactId>
-        <version>${choicemaker.release.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.choicemaker.cm</groupId>
-        <artifactId>com.choicemaker.cm.modeldb</artifactId>
-        <version>${choicemaker.release.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.choicemaker.cm</groupId>
-        <artifactId>com.choicemaker.cm.modelmaker.pkg_eclipse</artifactId>
-        <version>${choicemaker.release.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.choicemaker.cm</groupId>
-        <artifactId>com.choicemaker.cm.module</artifactId>
         <version>${choicemaker.release.version}</version>
       </dependency>
       <dependency>
@@ -731,12 +548,67 @@
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
+        <artifactId>com.choicemaker.cm.io.xml.gui</artifactId>
+        <version>${choicemaker.release.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.xmlenc.base</artifactId>
         <version>${choicemaker.release.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
-        <artifactId>com.choicemaker.cm.io.xml.gui</artifactId>
+        <artifactId>com.choicemaker.cm.matching.cfg</artifactId>
+        <version>${choicemaker.release.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>com.choicemaker.cm.matching.en</artifactId>
+        <version>${choicemaker.release.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>com.choicemaker.cm.matching.en.au</artifactId>
+        <version>${choicemaker.release.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>com.choicemaker.cm.matching.en.us</artifactId>
+        <version>${choicemaker.release.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>com.choicemaker.cm.matching.en.us.ny.nyc</artifactId>
+        <version>${choicemaker.release.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>com.choicemaker.cm.matching.en.us.train</artifactId>
+        <version>${choicemaker.release.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>com.choicemaker.cm.matching.gen</artifactId>
+        <version>${choicemaker.release.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>com.choicemaker.cm.matching.geo</artifactId>
+        <version>${choicemaker.release.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>com.choicemaker.cm.matching.intl</artifactId>
+        <version>${choicemaker.release.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>com.choicemaker.cm.matching.wfst</artifactId>
+        <version>${choicemaker.release.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>com.choicemaker.cm.matching.wfst.eclipse</artifactId>
         <version>${choicemaker.release.version}</version>
       </dependency>
       <dependency>
@@ -747,6 +619,36 @@
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.ml.me.gui</artifactId>
+        <version>${choicemaker.release.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>com.choicemaker.cm.mmdevtools</artifactId>
+        <version>${choicemaker.release.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>com.choicemaker.cm.modeldb</artifactId>
+        <version>${choicemaker.release.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>com.choicemaker.cm.modelmaker</artifactId>
+        <version>${choicemaker.release.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>com.choicemaker.cm.modelmaker.pkg_eclipse</artifactId>
+        <version>${choicemaker.release.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>com.choicemaker.cm.modelmaker.std</artifactId>
+        <version>${choicemaker.release.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>com.choicemaker.cm.module</artifactId>
         <version>${choicemaker.release.version}</version>
       </dependency>
       <dependency>
@@ -816,6 +718,11 @@
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
+        <artifactId>com.sun.tools</artifactId>
+        <version>1.8.0-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.wcohen.ss</artifactId>
         <version>${choicemaker.release.version}</version>
       </dependency>
@@ -826,15 +733,68 @@
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
-        <artifactId>cm-analyzer-ce</artifactId>
-        <version>${choicemaker.release.version}</version>
-        <classifier>distrib</classifier>
-        <type>zip</type>
+        <artifactId>javax.help.eclipse2plugin</artifactId>
+        <version>2.0.05-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
-        <artifactId>simple_person_matching</artifactId>
-        <version>${choicemaker.release.version}</version>
+        <artifactId>jfree.jcommon.eclipse2plugin</artifactId>
+        <version>1.0.17-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>jfree.jfreechart.eclipse2plugin</artifactId>
+        <version>1.0.15-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>org.apache.ant</artifactId>
+        <version>1.5.4-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>org.apache.bcel</artifactId>
+        <version>5.0.1-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>org.eclipse.ant.core</artifactId>
+        <version>2.1.2-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>org.eclipse.ant.internal.core</artifactId>
+        <version>2.1.2-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>org.eclipse.core.boot</artifactId>
+        <version>2.1.2-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>org.eclipse.core.launcher</artifactId>
+        <version>${plugin.eclipse.core.launcher.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>org.eclipse.core.resources</artifactId>
+        <version>2.1.2-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>org.eclipse.core.resources.ant</artifactId>
+        <version>2.1.2-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>org.eclipse.core.runtime</artifactId>
+        <version>2.1.2-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>org.jdom</artifactId>
+        <version>0.9.1-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
@@ -848,27 +808,7 @@
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
-        <artifactId>choicemaker-assembly</artifactId>
-        <version>${choicemaker.release.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.oracle</groupId>
-        <artifactId>ojdbc6</artifactId>
-        <version>11.2.0.4</version>
-      </dependency>
-      <dependency>
-        <groupId>com.oracle</groupId>
-        <artifactId>ucp</artifactId>
-        <version>11.2.0.4</version>
-      </dependency>
-      <dependency>
-        <groupId>com.choicemaker.cmit</groupId>
-        <artifactId>cmit-utils</artifactId>
-        <version>${choicemaker.release.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.choicemaker.cmit</groupId>
-        <artifactId>cmit-utils.j2ee</artifactId>
+        <artifactId>simple_person_matching</artifactId>
         <version>${choicemaker.release.version}</version>
       </dependency>
       <dependency>
@@ -887,31 +827,79 @@
         <version>${choicemaker.release.version}</version>
       </dependency>
       <dependency>
-        <groupId>commons-logging</groupId>
-        <artifactId>commons-logging</artifactId>
-        <version>1.1</version>
+        <groupId>com.choicemaker.cmit</groupId>
+        <artifactId>cmit-utils</artifactId>
+        <version>${choicemaker.release.version}</version>
       </dependency>
       <dependency>
-        <groupId>javax.help</groupId>
-        <artifactId>javahelp</artifactId>
-        <version>2.0.05</version>
+        <groupId>com.choicemaker.cmit</groupId>
+        <artifactId>cmit-utils.j2ee</artifactId>
+        <version>${choicemaker.release.version}</version>
       </dependency>
       <dependency>
-        <groupId>javax.help</groupId>
-        <artifactId>javahelp</artifactId>
-        <version>2.0.05</version>
-        <classifier>sources</classifier>
+        <groupId>com.choicemaker.e2</groupId>
+        <artifactId>com.choicemaker.e2</artifactId>
+        <version>${choicemaker.release.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.choicemaker.cm</groupId>
-        <artifactId>javax.help.eclipse2plugin</artifactId>
-        <version>2.0.05-SNAPSHOT</version>
+        <groupId>com.choicemaker.e2</groupId>
+        <artifactId>com.choicemaker.e2.ejb</artifactId>
+        <version>${choicemaker.release.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.jfree</groupId>
-        <artifactId>jcommon</artifactId>
-        <version>1.0.21</version>
-        <classifier>sources</classifier>
+        <groupId>com.choicemaker.e2</groupId>
+        <artifactId>com.choicemaker.e2.embed</artifactId>
+        <version>${choicemaker.release.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.e2</groupId>
+        <artifactId>com.choicemaker.e2.std</artifactId>
+        <version>${choicemaker.release.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.e2it</groupId>
+        <artifactId>com.choicemaker.e2it</artifactId>
+        <version>${choicemaker.release.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.e2it</groupId>
+        <artifactId>com.choicemaker.e2it.ejb</artifactId>
+        <version>${choicemaker.release.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.e2it</groupId>
+        <artifactId>com.choicemaker.e2it.embed</artifactId>
+        <version>${choicemaker.release.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.e2it</groupId>
+        <artifactId>com.choicemaker.e2it.std</artifactId>
+        <version>${choicemaker.release.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.mvn.cluemaker</groupId>
+        <artifactId>cluemaker-maven-plugin</artifactId>
+        <version>${choicemaker.tool.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.util</groupId>
+        <artifactId>choicemaker-util</artifactId>
+        <version>${choicemaker.release.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.utilit</groupId>
+        <artifactId>choicemaker-utilit</artifactId>
+        <version>${choicemaker.release.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.xml</groupId>
+        <artifactId>santuario-kms</artifactId>
+        <version>${santuario-kms.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.github.ekryd.sortpom</groupId>
+        <artifactId>sortpom-maven-plugin</artifactId>
+        <version>2.5.0</version>
       </dependency>
       <dependency>
         <groupId>com.mchange</groupId>
@@ -930,6 +918,71 @@
         <version>0.2.3.4</version>
       </dependency>
       <dependency>
+        <groupId>com.microsoft.sqlserver</groupId>
+        <artifactId>sqljdbc4</artifactId>
+        <version>4.0.2206</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>com.natpryce</groupId>
+        <artifactId>make-it-easy</artifactId>
+        <version>4.0.0</version>
+      </dependency>
+      <dependency>
+        <groupId>com.oracle</groupId>
+        <artifactId>ojdbc6</artifactId>
+        <version>11.2.0.4</version>
+      </dependency>
+      <dependency>
+        <groupId>com.oracle</groupId>
+        <artifactId>ucp</artifactId>
+        <version>11.2.0.4</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-logging</groupId>
+        <artifactId>commons-logging</artifactId>
+        <version>1.1</version>
+      </dependency>
+      <dependency>
+        <groupId>javax</groupId>
+        <artifactId>javaee-api</artifactId>
+        <version>7.0</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>javax.help</groupId>
+        <artifactId>javahelp</artifactId>
+        <version>2.0.05</version>
+      </dependency>
+      <dependency>
+        <groupId>javax.help</groupId>
+        <artifactId>javahelp</artifactId>
+        <version>2.0.05</version>
+        <classifier>sources</classifier>
+      </dependency>
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>4.8.2</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-collections4</artifactId>
+        <version>4.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jasypt</groupId>
+        <artifactId>jasypt</artifactId>
+        <version>1.9.2</version>
+        <classifier>lite</classifier>
+      </dependency>
+      <dependency>
+        <groupId>org.jfree</groupId>
+        <artifactId>jcommon</artifactId>
+        <version>1.0.21</version>
+        <classifier>sources</classifier>
+      </dependency>
+      <dependency>
         <groupId>org.jfree</groupId>
         <artifactId>jcommon</artifactId>
         <version>1.0.21</version>
@@ -944,54 +997,6 @@
         <artifactId>jfreechart</artifactId>
         <version>1.0.17</version>
         <classifier>sources</classifier>
-      </dependency>
-      <dependency>
-        <groupId>com.choicemaker.cm</groupId>
-        <artifactId>jfree.jcommon.eclipse2plugin</artifactId>
-        <version>1.0.17-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>com.choicemaker.cm</groupId>
-        <artifactId>jfree.jfreechart.eclipse2plugin</artifactId>
-        <version>1.0.15-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>com.choicemaker.mvn.cluemaker</groupId>
-        <artifactId>cluemaker-maven-plugin</artifactId>
-        <version>${choicemaker.tool.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>junit</groupId>
-        <artifactId>junit</artifactId>
-        <version>4.8.2</version>
-      </dependency>
-      <dependency>
-        <groupId>com.natpryce</groupId>
-        <artifactId>make-it-easy</artifactId>
-        <version>4.0.0</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.commons</groupId>
-        <artifactId>commons-collections4</artifactId>
-        <version>4.0</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jasypt</groupId>
-        <artifactId>jasypt</artifactId>
-        <version>1.9.2</version>
-        <classifier>lite</classifier>
-      </dependency>
-      <dependency>
-        <groupId>javax</groupId>
-        <artifactId>javaee-api</artifactId>
-        <version>7.0</version>
-        <scope>provided</scope>
-      </dependency>
-      <dependency>
-        <groupId>com.microsoft.sqlserver</groupId>
-        <artifactId>sqljdbc4</artifactId>
-        <version>4.0.2206</version>
-        <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>org.xmlunit</groupId>
