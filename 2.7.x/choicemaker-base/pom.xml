@@ -35,6 +35,8 @@
 
     <!-- Dependency versions -->
     <ant-jsch.version>1.9.2</ant-jsch.version>
+    <aws-encryption-sdk.version>0.0.1-SNAPSHOT</aws-encryption-sdk.version>
+    <aws-java-sdk.version>1.11.5</aws-java-sdk.version>
     <docbook.version>4.4</docbook.version>
     <jsch.version>0.1.50</jsch.version>
     <junit.version>4.8.1</junit.version>
@@ -531,7 +533,7 @@
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.sun.tools</artifactId>
-        <version>1.7.0-SNAPSHOT</version>
+        <version>1.8.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
@@ -954,6 +956,11 @@
         <artifactId>c3p0</artifactId>
         <version>0.9.5</version>
         <classifier>sources</classifier>
+      </dependency>
+      <dependency>
+        <groupId>com.mchange</groupId>
+        <artifactId>mchange-commons</artifactId>
+        <version>0.2.3.4</version>
       </dependency>
       <dependency>
         <groupId>org.jfree</groupId>
