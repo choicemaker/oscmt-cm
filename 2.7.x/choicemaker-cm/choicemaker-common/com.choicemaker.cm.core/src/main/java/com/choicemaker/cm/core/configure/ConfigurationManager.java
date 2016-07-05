@@ -23,7 +23,7 @@ public class ConfigurationManager {
 	public static final ConfigurationManager getInstance() {
 		return instance;
 	}
-	
+
 	public static void install(ChoiceMakerConfigurator configurator) {
 		InstallableConfigurator.getInstance().install(configurator);
 	}
@@ -132,11 +132,21 @@ public class ConfigurationManager {
 
 	public void init(String fn, String logConfName, boolean reload,
 			boolean initGui) throws XmlConfException {
+		init(fn, logConfName, reload, initGui, null);
+	}
+
+	public void init(String fn, String logConfName, boolean reload,
+			boolean initGui, char[] password) throws XmlConfException {
 		if (isInitialized()) {
 			logger.warning("Already initialized");
 		}
+		if (logConfName == null || !logConfName.isEmpty()) {
+			String msg = "Ignoring log configuration: '"
+					+ logConfName + "'";
+			logger.info(msg);
+		}
 		ChoiceMakerConfiguration cmc = getConfigurator().init(fn,
-				logConfName, reload, initGui);
+				reload, initGui, password);
 		getConfiguration().setDelegate(cmc);
 
 		// Postcondition

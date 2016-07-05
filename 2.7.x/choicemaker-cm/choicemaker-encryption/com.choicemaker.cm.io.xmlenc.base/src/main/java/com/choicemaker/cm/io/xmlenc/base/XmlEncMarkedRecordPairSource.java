@@ -27,7 +27,7 @@ import org.w3c.dom.Document;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Sink;
 import com.choicemaker.cm.io.xml.base.XmlMarkedRecordPairSource;
-import com.choicemaker.cm.io.xmlenc.xmlconf.XmlEncryptionManager;
+import com.choicemaker.cm.io.xmlenc.mgmt.XmlEncryptionManager;
 import com.choicemaker.util.Precondition;
 import com.choicemaker.xmlencryption.CredentialSet;
 import com.choicemaker.xmlencryption.DocumentDecryptor;
@@ -41,15 +41,23 @@ public class XmlEncMarkedRecordPairSource extends XmlMarkedRecordPairSource {
 	private static final Logger logger = Logger
 			.getLogger(XmlEncMarkedRecordPairSource.class.getName());
 
-	private final EncryptionScheme scheme;
-	private final CredentialSet credential;
-	private final XmlEncryptionManager xmlEncMgr;
+	private EncryptionScheme scheme;
+	private CredentialSet credential;
+	private XmlEncryptionManager xmlEncMgr;
+
+	public XmlEncMarkedRecordPairSource() {
+		this(null, null, null);
+	}
+
+	public XmlEncMarkedRecordPairSource(XmlEncryptionManager xcm) {
+		this(null, null, xcm);
+	}
 
 	public XmlEncMarkedRecordPairSource(EncryptionScheme ep, CredentialSet ec,
 			XmlEncryptionManager xcm) {
 		super();
-		Precondition.assertNonNullArgument("null scheme", ep);
-		Precondition.assertNonNullArgument("null credential", ec);
+		// Precondition.assertNonNullArgument("null scheme", ep);
+		// Precondition.assertNonNullArgument("null credential", ec);
 		Precondition.assertNonNullArgument("null encryption manager", xcm);
 		this.scheme = ep;
 		this.credential = ec;
@@ -74,16 +82,68 @@ public class XmlEncMarkedRecordPairSource extends XmlMarkedRecordPairSource {
 		this.xmlEncMgr = xcm;
 	}
 
-	public String getPolicyId() {
-		return scheme.getSchemeId();
+	public void setEncryptionScheme(String id) {
+		Precondition.assertNonNullArgument("null encryption scheme id", id);
+		EncryptionScheme es = this.xmlEncMgr.getEncryptionScheme(id);
+		if (es == null) {
+			String msg = "No encryption scheme for id '" + id + "'";
+			logger.warning(msg);
+		}
+		setEncryptionScheme(es);
+	}
+
+	public void setEncryptionScheme(EncryptionScheme es) {
+		if (es == null) {
+			String msg = "Setting encryption scheme to null";
+			logger.warning(msg);
+		}
+		this.scheme = es;
+	}
+
+	public EncryptionScheme getEncryptionScheme() {
+		return this.scheme;
+	}
+
+	public String getEncryptionSchemeId() {
+		String retVal = scheme == null ? null : scheme.getSchemeId();
+		return retVal;
+	}
+
+	public void setCredentialSet(String name) {
+		Precondition.assertNonNullArgument("null encryption credential name",
+				name);
+		CredentialSet cs = this.xmlEncMgr.getCredentialSet(name);
+		if (cs == null) {
+			String msg = "No encryption credential for id '" + name + "'";
+			logger.warning(msg);
+		}
+		setCredentialSet(cs);
+	}
+
+	public void setCredentialSet(CredentialSet cs) {
+		if (cs == null) {
+			String msg = "Setting credential set to null";
+			logger.warning(msg);
+		}
+		this.credential = cs;
+	}
+
+	public CredentialSet getCredentialSet() {
+		return this.credential;
 	}
 
 	public String getCredentialName() {
-		return credential.getCredentialName();
+		String retVal = credential == null ? null : credential
+				.getCredentialName();
+		return retVal;
 	}
 
 	public XmlEncryptionManager getXmlEncryptionManager() {
 		return xmlEncMgr;
+	}
+
+	public void setXmlEncryptionManager(XmlEncryptionManager xmlEncMgr) {
+		this.xmlEncMgr = xmlEncMgr;
 	}
 
 	public void open() {
@@ -145,4 +205,5 @@ public class XmlEncMarkedRecordPairSource extends XmlMarkedRecordPairSource {
 				xmlEncMgr);
 		return retVal;
 	}
+
 }

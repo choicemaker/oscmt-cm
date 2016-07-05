@@ -1,8 +1,10 @@
-package com.choicemaker.cm.io.xmlenc.xmlconf;
+package com.choicemaker.cm.io.xmlenc.mgmt;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Logger;
 
+import com.choicemaker.util.Precondition;
 import com.choicemaker.xmlencryption.CredentialSet;
 import com.choicemaker.xmlencryption.DocumentDecryptor;
 import com.choicemaker.xmlencryption.DocumentEncryptor;
@@ -13,19 +15,29 @@ public class InMemoryXmlEncManager implements XmlEncryptionManager {
 	private static final Logger logger = Logger
 			.getLogger(InMemoryEncryptionManager.class.getName());
 
-	private static final InMemoryXmlEncManager instance = new InMemoryXmlEncManager();
+	private static final AtomicReference<InMemoryXmlEncManager> instance = new AtomicReference<>(
+			null);
+
 	private static final String SOURCE_CLASS = InMemoryXmlEncManager.class
 			.getSimpleName();
 
 	public static XmlEncryptionManager getInstance() {
-		return instance;
+		XmlEncryptionManager retVal = instance.get();
+		if (retVal == null) {
+			InMemoryXmlEncManager em = new InMemoryXmlEncManager(
+					InMemoryEncryptionManager.getInstance());
+			instance.compareAndSet(null, em);
+			retVal = instance.get();
+		}
+		return retVal;
 	}
 
-	private InMemoryXmlEncManager() {
-	}
+	private final EncryptionManager delegate;
 
-	private final EncryptionManager delegate = InMemoryEncryptionManager
-			.getInstance();
+	private InMemoryXmlEncManager(EncryptionManager em) {
+		Precondition.assertNonNullArgument("null encryption manager", em);
+		this.delegate = em;
+	}
 
 	@Override
 	public List<EncryptionScheme> getEncryptionSchemes() {
@@ -43,18 +55,18 @@ public class InMemoryXmlEncManager implements XmlEncryptionManager {
 	}
 
 	@Override
-	public List<CredentialSet> getEncryptionCredentials() {
-		return delegate.getEncryptionCredentials();
+	public List<CredentialSet> getCredentialSets() {
+		return delegate.getCredentialSets();
 	}
 
 	@Override
-	public CredentialSet getEncryptionCredential(String name) {
-		return delegate.getEncryptionCredential(name);
+	public CredentialSet getCredentialSet(String name) {
+		return delegate.getCredentialSet(name);
 	}
 
 	@Override
-	public void putEncryptionCredential(CredentialSet ec) {
-		delegate.putEncryptionCredential(ec);
+	public void putCredentialSet(CredentialSet ec) {
+		delegate.putCredentialSet(ec);
 	}
 
 	@Override
@@ -75,6 +87,16 @@ public class InMemoryXmlEncManager implements XmlEncryptionManager {
 		DocumentDecryptor retVal = new DocumentDecryptor(encPolicy,
 				encCredential);
 		return retVal;
+	}
+
+	@Override
+	public EncryptionScheme getDefaultScheme() {
+		return delegate.getDefaultScheme();
+	}
+
+	@Override
+	public CredentialSet getDefaultCredentialSet() {
+		return delegate.getDefaultCredentialSet();
 	}
 
 }

@@ -41,9 +41,9 @@ import com.choicemaker.cm.gui.utils.dialogs.FileChooserFactory;
 import com.choicemaker.cm.io.xmlenc.base.XmlEncMarkedRecordPairSink;
 import com.choicemaker.cm.io.xmlenc.base.XmlEncMarkedRecordPairSinkFactory;
 import com.choicemaker.cm.io.xmlenc.base.XmlEncMarkedRecordPairSource;
+import com.choicemaker.cm.io.xmlenc.mgmt.InMemoryXmlEncManager;
+import com.choicemaker.cm.io.xmlenc.mgmt.XmlEncryptionManager;
 import com.choicemaker.cm.io.xmlenc.res.XmlEncMessageUtil;
-import com.choicemaker.cm.io.xmlenc.xmlconf.InMemoryXmlEncManager;
-import com.choicemaker.cm.io.xmlenc.xmlconf.XmlEncryptionManager;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cm.modelmaker.gui.dialogs.MarkedRecordPairSourceGui;
 import com.choicemaker.cm.modelmaker.gui.utils.Enable;
@@ -80,7 +80,7 @@ public class XmlEncMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui
 	private static Dimension CREATE_DIMENSION = new Dimension(500, 140);
 	private static Dimension GENERATE_DIMENSION = new Dimension(500, 400);
 
-	private final XmlEncryptionManager crdsMgr = InMemoryXmlEncManager
+	private final XmlEncryptionManager encMgr = InMemoryXmlEncManager
 			.getInstance();
 
 	private JComponent[] generateComponents;
@@ -116,6 +116,7 @@ public class XmlEncMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui
 		init(s);
 	}
 
+	@Override
 	public void setVisible(boolean b) {
 		if (b) {
 			setFields();
@@ -154,6 +155,7 @@ public class XmlEncMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui
 		}
 	}
 
+	@Override
 	public void setEnabledness() {
 		boolean ok = xmlFileName.getText().length() > 0
 				&& sourceFileName.getText().length() > 0;
@@ -176,6 +178,7 @@ public class XmlEncMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui
 		}
 	}
 
+	@Override
 	public void buildSource() {
 		XmlEncMarkedRecordPairSource xmlSource = (XmlEncMarkedRecordPairSource) getSource();
 		xmlSource.setFileName(getSourceFileName());
@@ -203,6 +206,7 @@ public class XmlEncMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui
 	/**
 	 * Executed by the superclass constructor to build the panel.
 	 */
+	@Override
 	public void buildContent() {
 		sourceFileNameLabel = new JLabel(
 				m.formatMessage("train.gui.modelmaker.dialog.source.name"));
@@ -217,18 +221,18 @@ public class XmlEncMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui
 		encSchemesLabel = new JLabel(
 				m.formatMessage("io.xmlenc.gui.encryption.scheme"));
 		encSchemesBox = new JComboBox<>();
-		List<EncryptionScheme> schemes = crdsMgr.getEncryptionSchemes();
-		for (EncryptionScheme scheme : schemes) {
-			String id = scheme.getSchemeId();
+		List<EncryptionScheme> schemes = encMgr.getEncryptionSchemes();
+		for (EncryptionScheme es : schemes) {
+			String id = es.getSchemeId();
 			encSchemesBox.addItem(id);
 		}
 
 		encCredentialsLabel = new JLabel(
 				m.formatMessage("io.xmlenc.gui.encryption.credentials"));
 		encCredentialsBox = new JComboBox<>();
-		List<CredentialSet> credentials = crdsMgr.getEncryptionCredentials();
-		for (CredentialSet scheme : credentials) {
-			String id = scheme.getCredentialName();
+		List<CredentialSet> credentials = encMgr.getCredentialSets();
+		for (CredentialSet cs : credentials) {
+			String id = cs.getCredentialName();
 			encCredentialsBox.addItem(id);
 		}
 
@@ -270,12 +274,14 @@ public class XmlEncMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui
 		layoutContent();
 	}
 
+	@Override
 	public void addContentListeners() {
 		super.addContentListeners();
 		EnablednessGuard dl = new EnablednessGuard(this);
 
 		// sourceFileBrowseButton
 		sourceFileBrowseButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent ev) {
 				File f = FileChooserFactory.selectMrpsFile(parent);
 				if (f != null) {
@@ -284,8 +290,9 @@ public class XmlEncMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui
 			}
 		});
 
-		// browsebutton
+		// browseButton
 		browseButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent ev) {
 				File f = FileChooserFactory.selectXmlFile(parent);
 				if (f != null) {
@@ -297,6 +304,7 @@ public class XmlEncMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui
 		if (!save) {
 			// removeButton
 			removeButton.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent ev) {
 					DefaultListModel<String> m = (DefaultListModel<String>) sourcesList
 							.getModel();
@@ -310,6 +318,7 @@ public class XmlEncMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui
 
 			// addButton
 			addButton.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent ev) {
 					File[] fs = FileChooserFactory.selectMrpsFiles(parent);
 					DefaultListModel<String> m = (DefaultListModel<String>) sourcesList
@@ -322,6 +331,7 @@ public class XmlEncMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui
 			});
 
 			modeButton.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent ev) {
 					if (mode == CREATE) {
 						mode = GENERATE;
@@ -340,6 +350,7 @@ public class XmlEncMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui
 			});
 
 			sourcesList.addListSelectionListener(new ListSelectionListener() {
+				@Override
 				public void valueChanged(ListSelectionEvent e) {
 					setEnabledness();
 				}
@@ -354,6 +365,20 @@ public class XmlEncMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui
 		JavaHelpUtils.enableHelpKey(this, "io.gui.xml.mrps");
 	}
 
+	@Override
+	public Source define() {
+		setVisible(true);
+		setEnabledness();
+		Source src = getSource();
+		XmlEncMarkedRecordPairSource encSrc = (XmlEncMarkedRecordPairSource) src;
+		final EncryptionScheme ep = createEncryptionPolicy();
+		final CredentialSet ec = createEncryptionCredential();
+		encSrc.setEncryptionScheme(ep);
+		encSrc.setCredentialSet(ec);
+		return src;
+	}
+
+	@Override
 	protected void generate() {
 		Object[] sources = ((DefaultListModel<?>) sourcesList.getModel())
 				.toArray();
@@ -370,7 +395,7 @@ public class XmlEncMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui
 			if (d == 1 && s == Integer.MAX_VALUE) {
 				XmlEncMarkedRecordPairSink sink = new XmlEncMarkedRecordPairSink(
 						getSourceFileName(), getSaveXmlFileName(),
-						parent.getProbabilityModel(), ep, ec, crdsMgr);
+						parent.getProbabilityModel(), ep, ec, encMgr);
 				MarkedRecordPairBinder.store(sourceNames,
 						parent.getProbabilityModel(), sink);
 				buildSource();
@@ -381,7 +406,7 @@ public class XmlEncMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui
 						- Constants.MRPS_EXTENSION.length() - 1);
 				XmlEncMarkedRecordPairSinkFactory sinkFactory = new XmlEncMarkedRecordPairSinkFactory(
 						fileNameBase, fileN, extension,
-						parent.getProbabilityModel(), ep, ec, crdsMgr);
+						parent.getProbabilityModel(), ep, ec, encMgr);
 				MarkedRecordPairBinder.store(sourceNames,
 						parent.getProbabilityModel(), sinkFactory, d, s);
 				Source[] srcs = sinkFactory.getSources();
@@ -407,13 +432,15 @@ public class XmlEncMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui
 	}
 
 	private CredentialSet createEncryptionCredential() {
-		// TODO Auto-generated method stub
-		return null;
+		String cName = (String) encCredentialsBox.getSelectedItem();
+		CredentialSet retVal = encMgr.getCredentialSet(cName);
+		return retVal;
 	}
 
 	private EncryptionScheme createEncryptionPolicy() {
-		// TODO Auto-generated method stub
-		return null;
+		String esName = (String) encSchemesBox.getSelectedItem();
+		EncryptionScheme retVal = encMgr.getEncryptionScheme(esName);
+		return retVal;
 	}
 
 	private void layoutContent() {

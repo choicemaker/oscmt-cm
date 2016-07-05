@@ -244,13 +244,14 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 	private MarkedRecordPairSource[] multiSources = new MarkedRecordPairSource[NUM_SOURCES];
 	private boolean keepAllSourcesInMemory;
 	private int usedMultiSource = 0;
-	private java.util.List[] multiSourceLists = new java.util.List[NUM_SOURCES];
+	@SuppressWarnings("unchecked")
+	private java.util.List<MarkedRecordPairSource>[] multiSourceLists = new java.util.List[NUM_SOURCES];
 	private boolean[] multiIncludeHolds = new boolean[NUM_SOURCES];
 	private boolean includeHolds; // in source
 	private Trainer trainer;
 	private Statistics statistics;
 	private boolean evaluated;
-	private java.util.List sourceList;
+	private java.util.List<MarkedRecordPairSource> sourceList;
 	private IntArrayList checkedList = new IntArrayList();
 	private int[] selection;
 	private Repository repository = new Repository(null, null);
@@ -813,7 +814,6 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 			ICompiler compiler = factory.getDefaultCompiler();
 			success = compiler.compile(pm, messagePanel.getWriter());
 		} catch (CompilerException ex) {
-			// TODO FIXME error message for compiler exception
 			String msg =
 				"failed to build model: " + pm.toString() + ": "
 						+ ex.toString();
@@ -931,7 +931,7 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 			multiSourceLists[1] = null;
 			setMultiIncludeHolds(usedMultiSource, multiIncludeHolds[usedMultiSource]);
 		} else {
-			java.util.List ll = multiSourceLists[0];
+			java.util.List<MarkedRecordPairSource> ll = multiSourceLists[0];
 			multiSourceLists[0] = multiSourceLists[1];
 			multiSourceLists[1] = ll;
 		}
@@ -1009,6 +1009,7 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 	 * in-memory collection.  This method is called prior to
 	 * training, or prior to saving a source to disk.
 	 */
+	@SuppressWarnings("unchecked")
 	private void loadSourceList() throws OperationFailedException {
 		if (sourceList == null) {
 			if (multiSourceLists[usedMultiSource] == null) {
@@ -1032,7 +1033,7 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 		checkedList = new IntArrayList();
 	}
 
-	public java.util.List getSourceList() {
+	public java.util.List<MarkedRecordPairSource> getSourceList() {
 		return sourceList;
 	}
 
@@ -1626,6 +1627,8 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 		ca.enter(args);
 		String conf = ca.argumentVal(CONF_ARG);
 		String log = ca.argumentVal(LOG_ARG);
+		char[] password = null;
+
 		if (ca.optionSet(DIALOG_OPT) || !checkValidity(conf)) {
 			if (conf == "") {
 				conf = getPreferences().get(PreferenceKeys.CONFIGURATION_FILE, PreferenceDefaults.CONFIGURATION_FILE);
@@ -1643,11 +1646,22 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 				// User cancelled the StartDialog
 				programExit(EXIT_OK);
 			}
+
+			// Get the configuration file name
 			conf = sd.getConfigurationFileName();
-			getPreferences().put("configurationfile", conf);
+			getPreferences().put(PreferenceKeys.CONFIGURATION_FILE, conf);
+
+			// Copy the password, then clear the password field
+			char[] pw = sd.getPassword();
+			if (pw != null && pw.length > 0) {
+				password = new char[pw.length];
+				System.arraycopy(pw, 0, password, 0, pw.length);
+			}
+			sd.clearPassword();
+
 		}
 		try {
-			ConfigurationManager.getInstance().init(conf, log, true, true);
+			ConfigurationManager.getInstance().init(conf, log, true, true, password);
 			// create
 			init();
 			buildComponents();

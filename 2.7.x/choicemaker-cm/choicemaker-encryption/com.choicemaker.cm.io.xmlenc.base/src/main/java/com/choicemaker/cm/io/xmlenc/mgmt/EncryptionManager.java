@@ -1,4 +1,4 @@
-package com.choicemaker.cm.io.xmlenc.xmlconf;
+package com.choicemaker.cm.io.xmlenc.mgmt;
 
 import java.util.List;
 
@@ -17,11 +17,15 @@ public interface EncryptionManager {
 
 	void putEncryptionScheme(EncryptionScheme ep);
 
-	List<CredentialSet> getEncryptionCredentials();
+	List<CredentialSet> getCredentialSets();
 
-	CredentialSet getEncryptionCredential(String name);
+	CredentialSet getCredentialSet(String name);
 
-	void putEncryptionCredential(CredentialSet ec);
+	void putCredentialSet(CredentialSet ec);
+
+	EncryptionScheme getDefaultScheme();
+
+	CredentialSet getDefaultCredentialSet();
 
 	// public <K extends MasterKey<K>> MasterKeyProvider<K>
 	// createMasterKeyProvider(

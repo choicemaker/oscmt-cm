@@ -20,6 +20,8 @@ import com.choicemaker.cm.core.MarkedRecordPairSource;
 import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.xmlconf.MarkedRecordPairSourceXmlConfigurator;
 import com.choicemaker.cm.io.xmlenc.base.XmlEncMarkedRecordPairSource;
+import com.choicemaker.cm.io.xmlenc.mgmt.InMemoryXmlEncManager;
+import com.choicemaker.cm.io.xmlenc.mgmt.XmlEncryptionManager;
 import com.choicemaker.utilcopy01.Precondition;
 import com.choicemaker.xmlencryption.CredentialSet;
 import com.choicemaker.xmlencryption.EncryptionScheme;
@@ -65,7 +67,7 @@ public class XmlEncMarkedRecordPairSourceXmlConf implements
 			String fileName = src.getFileName();
 			Element e = new Element("MarkedRecordPairSource");
 			e.setAttribute("class", EXTENSION_POINT_ID);
-			e.setAttribute("schemeId", src.getPolicyId());
+			e.setAttribute("schemeId", src.getEncryptionSchemeId());
 			e.setAttribute("credentialName", src.getCredentialName());
 			// e.addContent(new
 			// Element("fileName").setText(src.getXmlFileName()));
@@ -88,7 +90,7 @@ public class XmlEncMarkedRecordPairSourceXmlConf implements
 		String schemeId = e.getAttributeValue("schemeId");
 		EncryptionScheme ep = this.crdsMgr.getEncryptionScheme(schemeId);
 		String credentialName = e.getAttributeValue("credentialName");
-		CredentialSet ec = this.crdsMgr.getEncryptionCredential(credentialName);
+		CredentialSet ec = this.crdsMgr.getCredentialSet(credentialName);
 		XmlEncMarkedRecordPairSource retVal = new XmlEncMarkedRecordPairSource(
 				fileName, xmlFileName, model, ep, ec, this.crdsMgr);
 		return retVal;

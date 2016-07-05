@@ -6,9 +6,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.jasypt.digest.StandardStringDigester;
+import org.jasypt.digest.StringDigester;
+import org.jasypt.digest.config.EnvironmentStringDigesterConfig;
 import org.jasypt.encryption.StringEncryptor;
 import org.jasypt.encryption.pbe.PBEStringCleanablePasswordEncryptor;
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
+import org.jdom.Attribute;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
@@ -45,6 +49,23 @@ public class ConfigurationUtils {
 	public static final String ENC_END = ")";
 	protected static final int ENC_END_LEN = ENC_END.length();
 
+	public static StringDigester createStringDigester(Document ignored) {
+		// The return value from this method is consistent with the instance
+		// used by a default command-line JasyptStringDigestCLI instance. The
+		// JaSypt bash script 'digest.sh' uses a default JasyptStringDigestCLI
+		// instance if no arguments other than 'input' are specified.
+		//
+		// If the password digest is computed by a non-default
+		// JasyptStringDigestCLI instance (for example, if configuration
+		// argument are passed to the 'digest.sh' script), then Document
+		// argument to this method must be used to retrieve appropriate
+		// configuration parameters from the 'encryption' element.
+		EnvironmentStringDigesterConfig config = new EnvironmentStringDigesterConfig();
+		StandardStringDigester retVal = new StandardStringDigester();
+		retVal.setConfig(config);
+		return retVal;
+	}
+
 	public static StringEncryptor createTextEncryptor(char[] password) {
 		Precondition.assertBoolean("null or empty password", password != null
 				&& password.length > 0);
@@ -53,7 +74,7 @@ public class ConfigurationUtils {
 		return retVal;
 	}
 
-	protected static String decryptText(final String s,
+	public static String decryptText(final String s,
 			StringEncryptor encryptor) {
 		String retVal = s;
 		if (encryptor != null && s != null && s.startsWith(ENC_START)
@@ -96,26 +117,48 @@ public class ConfigurationUtils {
 		return document;
 	}
 
+	/**
+	 * Equivalent to:
+	 *
+	 * <pre>
+	 * isEncryptionEnabled(readConfigurationFile(fileName));
+	 *
+	 * <pre>
+	 */
 	public static boolean isEncryptionEnabled(String fileName)
 			throws XmlConfException {
 		Document d = readConfigurationFile(fileName);
 		return isEncryptionEnabled(d);
 	}
 
+	/**
+	 * Returns false only if an encryption element is present in the document
+	 * and the value of the <code>enabled</code> attribute is false or nonsense
+	 * (that is, the enabled attribute is not true).
+	 */
 	public static boolean isEncryptionEnabled(Document d)
 			throws XmlConfException {
-		throw new Error("not yet implemented");
+		boolean retVal = true;
+		if (d != null) {
+			Element c = getCore(d);
+			Element e = c == null ? null : c.getChild("encryption");
+			Attribute a = e == null ? null : e.getAttribute("enabled");
+			if (a != null) {
+				String s = a.getValue();
+				boolean tf = Boolean.parseBoolean(s);
+				retVal = tf;
+			}
+		}
+		return retVal;
 	}
 
 	/**
-	 * Returns false only if encryption is enabled, there's a digestValue
-	 * specified, and the digest of the password does not equal the specified
-	 * digestValue.
-	 * 
-	 * @param password
-	 * @param fileName
-	 * @throws XmlConfException
-	 *             if file can not be read
+	 * Equivalent to:
+	 *
+	 * <pre>
+	 * isPasswordValid(password, readConfigurationFile(fileName));
+	 *
+	 * <pre>
 	 */
 	public static boolean isPasswordValid(char[] password, String fileName)
 			throws XmlConfException {
@@ -127,13 +170,24 @@ public class ConfigurationUtils {
 	 * Returns false only if encryption is enabled, there's a digestValue
 	 * specified, and the digest of the password does not equal the specified
 	 * digestValue.
-	 * 
+	 *
 	 * @param password
 	 * @param d
 	 *            a non-null document
 	 */
-	public static boolean isPasswordValid(char[] password, Document d) {
-		throw new Error("not yet implemented");
+	public static boolean isPasswordValid(char[] password, Document d) throws XmlConfException {
+		boolean retVal = true;
+		if (d != null) {
+			Element c = getCore(d);
+			Element e = c == null ? null : c.getChild("encryption");
+			String expected = c == null ? null : e.getChildTextTrim("digestValue");
+			if (expected != null && !expected.isEmpty()) {
+				StringDigester digester = createStringDigester(d);
+				String pw = new String(password);
+				retVal = digester.matches(pw, expected);
+			}
+		}
+		return retVal;
 	}
 
 	public static File getWorkingDirectory(String configFile,
@@ -214,7 +268,8 @@ public class ConfigurationUtils {
 			e = e.getChild(CONFIGURATION_GENERATOR_ELEMENT);
 			if (e != null) {
 				String t = getTextValue(e, encryptor);
-				if (t != null) {
+				t = t == null ? null : t.trim();
+				if (t != null && !t.isEmpty()) {
 					f = FileUtilities.resolveFile(wdir, t);
 				}
 			}

@@ -20,7 +20,7 @@
          point="com.choicemaker.cm.core.mrpsReader">
       <handler
             name="XMLENC IO"
-            class="com.choicemaker.cm.io.xmlenc.base.xmlconf.XmlEncMarkedRecordPairSourceXmlConf"
+            class="com.choicemaker.cm.io.xmlenc.xmlconf.XmlEncMarkedRecordPairSourceXmlConf"
             handledClass="com.choicemaker.cm.io.xmlenc.base.XmlEncMarkedRecordPairSource">
       </handler>
    </extension>

@@ -188,7 +188,7 @@ public class XmlConfigurator implements ChoiceMakerConfigurator,
 
 	/**
 	 * Initializes all the modules listed in the configuration file.
-	 * 
+	 *
 	 * @throws XmlConfException
 	 *             if any error occurs.
 	 */
@@ -217,7 +217,7 @@ public class XmlConfigurator implements ChoiceMakerConfigurator,
 
 	/**
 	 * Initializes just the modules listed in the reload stanza.
-	 * 
+	 *
 	 * @throws XmlConfException
 	 *             if any error occurs.
 	 */
@@ -370,7 +370,7 @@ public class XmlConfigurator implements ChoiceMakerConfigurator,
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see java.lang.ClassLoader#findClass(java.lang.String)
 		 */
 		@Override
@@ -628,14 +628,14 @@ public class XmlConfigurator implements ChoiceMakerConfigurator,
 		this.initGui = initGui;
 		this.fileName = new File(fn).getAbsolutePath();
 
+		this.document = ConfigurationUtils.readConfigurationFile(fileName);
+
 		this.encryptor = null;
 		if (pw != null && pw.length > 0) {
 			if (ConfigurationUtils.isEncryptionEnabled(getDocument())) {
 				this.encryptor = ConfigurationUtils.createTextEncryptor(pw);
 			}
 		}
-
-		this.document = ConfigurationUtils.readConfigurationFile(fileName);
 
 		this.workingDirectory = ConfigurationUtils.getWorkingDirectory(
 				getFileName(), getDocument(), encryptor);

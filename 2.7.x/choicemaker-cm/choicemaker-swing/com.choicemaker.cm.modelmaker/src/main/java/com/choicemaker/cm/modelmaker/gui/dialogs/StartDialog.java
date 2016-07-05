@@ -173,6 +173,14 @@ public class StartDialog extends JFrame implements Enable {
 		return configuration.getText();
 	}
 
+	public char[] getPassword() {
+		return password.getPassword();
+	}
+
+	public void clearPassword() {
+		password.setText(null);
+	}
+
 	private void end() {
 		synchronized (ModelMaker.class) {
 			ModelMaker.class.notifyAll();
