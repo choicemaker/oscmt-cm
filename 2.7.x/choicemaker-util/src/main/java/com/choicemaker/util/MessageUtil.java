@@ -113,12 +113,12 @@ public class MessageUtil {
 	 * </pre>
 	 * 
 	 * @param s
-	 *            a non-null String
+	 *            any string
 	 * @param startLength
 	 *            the initial length of the returned elision
 	 * @param endLength
 	 *            the final length of the returned elision
-	 * @return an elision of the trimmed string
+	 * @return an elision of the trimmed string, or null if the input is null
 	 */
 	public String elideString(String s, int startLength, int endLength) {
 		return elideString(s, startLength, endLength, true);
@@ -138,7 +138,7 @@ public class MessageUtil {
 	 * </ul>
 	 * 
 	 * @param s
-	 *            a non-null String
+	 *            any string
 	 * @param startLength
 	 *            the initial length of the returned elision, before the
 	 *            ellipsis. The starting section of the elision is the
@@ -149,33 +149,71 @@ public class MessageUtil {
 	 *            last characters of the input string.
 	 * @param trim
 	 *            if true, the input string is first trimmed.
-	 * @return an elision of the string. The length of the returned elision is
+	 * @return null if the input is null, otherwise an elision of the string.
+	 *         The length of the returned elision is
 	 *         <code>min(s_length, startLength + endLength + ELLIPSIS_LENGTH)</code>
 	 *         , where s_length is the length of input string after optional
 	 *         trimming.
 	 */
 	public String elideString(String s, int startLength, int endLength,
 			boolean trim) {
-		Precondition.assertNonNullArgument("null string", s);
-		Precondition.assertBoolean("negative start length", startLength > -1);
-		Precondition.assertBoolean("negative start length", startLength > -1);
-		String retVal;
-		if (trim) {
-			s = s.trim();
-		}
-		final int s_length = s.length();
-		if (s_length <= startLength + endLength + ELLIPSIS_LENGTH) {
-			retVal = s;
-		} else {
-			StringBuilder sb = new StringBuilder();
-			sb.append(s.substring(0, startLength));
-			sb.append(ELLIPSIS);
-			if (endLength > 0) {
-				int endStart = s_length - endLength;
-				String end = s.substring(endStart, s_length);
-				sb.append(end);
+		String retVal = null;
+		if (s != null) {
+			Precondition.assertBoolean("negative start length",
+					startLength > -1);
+			Precondition.assertBoolean("negative start length",
+					startLength > -1);
+			if (trim) {
+				s = s.trim();
 			}
-			retVal = sb.toString();
+			final int s_length = s.length();
+			if (s_length <= startLength + endLength + ELLIPSIS_LENGTH) {
+				retVal = s;
+			} else {
+				StringBuilder sb = new StringBuilder();
+				sb.append(s.substring(0, startLength));
+				sb.append(ELLIPSIS);
+				if (endLength > 0) {
+					int endStart = s_length - endLength;
+					String end = s.substring(endStart, s_length);
+					sb.append(end);
+				}
+				retVal = sb.toString();
+			}
+		}
+		return retVal;
+	}
+
+	/**
+	 * Elide a file name. This method looks for the first file separator in a
+	 * file name such that the elided path, starting at the separator, is less
+	 * than the specified limit. If no such file separator exists -- in other
+	 * words, if the base file name is too long -- then base file name is
+	 * returned as the elided value.
+	 * 
+	 * @param fileName
+	 *            any file name
+	 * @return null if the input is null, otherwise an elided substring of the
+	 *         file name broken at some file separator if possible, or the
+	 *         entire base file name if base name is too long
+	 */
+	public String elideFileName(String fileName, int endLength) {
+		String retVal = null;
+		if (fileName != null && fileName.length() <= endLength + ELLIPSIS_LENGTH) {
+			retVal = fileName;
+		} else if (fileName != null) {
+			String candidate = elideString(fileName, 0, endLength);
+			int firstIdx = candidate.indexOf(SystemPropertyUtils.PV_FILE_SEPARATOR);
+			if (firstIdx == -1) {
+				int lastIdx = fileName.lastIndexOf(SystemPropertyUtils.PV_FILE_SEPARATOR);
+				if (lastIdx == -1) {
+					retVal = fileName;
+				} else {
+					retVal = ELLIPSIS + fileName.substring(lastIdx);
+				}
+			} else {
+				retVal = ELLIPSIS + candidate.substring(firstIdx);
+			}
 		}
 		return retVal;
 	}
