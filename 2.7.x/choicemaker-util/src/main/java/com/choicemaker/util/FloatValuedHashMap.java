@@ -20,50 +20,52 @@ import java.util.Map;
 /**
  * .
  *
- * @author   Adam Winkel
+ * @author Adam Winkel
  */
-@SuppressWarnings({"rawtypes", "unchecked"})
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class FloatValuedHashMap extends HashMap {
 	private static final long serialVersionUID = 1L;
 
-	public FloatValuedHashMap() { }
+	public FloatValuedHashMap() {
+	}
 
 	public FloatValuedHashMap(Map map) {
 		super(map);
 	}
-		
+
 	public FloatValuedHashMap(FloatValuedHashMap map) {
-		super(map);	
+		super(map);
 	}
-	
+
+	@Override
 	public Object put(Object key, Object value) {
 		if (!(value instanceof Float)) {
-			throw new IllegalArgumentException();	
+			throw new IllegalArgumentException();
 		}
-	
-		return super.put(key, value);	
+
+		return super.put(key, value);
 	}
-	
+
 	public void putFloat(Object key, float value) {
-		super.put(key, new Float(value));	
+		super.put(key, new Float(value));
 	}
 
 	public float getFloat(Object key) {
-		Float value = (Float)get(key);
+		Float value = (Float) get(key);
 		if (value != null)
 			return value.floatValue();
 		else
 			return 0f;
 	}
-		
+
 	public void increment(Object key) {
-		add(key, 1f);	
+		add(key, 1f);
 	}
-	
+
 	public void add(Object key, float amount) {
 		putFloat(key, getFloat(key) + amount);
 	}
-		
+
 	public void multiply(Object key, float factor) {
 		putFloat(key, getFloat(key) * factor);
 	}
@@ -79,6 +81,6 @@ public class FloatValuedHashMap extends HashMap {
 	public List sortedKeys() {
 		List keys = new ArrayList(keySet());
 		Collections.sort(keys, new MapKeyComparator(this));
-		return keys;		
+		return keys;
 	}
 }

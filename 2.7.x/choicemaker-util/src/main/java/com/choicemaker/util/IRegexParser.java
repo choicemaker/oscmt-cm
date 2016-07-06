@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
  */
 public interface IRegexParser<T> extends IParser<T> {
 
-	/** Returns the regular-expression pattern used by this parser */
+	/** @return the regular-expression pattern used by this parser */
 	Pattern getPattern();
 
 	/**
@@ -18,6 +18,10 @@ public interface IRegexParser<T> extends IParser<T> {
 	 * <pre>
 	 * getPattern().getMatcher(s)
 	 * </pre>
+	 * 
+	 * @param s
+	 *            a non-null string
+	 * @return a non-null matcher
 	 */
 	Matcher matcher(String s);
 

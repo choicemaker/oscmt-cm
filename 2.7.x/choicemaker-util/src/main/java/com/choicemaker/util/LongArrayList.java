@@ -14,8 +14,8 @@ import java.io.Serializable;
 import java.util.Arrays;
 
 /**
- * This is a wrapper object which contains a array of long that can grow when necessary.  It is better than using
- * ArrayList of Long Object.
+ * This is a wrapper object which contains a array of long that can grow when
+ * necessary. It is better than using ArrayList of Long Object.
  * 
  * @author pcheung
  *
@@ -36,7 +36,7 @@ public class LongArrayList implements Serializable {
 		data = dataInit;
 	}
 
-	//--------------------------------------------------------------
+	// --------------------------------------------------------------
 
 	/** Creates a new empty List, initial size is 16. */
 	public LongArrayList() {
@@ -50,8 +50,9 @@ public class LongArrayList implements Serializable {
 
 	/**
 	 * Copy constructor.
-	 * @param  orig  List that supplies the initial elements for
-	 *               the new List.
+	 * 
+	 * @param orig
+	 *            List that supplies the initial elements for the new List.
 	 */
 	public LongArrayList(LongArrayList orig) {
 		data = new long[orig.data.length];
@@ -59,8 +60,9 @@ public class LongArrayList implements Serializable {
 		System.arraycopy(orig.data, 0, data, 0, size);
 	}
 
-	//-----------------------------------------------------------------
+	// -----------------------------------------------------------------
 
+	@Override
 	public boolean equals(Object obj) {
 		LongArrayList operand;
 		int i;
@@ -78,15 +80,18 @@ public class LongArrayList implements Serializable {
 		}
 		return false;
 	}
-	
+
+	@Override
 	public int hashCode() {
 		return size;
 	}
 
 	/**
 	 * Gets an element from the List.
-	 * @param   idx  index of the element asked for
-	 * @return  selected element
+	 * 
+	 * @param idx
+	 *            index of the element asked for
+	 * @return selected element
 	 */
 	public long get(int idx) {
 		return data[idx];
@@ -94,8 +99,11 @@ public class LongArrayList implements Serializable {
 
 	/**
 	 * Replaces an element in the List.
-	 * @param  ele  new element
-	 * @param  idx  index of the element to be replaced
+	 * 
+	 * @param ele
+	 *            new element
+	 * @param idx
+	 *            index of the element to be replaced
 	 */
 	public void set(int idx, long ele) {
 		data[idx] = ele;
@@ -119,10 +127,13 @@ public class LongArrayList implements Serializable {
 	}
 
 	/**
-	 * Adds an element to the List. All following elements
-	 * are moved up by one index.
-	 * @param  idx  where to insert the new element
-	 * @param  ele  new element
+	 * Adds an element to the List. All following elements are moved up by one
+	 * index.
+	 * 
+	 * @param idx
+	 *            where to insert the new element
+	 * @param ele
+	 *            new element
 	 */
 	public void add(int idx, long ele) {
 		ensureCapacity(size + 1);
@@ -133,7 +144,9 @@ public class LongArrayList implements Serializable {
 
 	/**
 	 * Adds an element to the end of the List.
-	 * @param  ele  new element
+	 * 
+	 * @param ele
+	 *            new element
 	 */
 	public void add(long ele) {
 		ensureCapacity(size + 1);
@@ -147,9 +160,11 @@ public class LongArrayList implements Serializable {
 	}
 
 	/**
-	 * Removes an element from the List. All following elements
-	 * are moved down by one index.
-	 * @param  idx  index of the element to remove
+	 * Removes an element from the List. All following elements are moved down
+	 * by one index.
+	 * 
+	 * @param idx
+	 *            index of the element to remove
 	 */
 	public void remove(int idx) {
 		size--;
@@ -165,8 +180,10 @@ public class LongArrayList implements Serializable {
 
 	/**
 	 * Searches an element.
-	 * @param   ele  element to look for
-	 * @return  index of the first element found; -1 if nothing was found
+	 * 
+	 * @param ele
+	 *            element to look for
+	 * @return index of the first element found; -1 if nothing was found
 	 */
 	public int indexOf(long ele) {
 		int i;
@@ -185,6 +202,7 @@ public class LongArrayList implements Serializable {
 
 	/**
 	 * Returns the number of elements in the List.
+	 * 
 	 * @return number of elements
 	 */
 	public int size() {
@@ -197,7 +215,8 @@ public class LongArrayList implements Serializable {
 
 	/**
 	 * Creates an array with all elements of the List.
-	 * @return  the array requested
+	 * 
+	 * @return the array requested
 	 */
 	public long[] toArray() {
 		return toArray(new long[size]);
@@ -215,12 +234,14 @@ public class LongArrayList implements Serializable {
 		Arrays.sort(data, 0, size);
 	}
 
-	//-----------------------------------------------------------------
+	// -----------------------------------------------------------------
 
 	/**
 	 * Returns a string representation.
+	 * 
 	 * @return string representation
 	 */
+	@Override
 	public String toString() {
 		StringBuffer buf;
 		int i, max;

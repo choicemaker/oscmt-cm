@@ -17,13 +17,15 @@ import java.util.List;
 /**
  * Management of command line arguments.
  *
- * @author   Matthias Zenger
+ * @author Matthias Zenger
  *
- * @see <a href="https://commons.apache.org/proper/commons-cli/index.html">Apache Commons CLI</a>
+ * @see <a
+ *      href="https://commons.apache.org/proper/commons-cli/index.html">Apache
+ *      Commons CLI</a>
  * @see <a href="http://args4j.kohsuke.org/index.html">Args4j</a>
  * @see <a href="http://jcommander.org/">JCommander</a>
  */
-@SuppressWarnings({"rawtypes", "unchecked"})
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class Arguments {
 
 	public static final String DEFAULT = "$default$";
@@ -57,13 +59,24 @@ public class Arguments {
 		this.unknownOptionsHandling = a.unknownOptionsHandling;
 	}
 
-	/** define a new option; i.e. an argument that is either present or not */
+	/**
+	 * Define a new option; i.e. an argument that is either present or not
+	 * 
+	 * @param option
+	 *            a non-null, non-blank String
+	 */
 	public void addOption(String option) {
 		arguments.put(option, Boolean.FALSE);
 	}
 
-	/** define a new argument consisting of an argument name and a default
-	 *  value */
+	/**
+	 * Define a new argument consisting of an argument name and a default value
+	 * 
+	 * @param option
+	 *            a non-null, non-blank String
+	 * @param defaultVal
+	 *            may be null or blank
+	 */
 	public void addArgument(String option, String defaultVal) {
 		arguments.put(option, defaultVal);
 	}
@@ -76,8 +89,12 @@ public class Arguments {
 		arguments.put(option, DEFAULT);
 	}
 
-	/** enter arguments from the command line 'args' and return index
-	 *  of illegal argument; returns -1 for correct command lines */
+	/**
+	 * Enter arguments from the command line 'args'
+   * @param args may be null
+   * @return index of an illegal
+	 * argument, or -1 for correct command lines
+	 */
 	public int enter(String[] args) {
 		if (args == null)
 			return -1;
@@ -109,22 +126,30 @@ public class Arguments {
 		return -1;
 	}
 
-	/** check if option was set */
+	/**
+	Check if option was set
+@param option a non-null String
+@return true if the option was set; false otherwise
+*/
 	public boolean optionSet(String option) {
 		return ((Boolean) arguments.get(option)).booleanValue();
 	}
 
-	/** check the argument value */
+	/** Check the argument value 
+@param option a non-null String
+@return the value of the argument or null if the argument was not set
+*/
 	public String argumentVal(String option) {
 		Object o = arguments.get(option);
 		return (String) ((o == DEFAULT) ? null : o);
 	}
 
-	/** return all files */
+	/** @return all files */
 	public String[] files() {
 		return (String[]) files.toArray(new String[files.size()]);
 	}
 
+	@Override
 	public String toString() {
 		return "Arguments [arguments=" + arguments + ", files=" + files
 				+ ", unknownOptionsHandling=" + unknownOptionsHandling + "]";

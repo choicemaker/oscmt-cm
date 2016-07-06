@@ -13,15 +13,16 @@ package com.choicemaker.util;
 import java.util.Comparator;
 import java.util.Map;
 
-@SuppressWarnings({"rawtypes", "unchecked"})
+@SuppressWarnings({ "rawtypes", "unchecked" })
 class MapKeyComparator implements Comparator {
 
 	protected Map map;
 
 	public MapKeyComparator(Map map) {
-		this.map = map;	
+		this.map = map;
 	}
 
+	@Override
 	public int compare(Object obj1, Object obj2) {
 		Object val1 = map.get(obj1);
 		Object val2 = map.get(obj2);
@@ -30,9 +31,9 @@ class MapKeyComparator implements Comparator {
 		} else if (val1 == null) {
 			return 1;
 		} else if (val2 == null) {
-			return -1;	
+			return -1;
 		} else {
-			return ((Comparable)val2).compareTo(val1);
+			return ((Comparable) val2).compareTo(val1);
 		}
 	}
 }

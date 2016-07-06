@@ -18,11 +18,11 @@ import java.util.List;
 /**
  * .
  *
- * @author   Adam Winkel
+ * @author Adam Winkel
  */
-@SuppressWarnings({"rawtypes", "unchecked"})
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class SuffixTree {
-	
+
 	protected PrefixTree tree;
 
 	public SuffixTree() {
@@ -33,16 +33,16 @@ public class SuffixTree {
 		this();
 		addAll(strings);
 	}
-	
+
 	public SuffixTree(String[] strings) {
 		this();
-		addAll(strings);	
+		addAll(strings);
 	}
 
 	public void addAll(Collection strings) {
 		Iterator it = strings.iterator();
 		while (it.hasNext()) {
-			add((String)it.next());	
+			add((String) it.next());
 		}
 	}
 
@@ -51,46 +51,46 @@ public class SuffixTree {
 			add(strings[i]);
 		}
 	}
-	
+
 	public void add(String s) {
 		tree.add(reverse(s));
 	}
-	
+
 	public boolean contains(String s) {
-		return tree.contains(reverse(s));	
+		return tree.contains(reverse(s));
 	}
-	
+
 	public String getLongestSuffix(String s) {
 		String prefix = tree.getLongestPrefix(reverse(s));
-		
+
 		if (prefix == null)
 			return null;
 
-		return reverse(prefix);		
+		return reverse(prefix);
 	}
 
 	public String getShortestSuffix(String s) {
 		String prefix = tree.getLongestPrefix(reverse(s));
-		
+
 		if (prefix == null)
 			return null;
-		
+
 		return reverse(prefix);
 	}
-	
+
 	public List getAllSuffixes(String s) {
 		List prefixes = tree.getAllPrefixes(reverse(s));
-		
+
 		List suffixes = new ArrayList();
 		for (int i = 0; i < prefixes.size(); i++) {
-			String prefix = (String)prefixes.get(i);
-			suffixes.add(reverse(prefix));	
+			String prefix = (String) prefixes.get(i);
+			suffixes.add(reverse(prefix));
 		}
-		
+
 		return suffixes;
 	}
-	
+
 	private String reverse(String s) {
-		return new StringBuffer(s).reverse().toString();	
+		return new StringBuffer(s).reverse().toString();
 	}
 }

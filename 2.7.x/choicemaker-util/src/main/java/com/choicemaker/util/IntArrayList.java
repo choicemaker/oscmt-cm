@@ -14,14 +14,13 @@ import java.io.Serializable;
 import java.util.Arrays;
 
 /**
- * List of int elements. Similar to java.lang.List or
- * java.util.ArrayList, but it stores primitive int values.
- * Generic collections for primitive types should remove the
- * need for IntArrayList. I implemented only those methods
+ * List of int elements. Similar to java.lang.List or java.util.ArrayList, but
+ * it stores primitive int values. Generic collections for primitive types
+ * should remove the need for IntArrayList. I implemented only those methods
  * that I actually need.
  *
- * @author    Martin Buechi
- * @author    rphall (added toList() method)
+ * @author Martin Buechi
+ * @author rphall (added toList() method)
  */
 
 public class IntArrayList implements Serializable, Cloneable {
@@ -34,7 +33,7 @@ public class IntArrayList implements Serializable, Cloneable {
 	/** Number of data elements actually used. */
 	private int size;
 
-	//--------------------------------------------------------------
+	// --------------------------------------------------------------
 
 	/** Creates a new empty List, initial size is 16. */
 	public IntArrayList() {
@@ -47,7 +46,7 @@ public class IntArrayList implements Serializable, Cloneable {
 	}
 
 	public IntArrayList(int[] dataInit) {
-		this(dataInit.length,dataInit);
+		this(dataInit.length, dataInit);
 	}
 
 	public IntArrayList(int sizeInit, int[] dataInit) {
@@ -55,11 +54,11 @@ public class IntArrayList implements Serializable, Cloneable {
 		data = dataInit;
 	}
 
-
 	/**
 	 * Copy constructor.
-	 * @param  orig  List that supplies the initial elements for
-	 *               the new List.
+	 * 
+	 * @param orig
+	 *            List that supplies the initial elements for the new List.
 	 */
 	public IntArrayList(IntArrayList orig) {
 		data = new int[orig.data.length];
@@ -67,16 +66,17 @@ public class IntArrayList implements Serializable, Cloneable {
 		System.arraycopy(orig.data, 0, data, 0, size);
 	}
 
-	//-----------------------------------------------------------------
+	// -----------------------------------------------------------------
 
 	/**
-	 * Returns a copy of this IntArrayList.  
+	 * Returns a copy of this IntArrayList.
 	 */
+	@Override
 	public Object clone() {
 		try {
-			IntArrayList copy = (IntArrayList)super.clone();
+			IntArrayList copy = (IntArrayList) super.clone();
 			copy.data = this.toArray();
-			
+
 			return copy;
 		} catch (CloneNotSupportedException ex) {
 			// never happens; this class is Cloneable.
@@ -84,6 +84,7 @@ public class IntArrayList implements Serializable, Cloneable {
 		}
 	}
 
+	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof IntArrayList) {
 			IntArrayList operand = (IntArrayList) obj;
@@ -98,7 +99,8 @@ public class IntArrayList implements Serializable, Cloneable {
 		}
 		return false;
 	}
-	
+
+	@Override
 	public int hashCode() {
 		int hash = 1;
 		for (int i = 0; i < size; i++) {
@@ -109,9 +111,12 @@ public class IntArrayList implements Serializable, Cloneable {
 
 	/**
 	 * Gets an element from the List.
-	 * @param   idx  index of the element asked for
-	 * @return  selected element
-	 * @throws IndexOutOfBoundsException if <code>idx</code> is out of range
+	 * 
+	 * @param idx
+	 *            index of the element asked for
+	 * @return selected element
+	 * @throws IndexOutOfBoundsException
+	 *             if <code>idx</code> is out of range
 	 */
 	public int get(int idx) {
 		if (idx < 0 || idx >= size) {
@@ -122,9 +127,13 @@ public class IntArrayList implements Serializable, Cloneable {
 
 	/**
 	 * Replaces an element in the List.
-	 * @param  ele  new element
-	 * @param  idx  index of the element to be replaced
-	 * @throws IndexOutOfBoundsException if <code>idx</code> is out of range
+	 * 
+	 * @param ele
+	 *            new element
+	 * @param idx
+	 *            index of the element to be replaced
+	 * @throws IndexOutOfBoundsException
+	 *             if <code>idx</code> is out of range
 	 */
 	public void set(int idx, int ele) {
 		if (idx < 0 || idx >= size) {
@@ -134,8 +143,9 @@ public class IntArrayList implements Serializable, Cloneable {
 	}
 
 	/**
-	 * Enlarges this IntArrayList, if needed, in order to accomodate a <code>min</code> total elements,
-	 * including existing elements.
+	 * Enlarges this IntArrayList, if needed, in order to accomodate a
+	 * <code>min</code> total elements, including existing elements.
+@param min a positive integer
 	 */
 	public void ensureCapacity(int min) {
 		int[] tmp;
@@ -155,11 +165,15 @@ public class IntArrayList implements Serializable, Cloneable {
 	}
 
 	/**
-	 * Adds an element to the List. All following elements
-	 * are moved up by one index.
-	 * @param  idx  where to insert the new element
-	 * @param  ele  new element
-	 * @throws IndexOutOfBoundsException if <code>idx</code> is out of range
+	 * Adds an element to the List. All following elements are moved up by one
+	 * index.
+	 * 
+	 * @param idx
+	 *            where to insert the new element
+	 * @param ele
+	 *            new element
+	 * @throws IndexOutOfBoundsException
+	 *             if <code>idx</code> is out of range
 	 */
 	public void add(int idx, int ele) {
 		if (idx < 0 || idx > size) {
@@ -173,7 +187,9 @@ public class IntArrayList implements Serializable, Cloneable {
 
 	/**
 	 * Adds an element to the end of the List.
-	 * @param  ele  new element
+	 * 
+	 * @param ele
+	 *            new element
 	 */
 	public void add(int ele) {
 		ensureCapacity(size + 1);
@@ -187,10 +203,13 @@ public class IntArrayList implements Serializable, Cloneable {
 	}
 
 	/**
-	 * Removes an element from the List. All following elements
-	 * are moved down by one index.
-	 * @param  idx  index of the element to remove
-	 * @throws IndexOutOfBoundsException if <code>idx</code> is out of range
+	 * Removes an element from the List. All following elements are moved down
+	 * by one index.
+	 * 
+	 * @param idx
+	 *            index of the element to remove
+	 * @throws IndexOutOfBoundsException
+	 *             if <code>idx</code> is out of range
 	 */
 	public void remove(int idx) {
 		if (idx < 0 || idx >= size) {
@@ -209,8 +228,10 @@ public class IntArrayList implements Serializable, Cloneable {
 
 	/**
 	 * Searches an element.
-	 * @param   ele  element to look for
-	 * @return  index of the first element found; -1 if nothing was found
+	 * 
+	 * @param ele
+	 *            element to look for
+	 * @return index of the first element found; -1 if nothing was found
 	 */
 	public int indexOf(int ele) {
 		int i;
@@ -229,6 +250,7 @@ public class IntArrayList implements Serializable, Cloneable {
 
 	/**
 	 * Returns the number of elements in the List.
+	 * 
 	 * @return number of elements
 	 */
 	public int size() {
@@ -241,7 +263,8 @@ public class IntArrayList implements Serializable, Cloneable {
 
 	/**
 	 * Creates an array with all elements of the List.
-	 * @return  the array requested
+	 * 
+	 * @return the array requested
 	 */
 	public int[] toArray() {
 		return toArray(new int[size]);
@@ -256,194 +279,197 @@ public class IntArrayList implements Serializable, Cloneable {
 	}
 
 	/**
-	 * Sorts the elements of this IntArrayList in place using 
+	 * Sorts the elements of this IntArrayList in place using
 	 * <code>java.util.Arrays.sort(int[])</code>.
 	 */
 	public void sort() {
 		Arrays.sort(data, 0, size);
 	}
 
-	//-----------------------------------------------------------------
+	// -----------------------------------------------------------------
 
 	/**
 	 * Returns a string representation.
+	 * 
 	 * @return string representation
 	 */
+	@Override
 	public String toString() {
-		StringBuffer buff = new StringBuffer(size * 3); // minimal guess at length
+		StringBuffer buff = new StringBuffer(size * 3); // minimal guess at
+														// length
 		buff.append('[');
-		
+
 		int max = size();
 		if (max > 0) {
 			buff.append(get(0));
 		}
-		
+
 		for (int i = 1; i < max; i++) {
 			buff.append(", ");
 			buff.append(get(i));
 		}
-		
+
 		buff.append(']');
-		
+
 		return buff.toString();
 	}
-	
-//	/**
-//	 * Converts to a list of Integer values. A bridge method to allow
-//	 * incremental replacement of IntArrayClass by generic ArrayList<Integer>
-//	 * and List<Integer> instances.
-//	 */
-//	public List toList() {
-//		return new List() {
-//			final IntArrayList d = IntArrayList.this;
-//
-//			public Object clone() {
-//				return d.clone();
-//			}
-//
-//			public boolean equals(Object obj) {
-//				return d.equals(obj);
-//			}
-//
-//			public int hashCode() {
-//				return d.hashCode();
-//			}
-//
-//			public Object get(int idx) {
-//				return Integer.valueOf(d.get(idx));
-//			}
-//
-//			public void clear() {
-//				d.clear();
-//			}
-//
-//			public int size() {
-//				return d.size();
-//			}
-//
-//			public boolean isEmpty() {
-//				return d.isEmpty();
-//			}
-//
-//			public String toString() {
-//				return d.toString();
-//			}
-//
-//			public boolean contains(Object o) {
-//				boolean retVal = false;
-//				if (o instanceof Integer) {
-//					int i = ((Integer) o).intValue();
-//					retVal = d.contains(i);
-//				}
-//				return retVal;
-//			}
-//
-//			public Object[] toArray() {
-//				return toArray(new Integer[d.size]);
-//			}
-//
-//			public Object[] toArray(Object[] a) {
-//				Integer[] aI = (Integer[]) a;
-//				int[] ia = d.toArray();
-//				if (ia.length > aI.length) {
-//					aI = new Integer[ia.length];
-//				}
-//				for (int i = 0; i < ia.length; i++) {
-//					aI[i] = Integer.valueOf(ia[i]);
-//				}
-//				return aI;
-//			}
-//
-//			public boolean add(Object e) {
-//				int i = ((Integer) e).intValue();
-//				d.add(i);
-//				return true;
-//			}
-//
-//			public void add(int index, Object element) {
-//				int i = ((Integer) element).intValue();
-//				d.add(index, i);
-//			}
-//
-//			public boolean addAll(Collection c) {
-//				boolean retVal = false;
-//				for (Iterator it = c.iterator(); it.hasNext();) {
-//					Integer I = (Integer) it.next();
-//					retVal = retVal || add(I);
-//				}
-//				return retVal;
-//			}
-//
-//			public Object set(int index, Object element) {
-//				Object retVal = get(index);
-//				int ele = ((Integer) element).intValue();
-//				d.set(index, ele);
-//				return retVal;
-//			}
-//
-//			public boolean remove(Object o) {
-//				Integer I = (Integer) o;
-//				int i = I.intValue();
-//				boolean retVal = d.contains(i);
-//				if (retVal) {
-//					d.remove(i);
-//				}
-//				return retVal;
-//			}
-//
-//			public Object remove(int index) {
-//				int i = d.get(index);
-//				Integer retVal = Integer.valueOf(i);
-//				d.remove(index);
-//				return retVal;
-//			}
-//
-//			public int indexOf(Object o) {
-//				int retVal = -1;
-//				if (o instanceof Integer) {
-//					int i = ((Integer) o).intValue();
-//					retVal = d.indexOf(i);
-//				}
-//				return retVal;
-//			}
-//
-//			public Iterator iterator() {
-//				throw new Error("not implemented");
-//			}
-//
-//			public boolean addAll(int index, Collection c) {
-//				throw new Error("not implemented");
-//			}
-//
-//			public boolean containsAll(Collection c) {
-//				throw new Error("not implemented");
-//			}
-//
-//			public boolean removeAll(Collection c) {
-//				throw new Error("not implemented");
-//			}
-//
-//			public boolean retainAll(Collection c) {
-//				throw new Error("not implemented");
-//			}
-//
-//			public int lastIndexOf(Object o) {
-//				throw new Error("not implemented");
-//			}
-//
-//			public ListIterator listIterator() {
-//				throw new Error("not implemented");
-//			}
-//
-//			public ListIterator listIterator(int index) {
-//				throw new Error("not implemented");
-//			}
-//
-//			public List subList(int fromIndex, int toIndex) {
-//				throw new Error("not implemented");
-//			}
-//
-//		};
-//	}
+
+	// /**
+	// * Converts to a list of Integer values. A bridge method to allow
+	// * incremental replacement of IntArrayClass by generic ArrayList<Integer>
+	// * and List<Integer> instances.
+	// */
+	// public List toList() {
+	// return new List() {
+	// final IntArrayList d = IntArrayList.this;
+	//
+	// public Object clone() {
+	// return d.clone();
+	// }
+	//
+	// public boolean equals(Object obj) {
+	// return d.equals(obj);
+	// }
+	//
+	// public int hashCode() {
+	// return d.hashCode();
+	// }
+	//
+	// public Object get(int idx) {
+	// return Integer.valueOf(d.get(idx));
+	// }
+	//
+	// public void clear() {
+	// d.clear();
+	// }
+	//
+	// public int size() {
+	// return d.size();
+	// }
+	//
+	// public boolean isEmpty() {
+	// return d.isEmpty();
+	// }
+	//
+	// public String toString() {
+	// return d.toString();
+	// }
+	//
+	// public boolean contains(Object o) {
+	// boolean retVal = false;
+	// if (o instanceof Integer) {
+	// int i = ((Integer) o).intValue();
+	// retVal = d.contains(i);
+	// }
+	// return retVal;
+	// }
+	//
+	// public Object[] toArray() {
+	// return toArray(new Integer[d.size]);
+	// }
+	//
+	// public Object[] toArray(Object[] a) {
+	// Integer[] aI = (Integer[]) a;
+	// int[] ia = d.toArray();
+	// if (ia.length > aI.length) {
+	// aI = new Integer[ia.length];
+	// }
+	// for (int i = 0; i < ia.length; i++) {
+	// aI[i] = Integer.valueOf(ia[i]);
+	// }
+	// return aI;
+	// }
+	//
+	// public boolean add(Object e) {
+	// int i = ((Integer) e).intValue();
+	// d.add(i);
+	// return true;
+	// }
+	//
+	// public void add(int index, Object element) {
+	// int i = ((Integer) element).intValue();
+	// d.add(index, i);
+	// }
+	//
+	// public boolean addAll(Collection c) {
+	// boolean retVal = false;
+	// for (Iterator it = c.iterator(); it.hasNext();) {
+	// Integer I = (Integer) it.next();
+	// retVal = retVal || add(I);
+	// }
+	// return retVal;
+	// }
+	//
+	// public Object set(int index, Object element) {
+	// Object retVal = get(index);
+	// int ele = ((Integer) element).intValue();
+	// d.set(index, ele);
+	// return retVal;
+	// }
+	//
+	// public boolean remove(Object o) {
+	// Integer I = (Integer) o;
+	// int i = I.intValue();
+	// boolean retVal = d.contains(i);
+	// if (retVal) {
+	// d.remove(i);
+	// }
+	// return retVal;
+	// }
+	//
+	// public Object remove(int index) {
+	// int i = d.get(index);
+	// Integer retVal = Integer.valueOf(i);
+	// d.remove(index);
+	// return retVal;
+	// }
+	//
+	// public int indexOf(Object o) {
+	// int retVal = -1;
+	// if (o instanceof Integer) {
+	// int i = ((Integer) o).intValue();
+	// retVal = d.indexOf(i);
+	// }
+	// return retVal;
+	// }
+	//
+	// public Iterator iterator() {
+	// throw new Error("not implemented");
+	// }
+	//
+	// public boolean addAll(int index, Collection c) {
+	// throw new Error("not implemented");
+	// }
+	//
+	// public boolean containsAll(Collection c) {
+	// throw new Error("not implemented");
+	// }
+	//
+	// public boolean removeAll(Collection c) {
+	// throw new Error("not implemented");
+	// }
+	//
+	// public boolean retainAll(Collection c) {
+	// throw new Error("not implemented");
+	// }
+	//
+	// public int lastIndexOf(Object o) {
+	// throw new Error("not implemented");
+	// }
+	//
+	// public ListIterator listIterator() {
+	// throw new Error("not implemented");
+	// }
+	//
+	// public ListIterator listIterator(int index) {
+	// throw new Error("not implemented");
+	// }
+	//
+	// public List subList(int fromIndex, int toIndex) {
+	// throw new Error("not implemented");
+	// }
+	//
+	// };
+	// }
 
 }

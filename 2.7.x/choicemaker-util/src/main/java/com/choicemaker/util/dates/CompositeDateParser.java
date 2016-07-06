@@ -71,7 +71,9 @@ public class CompositeDateParser implements IDateParser {
 	/**
 	 * Returns a matcher from the disjunction of all the parser patterns.
 	 * Possibly (certainly?) useless, but required by the IDateParser interface.
-	 * @throws NullPointerException if the input string is null
+	 * 
+	 * @throws NullPointerException
+	 *             if the input string is null
 	 */
 	@Override
 	public Matcher matcher(String s) {

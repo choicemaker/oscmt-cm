@@ -19,49 +19,51 @@ import java.util.Map;
 /**
  * .
  *
- * @author   Adam Winkel
+ * @author Adam Winkel
  */
-@SuppressWarnings({"rawtypes", "unchecked"})
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class DoubleValuedHashMap extends HashMap {
 	private static final long serialVersionUID = 1L;
 
-	public DoubleValuedHashMap() { }
+	public DoubleValuedHashMap() {
+	}
 
 	public DoubleValuedHashMap(Map map) {
 		super(map);
 	}
-		
+
 	public DoubleValuedHashMap(DoubleValuedHashMap map) {
-		super(map);	
+		super(map);
 	}
-	
+
+	@Override
 	public Object put(Object key, Object value) {
 		if (!(value instanceof Double)) {
-			throw new IllegalArgumentException();	
+			throw new IllegalArgumentException();
 		}
-	
-		return super.put(key, value);	
+
+		return super.put(key, value);
 	}
-	
+
 	public void putDouble(Object key, double value) {
-		super.put(key, new Double(value));	
+		super.put(key, new Double(value));
 	}
 
 	public double getDouble(Object key) {
-		Double value = (Double)get(key);
+		Double value = (Double) get(key);
 		if (value != null)
 			return value.doubleValue();
 		else
 			return 0.0;
 	}
-		
+
 	public void increment(Object key) {
-		putDouble(key, getDouble(key) + 1);	
+		putDouble(key, getDouble(key) + 1);
 	}
-	
+
 	public List sortedKeys() {
 		List keys = new ArrayList(keySet());
 		Collections.sort(keys, new MapKeyComparator(this));
-		return keys;		
+		return keys;
 	}
 }

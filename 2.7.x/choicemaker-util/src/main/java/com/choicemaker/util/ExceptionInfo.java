@@ -33,7 +33,7 @@ public class ExceptionInfo {
 			causeMessage = "";
 		}
 	}
-	
+
 	public String getStackTrace() {
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);

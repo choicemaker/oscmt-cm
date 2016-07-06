@@ -17,8 +17,8 @@ public final class YyyyMm_DateParser extends AbstractDateParser {
 	public static final int YYYYMM_GROUP_MONTH = 2;
 	public static final int YYYYMM_GROUP_DAY = INVALID_GROUP_IDX;
 
-	private static AtomicReference<Pattern> YYYYMM_PATTERN =
-		new AtomicReference<>(null);
+	private static AtomicReference<Pattern> YYYYMM_PATTERN = new AtomicReference<>(
+			null);
 
 	public YyyyMm_DateParser() {
 		super(REGEX_YYYYMM, YYYYMM_GROUP_YEAR, YYYYMM_GROUP_MONTH,
@@ -30,13 +30,11 @@ public final class YyyyMm_DateParser extends AbstractDateParser {
 	@Override
 	public Pattern getPattern() {
 		// Get the date matching pattern, or compile and set it if needed
-		boolean wasNull =
-			YYYYMM_PATTERN.compareAndSet(null,
-					Pattern.compile(REGEX_YYYYMM));
+		boolean wasNull = YYYYMM_PATTERN.compareAndSet(null,
+				Pattern.compile(REGEX_YYYYMM));
 		if (wasNull) {
-			String msg =
-				"Compiled the standard date pattern from '" + REGEX_YYYYMM
-						+ "'";
+			String msg = "Compiled the standard date pattern from '"
+					+ REGEX_YYYYMM + "'";
 			logger.info(msg);
 		}
 		Pattern retVal = YYYYMM_PATTERN.get();

@@ -18,42 +18,44 @@ import java.util.List;
 /**
  * .
  *
- * @author   Adam Winkel
+ * @author Adam Winkel
  */
-@SuppressWarnings({"rawtypes", "unchecked"})
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class IntValuedHashMap extends HashMap {
 	private static final long serialVersionUID = 1L;
 
-	public IntValuedHashMap() { }
-		
-	public IntValuedHashMap(IntValuedHashMap map) {
-		super(map);	
+	public IntValuedHashMap() {
 	}
-	
+
+	public IntValuedHashMap(IntValuedHashMap map) {
+		super(map);
+	}
+
+	@Override
 	public Object put(Object key, Object value) {
 		if (!(value instanceof Integer)) {
-			throw new IllegalArgumentException();	
+			throw new IllegalArgumentException();
 		}
-	
-		return super.put(key, value);	
+
+		return super.put(key, value);
 	}
-	
+
 	public void putInt(Object key, int value) {
-		super.put(key, new Integer(value));	
+		super.put(key, new Integer(value));
 	}
 
 	public int getInt(Object key) {
-		Integer value = (Integer)get(key);
+		Integer value = (Integer) get(key);
 		if (value != null)
 			return value.intValue();
 		else
 			return 0;
 	}
-		
+
 	public void increment(Object key) {
-		putInt(key, getInt(key) + 1);	
+		putInt(key, getInt(key) + 1);
 	}
-	
+
 	public List sortedKeys() {
 		List keys = new ArrayList(keySet());
 		Collections.sort(keys, new MapKeyComparator(this));

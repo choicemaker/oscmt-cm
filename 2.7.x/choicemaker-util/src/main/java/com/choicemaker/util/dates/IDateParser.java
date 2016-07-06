@@ -3,9 +3,9 @@ package com.choicemaker.util.dates;
 import com.choicemaker.util.IRegexParser;
 
 /**
- * An extension of IRegexParser<YearMonthDay> which guarantees that the parse
- * method will return a {@link YearMonthDay#PLACEHOLDER placeholder} if the
- * input string cannot be parsed.
+ * An extension of IRegexParser&lt;YearMonthDay&gt; which guarantees that the
+ * parse method will return a {@link YearMonthDay#PLACEHOLDER placeholder} if
+ * the input string cannot be parsed.
  */
 public interface IDateParser extends IRegexParser<YearMonthDay> {
 
@@ -18,6 +18,7 @@ public interface IDateParser extends IRegexParser<YearMonthDay> {
 	 *         {@link YearMonthDay#PLACEHOLDER placeholder}; otherwise the
 	 *         return value will be a valid YearMonthDay object.
 	 */
+	@Override
 	YearMonthDay parse(String s);
 
 }

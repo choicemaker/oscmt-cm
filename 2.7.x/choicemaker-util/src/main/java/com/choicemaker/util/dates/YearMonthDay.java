@@ -5,16 +5,20 @@ import java.util.GregorianCalendar;
 import java.util.logging.Logger;
 
 /**
- * A utility class that represents a date in a variety of formats:<ul>
+ * A utility class that represents a date in a variety of formats:
+ * <ul>
  * <li>As a Date object</li>
  * <li>As a standardardized String in the format YYYYMMDD</li>
  * <li>As three positive integers, for year ([1000-9999]), month ([1-12]) and
- * day ([1-31]).</li></ul>
+ * day ([1-31]).</li>
+ * </ul>
+ * 
  * @author rphall
  */
 public final class YearMonthDay {
 
-	private static Logger logger = Logger.getLogger(YearMonthDay.class.getName());
+	private static Logger logger = Logger.getLogger(YearMonthDay.class
+			.getName());
 
 	public final static int INVALID_DATE_COMPONENT = -1;
 	public final static int PLACEHOLDER_YEAR = 0;
@@ -53,7 +57,7 @@ public final class YearMonthDay {
 		this.month = m;
 		this.day = d;
 		// Gregorian months are 0-based
-		this.date = new GregorianCalendar(y, m-1, d).getTime();
+		this.date = new GregorianCalendar(y, m - 1, d).getTime();
 		String yyyy = String.format("%04d", y);
 		String mm = String.format("%02d", m);
 		String dd = String.format("%02d", d);
@@ -82,8 +86,8 @@ public final class YearMonthDay {
 		result = prime * result + day;
 		result = prime * result + month;
 		result = prime * result + year;
-		result =
-			prime * result + ((yyyyMmDd == null) ? 0 : yyyyMmDd.hashCode());
+		result = prime * result
+				+ ((yyyyMmDd == null) ? 0 : yyyyMmDd.hashCode());
 		return result;
 	}
 

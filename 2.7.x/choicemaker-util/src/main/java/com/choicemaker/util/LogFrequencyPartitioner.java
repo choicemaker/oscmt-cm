@@ -117,8 +117,8 @@ public class LogFrequencyPartitioner {
 		logger.fine("computeBoundary: maxCount: " + maxCount);
 		logger.fine("computeBoundary: numPartitions: " + numPartitions);
 		int[] retVal = new int[numPartitions];
-		double f =
-			Math.pow(((double) maxCount) / minCount, 1.00d / numPartitions);
+		double f = Math.pow(((double) maxCount) / minCount,
+				1.00d / numPartitions);
 		logger.fine("computeBoundary: f: " + f);
 		double b = maxCount;
 		for (int i = numPartitions - 1; i >= 0; --i) {
@@ -137,8 +137,8 @@ public class LogFrequencyPartitioner {
 	 *            an array of positive counts arranged in increasing order
 	 * @param c
 	 *            a positive count
-	 * @return the largest index for which c > partition[index], or maxIndex
-	 * if c is greater than every value in the partition
+	 * @return the largest index for which c &gt; partition[index], or maxIndex
+	 *         if c is greater than every value in the partition
 	 */
 	public static int getPartitionIndex(int[] partition, final int c) {
 		if (c < MIN_COUNT) {
@@ -155,15 +155,14 @@ public class LogFrequencyPartitioner {
 		if (assertOn) {
 			for (int i = 0; i < partition.length; i++) {
 				if (partition[i] < MIN_COUNT) {
-					String msg =
-						"Non-positive count (" + partition[i]
-								+ ") at partition index " + i;
+					String msg = "Non-positive count (" + partition[i]
+							+ ") at partition index " + i;
 					throw new IllegalArgumentException(msg);
 				}
 				if (partition[i] < previousPartition) {
-					String msg =
-						"Unordered partition (" + Arrays.toString(partition)
-								+ ") at partition index " + i;
+					String msg = "Unordered partition ("
+							+ Arrays.toString(partition)
+							+ ") at partition index " + i;
 					throw new IllegalArgumentException(msg);
 				}
 				previousPartition = partition[i];
@@ -174,7 +173,7 @@ public class LogFrequencyPartitioner {
 		int i = MIN_RANK;
 		while (i < LIMIT && c >= partition[i]) {
 			assert i < partition.length - 1;
-			if (c < partition[i+1]) {
+			if (c < partition[i + 1]) {
 				break;
 			}
 			++i;
@@ -194,6 +193,7 @@ public class LogFrequencyPartitioner {
 	 * 
 	 * @param fileName
 	 *            name of an existing value-count file
+	 * @return a non-null list of non-null ValueCount instances
 	 * @throws IOException
 	 *             if the file can not be found or opened
 	 * @throws NumberFormatException
@@ -219,6 +219,7 @@ public class LogFrequencyPartitioner {
 	 *            <code>lineSep</code> is also the element separator.
 	 * @param lineSep
 	 *            separates pairs
+	 * @return a non-null list of non-null ValueCount instances
 	 * @throws IOException
 	 *             if the file can not be found or opened
 	 * @throws NumberFormatException
@@ -247,8 +248,7 @@ public class LogFrequencyPartitioner {
 		List<ValueCount> retVal = new ArrayList<>();
 		BufferedReader in = null;
 		try {
-			FileReader fr =
-				new FileReader(new File(fileName).getAbsoluteFile());
+			FileReader fr = new FileReader(new File(fileName).getAbsoluteFile());
 			in = new BufferedReader(fr);
 			String line = in.readLine();
 			while (line != null) {
@@ -282,15 +282,13 @@ public class LogFrequencyPartitioner {
 				try {
 					count = Integer.parseInt(sCount);
 				} catch (NumberFormatException x) {
-					String msg =
-						"Invalid count (" + sCount + ") for value '" + value
-								+ "'";
+					String msg = "Invalid count (" + sCount + ") for value '"
+							+ value + "'";
 					throw new IllegalArgumentException(msg);
 				}
 				if (count < 1) {
-					String msg =
-						"Non-positive count (" + count + ") for value '"
-								+ value + "'";
+					String msg = "Non-positive count (" + count
+							+ ") for value '" + value + "'";
 					throw new IllegalArgumentException(msg);
 				}
 				ValueCount vc = new ValueCount(value, count);
@@ -312,6 +310,8 @@ public class LogFrequencyPartitioner {
 	 * lines: values on odd lines (1, 3, 5, ...) and counts on even lines (2, 4,
 	 * 6, ...).
 	 * 
+	 * @param pairs
+	 *            a non-null list of non-null ValueRank instances
 	 * @param fileName
 	 *            name of the file (must not already exist)
 	 * @throws IOException
@@ -333,6 +333,8 @@ public class LogFrequencyPartitioner {
 	 * specified element separator and value-partition pairs are separated by
 	 * the specified line separator.
 	 * 
+	 * @param pairs
+	 *            a non-null list of non-null ValueRank instances
 	 * @param fileName
 	 *            name of the file (must not already exist)
 	 * @param elementSep
@@ -342,12 +344,15 @@ public class LogFrequencyPartitioner {
 	 * @param lineSep
 	 *            separates value-partition pairs from each other. If null, then
 	 *            the system default for the line separator is used.
+	 * @param <T>
+	 *            a type that extends ValueRank
 	 * @return the number of values-partition pairs that were written
 	 * @throws IOException
 	 *             if the file can not be created or written
 	 */
-	public static <T extends ValueRank> int writeFile(List<T> pairs, String fileName,
-			Character elementSep, String lineSep) throws IOException {
+	public static <T extends ValueRank> int writeFile(List<T> pairs,
+			String fileName, Character elementSep, String lineSep)
+			throws IOException {
 		if (pairs == null) {
 			throw new IllegalArgumentException("null pairs");
 		}
@@ -479,7 +484,7 @@ public class LogFrequencyPartitioner {
 			if (getClass() != obj.getClass()) {
 				return false;
 			}
-			return super.equals((ValueRank) obj);
+			return super.equals(obj);
 			/*
 			 * ValueCount other = (ValueCount) obj; if (rank != other.rank) {
 			 * return false; } if (value == null) { if (other.value != null) {

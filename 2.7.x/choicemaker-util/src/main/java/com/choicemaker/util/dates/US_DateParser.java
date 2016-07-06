@@ -12,8 +12,7 @@ public final class US_DateParser extends AbstractDateParser {
 	private static Logger logger = Logger.getLogger(US_DateParser.class
 			.getName());
 
-	public static final String REGEX_US =
-		"^(\\d{1,2}|\\s\\d|\\d\\s)\\D(\\d{1,2}|\\s\\d|\\d\\s)\\D(\\d{4,4})$";
+	public static final String REGEX_US = "^(\\d{1,2}|\\s\\d|\\d\\s)\\D(\\d{1,2}|\\s\\d|\\d\\s)\\D(\\d{4,4})$";
 	public static final int US_GROUP_YEAR = 3;
 	public static final int US_GROUP_MONTH = 1;
 	public static final int US_GROUP_DAY = 2;
@@ -30,11 +29,11 @@ public final class US_DateParser extends AbstractDateParser {
 	@Override
 	public Pattern getPattern() {
 		// Get the date matching pattern, or compile and set it if needed
-		boolean wasNull =
-			US_PATTERN.compareAndSet(null, Pattern.compile(REGEX_US));
+		boolean wasNull = US_PATTERN.compareAndSet(null,
+				Pattern.compile(REGEX_US));
 		if (wasNull) {
-			String msg =
-				"Compiled the standard date pattern from '" + REGEX_US + "'";
+			String msg = "Compiled the standard date pattern from '" + REGEX_US
+					+ "'";
 			logger.info(msg);
 		}
 		Pattern retVal = US_PATTERN.get();

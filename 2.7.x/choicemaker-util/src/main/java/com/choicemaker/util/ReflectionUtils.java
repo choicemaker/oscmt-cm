@@ -4,7 +4,7 @@ import java.lang.reflect.Method;
 import java.util.Random;
 import java.util.UUID;
 
-@SuppressWarnings({"rawtypes", "unchecked"})
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class ReflectionUtils {
 
 	private static final Random random = new Random();
@@ -176,7 +176,7 @@ public class ReflectionUtils {
 		try {
 			final Class c = nce.getClass();
 			final Method accessor = getAccessor(c, p, pn);
-			retVal = (Object) accessor.invoke(nce, (Object[]) null);
+			retVal = accessor.invoke(nce, (Object[]) null);
 		} catch (Exception e) {
 			fail(METHOD, nce, p, pn, e);
 		}
@@ -203,8 +203,8 @@ public class ReflectionUtils {
 			// Confirm the existing value is different from the new value
 			// @SuppressWarnings("unchecked")
 			if (requireChange) {
-				final Object existingValue =
-					(Object) accessor.invoke(nce, (Object[]) null);
+				final Object existingValue = accessor.invoke(nce,
+						(Object[]) null);
 				assertTrue(!pv.equals(existingValue));
 			}
 
@@ -232,7 +232,7 @@ public class ReflectionUtils {
 			final Class c = nce.getClass();
 			final Method accessor = getAccessor(c, p, pn);
 			// @SuppressWarnings("unchecked")
-			Object value = (Object) accessor.invoke(nce, (Object[]) null);
+			Object value = accessor.invoke(nce, (Object[]) null);
 			assertTrue(pv.equals(value));
 		} catch (Exception e) {
 			fail(METHOD, nce, p, pn, pv, e);

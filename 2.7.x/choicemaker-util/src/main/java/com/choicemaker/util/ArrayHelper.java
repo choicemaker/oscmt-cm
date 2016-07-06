@@ -32,11 +32,12 @@ public class ArrayHelper {
 	/**
 	 * Returns a boolean array with all elements set to <code>true</code>.
 	 *
-	 * This method is useful for creating a <code>cluesToEvaluate</code>
-	 * value that can be used to evaluate all clues.
+	 * This method is useful for creating a <code>cluesToEvaluate</code> value
+	 * that can be used to evaluate all clues.
 	 *
-	 * @return  A boolean array of length <code>size</code> with all
-	 *            elements set to <code>true</code>.
+@param size a positive integer
+	 * @return A boolean array of length <code>size</code> with all elements set
+	 *         to <code>true</code>.
 	 */
 	public static boolean[] getTrueArray(int size) {
 		boolean[] res = new boolean[size];

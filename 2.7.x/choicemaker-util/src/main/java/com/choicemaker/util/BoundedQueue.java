@@ -11,10 +11,10 @@
 package com.choicemaker.util;
 
 /**
- * Implementation of a bounded buffer that we can &quot;close&quot;, that is, 
- * we can tell Threads waiting in or calling get() that there will never be
- * more elements added to the queue (and thus they should wake up and return null
- * or not wait at all, respectively).
+ * Implementation of a bounded buffer that we can &quot;close&quot;, that is, we
+ * can tell Threads waiting in or calling get() that there will never be more
+ * elements added to the queue (and thus they should wake up and return null or
+ * not wait at all, respectively).
  */
 public final class BoundedQueue {
 
@@ -22,26 +22,27 @@ public final class BoundedQueue {
 	private int putIndex;
 	private int getIndex;
 	private int size;
-	
+
 	private boolean closed = false;
-	
+
 	public BoundedQueue(int capacity) {
 		if (capacity < 1) {
 			throw new IllegalArgumentException();
 		}
 		buffer = new Object[capacity];
 	}
-	
+
 	public int size() {
 		return size;
 	}
-	
+
 	public synchronized void put(Object obj) {
 		// can't put null Objects
 		if (obj == null) {
-			throw new IllegalArgumentException("Can't put a null into the buffer!");
+			throw new IllegalArgumentException(
+					"Can't put a null into the buffer!");
 		}
-		
+
 		// check if this buffer has been closed
 		if (closed) {
 			throw new IllegalStateException("Buffer closed!");
@@ -54,42 +55,44 @@ public final class BoundedQueue {
 
 		// check if this buffer has been closed
 		if (closed) {
-			throw new IllegalStateException("Buffer closed by a different thread!");
+			throw new IllegalStateException(
+					"Buffer closed by a different thread!");
 		}
-		
+
 		// put the object
 		buffer[putIndex] = obj;
 		putIndex = (putIndex + 1) % buffer.length;
-		
+
 		// if this was empty, notify everyone that was
 		// waiting on it.
 		if (size++ == 0) {
 			notifyAll();
 		}
 	}
-	
+
 	public synchronized Object get() {
-		// wait until there is an object to get 
+		// wait until there is an object to get
 		while (!closed && size == 0) {
-			tryWait(); 
+			tryWait();
 		}
-		
-		// if the buffer will never have another element, return null to indicate it
+
+		// if the buffer will never have another element, return null to
+		// indicate it
 		if (closed && size == 0) {
 			return null;
 		}
-		
+
 		// get an object
 		Object obj = buffer[getIndex];
 		buffer[getIndex] = null;
 		getIndex = (getIndex + 1) % buffer.length;
-		
-		// if the buffer was full, notify everyone that was 
+
+		// if the buffer was full, notify everyone that was
 		// waiting on it.
 		if (size-- == buffer.length) {
 			notifyAll();
 		}
-		
+
 		return obj;
 	}
 

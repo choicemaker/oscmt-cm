@@ -29,6 +29,10 @@ public final class DateParsers extends AbstractMap<String, IDateParser> {
 	 * Parses a String value that represents a date into a {@link YearMonthDay}
 	 * object using the named parser
 	 * 
+	 * @param parserName
+	 *            the name of a registered parser
+	 * @param date
+	 *            the date to be parsed
 	 * @return a non-null YearMonthDay object. If the input string is null or
 	 *         empty, or cannot be parsed, or the named parser is not
 	 *         registered, the return value will be a (non-null)

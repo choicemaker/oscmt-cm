@@ -29,16 +29,17 @@ import java.util.logging.Logger;
 /**
  * Description
  *
- * @author  Martin Buechi
+ * @author Martin Buechi
  */
-@SuppressWarnings({"rawtypes", "unchecked"})
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class FileUtilities {
 
-    public static final String MD5_HASH_ALGORITHM = "MD5";
+	public static final String MD5_HASH_ALGORITHM = "MD5";
 
-    public static final String SHA1_HASH_ALGORITHM = "SHA1";
+	public static final String SHA1_HASH_ALGORITHM = "SHA1";
 
-	private static Logger logger = Logger.getLogger(FileUtilities.class.getName());
+	private static Logger logger = Logger.getLogger(FileUtilities.class
+			.getName());
 
 	public static File resolveFile(File relativeTo, String fileName) {
 		if (relativeTo == null) {
@@ -56,11 +57,11 @@ public class FileUtilities {
 	}
 
 	/**
-	 * Returns a file <code>rel</code> such that
-	 *
-	 *  file.getCanonicalFile().toString.equals( new File(relativeToDir, rel.toString()).getCanonicalFile() )
-	 *
-	 * returns true.
+	 * Returns a file in canonical form for the path from <code>relativeToDir</code>
+to <code>file</code>
+@param relativeToDir the anchor of the path to be formed
+@param file the relative path from the anchor
+@return a file in canonical form
 	 */
 	public static File getRelativeFile(File relativeToDir, String file) {
 
@@ -80,7 +81,8 @@ public class FileUtilities {
 
 		// figure out how long they're the same...
 		int sameIndex = -1;
-		while (sameIndex + 1 < relPieces.size() && sameIndex + 1< fPieces.size()) {
+		while (sameIndex + 1 < relPieces.size()
+				&& sameIndex + 1 < fPieces.size()) {
 			if (relPieces.get(sameIndex + 1).equals(fPieces.get(sameIndex + 1))) {
 				sameIndex++;
 			} else {
@@ -127,7 +129,8 @@ public class FileUtilities {
 		return new File(file).isAbsolute();
 	}
 
-	public static URL[] cpToUrls(File wdir, String cp) throws MalformedURLException, IOException {
+	public static URL[] cpToUrls(File wdir, String cp)
+			throws MalformedURLException, IOException {
 		StringTokenizer st = new StringTokenizer(cp, ";:" + File.pathSeparator);
 		List l = new ArrayList();
 		while (st.hasMoreElements()) {
@@ -145,8 +148,11 @@ public class FileUtilities {
 		if (!path.startsWith("/")) {
 			path = "/" + path;
 		}
-		String ext = path.substring(Math.max(0, path.length() - 4), path.length()).toUpperCase().intern();
-		if (!path.endsWith("/") && (f.isDirectory() || !(ext == ".JAR" || ext == ".ZIP"))) {
+		String ext = path
+				.substring(Math.max(0, path.length() - 4), path.length())
+				.toUpperCase().intern();
+		if (!path.endsWith("/")
+				&& (f.isDirectory() || !(ext == ".JAR" || ext == ".ZIP"))) {
 			path = path + "/";
 		}
 		return new URL("file", "", path);
@@ -154,7 +160,9 @@ public class FileUtilities {
 
 	public static File findFileOnClasspath(String name) {
 		File file = null;
-		StringTokenizer st = new StringTokenizer(System.getProperty("java.class.path"), ";:" + File.pathSeparator);
+		StringTokenizer st = new StringTokenizer(
+				System.getProperty("java.class.path"), ";:"
+						+ File.pathSeparator);
 		while (file == null && st.hasMoreElements()) {
 			String t = st.nextToken();
 			File f = new File(t + File.separatorChar + name);
@@ -165,7 +173,8 @@ public class FileUtilities {
 		return file;
 	}
 
-	public static String toAbsoluteClasspath(File wdir, String cp) throws IOException {
+	public static String toAbsoluteClasspath(File wdir, String cp)
+			throws IOException {
 		StringBuffer res = new StringBuffer();
 		StringTokenizer st = new StringTokenizer(cp, ";" + File.pathSeparator);
 		while (st.hasMoreElements()) {
@@ -175,7 +184,8 @@ public class FileUtilities {
 		return res.toString();
 	}
 
-	public static String toAbsoluteUrlClasspath(File wdir, String cp) throws IOException {
+	public static String toAbsoluteUrlClasspath(File wdir, String cp)
+			throws IOException {
 		StringBuffer res = new StringBuffer();
 		StringTokenizer st = new StringTokenizer(cp, ";" + File.pathSeparator);
 		while (st.hasMoreElements()) {
@@ -186,11 +196,13 @@ public class FileUtilities {
 	}
 
 	/**
-	 * Deletes the files and subdirectories contained in the specified
-	 * directory <code>d</code>. If the specified file <code>d</code>
-	 * is not a directory, this method has no effect.
-	 * @param d a non-null file or directory. If a file, this method has no effect.
-	 * If a directory has empty, this method has no effect.
+	 * Deletes the files and subdirectories contained in the specified directory
+	 * <code>d</code>. If the specified file <code>d</code> is not a directory,
+	 * this method has no effect.
+	 * 
+	 * @param d
+	 *            a non-null file or directory. If a file, this method has no
+	 *            effect. If a directory has empty, this method has no effect.
 	 */
 	public static void removeChildren(File d) {
 		if (d == null) {
@@ -236,7 +248,7 @@ public class FileUtilities {
 
 	public static String getExtension(String fileName) {
 		int n = fileName.lastIndexOf('.');
-		if(n > 0) {
+		if (n > 0) {
 			return fileName.substring(n + 1);
 		} else {
 			return "";
@@ -245,7 +257,7 @@ public class FileUtilities {
 
 	public static String getBase(String fileName) {
 		int n = fileName.lastIndexOf('.');
-		if(n > 0) {
+		if (n > 0) {
 			return fileName.substring(0, n);
 		} else {
 			return fileName;
@@ -253,74 +265,75 @@ public class FileUtilities {
 	}
 
 	public static boolean hasExtension(File f, String extension) {
-		return f.getName().toLowerCase().endsWith("." + extension.toLowerCase());
+		return f.getName().toLowerCase()
+				.endsWith("." + extension.toLowerCase());
 	}
 
 	public static File addExtensionIfNecessary(File f, String extension) {
-		if(hasExtension(f, extension)) {
+		if (hasExtension(f, extension)) {
 			return f;
 		} else {
 			return new File(f.getAbsolutePath() + "." + extension);
 		}
 	}
 
-    /**
-     * Computes the MD5 or SHA1
-     *
-     * @param algo
-     *            see {@link #MD5_HASH_ALGORITHM} and
-     *            {@link #SHA1_HASH_ALGORITHM}
-     * @param f
-     *            a non-null, readable file
-     * @return A String representing the hash value in hexadecimal
-     * @throws IllegalArgumentException
-     *             if <code>algo</code> is neither MD5 nor SHA1, or if
-     *             <code>f</code> is null, doesn't exist or can not be read
-     * @throws IOException
-     *             if a IO exception occurs while the file is being read
-     * @throws Error
-     *          if a NoSuchAlgorithmException occurs (should never happen)
-     */
-    public static String computeHash(String algo, File f)
-            throws IllegalArgumentException, IOException {
-        if (!MD5_HASH_ALGORITHM.equals(algo)
-                && !SHA1_HASH_ALGORITHM.equals(algo)) {
-            throw new IllegalArgumentException("invalid algorithm: " + algo);
-        }
-        if (f == null || !f.exists() || !f.canRead()) {
-            String fName = f == null ? "null" : f.getName();
-            String msg =
-                "file '" + fName + "' is null, doesn't exist or cannot be read";
-            throw new IllegalArgumentException(msg);
-        }
+	/**
+	 * Computes the MD5 or SHA1
+	 *
+	 * @param algo
+	 *            see {@link #MD5_HASH_ALGORITHM} and
+	 *            {@link #SHA1_HASH_ALGORITHM}
+	 * @param f
+	 *            a non-null, readable file
+	 * @return A String representing the hash value in hexadecimal
+	 * @throws IllegalArgumentException
+	 *             if <code>algo</code> is neither MD5 nor SHA1, or if
+	 *             <code>f</code> is null, doesn't exist or can not be read
+	 * @throws IOException
+	 *             if a IO exception occurs while the file is being read
+	 * @throws Error
+	 *             if a NoSuchAlgorithmException occurs (should never happen)
+	 */
+	public static String computeHash(String algo, File f)
+			throws IllegalArgumentException, IOException {
+		if (!MD5_HASH_ALGORITHM.equals(algo)
+				&& !SHA1_HASH_ALGORITHM.equals(algo)) {
+			throw new IllegalArgumentException("invalid algorithm: " + algo);
+		}
+		if (f == null || !f.exists() || !f.canRead()) {
+			String fName = f == null ? "null" : f.getName();
+			String msg = "file '" + fName
+					+ "' is null, doesn't exist or cannot be read";
+			throw new IllegalArgumentException(msg);
+		}
 
-        byte[] buffer = new byte[8192];
-        BufferedInputStream bis = null;
-        try {
-            MessageDigest digest = null;
-            digest = MessageDigest.getInstance(algo);
-            InputStream fis = new FileInputStream(f);
-            bis = new BufferedInputStream(fis);
-            int n = bis.read(buffer);
-            while (n != -1) {
-                if (n > 0) {
-                    digest.update(buffer, 0, n);
-                }
-                n = bis.read(buffer);
-            }
-            buffer = digest.digest();
-        } catch (NoSuchAlgorithmException e) {
-            String msg = "UNEXPECTED FAILURE: algorithm '" + algo + "'";
-            throw new Error(msg, e);
-        } finally {
-            if (bis != null) {
-                bis.close();
-            }
-        }
-        String retVal = bytesToHex(buffer);
+		byte[] buffer = new byte[8192];
+		BufferedInputStream bis = null;
+		try {
+			MessageDigest digest = null;
+			digest = MessageDigest.getInstance(algo);
+			InputStream fis = new FileInputStream(f);
+			bis = new BufferedInputStream(fis);
+			int n = bis.read(buffer);
+			while (n != -1) {
+				if (n > 0) {
+					digest.update(buffer, 0, n);
+				}
+				n = bis.read(buffer);
+			}
+			buffer = digest.digest();
+		} catch (NoSuchAlgorithmException e) {
+			String msg = "UNEXPECTED FAILURE: algorithm '" + algo + "'";
+			throw new Error(msg, e);
+		} finally {
+			if (bis != null) {
+				bis.close();
+			}
+		}
+		String retVal = bytesToHex(buffer);
 
-        return retVal;
-    }
+		return retVal;
+	}
 
 	/**
 	 * Computes the MD5 or SHA1 of a text file, ignoring EOL characters. Files
@@ -356,8 +369,8 @@ public class FileUtilities {
 		}
 		if (f == null || !f.exists() || !f.canRead()) {
 			String fName = f == null ? "null" : f.getName();
-			String msg =
-				"file '" + fName + "' is null, doesn't exist or cannot be read";
+			String msg = "file '" + fName
+					+ "' is null, doesn't exist or cannot be read";
 			throw new IllegalArgumentException(msg);
 		}
 
@@ -435,16 +448,16 @@ public class FileUtilities {
 		return retVal;
 	}
 
-    final protected static char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
+	final protected static char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
 
-    public static String bytesToHex(byte[] bytes) {
-        char[] hexChars = new char[bytes.length * 2];
-        for ( int j = 0; j < bytes.length; j++ ) {
-            int v = bytes[j] & 0xFF;
-            hexChars[j * 2] = HEX_ARRAY[v >>> 4];
-            hexChars[j * 2 + 1] = HEX_ARRAY[v & 0x0F];
-        }
-        return new String(hexChars);
-    }
+	public static String bytesToHex(byte[] bytes) {
+		char[] hexChars = new char[bytes.length * 2];
+		for (int j = 0; j < bytes.length; j++) {
+			int v = bytes[j] & 0xFF;
+			hexChars[j * 2] = HEX_ARRAY[v >>> 4];
+			hexChars[j * 2 + 1] = HEX_ARRAY[v & 0x0F];
+		}
+		return new String(hexChars);
+	}
 
 }

@@ -52,30 +52,32 @@ public abstract class AbstractDateParser implements IDateParser {
 
 	// -- Parsing methods
 
-	/** Returns the regular expression used to parse a date string */
+	/**
+	 * @return the regular expression used by this parser
+	 */
 	protected final String getRegex() {
 		return regex;
 	}
 
 	/**
-	 * Returns the index for the match group representing the year in a date, or
-	 * INVALID_GROUP_IDX if the match group does not exist.
+	 * @return the index for the match group representing the year in a date, or
+	 *         INVALID_GROUP_IDX if the match group does not exist.
 	 */
 	protected final int getGroupYearIndex() {
 		return groupYearIndex;
 	}
 
 	/**
-	 * Returns the index for the match group representing the year in a date, or
-	 * INVALID_GROUP_IDX if the match group does not exist.
+	 * @return the index for the match group representing the year in a date, or
+	 *         INVALID_GROUP_IDX if the match group does not exist.
 	 */
 	protected final int getGroupMonthIndex() {
 		return groupMonthIndex;
 	}
 
 	/**
-	 * Returns the index for the match group representing the year in a date, or
-	 * INVALID_GROUP_IDX if the match group does not exist.
+	 * @return the index for the match group representing the year in a date, or
+	 *         INVALID_GROUP_IDX if the match group does not exist.
 	 */
 	protected final int getGroupDayIndex() {
 		return groupDayIndex;
@@ -99,9 +101,8 @@ public abstract class AbstractDateParser implements IDateParser {
 					try {
 						retVal = Integer.valueOf(t);
 					} catch (NumberFormatException x) {
-						String msg =
-							"Invalid number '" + retVal + "' in match group "
-									+ groupIdx;
+						String msg = "Invalid number '" + retVal
+								+ "' in match group " + groupIdx;
 						logger.warning(msg);
 					}
 				} else {
@@ -109,22 +110,19 @@ public abstract class AbstractDateParser implements IDateParser {
 					logger.warning(msg);
 				}
 			} catch (IllegalStateException x) {
-				String msg =
-					"Match group " + groupIdx
-							+ ": No match has yet been attempted, "
-							+ "or the previous match operation failed";
+				String msg = "Match group " + groupIdx
+						+ ": No match has yet been attempted, "
+						+ "or the previous match operation failed";
 				logger.warning(msg);
 			} catch (IndexOutOfBoundsException x) {
-				String msg =
-					"Match group " + groupIdx
-							+ ": There is no capturing group in the pattern "
-							+ "with the given index " + groupIdx;
+				String msg = "Match group " + groupIdx
+						+ ": There is no capturing group in the pattern "
+						+ "with the given index " + groupIdx;
 				logger.warning(msg);
 			}
 		} else {
-			String msg =
-				"Skipping invalid group index '" + groupIdx
-						+ " for match group '" + groupName + "'";
+			String msg = "Skipping invalid group index '" + groupIdx
+					+ " for match group '" + groupName + "'";
 			logger.warning(msg);
 		}
 		return retVal;
@@ -143,9 +141,9 @@ public abstract class AbstractDateParser implements IDateParser {
 	}
 
 	/**
-	 * Converts a string into year, month and day components.
-	 * If the input string can not be parsed, then a
-	 * {@link YearMonthDay#PLACEHOLDER placeholder} is returned.
+	 * Converts a string into year, month and day components. If the input
+	 * string can not be parsed, then a {@link YearMonthDay#PLACEHOLDER
+	 * placeholder} is returned.
 	 */
 	@Override
 	public YearMonthDay parse(String s) {

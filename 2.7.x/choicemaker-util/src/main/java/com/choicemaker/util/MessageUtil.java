@@ -91,6 +91,12 @@ public class MessageUtil {
 	 * <pre>
 	 * elideString(s, startLength, 0, true)
 	 * </pre>
+	 * 
+	 * @param s
+	 *            a non-null String
+	 * @param startLength
+	 *            the initial length of the returned elision
+	 * @return an elision of the trimmed string
 	 */
 	public String elideString(String s, int startLength) {
 		return elideString(s, startLength, 0, true);
@@ -102,6 +108,14 @@ public class MessageUtil {
 	 * <pre>
 	 * elideString(s, startLength, endLength, true)
 	 * </pre>
+	 * 
+	 * @param s
+	 *            a non-null String
+	 * @param startLength
+	 *            the initial length of the returned elision
+	 * @param endLength
+	 *            the final length of the returned elision
+	 * @return an elision of the trimmed string
 	 */
 	public String elideString(String s, int startLength, int endLength) {
 		return elideString(s, startLength, endLength, true);
@@ -121,6 +135,7 @@ public class MessageUtil {
 	 * </ul>
 	 * 
 	 * @param s
+	 *            a non-null String
 	 * @param startLength
 	 *            the initial length of the returned elision, before the
 	 *            ellipsis. The starting section of the elision is the
