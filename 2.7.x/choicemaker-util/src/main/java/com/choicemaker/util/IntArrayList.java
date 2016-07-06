@@ -145,7 +145,9 @@ public class IntArrayList implements Serializable, Cloneable {
 	/**
 	 * Enlarges this IntArrayList, if needed, in order to accomodate a
 	 * <code>min</code> total elements, including existing elements.
-@param min a positive integer
+	 * 
+	 * @param min
+	 *            a positive integer
 	 */
 	public void ensureCapacity(int min) {
 		int[] tmp;

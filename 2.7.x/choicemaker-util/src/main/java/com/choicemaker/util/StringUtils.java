@@ -18,7 +18,8 @@ import java.util.StringTokenizer;
  *
  * @author Martin Buechi
  */
-@SuppressWarnings({ "rawtypes", "unchecked" })
+@SuppressWarnings({
+		"rawtypes", "unchecked" })
 public class StringUtils {
 	/**
 	 * Returns <code>true</code> iff <code>s</code> is not null and
@@ -908,7 +909,8 @@ public class StringUtils {
 	 * @return <code>s1 + &quot; &quot; + s2</code>
 	 */
 	public static String join(String s1, String s2) {
-		return join(new String[] { s1, s2 });
+		return join(new String[] {
+				s1, s2 });
 	}
 
 	/**
@@ -923,7 +925,8 @@ public class StringUtils {
 	 * @return <code>s1 + &quot; &quot; + s2 + &quot; &quot; + s3</code>
 	 */
 	public static String join(String s1, String s2, String s3) {
-		return join(new String[] { s1, s2, s3 });
+		return join(new String[] {
+				s1, s2, s3 });
 	}
 
 	/**
@@ -941,7 +944,8 @@ public class StringUtils {
 	 * @return <code>s1 + &quot; &quot; + s2 + &quot; &quot; + s3 + &quot; &quot; + s4</code>
 	 */
 	public static String join(String s1, String s2, String s3, String s4) {
-		return join(new String[] { s1, s2, s3, s4 });
+		return join(new String[] {
+				s1, s2, s3, s4 });
 	}
 
 	/**

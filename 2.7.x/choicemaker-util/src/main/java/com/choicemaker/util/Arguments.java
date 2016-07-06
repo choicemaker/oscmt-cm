@@ -25,7 +25,8 @@ import java.util.List;
  * @see <a href="http://args4j.kohsuke.org/index.html">Args4j</a>
  * @see <a href="http://jcommander.org/">JCommander</a>
  */
-@SuppressWarnings({ "rawtypes", "unchecked" })
+@SuppressWarnings({
+		"rawtypes", "unchecked" })
 public class Arguments {
 
 	public static final String DEFAULT = "$default$";
@@ -91,9 +92,10 @@ public class Arguments {
 
 	/**
 	 * Enter arguments from the command line 'args'
-   * @param args may be null
-   * @return index of an illegal
-	 * argument, or -1 for correct command lines
+	 * 
+	 * @param args
+	 *            may be null
+	 * @return index of an illegal argument, or -1 for correct command lines
 	 */
 	public int enter(String[] args) {
 		if (args == null)
@@ -127,18 +129,23 @@ public class Arguments {
 	}
 
 	/**
-	Check if option was set
-@param option a non-null String
-@return true if the option was set; false otherwise
-*/
+	 * Check if option was set
+	 * 
+	 * @param option
+	 *            a non-null String
+	 * @return true if the option was set; false otherwise
+	 */
 	public boolean optionSet(String option) {
 		return ((Boolean) arguments.get(option)).booleanValue();
 	}
 
-	/** Check the argument value 
-@param option a non-null String
-@return the value of the argument or null if the argument was not set
-*/
+	/**
+	 * Check the argument value
+	 * 
+	 * @param option
+	 *            a non-null String
+	 * @return the value of the argument or null if the argument was not set
+	 */
 	public String argumentVal(String option) {
 		Object o = arguments.get(option);
 		return (String) ((o == DEFAULT) ? null : o);

@@ -20,7 +20,8 @@ import java.util.List;
  *
  * @author Adam Winkel
  */
-@SuppressWarnings({ "rawtypes", "unchecked" })
+@SuppressWarnings({
+		"rawtypes", "unchecked" })
 public class SuffixTree {
 
 	protected PrefixTree tree;

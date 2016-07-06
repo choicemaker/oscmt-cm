@@ -57,15 +57,18 @@ public class HashUtils {
 	/**
 	 * Returns a base-64 encoded String representation of the SHA1 hash of the
 	 * specified String encoded as UTF-8 bytes.
-@param s a non-null String
-@param breakLines whether the returned value should be broken into lines
-@return the base-64 encoded hash
+	 * 
+	 * @param s
+	 *            a non-null String
+	 * @param breakLines
+	 *            whether the returned value should be broken into lines
+	 * @return the base-64 encoded hash
 	 */
 	public static String toBase64SHA1Hash(String s, boolean breakLines) {
 		String retVal = null;
 		try {
-			MessageDigest md = MessageDigest
-					.getInstance(DEFAULT_HASH_ALGORITHM);
+			MessageDigest md =
+				MessageDigest.getInstance(DEFAULT_HASH_ALGORITHM);
 			byte[] raw = md.digest(s.getBytes(DEFAULT_ENCODING));
 			retVal = Base64.encodeBytes(raw, breakLines);
 		} catch (NoSuchAlgorithmException e) {

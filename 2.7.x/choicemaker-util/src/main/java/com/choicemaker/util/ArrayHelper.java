@@ -35,7 +35,8 @@ public class ArrayHelper {
 	 * This method is useful for creating a <code>cluesToEvaluate</code> value
 	 * that can be used to evaluate all clues.
 	 *
-@param size a positive integer
+	 * @param size
+	 *            a positive integer
 	 * @return A boolean array of length <code>size</code> with all elements set
 	 *         to <code>true</code>.
 	 */

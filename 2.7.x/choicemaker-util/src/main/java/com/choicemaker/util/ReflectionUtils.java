@@ -4,7 +4,8 @@ import java.lang.reflect.Method;
 import java.util.Random;
 import java.util.UUID;
 
-@SuppressWarnings({ "rawtypes", "unchecked" })
+@SuppressWarnings({
+		"rawtypes", "unchecked" })
 public class ReflectionUtils {
 
 	private static final Random random = new Random();
@@ -203,8 +204,8 @@ public class ReflectionUtils {
 			// Confirm the existing value is different from the new value
 			// @SuppressWarnings("unchecked")
 			if (requireChange) {
-				final Object existingValue = accessor.invoke(nce,
-						(Object[]) null);
+				final Object existingValue =
+					accessor.invoke(nce, (Object[]) null);
 				assertTrue(!pv.equals(existingValue));
 			}
 

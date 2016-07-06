@@ -31,7 +31,8 @@ import java.util.logging.Logger;
  *
  * @author Martin Buechi
  */
-@SuppressWarnings({ "rawtypes", "unchecked" })
+@SuppressWarnings({
+		"rawtypes", "unchecked" })
 public class FileUtilities {
 
 	public static final String MD5_HASH_ALGORITHM = "MD5";
@@ -57,11 +58,14 @@ public class FileUtilities {
 	}
 
 	/**
-	 * Returns a file in canonical form for the path from <code>relativeToDir</code>
-to <code>file</code>
-@param relativeToDir the anchor of the path to be formed
-@param file the relative path from the anchor
-@return a file in canonical form
+	 * Returns a file in canonical form for the path from
+	 * <code>relativeToDir</code> to <code>file</code>
+	 * 
+	 * @param relativeToDir
+	 *            the anchor of the path to be formed
+	 * @param file
+	 *            the relative path from the anchor
+	 * @return a file in canonical form
 	 */
 	public static File getRelativeFile(File relativeToDir, String file) {
 
@@ -148,9 +152,9 @@ to <code>file</code>
 		if (!path.startsWith("/")) {
 			path = "/" + path;
 		}
-		String ext = path
-				.substring(Math.max(0, path.length() - 4), path.length())
-				.toUpperCase().intern();
+		String ext =
+			path.substring(Math.max(0, path.length() - 4), path.length())
+					.toUpperCase().intern();
 		if (!path.endsWith("/")
 				&& (f.isDirectory() || !(ext == ".JAR" || ext == ".ZIP"))) {
 			path = path + "/";
@@ -160,9 +164,9 @@ to <code>file</code>
 
 	public static File findFileOnClasspath(String name) {
 		File file = null;
-		StringTokenizer st = new StringTokenizer(
-				System.getProperty("java.class.path"), ";:"
-						+ File.pathSeparator);
+		StringTokenizer st =
+			new StringTokenizer(System.getProperty("java.class.path"), ";:"
+					+ File.pathSeparator);
 		while (file == null && st.hasMoreElements()) {
 			String t = st.nextToken();
 			File f = new File(t + File.separatorChar + name);
@@ -302,8 +306,8 @@ to <code>file</code>
 		}
 		if (f == null || !f.exists() || !f.canRead()) {
 			String fName = f == null ? "null" : f.getName();
-			String msg = "file '" + fName
-					+ "' is null, doesn't exist or cannot be read";
+			String msg =
+				"file '" + fName + "' is null, doesn't exist or cannot be read";
 			throw new IllegalArgumentException(msg);
 		}
 
@@ -369,8 +373,8 @@ to <code>file</code>
 		}
 		if (f == null || !f.exists() || !f.canRead()) {
 			String fName = f == null ? "null" : f.getName();
-			String msg = "file '" + fName
-					+ "' is null, doesn't exist or cannot be read";
+			String msg =
+				"file '" + fName + "' is null, doesn't exist or cannot be read";
 			throw new IllegalArgumentException(msg);
 		}
 

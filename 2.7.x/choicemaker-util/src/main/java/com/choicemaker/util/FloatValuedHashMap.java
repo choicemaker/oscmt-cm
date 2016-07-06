@@ -22,7 +22,8 @@ import java.util.Map;
  *
  * @author Adam Winkel
  */
-@SuppressWarnings({ "rawtypes", "unchecked" })
+@SuppressWarnings({
+		"rawtypes", "unchecked" })
 public class FloatValuedHashMap extends HashMap {
 	private static final long serialVersionUID = 1L;
 

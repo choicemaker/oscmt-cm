@@ -13,7 +13,8 @@ package com.choicemaker.util;
 import java.util.Comparator;
 import java.util.Map;
 
-@SuppressWarnings({ "rawtypes", "unchecked" })
+@SuppressWarnings({
+		"rawtypes", "unchecked" })
 class MapKeyComparator implements Comparator {
 
 	protected Map map;

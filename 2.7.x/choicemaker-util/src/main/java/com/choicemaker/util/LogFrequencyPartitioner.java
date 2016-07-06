@@ -117,8 +117,8 @@ public class LogFrequencyPartitioner {
 		logger.fine("computeBoundary: maxCount: " + maxCount);
 		logger.fine("computeBoundary: numPartitions: " + numPartitions);
 		int[] retVal = new int[numPartitions];
-		double f = Math.pow(((double) maxCount) / minCount,
-				1.00d / numPartitions);
+		double f =
+			Math.pow(((double) maxCount) / minCount, 1.00d / numPartitions);
 		logger.fine("computeBoundary: f: " + f);
 		double b = maxCount;
 		for (int i = numPartitions - 1; i >= 0; --i) {
@@ -155,14 +155,15 @@ public class LogFrequencyPartitioner {
 		if (assertOn) {
 			for (int i = 0; i < partition.length; i++) {
 				if (partition[i] < MIN_COUNT) {
-					String msg = "Non-positive count (" + partition[i]
-							+ ") at partition index " + i;
+					String msg =
+						"Non-positive count (" + partition[i]
+								+ ") at partition index " + i;
 					throw new IllegalArgumentException(msg);
 				}
 				if (partition[i] < previousPartition) {
-					String msg = "Unordered partition ("
-							+ Arrays.toString(partition)
-							+ ") at partition index " + i;
+					String msg =
+						"Unordered partition (" + Arrays.toString(partition)
+								+ ") at partition index " + i;
 					throw new IllegalArgumentException(msg);
 				}
 				previousPartition = partition[i];
@@ -248,7 +249,8 @@ public class LogFrequencyPartitioner {
 		List<ValueCount> retVal = new ArrayList<>();
 		BufferedReader in = null;
 		try {
-			FileReader fr = new FileReader(new File(fileName).getAbsoluteFile());
+			FileReader fr =
+				new FileReader(new File(fileName).getAbsoluteFile());
 			in = new BufferedReader(fr);
 			String line = in.readLine();
 			while (line != null) {
@@ -282,13 +284,15 @@ public class LogFrequencyPartitioner {
 				try {
 					count = Integer.parseInt(sCount);
 				} catch (NumberFormatException x) {
-					String msg = "Invalid count (" + sCount + ") for value '"
-							+ value + "'";
+					String msg =
+						"Invalid count (" + sCount + ") for value '" + value
+								+ "'";
 					throw new IllegalArgumentException(msg);
 				}
 				if (count < 1) {
-					String msg = "Non-positive count (" + count
-							+ ") for value '" + value + "'";
+					String msg =
+						"Non-positive count (" + count + ") for value '"
+								+ value + "'";
 					throw new IllegalArgumentException(msg);
 				}
 				ValueCount vc = new ValueCount(value, count);

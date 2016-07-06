@@ -24,13 +24,16 @@ public class SystemPropertyUtils {
 	public static final String PN_JAVA_HOME = "java.home";
 
 	/** Property Name for Java Virtual Machine specification version */
-	public static final String PN_JAVA_VM_SPECIFICATION_VERSION = "java.vm.specification.version";
+	public static final String PN_JAVA_VM_SPECIFICATION_VERSION =
+		"java.vm.specification.version";
 
 	/** Property Name for Java Virtual Machine specification vendor */
-	public static final String PN_JAVA_VM_SPECIFICATION_VENDOR = "java.vm.specification.vendor";
+	public static final String PN_JAVA_VM_SPECIFICATION_VENDOR =
+		"java.vm.specification.vendor";
 
 	/** Property Name for Java Virtual Machine specification name */
-	public static final String PN_JAVA_VM_SPECIFICATION_NAME = "java.vm.specification.name";
+	public static final String PN_JAVA_VM_SPECIFICATION_NAME =
+		"java.vm.specification.name";
 
 	/** Property Name for Java Virtual Machine implementation version */
 	public static final String PN_JAVA_VM_VERSION = "java.vm.version";
@@ -42,13 +45,16 @@ public class SystemPropertyUtils {
 	public static final String PN_JAVA_VM_NAME = "java.vm.name";
 
 	/** Property Name for Java Runtime Environment specification version */
-	public static final String PN_JAVA_SPECIFICATION_VERSION = "java.specification.version";
+	public static final String PN_JAVA_SPECIFICATION_VERSION =
+		"java.specification.version";
 
 	/** Property Name for Java Runtime Environment specification vendor */
-	public static final String PN_JAVA_SPECIFICATION_VENDOR = "java.specification.vendor";
+	public static final String PN_JAVA_SPECIFICATION_VENDOR =
+		"java.specification.vendor";
 
 	/** Property Name for Java Runtime Environment specification name */
-	public static final String PN_JAVA_SPECIFICATION_NAME = "java.specification.name";
+	public static final String PN_JAVA_SPECIFICATION_NAME =
+		"java.specification.name";
 
 	/** Property Name for Java class format version number */
 	public static final String PN_JAVA_CLASS_VERSION = "java.class.version";
