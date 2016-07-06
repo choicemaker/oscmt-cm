@@ -9,12 +9,11 @@ import java.util.logging.Logger;
 /**
  * A utility class that formats user-visible text using a specified resource
  * bundle.
- *
- * @author    Martin Buechi
  */
 public class MessageUtil {
 
-	private static final Logger logger = Logger.getLogger(MessageUtil.class.getName());
+	private static final Logger logger = Logger.getLogger(MessageUtil.class
+			.getName());
 	private static final Object[] ZERO_LENGTH_ARRAY = new Object[0];
 	protected ResourceBundle myResources;
 
@@ -30,7 +29,8 @@ public class MessageUtil {
 		try {
 			return myResources.getString(messageKey);
 		} catch (MissingResourceException ex) {
-			logger.severe("missing resource in locale: " + Locale.getDefault() + ": " + ex);
+			logger.severe("missing resource in locale: " + Locale.getDefault()
+					+ ": " + ex);
 			return "Missing resource: " + messageKey;
 		}
 	}
@@ -62,23 +62,104 @@ public class MessageUtil {
 
 	public String formatMessage(String messageKey, Object arg0, Object arg1,
 			Object arg2) {
-				MessageFormat mf = new MessageFormat(getMessageString(messageKey));
-				Object[] args = new Object[3];
-				args[0] = arg0;
-				args[1] = arg1;
-				args[2] = arg2;
-				return mf.format(args);
-			}
+		MessageFormat mf = new MessageFormat(getMessageString(messageKey));
+		Object[] args = new Object[3];
+		args[0] = arg0;
+		args[1] = arg1;
+		args[2] = arg2;
+		return mf.format(args);
+	}
 
 	public String formatMessage(String messageKey, Object arg0, Object arg1,
 			Object arg2, Object arg3) {
-				MessageFormat mf = new MessageFormat(getMessageString(messageKey));
-				Object[] args = new Object[4];
-				args[0] = arg0;
-				args[1] = arg1;
-				args[2] = arg2;
-				args[3] = arg3;
-				return mf.format(args);
+		MessageFormat mf = new MessageFormat(getMessageString(messageKey));
+		Object[] args = new Object[4];
+		args[0] = arg0;
+		args[1] = arg1;
+		args[2] = arg2;
+		args[3] = arg3;
+		return mf.format(args);
+	}
+
+	public static final String ELLIPSIS = "...";
+
+	public static final int ELLIPSIS_LENGTH = ELLIPSIS.length();
+
+	/**
+	 * Equivalent to:
+	 * 
+	 * <pre>
+	 * elideString(s, startLength, 0, true)
+	 * </pre>
+	 */
+	public String elideString(String s, int startLength) {
+		return elideString(s, startLength, 0, true);
+	}
+
+	/**
+	 * Equivalent to:
+	 * 
+	 * <pre>
+	 * elideString(s, startLength, endLength, true)
+	 * </pre>
+	 */
+	public String elideString(String s, int startLength, int endLength) {
+		return elideString(s, startLength, endLength, true);
+	}
+
+	/**
+	 * Elides a string; that is, replaces a section of a string with an
+	 * {@link #ELLIPSIS ellipsis (...)}. The returned elision depends on the
+	 * length of the input string:
+	 * <ul>
+	 * <li>If the length of the input string is less than <code>startLength +
+	 * endLength + ELLIPSIS_LENGTH</code>, the input string is returned without
+	 * alteration.</li>
+	 * <li>Otherwise, the returned elision consists of the first
+	 * <code>startLength</code> characters of the input string, plus an
+	 * ellipsis, plus the last <code>endLength</code> of the input string.
+	 * </ul>
+	 * 
+	 * @param s
+	 * @param startLength
+	 *            the initial length of the returned elision, before the
+	 *            ellipsis. The starting section of the elision is the
+	 *            <code>startLength</code> first characters of the input string.
+	 * @param endLength
+	 *            the final length of the returned elision, after the ellipsis.
+	 *            The final section of the elision is the <code>endLength</code>
+	 *            last characters of the input string.
+	 * @param trim
+	 *            if true, the input string is first trimmed.
+	 * @return an elision of the string. The length of the returned elision is
+	 *         <code>min(s_length, startLength + endLength + ELLIPSIS_LENGTH)</code>
+	 *         , where s_length is the length of input string after optional
+	 *         trimming.
+	 */
+	public String elideString(String s, int startLength, int endLength,
+			boolean trim) {
+		Precondition.assertNonNullArgument("null string", s);
+		Precondition.assertBoolean("negative start length", startLength > -1);
+		Precondition.assertBoolean("negative start length", startLength > -1);
+		String retVal;
+		if (trim) {
+			s = s.trim();
+		}
+		final int s_length = s.length();
+		if (s_length <= startLength + endLength + ELLIPSIS_LENGTH) {
+			retVal = s;
+		} else {
+			StringBuilder sb = new StringBuilder();
+			sb.append(s.substring(0, startLength));
+			sb.append(ELLIPSIS);
+			if (endLength > 0) {
+				int endStart = s_length - endLength;
+				String end = s.substring(endStart, s_length);
+				sb.append(end);
 			}
+			retVal = sb.toString();
+		}
+		return retVal;
+	}
 
 }
