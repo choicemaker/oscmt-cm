@@ -558,6 +558,11 @@
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
+        <artifactId>com.choicemaker.cm.io.xmlenc.gui</artifactId>
+        <version>${choicemaker.release.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.matching.cfg</artifactId>
         <version>${choicemaker.release.version}</version>
       </dependency>
@@ -914,7 +919,7 @@
       </dependency>
       <dependency>
         <groupId>com.mchange</groupId>
-        <artifactId>mchange-commons</artifactId>
+        <artifactId>mchange-commons-java</artifactId>
         <version>0.2.3.4</version>
       </dependency>
       <dependency>
