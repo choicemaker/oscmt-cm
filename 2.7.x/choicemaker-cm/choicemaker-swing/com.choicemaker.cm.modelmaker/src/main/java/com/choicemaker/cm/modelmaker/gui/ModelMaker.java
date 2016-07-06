@@ -1768,6 +1768,7 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 			addListeners();
 			setTitleMessage();
 		} catch (XmlConfException e) {
+
 			final ExceptionInfo xinfo = new ExceptionInfo(e);
 			final String fullSummary =
 				_msgs.formatMessage(
@@ -1775,7 +1776,7 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 						conf);
 			logger.severe(xinfo.toString(fullSummary));
 
-			final String shortConf = _msgs.elideString(conf, 0, 30);
+			final String shortConf = _msgs.elideFileName(conf, 50);
 			final String shortSummary =
 				_msgs.formatMessage(
 						"train.gui.modelmaker.configurationfile.invalid.error",
@@ -1784,8 +1785,13 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 			List<String> userInfo = new ArrayList<>();
 			userInfo.add(shortSummary);
 			userInfo.addAll(_msgs.exceptionInfo(xinfo));
-			JOptionPane.showMessageDialog(null, userInfo,
-					_msgs.formatMessage("error"), JOptionPane.ERROR_MESSAGE);
+			final String[] arUserInfo =
+				userInfo.toArray(new String[userInfo.size()]);
+
+			final String title = _msgs.formatMessage("error");
+
+			JOptionPane.showMessageDialog(null, arUserInfo, title,
+					JOptionPane.ERROR_MESSAGE);
 			programExit(EXIT_ERROR);
 		}
 
