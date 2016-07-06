@@ -240,12 +240,12 @@ public abstract class AbstractPairResultEntity<T extends Comparable<T>>
 			String record1Id, String record2Id, char record2Source,
 			float probability, char decision, String[] notes, String ecSHA1) {
 
-		assert this.recordType != DV_ABSTRACT.charAt(0);
-		assert this.record1Id != INVALID_RECORD_ID;
-		assert this.record2Id != INVALID_RECORD_ID;
-		assert this.record2Source != INVALID_RECORD_SOURCE;
-		assert this.probability != INVALID_PROBABILITY;
-		assert this.decision != INVALID_DECISION;
+		assert recordType != DV_ABSTRACT.charAt(0);
+		assert record1Id != INVALID_RECORD_ID;
+		assert record2Id != INVALID_RECORD_ID;
+		assert record2Source != INVALID_RECORD_SOURCE;
+		assert probability != INVALID_PROBABILITY;
+		assert decision != INVALID_DECISION;
 
 		this.jobId = jobId;
 		this.recordType = recordType;
