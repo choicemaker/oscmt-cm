@@ -24,8 +24,10 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.EventListener;
+import java.util.List;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 
@@ -106,6 +108,7 @@ import com.choicemaker.cm.module.swing.DefaultModuleMenu;
 import com.choicemaker.e2.CMPlatformRunnable;
 import com.choicemaker.util.Arguments;
 import com.choicemaker.util.ArrayHelper;
+import com.choicemaker.util.ExceptionInfo;
 import com.choicemaker.util.IntArrayList;
 
 /**
@@ -117,9 +120,14 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 
 	private static final long serialVersionUID = 1L;
 
-	public static Logger logger = Logger.getLogger(ModelMaker.class.getName());
+	private static final Logger logger = Logger.getLogger(ModelMaker.class
+			.getName());
 
-	public static String PLUGIN_APPLICATION_ID = "com.choicemaker.cm.modelmaker.ModelMaker";
+	private static final ChoiceMakerCoreMessages _msgs =
+		ChoiceMakerCoreMessages.m;
+
+	public static String PLUGIN_APPLICATION_ID =
+		"com.choicemaker.cm.modelmaker.ModelMaker";
 
 	public static final int CLUES = 1;
 	public static final int RULES = 2;
@@ -133,31 +141,31 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 	private int returnCode = EXIT_ERROR;
 
 	protected boolean isWait() {
-		synchronized(statusSynchronization) {
+		synchronized (statusSynchronization) {
 			return doWait;
 		}
 	}
 
 	protected void setWait(boolean doWait) {
-		synchronized(statusSynchronization) {
+		synchronized (statusSynchronization) {
 			this.doWait = doWait;
 		}
 	}
 
 	public boolean isReady() {
-		synchronized(statusSynchronization) {
+		synchronized (statusSynchronization) {
 			return isReady;
 		}
 	}
 
 	private void setReady(boolean isReady) {
-		synchronized(statusSynchronization) {
+		synchronized (statusSynchronization) {
 			this.isReady = isReady;
 		}
 	}
 
 	protected int getReturnCode() {
-		synchronized(statusSynchronization) {
+		synchronized (statusSynchronization) {
 			return returnCode;
 		}
 	}
@@ -173,48 +181,53 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 		}
 	}
 
-	//XmlConf file name
-//	private static String xmlConfFileName;
+	// XmlConf file name
+	// private static String xmlConfFileName;
 
 	// Delegates
-	final private IUserMessages userMessages =
-	new IUserMessages() {
-			public Writer getWriter() {
-				return ModelMaker.this.getMessagePanel().getWriter();
-			}
-			public OutputStream getOutputStream() {
-				return ModelMaker.this.getMessagePanel().getOutputStream();
-			}
-			public PrintStream getPrintStream() {
-				return ModelMaker.this.getMessagePanel().getPrintStream();
-			}
-			public void postMessage(final String s) {
-				ModelMaker.this.getMessagePanel().getPrintStream().println(s);
-			}
-			public void clearMessages() {
-				ModelMaker.this.getMessagePanel().clearMessages();
-			}
-			public void postInfo(String s) {
-				String displayString =
-					ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.message.info", s) + Constants.LINE_SEPARATOR;
-				ModelMaker.this.getMessagePanel().postMessage(displayString);
-			}
+	final private IUserMessages userMessages = new IUserMessages() {
+		public Writer getWriter() {
+			return ModelMaker.this.getMessagePanel().getWriter();
+		}
+
+		public OutputStream getOutputStream() {
+			return ModelMaker.this.getMessagePanel().getOutputStream();
+		}
+
+		public PrintStream getPrintStream() {
+			return ModelMaker.this.getMessagePanel().getPrintStream();
+		}
+
+		public void postMessage(final String s) {
+			ModelMaker.this.getMessagePanel().getPrintStream().println(s);
+		}
+
+		public void clearMessages() {
+			ModelMaker.this.getMessagePanel().clearMessages();
+		}
+
+		public void postInfo(String s) {
+			String displayString =
+				_msgs.formatMessage("train.gui.modelmaker.message.info", s)
+						+ Constants.LINE_SEPARATOR;
+			ModelMaker.this.getMessagePanel().postMessage(displayString);
+		}
 	};
 
 	public IUserMessages getUserMessages() {
 		return userMessages;
 	}
 
-	//Frame icon
+	// Frame icon
 	private ImageIcon cmIcon;
 
-	//Main content panel of this JFrame
+	// Main content panel of this JFrame
 	private JPanel myContentPanel;
 
-	//RecordPairFilterDialog
+	// RecordPairFilterDialog
 	private ListeningMarkedRecordPairFilter filter;
 
-	//Menus
+	// Menus
 	private JMenuBar myMenuBar;
 	private SourceMenu sourceMenu;
 	private ModelMenu modelMenu;
@@ -226,10 +239,10 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 	private ToolBar toolbar;
 	private RecordPairList recordPairList;
 
-	//message panel
+	// message panel
 	private MessagePanel messagePanel;
 
-	//tabbed panes
+	// tabbed panes
 	private JTabbedPane tabbedPane;
 	private JSplitPane splitPane;
 	private TrainingControlPanel trainingPanel;
@@ -237,15 +250,17 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 	private HumanReviewPanel reviewPanel;
 	private DefaultManagedPanel modulePanel;
 
-	//training objects
+	// training objects
 	private IProbabilityModel probabilityModel;
 	private MarkedRecordPairSource markedRecordPairSource;
 	private static final int NUM_SOURCES = 2;
-	private MarkedRecordPairSource[] multiSources = new MarkedRecordPairSource[NUM_SOURCES];
+	private MarkedRecordPairSource[] multiSources =
+		new MarkedRecordPairSource[NUM_SOURCES];
 	private boolean keepAllSourcesInMemory;
 	private int usedMultiSource = 0;
 	@SuppressWarnings("unchecked")
-	private java.util.List<MarkedRecordPairSource>[] multiSourceLists = new java.util.List[NUM_SOURCES];
+	private java.util.List<MarkedRecordPairSource>[] multiSourceLists =
+		new java.util.List[NUM_SOURCES];
 	private boolean[] multiIncludeHolds = new boolean[NUM_SOURCES];
 	private boolean includeHolds; // in source
 	private Trainer trainer;
@@ -256,19 +271,22 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 	private int[] selection;
 	private Repository repository = new Repository(null, null);
 
-	//thresholds
+	// thresholds
 	private Thresholds thresholds;
 
 	private int markedRecordPair;
 	private boolean sourceDataModified;
 
-	private static Preferences preferences = Preferences.userNodeForPackage(ModelMaker.class);
+	private static Preferences preferences = Preferences
+			.userNodeForPackage(ModelMaker.class);
 
 	// listeners
-	private EventMultiplexer probabilityModelEventMultiplexer = new EventMultiplexer();
+	private EventMultiplexer probabilityModelEventMultiplexer =
+		new EventMultiplexer();
 	private EventListenerList listenerList = new EventListenerList();
 
-	private static final String FRAME_TITLE = ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.title");
+	private static final String FRAME_TITLE = _msgs
+			.formatMessage("train.gui.modelmaker.title");
 
 	public EventMultiplexer getProbabilityModelEventMultiplexer() {
 		return probabilityModelEventMultiplexer;
@@ -278,24 +296,28 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 		listenerList.add(RepositoryChangeListener.class, l);
 	}
 
-	public void removeMarkedRecordPairDataChangeListener(RepositoryChangeListener l) {
+	public void removeMarkedRecordPairDataChangeListener(
+			RepositoryChangeListener l) {
 		listenerList.remove(RepositoryChangeListener.class, l);
 	}
 
 	public void fireMarkedRecordPairDataChange(RepositoryChangeEvent evt) {
 		setSourceDataModified(true);
-		EventListener[] listeners = listenerList.getListeners(RepositoryChangeListener.class);
+		EventListener[] listeners =
+			listenerList.getListeners(RepositoryChangeListener.class);
 		for (int i = listeners.length - 1; i >= 0; --i) {
 			switch (evt.getID()) {
-				case RepositoryChangeEvent.SET_CHANGED :
-					 ((RepositoryChangeListener) listeners[i]).setChanged(evt);
-					break;
-				case RepositoryChangeEvent.RECORD_DATA_CHANGED :
-					 ((RepositoryChangeListener) listeners[i]).recordDataChanged(evt);
-					break;
-				case RepositoryChangeEvent.MARKUP_DATA_CHANGED :
-					 ((RepositoryChangeListener) listeners[i]).markupDataChanged(evt);
-					break;
+			case RepositoryChangeEvent.SET_CHANGED:
+				((RepositoryChangeListener) listeners[i]).setChanged(evt);
+				break;
+			case RepositoryChangeEvent.RECORD_DATA_CHANGED:
+				((RepositoryChangeListener) listeners[i])
+						.recordDataChanged(evt);
+				break;
+			case RepositoryChangeEvent.MARKUP_DATA_CHANGED:
+				((RepositoryChangeListener) listeners[i])
+						.markupDataChanged(evt);
+				break;
 			}
 		}
 	}
@@ -309,7 +331,8 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 	}
 
 	private void fireEvaluated(EvaluationEvent evt) {
-		EventListener[] listeners = listenerList.getListeners(EvaluationListener.class);
+		EventListener[] listeners =
+			listenerList.getListeners(EvaluationListener.class);
 		for (int i = listeners.length - 1; i >= 0; --i) {
 			((EvaluationListener) listeners[i]).evaluated(evt);
 		}
@@ -323,45 +346,56 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 	}
 
 	/**
-	 * Instantiates the one instance of Trainer that is used
-	 * throughout.  Sets the look and feel.  Gives this JFrame
-	 * its title and title icon.  Creates the content panel.
+	 * Instantiates the one instance of Trainer that is used throughout. Sets
+	 * the look and feel. Gives this JFrame its title and title icon. Creates
+	 * the content panel.
 	 */
 	private void init() {
-		//Set the frame title
+		// Set the frame title
 		setTitle(FRAME_TITLE);
-		cmIcon = new ImageIcon(ModelMaker.class.getResource("images/cmIcon.gif"));
+		cmIcon =
+			new ImageIcon(ModelMaker.class.getResource("images/cmIcon.gif"));
 		setIconImage(cmIcon.getImage());
-		//Create the content panel
+		// Create the content panel
 		myContentPanel = new JPanel();
 		getContentPane().add(myContentPanel, BorderLayout.CENTER);
 		filter = new ModelMakerMRPFilter(this);
 
-		float _dt = getPreferences().getFloat(PreferenceKeys.DIFFER_THRESHOLD,PreferenceDefaults.DIFFER_THRESHOLD);
-		float _mt = getPreferences().getFloat(PreferenceKeys.MATCH_THRESHOLD,PreferenceDefaults.MATCH_THRESHOLD);
+		float _dt =
+			getPreferences().getFloat(PreferenceKeys.DIFFER_THRESHOLD,
+					PreferenceDefaults.DIFFER_THRESHOLD);
+		float _mt =
+			getPreferences().getFloat(PreferenceKeys.MATCH_THRESHOLD,
+					PreferenceDefaults.MATCH_THRESHOLD);
 		setThresholds(new Thresholds(_dt, _mt));
 	}
 
 	/**
-	 * Instantiates the main panels - Message, Training, Testing,
-	 * and Review. Loads the latter three into a tabbed pane.
+	 * Instantiates the main panels - Message, Training, Testing, and Review.
+	 * Loads the latter three into a tabbed pane.
 	 */
 	private void buildComponents() {
 		JavaHelpUtils.init(ModelMaker.class.getClassLoader());
 
 		// Toolbar
-		toolbar = new ToolBar(this, ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.modelmaker"));
+		toolbar =
+			new ToolBar(this,
+					_msgs.formatMessage("train.gui.modelmaker.modelmaker"));
 		getContentPane().add(toolbar, BorderLayout.NORTH);
 
 		// Menus
 		myMenuBar = new JMenuBar();
 		setJMenuBar(myMenuBar);
 
-		JMenu fileMenu = new JMenu(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.menu.file"));
+		JMenu fileMenu =
+			new JMenu(_msgs.formatMessage("train.gui.modelmaker.menu.file"));
 		fileMenu.setMnemonic(KeyEvent.VK_F);
 		myMenuBar.add(fileMenu);
-		exitItem = new JMenuItem(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.menu.file.exit"));
-		exitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, ActionEvent.ALT_MASK));
+		exitItem =
+			new JMenuItem(
+					_msgs.formatMessage("train.gui.modelmaker.menu.file.exit"));
+		exitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4,
+				ActionEvent.ALT_MASK));
 		fileMenu.add(exitItem);
 
 		modelMenu = new ModelMenu(this);
@@ -373,29 +407,38 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 		viewMenu = new ViewMenu(this);
 		myMenuBar.add(viewMenu);
 
-		//MessagePanel
+		// MessagePanel
 		messagePanel = new MessagePanel(this);
 
-		//TrainingPanel
+		// TrainingPanel
 		trainingPanel = new TrainingControlPanel(this);
 
-		//TestingPanel
+		// TestingPanel
 		testingPanel = new TestingControlPanel(this);
 
-		//ClusterPanel
-		modulePanel = new DefaultManagedPanel(messagePanel.getDocument(),this);
+		// ClusterPanel
+		modulePanel = new DefaultManagedPanel(messagePanel.getDocument(), this);
 
-		//ReviewPanel
+		// ReviewPanel
 		reviewPanel = new HumanReviewPanel(this);
 
-		//TabbedPane
+		// TabbedPane
 		tabbedPane = new JTabbedPane();
-		tabbedPane.addTab(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.training.tabtext"), trainingPanel);
-		tabbedPane.addTab(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.test.tabtext"), testingPanel);
-		tabbedPane.addTab(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.cluster.tabtext"), modulePanel);
-		tabbedPane.addTab(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.humanreview.tabtext"), reviewPanel);
+		tabbedPane.addTab(_msgs
+				.formatMessage("train.gui.modelmaker.panel.training.tabtext"),
+				trainingPanel);
+		tabbedPane.addTab(
+				_msgs.formatMessage("train.gui.modelmaker.panel.test.tabtext"),
+				testingPanel);
+		tabbedPane.addTab(_msgs
+				.formatMessage("train.gui.modelmaker.panel.cluster.tabtext"),
+				modulePanel);
+		tabbedPane
+				.addTab(_msgs
+						.formatMessage("train.gui.modelmaker.panel.humanreview.tabtext"),
+						reviewPanel);
 
-		//SplitPane to hold everything.
+		// SplitPane to hold everything.
 		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		splitPane.setDividerSize(2);
 		splitPane.setContinuousLayout(true);
@@ -407,35 +450,39 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 		myContentPanel.setLayout(new BorderLayout());
 		myContentPanel.add(splitPane, BorderLayout.CENTER);
 
-		//RecordPairFilterDialog
+		// RecordPairFilterDialog
 		recordPairList = new RecordPairList(this);
 		myContentPanel.add(recordPairList, BorderLayout.EAST);
 		toolbar.addThresholds();
 
 		// Other modules, Tools and help menus
-		DefaultModuleMenu dmm = new DefaultModuleMenu(modulePanel.getModule(),this);
+		DefaultModuleMenu dmm =
+			new DefaultModuleMenu(modulePanel.getModule(), this);
 		dmm.setEnabled(false);
 		myMenuBar.add(dmm);
 		myMenuBar.add(new ToolsMenu(this));
 
-		JMenu helpMenu = new JMenu(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.menu.help"));
+		JMenu helpMenu =
+			new JMenu(_msgs.formatMessage("train.gui.modelmaker.menu.help"));
 		myMenuBar.add(helpMenu);
 		JMenuItem contentsItem = new JMenuItem("Contents");
 		JavaHelpUtils.enableHelp(contentsItem, "train.gui.modelmaker");
 		helpMenu.add(contentsItem);
-		aboutItem = new JMenuItem(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.menu.help.about"));
+		aboutItem =
+			new JMenuItem(
+					_msgs.formatMessage("train.gui.modelmaker.menu.help.about"));
 		helpMenu.add(aboutItem);
 
 		JavaHelpUtils.enableHelpKey(this, "train.gui.modelmaker");
 	}
 
 	public void programExit(int rc) {
-		synchronized(statusSynchronization) {
+		synchronized (statusSynchronization) {
 			setReturnCode(rc);
 			setWait(false);
 			statusSynchronization.notifyAll();
 		}
-		synchronized(this) {
+		synchronized (this) {
 			this.notifyAll();
 		}
 	}
@@ -444,15 +491,23 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 
 		aboutItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
-				String title = ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.title");
+				String title =
+					_msgs.formatMessage("train.gui.modelmaker.title");
 
 				Date d = null;
 				try {
-					d = new Date(new File(ModelMaker.class.getProtectionDomain().getCodeSource().getLocation().getFile().replaceAll("%20", " ")).lastModified());
-				} catch(Exception ex) {
+					d =
+						new Date(
+								new File(ModelMaker.class.getProtectionDomain()
+										.getCodeSource().getLocation()
+										.getFile().replaceAll("%20", " "))
+										.lastModified());
+				} catch (Exception ex) {
 					// DO NOTHING
 				}
-				String text = ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.dialog.about.message", d);
+				String text =
+					_msgs.formatMessage(
+							"train.gui.modelmaker.dialog.about.message", d);
 
 				new AboutDialog(ModelMaker.this, title, text).setVisible(true);
 			}
@@ -466,16 +521,16 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 	}
 
 	/**
-	 * The usual stuff that a JFrame needs in order to be
-	 * displayed.
+	 * The usual stuff that a JFrame needs in order to be displayed.
 	 */
 	protected void display() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		pack();
 		Dimension dim = getToolkit().getScreenSize();
 		setSize(dim.width, dim.height - 22);
-		//setSize(800, 600-22);
-		setLocation((dim.width - getWidth()) / 2, (dim.height - getHeight()) / 2 - 11);
+		// setSize(800, 600-22);
+		setLocation((dim.width - getWidth()) / 2,
+				(dim.height - getHeight()) / 2 - 11);
 		setVisible(true);
 	}
 
@@ -513,8 +568,8 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 	}
 
 	/**
-	 * Accessor used by the HumanReviewPanel in order to call
-	 * methods on the testingPanel.
+	 * Accessor used by the HumanReviewPanel in order to call methods on the
+	 * testingPanel.
 	 *
 	 * @return reference to the TestingControlPanel.
 	 */
@@ -554,11 +609,9 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 		evaluated = b;
 		if (evaluated) {
 			statistics =
-				new Statistics(
-					probabilityModel,
-					sourceList,
-					thresholds.getDifferThreshold(),
-					thresholds.getMatchThreshold());
+				new Statistics(probabilityModel, sourceList,
+						thresholds.getDifferThreshold(),
+						thresholds.getMatchThreshold());
 		} else {
 			if (!keepAllSourcesInMemory) {
 				multiSourceLists[0] = null;
@@ -571,7 +624,8 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 			statistics = null;
 		}
 		fireEvaluated(new EvaluationEvent(this, evaluated));
-		if (evaluated && markedRecordPair < sourceList.size() && sourceList.size() > 0) {
+		if (evaluated && markedRecordPair < sourceList.size()
+				&& sourceList.size() > 0) {
 			setMarkedRecordPair(0);
 		}
 		Runtime.getRuntime().gc();
@@ -592,26 +646,32 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 	public void setThresholds(Thresholds t) {
 		Thresholds oldValue = thresholds;
 		thresholds = t;
-		getPreferences().putFloat(PreferenceKeys.DIFFER_THRESHOLD, thresholds.getDifferThreshold());
-		getPreferences().putFloat(PreferenceKeys.MATCH_THRESHOLD, thresholds.getMatchThreshold());
-		if ((oldValue == null || !oldValue.equals(thresholds)) && trainer != null) {
-			trainer.computeDecisions(thresholds.getDifferThreshold(), thresholds.getMatchThreshold());
+		getPreferences().putFloat(PreferenceKeys.DIFFER_THRESHOLD,
+				thresholds.getDifferThreshold());
+		getPreferences().putFloat(PreferenceKeys.MATCH_THRESHOLD,
+				thresholds.getMatchThreshold());
+		if ((oldValue == null || !oldValue.equals(thresholds))
+				&& trainer != null) {
+			trainer.computeDecisions(thresholds.getDifferThreshold(),
+					thresholds.getMatchThreshold());
 			statistics.setThresholds(thresholds);
 		}
-		if(trainer != null) {
+		if (trainer != null) {
 			trainer.setLowerThreshold(thresholds.getDifferThreshold());
 			trainer.setUpperThreshold(thresholds.getMatchThreshold());
 		}
-		firePropertyChange(ModelMakerEventNames.THRESHOLDS, oldValue, thresholds);
+		firePropertyChange(ModelMakerEventNames.THRESHOLDS, oldValue,
+				thresholds);
 	}
 
-	//************************************************************************************************
-	//**********Probability Model Handling************************************************************
-	//************************************************************************************************
+	// ************************************************************************************************
+	// **********Probability Model
+	// Handling************************************************************
+	// ************************************************************************************************
 
 	/**
-	* Returns true if we have a non-null probability model.  *
-	*/
+	 * Returns true if we have a non-null probability model. *
+	 */
 	public boolean haveProbabilityModel() {
 		return (probabilityModel != null);
 	}
@@ -626,14 +686,14 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 	}
 
 	/**
-	 * Gets the model using the model name, then sets the model.
-	 * If a model by the passed name can not be retrieved, an
-	 * error is posted and the previously set model is kept as
-	 * the active model.
+	 * Gets the model using the model name, then sets the model. If a model by
+	 * the passed name can not be retrieved, an error is posted and the
+	 * previously set model is kept as the active model.
 	 *
 	 * @param modelName
 	 */
-	public void setProbabilityModel(String modelName, boolean reload) throws OperationFailedException {
+	public void setProbabilityModel(String modelName, boolean reload)
+			throws OperationFailedException {
 		Writer statusOutput = new StringWriter();
 		Cursor cursor = null;
 		try {
@@ -642,7 +702,7 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 			File f = new File(modelName);
 			InputStream is = new FileInputStream(f);
 
-			CompilerFactory factory = CompilerFactory.getInstance ();
+			CompilerFactory factory = CompilerFactory.getInstance();
 			ICompiler compiler = factory.getDefaultCompiler();
 			final boolean allowCompile = true;
 			final ClassLoader customCL = null;
@@ -664,11 +724,12 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 	}
 
 	/**
-	 * Sets the probability model.  Nulls out the source list and calls
+	 * Sets the probability model. Nulls out the source list and calls
 	 * resetEvaluationStatistics on the trainingPanel so that the proper clue
-	 * set is displayed.  Sends a modelChanged message to any listeners.
+	 * set is displayed. Sends a modelChanged message to any listeners.
 	 *
-	 * @param pm     A reference to a PMManager.
+	 * @param pm
+	 *            A reference to a PMManager.
 	 */
 	public void setProbabilityModel(IProbabilityModel pm) {
 		Cursor cursor = getCursor();
@@ -679,7 +740,8 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 			oldModel.removePropertyChangeListener(probabilityModelEventMultiplexer);
 		probabilityModel = pm;
 		if (probabilityModel != null)
-			probabilityModel.addPropertyChangeListener(probabilityModelEventMultiplexer);
+			probabilityModel
+					.addPropertyChangeListener(probabilityModelEventMultiplexer);
 		setTitleMessage();
 		postProbabilityModelInfo();
 		multiSourceLists[0] = null;
@@ -687,7 +749,8 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 		setEvaluated(false);
 		if (markedRecordPairSource != null)
 			markedRecordPairSource.setModel(probabilityModel);
-		firePropertyChange(ModelMakerEventNames.PROBABILITY_MODEL, oldModel, probabilityModel);
+		firePropertyChange(ModelMakerEventNames.PROBABILITY_MODEL, oldModel,
+				probabilityModel);
 		setCursor(cursor);
 	}
 
@@ -701,32 +764,32 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 
 	public void postProbabilityModelInfo() {
 		if (probabilityModel != null) {
-			postUserMessage(ChoiceMakerCoreMessages.m.formatMessage(
+			postUserMessage(_msgs.formatMessage(
 					"train.gui.modelmaker.model.name",
 					probabilityModel.getModelName()));
-			postUserMessage(ChoiceMakerCoreMessages.m.formatMessage(
+			postUserMessage(_msgs.formatMessage(
 					"train.gui.modelmaker.model.clue.file.name",
 					probabilityModel.getClueFilePath()));
-			postUserMessage(ChoiceMakerCoreMessages.m.formatMessage(
+			postUserMessage(_msgs.formatMessage(
 					"train.gui.modelmaker.model.schema.file.name",
 					probabilityModel.getAccessor().getSchemaFileName()));
-			postUserMessage(ChoiceMakerCoreMessages.m.formatMessage(
+			postUserMessage(_msgs.formatMessage(
 					"train.gui.modelmaker.model.last.train.user",
 					probabilityModel.getUserName()));
-			postUserMessage(ChoiceMakerCoreMessages.m.formatMessage(
+			postUserMessage(_msgs.formatMessage(
 					"train.gui.modelmaker.model.last.train.date",
 					probabilityModel.getLastTrainingDate()));
-			postUserMessage(ChoiceMakerCoreMessages.m.formatMessage(
+			postUserMessage(_msgs.formatMessage(
 					"train.gui.modelmaker.model.last.train.source",
 					probabilityModel.getTrainingSource()));
 			postUserMessage(probabilityModel.isTrainedWithHolds() ? "Trained with holds"
 					: "Trained without holds");
-			postUserMessage(ChoiceMakerCoreMessages.m.formatMessage(
+			postUserMessage(_msgs.formatMessage(
 					"train.gui.modelmaker.model.last.train.firing.threshold",
 					new Integer(probabilityModel.getFiringThreshold())));
 			MachineLearner ml = probabilityModel.getMachineLearner();
 			if (ml != null && !(ml instanceof DoNothingMachineLearning)) {
-				postUserMessage(ChoiceMakerCoreMessages.m.formatMessage(
+				postUserMessage(_msgs.formatMessage(
 						"train.gui.modelmaker.model.last.train.ml",
 						MlGuiFactories.getGui(probabilityModel
 								.getMachineLearner())));
@@ -754,10 +817,8 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 				ProbabilityModelsXmlConf.readModel(modelName, is, compiler,
 						statusOutput, customCL, allowCompile);
 		} catch (ModelConfigurationException ex) {
-			throw new OperationFailedException(
-					ChoiceMakerCoreMessages.m.formatMessage(
-							"train.gui.modelmaker.model.retrieve.error",
-							modelName));
+			throw new OperationFailedException(_msgs.formatMessage(
+					"train.gui.modelmaker.model.retrieve.error", modelName));
 		} catch (FileNotFoundException ex) {
 			String msg = "Unable to find '" + modelName + "'";
 			throw new OperationFailedException(msg);
@@ -777,11 +838,11 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 		try {
 			ProbabilityModelsXmlConf.saveModel(pm);
 			// logger.info("Saved probability model to disk: " + pm.getName());
-			postUserMessage(ChoiceMakerCoreMessages.m.formatMessage(
+			postUserMessage(_msgs.formatMessage(
 					"train.gui.modelmaker.model.saved", pm.getModelName()));
 		} catch (ModelConfigurationException ex) {
 			throw new OperationFailedException(
-					ChoiceMakerCoreMessages.m.formatMessage(
+					_msgs.formatMessage(
 							"train.gui.modelmaker.model.save.error",
 							pm.getModelName()), ex);
 		}
@@ -823,13 +884,14 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 		return success;
 	}
 
-	//************************************************************************************************
-	//**********Marked Record-Pair Source Handling****************************************************
-	//************************************************************************************************
+	// ************************************************************************************************
+	// **********Marked Record-Pair Source
+	// Handling****************************************************
+	// ************************************************************************************************
 
 	/**
-	* Returns true if we have a non-null MRP source.  *
-	*/
+	 * Returns true if we have a non-null MRP source. *
+	 */
 	public boolean haveMarkedRecordPairSource() {
 		return (markedRecordPairSource != null);
 	}
@@ -845,7 +907,8 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 			if (usedMultiSource == i) {
 				setIncludeHolds(b);
 			}
-			firePropertyChange(ModelMakerEventNames.MULTI_INCLUDE_HOLDS, null, null);
+			firePropertyChange(ModelMakerEventNames.MULTI_INCLUDE_HOLDS, null,
+					null);
 		}
 		setTitleMessage();
 	}
@@ -874,7 +937,7 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 		multiSourceLists[i] = null;
 		multiSources[i] = s;
 		if (usedMultiSource == i) {
-			if(s == null && multiSources[1 - i] != null) {
+			if (s == null && multiSources[1 - i] != null) {
 				usedMultiSource = 1 - i;
 				setIncludeHolds(multiIncludeHolds[usedMultiSource]);
 				setMarkedRecordPairSource(multiSources[usedMultiSource]);
@@ -891,6 +954,7 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 
 	/**
 	 * Returns the keepBothSourcesInMemory.
+	 * 
 	 * @return boolean
 	 */
 	public boolean isKeepAllSourcesInMemory() {
@@ -899,7 +963,9 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 
 	/**
 	 * Sets the keepBothSourcesInMemory.
-	 * @param keepBothSourcesInMemory The keepBothSourcesInMemory to set
+	 * 
+	 * @param keepBothSourcesInMemory
+	 *            The keepBothSourcesInMemory to set
 	 */
 	public void setKeepAllSourcesInMemory(boolean keepAllSourcesInMemory) {
 		this.keepAllSourcesInMemory = keepAllSourcesInMemory;
@@ -911,7 +977,9 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 
 	/**
 	 * Sets the trainSourceUsed.
-	 * @param trainSourceUsed The trainSourceUsed to set
+	 * 
+	 * @param trainSourceUsed
+	 *            The trainSourceUsed to set
 	 */
 	public void setUsedMultiSource(int i) {
 		usedMultiSource = i;
@@ -929,17 +997,22 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 		if (multiIncludeHolds[0] != multiIncludeHolds[1]) {
 			multiSourceLists[0] = null;
 			multiSourceLists[1] = null;
-			setMultiIncludeHolds(usedMultiSource, multiIncludeHolds[usedMultiSource]);
+			setMultiIncludeHolds(usedMultiSource,
+					multiIncludeHolds[usedMultiSource]);
 		} else {
 			java.util.List<MarkedRecordPairSource> ll = multiSourceLists[0];
 			multiSourceLists[0] = multiSourceLists[1];
 			multiSourceLists[1] = ll;
 		}
 		setTitleMessage();
-		// AJW 2004-04-26: fire an event so that the MultiSourceMenu items update themselves.
-		// passing "null" as the oldValue is a hack so that PropertyChangeSupport actually
-		// fires events to listeners (it doesn't if the two are reference equal).
-		firePropertyChange(ModelMakerEventNames.MARKED_RECORD_PAIR_SOURCE, null, markedRecordPairSource);
+		// AJW 2004-04-26: fire an event so that the MultiSourceMenu items
+		// update themselves.
+		// passing "null" as the oldValue is a hack so that
+		// PropertyChangeSupport actually
+		// fires events to listeners (it doesn't if the two are reference
+		// equal).
+		firePropertyChange(ModelMakerEventNames.MARKED_RECORD_PAIR_SOURCE,
+				null, markedRecordPairSource);
 	}
 
 	public MarkedRecordPairSource getMarkedRecordPairSource() {
@@ -947,11 +1020,11 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 	}
 
 	/**
-	 * Sets the MRP source.  Nulls out the source list and
-	 * resets the panels that contain data that needs to be
-	 * recomputed whenever the source changes.
+	 * Sets the MRP source. Nulls out the source list and resets the panels that
+	 * contain data that needs to be recomputed whenever the source changes.
 	 *
-	 * @param s      A reference to a MarkedRecordPairSource.
+	 * @param s
+	 *            A reference to a MarkedRecordPairSource.
 	 */
 	private void setMarkedRecordPairSource(MarkedRecordPairSource s) {
 		MarkedRecordPairSource old = markedRecordPairSource;
@@ -961,7 +1034,8 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 		if (markedRecordPairSource != null)
 			markedRecordPairSource.setModel(probabilityModel);
 		setTitleMessage();
-		firePropertyChange(ModelMakerEventNames.MARKED_RECORD_PAIR_SOURCE, old, markedRecordPairSource);
+		firePropertyChange(ModelMakerEventNames.MARKED_RECORD_PAIR_SOURCE, old,
+				markedRecordPairSource);
 	}
 
 	private void setTitleMessage() {
@@ -1005,23 +1079,26 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 	}
 
 	/**
-	 * Uses the MarkedRecordPairBinder to load the source into an
-	 * in-memory collection.  This method is called prior to
-	 * training, or prior to saving a source to disk.
+	 * Uses the MarkedRecordPairBinder to load the source into an in-memory
+	 * collection. This method is called prior to training, or prior to saving a
+	 * source to disk.
 	 */
 	@SuppressWarnings("unchecked")
 	private void loadSourceList() throws OperationFailedException {
 		if (sourceList == null) {
 			if (multiSourceLists[usedMultiSource] == null) {
 				try {
-					sourceList = MarkedRecordPairBinder.getList(markedRecordPairSource, includeHolds, repository);
+					sourceList =
+						MarkedRecordPairBinder.getList(markedRecordPairSource,
+								includeHolds, repository);
 					if (sourceList.size() == 0) {
 						sourceList = null;
 					}
 					multiSourceLists[usedMultiSource] = sourceList;
 				} catch (IOException ex) {
 					String s = ex.toString();
-					String msg = ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.source.list.retrieve.error");
+					String msg =
+						_msgs.formatMessage("train.gui.modelmaker.source.list.retrieve.error");
 					msg += ": " + s;
 					postUserMessage(msg);
 					throw new OperationFailedException(msg, ex);
@@ -1063,7 +1140,8 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 	public void uncheckAll() {
 		IntArrayList old = checkedList;
 		checkedList = new IntArrayList();
-		firePropertyChange(ModelMakerEventNames.CHECKED_INDICES, old, checkedList);
+		firePropertyChange(ModelMakerEventNames.CHECKED_INDICES, old,
+				checkedList);
 	}
 
 	public void checkAll() {
@@ -1076,7 +1154,8 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 		}
 
 		checkedList = newChecked;
-		firePropertyChange(ModelMakerEventNames.CHECKED_INDICES, old, checkedList);
+		firePropertyChange(ModelMakerEventNames.CHECKED_INDICES, old,
+				checkedList);
 	}
 
 	public int[] getCheckedIndices() {
@@ -1096,15 +1175,16 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 	}
 
 	/**
-	 * Saves the active MRPSource to disk.  This method is called
-	 * by the HumanReviewPanel to save a source that has been
-	 * modified.
+	 * Saves the active MRPSource to disk. This method is called by the
+	 * HumanReviewPanel to save a source that has been modified.
 	 */
 	public void saveMarkedRecordPairSource() {
 		try {
-			MarkedRecordPairSink snk = (MarkedRecordPairSink) markedRecordPairSource.getSink();
+			MarkedRecordPairSink snk =
+				(MarkedRecordPairSink) markedRecordPairSource.getSink();
 			MarkedRecordPairBinder.store(sourceList, snk);
-			logger.info("Re-saved MarkedRecordPairSource: " + markedRecordPairSource.getName());
+			logger.info("Re-saved MarkedRecordPairSource: "
+					+ markedRecordPairSource.getName());
 			setSourceDataModified(false);
 		} catch (IOException ex) {
 			logger.severe(new LoggingObject("CM-100602", markedRecordPairSource
@@ -1112,19 +1192,20 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 		}
 	}
 
-	//************************************************************************************************
-	//******Clues methods*****************************************************************************
-	//************************************************************************************************
+	// ************************************************************************************************
+	// ******Clues
+	// methods*****************************************************************************
+	// ************************************************************************************************
 
 	/**
-	 * Sets the cluesToEvaluate elements all to true in
-	 * probabilityModel.
+	 * Sets the cluesToEvaluate elements all to true in probabilityModel.
 	 */
 	public void setAllCluesOrRules(int what, boolean value) {
 		boolean[] cluesEnabled = probabilityModel.getCluesToEvaluate();
 		ClueDesc[] cds = probabilityModel.getClueSet().getClueDesc();
 		for (int i = 0; i < cluesEnabled.length; i++) {
-			if (((what & CLUES) != 0 && !cds[i].rule) || ((what & RULES) != 0 && cds[i].rule)) {
+			if (((what & CLUES) != 0 && !cds[i].rule)
+					|| ((what & RULES) != 0 && cds[i].rule)) {
 				cluesEnabled[i] = value;
 			}
 		}
@@ -1137,15 +1218,14 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 	public void resetWeights() {
 		// 2014-04-24 rphall: Commented out unused local variable.
 		// Any side effects?
-		/* MachineLearner ml = */ probabilityModel.getMachineLearner();
-//		if (ml instanceof MaximumEntropy) {
-//			((MaximumEntropy) ml).resetWeights();
-//		}
+		/* MachineLearner ml = */probabilityModel.getMachineLearner();
+		// if (ml instanceof MaximumEntropy) {
+		// ((MaximumEntropy) ml).resetWeights();
+		// }
 	}
 
 	/**
-	 * Evaluates the clues on the source to get and display
-	 * the counts.
+	 * Evaluates the clues on the source to get and display the counts.
 	 */
 	public void evaluateClues() {
 		if (usedMultiSource == 0 && multiSources[1] != null) {
@@ -1160,14 +1240,15 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 				try {
 					if (!currentThread().isInterrupted()) {
 						loadSourceList();
-						if (haveSourceList() && !currentThread().isInterrupted()) {
+						if (haveSourceList()
+								&& !currentThread().isInterrupted()) {
 							initializeTrainer();
 							if (!currentThread().isInterrupted()) {
 								trainer.test();
 								if (!currentThread().isInterrupted()) {
 									trainer.computeProbabilitiesAndDecisions(
-										thresholds.getDifferThreshold(),
-										thresholds.getMatchThreshold());
+											thresholds.getDifferThreshold(),
+											thresholds.getMatchThreshold());
 								}
 							}
 						}
@@ -1179,18 +1260,18 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 			}
 		};
 		boolean interrupted =
-			ThreadWatcher.watchThread(
-				t,
-				this,
-				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.wait"),
-				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.evaluation.evaulate"));
+			ThreadWatcher.watchThread(t, this, _msgs
+					.formatMessage("train.gui.modelmaker.wait"), _msgs
+					.formatMessage("train.gui.modelmaker.evaluation.evaulate"));
 		if (interrupted) {
 			postUserMessage("Clue evaluation cancelled.");
 			multiSourceLists[usedMultiSource] = null;
 			setEvaluated(false);
 		} else {
 			long deltaT = System.currentTimeMillis() - t0;
-			postUserMessage(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.evaluation.complete", new Long(deltaT)));
+			postUserMessage(_msgs.formatMessage(
+					"train.gui.modelmaker.evaluation.complete",
+					new Long(deltaT)));
 			setEvaluated(haveSourceList());
 		}
 	}
@@ -1205,30 +1286,29 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 		}
 	}
 
-	//************************************************************************************************
-	//****Trainer methods ****************************************************************************
-	//************************************************************************************************
+	// ************************************************************************************************
+	// ****Trainer methods
+	// ****************************************************************************
+	// ************************************************************************************************
 
 	private void initializeTrainer() {
 		markedRecordPairSource.setModel(getProbabilityModel());
-		trainer = new Trainer(thresholds.getDifferThreshold(), thresholds.getMatchThreshold());
+		trainer =
+			new Trainer(thresholds.getDifferThreshold(),
+					thresholds.getMatchThreshold());
 		repository.setTrainer(trainer);
 		trainer.setModel(probabilityModel);
 		trainer.setSource(sourceList);
 	}
 
 	/**
-	 * Starts the training.  When training is done, updates
-	 * the ProbabilityModelChangeListeners and TrainerChangeListeners
-	 * so that they can update their data.
+	 * Starts the training. When training is done, updates the
+	 * ProbabilityModelChangeListeners and TrainerChangeListeners so that they
+	 * can update their data.
 	 */
-	public boolean train(
-		boolean recompile,
-		boolean enableAllClues,
-		boolean enableAllRules,
-		int firingThreshold,
-		boolean andTest) {
-		//logger.fine("train called.");
+	public boolean train(boolean recompile, boolean enableAllClues,
+			boolean enableAllRules, int firingThreshold, boolean andTest) {
+		// logger.fine("train called.");
 		if (this.probabilityModel == null) {
 			throw new IllegalStateException("null probability model");
 		}
@@ -1250,13 +1330,14 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 			}
 		}
 		if (firingThreshold < 2) {
-			//postError(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.train.firing.threshold.warning"));
+			// postError(_msgs.formatMessage("train.gui.modelmaker.train.firing.threshold.warning"));
 			return false;
 		}
 		probabilityModel.beginMultiPropertyChange();
 		probabilityModel.setEnableAllCluesBeforeTraining(enableAllClues);
 		probabilityModel.setEnableAllRulesBeforeTraining(enableAllRules);
-		setAllCluesOrRules((enableAllClues ? ModelMaker.CLUES : 0) + (enableAllRules ? ModelMaker.RULES : 0), true);
+		setAllCluesOrRules((enableAllClues ? ModelMaker.CLUES : 0)
+				+ (enableAllRules ? ModelMaker.RULES : 0), true);
 		probabilityModel.setFiringThreshold(firingThreshold);
 
 		final Thread t = new Thread() {
@@ -1264,7 +1345,8 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 				try {
 					if (!currentThread().isInterrupted()) {
 						loadSourceList();
-						if (haveSourceList() && !currentThread().isInterrupted()) {
+						if (haveSourceList()
+								&& !currentThread().isInterrupted()) {
 							initializeTrainer();
 							// NOTE: to undo this, change "true" to "false".
 							Object ret = trainer.train();
@@ -1280,11 +1362,9 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 			}
 		};
 		boolean interrupted =
-			ThreadWatcher.watchThread(
-				t,
-				this,
-				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.wait"),
-				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.train.train"));
+			ThreadWatcher.watchThread(t, this,
+					_msgs.formatMessage("train.gui.modelmaker.wait"),
+					_msgs.formatMessage("train.gui.modelmaker.train.train"));
 		if (interrupted) {
 			postUserMessage("Training cancelled.");
 			probabilityModel.endMultiPropertyChange();
@@ -1294,18 +1374,21 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 		} else {
 			if (haveSourceList()) {
 				probabilityModel.setLastTrainingDate(new java.util.Date());
-				probabilityModel.setTrainingSource(markedRecordPairSource.getName());
+				probabilityModel.setTrainingSource(markedRecordPairSource
+						.getName());
 				probabilityModel.setTrainedWithHolds(isIncludeHolds());
 				probabilityModel.setUserName(System.getProperty("user.name"));
 				long deltaT = System.currentTimeMillis() - t0;
-				postUserMessage(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.train.complete", new Long(deltaT)));
+				postUserMessage(_msgs
+						.formatMessage("train.gui.modelmaker.train.complete",
+								new Long(deltaT)));
 				probabilityModel.endMultiPropertyChange();
 				if (andTest && usedMultiSource == 0 && multiSources[1] != null) {
 					evaluateClues();
 				} else {
 					trainer.computeProbabilitiesAndDecisions(
-						thresholds.getDifferThreshold(),
-						thresholds.getMatchThreshold());
+							thresholds.getDifferThreshold(),
+							thresholds.getMatchThreshold());
 					setEvaluated(true);
 				}
 			} else {
@@ -1327,16 +1410,24 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 		return repository;
 	}
 
-	//************************************************************************************************
-	//******Human review methods**********************************************************************
-	//************************************************************************************************
+	// ************************************************************************************************
+	// ******Human review
+	// methods**********************************************************************
+	// ************************************************************************************************
 
-	/*  Method called by the testingPanel or the reviewPanel when a particular
-	 *  MRP is selected for reviewing.
+	/*
+	 * Method called by the testingPanel or the reviewPanel when a particular
+	 * MRP is selected for reviewing.
 	 */
 	public void setMarkedRecordPair(int p) {
 		markedRecordPair = p;
-		firePropertyChange(ModelMakerEventNames.MARKED_RECORD_PAIR, null /* new Integer(oldValue) */
+		firePropertyChange(ModelMakerEventNames.MARKED_RECORD_PAIR, null /*
+																		 * new
+																		 * Integer
+																		 * (
+																		 * oldValue
+																		 * )
+																		 */
 		, new Integer(markedRecordPair));
 	}
 
@@ -1345,29 +1436,29 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 	}
 
 	/**
-	 * This method is called by the ClueTableCellListener which is
-	 * attached to the clue table in the TestingPanel.  It allows
-	 * one to step through the MRPs associated with a given
-	 * clue.
+	 * This method is called by the ClueTableCellListener which is attached to
+	 * the clue table in the TestingPanel. It allows one to step through the
+	 * MRPs associated with a given clue.
 	 *
 	 * @param clueID
 	 * @param fireType
 	 */
 	public void updateRecordPairList(int clueID, int fireType) {
-		ClueDesc cd = probabilityModel.getAccessor().getClueSet().getClueDesc()[clueID];
+		ClueDesc cd =
+			probabilityModel.getAccessor().getClueSet().getClueDesc()[clueID];
 		if (cd.rule) {
 			if (fireType == ClueTableModel.COL_TOTAL_FIRES) {
 				filter.reset();
-				filter.setConditions(
-					new FilterCondition[] { new RuleFilterCondition(clueID, BooleanFilterCondition.ACTIVE)});
+				filter.setConditions(new FilterCondition[] { new RuleFilterCondition(
+						clueID, BooleanFilterCondition.ACTIVE) });
 				filterMarkedRecordPairList();
 			}
 		} else if (cd.decision.toInt() < Decision.NUM_DECISIONS) {
 			filter.reset();
-			//			filter.setActiveClues(new int[] { clueID });
-			filter.setConditions(
-				new BooleanFilterCondition[] { new BooleanFilterCondition(clueID, BooleanFilterCondition.ACTIVE)});
-			//                                            this argument represents an ActiveClue -----^
+			// filter.setActiveClues(new int[] { clueID });
+			filter.setConditions(new BooleanFilterCondition[] { new BooleanFilterCondition(
+					clueID, BooleanFilterCondition.ACTIVE) });
+			// this argument represents an ActiveClue -----^
 			if (fireType != ClueTableModel.COL_TOTAL_FIRES) {
 				Decision d = cd.decision;
 				boolean[] b;
@@ -1407,43 +1498,45 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 		filterMarkedRecordPairList();
 	}
 
-	//************************ Data Methods
+	// ************************ Data Methods
 
 	/**
-	 * Method called from the HumanReviewPanel when a record's
-	 * data have been modified by hand.  This method recomputes
-	 * the probability on the modified record pair.
+	 * Method called from the HumanReviewPanel when a record's data have been
+	 * modified by hand. This method recomputes the probability on the modified
+	 * record pair.
 	 *
-	 * @param index Index of the MRP in the source list.
+	 * @param index
+	 *            Index of the MRP in the source list.
 	 */
 	public void dataModified() {
 		int index = getMarkedRecordPair();
 		// 2014-04-24 rphall: Commented out unused local variable.
 		// Any side effects?
-//		ImmutableMarkedRecordPair r = (ImmutableMarkedRecordPair)
-				sourceList.get(index);
-	//	trainer.computeProbability(r, thresholds.getDifferThreshold(), thresholds.getMatchThreshold());
+		// ImmutableMarkedRecordPair r = (ImmutableMarkedRecordPair)
+		sourceList.get(index);
+		// trainer.computeProbability(r, thresholds.getDifferThreshold(),
+		// thresholds.getMatchThreshold());
 		setMarkedRecordPair(index);
 		fireMarkedRecordPairDataChange(new RepositoryChangeEvent(this, null));
 	}
 
-	//*************************
+	// *************************
 
 	/**
-	 * Since the HumanReviewPanel and the TestingControlPanel do
-	 * not communicate directly, this method allows one to click
-	 * a button on the review Panel to select the next MRP to
-	 * be displayed from the list shown on the testing panel.
+	 * Since the HumanReviewPanel and the TestingControlPanel do not communicate
+	 * directly, this method allows one to click a button on the review Panel to
+	 * select the next MRP to be displayed from the list shown on the testing
+	 * panel.
 	 */
 	public void reviewNextMarkedRecordPair() {
 		recordPairList.reviewNextMarkedRecordPair();
 	}
 
 	/**
-	 * Since the HumanReviewPanel and the TestingControlPanel do
-	 * not communicate directly, this method allows one to click
-	 * a button on the review Panel to select the previous MRP to
-	 * be displayed from the list shown on the testing panel.
+	 * Since the HumanReviewPanel and the TestingControlPanel do not communicate
+	 * directly, this method allows one to click a button on the review Panel to
+	 * select the previous MRP to be displayed from the list shown on the
+	 * testing panel.
 	 */
 	public void reviewPreviousMarkedRecordPair() {
 		recordPairList.reviewPreviousMarkedRecordPair();
@@ -1453,15 +1546,16 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 		return recordPairList;
 	}
 
-	//******************************************************************************
-	//******************************************************************************
-	//******************************************************************************
+	// ******************************************************************************
+	// ******************************************************************************
+	// ******************************************************************************
 
 	/**
 	 * Posts Clue text to the MessagePanel.
 	 */
 	public void postClue(String s) {
-		messagePanel.postMessage(Constants.LINE_SEPARATOR + s + Constants.LINE_SEPARATOR);
+		messagePanel.postMessage(Constants.LINE_SEPARATOR + s
+				+ Constants.LINE_SEPARATOR);
 	}
 
 	/**
@@ -1471,7 +1565,7 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 
 	(String s) {
 		// String displayString =
-		// ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.message.info",
+		// _msgs.formatMessage("train.gui.modelmaker.message.info",
 		// s) + Constants.LINE_SEPARATOR;
 		// messagePanel.postMessage(displayString);
 		this.getUserMessages().postInfo(s);
@@ -1480,30 +1574,33 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 	/**
 	 * Posts Warning message to the MessagePanel.
 	 */
-	//public void postWarning(String s) {
-	//	String displayString =
-	//		ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.message.warning", s) + Constants.LINE_SEPARATOR;
-	//	messagePanel.postMessage(displayString);
-	//}
+	// public void postWarning(String s) {
+	// String displayString =
+	// _msgs.formatMessage("train.gui.modelmaker.message.warning", s) +
+	// Constants.LINE_SEPARATOR;
+	// messagePanel.postMessage(displayString);
+	// }
 
 	/**
 	 * Posts Error message to the MessagePanel.
 	 */
-	//public void postError(String s) {
-	//	String displayString =
-	//		ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.message.error", s) + Constants.LINE_SEPARATOR;
-	//	messagePanel.postMessage(displayString);
-	//}
+	// public void postError(String s) {
+	// String displayString =
+	// _msgs.formatMessage("train.gui.modelmaker.message.error", s) +
+	// Constants.LINE_SEPARATOR;
+	// messagePanel.postMessage(displayString);
+	// }
 
 	/**
 	 * Posts FatalError message to the MessagePanel.
 	 */
-	//public void postFatalError(String s) {
-	//	String displayString =
-	//		ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.message.fatal.error", s) + Constants.LINE_SEPARATOR;
-	//	messagePanel.clearMessages();
-	//	messagePanel.postMessage(displayString);
-	//}
+	// public void postFatalError(String s) {
+	// String displayString =
+	// _msgs.formatMessage("train.gui.modelmaker.message.fatal.error", s) +
+	// Constants.LINE_SEPARATOR;
+	// messagePanel.clearMessages();
+	// messagePanel.postMessage(displayString);
+	// }
 
 	public MessagePanel getMessagePanel() {
 		return messagePanel;
@@ -1528,7 +1625,8 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 	}
 
 	private static String CONF_ARG = "-conf";
-	private static String LOG_ARG = CompilationArguments.LOGGING_CONFIGURATION_NAME;
+	private static String LOG_ARG =
+		CompilationArguments.LOGGING_CONFIGURATION_NAME;
 	private static String DIALOG_OPT = "-dialog";
 
 	/**
@@ -1548,14 +1646,15 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 		}
 
 		// Configure the compiler
-		pv = System.getProperty(PropertyNames.INSTALLABLE_COMPILER); {
-		System.setProperty(
-				PropertyNames.INSTALLABLE_COMPILER,
-				WellKnownPropertyValues.BASIC_COMPILER);
+		pv = System.getProperty(PropertyNames.INSTALLABLE_COMPILER);
+		{
+			System.setProperty(PropertyNames.INSTALLABLE_COMPILER,
+					WellKnownPropertyValues.BASIC_COMPILER);
 		}
 
 		// Configure a factory for generator plugins used by the compiler
-		pv = System.getProperty(PropertyNames.INSTALLABLE_GENERATOR_PLUGIN_FACTORY);
+		pv =
+			System.getProperty(PropertyNames.INSTALLABLE_GENERATOR_PLUGIN_FACTORY);
 		if (pv == null) {
 			System.setProperty(
 					PropertyNames.INSTALLABLE_GENERATOR_PLUGIN_FACTORY,
@@ -1567,26 +1666,24 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 	 * ChoiceMaker uses System properties for configuration. If the
 	 * configuration properties haven't already been set, this method sets some
 	 * defaults expected by Analyzer when running in an Eclipse 2 context.
-	 * ChoiceMaker uses System properties for configuration.
-	 * This method sets some defaults expected by Analyzer
-	 * when running in  context (if the properties
-	 * haven't already been set).
+	 * ChoiceMaker uses System properties for configuration. This method sets
+	 * some defaults expected by Analyzer when running in context (if the
+	 * properties haven't already been set).
 	 */
 	protected static void setEclipse2ConfigurationProperties() {
 		// Install a ChoiceMaker configurator
-		System.setProperty(
-				PropertyNames.INSTALLABLE_CHOICEMAKER_CONFIGURATOR,
+		System.setProperty(PropertyNames.INSTALLABLE_CHOICEMAKER_CONFIGURATOR,
 				WellKnownPropertyValues.ECLIPSE2_CONFIGURATOR);
 
-//		// Configure the compiler
-//		System.setProperty(
-//				PropertyNames.INSTALLABLE_COMPILER,
-//				WellKnownPropertyValues.ECLIPSE2_COMPILER);
-//
-//		// Configure a factory for generator plugins used by the compiler
-//		System.setProperty(
-//				PropertyNames.INSTALLABLE_GENERATOR_PLUGIN_FACTORY,
-//				WellKnownPropertyValues.ECLIPSE2_GENERATOR_PLUGIN_FACTORY);
+		// // Configure the compiler
+		// System.setProperty(
+		// PropertyNames.INSTALLABLE_COMPILER,
+		// WellKnownPropertyValues.ECLIPSE2_COMPILER);
+		//
+		// // Configure a factory for generator plugins used by the compiler
+		// System.setProperty(
+		// PropertyNames.INSTALLABLE_GENERATOR_PLUGIN_FACTORY,
+		// WellKnownPropertyValues.ECLIPSE2_GENERATOR_PLUGIN_FACTORY);
 	}
 
 	/**
@@ -1610,7 +1707,7 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 		logger.info("ModelMaker starting up");
 
 		String[] args = null;
-		if(args2 instanceof String[]) {
+		if (args2 instanceof String[]) {
 			args = (String[]) args2;
 		}
 		// defineFrameLookAndFeel();
@@ -1631,7 +1728,9 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 
 		if (ca.optionSet(DIALOG_OPT) || !checkValidity(conf)) {
 			if (conf == "") {
-				conf = getPreferences().get(PreferenceKeys.CONFIGURATION_FILE, PreferenceDefaults.CONFIGURATION_FILE);
+				conf =
+					getPreferences().get(PreferenceKeys.CONFIGURATION_FILE,
+							PreferenceDefaults.CONFIGURATION_FILE);
 			}
 			StartDialog sd = new StartDialog(conf);
 			sd.setVisible(true);
@@ -1661,19 +1760,32 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 
 		}
 		try {
-			ConfigurationManager.getInstance().init(conf, log, true, true, password);
+			ConfigurationManager.getInstance().init(conf, log, true, true,
+					password);
 			// create
 			init();
 			buildComponents();
 			addListeners();
 			setTitleMessage();
 		} catch (XmlConfException e) {
-			e.printStackTrace();
-			JOptionPane.showMessageDialog(
-				null,
-				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.configurationfile.invalid.error", conf),
-				ChoiceMakerCoreMessages.m.formatMessage("error"),
-				JOptionPane.ERROR_MESSAGE);
+			final ExceptionInfo xinfo = new ExceptionInfo(e);
+			final String fullSummary =
+				_msgs.formatMessage(
+						"train.gui.modelmaker.configurationfile.invalid.error",
+						conf);
+			logger.severe(xinfo.toString(fullSummary));
+
+			final String shortConf = _msgs.elideString(conf, 0, 30);
+			final String shortSummary =
+				_msgs.formatMessage(
+						"train.gui.modelmaker.configurationfile.invalid.error",
+						shortConf);
+
+			List<String> userInfo = new ArrayList<>();
+			userInfo.add(shortSummary);
+			userInfo.addAll(_msgs.exceptionInfo(xinfo));
+			JOptionPane.showMessageDialog(null, userInfo,
+					_msgs.formatMessage("error"), JOptionPane.ERROR_MESSAGE);
 			programExit(EXIT_ERROR);
 		}
 
@@ -1706,8 +1818,8 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 		display();
 
 		// Wait for programExit(int) to be invoked
-		while(isWait()) {
-			synchronized(this) {
+		while (isWait()) {
+			synchronized (this) {
 				try {
 					this.wait();
 				} catch (InterruptedException e) {
@@ -1727,7 +1839,8 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 	}
 
 	/**
-	 * Tears down an instance:<ul>
+	 * Tears down an instance:
+	 * <ul>
 	 * <li>First hides the GUI</li>
 	 * <li>Then disposes of the GUI</li>
 	 * </ul>
@@ -1738,7 +1851,7 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 	}
 
 	public static void main(String[] args) throws IOException {
-		//defineFrameLookAndFeel();
+		// defineFrameLookAndFeel();
 		processLicenseFile();
 		setPojoConfigurationProperties();
 		Arguments ca = new Arguments();
@@ -1750,7 +1863,9 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 		String log = ca.argumentVal(LOG_ARG);
 		if (ca.optionSet(DIALOG_OPT) || !checkValidity(conf)) {
 			if (conf == "") {
-				conf = getPreferences().get(PreferenceKeys.CONFIGURATION_FILE, PreferenceDefaults.CONFIGURATION_FILE);
+				conf =
+					getPreferences().get(PreferenceKeys.CONFIGURATION_FILE,
+							PreferenceDefaults.CONFIGURATION_FILE);
 			}
 			StartDialog sd = new StartDialog(conf);
 			sd.setVisible(true);
@@ -1773,11 +1888,10 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 			new ModelMaker();
 		} catch (XmlConfException e) {
 			e.printStackTrace();
-			JOptionPane.showMessageDialog(
-				null,
-				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.configurationfile.invalid.error", conf),
-				ChoiceMakerCoreMessages.m.formatMessage("error"),
-				JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, _msgs.formatMessage(
+					"train.gui.modelmaker.configurationfile.invalid.error",
+					conf), _msgs.formatMessage("error"),
+					JOptionPane.ERROR_MESSAGE);
 			System.exit(1);
 		}
 	}
