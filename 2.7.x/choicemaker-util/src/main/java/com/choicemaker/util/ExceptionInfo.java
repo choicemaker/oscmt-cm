@@ -42,4 +42,34 @@ public class ExceptionInfo {
 		return retVal;
 	}
 
+	public String toString(String context) {
+		StringBuilder sb = new StringBuilder();
+		if (context != null) {
+			sb.append(context.trim());
+		}
+		if (sb.length() > 0) {
+			sb.append(": ");
+		}
+		sb.append(this.toString());
+		return sb.toString();
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Exception " + simpleClassName);
+		if (!message.isEmpty()) {
+			sb.append(": " + message);
+		}
+		if (!causeSimpleClassName.isEmpty()) {
+			sb.append(" (" + causeSimpleClassName);
+			if (!causeMessage.isEmpty()) {
+				sb.append(": " + causeMessage);
+			}
+			sb.append(")");
+		}
+		String retVal = sb.toString();
+		return retVal;
+	}
+
 }

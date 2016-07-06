@@ -1,6 +1,9 @@
 package com.choicemaker.util;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -173,6 +176,47 @@ public class MessageUtil {
 				sb.append(end);
 			}
 			retVal = sb.toString();
+		}
+		return retVal;
+	}
+
+	/**
+	 * Creates a list of Strings where each element is a labeled component of an
+	 * exception.
+	 * 
+	 * @param x
+	 *            may be null (but return value will be empty)
+	 * @return a non-null but possibly empty list
+	 */
+	public List<String> exceptionInfo(Exception x) {
+		ExceptionInfo xinfo = x == null ? null : new ExceptionInfo(x);
+		return exceptionInfo(xinfo);
+	}
+
+	/**
+	 * Creates a list of Strings where each element is a labeled component of an
+	 * exception.
+	 * 
+	 * @param xinfo
+	 *            may be null (but return value will be empty)
+	 * @return a non-null but possibly empty list
+	 */
+	public List<String> exceptionInfo(ExceptionInfo xinfo) {
+		List<String> retVal;
+		if (xinfo == null) {
+			retVal = Collections.emptyList();
+		} else {
+			retVal = new ArrayList<>();
+			retVal.add("Exception: " + xinfo.simpleClassName);
+			if (!xinfo.message.isEmpty()) {
+				retVal.add("Message: " + xinfo.message);
+			}
+			if (!xinfo.causeSimpleClassName.isEmpty()) {
+				retVal.add("Cause: " + xinfo.causeSimpleClassName);
+				if (!xinfo.causeMessage.isEmpty()) {
+					retVal.add("Details: " + xinfo.causeMessage);
+				}
+			}
 		}
 		return retVal;
 	}
