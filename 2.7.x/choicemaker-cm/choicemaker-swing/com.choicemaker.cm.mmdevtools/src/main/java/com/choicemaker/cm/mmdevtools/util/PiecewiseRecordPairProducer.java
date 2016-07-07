@@ -84,14 +84,14 @@ public class PiecewiseRecordPairProducer implements Runnable {
 				blocker.clear();
 				records.clear();
 			}
-		} catch (IOException ex) {
+		} catch (Exception ex) {
 			// not sure of a better way to handle this...
 			ex.printStackTrace();
 		} finally {
 			if (sink != null) {
 				try {
 					sink.close();
-				} catch (IOException ex) {
+				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
 			}
@@ -125,7 +125,7 @@ public class PiecewiseRecordPairProducer implements Runnable {
 	 * the in-memory blocker allows us to only consider records with a higher index
 	 * in the List.  This avoid returning both <1, 2>, and <2, 1>
 	 */
-	private void block(List records) throws IOException {
+	private void block(List records) throws Exception {
 		for (int i = 0, n = records.size(); i < n; i++) {
 			Record q = (Record) records.get(i);
 			
@@ -137,7 +137,7 @@ public class PiecewiseRecordPairProducer implements Runnable {
 	/**
 	 * Block each record of the specified RecordSource against the currently-indexed Records.
 	 */
-	private void block(RecordSource rs) throws IOException {
+	private void block(RecordSource rs) throws Exception {
 		try {
 			rs.open();
 			while (rs.hasNext()) {
@@ -158,7 +158,7 @@ public class PiecewiseRecordPairProducer implements Runnable {
 		}
 	}
 
-	private void block(Record q, RecordSource blocked) throws IOException {
+	private void block(Record q, RecordSource blocked) throws Exception {
 		Object qId = q.getId();
 
 		try {

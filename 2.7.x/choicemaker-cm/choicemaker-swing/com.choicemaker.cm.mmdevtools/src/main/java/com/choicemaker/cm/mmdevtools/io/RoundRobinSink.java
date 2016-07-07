@@ -39,7 +39,7 @@ public class RoundRobinSink implements RecordSink, MarkedRecordPairSink {
 		this.sinkSize = sinkSize;
 	}
 
-	public void put(Record r) throws IOException {
+	public void put(Record r) throws Exception {
 		((RecordSink)sinks[curSink]).put(r);
 		sizes[curSink]++;
 		if (sizes[curSink] == sinkSize) {
@@ -51,7 +51,7 @@ public class RoundRobinSink implements RecordSink, MarkedRecordPairSink {
 		curSink = (curSink + 1) % distrib;
 	}
 
-	public void putMarkedRecordPair(ImmutableMarkedRecordPair mrp) throws IOException {
+	public void putMarkedRecordPair(ImmutableMarkedRecordPair mrp) throws Exception {
 		((MarkedRecordPairSink)sinks[curSink]).put(mrp);
 		sizes[curSink]++;
 		if (sizes[curSink] == sinkSize) {
@@ -63,7 +63,7 @@ public class RoundRobinSink implements RecordSink, MarkedRecordPairSink {
 		curSink = (curSink + 1) % distrib;
 	}
 
-	public void put(ImmutableRecordPair rp) throws IOException {
+	public void put(ImmutableRecordPair rp) throws Exception {
 		putMarkedRecordPair((ImmutableMarkedRecordPair)rp);
 	}
 
@@ -86,7 +86,7 @@ public class RoundRobinSink implements RecordSink, MarkedRecordPairSink {
 		curSink = 0;
 	}
 
-	public void close() throws IOException {
+	public void close() throws Exception {
 		for (int i = 0; i < distrib; i++) {
 			sinks[i].close();
 		}

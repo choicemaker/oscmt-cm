@@ -24,6 +24,7 @@ import com.choicemaker.cm.core.Source;
 import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.core.util.LoggingObject;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
+import com.choicemaker.util.ExceptionInfo;
 
 /**
  * Superclass of the different types of MRPSGuis associated
@@ -107,7 +108,7 @@ public abstract class SourceGui extends JDialog {
 		}
 	}
 
-	protected void generate() {
+	protected void generate() throws Exception {
 	}
 
 
@@ -125,7 +126,22 @@ public abstract class SourceGui extends JDialog {
 				if (mode == CREATE) {
 					create();
 				} else {
-					generate();
+					try {
+						generate();
+					} catch (Exception e) {
+						// Log the error
+						final String info = "Generatiion failed for ";
+						final String fullName = source.getName();
+						final String fullSummary = info + fullName;
+						logger.severe(new ExceptionInfo(e)
+								.toString(fullSummary));
+
+						// Display the error
+						final String shortName =
+							ChoiceMakerCoreMessages.elideFileName(fullName, 50);
+						final String shortSummary = info + shortName;
+						parent.postError(shortSummary, e, true);
+					}
 				}
 			}
 		});

@@ -421,10 +421,7 @@ public class XmlEncMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui
 					}
 				}
 			}
-		} catch (XmlConfException ex) {
-			logger.severe(new LoggingObject("CM-020001").toString() + ": " + ex);
-			return;
-		} catch (IOException ex) {
+		} catch (Exception ex) {
 			logger.severe(new LoggingObject("CM-020001").toString() + ": " + ex);
 			return;
 		}

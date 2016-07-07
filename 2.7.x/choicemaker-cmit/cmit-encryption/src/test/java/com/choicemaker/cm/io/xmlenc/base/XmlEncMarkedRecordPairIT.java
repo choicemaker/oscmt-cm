@@ -38,6 +38,7 @@ import com.choicemaker.cm.core.ModelConfigurationException;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.xmlconf.XmlConfigurator;
+import com.choicemaker.cm.io.xml.base.XmlDiagnosticException;
 import com.choicemaker.cm.io.xml.base.XmlMarkedRecordPairSource;
 import com.choicemaker.cm.io.xmlenc.mgmt.InMemoryXmlEncManager;
 import com.choicemaker.cm.io.xmlenc.mgmt.XmlEncryptionManager;
@@ -257,7 +258,11 @@ public class XmlEncMarkedRecordPairIT {
 
 		} finally {
 			if (encSink != null) {
-				encSink.close();
+				try {
+					encSink.close();
+				} catch (XmlDiagnosticException e) {
+					logger.warning(e.toString());
+				}
 			}
 			encSink = null;
 		}

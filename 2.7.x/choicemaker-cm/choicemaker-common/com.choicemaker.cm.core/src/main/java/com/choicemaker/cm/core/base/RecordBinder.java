@@ -40,7 +40,7 @@ public class RecordBinder implements RecordSource {
 		return list;
 	}
 
-	public static void store(Collection l, RecordSink snk) throws IOException {
+	public static void store(Collection l, RecordSink snk) throws Exception {
 		snk.open();
 		Iterator i = l.iterator();
 		while (i.hasNext()) {

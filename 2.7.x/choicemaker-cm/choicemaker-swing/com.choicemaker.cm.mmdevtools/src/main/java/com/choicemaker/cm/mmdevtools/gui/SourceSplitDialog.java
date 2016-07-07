@@ -129,9 +129,7 @@ public class SourceSplitDialog extends JDialog {
 			sink.close();
 			source.close();
 
-		} catch (XmlConfException ex) {
-			ex.printStackTrace();
-		} catch (IOException ex) {
+		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 	}

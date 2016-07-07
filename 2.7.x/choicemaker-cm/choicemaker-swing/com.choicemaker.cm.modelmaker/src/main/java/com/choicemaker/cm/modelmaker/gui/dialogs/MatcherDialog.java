@@ -68,6 +68,7 @@ import com.choicemaker.cm.modelmaker.gui.utils.Enable;
 import com.choicemaker.cm.modelmaker.gui.utils.EnablednessGuard;
 import com.choicemaker.cm.module.IUserMessages;
 import com.choicemaker.e2.platform.CMPlatformUtils;
+import com.choicemaker.util.ExceptionInfo;
 
 /**
  * Description
@@ -94,7 +95,7 @@ public class MatcherDialog extends JDialog implements Enable {
 	private JButton largeBrowse;
 	private JButton largeNew;
 	private JButton largePreview;
-	private JComboBox blocking;
+	private JComboBox<String> blocking;
 	private JCheckBox excludeMatchesToSelf;
 	private JTextField maxNumMatchesPerSourceRecord;
 	private JComboBox sortOrder;
@@ -353,11 +354,16 @@ public class MatcherDialog extends JDialog implements Enable {
 							public void run() {
 								try {
 									matcher.match();
-								} catch (IOException e) {
-									LoggingObject lo = new LoggingObject("CM-100401");
-									String msg = lo.getFormattedMessage() + ": " + e;
-									userMessages.postMessage(msg);
-									logger.severe(msg);
+								} catch (Exception e) {
+									// Log the error
+									LoggingObject lo =
+										new LoggingObject("CM-100401");
+									final String msg = lo.getFormattedMessage();
+									logger.severe(new ExceptionInfo(e)
+											.toString(msg));
+
+									// Display the error
+									modelMaker.postError(msg, e, true);
 								}
 							}
 						};

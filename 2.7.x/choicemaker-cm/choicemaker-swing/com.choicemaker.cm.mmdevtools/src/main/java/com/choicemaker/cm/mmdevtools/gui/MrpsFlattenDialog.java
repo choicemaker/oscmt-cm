@@ -84,7 +84,7 @@ public class MrpsFlattenDialog extends JDialog {
 				}
 			}
 			sink.close();		
-		} catch (IOException ex) {
+		} catch (Exception ex) {
 			ErrorDialog.showErrorDialog(this, "Error transfering records to sink: " + ex.getMessage(), ex);
 			return false;
 		}

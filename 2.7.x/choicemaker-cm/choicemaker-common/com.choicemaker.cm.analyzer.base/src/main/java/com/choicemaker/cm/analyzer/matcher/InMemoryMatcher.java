@@ -138,7 +138,7 @@ public class InMemoryMatcher {
 		}
 	}
 
-	public void match() throws IOException {
+	public void match() throws Exception {
 		boolean deduplicateSingleSource = largeRecordSource == null;
 		smallRecordSource.setModel(probabilityModel);
 		sink.setModel(probabilityModel);

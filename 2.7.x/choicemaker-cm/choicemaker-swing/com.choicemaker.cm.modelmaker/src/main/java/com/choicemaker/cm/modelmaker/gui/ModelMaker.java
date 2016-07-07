@@ -110,6 +110,7 @@ import com.choicemaker.util.Arguments;
 import com.choicemaker.util.ArrayHelper;
 import com.choicemaker.util.ExceptionInfo;
 import com.choicemaker.util.IntArrayList;
+import com.choicemaker.util.MessageUtil;
 
 /**
  *
@@ -1186,16 +1187,25 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 			logger.info("Re-saved MarkedRecordPairSource: "
 					+ markedRecordPairSource.getName());
 			setSourceDataModified(false);
-		} catch (IOException ex) {
-			logger.severe(new LoggingObject("CM-100602", markedRecordPairSource
-					.getName()).getFormattedMessage() + ": " + ex);
+		} catch (Exception ex) {
+			// Log the error
+			final String fullName = markedRecordPairSource.getName();
+			final String fullSummary =
+				new LoggingObject("CM-100602", fullName).getFormattedMessage();
+			logger.severe(new ExceptionInfo(ex).toString(fullSummary));
+
+			// Display the error
+			final String shortName =
+				ChoiceMakerCoreMessages.elideFileName(fullName, 50);
+			final String shortSummary =
+				new LoggingObject("CM-100602", shortName).getFormattedMessage();
+			postError(shortSummary, ex, true);
 		}
 	}
 
-	// ************************************************************************************************
-	// ******Clues
-	// methods*****************************************************************************
-	// ************************************************************************************************
+	// ************************************************************************
+	// ****** Clue  methods ***************************************************
+	// ************************************************************************
 
 	/**
 	 * Sets the cluesToEvaluate elements all to true in probabilityModel.
@@ -1550,6 +1560,39 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 	// ******************************************************************************
 	// ******************************************************************************
 
+	// This operation blocks until the user dismisses the displayed error
+	public void displayError(final String context, Exception x) {
+		final String title = _msgs.formatMessage("error");
+		Object arUserInfo;
+		if (x != null) {
+			final ExceptionInfo xinfo = new ExceptionInfo(x);
+			List<String> userInfo = new ArrayList<>();
+			userInfo.add(context);
+			userInfo.addAll(MessageUtil.exceptionInfo(xinfo));
+			arUserInfo = userInfo.toArray(new String[userInfo.size()]);
+		} else {
+			arUserInfo = context;
+		}
+		JOptionPane.showMessageDialog(null, arUserInfo, title,
+				JOptionPane.ERROR_MESSAGE);
+	}
+
+	public void postError(final String context, Exception x, 
+			boolean displayError) {
+		StringBuffer sb = new StringBuffer();
+		sb.append(_msgs.formatMessage("error"));
+		if (x != null) {
+			final ExceptionInfo xinfo = new ExceptionInfo(x);
+			sb.append(": ").append(xinfo.toString(context));
+		} else {
+			sb.append(": ").append(context);
+		}
+		postUserMessage(sb.toString());
+		if (displayError) {
+			displayError(context, x);
+		}
+	}
+
 	/**
 	 * Posts Clue text to the MessagePanel.
 	 */
@@ -1561,9 +1604,7 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 	/**
 	 * Posts Info message to the MessagePanel.
 	 */
-	public void postUserMessage
-
-	(String s) {
+	public void postUserMessage(String s) {
 		// String displayString =
 		// _msgs.formatMessage("train.gui.modelmaker.message.info",
 		// s) + Constants.LINE_SEPARATOR;
@@ -1767,31 +1808,25 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 			buildComponents();
 			addListeners();
 			setTitleMessage();
-		} catch (XmlConfException e) {
 
-			final ExceptionInfo xinfo = new ExceptionInfo(e);
+		} catch (XmlConfException e) {
+			// Log the error
 			final String fullSummary =
 				_msgs.formatMessage(
 						"train.gui.modelmaker.configurationfile.invalid.error",
 						conf);
-			logger.severe(xinfo.toString(fullSummary));
+			logger.severe(new ExceptionInfo(e).toString(fullSummary));
 
-			final String shortConf = _msgs.elideFileName(conf, 50);
+			// Display the error
+			final String shortConf =
+				ChoiceMakerCoreMessages.elideFileName(conf, 50);
 			final String shortSummary =
 				_msgs.formatMessage(
 						"train.gui.modelmaker.configurationfile.invalid.error",
 						shortConf);
+			displayError(shortSummary, e);
 
-			List<String> userInfo = new ArrayList<>();
-			userInfo.add(shortSummary);
-			userInfo.addAll(_msgs.exceptionInfo(xinfo));
-			final String[] arUserInfo =
-				userInfo.toArray(new String[userInfo.size()]);
-
-			final String title = _msgs.formatMessage("error");
-
-			JOptionPane.showMessageDialog(null, arUserInfo, title,
-					JOptionPane.ERROR_MESSAGE);
+			// Exit
 			programExit(EXIT_ERROR);
 		}
 

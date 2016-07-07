@@ -31,18 +31,18 @@ public interface Sink extends AutoCloseable {
 	 * Closes the data sink.
 	 * Every data sinks that is opened must eventually be closed again explicitly.
 	 *
-	 * @throws  IOException  if there is a problem closing the sink.
+	 * @throws  Exception  if there is a problem closing the sink.
 	 */
-	void close() throws IOException;
+	void close() throws Exception;
 
 	/**
 	 * Flushes the data sink.
 	 * If the sink is backed by persistent storage, this method forces the sink
 	 * to write any cached data to the storage. Otherwise this method does nothing.
 	 *
-	 * @throws  IOException  if there is a problem writing the data.
+	 * @throws  Exception  if there is a problem writing the data.
 	 */
-	void flush() throws IOException;
+	void flush() throws Exception;
 
 	String getName();
 

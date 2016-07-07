@@ -100,7 +100,7 @@ public class XmlMarkedRecordPairSink implements MarkedRecordPairSink {
 		getWriter().write("</ChoiceMakerMarkedRecordPairs>");
 	}
 
-	public void close() throws IOException {
+	public void close() throws IOException, XmlDiagnosticException {
 		finishRootEntity();
 		getWriter().flush();
 		getOutputStream().close();

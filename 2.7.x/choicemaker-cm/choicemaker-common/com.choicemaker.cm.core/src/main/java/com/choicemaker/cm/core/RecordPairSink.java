@@ -19,7 +19,7 @@ public interface RecordPairSink extends Sink {
 	 * Stores a record to the sink.
 	 *
 	 * @param   r The record to be stored.
-	 * @throws  IOException  if there is a problem retrieving the data.
+	 * @throws  Exception  if there is a problem retrieving the data.
 	 */
-	void put(ImmutableRecordPair r) throws IOException;
+	void put(ImmutableRecordPair r) throws Exception;
 }

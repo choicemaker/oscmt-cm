@@ -385,7 +385,7 @@ public class ChunkService3_OLD {
 				recIDSinks = null;
 			}
 
-		} catch (IOException ex) {
+		} catch (Exception ex) {
 			throw new BlockingException(ex.toString());
 		}
 
@@ -398,7 +398,7 @@ public class ChunkService3_OLD {
 	 * @param masterRecordSinks
 	 * @throws IOException
 	 */
-	private void openMaster(RecordSink[] masterRecordSinks) throws IOException {
+	private void openMaster(RecordSink[] masterRecordSinks) throws Exception {
 		int s = masterRecordSinks.length;
 		for (int i = 0; i < s; i++) {
 			masterRecordSinks[i].open();
@@ -471,7 +471,7 @@ public class ChunkService3_OLD {
 			log.finer("closing record sink[" + i + "]");
 			try {
 				recordSinks[i].close();
-			} catch (IOException e) {
+			} catch (Exception e) {
 				log.warning(e.toString());
 			}
 
@@ -565,7 +565,7 @@ public class ChunkService3_OLD {
 
 			context = "closing record source (" + rs.toString() + ")";
 			rs.close();
-		} catch (IOException ex) {
+		} catch (Exception ex) {
 			String msg = "Error while " + context + ": " + ex.toString();
 			log.severe(msg);
 			throw new BlockingException(msg);

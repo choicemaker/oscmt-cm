@@ -13,20 +13,29 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.logging.Logger;
 
 import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.xml.security.encryption.XMLEncryptionException;
+import org.apache.xml.security.exceptions.XMLSecurityException;
 import org.apache.xml.security.utils.XMLUtils;
 import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
+import com.choicemaker.cm.io.xml.base.XmlDiagnosticException;
 import com.choicemaker.cm.io.xml.base.XmlMarkedRecordPairSink;
 import com.choicemaker.cm.io.xmlenc.mgmt.XmlEncryptionManager;
+import com.choicemaker.util.MessageUtil;
 import com.choicemaker.utilcopy01.Precondition;
+//import com.choicemaker.utilcopy01.XMLUtils;
 import com.choicemaker.xmlencryption.CredentialSet;
 import com.choicemaker.xmlencryption.DocumentEncryptor;
 import com.choicemaker.xmlencryption.EncryptionScheme;
@@ -37,6 +46,9 @@ import com.choicemaker.xmlencryption.EncryptionScheme;
  * @author rphall
  */
 public class XmlEncMarkedRecordPairSink extends XmlMarkedRecordPairSink {
+
+	private static final Logger logger = Logger
+			.getLogger(XmlEncMarkedRecordPairSink.class.getName());
 
 	private final EncryptionScheme scheme;
 	private final CredentialSet credential;
@@ -70,20 +82,21 @@ public class XmlEncMarkedRecordPairSink extends XmlMarkedRecordPairSink {
 		return docWriter;
 	}
 
-	public void close() throws IOException {
+	public void close() throws IOException, XmlDiagnosticException {
 		super.finishRootEntity();
 		super.getWriter().flush();
 		String docString = docWriter.toString();
 		FileOutputStream fos = createFileOutputStream();
-		DocumentEncryptor encryptor = xmlEncMgr.getDocumentEncryptor(scheme,
-				credential);
+		DocumentEncryptor encryptor =
+			xmlEncMgr.getDocumentEncryptor(scheme, credential);
 		encrypt(encryptor, docString, fos);
 		finishRootEntity();
 		fos.close();
 	}
 
 	protected static void encrypt(DocumentEncryptor encryptor,
-			String docString, FileOutputStream fos) throws IOException {
+			String docString, FileOutputStream fos) throws IOException,
+			XmlDiagnosticException {
 		try {
 			byte[] b = docString.getBytes();
 			ByteArrayInputStream sourceDocument = new ByteArrayInputStream(b);
@@ -99,10 +112,23 @@ public class XmlEncMarkedRecordPairSink extends XmlMarkedRecordPairSink {
 			PrintStream ps = new PrintStream(fos);
 			StreamResult result = new StreamResult(ps);
 			transformer.transform(source, result);
-		} catch (IOException x) {
-			throw x;
-		} catch (Exception x) {
-			throw new IOException(x);
+		} catch (ParserConfigurationException | SAXException
+				| TransformerException | XMLSecurityException e) {
+			String elidedDocString = MessageUtil.elideString(docString, 50);
+			final String msg = "Failed to encrypt document: " + elidedDocString;
+			logger.severe(msg + ": " + e.toString());
+			if (e instanceof ParserConfigurationException) {
+				throw new XmlDiagnosticException(msg, (ParserConfigurationException)e);
+			} else if (e instanceof SAXException) {
+				throw new XmlDiagnosticException(msg, (SAXException) e);
+			} else if (e instanceof TransformerException) {
+				throw new XmlDiagnosticException(msg, (TransformerException) e);
+			} else if (e instanceof XMLSecurityException) {
+				throw new XmlEncDiagnosticException(msg, (XMLSecurityException) e);
+			} else {
+				String msg2 = "Unexpected exception type: " + e.getClass().getSimpleName() +": " + msg;
+				throw new XmlDiagnosticException(msg, e);
+			}
 		}
 	}
 

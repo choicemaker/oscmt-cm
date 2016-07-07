@@ -24,7 +24,6 @@ import com.choicemaker.cm.core.MarkedRecordPairSink;
 import com.choicemaker.cm.core.MarkedRecordPairSource;
 import com.choicemaker.cm.core.Sink;
 import com.choicemaker.cm.core.SinkFactory;
-import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.xmlconf.MarkedRecordPairSourceXmlConf;
 
 /**
@@ -85,7 +84,7 @@ public class MarkedRecordPairBinder implements MarkedRecordPairSource {
 	 * @throws  IOException  If an exception occurs adding elements to the
 	 *            <code>MarkedRecordPairSink</code>.
 	 */
-	public static void store(Collection l, MarkedRecordPairSink snk) throws IOException {
+	public static void store(Collection l, MarkedRecordPairSink snk) throws Exception {
 		snk.open();
 		Iterator i = l.iterator();
 		while (i.hasNext()) {
@@ -94,7 +93,7 @@ public class MarkedRecordPairBinder implements MarkedRecordPairSource {
 		snk.close();
 	}
 
-	public static void store(List l, int[] selection, MarkedRecordPairSink snk) throws IOException {
+	public static void store(List l, int[] selection, MarkedRecordPairSink snk) throws Exception {
 		snk.open();
 		if (selection != null) {
 			for (int i = 0; i < selection.length; ++i) {
@@ -104,7 +103,7 @@ public class MarkedRecordPairBinder implements MarkedRecordPairSource {
 		snk.close();
 	}
 
-	public static void store(MarkedRecordPairSource[] sources, MarkedRecordPairSink sink) throws IOException {
+	public static void store(MarkedRecordPairSource[] sources, MarkedRecordPairSink sink) throws Exception {
 		sink.open();
 		for (int i = 0; i < sources.length; ++i) {
 			MarkedRecordPairSource src = sources[i];
@@ -118,7 +117,7 @@ public class MarkedRecordPairBinder implements MarkedRecordPairSource {
 	}
 
 	public static void store(String[] sourceNames, ImmutableProbabilityModel model, MarkedRecordPairSink sink)
-		throws XmlConfException, IOException {
+		throws Exception {
 		MarkedRecordPairSource[] sources = new MarkedRecordPairSource[sourceNames.length];
 		for (int i = 0; i < sourceNames.length; ++i) {
 			sources[i] = MarkedRecordPairSourceXmlConf.getMarkedRecordPairSource(sourceNames[i]);
@@ -128,7 +127,7 @@ public class MarkedRecordPairBinder implements MarkedRecordPairSource {
 	}
 
 	public static void store(MarkedRecordPairSource[] sources, SinkFactory f, int distrib, int sinkSize)
-		throws IOException {
+		throws Exception {
 		MarkedRecordPairSink[] sink = new MarkedRecordPairSink[distrib];
 		int[] sizes = new int[distrib];
 		for (int d = 0; d < distrib; ++d) {
@@ -158,7 +157,7 @@ public class MarkedRecordPairBinder implements MarkedRecordPairSource {
 	}
 
 	public static void store(String[] sourceNames, ImmutableProbabilityModel model, SinkFactory f, int distrib, int sinkSize)
-		throws XmlConfException, IOException {
+		throws Exception {
 		MarkedRecordPairSource[] sources = new MarkedRecordPairSource[sourceNames.length];
 		for (int i = 0; i < sourceNames.length; ++i) {
 			sources[i] = MarkedRecordPairSourceXmlConf.getMarkedRecordPairSource(sourceNames[i]);

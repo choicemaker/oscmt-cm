@@ -20,7 +20,7 @@ public interface MarkedRecordPairSink extends RecordPairSink {
 	 * <code>MarkedRecordPair</code>.
 	 *
 	 * @param   r The marked record pair to be stored.
-	 * @throws  IOException  if there is a problem retrieving the data.
+	 * @throws  Exception  if there is a problem retrieving the data.
 	 */
-	void putMarkedRecordPair(ImmutableMarkedRecordPair r) throws IOException;
+	void putMarkedRecordPair(ImmutableMarkedRecordPair r) throws Exception;
 }

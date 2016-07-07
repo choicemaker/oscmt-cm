@@ -368,9 +368,7 @@ public class MRPSCreator {
 
 			}
 
-		} catch (RemoteException e) {
-			throw new BlockingException(e.toString());
-		} catch (IOException e) {
+		} catch (Exception e) {
 			throw new BlockingException(e.toString());
 		} finally {
 			try {
@@ -476,8 +474,7 @@ public class MRPSCreator {
 
 	private static void writeMRPS(MarkedRecordPairSink mrps, Iterator mrIter,
 			Filter postFilter, Map stageMap, Map masterMap, IControl control,
-			PairSampler sampler) throws BlockingException, ControlException,
-			IOException, RemoteException {
+			PairSampler sampler) throws Exception {
 
 		// Preconditions
 		if (mrps == null) {

@@ -14,7 +14,7 @@
 
   <artifactId>com.choicemaker.cm.io.xmlenc.gui</artifactId>
   <packaging>jar</packaging>
-  <name>ChoiceMaker IO Plug-in (XML GUI)</name>
+  <name>ChoiceMaker Encryption: XML GUI </name>
 
   <properties>
     <eclipse.plugin.runtime.library.name>gui.jar</eclipse.plugin.runtime.library.name>

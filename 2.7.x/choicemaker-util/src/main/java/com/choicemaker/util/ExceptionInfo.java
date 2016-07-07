@@ -1,7 +1,5 @@
 package com.choicemaker.util;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 
 /**
  * Gathers information from an exception
@@ -32,14 +30,6 @@ public class ExceptionInfo {
 			causeSimpleClassName = "";
 			causeMessage = "";
 		}
-	}
-
-	public String getStackTrace() {
-		StringWriter sw = new StringWriter();
-		PrintWriter pw = new PrintWriter(sw);
-		x.printStackTrace(pw);
-		String retVal = sw.toString();
-		return retVal;
 	}
 
 	public String toString(String context) {

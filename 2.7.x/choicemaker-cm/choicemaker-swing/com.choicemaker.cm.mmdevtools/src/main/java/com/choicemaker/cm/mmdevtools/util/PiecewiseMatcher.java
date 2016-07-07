@@ -108,7 +108,7 @@ public class PiecewiseMatcher {
 		matches = new Counter(MATCHES_CREATED, 100);
 	}
 
-	public void match() throws IOException {
+	public void match() throws Exception {
 				
 		for (int i = 0; i < sources.length; i++) {
 			sources[i].setModel(probabilityModel);
@@ -156,7 +156,7 @@ public class PiecewiseMatcher {
 		setDone();		
 	}
 
-	private void match(List records) throws IOException {
+	private void match(List records) throws Exception {
 		int len = records.size();
 		for (int i = 0; i < len; i++) {
 			Record q = (Record) records.get(i);
@@ -167,7 +167,7 @@ public class PiecewiseMatcher {
 		}
 	}
 	
-	private void match(RecordSource rs) throws IOException {
+	private void match(RecordSource rs) throws Exception {
 		rs.open();
 		while (rs.hasNext()) {
 			Record q = rs.getNext();
@@ -180,7 +180,7 @@ public class PiecewiseMatcher {
 		rs.close();
 	}
 
-	private void match(Record q, RecordSource rsBlocked) throws IOException {
+	private void match(Record q, RecordSource rsBlocked) throws Exception {
 		rsBlocked.open();
 
 		while (rsBlocked.hasNext()) {

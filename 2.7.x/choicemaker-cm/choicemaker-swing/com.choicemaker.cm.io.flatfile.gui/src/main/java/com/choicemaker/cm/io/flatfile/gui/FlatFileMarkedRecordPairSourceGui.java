@@ -449,10 +449,7 @@ public class FlatFileMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui
 					}
 				}
 			}
-		} catch (XmlConfException ex) {
-			logger.severe(new LoggingObject("CM-020001").toString() + ": " + ex);
-			return;
-		} catch (IOException ex) {
+		} catch (Exception ex) {
 			logger.severe(new LoggingObject("CM-020001").toString() + ": " + ex);
 			return;
 		}
@@ -460,7 +457,8 @@ public class FlatFileMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui
 	}
 
 	private char separatorChar() {
-		return ((Separator) separatorList.getSelectedItem()).getSeparator(separator.getText());
+		return ((Separator) separatorList.getSelectedItem())
+				.getSeparator(separator.getText());
 	}
 
 	private void layoutContent() {

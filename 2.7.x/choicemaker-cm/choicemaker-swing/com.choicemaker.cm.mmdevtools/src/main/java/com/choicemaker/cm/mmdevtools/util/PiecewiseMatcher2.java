@@ -85,7 +85,7 @@ public class PiecewiseMatcher2 {
 		this.numThreads = numThreads;
 	}
 
-	public void match() throws IOException {
+	public void match() throws Exception {
 			
 		RecordPairQueue queue = new RecordPairQueue(10000);
 		
@@ -255,7 +255,7 @@ public class PiecewiseMatcher2 {
 						numPairsOutput++;
 					}
 				}
-			} catch (IOException ex) {
+			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
 		}
@@ -270,11 +270,12 @@ public class PiecewiseMatcher2 {
 			this.inner = sink;
 		}
 
-		public synchronized void putMarkedRecordPair(ImmutableMarkedRecordPair r) throws IOException {
+		public synchronized void putMarkedRecordPair(ImmutableMarkedRecordPair r)
+				throws Exception {
 			inner.putMarkedRecordPair(r);
 		}
 
-		public synchronized void put(ImmutableRecordPair r) throws IOException {
+		public synchronized void put(ImmutableRecordPair r) throws Exception {
 			inner.put(r);
 		}
 
@@ -282,7 +283,7 @@ public class PiecewiseMatcher2 {
 			inner.open();
 		}
 
-		public synchronized void close() throws IOException {
+		public synchronized void close() throws Exception {
 			inner.close();
 		}
 

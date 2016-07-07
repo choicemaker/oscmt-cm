@@ -415,7 +415,7 @@ public class ChunkService3 {
 				recIDSinks = null;
 			}
 
-		} catch (IOException ex) {
+		} catch (Exception ex) {
 			throw new BlockingException(ex.toString());
 		}
 
@@ -429,7 +429,7 @@ public class ChunkService3 {
 	 * @throws IOException
 	 */
 	private void createEmptySinks(RecordSink[] masterRecordSinks)
-			throws IOException {
+			throws Exception {
 		int s = masterRecordSinks.length;
 		for (int i = 0; i < s; i++) {
 			masterRecordSinks[i].open();
@@ -484,7 +484,7 @@ public class ChunkService3 {
 		for (int i = start; i < end; i++) {
 			try {
 				recordSinks[i].close();
-			} catch (IOException e) {
+			} catch (Exception e) {
 				throw new BlockingException(e.getMessage(), e);
 			}
 			if (crSets[i].isDebugEnabled()) {
@@ -623,7 +623,7 @@ public class ChunkService3 {
 			// close source
 			rs.close();
 
-		} catch (IOException ex) {
+		} catch (Exception ex) {
 			throw new BlockingException(ex.toString());
 		}
 	}

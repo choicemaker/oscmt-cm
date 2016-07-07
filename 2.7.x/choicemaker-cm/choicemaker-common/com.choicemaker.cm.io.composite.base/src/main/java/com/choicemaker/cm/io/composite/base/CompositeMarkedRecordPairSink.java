@@ -41,7 +41,7 @@ public class CompositeMarkedRecordPairSink implements MarkedRecordPairSink {
 		curSink.open();
 	}
 
-	public void close() throws IOException {
+	public void close() throws Exception {
 		curSink.close();
 	}
 
@@ -64,11 +64,11 @@ public class CompositeMarkedRecordPairSink implements MarkedRecordPairSink {
 		}
 	}
 
-	public void put(ImmutableRecordPair r) throws IOException {
+	public void put(ImmutableRecordPair r) throws Exception {
 		putMarkedRecordPair((ImmutableMarkedRecordPair) r);
 	}
 
-	public void putMarkedRecordPair(ImmutableMarkedRecordPair r) throws IOException {
+	public void putMarkedRecordPair(ImmutableMarkedRecordPair r) throws Exception {
 		while (curIdx == constituentSizes[curSource]) {
 			curSink.close();
 			++curSource;

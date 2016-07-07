@@ -13,7 +13,6 @@ import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.IOException;
 import java.util.logging.Logger;
 
 import javax.swing.AbstractAction;
@@ -31,7 +30,6 @@ import com.choicemaker.cm.core.MarkedRecordPairSource;
 import com.choicemaker.cm.core.RepositoryChangeEvent;
 import com.choicemaker.cm.core.RepositoryChangeListener;
 import com.choicemaker.cm.core.Source;
-import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.base.MarkedRecordPairBinder;
 import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.core.util.LoggingObject;
@@ -40,6 +38,7 @@ import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cm.modelmaker.gui.dialogs.SourceTypeSelectorDialog;
 import com.choicemaker.cm.modelmaker.gui.listeners.EvaluationEvent;
 import com.choicemaker.cm.modelmaker.gui.listeners.EvaluationListener;
+import com.choicemaker.util.ExceptionInfo;
 
 /**
  * The menu from which a MarkedRecordPairSource is selected.
@@ -86,15 +85,29 @@ public class SourceMenu extends JMenu {
 		public void actionPerformed(ActionEvent e) {
 			Source source = new SourceTypeSelectorDialog(parent, true).define();
 			if (source != null) {
-				MarkedRecordPairSink sink = (MarkedRecordPairSink) source.getSink();
+				MarkedRecordPairSink sink =
+					(MarkedRecordPairSink) source.getSink();
 				sink.setModel(parent.getProbabilityModel());
 				try {
-					MarkedRecordPairBinder.store(parent.getSourceList(), parent.getSelection(), sink);
-					MarkedRecordPairSourceXmlConf.add((MarkedRecordPairSource) source);
-				} catch (IOException ex) {
-					logger.severe(new LoggingObject("CM-100602", sink.getName()).getFormattedMessage() + ": " + ex);
-				} catch (XmlConfException ex) {
-					logger.severe(new LoggingObject("CM-100602", sink.getName()).getFormattedMessage() + ": " + ex);
+					MarkedRecordPairBinder.store(parent.getSourceList(),
+							parent.getSelection(), sink);
+					MarkedRecordPairSourceXmlConf
+							.add((MarkedRecordPairSource) source);
+				} catch (Exception ex) {
+					// Log the error
+					final String fullName = sink.getName();
+					final String fullSummary =
+						new LoggingObject("CM-100602", fullName)
+								.getFormattedMessage();
+					logger.severe(new ExceptionInfo(ex).toString(fullSummary));
+
+					// Display the error
+					final String shortName =
+						ChoiceMakerCoreMessages.elideFileName(fullName, 50);
+					final String shortSummary =
+						new LoggingObject("CM-100602", shortName)
+								.getFormattedMessage();
+					parent.postError(shortSummary, ex, true);
 				}
 			}
 		}
@@ -200,12 +213,25 @@ public class SourceMenu extends JMenu {
 				sink.setModel(parent.getProbabilityModel());
 				try {
 					parent.sortChecked();
-					MarkedRecordPairBinder.store(parent.getSourceList(), parent.getCheckedIndices(), sink);
-					MarkedRecordPairSourceXmlConf.add((MarkedRecordPairSource) source);
-				} catch (IOException ex) {
-					logger.severe(new LoggingObject("CM-100602", sink.getName()).getFormattedMessage() + ": " + ex);
-				} catch (XmlConfException ex) {
-					logger.severe(new LoggingObject("CM-100602", sink.getName()).getFormattedMessage() + ": " + ex);
+					MarkedRecordPairBinder.store(parent.getSourceList(),
+							parent.getCheckedIndices(), sink);
+					MarkedRecordPairSourceXmlConf
+							.add((MarkedRecordPairSource) source);
+				} catch (Exception ex) {
+					// Log the error
+					final String fullName = sink.getName();
+					final String fullSummary =
+						new LoggingObject("CM-100602", fullName)
+								.getFormattedMessage();
+					logger.severe(new ExceptionInfo(ex).toString(fullSummary));
+
+					// Display the error
+					final String shortName =
+						ChoiceMakerCoreMessages.elideFileName(fullName, 50);
+					final String shortSummary =
+						new LoggingObject("CM-100602", shortName)
+								.getFormattedMessage();
+					parent.postError(shortSummary, ex, true);
 				}
 			}
 		}

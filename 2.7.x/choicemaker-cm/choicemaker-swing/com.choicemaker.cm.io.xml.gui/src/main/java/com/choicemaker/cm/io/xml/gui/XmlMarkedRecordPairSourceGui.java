@@ -333,7 +333,7 @@ public class XmlMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui
 	}
 
 	@Override
-	protected void generate() {
+	protected void generate() throws Exception {
 		Object[] sources = ((DefaultListModel<?>) sourcesList.getModel())
 				.toArray();
 		String[] sourceNames = new String[sources.length];

@@ -17,7 +17,12 @@ public class MessageUtil {
 
 	private static final Logger logger = Logger.getLogger(MessageUtil.class
 			.getName());
+
 	private static final Object[] ZERO_LENGTH_ARRAY = new Object[0];
+
+	public static final String ELLIPSIS = "...";
+	public static final int ELLIPSIS_LENGTH = ELLIPSIS.length();
+
 	protected ResourceBundle myResources;
 
 	public MessageUtil(String name) {
@@ -84,10 +89,6 @@ public class MessageUtil {
 		return mf.format(args);
 	}
 
-	public static final String ELLIPSIS = "...";
-
-	public static final int ELLIPSIS_LENGTH = ELLIPSIS.length();
-
 	/**
 	 * Equivalent to:
 	 * 
@@ -101,7 +102,7 @@ public class MessageUtil {
 	 *            the initial length of the returned elision
 	 * @return an elision of the trimmed string
 	 */
-	public String elideString(String s, int startLength) {
+	public static String elideString(String s, int startLength) {
 		return elideString(s, startLength, 0, true);
 	}
 
@@ -120,7 +121,7 @@ public class MessageUtil {
 	 *            the final length of the returned elision
 	 * @return an elision of the trimmed string, or null if the input is null
 	 */
-	public String elideString(String s, int startLength, int endLength) {
+	public static String elideString(String s, int startLength, int endLength) {
 		return elideString(s, startLength, endLength, true);
 	}
 
@@ -155,7 +156,7 @@ public class MessageUtil {
 	 *         , where s_length is the length of input string after optional
 	 *         trimming.
 	 */
-	public String elideString(String s, int startLength, int endLength,
+	public static String elideString(String s, int startLength, int endLength,
 			boolean trim) {
 		String retVal = null;
 		if (s != null) {
@@ -197,7 +198,7 @@ public class MessageUtil {
 	 *         file name broken at some file separator if possible, or the
 	 *         entire base file name if base name is too long
 	 */
-	public String elideFileName(String fileName, int endLength) {
+	public static String elideFileName(String fileName, int endLength) {
 		String retVal = null;
 		if (fileName != null && fileName.length() <= endLength + ELLIPSIS_LENGTH) {
 			retVal = fileName;
@@ -226,7 +227,7 @@ public class MessageUtil {
 	 *            may be null (but return value will be empty)
 	 * @return a non-null but possibly empty list
 	 */
-	public List<String> exceptionInfo(Exception x) {
+	public static List<String> exceptionInfo(Exception x) {
 		ExceptionInfo xinfo = x == null ? null : new ExceptionInfo(x);
 		return exceptionInfo(xinfo);
 	}
@@ -239,7 +240,7 @@ public class MessageUtil {
 	 *            may be null (but return value will be empty)
 	 * @return a non-null but possibly empty list
 	 */
-	public List<String> exceptionInfo(ExceptionInfo xinfo) {
+	public static List<String> exceptionInfo(ExceptionInfo xinfo) {
 		List<String> retVal;
 		if (xinfo == null) {
 			retVal = Collections.emptyList();
