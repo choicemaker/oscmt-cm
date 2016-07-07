@@ -41,7 +41,6 @@
             <configuration>
               <outputDirectory>
                 ${eclipse.application.plugins.dir}</outputDirectory>
-              <!-- classifier>eclipse2prj</classifier -->
             </configuration>
           </execution>
           <execution>
