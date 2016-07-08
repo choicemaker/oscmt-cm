@@ -7,6 +7,7 @@
  *******************************************************************************/
 package com.choicemaker.cm.io.xmlenc.xmlconf;
 
+import java.util.List;
 import java.util.Properties;
 import java.util.logging.Logger;
 
@@ -59,8 +60,14 @@ public class XmlEncInitializer implements XmlModuleInitializer {
 		if (e != null && !e.getName().equals("xmlenc")) {
 			Document d = e.getDocument();
 			Element r = d == null ? null : d.getRootElement();
-			Element p = r == null ? null : r.getChild("plugin");
-			e = p == null ? null : p.getChild("xmlenc");
+			List<?> plugins = r == null ? null : r.getChildren("plugin");
+			for (Object o : plugins) {
+				Element p = (Element) o;
+				e = p == null ? null : p.getChild("xmlenc");
+				if (e != null) {
+					break;
+				}
+			}
 		}
 		if (e != null) {
 			for (Object o : e.getChildren("credentialSet")) {
