@@ -12,7 +12,6 @@
    </runtime>
    <requires>
       <import plugin="com.choicemaker.cm.core"/>
-      <import plugin="javax.help.eclipse2plugin"/>
    </requires>
 
 
