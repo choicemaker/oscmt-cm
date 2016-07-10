@@ -45,6 +45,7 @@ import com.choicemaker.cm.io.xmlenc.mgmt.XmlEncryptionManager;
 import com.choicemaker.demo.simple_person_matching.PersonMrpListComparator;
 import com.choicemaker.e2.embed.EmbeddedPlatform;
 import com.choicemaker.util.FileUtilities;
+import com.choicemaker.util.SystemPropertyUtils;
 import com.choicemaker.xmlencryption.AwsKmsCredentialSet;
 import com.choicemaker.xmlencryption.AwsKmsEncryptionScheme;
 import com.choicemaker.xmlencryption.DocumentEncryptor;
@@ -68,7 +69,7 @@ public class XmlEncMarkedRecordPairIT {
 	 * created before this test is run. This file may be overridden at run time
 	 * by specifying a value for the System property {@link #X}.
 	 */
-	public static final String CREDENTIALS = "/Users/rphall/Documents/git/oscmt-cm/2.7.x/choicemaker-cmit/cmit-encryption/src/test/resources/santuario-kms_local.properties";
+	public static final String CREDENTIALS = SystemPropertyUtils.PV_USER_HOME + "/.aws/santuario-kms_local.properties";
 
 	/**
 	 * The name of the System property that specifies at runtime the location of
