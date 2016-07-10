@@ -48,8 +48,8 @@ import com.choicemaker.util.FileUtilities;
 import com.choicemaker.util.SystemPropertyUtils;
 import com.choicemaker.xmlencryption.AwsKmsCredentialSet;
 import com.choicemaker.xmlencryption.AwsKmsEncryptionScheme;
-import com.choicemaker.xmlencryption.DocumentEncryptor;
 import com.choicemaker.xmlencryption.CredentialSet;
+import com.choicemaker.xmlencryption.DocumentEncryptor;
 import com.choicemaker.xmlencryption.EncryptionParameters;
 import com.choicemaker.xmlencryption.EncryptionScheme;
 
@@ -282,6 +282,7 @@ public class XmlEncMarkedRecordPairIT {
 	private final EncryptionScheme policy = new AwsKmsEncryptionScheme();
 	private CredentialSet credential;
 
+//	private DocumentDecryptor decryptor;
 	private DocumentEncryptor encryptor;
 
 	@Before
@@ -321,22 +322,17 @@ public class XmlEncMarkedRecordPairIT {
 			final File inputFile = null;
 			final EncryptionParameters params = new EncryptionParameters(
 					isHelp, errors, credProps, inputFile);
-			final AWSCredentials creds = new BasicAWSCredentials(
-					params.getAwsAccessKey(), params.getAwsSecretkey());
-//                       final SecretKeyInfoFactory skif = new SecretKeyInfoFactory(
-//                                       params.getAwsMasterKeyId(),
-//                                       AwsKmsUtils.DEFAULT_AWS_KEY_ENCRYPTION_ALGORITHM,
-//                                       params.getAwsEndpoint(), creds);
-//
-//                       decryptor = new DocumentDecryptor(params.getAwsEndpoint(), creds);
-//                       encryptor = new DocumentEncryptor(skif);
-			/*
-			 * public DefaultAWSEncryptionCredential(AWSCredentials aws, String
-			 * name, String masterKeyId, String endpoint) {
-			 */
-			this.credential = new AwsKmsCredentialSet(creds,
-					CREDENTIAL_NAME, params.getAwsMasterKeyId(),
-					params.getAwsEndpoint());
+			final AWSCredentials creds =
+				new BasicAWSCredentials(params.getAwsAccessKey(),
+						params.getAwsSecretkey());
+
+			EncryptionScheme es = new AwsKmsEncryptionScheme();
+			credential =
+				new AwsKmsCredentialSet(creds, CREDENTIAL_NAME,
+						params.getAwsMasterKeyId(), params.getAwsEndpoint());
+			// decryptor = new DocumentDecryptor(es, credential);
+			encryptor = new DocumentEncryptor(es, credential);
+
 		} catch (Exception x) {
 			fail(x.toString());
 		}
