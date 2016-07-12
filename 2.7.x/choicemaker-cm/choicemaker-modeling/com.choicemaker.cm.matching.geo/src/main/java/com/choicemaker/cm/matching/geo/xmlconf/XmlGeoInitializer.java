@@ -141,7 +141,6 @@ public class XmlGeoInitializer implements XmlModuleInitializer {
 	 *            A map to populate.
 	 * @throws IOException
 	 */
-	@SuppressWarnings("unchecked")
 	public static void readFileMap(InputStream stream, String keyType, GeoMap m)
 			throws IOException {
 		InputStreamReader reader = new InputStreamReader(stream);
@@ -167,7 +166,7 @@ public class XmlGeoInitializer implements XmlModuleInitializer {
 				}
 
 				m.getMap().put(
-						ConvUtils.convertString2Object(key, keyType),
+						(Integer) ConvUtils.convertString2Object(key, keyType),
 						new GeoPoint(Integer.valueOf(lat).intValue(), Integer
 								.valueOf(lon).intValue()));
 			}
