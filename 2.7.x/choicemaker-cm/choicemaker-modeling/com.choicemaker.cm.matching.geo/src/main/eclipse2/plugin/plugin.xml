@@ -12,5 +12,22 @@
       <import plugin="com.choicemaker.cm.core"/>
    </requires>
 
+   <extension-point id="geo" name="Geo" schema="schema/geo.exsd"/>
 
+   <extension
+         point="com.choicemaker.cm.matching.geo.geo">
+		<fileGeo 
+			name="Zip code" 
+			mapType="tree" 
+			keyType="int" 
+			length="5" 
+			file="etc/data/zipCodes.txt" />
+	    <fileGeo 
+	    	name="Area code" 
+	    	mapType="tree" 
+	    	keyType="int" 
+	    	length="3" 
+	    	file="etc/data/Acds.txt" />
+   </extension>
+   
 </plugin>

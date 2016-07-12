@@ -66,6 +66,9 @@ public interface ChoiceMakerExtensionPoint {
 	public static final String CM_MATCHING_WFST_PARSER =
 		"com.choicemaker.cm.matching.wfst.parser";
 
+	public static final String CM_MATCHING_GEO =
+		"com.choicemaker.cm.matching.geo.geo";
+
 	public static final String CM_MODELMAKER_MATCHERBLOCKINGTOOLKIT =
 		"com.choicemaker.cm.modelmaker.matcherBlockingToolkit";
 	public static final String CM_MODELMAKER_MLTRAINGUIPLUGIN =
