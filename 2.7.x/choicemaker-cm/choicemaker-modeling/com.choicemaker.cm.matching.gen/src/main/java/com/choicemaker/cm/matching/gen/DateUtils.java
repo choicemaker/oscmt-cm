@@ -394,6 +394,24 @@ public class DateUtils extends DateHelper {
 	}
 
 	/**
+	 * Returns a representation of the input date in YYYYMMDD format where YYYY,
+	 * MM and DD doesn't have leading 0
+	 * 
+	 * @param d
+	 *            the input date
+	 * @return a date time String in YYYYMMDD format
+	 */
+	public static String getDateString(Date d) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(d);
+		StringBuffer buff = new StringBuffer(14);
+		buff.append("" + calendar.get(Calendar.YEAR));
+		buff.append("" + (calendar.get(Calendar.MONTH) + 1));
+		buff.append("" + calendar.get(Calendar.DAY_OF_MONTH));
+		return buff.toString();
+	}
+
+	/**
 	 * Note, the range of mm is 1 thru 12, inclusive.
 	 */
 	public static Date getDate(int yyyy, int mm, int dd) {
