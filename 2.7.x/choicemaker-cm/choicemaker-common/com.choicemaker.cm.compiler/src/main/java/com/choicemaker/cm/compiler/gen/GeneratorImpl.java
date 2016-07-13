@@ -306,27 +306,34 @@ public class GeneratorImpl implements IGenerator {
 
 	/**
 	 * Generate files.
-	 * @throws CompilerException
+	 * 
+	 * @throws CompilerException if generation fails
 	 */
 	public void generate() throws CompilerException {
 		boolean validate = XmlParserFactory.connected();
 		SAXBuilder builder = XmlParserFactory.createSAXBuilder(validate);
 		if (validate) {
-			builder.setFeature("http://apache.org/xml/features/validation/schema", true);
+			builder.setFeature(
+					"http://apache.org/xml/features/validation/schema", true);
 		}
 		builder.setErrorHandler(new SaxErrorHandler());
 		ClassLoader oldCl = XmlParserFactory.setClassLoader();
 		try {
-			document = builder.build(new File(schemaFileName).getAbsoluteFile());
+			document =
+				builder.build(new File(schemaFileName).getAbsoluteFile());
 			if (cu.getErrors() == 0) {
 				process();
 			}
 		} catch (JDOMException ex) {
-			String msg = "XML error in schema file " + schemaFileName + Constants.LINE_SEPARATOR + ex;
+			String msg =
+				"XML error in schema file " + schemaFileName
+						+ Constants.LINE_SEPARATOR + ex;
 			cu.error(msg);
 			logger.severe(msg);
 		} catch (Exception ex) {
-			String msg = "Error processing schema file " + schemaFileName + Constants.LINE_SEPARATOR + ex;
+			String msg =
+				"Error processing schema file " + schemaFileName
+						+ Constants.LINE_SEPARATOR + ex;
 			cu.error(msg);
 			logger.severe(msg);
 		} finally {

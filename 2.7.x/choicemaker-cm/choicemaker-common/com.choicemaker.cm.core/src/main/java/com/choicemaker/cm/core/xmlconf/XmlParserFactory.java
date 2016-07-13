@@ -58,11 +58,13 @@ public class XmlParserFactory {
 		Thread.currentThread().setContextClassLoader(oldClassLoader);
 	}
 
+	public static final String CHOICEMAKER_XSD_URL =
+		"http://oscmt.sourceforge.net/xml_schemas/2.6/ChoiceMakerAll.xsd";
+
 	public static boolean connected() {
 		try {
-			URL url = new URL("http://www.choicemaker.com/");
-			// 2014-04-24 rphall: Commented out unused local variable.
-			/* Object o = */
+			// URL url = new URL("http://www.choicemaker.com/");
+			URL url = new URL(CHOICEMAKER_XSD_URL);
 			url.getContent();
 			return true;
 		} catch (Exception ex) {
