@@ -16,17 +16,39 @@
   <packaging>pom</packaging>
   <name>Integration tests: ChoiceMaker</name>
 
-  <modules>
-    <module>cmit-jdbc</module>
-    <module>cm-analyzer-ce-it2</module>
-    <module>simple-person-plugin-it</module>
-    <module>cmit-utils</module>
-    <module>cmit-utils.j2ee</module>
-    <module>cmit-objectmakers</module>
-    <module>cmit-encryption</module>
-    <module>cmit-aba</module>
-    <module>cmit-oaba</module>
-    <module>cmit-transitivity</module>
+  <profiles>
+    <profile>
+      <id>headless</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <modules>
+        <module>cmit-jdbc</module>
+        <module>simple-person-plugin-it</module>
+        <module>cmit-utils</module>
+        <module>cmit-utils.j2ee</module>
+        <module>cmit-objectmakers</module>
+        <module>cmit-encryption</module>
+        <module>cmit-aba</module>
+        <module>cmit-oaba</module>
+        <module>cmit-transitivity</module>
   </modules>
+    </profile>
+    <profile>
+      <id>with_gui</id>
+      <modules>
+        <module>cmit-jdbc</module>
+        <module>cm-analyzer-ce-it2</module>
+        <module>simple-person-plugin-it</module>
+        <module>cmit-utils</module>
+        <module>cmit-utils.j2ee</module>
+        <module>cmit-objectmakers</module>
+        <module>cmit-encryption</module>
+        <module>cmit-aba</module>
+        <module>cmit-oaba</module>
+        <module>cmit-transitivity</module>
+      </modules>
+    </profile>
+  </profiles>
 
 </project>
