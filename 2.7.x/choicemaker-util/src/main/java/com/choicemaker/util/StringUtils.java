@@ -1001,4 +1001,12 @@ public class StringUtils {
 		return buff.toString();
 	}
 
+	public static String toUpperCase(String s) {
+		String retVal = null;
+		if (s != null) {
+			retVal = s.toUpperCase();
+		}
+		return retVal;
+	}
+
 }
