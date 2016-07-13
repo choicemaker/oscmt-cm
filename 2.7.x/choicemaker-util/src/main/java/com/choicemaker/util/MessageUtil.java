@@ -20,6 +20,10 @@ public class MessageUtil {
 
 	private static final Object[] ZERO_LENGTH_ARRAY = new Object[0];
 
+	public static final int DEFAULT_MAX_LINE_LENGTH = 100;
+	public static final String DEFAULT_REPLACEMENT_TEXT =
+		"See the application log";
+
 	public static final String ELLIPSIS = "...";
 	public static final int ELLIPSIS_LENGTH = ELLIPSIS.length();
 
@@ -200,13 +204,16 @@ public class MessageUtil {
 	 */
 	public static String elideFileName(String fileName, int endLength) {
 		String retVal = null;
-		if (fileName != null && fileName.length() <= endLength + ELLIPSIS_LENGTH) {
+		if (fileName != null
+				&& fileName.length() <= endLength + ELLIPSIS_LENGTH) {
 			retVal = fileName;
 		} else if (fileName != null) {
 			String candidate = elideString(fileName, 0, endLength);
-			int firstIdx = candidate.indexOf(SystemPropertyUtils.PV_FILE_SEPARATOR);
+			int firstIdx =
+				candidate.indexOf(SystemPropertyUtils.PV_FILE_SEPARATOR);
 			if (firstIdx == -1) {
-				int lastIdx = fileName.lastIndexOf(SystemPropertyUtils.PV_FILE_SEPARATOR);
+				int lastIdx =
+					fileName.lastIndexOf(SystemPropertyUtils.PV_FILE_SEPARATOR);
 				if (lastIdx == -1) {
 					retVal = fileName;
 				} else {
@@ -221,7 +228,11 @@ public class MessageUtil {
 
 	/**
 	 * Creates a list of Strings where each element is a labeled component of an
-	 * exception.
+	 * exception. Equivalent to
+	 * 
+	 * <pre>
+	 * exceptionInfo(x, DEFAULT_MAX_LINE_LENGTH)
+	 * </pre>
 	 * 
 	 * @param x
 	 *            may be null (but return value will be empty)
@@ -229,7 +240,39 @@ public class MessageUtil {
 	 */
 	public static List<String> exceptionInfo(Exception x) {
 		ExceptionInfo xinfo = x == null ? null : new ExceptionInfo(x);
-		return exceptionInfo(xinfo);
+		return exceptionInfo(xinfo, DEFAULT_MAX_LINE_LENGTH);
+	}
+
+	/**
+	 * Creates a list of Strings where each element is a labeled component of an
+	 * exception.
+	 * 
+	 * @param x
+	 *            may be null (but return value will be empty)
+	 * @param maxLineLen
+	 *            the maximum length of a message element before it is replaced
+	 *            with {@link #DEFAULT_REPLACEMENT_TEXT default text}
+	 * @return a non-null but possibly empty list
+	 */
+	public static List<String> exceptionInfo(Exception x, int maxLineLen) {
+		ExceptionInfo xinfo = x == null ? null : new ExceptionInfo(x);
+		return exceptionInfo(xinfo, maxLineLen);
+	}
+
+	/**
+	 * Creates a list of Strings where each element is a labeled component of an
+	 * exception. Equivalent to
+	 * 
+	 * <pre>
+	 * exceptionInfo(xinfo, DEFAULT_MAX_LINE_LENGTH)
+	 * </pre>
+	 * 
+	 * @param xinfo
+	 *            may be null (but return value will be empty)
+	 * @return a non-null but possibly empty list
+	 */
+	public static List<String> exceptionInfo(ExceptionInfo xinfo) {
+		return exceptionInfo(xinfo, DEFAULT_MAX_LINE_LENGTH);
 	}
 
 	/**
@@ -238,9 +281,12 @@ public class MessageUtil {
 	 * 
 	 * @param xinfo
 	 *            may be null (but return value will be empty)
+	 * @param maxLineLen
+	 *            the maximum length of a message element before it is replaced
+	 *            with {@link #DEFAULT_REPLACEMENT_TEXT default text}
 	 * @return a non-null but possibly empty list
 	 */
-	public static List<String> exceptionInfo(ExceptionInfo xinfo) {
+	public static List<String> exceptionInfo(ExceptionInfo xinfo, int maxLineLen) {
 		List<String> retVal;
 		if (xinfo == null) {
 			retVal = Collections.emptyList();
@@ -248,14 +294,24 @@ public class MessageUtil {
 			retVal = new ArrayList<>();
 			retVal.add("Exception: " + xinfo.simpleClassName);
 			if (!xinfo.message.isEmpty()) {
-				retVal.add("Message: " + xinfo.message);
+				retVal.add("Message: "
+						+ conditionalText(xinfo.message, maxLineLen));
 			}
 			if (!xinfo.causeSimpleClassName.isEmpty()) {
 				retVal.add("Cause: " + xinfo.causeSimpleClassName);
 				if (!xinfo.causeMessage.isEmpty()) {
-					retVal.add("Details: " + xinfo.causeMessage);
+					retVal.add("Details: "
+							+ conditionalText(xinfo.causeMessage, maxLineLen));
 				}
 			}
+		}
+		return retVal;
+	}
+
+	protected static String conditionalText(String s, int len) {
+		String retVal = s;
+		if (s != null && len > 0 && s.length() > len) {
+			retVal = DEFAULT_REPLACEMENT_TEXT;
 		}
 		return retVal;
 	}
