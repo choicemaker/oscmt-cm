@@ -212,7 +212,7 @@ public class ClueMakerMojo extends AbstractMojo {
 			} catch (CompilerException e) {
 				++exceptionCount;
 				String msg =
-					"Code generation failed for " + model.getName() + ": ";
+					"Code generation failed for " + model.getName() + ": " + e.toString();
 				// 'info' since failures are expected in unit tests
 				getLog().info(msg);
 				sb.append(msg).append(EOL);
