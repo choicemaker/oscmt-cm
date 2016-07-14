@@ -159,6 +159,7 @@ public class StartDialog extends JFrame implements Enable {
 		c.gridx = 1;
 		c.anchor = GridBagConstraints.EAST;
 		c.fill = GridBagConstraints.NONE;
+		c.weightx = 0;
 		content.add(ok, c);
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 2;
