@@ -44,8 +44,8 @@
       <plugin>
         <artifactId>maven-site-plugin</artifactId>
         <configuration>
-          <skip>${javadocs.skip}</skip>
-          <skipDeploy>${javadocs.skip}</skipDeploy>
+          <skip>${maven.javadoc.skip}</skip>
+          <skipDeploy>${maven.javadoc.skip}</skipDeploy>
         </configuration>
       </plugin>
 
@@ -60,7 +60,7 @@
         <artifactId>maven-javadoc-plugin</artifactId>
         <version>${plugin.maven-javadoc.version}</version>
         <configuration>
-          <skip>${javadocs.skip}</skip>
+          <skip>${maven.javadoc.skip}</skip>
           <failOnError>false</failOnError>
         </configuration>
       </plugin>
