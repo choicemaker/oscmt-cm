@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+   id="test.choicemaker.cm.online"
+   name="ChoiceMaker Online"
+   version="2.7.1"
+   provider-name="ChoiceMaker LLC">
+
+   <runtime>
+      <library name="online.jar">
+         <export name="*"/>
+      </library>
+   </runtime>
+   <requires>
+      <import plugin="com.choicemaker.cm.core"/>
+      <import plugin="com.choicemaker.cm.compiler"/>
+      <import plugin="com.choicemaker.cm.io.xml.base"/>
+      <import plugin="com.choicemaker.cm.io.xmlenc.base"/>
+   </requires>
+
+
+</plugin>
