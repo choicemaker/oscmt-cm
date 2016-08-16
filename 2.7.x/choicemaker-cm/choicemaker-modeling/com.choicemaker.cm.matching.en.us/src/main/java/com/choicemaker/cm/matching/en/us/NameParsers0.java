@@ -8,10 +8,13 @@
 package com.choicemaker.cm.matching.en.us;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
@@ -32,21 +35,29 @@ public final class NameParsers0 {
 	private static final Logger logger = Logger.getLogger(NameParsers0.class
 			.getName());
 
-	private static HashMap<String, NameParser0> parsers = new HashMap<>();
+	private static AtomicReference<Map<String, NameParser0>> parsersRef =
+		new AtomicReference<>();
 
 	public static final String COMMENT_FLAG = "#";
 
-	static {
-		initRegisteredParsers();
+	private static Map<String, NameParser0> parsersMap() {
+		Map<String, NameParser0> parsers = parsersRef.get();
+		if (parsers == null) {
+			parsers = new HashMap<>();
+			initRegisteredParsers(parsers);
+			parsersRef.compareAndSet(null, parsers);
+		}
+		assert parsers == parsersRef.get();
+		return Collections.unmodifiableMap(parsers);
 	}
 
 	public static boolean has(String name) {
-		return parsers.containsKey(name);
+		return parsersMap().containsKey(name);
 	}
 
 	public static NameParser0 get(String name) {
 		Precondition.assertNonNullArgument(name);
-		NameParser0 retVal = (NameParser0) parsers.get(name);
+		NameParser0 retVal = (NameParser0) parsersMap().get(name);
 		if (retVal == null) {
 			String msg = "No parser named '" + name + "'";
 			logger.warning(msg);
@@ -55,7 +66,7 @@ public final class NameParsers0 {
 	}
 
 	public static Set<String> getParserKeys() {
-		return parsers.keySet();
+		return parsersMap().keySet();
 	}
 
 	public static void put(NameParser0 parser) {
@@ -66,12 +77,50 @@ public final class NameParsers0 {
 	}
 
 	public static void put(String name, NameParser0 parser) {
-		Precondition.assertNonNullArgument(
+		Precondition.assertNonEmptyString(
 				"Cannot add a parser without a name!", name);
-		parsers.put(name, parser);
+		Precondition.assertNonNullArgument("Cannot add a null parser: " + name,
+				parser);
+		final Map<String, NameParser0> parsers = parsersMap();
+		final Map<String, NameParser0> newMap = new HashMap<>();
+		newMap.putAll(parsers);
+		NameParser0 replaced = newMap.put(name, parser);
+		if (replaced != null) {
+			logger.info("Replaced existing parser named '" + name + "'");
+		}
+		boolean updated = parsersRef.compareAndSet(parsers, newMap);
+		if (!updated) {
+			logger.warning("Unable to add parser '" + name + "'");
+		}
 	}
 
-	static void initRegisteredParsers() {
+	public static void remove(NameParser0 parser) {
+		Precondition.assertNonNullArgument(parser);
+		String name = parser.getName();
+		Precondition.assertNonNullArgument("A parser must have a name!", name);
+		remove(name);
+	}
+
+	public static void remove(String name) {
+		Precondition.assertNonEmptyString(
+				"Cannot remove a parser without a name!", name);
+		final Map<String, NameParser0> parsers = parsersMap();
+		final Map<String, NameParser0> newMap = new HashMap<>();
+		newMap.putAll(parsers);
+		NameParser0 removed = newMap.remove(name);
+		if (removed == null) {
+			logger.warning("No parser named '" + name + "'");
+		} else {
+			boolean updated = parsersRef.compareAndSet(parsers, newMap);
+			if (!updated) {
+				logger.warning("Unable to remove parser '" + name + "'");
+			}
+		}
+	}
+
+	static void initRegisteredParsers(Map<String, NameParser0> parsers) {
+		Precondition.assertNonNullArgument("null parser map", parsers);
+
 		CMExtension[] extensions =
 			CMPlatformUtils
 					.getExtensions(ChoiceMakerExtensionPoint.CM_MATCHING_NAMEPARSER0);
@@ -132,7 +181,6 @@ public final class NameParsers0 {
 		if (!StringUtils.nonEmptyString(_setName)) {
 			throw new IllegalArgumentException("null or blank set name");
 		}
-		@SuppressWarnings("unchecked")
 		Collection<String> c = Sets.getCollection(_setName);
 		if (c == null) {
 			String msg = "No set named '" + _setName + "'";
