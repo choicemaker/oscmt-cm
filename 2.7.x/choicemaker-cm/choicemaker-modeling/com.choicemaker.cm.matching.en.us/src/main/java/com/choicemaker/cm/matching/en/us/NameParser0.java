@@ -19,12 +19,15 @@ import com.choicemaker.cm.matching.en.Soundex;
 import com.choicemaker.util.StringUtils;
 
 /**
- * A simple name parser that deals with compound names.
+ * A simple name parser that deals with compound names. This class produces
+ * {@link ParsedName0} instances.
  * <ul>
  * <li>The name parser breaks multiple names reported in a single field</li>
  * <li>Filters out titles and suffixes, such as MR and JR</li>
  * <li>Removes invalid values such as N/A</li>
  * <ul>
+ * <strong>NOTE:</strong> This class is unrelated to the NameParser class, which
+ * is based on a context-free grammar (CFG).
  *
  * @see com.choicemaker.cm.matching.cfg.Parsers
  *

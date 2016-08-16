@@ -12,6 +12,9 @@ package com.choicemaker.cm.matching.en.us;
  * A class that represents a name <strong> <em>parsed</em></strong> by the
  * {@link NameParser0} class.
  *
+ * <strong>NOTE:</strong> This class is unrelated to the NameParser class, which
+ * is based on a context-free grammar (CFG).
+ *
  * @see com.choicemaker.cm.matching.cfg.Parsers
  *
  * @author S. Yoakum-Stover
