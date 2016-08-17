@@ -26,22 +26,22 @@ import com.choicemaker.util.Precondition;
 import com.choicemaker.util.StringUtils;
 
 /**
- * A collection of NameParser0 instances configured from plugin descriptors
+ * A collection of AdhocNameParser instances configured from plugin descriptors
  *
  * @author rphall
  */
-public final class NameParsers0 {
+public final class AdhocNameParsers {
 
-	private static final Logger logger = Logger.getLogger(NameParsers0.class
+	private static final Logger logger = Logger.getLogger(AdhocNameParsers.class
 			.getName());
 
-	private static AtomicReference<Map<String, NameParser0>> parsersRef =
+	private static AtomicReference<Map<String, AdhocNameParser>> parsersRef =
 		new AtomicReference<>();
 
 	public static final String COMMENT_FLAG = "#";
 
-	private static Map<String, NameParser0> parsersMap() {
-		Map<String, NameParser0> parsers = parsersRef.get();
+	private static Map<String, AdhocNameParser> parsersMap() {
+		Map<String, AdhocNameParser> parsers = parsersRef.get();
 		if (parsers == null) {
 			parsers = new HashMap<>();
 			initRegisteredParsers(parsers);
@@ -55,9 +55,9 @@ public final class NameParsers0 {
 		return parsersMap().containsKey(name);
 	}
 
-	public static NameParser0 get(String name) {
+	public static AdhocNameParser get(String name) {
 		Precondition.assertNonNullArgument(name);
-		NameParser0 retVal = (NameParser0) parsersMap().get(name);
+		AdhocNameParser retVal = (AdhocNameParser) parsersMap().get(name);
 		if (retVal == null) {
 			String msg = "No parser named '" + name + "'";
 			logger.warning(msg);
@@ -69,22 +69,22 @@ public final class NameParsers0 {
 		return parsersMap().keySet();
 	}
 
-	public static void put(NameParser0 parser) {
+	public static void put(AdhocNameParser parser) {
 		Precondition.assertNonNullArgument(parser);
 		String name = parser.getName();
 		Precondition.assertNonNullArgument("A parser must have a name!", name);
 		put(name, parser);
 	}
 
-	public static void put(String name, NameParser0 parser) {
+	public static void put(String name, AdhocNameParser parser) {
 		Precondition.assertNonEmptyString(
 				"Cannot add a parser without a name!", name);
 		Precondition.assertNonNullArgument("Cannot add a null parser: " + name,
 				parser);
-		final Map<String, NameParser0> parsers = parsersMap();
-		final Map<String, NameParser0> newMap = new HashMap<>();
+		final Map<String, AdhocNameParser> parsers = parsersMap();
+		final Map<String, AdhocNameParser> newMap = new HashMap<>();
 		newMap.putAll(parsers);
-		NameParser0 replaced = newMap.put(name, parser);
+		AdhocNameParser replaced = newMap.put(name, parser);
 		if (replaced != null) {
 			logger.info("Replaced existing parser named '" + name + "'");
 		}
@@ -94,7 +94,7 @@ public final class NameParsers0 {
 		}
 	}
 
-	public static void remove(NameParser0 parser) {
+	public static void remove(AdhocNameParser parser) {
 		Precondition.assertNonNullArgument(parser);
 		String name = parser.getName();
 		Precondition.assertNonNullArgument("A parser must have a name!", name);
@@ -104,10 +104,10 @@ public final class NameParsers0 {
 	public static void remove(String name) {
 		Precondition.assertNonEmptyString(
 				"Cannot remove a parser without a name!", name);
-		final Map<String, NameParser0> parsers = parsersMap();
-		final Map<String, NameParser0> newMap = new HashMap<>();
+		final Map<String, AdhocNameParser> parsers = parsersMap();
+		final Map<String, AdhocNameParser> newMap = new HashMap<>();
 		newMap.putAll(parsers);
-		NameParser0 removed = newMap.remove(name);
+		AdhocNameParser removed = newMap.remove(name);
 		if (removed == null) {
 			logger.warning("No parser named '" + name + "'");
 		} else {
@@ -118,12 +118,12 @@ public final class NameParsers0 {
 		}
 	}
 
-	static void initRegisteredParsers(Map<String, NameParser0> parsers) {
+	static void initRegisteredParsers(Map<String, AdhocNameParser> parsers) {
 		Precondition.assertNonNullArgument("null parser map", parsers);
 
 		CMExtension[] extensions =
 			CMPlatformUtils
-					.getExtensions(ChoiceMakerExtensionPoint.CM_MATCHING_NAMEPARSER0);
+					.getExtensions(ChoiceMakerExtensionPoint.CM_MATCHING_ADHOC_NAMEPARSER);
 		for (int i = 0; i < extensions.length; i++) {
 			CMExtension ext = extensions[i];
 			CMConfigurationElement[] els = ext.getConfigurationElements();
@@ -143,7 +143,7 @@ public final class NameParsers0 {
 				Set<String> setNT = initializeSetAndContents(nt);
 				Set<String> setLNP = initializeSetAndContents(lnp);
 
-				NameParser0 np = new NameParser0();
+				AdhocNameParser np = new AdhocNameParser();
 				np.setName(name);
 				np.setGenericFirstNames(setGFN);
 				np.setChildOfIndicators(setCOI);
@@ -213,7 +213,7 @@ public final class NameParsers0 {
 		return retVal;
 	}
 
-	private NameParsers0() {
+	private AdhocNameParsers() {
 	}
 
 }

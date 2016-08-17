@@ -282,9 +282,9 @@
       </fileMap>
    </extension>
    <extension
-         point="com.choicemaker.cm.matching.en.us.nameParser0">
-      <nameParser0
-            name="en.us.defaultNameParser0"
+         point="com.choicemaker.cm.matching.en.us.adhocNameParser">
+      <adhocNameParser
+            name="en.us.defaultAdhocNameParser"
             genericFirstNames="genericFirstNames"
             childOfIndicators="childOfIndicators"
             invalidLastNames="invalidLastNames"

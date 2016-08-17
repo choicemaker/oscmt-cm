@@ -48,8 +48,8 @@ public interface ChoiceMakerExtensionPoint {
 	public static final String CM_IO_BLOCKING_AUTOMATED_BASE_DATABASEACCESSOR =
 		"com.choicemaker.cm.io.blocking.automated.base.databaseAccessor";
 
-	public static final String CM_MATCHING_NAMEPARSER0 =
-		"com.choicemaker.cm.matching.en.us.nameParser0";
+	public static final String CM_MATCHING_ADHOC_NAMEPARSER =
+		"com.choicemaker.cm.matching.en.us.adhocNameParser";
 
 	public static final String CM_MATCHING_CFG_CASCADEDPARSER =
 		"com.choicemaker.cm.matching.cfg.cascadedParser";

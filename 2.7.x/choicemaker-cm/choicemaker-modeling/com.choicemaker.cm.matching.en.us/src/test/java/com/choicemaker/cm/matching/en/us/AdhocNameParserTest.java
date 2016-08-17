@@ -17,9 +17,9 @@ import com.choicemaker.cm.core.PropertyNames;
  * @author rphall
  *
  */
-public class NameParser0Test extends TestCase {
+public class AdhocNameParserTest extends TestCase {
 
-	private static final Logger logger = Logger.getLogger(NameParser0Test.class
+	private static final Logger logger = Logger.getLogger(AdhocNameParserTest.class
 			.getName());
 
 	public void assertDefaultConfigurator() {
@@ -28,7 +28,7 @@ public class NameParser0Test extends TestCase {
 		assertTrue(fqcn == null);
 	}
 
-	public void assertEmptyCollection(String accessorName, Collection c) {
+	public void assertEmptyCollection(String accessorName, Collection<?> c) {
 		assert accessorName != null && !accessorName.isEmpty();
 		String msg;
 
@@ -41,7 +41,9 @@ public class NameParser0Test extends TestCase {
 
 	public void testGetDefaultInstance() {
 		assertDefaultConfigurator();
-		NameParser0 np = NameParser0.getDefaultInstance();
+		final AdhocNameParser np =
+			AdhocNameParser
+					.lookupAdhocNameParser(AdhocNameParser.DEFAULT_ADHOC_NAME_PARSER);
 		assertEmptyCollection("getChildOfIndicators()",
 				np.getChildOfIndicators());
 		assertEmptyCollection("getGenericFirstNames()",
@@ -54,16 +56,18 @@ public class NameParser0Test extends TestCase {
 	public void testParse() throws Exception {
 		final InputAndExpected[] testData =
 			InputAndExpectedTestData.getTestData();
-		final NameParser0 np = NameParser0.getDefaultInstance();
-		final List exceptions = new ArrayList();
-		final List errors = new ArrayList();
+		final AdhocNameParser np =
+				AdhocNameParser
+						.lookupAdhocNameParser(AdhocNameParser.DEFAULT_ADHOC_NAME_PARSER);
+		final List<String> exceptions = new ArrayList<>();
+		final List<String> errors = new ArrayList<>();
 		for (int i = 0; i < testData.length; i++) {
 			InputAndExpected iae = null;
 			String f = null;
 			String m = null;
 			String l = null;
-			ParsedName0 expected = null;
-			ParsedName0 computed = null;
+			AdhocName expected = null;
+			AdhocName computed = null;
 			try {
 				iae = testData[i];
 				f = iae.first;
@@ -103,7 +107,7 @@ public class NameParser0Test extends TestCase {
 						+ ". See log for any additional failures.";
 			throw new AssertionError(msg);
 		}
-		logger.info("NameParser0Test.testParse() completed successfully");
+		logger.info("AdhocNameParserTest.testParse() completed successfully");
 	}
 
 	// public void testGetSwapSimilarity() {

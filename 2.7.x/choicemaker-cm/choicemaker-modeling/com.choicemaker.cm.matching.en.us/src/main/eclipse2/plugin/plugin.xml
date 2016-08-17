@@ -17,7 +17,7 @@
       <import plugin="com.choicemaker.cm.matching.cfg" export="true"/>
    </requires>
 
-   <extension-point id="nameParser0" name="nameParser0" schema="schema/nameParser0.exsd"/>
+   <extension-point id="adhocNameParser" name="adhocNameParser" schema="schema/adhocNameParser.exsd"/>
 
    <extension
          point="com.choicemaker.cm.matching.gen.set">

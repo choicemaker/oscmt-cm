@@ -12,15 +12,14 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.StringTokenizer;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Logger;
 
-import com.choicemaker.cm.matching.en.Soundex;
+import com.choicemaker.util.Precondition;
 import com.choicemaker.util.StringUtils;
 
 /**
  * A simple name parser that deals with compound names. This class produces
- * {@link ParsedName0} instances.
+ * {@link AdhocName} instances.
  * <ul>
  * <li>The name parser breaks multiple names reported in a single field</li>
  * <li>Filters out titles and suffixes, such as MR and JR</li>
@@ -34,90 +33,26 @@ import com.choicemaker.util.StringUtils;
  * @author S. Yoakum-Stover
  * @author rphall (refactored for CM 2.7)
  */
-public class NameParser0 {
+public class AdhocNameParser {
 
-	private static final Logger logger = Logger.getLogger(NameParser0.class
+	private static final Logger logger = Logger.getLogger(AdhocNameParser.class
 			.getName());
 
-	public static final String DEFAULT_NAMEPARSER0 = "en.us.defaultNameParser0";
+	public static final String DEFAULT_ADHOC_NAME_PARSER = "en.us.defaultAdhocNameParser";
 
-	private static final AtomicReference<NameParser0> instance = new AtomicReference<>();
-
-	public static NameParser0 getDefaultInstance() {
-		if (instance.get() == null) {
-			NameParser0 defaultNP0 = lookupDefaultNameParser0();
-			instance.compareAndSet(null, defaultNP0);
-		}
-		NameParser0 retVal = (NameParser0) instance.get();
-		assert retVal != null;
-		return retVal;
-	}
-
-	public static NameParser0 lookupDefaultNameParser0() {
-		NameParser0 retVal = NameParsers0.get(DEFAULT_NAMEPARSER0);
+	public static AdhocNameParser lookupAdhocNameParser(String name) {
+		Precondition.assertNonEmptyString("null or blank parser name", name);
+		AdhocNameParser retVal = AdhocNameParsers.get(name);
 		if (retVal == null) {
-			retVal = new NameParser0();
-			retVal.setName(DEFAULT_NAMEPARSER0);
-			NameParsers0.put(DEFAULT_NAMEPARSER0, retVal);
+			retVal = new AdhocNameParser();
+			retVal.setName(name);
+			AdhocNameParsers.put(name, retVal);
 			String msg = "No-data parser registered under '"
-					+ DEFAULT_NAMEPARSER0 + "'; using do-nothing parser: "
+					+ name + "'; using do-nothing parser: "
 					+ retVal.toString();
 			logger.warning(msg);
 		}
 		return retVal;
-	}
-
-	static final int NUM_NAMES = 4;
-	static final int NUM_NAMES2 = 2 * NUM_NAMES;
-
-	/**
-	 * @return a measure for how many name components are swapped. Each exact
-	 *         swap increments the score by 2. Each name approximate swap
-	 *         (Soundex) increases the score by 1.
-	 *
-	 *         A higher score indicates a higher similarity. E.g., the
-	 *         similarity score for "JIM R. SMITH" and "SMIT JIM" is 3.
-	 */
-	public static int getSwapSimilarity(NameParser np1, NameParser np2) {
-		int score = 0;
-		if (np1 != null && np2 != null) {
-			String[] n = new String[NUM_NAMES2 + NUM_NAMES2];
-			boolean[] f = new boolean[NUM_NAMES2];
-			n[0] = np1.getFirstName();
-			n[1] = np1.getMiddleNames();
-			n[2] = np1.getLastName();
-			n[3] = np1.getPotentialMaidenName();
-			n[4] = np2.getFirstName();
-			n[5] = np2.getMiddleNames();
-			n[6] = np2.getLastName();
-			n[7] = np2.getPotentialMaidenName();
-			for (int i = 0; i < NUM_NAMES2; ++i) {
-				f[i] = n[i] != null;
-				if (f[i] && n[i].length() > 0) {
-					n[i + NUM_NAMES2] = Soundex.soundex(n[i]);
-				}
-			}
-			for (int i = 0; i < NUM_NAMES; ++i) {
-				boolean sndx = false;
-				for (int j = NUM_NAMES; j < NUM_NAMES2; ++j) {
-					if (i + NUM_NAMES != j && f[i] && f[j]) {
-						if (n[i] == n[j]) {
-							if (sndx) {
-								score += 1;
-							} else {
-								score += 2;
-							}
-							break;
-						} else if (!sndx
-								&& n[i + NUM_NAMES2].equals(n[j + NUM_NAMES2])) {
-							score += 1;
-							sndx = true;
-						}
-					}
-				}
-			}
-		}
-		return score;
 	}
 
 	private static String dedupTokens(String tokens) {
@@ -253,7 +188,7 @@ public class NameParser0 {
 	/** Last name prefixes */
 	private Collection<String> lnp = new HashSet<>();
 
-	public ParsedName0 parse(String f, String m, String l) {
+	public AdhocName parse(String f, String m, String l) {
 		String first = StringUtils.nonEmptyString(f) ? StringUtils
 				.removePunctuation(f) : "";
 		String middle = StringUtils.nonEmptyString(m) ? StringUtils
@@ -267,8 +202,8 @@ public class NameParser0 {
 		middle = middle.trim();
 		last = last.trim();
 		// END BUGFIX
-		ParsedName0 retVal = new ParsedName0();
-		ParsedName0 test = chunkUpNamesStrings(first, middle, last);
+		AdhocName retVal = new AdhocName();
+		AdhocName test = chunkUpNamesStrings(first, middle, last);
 		if (test.getFirstName() != null)
 			retVal.setFirstName(test.getFirstName().intern());
 		if (test.getMiddleNames() != null)
@@ -285,13 +220,13 @@ public class NameParser0 {
 		return retVal;
 	}
 
-	protected ParsedName0 chunkUpNamesStrings(String first, String middle,
+	protected AdhocName chunkUpNamesStrings(String first, String middle,
 			String last) {
 
-		ParsedName0 retVal = new ParsedName0();
+		AdhocName retVal = new AdhocName();
 
 		// chunk up the first name
-		ParsedName0 firstNames = chunkUpNameString(first, true);
+		AdhocName firstNames = chunkUpNameString(first, true);
 
 		// place the first name chunks
 		retVal.setFirstName(firstNames.getFirstName());
@@ -301,7 +236,7 @@ public class NameParser0 {
 
 		// place the middle names
 		if (StringUtils.nonEmptyString(middle)) {
-			ParsedName0 tmpMiddles = chunkUpNameString(middle, false);
+			AdhocName tmpMiddles = chunkUpNameString(middle, false);
 			if (StringUtils.nonEmptyString(tmpMiddles.getFirstName())) {
 				String s = concatWithSeparator(retVal.getMiddleNames(),
 						tmpMiddles.getFirstName(), " ");
@@ -317,7 +252,7 @@ public class NameParser0 {
 		}
 
 		// chunk up the last name
-		ParsedName0 lastNames = chunkUpLastNameString(last);
+		AdhocName lastNames = chunkUpLastNameString(last);
 
 		// place the last name chunks
 		// 2008-10-20 rphall
@@ -332,8 +267,8 @@ public class NameParser0 {
 		return retVal;
 	}
 
-	protected ParsedName0 chunkUpLastNameString(String s) {
-		ParsedName0 retVal = new ParsedName0();
+	protected AdhocName chunkUpLastNameString(String s) {
+		AdhocName retVal = new AdhocName();
 		assert retVal.getLastName().equals("");
 		assert retVal.getTitles().equals("");
 		assert retVal.getMothersFirstName().equals("");
@@ -344,7 +279,7 @@ public class NameParser0 {
 
 		s = fixMc(s);
 		String flipped = flipToks(s);
-		ParsedName0 chunks = chunkUpNameString(flipped, false);
+		AdhocName chunks = chunkUpNameString(flipped, false);
 		retVal.setTitles(chunks.getTitles());
 
 		// 2008-10-20 rphall
@@ -410,8 +345,8 @@ public class NameParser0 {
 	 * @param isAFirstName
 	 *            true if this is a first name string, false for last name.
 	 */
-	protected ParsedName0 chunkUpNameString(String str, boolean isAFirstName) {
-		ParsedName0 retVal = new ParsedName0();
+	protected AdhocName chunkUpNameString(String str, boolean isAFirstName) {
+		AdhocName retVal = new AdhocName();
 		assert retVal.getFirstName().equals("");
 		assert retVal.getMiddleNames().equals("");
 		assert retVal.getTitles().equals("");
@@ -570,7 +505,7 @@ public class NameParser0 {
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		NameParser0 other = (NameParser0) obj;
+		AdhocNameParser other = (AdhocNameParser) obj;
 		if (coi == null) {
 			if (other.coi != null) {
 				return false;
@@ -639,7 +574,7 @@ public class NameParser0 {
 	}
 
 	public String toString() {
-		return "NameParser0 [name=" + name + ", genericFirstNames="
+		return "AdhocNameParser [name=" + name + ", genericFirstNames="
 				+ toShortString(gfn) + ", childOfIndicators="
 				+ toShortString(coi) + ", invalidLastNames="
 				+ toShortString(iln) + ", nameTitles=" + toShortString(nt)

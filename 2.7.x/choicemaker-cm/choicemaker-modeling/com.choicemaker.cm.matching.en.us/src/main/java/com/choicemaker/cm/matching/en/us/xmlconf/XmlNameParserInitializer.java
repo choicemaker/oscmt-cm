@@ -8,6 +8,7 @@
 package com.choicemaker.cm.matching.en.us.xmlconf;
 
 import java.util.Collection;
+import java.util.logging.Logger;
 
 import org.jasypt.encryption.StringEncryptor;
 import org.jdom.Element;
@@ -15,7 +16,7 @@ import org.jdom.Element;
 import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.configure.ConfigurationUtils;
 import com.choicemaker.cm.core.xmlconf.XmlModuleInitializer;
-import com.choicemaker.cm.matching.en.us.NameParser0;
+import com.choicemaker.cm.matching.en.us.AdhocNameParser;
 import com.choicemaker.cm.matching.gen.Sets;
 
 /**
@@ -47,9 +48,11 @@ import com.choicemaker.cm.matching.gen.Sets;
  * (Section 5.1) that are defined before the name parser initialization.
  *
  * @author Martin Buechi
- * @see com.choicemaker.cm.matching.en.us.NameParser
+ * @see com.choicemaker.cm.custom.mci.nameparser.NameParser
  */
 public class XmlNameParserInitializer implements XmlModuleInitializer {
+
+	private final static Logger logger = Logger.getLogger(XmlNameParserInitializer.class.getName());
 
 	public final static XmlNameParserInitializer instance = new XmlNameParserInitializer();
 
@@ -64,34 +67,38 @@ public class XmlNameParserInitializer implements XmlModuleInitializer {
 	@Override
 	public void init(Element e, StringEncryptor encryptor)
 			throws XmlConfException {
-		String gfn = ConfigurationUtils.getChildText(e, "genericFirstNames",
-				encryptor);
-		if (gfn != null) {
-			Collection<String> c = Sets.getCollection(gfn);
-			NameParser0.getDefaultInstance().setGenericFirstNames(c);
-		}
-		String coi = ConfigurationUtils.getChildText(e, "childOfIndicators",
-				encryptor);
-		if (coi != null) {
-			Collection<String> c = Sets.getCollection(coi);
-			NameParser0.getDefaultInstance().setChildOfIndicators(c);
-		}
-		String iln = ConfigurationUtils.getChildText(e, "invalidLastNames",
-				encryptor);
-		if (iln != null) {
-			Collection<String> c = Sets.getCollection(iln);
-			NameParser0.getDefaultInstance().setInvalidLastNames(c);
-		}
-		String nt = ConfigurationUtils.getChildText(e, "nameTitles", encryptor);
-		if (nt != null) {
-			Collection<String> c = Sets.getCollection(nt);
-			NameParser0.getDefaultInstance().setNameTitles(c);
-		}
-		String lnp = ConfigurationUtils.getChildText(e, "lastNamePrefixes",
-				encryptor);
-		if (lnp != null) {
-			Collection<String> c = Sets.getCollection(lnp);
-			NameParser0.getDefaultInstance().setLastNamePrefixes(c);
-		}
+		String msg = "Ad hoc name parsers are no longer configured as CM Analyzer "
+				+ "modules. They should be configured as plugins. "
+				+ "See the com.choicemaker.cm.matching.en.us module for details.";
+		logger.warning(msg);
+		//String gfn = ConfigurationUtils.getChildText(e, "genericFirstNames",
+		//		encryptor);
+		//if (gfn != null) {
+		//	Collection<String> c = Sets.getCollection(gfn);
+		//	AdhocNameParser.getDefaultInstance().setGenericFirstNames(c);
+		//}
+		//String coi = ConfigurationUtils.getChildText(e, "childOfIndicators",
+		//		encryptor);
+		//if (coi != null) {
+		//	Collection<String> c = Sets.getCollection(coi);
+		//	AdhocNameParser.getDefaultInstance().setChildOfIndicators(c);
+		//}
+		//String iln = ConfigurationUtils.getChildText(e, "invalidLastNames",
+		//		encryptor);
+		//if (iln != null) {
+		//	Collection<String> c = Sets.getCollection(iln);
+		//	AdhocNameParser.getDefaultInstance().setInvalidLastNames(c);
+		//}
+		//String nt = ConfigurationUtils.getChildText(e, "nameTitles", encryptor);
+		//if (nt != null) {
+		//	Collection<String> c = Sets.getCollection(nt);
+		//	AdhocNameParser.getDefaultInstance().setNameTitles(c);
+		//}
+		//String lnp = ConfigurationUtils.getChildText(e, "lastNamePrefixes",
+		//		encryptor);
+		//if (lnp != null) {
+		//	Collection<String> c = Sets.getCollection(lnp);
+		//	AdhocNameParser.getDefaultInstance().setLastNamePrefixes(c);
+		//}
 	}
 }

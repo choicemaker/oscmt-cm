@@ -4,9 +4,9 @@ public class InputAndExpected {
 	public final String first;
 	public final String middle;
 	public final String last;
-	public final ParsedName0 expected;
+	public final AdhocName expected;
 
-	public InputAndExpected(String fn, String mn, String ln, ParsedName0 pn) {
+	public InputAndExpected(String fn, String mn, String ln, AdhocName pn) {
 		this.first = fn;
 		this.middle = mn;
 		this.last = ln;
@@ -19,7 +19,7 @@ public class InputAndExpected {
 		this.first = fn;
 		this.middle = mn;
 		this.last = ln;
-		this.expected = new ParsedName0(pnFirst, pnMiddle, pnLast);
+		this.expected = new AdhocName(pnFirst, pnMiddle, pnLast);
 		this.expected.setTitles(pnTitles);
 		this.expected.setPotentialMaidenName(pnMaiden);
 		this.expected.setMothersFirstName(pnMomFn);

@@ -10,17 +10,12 @@ package com.choicemaker.cm.matching.en.us;
 
 /**
  * A class that represents a name <strong> <em>parsed</em></strong> by the
- * {@link NameParser0} class.
- *
- * <strong>NOTE:</strong> This class is unrelated to the NameParser class, which
- * is based on a context-free grammar (CFG).
- *
- * @see com.choicemaker.cm.matching.cfg.Parsers
+ * {@link AdhocNameParser} class.
  *
  * @author S. Yoakum-Stover
- * @author rphall (refactored for CM 2.7)
+ * @author rphall (renamed and refactored for CM 2.7)
  */
-public class ParsedName0 {
+public class AdhocName {
 
 	public static final String EMPTY = "".intern();
 
@@ -31,11 +26,11 @@ public class ParsedName0 {
 	private String potentialMaidenName = EMPTY;
 	private String mothersFirstName = EMPTY;
 
-	public ParsedName0() {
+	public AdhocName() {
 		this(EMPTY,EMPTY,EMPTY);
 	}
 
-	public ParsedName0(String f, String m, String l) {
+	public AdhocName(String f, String m, String l) {
 		setFirstName(f);
 		setMiddleNames(m);
 		setLastName(l);
@@ -147,7 +142,7 @@ public class ParsedName0 {
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		ParsedName0 other = (ParsedName0) obj;
+		AdhocName other = (AdhocName) obj;
 		if (firstName == null) {
 			if (other.firstName != null) {
 				return false;

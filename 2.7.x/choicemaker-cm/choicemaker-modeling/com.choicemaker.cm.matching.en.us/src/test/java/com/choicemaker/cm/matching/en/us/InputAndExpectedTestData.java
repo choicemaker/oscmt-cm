@@ -13,7 +13,7 @@ public class InputAndExpectedTestData {
 	private static final int IDX_PARSED_MOMSFN = 8;
 
 	/**
-	 * Without any collections loaded, the default constructor for NameParser0
+	 * Without any collections loaded, the default constructor for AdhocNameParser
 	 * should still handle basic name parsing, including guesses at probable
 	 * mother's maiden names.
 	 */
@@ -57,7 +57,7 @@ public class InputAndExpectedTestData {
 			String PARSED_TITLES = _testData[i][IDX_PARSED_TITLES];
 			String PARSED_MAIDEN = _testData[i][IDX_PARSED_MAIDEN];
 			String PARSED_MOMSFN = _testData[i][IDX_PARSED_MOMSFN];
-			ParsedName0 p = new ParsedName0(PARSED_FN, PARSED_MN, PARSED_LN);
+			AdhocName p = new AdhocName(PARSED_FN, PARSED_MN, PARSED_LN);
 			p.setMothersFirstName(PARSED_MOMSFN);
 			p.setPotentialMaidenName(PARSED_MAIDEN);
 			p.setTitles(PARSED_TITLES);

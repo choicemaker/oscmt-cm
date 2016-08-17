@@ -33,7 +33,7 @@ import com.choicemaker.cm.matching.gen.Sets;
 
 /**
  * @author Martin Buechi
- * @see com.choicemaker.cm.matching.en.us.NameParser
+ * @see com.choicemaker.cm.custom.mci.nameparser.NameParser
  */
 public class XmlAddressParserInitializer implements XmlModuleInitializer {
 

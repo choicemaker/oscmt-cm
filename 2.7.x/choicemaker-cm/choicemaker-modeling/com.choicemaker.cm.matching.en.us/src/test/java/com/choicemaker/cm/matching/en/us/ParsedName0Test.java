@@ -35,7 +35,7 @@ public class ParsedName0Test extends TestCase {
 	}
 
 	public void testParsedName0() {
-		ParsedName0 pn = new ParsedName0();
+		AdhocName pn = new AdhocName();
 		assertEmptyField("getFirstName()", pn.getFirstName());
 		assertEmptyField("getFirstName()", pn.getMiddleNames());
 		assertEmptyField("getFirstName()", pn.getLastName());
@@ -45,7 +45,7 @@ public class ParsedName0Test extends TestCase {
 	}
 
 	public void testParsedName0StringStringString() {
-		ParsedName0 pn = new ParsedName0(FN, MN, LN);
+		AdhocName pn = new AdhocName(FN, MN, LN);
 		assertTrue(pn.getFirstName() == FN);
 		assertTrue(pn.getMiddleNames() == MN);
 		assertTrue(pn.getLastName() == LN);
@@ -55,63 +55,63 @@ public class ParsedName0Test extends TestCase {
 	}
 
 	public void testSetFirstName() {
-		ParsedName0 pn = new ParsedName0();
+		AdhocName pn = new AdhocName();
 		pn.setFirstName(FN);
 		assertTrue(FN == pn.getFirstName());
 		pn.setFirstName(pad(FN));
 		assertTrue(pad(FN).equals(pn.getFirstName()));
 		pn.setFirstName(null);
-		assertTrue(ParsedName0.EMPTY == pn.getFirstName());
+		assertTrue(AdhocName.EMPTY == pn.getFirstName());
 	}
 
 	public void testSetMiddleNames() {
-		ParsedName0 pn = new ParsedName0();
+		AdhocName pn = new AdhocName();
 		pn.setMiddleNames(MN);
 		assertTrue(MN == pn.getMiddleNames());
 		pn.setMiddleNames(pad(MN));
 		assertTrue(pad(MN).equals(pn.getMiddleNames()));
 		pn.setMiddleNames(null);
-		assertTrue(ParsedName0.EMPTY == pn.getMiddleNames());
+		assertTrue(AdhocName.EMPTY == pn.getMiddleNames());
 	}
 
 	public void testSetLastName() {
-		ParsedName0 pn = new ParsedName0();
+		AdhocName pn = new AdhocName();
 		pn.setLastName(LN);
 		assertTrue(LN == pn.getLastName());
 		pn.setLastName(pad(LN));
 		assertTrue(pad(LN).equals(pn.getLastName()));
 		pn.setLastName(null);
-		assertTrue(ParsedName0.EMPTY == pn.getLastName());
+		assertTrue(AdhocName.EMPTY == pn.getLastName());
 	}
 
 	public void testSetTitles() {
-		ParsedName0 pn = new ParsedName0();
+		AdhocName pn = new AdhocName();
 		pn.setTitles(TITLES);
 		assertTrue(TITLES == pn.getTitles());
 		pn.setTitles(pad(TITLES));
 		assertTrue(pad(TITLES).equals(pn.getTitles()));
 		pn.setTitles(null);
-		assertTrue(ParsedName0.EMPTY == pn.getTitles());
+		assertTrue(AdhocName.EMPTY == pn.getTitles());
 	}
 
 	public void testSetPotentialMaidenName() {
-		ParsedName0 pn = new ParsedName0();
+		AdhocName pn = new AdhocName();
 		pn.setPotentialMaidenName(MAIDEN);
 		assertTrue(MAIDEN == pn.getPotentialMaidenName());
 		pn.setPotentialMaidenName(pad(MAIDEN));
 		assertTrue(pad(MAIDEN).equals(pn.getPotentialMaidenName()));
 		pn.setPotentialMaidenName(null);
-		assertTrue(ParsedName0.EMPTY == pn.getPotentialMaidenName());
+		assertTrue(AdhocName.EMPTY == pn.getPotentialMaidenName());
 	}
 
 	public void testSetMothersFirstName() {
-		ParsedName0 pn = new ParsedName0();
+		AdhocName pn = new AdhocName();
 		pn.setMothersFirstName(MOMFN);
 		assertTrue(MOMFN == pn.getMothersFirstName());
 		pn.setMothersFirstName(pad(MOMFN));
 		assertTrue(pad(MOMFN).equals(pn.getMothersFirstName()));
 		pn.setMothersFirstName(null);
-		assertTrue(ParsedName0.EMPTY == pn.getMothersFirstName());
+		assertTrue(AdhocName.EMPTY == pn.getMothersFirstName());
 	}
 
 }
