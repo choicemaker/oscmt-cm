@@ -131,8 +131,8 @@
             file="etc/parsers/en.us.defaultAddressParser.xml">
       </parser>
       <parser
-            name="en.us.defaultNameParser"
-            file="etc/parsers/en.us.defaultNameParser.xml">
+            name="en.us.defaultCfgNameParser"
+            file="etc/parsers/en.us.defaultCfgNameParser.xml">
       </parser>
    </extension>
 
