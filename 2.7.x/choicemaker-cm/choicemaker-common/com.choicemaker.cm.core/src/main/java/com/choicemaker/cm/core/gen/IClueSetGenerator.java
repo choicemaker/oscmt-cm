@@ -10,8 +10,8 @@
  */
 package com.choicemaker.cm.core.gen;
 
-import org.jdom.Document;
-import org.jdom.Element;
+import org.jdom2.Document;
+import org.jdom2.Element;
 
 /**
  * @author rphall

@@ -41,10 +41,6 @@
       <url>https://javahelp.java.net/</url>
     </contributor>
     <contributor>
-      <name>JDOM project</name>
-      <url>http://www.jdom.org/</url>
-    </contributor>
-    <contributor>
       <name>JFreeChart Project</name>
       <url>http://sourceforge.net/projects/jfreechart/</url>
     </contributor>
@@ -64,7 +60,6 @@
     <module>org.eclipse.core.resources</module>
     <module>org.eclipse.core.resources.ant</module>
     <module>org.eclipse.core.runtime</module>
-    <module>org.jdom</module>
     <module>javax.help.eclipse2</module>
     <module>jfree.jcommon.eclipse2</module>
     <module>jfree.jfreechart.eclipse2</module>
