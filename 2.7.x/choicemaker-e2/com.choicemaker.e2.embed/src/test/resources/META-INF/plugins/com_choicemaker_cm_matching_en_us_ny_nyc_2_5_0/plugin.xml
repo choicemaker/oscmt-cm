@@ -17,7 +17,7 @@
 
 
    <extension
-         name="NameParser and StreetParser Sets"
+         name="Ad hoc name and street sets"
          point="com.choicemaker.cm.matching.gen.set">
       <fileSet
             name="streetTypes"
