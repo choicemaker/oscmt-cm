@@ -7,17 +7,13 @@
  *******************************************************************************/
 package com.choicemaker.cm.matching.en.us.xmlconf;
 
-import java.util.Collection;
 import java.util.logging.Logger;
 
 import org.jasypt.encryption.StringEncryptor;
 import org.jdom.Element;
 
 import com.choicemaker.cm.core.XmlConfException;
-import com.choicemaker.cm.core.configure.ConfigurationUtils;
 import com.choicemaker.cm.core.xmlconf.XmlModuleInitializer;
-import com.choicemaker.cm.matching.en.us.AdhocNameParser;
-import com.choicemaker.cm.matching.gen.Sets;
 
 /**
  * XML initializer for an adhoc name parser.
