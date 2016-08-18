@@ -84,8 +84,8 @@
       <artifactId>org.apache.ant</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>org.jdom</artifactId>
+      <groupId>org.jdom</groupId>
+      <artifactId>jdom2</artifactId>
     </dependency>
   </dependencies>
 
