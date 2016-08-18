@@ -14,7 +14,6 @@
    <requires>
       <import plugin="com.choicemaker.e2"/>
       <import plugin="org.apache.ant"/>
-      <import plugin="org.jdom" export="true"/>
    </requires>
 
    <extension-point id="accessor" name="Accessor" schema="schema/accessor.exsd"/>
