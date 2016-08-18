@@ -13,6 +13,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * An ambiguous parser implemented as a weighted finite state transducer.
@@ -49,14 +50,12 @@ public class WfstParser implements AmbiguousParser, Cloneable {
 	 * (non-Javadoc)
 	 * @see com.choicemaker.cm.matching.wfst.AmbiguousParser#parse(java.lang.String)
 	 */
-	public List parse(String str) {
-		// HACK rphall 12-21-2005
+	public List<Map<String,String>> parse(String str) {
 		if (str !=null ) {
 			str = str.trim();
 		}
-		// ENDHACK
-		LinkedList list0 = filter.filter(str);
-		LinkedList list = grammar.filter(list0);
+		LinkedList<?> list0 = filter.filter(str);
+		LinkedList<?> list = grammar.filter(list0);
 		list = interpreter.beststrings(list);
 		return interpreter.interpret(list);
 	}

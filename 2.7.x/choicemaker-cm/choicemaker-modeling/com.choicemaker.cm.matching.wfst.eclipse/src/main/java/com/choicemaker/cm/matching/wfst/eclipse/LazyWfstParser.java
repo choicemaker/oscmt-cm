@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
+import java.util.Map;
 
 import com.choicemaker.cm.matching.wfst.AmbiguousParser;
 import com.choicemaker.cm.matching.wfst.WfstParser;
@@ -73,7 +74,7 @@ class LazyWfstParser implements AmbiguousParser {
 		return parser.isWeighted();
 	}
 
-	public List parse(String text) {
+	public List<Map<String,String>> parse(String text) {
 		init();
 		return parser.parse(text);
 	}

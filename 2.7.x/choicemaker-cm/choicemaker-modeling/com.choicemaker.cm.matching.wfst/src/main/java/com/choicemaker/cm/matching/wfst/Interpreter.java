@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 import java.util.StringTokenizer;
 
@@ -50,14 +51,14 @@ public class Interpreter {
 	return outstrings;
     }
 
-    public LinkedList interpret(List strings) {
-	LinkedList sems = new LinkedList();
+    public LinkedList<Map<String,String>> interpret(List<?> strings) {
+	LinkedList<Map<String,String>> sems = new LinkedList<>();
 	if (strings == null) { return sems; }
-	Iterator iter = strings.iterator();
+	Iterator<?> iter = strings.iterator();
 	while (iter.hasNext()) {
 	    String str = (String)iter.next();
 	    String weight = ((Integer)iter.next()).toString();
-        HashMap sem = list2sem(retokenize(str));
+        HashMap<String,String> sem = list2sem(retokenize(str));
 	    sem.put("weight", weight);
 	    sems.add(sem);
 	}
@@ -75,8 +76,8 @@ public class Interpreter {
 	return out;
     }
 
-    private HashMap list2sem(List list) {
-		HashMap sem = new HashMap();
+    private HashMap<String,String> list2sem(List list) {
+		HashMap<String,String> sem = new HashMap<>();
     	if (list == null) {
     		return sem;
     	} else {

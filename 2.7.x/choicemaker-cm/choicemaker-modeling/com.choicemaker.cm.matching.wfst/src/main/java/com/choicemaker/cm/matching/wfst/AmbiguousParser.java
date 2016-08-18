@@ -8,6 +8,7 @@
 package com.choicemaker.cm.matching.wfst;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * A parser that produces one or more plausible parses of an input String. The
@@ -42,7 +43,7 @@ public interface AmbiguousParser {
 	 * @return a non-null (but possibly empty) list of non-null (but possibly empty)
 	 * map instances.
 	 */
-	List parse(String s);
+	List<Map<String,String>> parse(String s);
 
 } // AmbiguousParser
 

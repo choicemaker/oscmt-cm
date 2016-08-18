@@ -41,7 +41,7 @@ public final class WfstParsers {
 	private WfstParsers() {
 	}
 
-	private static Map parsers = new HashMap();
+	private static Map<String,AmbiguousParser> parsers = new HashMap<>();
 
 	static {
 		initRegisteredWfstParsers();
@@ -120,7 +120,7 @@ public final class WfstParsers {
 	 * herein.
 	 * @return a Collection of the names of all registered parsers
 	 */
-	public static Collection getWfstParserNames() {
+	public static Collection<String> getWfstParserNames() {
 		return parsers.keySet();
 	}
 
@@ -135,7 +135,7 @@ public final class WfstParsers {
 	 * @see AmbiguousParser
 	 * @throws IllegalArgumentException if no AmbiguousParser named <code>name</code> is registered.
 	 */
-	public static List parse(String name, String text) {
+	public static List<Map<String,String>> parse(String name, String text) {
 		AmbiguousParser parser = (AmbiguousParser) parsers.get(name);
 		if (parser == null) {
 			throw new IllegalArgumentException(
