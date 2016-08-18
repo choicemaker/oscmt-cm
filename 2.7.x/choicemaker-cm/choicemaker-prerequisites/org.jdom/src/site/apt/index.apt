@@ -1,4 +1,0 @@
-org.jdom
-
-  This module repackages the {{{http://www.jdom.org/}open-source JDOM library}}
-as an Eclipse 2.1 plugin.
