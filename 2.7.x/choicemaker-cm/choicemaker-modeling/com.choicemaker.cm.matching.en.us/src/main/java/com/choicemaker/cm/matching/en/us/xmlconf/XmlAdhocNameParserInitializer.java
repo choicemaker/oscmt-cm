@@ -20,7 +20,7 @@ import com.choicemaker.cm.matching.en.us.AdhocNameParser;
 import com.choicemaker.cm.matching.gen.Sets;
 
 /**
- * XML initializer for collections (sets).
+ * XML initializer for an adhoc name parser.
  * 
  * The name parser can be customized through the configuration file. The
  * following gives a sample configuration:
@@ -50,13 +50,13 @@ import com.choicemaker.cm.matching.gen.Sets;
  * @author Martin Buechi
  * @see com.choicemaker.cm.custom.mci.nameparser.NameParser
  */
-public class XmlNameParserInitializer implements XmlModuleInitializer {
+public class XmlAdhocNameParserInitializer implements XmlModuleInitializer {
 
-	private final static Logger logger = Logger.getLogger(XmlNameParserInitializer.class.getName());
+	private final static Logger logger = Logger.getLogger(XmlAdhocNameParserInitializer.class.getName());
 
-	public final static XmlNameParserInitializer instance = new XmlNameParserInitializer();
+	public final static XmlAdhocNameParserInitializer instance = new XmlAdhocNameParserInitializer();
 
-	private XmlNameParserInitializer() {
+	private XmlAdhocNameParserInitializer() {
 	}
 
 	@Override
