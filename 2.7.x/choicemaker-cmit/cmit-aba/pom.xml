@@ -395,8 +395,8 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>org.apache.bcel</artifactId>
+      <groupId>org.apache.bcel</groupId>
+      <artifactId>bcel</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>

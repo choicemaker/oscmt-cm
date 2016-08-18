@@ -157,9 +157,9 @@
       <version>1.5.4-SNAPSHOT</version>
     </dependency>
     <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>org.apache.bcel</artifactId>
-      <version>5.0.1-SNAPSHOT</version>
+      <groupId>org.apache.bcel</groupId>
+      <artifactId>bcel</artifactId>
+      <version>6.0</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>

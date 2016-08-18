@@ -270,8 +270,8 @@
       <artifactId>org.apache.ant</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>org.apache.bcel</artifactId>
+      <groupId>org.apache.bcel</groupId>
+      <artifactId>bcel</artifactId>
     </dependency>
     <dependency>
       <groupId>org.jdom</groupId>
