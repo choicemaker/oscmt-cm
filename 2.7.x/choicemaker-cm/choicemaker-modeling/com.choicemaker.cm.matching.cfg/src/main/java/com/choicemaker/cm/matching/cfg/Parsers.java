@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
-import org.jdom.JDOMException;
+import org.jdom2.JDOMException;
 
 import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.choicemaker.cm.core.XmlConfException;

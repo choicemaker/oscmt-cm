@@ -11,8 +11,8 @@ import java.util.Iterator;
 import java.util.logging.Logger;
 
 import org.jasypt.encryption.StringEncryptor;
-import org.jdom.Document;
-import org.jdom.Element;
+import org.jdom2.Document;
+import org.jdom2.Element;
 
 import com.choicemaker.cm.core.configure.ConfigurationUtils;
 import com.choicemaker.cm.core.xmlconf.XmlConfigurator;

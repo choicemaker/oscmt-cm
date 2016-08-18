@@ -12,7 +12,7 @@ package com.choicemaker.cm.core.xmlconf;
 
 import java.io.File;
 
-import org.jdom.Element;
+import org.jdom2.Element;
 
 /**
  * Description

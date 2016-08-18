@@ -30,7 +30,7 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
-import org.jdom.Element;
+import org.jdom2.Element;
 
 import com.choicemaker.cm.analyzer.matcher.SimpleRecordSink;
 import com.choicemaker.cm.analyzer.sampler.DefaultPairSampler;

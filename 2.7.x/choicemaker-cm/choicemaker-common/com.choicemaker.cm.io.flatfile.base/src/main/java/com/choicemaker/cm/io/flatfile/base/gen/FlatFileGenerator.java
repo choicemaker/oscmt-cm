@@ -14,9 +14,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.jdom.Attribute;
-import org.jdom.DataConversionException;
-import org.jdom.Element;
+import org.jdom2.Attribute;
+import org.jdom2.DataConversionException;
+import org.jdom2.Element;
 
 import com.choicemaker.cm.core.Constants;
 import com.choicemaker.cm.core.gen.CoreTags;

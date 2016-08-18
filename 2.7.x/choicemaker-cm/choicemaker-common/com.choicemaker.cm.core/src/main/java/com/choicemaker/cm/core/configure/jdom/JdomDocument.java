@@ -10,8 +10,8 @@
  */
 package com.choicemaker.cm.core.configure.jdom;
 
-import org.jdom.Document;
-import org.jdom.Element;
+import org.jdom2.Document;
+import org.jdom2.Element;
 
 import com.choicemaker.cm.core.configure.xml.IDocument;
 import com.choicemaker.cm.core.configure.xml.IElement;

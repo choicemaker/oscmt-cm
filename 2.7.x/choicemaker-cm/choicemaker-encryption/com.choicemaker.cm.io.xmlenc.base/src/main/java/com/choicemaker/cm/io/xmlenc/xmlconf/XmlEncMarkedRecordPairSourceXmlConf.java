@@ -11,9 +11,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.output.XMLOutputter;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
 
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.MarkedRecordPairSource;
@@ -75,8 +76,8 @@ public class XmlEncMarkedRecordPairSourceXmlConf implements
 					.getRawXmlFileName()));
 			FileOutputStream fs = new FileOutputStream(
 					new File(fileName).getAbsoluteFile());
-			XMLOutputter o = new XMLOutputter("    ", true);
-			o.setTextNormalize(true);
+			Format format = Format.getPrettyFormat();
+			XMLOutputter o = new XMLOutputter(format);
 			o.output(new Document(e), fs);
 			fs.close();
 		} catch (IOException ex) {

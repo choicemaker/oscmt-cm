@@ -35,7 +35,9 @@
 
     <!-- Dependency versions -->
     <ant-jsch.version>1.9.2</ant-jsch.version>
+    <apache-ant.version>1.9.7</apache-ant.version>
     <apache-cxf.version>3.1.6</apache-cxf.version>
+    <apache-bcel.version>6.0</apache-bcel.version>
     <apache-wss4j.version>2.1.5</apache-wss4j.version>
     <apache-commons-logging.version>1.1.2</apache-commons-logging.version>
     <aws-encryption-sdk.version>0.0.1-SNAPSHOT</aws-encryption-sdk.version>
@@ -985,6 +987,16 @@
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
         <version>${junit.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.ant</groupId>
+        <artifactId>ant</artifactId>
+        <version>${apache-ant.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.bcel</groupId>
+        <artifactId>bcel</artifactId>
+        <version>${apache-bcel.version}</version>
       </dependency>
       <dependency>
         <groupId>org.apache.commons</groupId>

@@ -33,7 +33,7 @@ public class StandardPluginDiscoveryTest {
 	}
 
 	/**
-	 * Tests anonymous discovery. There should be about 48 plugins based on the
+	 * Tests anonymous discovery. There should be about 47 plugins based on the
 	 * POM for this test:
 	 * <ul>
 	 * <li>com.choicemaker.cm.analyzer.base</li>
@@ -60,7 +60,6 @@ public class StandardPluginDiscoveryTest {
 	 * <li>org....</li>
 	 * <li>org.eclipse.core.boot</li>
 	 * <li>org.eclipse...</li>
-	 * <li>org.jdom</li>
 	 * </ul>
 	 */
 	@Test

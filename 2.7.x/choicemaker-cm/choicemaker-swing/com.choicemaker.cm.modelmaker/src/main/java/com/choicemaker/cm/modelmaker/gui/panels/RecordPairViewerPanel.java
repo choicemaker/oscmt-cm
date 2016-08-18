@@ -10,7 +10,7 @@ package com.choicemaker.cm.modelmaker.gui.panels;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import org.jdom.Element;
+import org.jdom2.Element;
 
 import com.choicemaker.cm.core.RepositoryChangeEvent;
 import com.choicemaker.cm.core.RepositoryChangeListener;

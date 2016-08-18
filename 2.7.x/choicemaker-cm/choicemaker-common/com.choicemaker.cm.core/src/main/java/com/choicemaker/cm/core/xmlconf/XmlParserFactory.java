@@ -12,7 +12,7 @@ package com.choicemaker.cm.core.xmlconf;
 
 import java.net.URL;
 
-import org.jdom.input.SAXBuilder;
+import org.jdom2.input.SAXBuilder;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;

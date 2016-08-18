@@ -11,7 +11,7 @@ import java.io.File;
 import java.util.Iterator;
 import java.util.List;
 
-import org.jdom.Element;
+import org.jdom2.Element;
 
 import com.choicemaker.cm.core.Constants;
 import com.choicemaker.cm.core.gen.CoreTags;
@@ -49,7 +49,7 @@ public class DbGenerator implements GeneratorPlugin {
 			name = dbField.getAttributeValue(DbTags.TABLE);
 		}
 		if (name == null) {
-			name = getViewNameForNode(field.getParent(), conf, g);
+			name = getViewNameForNode(field.getParentElement(), conf, g);
 		}
 		return name;
 	}

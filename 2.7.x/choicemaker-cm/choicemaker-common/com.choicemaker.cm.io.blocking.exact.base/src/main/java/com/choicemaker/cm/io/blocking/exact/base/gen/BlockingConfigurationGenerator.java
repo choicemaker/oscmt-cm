@@ -22,8 +22,8 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import org.jdom.Attribute;
-import org.jdom.Element;
+import org.jdom2.Attribute;
+import org.jdom2.Element;
 
 import com.choicemaker.cm.core.Constants;
 import com.choicemaker.cm.core.DerivedSource;
@@ -149,7 +149,7 @@ public class BlockingConfigurationGenerator {
 		for (int i = 0; i < bfs.length; i++) {
 			bfs[i] = targetFields[i].bf;
 		}
-		Element fieldNodeType = targetFields[0].targetField.getParent();
+		Element fieldNodeType = targetFields[0].targetField.getParentElement();
 		int level = Integer.parseInt(fieldNodeType.getAttributeValue(CoreTags.LEVEL));
 		writeNodeType(fieldNodeType, level, bfs, targetFields);
 		if (rn == 0) {
@@ -195,7 +195,7 @@ public class BlockingConfigurationGenerator {
 						+ "];"
 						+ Constants.LINE_SEPARATOR
 						+ fors;
-				cur = cur.getParent();
+				cur = cur.getParentElement();
 			}
 			w.write(fors);
 		}
@@ -205,7 +205,7 @@ public class BlockingConfigurationGenerator {
 			if (i != 0) {
 				w.write(" &&");
 			}
-			Element f = targetFields == null ? bf.getParent() : targetFields[i].targetField;
+			Element f = targetFields == null ? bf.getParentElement() : targetFields[i].targetField;
 			w.write("r" + level + ".__v_" + f.getAttributeValue(CoreTags.NAME));
 			String valid = bf.getAttributeValue(targetFields != null ? BlockingTags.TARGET_VALID : BlockingTags.SOURCE_VALID);
 			if (valid != null) {
@@ -226,7 +226,7 @@ public class BlockingConfigurationGenerator {
 		}
 		for (int i = 0; i < bfs.length; i++) {
 			Element bf = bfs[i];
-			Element f = bf.getParent();
+			Element f = bf.getParentElement();
 			String name = targetFields == null ? f.getAttributeValue(CoreTags.NAME) : targetFields[i].targetField.getAttributeValue(CoreTags.NAME);
 			String keyFieldName = getKeyFieldName(f);
 			if (targetFields == null) {
@@ -298,7 +298,7 @@ public class BlockingConfigurationGenerator {
 	}
 
 	private String getKeyFieldName(Element e) {
-		return e.getParent().getAttributeValue(CoreTags.CLASS_NAME) + "__" + e.getAttributeValue(CoreTags.NAME);
+		return e.getParentElement().getAttributeValue(CoreTags.CLASS_NAME) + "__" + e.getAttributeValue(CoreTags.NAME);
 	}
 
 	private void writeKey() throws IOException {
@@ -383,23 +383,23 @@ public class BlockingConfigurationGenerator {
 			String targetFieldName = bf.getAttributeValue(BlockingTags.TARGET_FIELD_NAME);
 			if (targetNodeTypeName == null) {
 				if (targetFieldName == null) {
-					targetField = bf.getParent();
+					targetField = bf.getParentElement();
 				} else {
-					targetField = GeneratorHelper.findField(bf.getParent().getParent(), targetFieldName);
+					targetField = GeneratorHelper.findField(bf.getParentElement().getParentElement(), targetFieldName);
 				}
 			} else {
 				Element targetNodeType = GeneratorHelper.findNodeType(g.getRootElement(), targetNodeTypeName);
 				if (targetNodeType != null) {
 					targetField =
-						GeneratorHelper.findField(targetNodeType, targetFieldName == null ? bf.getParent().getAttributeValue(CoreTags.NAME) : targetFieldName);
+						GeneratorHelper.findField(targetNodeType, targetFieldName == null ? bf.getParentElement().getAttributeValue(CoreTags.NAME) : targetFieldName);
 				}
 			}
 			if (targetField == null) {
 				g.error("Unknown target field.");
-			} else if (!bf.getParent().getAttributeValue(CoreTags.TYPE).equals(targetField.getAttributeValue(CoreTags.TYPE))) {
+			} else if (!bf.getParentElement().getAttributeValue(CoreTags.TYPE).equals(targetField.getAttributeValue(CoreTags.TYPE))) {
 				g.error("Incompatible types.");
 			} else {
-				targetRecordNumber = Integer.parseInt(targetField.getParent().getAttributeValue(CoreTags.RECORD_NUMBER));
+				targetRecordNumber = Integer.parseInt(targetField.getParentElement().getAttributeValue(CoreTags.RECORD_NUMBER));
 			}
 			targetGroup = getGroup(bf, BlockingTags.TARGET_GROUP, targetRecordNumber);
 		}

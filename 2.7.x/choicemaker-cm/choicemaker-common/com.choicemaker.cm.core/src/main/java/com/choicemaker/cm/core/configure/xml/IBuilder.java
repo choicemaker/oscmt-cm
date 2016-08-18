@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.io.Reader;
 
 /**
- * Based on the public methods of org.jdom.input.SAXBuilder
+ * Based on the public methods of org.jdom2.input.SAXBuilder
  * @author rphall
  */
 public interface IBuilder {

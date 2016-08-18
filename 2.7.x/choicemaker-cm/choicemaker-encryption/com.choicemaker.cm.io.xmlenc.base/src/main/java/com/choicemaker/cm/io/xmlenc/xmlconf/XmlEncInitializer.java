@@ -12,11 +12,11 @@ import java.util.Properties;
 import java.util.logging.Logger;
 
 import org.jasypt.encryption.StringEncryptor;
-import org.jdom.Attribute;
-import org.jdom.DocType;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.output.XMLOutputter;
+import org.jdom2.Attribute;
+import org.jdom2.DocType;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.output.XMLOutputter;
 
 import com.amazonaws.util.StringInputStream;
 import com.choicemaker.cm.core.XmlConfException;

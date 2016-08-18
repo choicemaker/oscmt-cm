@@ -14,7 +14,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.jdom.Element;
+import org.jdom2.Element;
 
 import com.choicemaker.cm.core.configure.xml.IElement;
 import com.choicemaker.util.Precondition;

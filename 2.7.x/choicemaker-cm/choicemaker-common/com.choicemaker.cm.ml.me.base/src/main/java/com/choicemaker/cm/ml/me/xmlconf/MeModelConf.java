@@ -10,7 +10,7 @@ package com.choicemaker.cm.ml.me.xmlconf;
 import java.util.Iterator;
 import java.util.List;
 
-import org.jdom.Element;
+import org.jdom2.Element;
 
 import com.choicemaker.cm.core.Accessor;
 import com.choicemaker.cm.core.MachineLearner;

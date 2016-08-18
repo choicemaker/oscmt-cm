@@ -10,7 +10,7 @@ package com.choicemaker.cm.matching.en.us.xmlconf;
 import java.util.logging.Logger;
 
 import org.jasypt.encryption.StringEncryptor;
-import org.jdom.Element;
+import org.jdom2.Element;
 
 import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.xmlconf.XmlModuleInitializer;

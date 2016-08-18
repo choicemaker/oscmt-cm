@@ -7,7 +7,7 @@
  *******************************************************************************/
 package com.choicemaker.cm.io.xml.base.xmlconf;
 
-import org.jdom.Element;
+import org.jdom2.Element;
 
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.MarkedRecordPairSource;

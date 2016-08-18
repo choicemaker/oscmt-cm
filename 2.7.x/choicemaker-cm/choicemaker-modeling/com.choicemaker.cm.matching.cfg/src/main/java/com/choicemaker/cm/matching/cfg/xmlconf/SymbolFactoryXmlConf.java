@@ -9,7 +9,7 @@ package com.choicemaker.cm.matching.cfg.xmlconf;
 
 import java.util.List;
 
-import org.jdom.Element;
+import org.jdom2.Element;
 
 import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.matching.cfg.SimpleSymbolFactory;

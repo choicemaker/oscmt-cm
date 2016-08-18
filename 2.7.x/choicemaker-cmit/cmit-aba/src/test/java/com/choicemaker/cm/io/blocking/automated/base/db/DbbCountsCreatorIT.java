@@ -13,8 +13,8 @@ import java.util.logging.Logger;
 
 import javax.sql.DataSource;
 
-import org.jdom.Document;
-import org.jdom.JDOMException;
+import org.jdom2.Document;
+import org.jdom2.JDOMException;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

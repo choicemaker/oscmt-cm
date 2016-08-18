@@ -25,10 +25,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.jasypt.encryption.StringEncryptor;
-import org.jdom.Attribute;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.output.XMLOutputter;
+import org.jdom2.Attribute;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
 
 import com.choicemaker.cm.core.PropertyNames;
 import com.choicemaker.cm.core.WellKnownPropertyValues;
@@ -249,8 +250,8 @@ public class XmlConfigurator implements ChoiceMakerConfigurator,
 		fileName = new File(fn).getAbsolutePath();
 		try {
 			FileOutputStream fs = new FileOutputStream(fileName);
-			XMLOutputter o = new XMLOutputter("    ", true);
-			o.setTextNormalize(true);
+			Format format = Format.getPrettyFormat();
+			XMLOutputter o = new XMLOutputter(format);
 			o.output(document, fs);
 			fs.close();
 		} catch (IOException ex) {

@@ -10,7 +10,7 @@
  */
 package com.choicemaker.cm.core.xmlconf;
 
-import org.jdom.Element;
+import org.jdom2.Element;
 
 import com.choicemaker.cm.core.DynamicDispatchHandler;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;

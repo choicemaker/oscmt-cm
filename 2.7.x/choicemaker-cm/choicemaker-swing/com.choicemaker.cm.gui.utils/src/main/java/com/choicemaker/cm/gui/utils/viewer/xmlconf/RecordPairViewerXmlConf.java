@@ -24,10 +24,11 @@ import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.input.SAXBuilder;
-import org.jdom.output.XMLOutputter;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
 
 import com.choicemaker.cm.core.Descriptor;
 import com.choicemaker.cm.core.XmlConfException;
@@ -226,8 +227,8 @@ public class RecordPairViewerXmlConf {
 		Element layout = modelToXml(compositePaneModel);
 		try {
 			FileOutputStream fs = new FileOutputStream(new File(compositePaneModel.getFileName()).getAbsoluteFile());
-			XMLOutputter o = new XMLOutputter("    ", true);
-			o.setTextNormalize(true);
+			Format format = Format.getPrettyFormat();
+			XMLOutputter o = new XMLOutputter(format);
 			o.output(layout, fs);
 			fs.close();
 		} catch (IOException ex) {

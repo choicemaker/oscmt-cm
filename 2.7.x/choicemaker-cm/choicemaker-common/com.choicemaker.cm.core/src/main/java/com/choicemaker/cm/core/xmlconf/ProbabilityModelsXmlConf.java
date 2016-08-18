@@ -26,10 +26,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.input.SAXBuilder;
-import org.jdom.output.XMLOutputter;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
 
 import com.choicemaker.cm.core.Accessor;
 import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
@@ -142,7 +143,8 @@ public class ProbabilityModelsXmlConf {
 			String fileName = model.getModelFilePath();
 			FileOutputStream fs =
 				new FileOutputStream(new File(fileName).getAbsoluteFile());
-			XMLOutputter o = new XMLOutputter("    ", true);
+			Format format = Format.getPrettyFormat();
+			XMLOutputter o = new XMLOutputter(format);
 			//o.setTextNormalize(true);
 			o.output(m, fs);
 			fs.close();

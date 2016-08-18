@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.logging.Logger;
 
 import org.jasypt.encryption.StringEncryptor;
-import org.jdom.Document;
+import org.jdom2.Document;
 
 import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.compiler.ICompiler;
