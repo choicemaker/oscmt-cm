@@ -10,8 +10,6 @@
   </runtime>
   <requires>
     <import plugin="com.choicemaker.cm.core" />
-    <import plugin="org.apache.ant" />
-    <import plugin="org.apache.bcel" />
   </requires>
 
   <extension point="com.choicemaker.cm.core.generatorPlugin">

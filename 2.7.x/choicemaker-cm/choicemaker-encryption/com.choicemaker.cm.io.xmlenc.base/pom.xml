@@ -93,10 +93,6 @@
       <artifactId>com.choicemaker.cm.io.xml.base</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.choicemaker.xml</groupId>
-      <artifactId>santuario-kms</artifactId>
-    </dependency>
-    <dependency>
       <groupId>org.jdom</groupId>
       <artifactId>jdom2</artifactId>
     </dependency>

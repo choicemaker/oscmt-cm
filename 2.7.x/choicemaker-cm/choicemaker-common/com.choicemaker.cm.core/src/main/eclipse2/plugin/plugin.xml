@@ -13,7 +13,6 @@
    </runtime>
    <requires>
       <import plugin="com.choicemaker.e2"/>
-      <import plugin="org.apache.ant"/>
    </requires>
 
    <extension-point id="accessor" name="Accessor" schema="schema/accessor.exsd"/>
