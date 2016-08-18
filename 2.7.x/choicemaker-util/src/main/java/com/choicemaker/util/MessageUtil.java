@@ -27,6 +27,8 @@ public class MessageUtil {
 	public static final String ELLIPSIS = "...";
 	public static final int ELLIPSIS_LENGTH = ELLIPSIS.length();
 
+	public static final String EXCEPTION_SEP = ": ";
+
 	protected ResourceBundle myResources;
 
 	public MessageUtil(String name) {
@@ -42,55 +44,91 @@ public class MessageUtil {
 			return myResources.getString(messageKey);
 		} catch (MissingResourceException ex) {
 			logger.severe("missing resource in locale: " + Locale.getDefault()
-					+ ": " + ex);
+					+ EXCEPTION_SEP + ex);
 			return "Missing resource: " + messageKey;
 		}
 	}
 
 	public String formatMessage(String messageKey) {
+		return formatMessage(messageKey, (Throwable) null);
+	}
+
+	public String formatMessage(String messageKey, Throwable t) {
 		MessageFormat mf = new MessageFormat(getMessageString(messageKey));
-		return mf.format(ZERO_LENGTH_ARRAY);
+		return t == null ? mf.format(ZERO_LENGTH_ARRAY) : mf
+				.format(ZERO_LENGTH_ARRAY)
+				+ EXCEPTION_SEP
+				+ new ExceptionInfo(t).toString();
 	}
 
 	public String formatMessage(String messageKey, Object[] args) {
+		return formatMessage(messageKey, args, (Throwable) null);
+	}
+
+	public String formatMessage(String messageKey, Object[] args, Throwable t) {
 		MessageFormat mf = new MessageFormat(getMessageString(messageKey));
-		return mf.format(args);
+		return t == null ? mf.format(args) : mf.format(args) + EXCEPTION_SEP
+				+ new ExceptionInfo(t).toString();
 	}
 
 	public String formatMessage(String messageKey, Object arg0) {
+		return formatMessage(messageKey, arg0, (Throwable) null);
+	}
+
+	public String formatMessage(String messageKey, Object arg0, Throwable t) {
 		MessageFormat mf = new MessageFormat(getMessageString(messageKey));
 		Object[] args = new Object[1];
 		args[0] = arg0;
-		return mf.format(args);
+		return t == null ? mf.format(args) : mf.format(args) + EXCEPTION_SEP
+				+ new ExceptionInfo(t).toString();
 	}
 
 	public String formatMessage(String messageKey, Object arg0, Object arg1) {
+		return formatMessage(messageKey, arg0, arg1, (Throwable) null);
+	}
+
+	public String formatMessage(String messageKey, Object arg0, Object arg1,
+			Throwable t) {
 		MessageFormat mf = new MessageFormat(getMessageString(messageKey));
 		Object[] args = new Object[2];
 		args[0] = arg0;
 		args[1] = arg1;
-		return mf.format(args);
+		return t == null ? mf.format(args) : mf.format(args) + EXCEPTION_SEP
+				+ new ExceptionInfo(t).toString();
 	}
 
 	public String formatMessage(String messageKey, Object arg0, Object arg1,
 			Object arg2) {
+		return formatMessage(messageKey, arg0, arg1, arg2, (Throwable) null);
+	}
+
+	public String formatMessage(String messageKey, Object arg0, Object arg1,
+			Object arg2, Throwable t) {
 		MessageFormat mf = new MessageFormat(getMessageString(messageKey));
 		Object[] args = new Object[3];
 		args[0] = arg0;
 		args[1] = arg1;
 		args[2] = arg2;
-		return mf.format(args);
+		return t == null ? mf.format(args) : mf.format(args) + EXCEPTION_SEP
+				+ new ExceptionInfo(t).toString();
 	}
 
 	public String formatMessage(String messageKey, Object arg0, Object arg1,
 			Object arg2, Object arg3) {
+		return formatMessage(messageKey, arg0, arg1, arg2, arg3,
+				(Throwable) null);
+	}
+
+	public String formatMessage(String messageKey, Object arg0, Object arg1,
+			Object arg2, Object arg3, Throwable t) {
 		MessageFormat mf = new MessageFormat(getMessageString(messageKey));
 		Object[] args = new Object[4];
 		args[0] = arg0;
 		args[1] = arg1;
 		args[2] = arg2;
 		args[3] = arg3;
-		return mf.format(args);
+		return t == null ? mf.format(args) : mf.format(args) + EXCEPTION_SEP
+				+ new ExceptionInfo(t).toString();
 	}
 
 	/**
@@ -238,7 +276,7 @@ public class MessageUtil {
 	 *            may be null (but return value will be empty)
 	 * @return a non-null but possibly empty list
 	 */
-	public static List<String> exceptionInfo(Exception x) {
+	public static List<String> exceptionInfo(Throwable x) {
 		ExceptionInfo xinfo = x == null ? null : new ExceptionInfo(x);
 		return exceptionInfo(xinfo, DEFAULT_MAX_LINE_LENGTH);
 	}
@@ -254,7 +292,7 @@ public class MessageUtil {
 	 *            with {@link #DEFAULT_REPLACEMENT_TEXT default text}
 	 * @return a non-null but possibly empty list
 	 */
-	public static List<String> exceptionInfo(Exception x, int maxLineLen) {
+	public static List<String> exceptionInfo(Throwable x, int maxLineLen) {
 		ExceptionInfo xinfo = x == null ? null : new ExceptionInfo(x);
 		return exceptionInfo(xinfo, maxLineLen);
 	}

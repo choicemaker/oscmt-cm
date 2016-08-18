@@ -1,12 +1,11 @@
 package com.choicemaker.util;
 
-
 /**
  * Gathers information from an exception
  */
 public class ExceptionInfo {
 
-	public final Exception x;
+	public final Throwable x;
 	public final String className;
 	public final String simpleClassName;
 	public final String message;
@@ -14,7 +13,7 @@ public class ExceptionInfo {
 	public final String causeSimpleClassName;
 	public final String causeMessage;
 
-	public ExceptionInfo(Exception x) {
+	public ExceptionInfo(Throwable x) {
 		Precondition.assertNonNullArgument("null exception", x);
 		this.x = x;
 		className = x.getClass().getName();
