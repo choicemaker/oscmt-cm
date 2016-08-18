@@ -7,12 +7,6 @@
  *******************************************************************************/
 package com.choicemaker.cm.matching.en.us;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.StringTokenizer;
-
 import com.choicemaker.util.StringUtils;
 
 /**
@@ -22,7 +16,7 @@ import com.choicemaker.util.StringUtils;
  * @author S. Yoakum-Stover (initial version)
  * @author rphall stripped of unused methods)
  */
-public class AdhocStreetParser {
+public class StreetParser {
 //	public static Collection directions = new HashSet();
 //	public static Collection streetTypes = new HashSet();
 //	public static Collection ordinalExtensions = new HashSet();
@@ -45,11 +39,11 @@ public class AdhocStreetParser {
 //	private String cleanStreet = "";
 //	private String apartment = "";
 //
-//	public static AdhocStreetParser parse(String s) {
-//		return new AdhocStreetParser(s);
+//	public static StreetParser parse(String s) {
+//		return new StreetParser(s);
 //	}
 //
-//	public AdhocStreetParser(String s) {
+//	public StreetParser(String s) {
 //		if (StringUtils.nonEmptyString(s)) {
 //			parseStreetString(s);
 //			findNumberAndStreet();
