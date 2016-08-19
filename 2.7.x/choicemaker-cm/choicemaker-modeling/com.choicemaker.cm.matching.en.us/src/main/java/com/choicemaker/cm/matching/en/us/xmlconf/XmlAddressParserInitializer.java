@@ -55,7 +55,6 @@ public class XmlAddressParserInitializer implements XmlModuleInitializer {
 			Object[] args = new Object[1];
 
 			// Tokenizer(s)
-			@SuppressWarnings("unchecked")
 			List<Element> tokenizerElements = e.getChildren("tokenizer");
 			AddressTokenizer[] tokenizers = new AddressTokenizer[tokenizerElements
 					.size()];
