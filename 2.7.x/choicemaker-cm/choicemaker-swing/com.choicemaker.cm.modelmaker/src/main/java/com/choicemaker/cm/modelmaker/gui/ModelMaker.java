@@ -183,8 +183,13 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 		}
 	}
 
-	// XmlConf file name
-	// private static String xmlConfFileName;
+	// CM Analyzer configuration file name.
+	// Read-only after startup(Object).
+	private String xmlConfFileName;
+
+	public String getModelMakerConfigurationFile() {
+		return xmlConfFileName;
+	}
 
 	// Delegates
 	final private IUserMessages userMessages = new IUserMessages() {
@@ -770,6 +775,9 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 
 	public void postProbabilityModelInfo() {
 		if (probabilityModel != null) {
+			postUserMessage(_msgs.formatMessage(
+					"train.gui.modelmaker.conf.filename",
+					getModelMakerConfigurationFile()));
 			postUserMessage(_msgs.formatMessage(
 					"train.gui.modelmaker.model.name",
 					probabilityModel.getModelName()));
@@ -1794,6 +1802,7 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 
 			// Get the configuration file name
 			conf = sd.getConfigurationFileName();
+			this.xmlConfFileName = conf;
 			getPreferences().put(PreferenceKeys.CONFIGURATION_FILE, conf);
 
 			// Copy the password, then clear the password field
