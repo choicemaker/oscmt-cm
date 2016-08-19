@@ -217,7 +217,10 @@ public class MultiSourceMenu extends LastUsedMenu {
 			parent.setMultiSource(num, s);
 			opened(fileName);
 		} catch (XmlConfException ex) {
-			logger.severe(new LoggingObject("CM-100601", fileName).getFormattedMessage() + ": " + ex);
+			LoggingObject lo = new LoggingObject("CM-100601", fileName, ex);
+			String msg = lo.getFormattedMessage();
+			logger.severe(msg);
+			this.parent.postUserMessage(msg);
 			remove(fileName);
 		}
 	}

@@ -111,6 +111,7 @@ import com.choicemaker.util.ArrayHelper;
 import com.choicemaker.util.ExceptionInfo;
 import com.choicemaker.util.IntArrayList;
 import com.choicemaker.util.MessageUtil;
+import com.choicemaker.util.StringUtils;
 
 /**
  *
@@ -716,11 +717,15 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 			LoggingObject lo = new LoggingObject("CM-100502", modelName, ex);
 			String msg = lo.getFormattedMessage();
 			logger.severe(msg);
+			messagePanel.postMessage(msg);
 			throw new OperationFailedException(msg);
 
 		} finally {
 			setCursor(cursor);
-			messagePanel.postMessage(statusOutput.toString());
+			String msg = statusOutput.toString();
+			if (StringUtils.nonEmptyString(msg)) {
+				messagePanel.postMessage(msg);
+			}
 		}
 	}
 
