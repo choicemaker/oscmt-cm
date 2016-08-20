@@ -7,151 +7,215 @@
  *******************************************************************************/
 package com.choicemaker.cm.matching.en.us;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.matching.cfg.ContextFreeGrammar;
+import com.choicemaker.cm.matching.cfg.ParseTreeNode;
 import com.choicemaker.cm.matching.cfg.ParseTreeNodeStandardizer;
 import com.choicemaker.cm.matching.cfg.ParsedData;
+import com.choicemaker.cm.matching.cfg.SymbolFactory;
 import com.choicemaker.cm.matching.cfg.Tokenizer;
-import com.choicemaker.cm.matching.cfg.cyk.CykParser;
+import com.choicemaker.util.Precondition;
 
 /**
- * Used to split an address string into its constituent pieces.
- * The AddressParser class is intended to handle all cases. 
+ * Used to split an address string into its constituent pieces. The
+ * AddressParser class is intended to handle all cases.
  * 
  * Such cases include
  * <ul>
- * <li>
- * street address only
- * <li>
- * the full address (including city, state, and zip)
+ * <li>street address only
+ * <li>the full address (including city, state, and zip)
  * </ul>
  *
- * Note that currently, AddressParser does not parse addresses from single strings.
+ * Note that currently, AddressParser does not parse addresses from single
+ * strings.
  * 
- * Things like PO Box addresses, C/O pieces, Rural Routes, etc. generally screw up
- * this AddressParser.  Hopefully we will have time to introduce support for such
- * addresses in the future.
+ * Things like PO Box addresses, C/O pieces, Rural Routes, etc. generally screw
+ * up this AddressParser. Hopefully we will have time to introduce support for
+ * such addresses in the future.
  * 
- * Also, AddressParser does no processing (not even validity checking) of
- * City, State, and Zip Codes.
+ * Also, AddressParser does no processing (not even validity checking) of City,
+ * State, and Zip Codes.
  *
- * @author   Adam Winkel
+ * @author Adam Winkel
  */
-public class AddressParser extends CykParser {
-	
-	//
-	// static default parser stuff
-	//
-	
-	private static AddressParser defaultParser;
-	
-	/** 
-	 * Sets the default parser. 
-	 * @deprecated Use generic cfg.Parsers functionality
-	 * @see #getDefaultParser
-	 */
-	public static synchronized void setDefaultParser(AddressParser parser) {
-		defaultParser = parser;	
-	}
-	
-	/** 
-	 * Returns the default parser.
-	 * @deprecated Use generic cfg.Parsers functionality 
-	 * @see #setDefaultParser
-	 */
+public class AddressParser {
+
+	private static final Logger logger =
+		Logger.getLogger(AddressParser.class.getName());
+
+	public static final String MCI_CFG_ADDRESS_PARSER = "mciCfgAddressParser";
+
+	private static AtomicReference<AddressParser> defaultParserRef =
+		new AtomicReference<>(null);
+
 	public static synchronized AddressParser getDefaultParser() {
-		return defaultParser;	
-	}
-		
-	//
-	// Constructors and instance methods
-	//
-		
-	/**
-	 * Creates a new AddressParser with the specified tokenizer, grammar, and standardizer.
-	 * 
-	 * @param tokenizer the tokenizer
-	 * @param grammar the grammar
-	 * @param standardizer the standardizer
-	 */
-	public AddressParser(Tokenizer tokenizer, ContextFreeGrammar grammar, ParseTreeNodeStandardizer standardizer) {
-		super(tokenizer, grammar, standardizer, ParsedAddress.class);
-
-		if (defaultParser == null) {
-			setDefaultParser(this);	
+		AddressParser retVal = defaultParserRef.get();
+		if (retVal == null) {
+			CfgAddressParser defaultDelegate = CfgAddressParsers
+					.lookupCfgAddressParser(MCI_CFG_ADDRESS_PARSER);
+			final AddressParser defaultParser =
+				new AddressParser(defaultDelegate);
+			retVal = defaultParserRef.get();
+			boolean isSet = defaultParserRef.compareAndSet(null, defaultParser);
+			if (isSet) {
+				assert retVal == defaultParser;
+				String msg =
+						"default MCI address parser is " + retVal;
+				logger.info(msg);
+			} else {
+				if (retVal == null) {
+					String msg =
+						"race condition: default MCI address parser is null";
+					logger.severe(msg);
+					throw new IllegalStateException(msg);
+				} else {
+					String msg =
+							"race condition: default MCI address parser is " + retVal;
+					logger.warning(msg);
+				}
+			}
 		}
-	}
-	
-	/**
-	 * Creates a new AddressParser with the specifies tokenizers, grammar, and standardizer.
-	 * 
-	 * @param tokenizers the tokenizers
-	 * @param grammar the grammar
-	 * @param standardizer the standardizer
-	 */
-	public AddressParser(Tokenizer[] tokenizers, ContextFreeGrammar grammar, ParseTreeNodeStandardizer standardizer) {
-		super(tokenizers, grammar, standardizer, ParsedAddress.class);
-				
-		if (defaultParser == null) {
-			setDefaultParser(this);	
-		}
+		return retVal;
 	}
 
-	/**
-	 * Returns the best parse of the single address line.
-	 * 
-	 * @param street
-	 * @return the best parse of the single address line
-	 */
+	private final CfgAddressParser delegate;
+
+	public AddressParser(CfgAddressParser cfgAddressParser) {
+		Precondition.assertNonNullArgument("null delegate", cfgAddressParser);
+		delegate = cfgAddressParser;
+	}
+
+	public int hashCode() {
+		return delegate.hashCode();
+	}
+
+	public void setGrammar(ContextFreeGrammar g) {
+		delegate.setGrammar(g);
+	}
+
+	public void setName(String name) {
+		delegate.setName(name);
+	}
+
+	public String getName() {
+		return delegate.getName();
+	}
+
+	public void setSymbolFactory(SymbolFactory sf) {
+		delegate.setSymbolFactory(sf);
+	}
+
+	public SymbolFactory getSymbolFactory() {
+		return delegate.getSymbolFactory();
+	}
+
+	public void addTokenizer(Tokenizer t) {
+		delegate.addTokenizer(t);
+	}
+
+	public void setTokenizer(Tokenizer t) {
+		delegate.setTokenizer(t);
+	}
+
+	public void setTokenizers(Tokenizer[] t) {
+		delegate.setTokenizers(t);
+	}
+
+	public Tokenizer[] getTokenizers() {
+		return delegate.getTokenizers();
+	}
+
+	public ContextFreeGrammar getGrammar() {
+		return delegate.getGrammar();
+	}
+
+	public void setStandardizer(ParseTreeNodeStandardizer s) {
+		delegate.setStandardizer(s);
+	}
+
+	public ParseTreeNodeStandardizer getStandardizer() {
+		return delegate.getStandardizer();
+	}
+
+	public void setParsedDataClass(Class cls) {
+		delegate.setParsedDataClass(cls);
+	}
+
+	public Class getParsedDataClass() {
+		return delegate.getParsedDataClass();
+	}
+
+	public ParsedData getBestParse(String s) {
+		return delegate.getBestParse(s);
+	}
+
 	public ParsedAddress parseAddress(String street) {
-		return parseAddress(street, null, null, null);
+		return delegate.parseAddress(street);
 	}
 
-	/**
-	 * Returns the most probable parsed for the specified city, state, and zip.
-	 * 
-	 * @param street the street address
-	 * @param city the city 
-	 * @param state the state
-	 * @param zip the zip
-	 */
-	public ParsedAddress parseAddress(String street, String city, String state, String zip) {
-		ParsedAddress addr = (ParsedAddress) getBestParse(street);
-		if (addr != null) {
-			addr.put(ParsedAddress.CITY, city);
-			addr.put(ParsedAddress.STATE, state);
-			addr.put(ParsedAddress.ZIP, zip);
-		}
-		
-		return addr;
+	public ParsedData getBestParse(String[] s) {
+		return delegate.getBestParse(s);
 	}
-	
-	/**
-	 * Returns a List of all ParsedAddress for the specified street, city, state, and zip, 
-	 * sorted in decreasing order by probability.
-	 * 
-	 * @param street the street address
-	 * @param city the city 
-	 * @param state the state
-	 * @param zip the zip 
-	 */
-	public List<ParsedData> getAllParsedAddresses(String street, String city, String state, String zip) {
-		ParsedData[] parses = getAllParses(street);
 
-		List<ParsedData> ret = new ArrayList<>(parses.length);
-		for (int i = 0; i < parses.length; i++) {
-			parses[i].put(ParsedAddress.CITY, city);
-			parses[i].put(ParsedAddress.STATE, state);
-			parses[i].put(ParsedAddress.ZIP, zip);
-			
-			ret.add(parses[i]);
-		}
-		
-		// NOTE: they're already sorted.
-		
-		return ret;
+	public ParsedAddress parseAddress(String street, String city, String state,
+			String zip) {
+		return delegate.parseAddress(street, city, state, zip);
 	}
-	
+
+	public boolean equals(Object obj) {
+		return delegate.equals(obj);
+	}
+
+	public ParsedData[] getAllParses(String s) {
+		return delegate.getAllParses(s);
+	}
+
+	public List<ParsedData> getAllParsedAddresses(String street, String city,
+			String state, String zip) {
+		return delegate.getAllParsedAddresses(street, city, state, zip);
+	}
+
+	public ParsedData[] getAllParses(String[] s) {
+		return delegate.getAllParses(s);
+	}
+
+	public ParseTreeNode getBestParseTree(String s) {
+		return delegate.getBestParseTree(s);
+	}
+
+	public ParseTreeNode getBestParseTree(String[] s) {
+		return delegate.getBestParseTree(s);
+	}
+
+	public ParseTreeNode[] getAllParseTrees(String s) {
+		return delegate.getAllParseTrees(s);
+	}
+
+	public ParseTreeNode[] getAllParseTrees(String[] s) {
+		return delegate.getAllParseTrees(s);
+	}
+
+	public List getTokenization(String s) {
+		return delegate.getTokenization(s);
+	}
+
+	public List getTokenization(String[] s) {
+		return delegate.getTokenization(s);
+	}
+
+	public List[] getAllTokenizations(String s) {
+		return delegate.getAllTokenizations(s);
+	}
+
+	public List[] getAllTokenizations(String[] s) {
+		return delegate.getAllTokenizations(s);
+	}
+
+	public String toString() {
+		return delegate.toString();
+	}
+
 }

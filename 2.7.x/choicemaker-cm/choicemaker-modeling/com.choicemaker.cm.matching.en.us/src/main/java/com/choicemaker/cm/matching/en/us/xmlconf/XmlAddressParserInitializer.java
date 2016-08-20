@@ -26,7 +26,7 @@ import com.choicemaker.cm.core.xmlconf.XmlModuleInitializer;
 import com.choicemaker.cm.matching.cfg.ContextFreeGrammar;
 import com.choicemaker.cm.matching.cfg.SymbolFactory;
 import com.choicemaker.cm.matching.cfg.xmlconf.ContextFreeGrammarXmlConf;
-import com.choicemaker.cm.matching.en.us.AddressParser;
+import com.choicemaker.cm.matching.en.us.CfgAddressParser;
 import com.choicemaker.cm.matching.en.us.address.AddressStandardizer;
 import com.choicemaker.cm.matching.en.us.address.AddressTokenizer;
 import com.choicemaker.cm.matching.gen.Sets;
@@ -162,11 +162,11 @@ public class XmlAddressParserInitializer implements XmlModuleInitializer {
 			AddressStandardizer standardizer = (AddressStandardizer) constructor
 					.newInstance(args);
 
-			// AddressParser automatically saves it as the default parser.
+			// CfgAddressParser automatically saves it as the default parser.
 			// 2014-04-24 rphall: Commented out unused local variable.
 			// Any side effects?
-			/* AddressParser parser = */
-			new AddressParser(tokenizers, grammar, standardizer);
+			/* CfgAddressParser parser = */
+			new CfgAddressParser(tokenizers, grammar, standardizer);
 
 		} catch (ClassNotFoundException ex) {
 			throw new XmlConfException("Cannot find class", ex);
