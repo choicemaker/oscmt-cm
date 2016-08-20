@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plugin>
 <plugin
    id="com.choicemaker.cm.io.flatfile.gui"
    name="Flatfile IO Gui Plug-in"
