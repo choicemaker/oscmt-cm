@@ -37,13 +37,13 @@ import com.choicemaker.cm.matching.cfg.Variable;
 public class RecursiveStandardizer implements ParseTreeNodeStandardizer {
 
 	/** Map from Variables to child standardizers. */
-	protected Map nodeStandardizers = new HashMap();
-	
+	protected Map<Variable, ParseTreeNodeStandardizer> nodeStandardizers =
+		new HashMap<>();
+
 	/**
 	 * Creates a new RecursiveStandardizer with no child standardizers.
 	 */
 	public RecursiveStandardizer() {
-		// nothing to do...	
 	}
 	
 	/**

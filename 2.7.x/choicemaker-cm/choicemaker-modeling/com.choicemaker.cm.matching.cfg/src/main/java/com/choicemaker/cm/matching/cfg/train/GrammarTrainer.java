@@ -31,6 +31,8 @@ import com.choicemaker.util.IntValuedHashMap;
  *
  * @author   Adam Winkel
  */
+@SuppressWarnings({
+	"rawtypes", "unchecked" })
 public class GrammarTrainer {
 	
 	private ContextFreeGrammar grammar;
@@ -38,7 +40,7 @@ public class GrammarTrainer {
 	private IntValuedHashMap variableCounts = new IntValuedHashMap();
 	private IntValuedHashMap ruleCounts = new IntValuedHashMap();
 	
-	private Map tokenCounts = new HashMap();
+	private Map<Variable, IntValuedHashMap> tokenCounts = new HashMap<>();
 	
 	public GrammarTrainer(ContextFreeGrammar grammar) {
 		this.grammar = grammar;
@@ -61,8 +63,8 @@ public class GrammarTrainer {
 		}
 	}
 	
-	public void addAllParseTrees(Collection parseTrees) {
-		Iterator it = parseTrees.iterator();
+	public void addAllParseTrees(Collection<ParseTreeNode> parseTrees) {
+		Iterator<ParseTreeNode> it = parseTrees.iterator();
 		while (it.hasNext()) {
 			addParseTree((ParseTreeNode)it.next());
 		}
@@ -93,7 +95,7 @@ public class GrammarTrainer {
 		incrementVariableCount(r.getLhs());
 		incrementRuleCount(r);
 		
-		Iterator itKids = tree.getChildren().iterator();
+		Iterator<ParseTreeNode> itKids = tree.getChildren().iterator();
 		while (itKids.hasNext()) {
 			addParseTree((ParseTreeNode)itKids.next());	
 		}
@@ -107,7 +109,7 @@ public class GrammarTrainer {
 		ruleCounts.putInt(r, ruleCounts.getInt(r)+1);
 	}
 			
-	public Collection getTokenTypes() {
+	public Collection<Variable> getTokenTypes() {
 		return tokenCounts.keySet();	
 	}
 	
@@ -118,12 +120,12 @@ public class GrammarTrainer {
 	public ContextFreeGrammar getTrainedGrammar() {
 		ContextFreeGrammar newGrammar = new ContextFreeGrammar(grammar.getStartVariable(), grammar.getRules());
 		
-		Iterator itVariables = newGrammar.getVariables().iterator();
+		Iterator<Symbol> itVariables = newGrammar.getVariables().iterator();
 		while (itVariables.hasNext()) {
 			Variable v = (Variable)itVariables.next();
 			double varCount = variableCounts.getInt(v);
 			
-			Iterator itRules = newGrammar.getRules(v).iterator();
+			Iterator<Rule> itRules = newGrammar.getRules(v).iterator();
 			while (itRules.hasNext()) {
 				Rule r = (Rule)itRules.next();
 				int ruleCount = ruleCounts.getInt(r);

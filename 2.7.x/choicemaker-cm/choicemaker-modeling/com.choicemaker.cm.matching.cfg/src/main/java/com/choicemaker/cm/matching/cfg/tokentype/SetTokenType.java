@@ -26,9 +26,11 @@ import com.choicemaker.util.DoubleValuedHashMap;
  * @author   Adam Winkel
  */
 public class SetTokenType extends TokenType {
+	
+	public static final double NEARLY_ZERO = 1E-50;
 
 	/** A Collection of Strings listing the Tokens which can take on this TokenType */
-	protected Collection members = new HashSet();
+	protected Collection<String> members = new HashSet<>();
 
 	/** Mapping from Token to implied rule probability */
 	protected DoubleValuedHashMap probabilities;
@@ -40,7 +42,7 @@ public class SetTokenType extends TokenType {
 	 * A Map from Tokens to standard token forms, for example, &quot;AVENUE&quot; to
 	 * &quot;AVE&quot;
 	 */
-	protected Map standards;
+	protected Map<String, String> standards;
 
 	/**
 	 * Create a new SetTokenType with the specified name.
@@ -49,7 +51,7 @@ public class SetTokenType extends TokenType {
 		super(name);
 	}
 	
-	public SetTokenType(String name, Set members) {
+	public SetTokenType(String name, Set<String> members) {
 		super(name);
 		setMembers(members);
 		setDefaultProbability(1.0 / members.size());
@@ -191,7 +193,7 @@ public class SetTokenType extends TokenType {
 	 * @see com.choicemaker.cm.matching.gen.Sets
 	 */
 	public void setMembers(String membersName) {
-		Collection m = Sets.getCollection(membersName);
+		Collection<String> m = Sets.getCollection(membersName);
 		if (m == null) {
 			throw new IllegalArgumentException(
 				"The specified set (" + membersName + ") doesn't exist.");
@@ -203,17 +205,17 @@ public class SetTokenType extends TokenType {
 	/**
 	 * Sets the members Collection.
 	 */
-	public void setMembers(Collection m) {
-		this.members = new HashSet(m);	
+	public void setMembers(Collection<String> m) {
+		this.members = new HashSet<>(m);	
 	}
 	
-	public void setMembers(Set s) {
-		this.members = new HashSet(s);
+	public void setMembers(Set<String> s) {
+		this.members = new HashSet<>(s);
 	}
 	
-	public void addMembers(Set m) {
+	public void addMembers(Set<String> m) {
 		if (members == null) {
-			members = new HashSet(m);
+			members = new HashSet<>(m);
 		} else {
 			members.addAll(m);	
 		}
@@ -230,7 +232,8 @@ public class SetTokenType extends TokenType {
 	 * @see #setCounts(Map, int)
 	 */	
 	public void setCounts(String countsName) {
-		Map counts = Maps.getMap(countsName);
+		@SuppressWarnings("unchecked")
+		Map<String, Integer> counts = Maps.getMap(countsName);
 		if (counts == null) {
 			throw new IllegalArgumentException(
 				"The specified map (" + countsName + ") doesn't exist.");
@@ -246,7 +249,7 @@ public class SetTokenType extends TokenType {
 	 * @throws ClassCastException if counts is not a map from Strings to Integers.
 	 * @see SetTokenType#setCounts(Map, int)
 	 */
-	public void setCounts(Map counts) {
+	public void setCounts(Map<String, Integer> counts) {
 		setCounts(counts, 0);	
 	}
 	
@@ -277,15 +280,15 @@ public class SetTokenType extends TokenType {
 	 * 
 	 * @throws ClassCaseException if counts is not a mapping from Strings to Integers
 	 */
-	public void setCounts(Map counts, int notIncluded) {
+	public void setCounts(Map<String,Integer> counts, int notIncluded) {
 		
 		double sum = notIncluded;
 		if (sum <= 0) {
-			sum = 1E-50;	
+			sum = NEARLY_ZERO;	
 		}
 
 		// count the total number of occurrences.
-		Iterator itValues = counts.values().iterator();
+		Iterator<Integer> itValues = counts.values().iterator();
 		while (itValues.hasNext()) {
 			sum += ((Integer)itValues.next()).intValue();
 		}
@@ -293,7 +296,7 @@ public class SetTokenType extends TokenType {
 		// compute the probabilities for the tokens in the counts
 		// map...
 		probabilities = new DoubleValuedHashMap();
-		Iterator itKeys = counts.keySet().iterator();
+		Iterator<String> itKeys = counts.keySet().iterator();
 		while (itKeys.hasNext()) {
 			String key = (String)itKeys.next();
 			Integer value = (Integer)counts.get(key);
@@ -315,7 +318,8 @@ public class SetTokenType extends TokenType {
 	 * @throws IllegalArgumentException if the named Map doesn't exist
 	 */
 	public void setStandards(String standardsName) {
-		Map s = Maps.getMap(standardsName);
+		@SuppressWarnings("unchecked")
+		Map<String, String> s = Maps.getMap(standardsName);
 		if (s == null) {
 			throw new IllegalArgumentException(
 				"The specified map (" + standardsName + ") doesn't exist.");
@@ -327,7 +331,7 @@ public class SetTokenType extends TokenType {
 	/**
 	 * Sets the standard token forms Map to the specified Map.
 	 */
-	public void setStandards(Map standards) {
+	public void setStandards(Map<String, String> standards) {
 		this.standards = standards;
 	}
 

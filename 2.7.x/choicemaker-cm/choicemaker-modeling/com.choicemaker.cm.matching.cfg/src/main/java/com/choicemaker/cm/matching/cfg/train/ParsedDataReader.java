@@ -36,6 +36,8 @@ import com.choicemaker.cm.matching.cfg.SymbolFactory;
  * 
  * @author Adam Winkel
  */
+@SuppressWarnings({
+	"rawtypes", "unchecked" })
 public class ParsedDataReader extends DefaultHandler implements Runnable {
 	
 	// Parsing variables

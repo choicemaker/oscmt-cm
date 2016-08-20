@@ -16,14 +16,14 @@ import java.util.Map;
  */
 public class InputData {
 
-	private Map fields;
+	private Map<String, String> fields;
 	
 	public InputData() {
-		fields = new HashMap();
+		fields = new HashMap<>();
 	}
 	
 	public InputData(InputData copy) {
-		fields = new HashMap(copy.fields);
+		fields = new HashMap<>(copy.fields);
 	}
 
 	public String put(String key, String value) {

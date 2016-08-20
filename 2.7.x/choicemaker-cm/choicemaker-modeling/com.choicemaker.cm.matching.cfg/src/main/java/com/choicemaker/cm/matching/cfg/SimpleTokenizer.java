@@ -103,14 +103,14 @@ public class SimpleTokenizer implements Tokenizer {
 	/**
 	 * Returns a list of tokens for the specified String.
 	 */
-	public List tokenize(String s) {
+	public List<Token> tokenize(String s) {
 		if (s == null) {
-			return new ArrayList(0);
+			return new ArrayList<Token>(0);
 		}
 		
 		StringBuffer preprocessed = preprocessString(s);
-		List tokenizedStrings = split(preprocessed);		
-		List tokens = createTokens(tokenizedStrings);
+		List<String> tokenizedStrings = split(preprocessed);		
+		List<Token> tokens = createTokens(tokenizedStrings);
 		return tokens;
 	}
 	
@@ -119,7 +119,7 @@ public class SimpleTokenizer implements Tokenizer {
 	 * Null array elements do not result in a Token, and no field-separator
 	 * Token is used.
 	 */
-	public List tokenize(String[] s) {
+	public List<Token> tokenize(String[] s) {
 		return tokenize(s, null, null);
 	}
 	
@@ -132,8 +132,8 @@ public class SimpleTokenizer implements Tokenizer {
 	 * If <code>nullToken</code> is non null, it acts as a placeholder for 
 	 * null elements of <code>strings</code> in the final List of Tokens.
 	 */
-	public List tokenize(String[] strings, Token separatorToken, Token nullToken) {
-		List finalList = new ArrayList();
+	public List<Token> tokenize(String[] strings, Token separatorToken, Token nullToken) {
+		List<Token> finalList = new ArrayList<>();
 				
 		for (int i = 0; i < strings.length - 1; i++) {
 			if (strings[i] != null) {
@@ -199,12 +199,12 @@ public class SimpleTokenizer implements Tokenizer {
 	/**
 	 * Split the preprocessed string into characters of the same type.
 	 */
-	protected List split(StringBuffer s) {
+	protected List<String> split(StringBuffer s) {
 		int len = s.length();	
 
 		int lastType = 0;		
 		StringBuffer curChars = new StringBuffer();
-		List list = new ArrayList();
+		List<String> list = new ArrayList<>();
 		
 		for (int i = 0; i < len; i++) {
 			char c = s.charAt(i);
@@ -230,10 +230,10 @@ public class SimpleTokenizer implements Tokenizer {
 	/**
 	 * Build a list of Tokens from the split Strings.
 	 */
-	protected List createTokens(List strings) {
+	protected List<Token> createTokens(List<String> strings) {
 		int len = strings.size();
 		
-		List tokens = new ArrayList(len);
+		List<Token> tokens = new ArrayList<>(len);
 		for (int i = 0; i < len; i++) {
 			String s = (String) strings.get(i);
 			s = s.trim();

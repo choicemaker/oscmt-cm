@@ -33,13 +33,13 @@ public class ContextFreeGrammar {
 	protected Variable startVariable;
 	
 	/** the Variables used by this CFG */
-	protected HashSet variables = new HashSet();
+	protected Set<Symbol> variables = new HashSet<>();
 	
 	/** 
 	 * A hash of collections from LHS symbol to a collection of rules 
 	 * that have that symbol as the LHS.
 	 */
-	protected Map lhsBuckets = new HashMap();
+	protected Map<Variable, CfgRuleBucket> lhsBuckets = new HashMap<>();
 	
 	/**
 	 * Default constructor for subclasses like CnfGrammar.
@@ -53,7 +53,7 @@ public class ContextFreeGrammar {
 	 * @param startVariable the start variable
 	 * @param rules the rules in this 
 	 */
-	public ContextFreeGrammar(Variable startVariable, Collection rules) {
+	public ContextFreeGrammar(Variable startVariable, Collection<Rule> rules) {
 		this.startVariable = startVariable;
 		addAllRules(rules);
 	}
@@ -64,8 +64,8 @@ public class ContextFreeGrammar {
 	 * @throws IllegalArgumentException if <code>rules</code> contains a
 	 * &quot;leaf rule&quot; with a TokenType on the LHS and a Token on the RHS.
 	 */
-	public void addAllRules(Collection rules) {
-		Iterator elements = rules.iterator();
+	public void addAllRules(Collection<Rule> rules) {
+		Iterator<Rule> elements = rules.iterator();
 		while (elements.hasNext()) {
 			addRule((Rule) elements.next());
 		}
@@ -123,13 +123,13 @@ public class ContextFreeGrammar {
 		this.startVariable = v;
 	}
 		
-	public List getVariables() {
-		return new ArrayList(variables);
+	public List<Symbol> getVariables() {
+		return new ArrayList<>(variables);
 	}
 
-	public List getInlineTokenTypes() {
-		List vList = getVariables();
-		List inline = new ArrayList();
+	public List<Variable> getInlineTokenTypes() {
+		List<Symbol> vList = getVariables();
+		List<Variable> inline = new ArrayList<>();
 		for (int i = 0; i < vList.size(); i++) {
 			Variable v = (Variable) vList.get(i);
 			if (v instanceof InlineTokenType) {
@@ -141,7 +141,7 @@ public class ContextFreeGrammar {
 		
 	public int getNumRules() {
 		int num = 0;
-		Iterator it = lhsBuckets.values().iterator();
+		Iterator<CfgRuleBucket> it = lhsBuckets.values().iterator();
 		while (it.hasNext()) {
 			CfgRuleBucket bucket = (CfgRuleBucket) it.next();
 			num += bucket.getNumRules();
@@ -153,7 +153,7 @@ public class ContextFreeGrammar {
 		return hasRule(r.getLhs(), r.getRhs());	
 	}
 
-	public boolean hasRule(Variable lhs, List rhs) {
+	public boolean hasRule(Variable lhs, List<Symbol> rhs) {
 		CfgRuleBucket bucket = getLhsBucket(lhs);
 		if (bucket == null) {
 			return false;
@@ -161,7 +161,7 @@ public class ContextFreeGrammar {
 		return bucket.hasRule(lhs, rhs);
 	}
 
-	public Rule getRule(Variable lhs, List rhs) {
+	public Rule getRule(Variable lhs, List<Symbol> rhs) {
 		if (!hasRule(lhs, rhs)) {
 			StringBuffer buff = new StringBuffer();
 			buff.append(lhs.toString());
@@ -174,17 +174,17 @@ public class ContextFreeGrammar {
 		return getLhsBucket(lhs).getRule(lhs, rhs);
 	}
 	
-	public List getRules(Variable lhs) {
+	public List<Rule> getRules(Variable lhs) {
 		CfgRuleBucket bucket = getLhsBucket(lhs);
 		if (bucket == null) {
-			return new ArrayList();	
+			return new ArrayList<>();	
 		}
 		return bucket.getRules();
 	}
 	
-	public List getRules() {
-		ArrayList list = new ArrayList();
-		Iterator it = lhsBuckets.values().iterator();
+	public List<Rule> getRules() {
+		ArrayList<Rule> list = new ArrayList<>();
+		Iterator<CfgRuleBucket> it = lhsBuckets.values().iterator();
 		while (it.hasNext()) {
 			CfgRuleBucket bucket = (CfgRuleBucket)it.next();
 			list.addAll(bucket.getRules());	
@@ -208,11 +208,11 @@ public class ContextFreeGrammar {
 	public boolean areRuleProbabilitiesConsistent() {
 		boolean consistent = true;
 		
-		Iterator itVars = getVariables().iterator();
+		Iterator<Symbol> itVars = getVariables().iterator();
 		while (itVars.hasNext()) {
 			Variable v = (Variable)itVars.next();
 			
-			Iterator itRules = getRules(v).iterator();
+			Iterator<Rule> itRules = getRules(v).iterator();
 			if (!itRules.hasNext()) {
 				continue;	
 			}			
@@ -244,15 +244,15 @@ public class ContextFreeGrammar {
 	 */
 	public boolean hasDanglingNonTokenTypes() {
 		
-		Set lhsVariables = new HashSet();
-		Set rhsNonTokenTypes = new HashSet();
-		List rules = getRules();
+		Set<Variable> lhsVariables = new HashSet<>();
+		Set<Variable> rhsNonTokenTypes = new HashSet<>();
+		List<Rule> rules = getRules();
 		for (int i = 0; i < rules.size(); i++) {
 			Rule r = (Rule) rules.get(i);
 			
 			lhsVariables.add(r.getLhs());
 			
-			List rhs = r.getRhs();
+			List<Symbol> rhs = r.getRhs();
 			for (int j = 0; j < rhs.size(); j++) {
 				Variable v = (Variable) rhs.get(j);
 				if (!(v instanceof TokenType)) {
@@ -291,7 +291,7 @@ public class ContextFreeGrammar {
 	 */
 	public void removeUselessRules() {
 		while (true) {
-			List useless = getUselessRules();
+			List<Rule> useless = getUselessRules();
 			if (useless.size() == 0) {
 				return;	
 			}
@@ -307,9 +307,9 @@ public class ContextFreeGrammar {
 	 * Returns the first useless rule encountered in this grammar, or null if none
 	 * exists.
 	 */
-	protected List getUselessRules() {
-		List rules = getRules();		
-		Set rhsVars = new HashSet();
+	protected List<Rule> getUselessRules() {
+		List<Rule> rules = getRules();		
+		Set<Symbol> rhsVars = new HashSet<>();
 
 		for (int i = 0; i < rules.size(); i++) {
 			Rule r = (Rule) rules.get(i);
@@ -318,7 +318,7 @@ public class ContextFreeGrammar {
 
 		Variable sv = getStartVariable();
 
-		List useless = new ArrayList();
+		List<Rule> useless = new ArrayList<>();
 		for (int i = 0; i < rules.size(); i++) {
 			Rule r = (Rule) rules.get(i);
 			Variable lhs = r.getLhs();			
@@ -340,18 +340,18 @@ public class ContextFreeGrammar {
 	public String toString() {
 		String s = "";
 
-		List inlineTokenTypes = getInlineTokenTypes();
+		List<Variable> inlineTokenTypes = getInlineTokenTypes();
 		for (int i = 0; i < inlineTokenTypes.size(); i++) {
 			InlineTokenType tt = (InlineTokenType) inlineTokenTypes.get(i);
 			s += tt.getDefinitionString() + "\n";	
 		}
 		
-		Iterator rules = getRules(startVariable).iterator();
+		Iterator<Rule> rules = getRules(startVariable).iterator();
 		while (rules.hasNext()) {
 			s += rules.next() + "\n";	
 		}
 		
-		Iterator keys = lhsBuckets.keySet().iterator();
+		Iterator<Variable> keys = lhsBuckets.keySet().iterator();
 		while (keys.hasNext()) {
 			Variable lhs = (Variable) keys.next();
 			if (lhs.equals(startVariable)) {
@@ -376,17 +376,17 @@ public class ContextFreeGrammar {
 	private static class CfgRuleBucket {
 		
 		Variable lhs;
-		HashMap rules = new HashMap();
+		Map<List<Symbol>, Rule> rules = new HashMap<>();
 		
-		List ruleList = new ArrayList(4);
-		List unmodifiableRuleList = Collections.unmodifiableList(ruleList);
+		List<Rule> ruleList = new ArrayList<>(4);
+		List<Rule> unmodifiableRuleList = Collections.unmodifiableList(ruleList);
 		
 		public CfgRuleBucket(Variable lhs) {
 			this.lhs = lhs;
 		}
 		
 		public void addRule(Rule r) {
-			List rhs = r.getRhs();
+			List<Symbol> rhs = r.getRhs();
 			if (rules.containsKey(rhs)) {
 				throw new IllegalArgumentException("Attempt to add duplicate rule to CFG: " + r);	
 			}
@@ -395,14 +395,14 @@ public class ContextFreeGrammar {
 			ruleList.add(r);
 		}
 		
-		public boolean hasRule(Variable lhs, List rhs) {
+		public boolean hasRule(Variable lhs, List<Symbol> rhs) {
 			if (!this.lhs.equals(lhs)) {
 				throw new IllegalStateException("Specified LHS different than bucket LHS!");	
 			}			
 			return rules.containsKey(rhs);
 		}
 		
-		public Rule getRule(Variable lhs, List rhs) {
+		public Rule getRule(Variable lhs, List<Symbol> rhs) {
 			if (!hasRule(lhs, rhs)) {
 				throw new IllegalArgumentException("Rule does not exist!");
 			}
@@ -413,7 +413,7 @@ public class ContextFreeGrammar {
 			return rules.size();	
 		}
 		
-		public List getRules() {
+		public List<Rule> getRules() {
 			return unmodifiableRuleList;
 		}
 		
@@ -422,7 +422,7 @@ public class ContextFreeGrammar {
 				throw new IllegalStateException("Rule has LHS different than bucket LHS!");	
 			}
 			
-			List rhs = r.getRhs();
+			List<Symbol> rhs = r.getRhs();
 			Object fromHash = rules.remove(rhs);
 			
 			ruleList.remove(r);

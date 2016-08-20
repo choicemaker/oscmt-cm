@@ -34,7 +34,7 @@ public class EarleyParserChart extends ParserChart {
 	 * Creates a new EarleyParserChart from the specified List of Tokens
 	 * and grammar.  Also performs the actual parsing.
 	 */
-	public EarleyParserChart(List tokens, ContextFreeGrammar grammar) {
+	public EarleyParserChart(List<Token> tokens, ContextFreeGrammar grammar) {
 		super(tokens, grammar);
 		earleyParse();
 	}
@@ -70,7 +70,7 @@ public class EarleyParserChart extends ParserChart {
 	 * rule, to this chart.
 	 */
 	protected void predictor(ParserState state) {
-		List rules = grammar.getRules((Variable)state.getNextSymbol());
+		List<Rule> rules = grammar.getRules((Variable)state.getNextSymbol());
 		for (int i = 0; i < rules.size(); i++) {
 			Rule rule = (Rule) rules.get(i);
 			enqueue(rule, 0, state.getEndIndex(), state.getEndIndex());
@@ -103,7 +103,7 @@ public class EarleyParserChart extends ParserChart {
 		int start = state.getStartIndex();
 		int end = state.getEndIndex();
 
-		List incomplete = getIncompleteStates(start);
+		List<ParserState> incomplete = getIncompleteStates(start);
 		for (int i = 0; i < incomplete.size(); i++) {
 			ParserState oldState = (ParserState) incomplete.get(i);
 			

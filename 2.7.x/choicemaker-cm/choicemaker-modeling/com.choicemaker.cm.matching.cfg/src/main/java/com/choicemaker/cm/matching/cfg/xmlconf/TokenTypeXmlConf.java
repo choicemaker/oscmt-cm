@@ -16,6 +16,8 @@ import com.choicemaker.cm.matching.cfg.TokenType;
  * @author ajwinkel
  *
  */
+@SuppressWarnings({
+	"rawtypes" })
 public class TokenTypeXmlConf {
 
 	public static TokenType readFromElement(Element e) throws XmlConfException {

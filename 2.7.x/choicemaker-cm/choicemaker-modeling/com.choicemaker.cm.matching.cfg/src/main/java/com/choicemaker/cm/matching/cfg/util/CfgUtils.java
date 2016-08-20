@@ -30,7 +30,7 @@ public final class CfgUtils {
 	 * @throws ClassCastException if an element of the list is not an
 	 * instance of ParseTreeNode
 	 */
-	public static void sortParseTrees(List parseTrees) {
+	public static void sortParseTrees(List<ParseTreeNode> parseTrees) {
 		Collections.sort(parseTrees, REVERSE_PARSE_TREE_COMPARATOR);
 	}
 	
@@ -45,7 +45,7 @@ public final class CfgUtils {
 	 * @throws ClassCastException if an element of the list is not an
 	 * instance of ParsedDataHolder
 	 */
-	public static void sortParsedDataHolders(List parsedDataHolders) {
+	public static void sortParsedDataHolders(List<ParsedData> parsedDataHolders) {
 		Collections.sort(parsedDataHolders, REVERSE_PARSED_DATA_HOLDER_COMPARATOR);	
 	}
 
@@ -55,30 +55,32 @@ public final class CfgUtils {
 
 	/**
 	 * Comparator to sort ParseTreeNodes in decreasing order by probability.
-	 */	
-	private static class ReverseParseTreeNodeComparator implements Comparator {
-		public int compare(Object obj1, Object obj2) {
-			double p1 = ((ParseTreeNode)obj1).getProbability();
-			double p2 = ((ParseTreeNode)obj2).getProbability();	
+	 */
+	private static class ReverseParseTreeNodeComparator
+			implements Comparator<ParseTreeNode> {
+		public int compare(ParseTreeNode obj1, ParseTreeNode obj2) {
+			double p1 = ((ParseTreeNode) obj1).getProbability();
+			double p2 = ((ParseTreeNode) obj2).getProbability();
 			return p1 < p2 ? 1 : p1 > p2 ? -1 : 0;
-		}		
+		}
 	}
-	
+
 	/**
 	 * Comparator to sort ParsedAddresses in decreasing order by probability.
 	 */
-	private static class ReverseParsedDataHolderComparator implements Comparator {
-		public int compare(Object obj1, Object obj2) {
-			double p1 = ((ParsedData)obj1).getProbability();
-			double p2 = ((ParsedData)obj2).getProbability();
+	private static class ReverseParsedDataHolderComparator
+			implements Comparator<ParsedData> {
+		public int compare(ParsedData obj1, ParsedData obj2) {
+			double p1 = ((ParsedData) obj1).getProbability();
+			double p2 = ((ParsedData) obj2).getProbability();
 			return p1 < p2 ? 1 : p1 > p2 ? -1 : 0;
-		}	
+		}
 	}
-	
-	private static final Comparator REVERSE_PARSE_TREE_COMPARATOR =
+
+	private static final Comparator<ParseTreeNode> REVERSE_PARSE_TREE_COMPARATOR =
 		new ReverseParseTreeNodeComparator();
-	
-	private static final Comparator REVERSE_PARSED_DATA_HOLDER_COMPARATOR = 
+
+	private static final Comparator<ParsedData> REVERSE_PARSED_DATA_HOLDER_COMPARATOR =
 		new ReverseParsedDataHolderComparator();
 
 }

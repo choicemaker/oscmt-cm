@@ -16,31 +16,32 @@ import java.util.Set;
  */
 public class ExcludeTokenType extends WordTokenType {
 
-	protected Set exclude;
+	protected Set<String> exclude;
 
 	public ExcludeTokenType(String name) {
 		this(name, null);
 	}
 
-	public ExcludeTokenType(String name, Set exclude) {
+	public ExcludeTokenType(String name, Set<String> exclude) {
 		super(name);
+		setExcludes(exclude);
 	}
 
-	public void setExcludes(Set e) {
+	public void setExcludes(Set<String> e) {
 		if (e == null || e.size() == 0) {
 			this.exclude = null;
 		} else {
-			this.exclude = new HashSet(e);
+			this.exclude = new HashSet<>(e);
 		}
 	}
 	
-	public void addExcludes(Set e) {
+	public void addExcludes(Set<String> e) {
 		if (e == null || e.size() == 0) {
 			return;
 		} 
 		
 		if (this.exclude == null) {
-			this.exclude = new HashSet(e);
+			this.exclude = new HashSet<>(e);
 		} else {
 			this.exclude.addAll(e);
 		}

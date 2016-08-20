@@ -27,6 +27,8 @@ import com.choicemaker.cm.matching.cfg.ParsedData;
  * 
  * @author Adam Winkel
  */
+@SuppressWarnings({
+	"rawtypes", "unchecked" })
 public class ParsedDataWriter extends XmlWriter {
 
 	// depth 1

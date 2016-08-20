@@ -20,6 +20,8 @@ import com.choicemaker.cm.matching.cfg.TokenType;
  * @author ajwinkel
  *
  */
+@SuppressWarnings({
+	"rawtypes" })
 public class SymbolFactoryXmlConf {
 
 	public static SymbolFactory readFromElement(Element e) throws XmlConfException {

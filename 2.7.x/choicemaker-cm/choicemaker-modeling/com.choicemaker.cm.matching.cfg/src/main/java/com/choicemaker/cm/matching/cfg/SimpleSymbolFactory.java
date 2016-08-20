@@ -20,7 +20,7 @@ public class SimpleSymbolFactory implements SymbolFactory {
 	/** 
 	 * Mapping from variable names to VARIABLE objects.
 	 */
-	Map variables = new HashMap();
+	Map<String, Variable> variables = new HashMap<>();
 		
 	/**
 	 * Returns true if this SymbolFactory has a variable with the specified

@@ -53,6 +53,8 @@ import com.choicemaker.cm.matching.gen.Sets;
  * @author ajwinkel
  *
  */
+@SuppressWarnings({
+	"rawtypes", "unchecked" })
 public class ParserXmlConf {
 
 	private static ClassLoader defaultClassLoader = ConfigurationManager.getInstance().getRmiClassLoader();

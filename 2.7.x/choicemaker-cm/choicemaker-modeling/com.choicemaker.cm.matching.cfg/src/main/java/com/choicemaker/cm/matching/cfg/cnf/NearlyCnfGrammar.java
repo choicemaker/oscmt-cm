@@ -10,9 +10,11 @@ package com.choicemaker.cm.matching.cfg.cnf;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.choicemaker.cm.matching.cfg.ContextFreeGrammar;
 import com.choicemaker.cm.matching.cfg.Rule;
+import com.choicemaker.cm.matching.cfg.Symbol;
 import com.choicemaker.cm.matching.cfg.TokenType;
 import com.choicemaker.cm.matching.cfg.Variable;
 
@@ -120,7 +122,7 @@ public class NearlyCnfGrammar extends ContextFreeGrammar {
 	//
 
 	private void fixUnitRules() {
-		HashSet unitRulesPreviouslyRemoved = new HashSet();
+		Set<Rule> unitRulesPreviouslyRemoved = new HashSet<>();
 
 		Rule r;
 		while ((r = nextNonTokenTypeUnitRule()) != null) {
@@ -136,7 +138,7 @@ public class NearlyCnfGrammar extends ContextFreeGrammar {
 				removeRule(r);
 				unitRulesPreviouslyRemoved.add(r);
 
-				List rhsList = getRules(rhs);
+				List<Rule> rhsList = getRules(rhs);
 				for (int i = 0; i < rhsList.size(); i++) {
 					Rule base = (Rule) rhsList.get(i);
 					SquashedRule newRule = new SquashedRule(r, base);
@@ -151,7 +153,7 @@ public class NearlyCnfGrammar extends ContextFreeGrammar {
 	}
 
 	private Rule nextNonTokenTypeUnitRule() {
-		List rules = getRules();
+		List<Rule> rules = getRules();
 		for (int i = 0; i < rules.size(); i++) {
 			Rule r = (Rule) rules.get(i);
 			if (r.getRhsSize() == 1) {
@@ -200,7 +202,7 @@ public class NearlyCnfGrammar extends ContextFreeGrammar {
 	}
 
 	private Rule nextLongRule() {
-		List rules = getRules();
+		List<Rule> rules = getRules();
 		for (int i = 0; i < rules.size(); i++) {
 			Rule r = (Rule) rules.get(i);
 			if (r.getRhsSize() > 2) {
@@ -217,7 +219,7 @@ public class NearlyCnfGrammar extends ContextFreeGrammar {
 	//
 
 	private void createTempVariablePrefix() {
-		List vars = source.getVariables();
+		List<Symbol> vars = source.getVariables();
 		String[] names = new String[vars.size()];
 		int maxLength = 0;
 		for (int i = 0; i < names.length; i++) {
@@ -244,11 +246,11 @@ public class NearlyCnfGrammar extends ContextFreeGrammar {
 	//
 
 	public static class SquashedRule extends Rule {
-		private List rules;
+		private List<Rule> rules;
 		public SquashedRule(Rule top, Rule child) {
 			super(top.getLhs(), child.getRhs(), top.getProbability() * child.getProbability());
 
-			rules = new ArrayList();
+			rules = new ArrayList<>();
 
 			if (top instanceof SquashedRule) {
 				rules.addAll(((SquashedRule)top).getRules());
@@ -262,7 +264,7 @@ public class NearlyCnfGrammar extends ContextFreeGrammar {
 				rules.add(child);
 			}
 		}
-		public List getRules() {
+		public List<Rule> getRules() {
 			return rules;
 		}
 		public int getNumRules() {
@@ -272,7 +274,7 @@ public class NearlyCnfGrammar extends ContextFreeGrammar {
 
 	public static class HeadCascadedRule extends Rule {
 		private Rule base;
-		HeadCascadedRule(Variable lhs, List rhs, Rule base) {
+		HeadCascadedRule(Variable lhs, List<Symbol> rhs, Rule base) {
 			super(lhs, rhs, base.getProbability());
 			this.base = base;
 		}
@@ -282,7 +284,7 @@ public class NearlyCnfGrammar extends ContextFreeGrammar {
 	}
 
 	private static Rule createHeadCascadedRule(Rule base, Variable rhs2) {
-		List rhs = new ArrayList(2);
+		List<Symbol> rhs = new ArrayList<>(2);
 		rhs.add(base.getRhsSymbol(0));
 		rhs.add(rhs2);
 
@@ -290,7 +292,7 @@ public class NearlyCnfGrammar extends ContextFreeGrammar {
 	}
 
 	private static Rule createCascadedRule(Variable lhs, Variable rhs1, Variable rhs2) {
-		List rhs = new ArrayList(2);
+		List<Symbol> rhs = new ArrayList<>(2);
 		rhs.add(rhs1);
 		rhs.add(rhs2);
 

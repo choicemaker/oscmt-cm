@@ -11,12 +11,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeSet;
 
 import com.choicemaker.cm.matching.cfg.ContextFreeGrammar;
 import com.choicemaker.cm.matching.cfg.ParseTreeNode;
 import com.choicemaker.cm.matching.cfg.Rule;
+import com.choicemaker.cm.matching.cfg.Token;
 import com.choicemaker.cm.matching.cfg.Variable;
+import com.choicemaker.util.Precondition;
 
 /**
  * (Hopefully) useful common functionality to be used by any CFG
@@ -28,7 +31,7 @@ import com.choicemaker.cm.matching.cfg.Variable;
  */
 public class ParserChart {
 
-	protected List tokens;
+	protected List<Token> tokens;
 	protected ContextFreeGrammar grammar;
 
 	/** List of buckets */
@@ -39,9 +42,12 @@ public class ParserChart {
 	private ParserState tempState;
 							
 	/**
-	 * Create a new ParserChart with the specified number of buckets.
+	 * Create a new ParserChart based on the specified token set.
+	 * The size of the parser chart will be <code>tokens.size() + 1</code>
 	 */
-	public ParserChart(List tokens, ContextFreeGrammar grammar) {
+	public ParserChart(List<Token> tokens, ContextFreeGrammar grammar) {
+		Precondition.assertNonNullArgument("null token list", tokens);
+		Precondition.assertNonNullArgument("null grammar", grammar);
 		this.tokens = tokens;
 		this.grammar = grammar;
 		
@@ -67,11 +73,11 @@ public class ParserChart {
 		return buckets[end].containsState(rule, dotPos, start, end);
 	}
 	
-	public List getStates(int bucket) {
+	public List<ParserState> getStates(int bucket) {
 		return buckets[bucket].getStates();
 	}
 	
-	public List getIncompleteStates(int bucket) {
+	public List<ParserState> getIncompleteStates(int bucket) {
 		return buckets[bucket].getIncompleteStates();	
 	}
 	
@@ -139,7 +145,7 @@ public class ParserChart {
 			s += "---------\n";
 			
 			// use a TreeSet to sort the states...
-			Iterator states = new TreeSet(getStates(i)).iterator();
+			Iterator<ParserState> states = new TreeSet<>(getStates(i)).iterator();
 
 			while (states.hasNext()) {
 				ParserState state = (ParserState) states.next();
@@ -154,13 +160,13 @@ public class ParserChart {
 		
 	private class ParserChartBucket {
 		
-		private List states = new ArrayList();
+		private List<ParserState> states = new ArrayList<>();
 		private int numStates = 0;
 		private int nextUnexplored = 0;
 		
-		private List incomplete = new ArrayList();
+		private List<ParserState> incomplete = new ArrayList<>();
 		
-		private HashMap all = new HashMap();
+		private Map<ParserState, ParserState> all = new HashMap<>();
 		
 		protected void addState(ParserState state) {
 			all.put(state, state);
@@ -213,11 +219,11 @@ public class ParserChart {
 			return (ParserState)states.get(nextUnexplored++);
 		}
 		
-		public List getIncompleteStates() {
+		public List<ParserState> getIncompleteStates() {
 			return incomplete;
 		}
 		
-		public List getStates() {
+		public List<ParserState> getStates() {
 			return states;
 		}
 		

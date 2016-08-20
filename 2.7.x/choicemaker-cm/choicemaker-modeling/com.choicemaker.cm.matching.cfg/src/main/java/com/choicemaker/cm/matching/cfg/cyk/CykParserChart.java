@@ -15,6 +15,7 @@ import java.util.List;
 
 import com.choicemaker.cm.matching.cfg.ParseTreeNode;
 import com.choicemaker.cm.matching.cfg.Rule;
+import com.choicemaker.cm.matching.cfg.Symbol;
 import com.choicemaker.cm.matching.cfg.Token;
 import com.choicemaker.cm.matching.cfg.TokenType;
 import com.choicemaker.cm.matching.cfg.Variable;
@@ -38,7 +39,7 @@ public class CykParserChart {
 	protected int numVariables;
 	protected int numNonTokenTypes;
 	protected Variable[] variables;
-	protected IntValuedHashMap variableIndices;
+	protected IntValuedHashMap<Symbol> variableIndices;
 
 	/**
 	 * The ith entry is the index of the first rule with
@@ -55,7 +56,7 @@ public class CykParserChart {
 	protected int numRules;
 	protected int numNonTokenTypeUnitRules;
 	protected Rule[] rules;
-	protected IntValuedHashMap ruleIndices;
+	protected IntValuedHashMap<Rule> ruleIndices;
 	
 	protected int[] ruleLhs;
 	protected int[] ruleRhs1;
@@ -64,7 +65,7 @@ public class CykParserChart {
 
 	// Parsing structures
 
-	protected List tokens;
+	protected List<Token> tokens;
 	protected int numTokens;
 
 	public float[][][] probChart;
@@ -88,7 +89,7 @@ public class CykParserChart {
 		}
 	}
 
-	public synchronized ParseTreeNode getBestParseTree(List tokens) {
+	public synchronized ParseTreeNode getBestParseTree(List<Token> tokens) {
 		this.tokens = tokens;
 		numTokens = tokens.size();
 		initParseChart();
@@ -237,7 +238,7 @@ public class CykParserChart {
 			} else if (rules[r] instanceof NearlyCnfGrammar.SquashedRule) {
 				return recoverSquashedRule(v, i, j);
 			} else {
-				List kids = new ArrayList(2);
+				List<ParseTreeNode> kids = new ArrayList<>(2);
 				kids.add(recoverParseTree(ruleRhs1[r], i, k));
 				if (ruleRhs2[r] >= 0) {
 					kids.add(recoverParseTree(ruleRhs2[r], k+1, j));
@@ -253,7 +254,7 @@ public class CykParserChart {
 
 		Rule base = ((NearlyCnfGrammar.HeadCascadedRule)rules[r]).getBaseRule();
 		int rhsSize = base.getRhsSize();
-		List kids = new ArrayList(rhsSize);
+		List<ParseTreeNode> kids = new ArrayList<>(rhsSize);
 		
 		int newR = r;
 		int newI = i;
@@ -285,13 +286,13 @@ public class CykParserChart {
 		}
 	}
 	
-	private ParseTreeNode unsquash(NearlyCnfGrammar.SquashedRule r, List kids) {
-		List squashed = r.getRules();
+	private ParseTreeNode unsquash(NearlyCnfGrammar.SquashedRule r, List<ParseTreeNode> kids) {
+		List<Rule> squashed = r.getRules();
 		int size = squashed.size();
 		
 		ParseTreeNode ret = new ParseTreeNode((Rule)squashed.get(--size), kids);
 		while (--size >= 0) {
-			kids = new ArrayList(1);
+			kids = new ArrayList<>(1);
 			kids.add(ret);
 			ret = new ParseTreeNode((Rule)squashed.get(size), kids);
 		}
@@ -304,11 +305,11 @@ public class CykParserChart {
 		int k = kChart[v][i][j];
 
 		NearlyCnfGrammar.SquashedRule rule = (NearlyCnfGrammar.SquashedRule)rules[r];
-		List squashed = rule.getRules();
+		List<Rule> squashed = rule.getRules();
 		int squashedSize = squashed.size();
 
 		// bottom level
-		List kids = new ArrayList(2);
+		List<ParseTreeNode> kids = new ArrayList<>(2);
 		kids.add(recoverParseTree(ruleRhs1[r], i, k));
 		if (ruleRhs2[r] >= 0) {
 			kids.add(recoverParseTree(ruleRhs2[r], k+1, j));
@@ -317,7 +318,7 @@ public class CykParserChart {
 
 		// successively higher levels
 		for (int index = squashedSize - 2; index >= 0; index--) {
-			kids = new ArrayList(1);
+			kids = new ArrayList<>(1);
 			kids.add(ret);
 			ret = new ParseTreeNode((Rule)squashed.get(index), kids);
 		}
@@ -329,10 +330,10 @@ public class CykParserChart {
 		
 		// *************** Initialize the Variable Structures *****************
 		
-		List vList = ncnfGrammar.getVariables();
+		List<Symbol> vList = ncnfGrammar.getVariables();
 		final Variable sv = ncnfGrammar.getStartVariable();
-		Comparator vc = new Comparator() {
-			public int compare(Object obj1, Object obj2) {
+		Comparator<Symbol> vc = new Comparator<Symbol>() {
+			public int compare(Symbol obj1, Symbol obj2) {
 				return obj1 == sv ? -1 : 
 					obj2 == sv ? 1 : 
 					obj1 instanceof TokenType ? 1 :
@@ -344,7 +345,7 @@ public class CykParserChart {
 		
 		numVariables = vList.size();
 		variables = new Variable[numVariables];
-		variableIndices = new IntValuedHashMap();
+		variableIndices = new IntValuedHashMap<>();
 
 		// these two filled in later		
 		firstRule = new int[numVariables];
@@ -365,11 +366,11 @@ public class CykParserChart {
 			}
 		}
 
-		// *************** Intialize the Rule Structures **********************
+		// *************** Initialize the Rule Structures **********************
 		
-		List rList = ncnfGrammar.getRules();
-		Comparator rc = new Comparator() {
-			public int compare(Object obj1, Object obj2) {
+		List<Rule> rList = ncnfGrammar.getRules();
+		Comparator<Rule> rc = new Comparator<Rule>() {
+			public int compare(Rule obj1, Rule obj2) {
 				Rule r1 = (Rule) obj1;
 				Rule r2 = (Rule) obj2;
 				
@@ -388,7 +389,7 @@ public class CykParserChart {
 		
 		numRules = rList.size();
 		rules = new Rule[numRules];
-		ruleIndices = new IntValuedHashMap();
+		ruleIndices = new IntValuedHashMap<>();
 		
 		ruleLhs = new int[numRules];
 		ruleRhs1 = new int[numRules];

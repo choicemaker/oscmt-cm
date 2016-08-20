@@ -35,6 +35,8 @@ import com.choicemaker.util.StringUtils;
  * @author ajwinkel
  *
  */
+@SuppressWarnings({
+	"rawtypes", "unchecked" })
 public class ContextFreeGrammarXmlConf {
 
 	public static final String ARROW = "-->";

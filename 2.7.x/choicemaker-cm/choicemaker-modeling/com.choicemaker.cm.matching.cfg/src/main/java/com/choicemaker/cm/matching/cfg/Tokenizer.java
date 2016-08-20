@@ -40,7 +40,7 @@ public interface Tokenizer {
 	 * @return a List of Token objects representing a tokenization
 	 * of the input String
 	 */
-	public List tokenize(String s);
+	public List<Token> tokenize(String s);
 	
 	/**
 	 * Returns a List of Token objects, constituting a
@@ -54,6 +54,6 @@ public interface Tokenizer {
 	 * @return a List of Token objects representing a tokenization
 	 * of the input String
 	 */
-	public List tokenize(String[] strings);
+	public List<Token> tokenize(String[] strings);
 	
 }

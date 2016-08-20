@@ -20,6 +20,8 @@ import com.choicemaker.cm.matching.cfg.Parser;
  * 
  * @author Adam Winkel
  */
+@SuppressWarnings({
+	"rawtypes" })
 public class ParserAccuracyTest {
 
 	public static int TOKENIZATION_MODE = -1;

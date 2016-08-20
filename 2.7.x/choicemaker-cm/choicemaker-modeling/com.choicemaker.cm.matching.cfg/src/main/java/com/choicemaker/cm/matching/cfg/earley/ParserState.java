@@ -23,7 +23,7 @@ import com.choicemaker.cm.matching.cfg.Token;
  * @see ParserChart
  * @see EarleyParserChart
  */
-public class ParserState implements Comparable {
+public class ParserState implements Comparable<Object> {
 
 	protected Rule rule;
 	protected int dotPosition;
@@ -35,7 +35,7 @@ public class ParserState implements Comparable {
 
 	protected int numParseTrees;
 
-	protected List backPointers = new ArrayList();
+	protected List<BackPointer> backPointers = new ArrayList<>();
 	protected int numBackPointers = 0;
 	protected BackPointer bestBackPointer;
 
@@ -143,13 +143,13 @@ public class ParserState implements Comparable {
 		if (isLeaf) {
 			return new ParseTreeNode(rule);
 		} else {
-			LinkedList list = new LinkedList();
+			LinkedList<ParseTreeNode> list = new LinkedList<>();
 			getBestSubtrees(list);
 			return new ParseTreeNode(rule, list);
 		}
 	}
 
-	protected void getBestSubtrees(LinkedList list) {
+	protected void getBestSubtrees(LinkedList<ParseTreeNode> list) {
 		if (bestBackPointer != null) {
 			bestBackPointer.getBestSubtrees(list);
 		}
@@ -190,7 +190,7 @@ public class ParserState implements Comparable {
 			int numForBackPointer = bp.getNumParseTrees();
 
 			if (numForBackPointer > index) {
-				LinkedList list = new LinkedList();
+				LinkedList<ParseTreeNode> list = new LinkedList<>();
 				bp.getSubtrees(index, list);
 				return new ParseTreeNode(rule, list);
 			}
@@ -201,7 +201,7 @@ public class ParserState implements Comparable {
 		throw new IllegalStateException("Internal Code Error.");
 	}
 
-	protected void getSubtrees(int index, LinkedList list) {
+	protected void getSubtrees(int index, LinkedList<ParseTreeNode> list) {
 		if (index >= getNumParseTrees())
 			throw new IllegalArgumentException(index + " > " + numParseTrees);
 
@@ -302,20 +302,17 @@ public class ParserState implements Comparable {
 			return bestProbability;
 		}
 
-		public void getBestSubtrees(LinkedList list) {
+		public void getBestSubtrees(LinkedList<ParseTreeNode> list) {
 			list.addFirst(nextSubtree.getBestParseTree());
 			oldState.getBestSubtrees(list);
 		}
 
 		public double getProbability(int index) {
 			int indexForNextSubtree = index % numForNextSubtree;
-			// 2014-04-24 rphall: Commented out unused local variable.
-//			int indexForOldState = (index - indexForNextSubtree) / numForNextSubtree;
-
 			return nextSubtree.getProbability(indexForNextSubtree) * oldState.getProbability(indexForNextSubtree);
 		}
 
-		public void getSubtrees(int index, LinkedList list) {
+		public void getSubtrees(int index, LinkedList<ParseTreeNode> list) {
 			int indexForNextSubtree = index % numForNextSubtree;
 			int indexForOldState = (index - indexForNextSubtree) / numForNextSubtree;
 

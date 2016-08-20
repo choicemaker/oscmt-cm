@@ -30,7 +30,7 @@ public abstract class AbstractParser implements Parser {
 	protected ContextFreeGrammar grammar;
 	protected ParseTreeNodeStandardizer standardizer;
 	
-	protected Class parsedDataClass;
+	protected Class<? extends ParsedData> parsedDataClass;
 	
 	protected AbstractParser() {
 		tokenizers = new Tokenizer[0];
@@ -45,11 +45,11 @@ public abstract class AbstractParser implements Parser {
 		this(t, g, s, null);	
 	}
 	
-	public AbstractParser(Tokenizer t, ContextFreeGrammar g, ParseTreeNodeStandardizer s, Class c) {
+	public AbstractParser(Tokenizer t, ContextFreeGrammar g, ParseTreeNodeStandardizer s, Class<? extends ParsedData> c) {
 		this(new Tokenizer[] {t}, g, s, c);
 	}
 
-	public AbstractParser(Tokenizer[] t, ContextFreeGrammar g, ParseTreeNodeStandardizer s, Class c) {
+	public AbstractParser(Tokenizer[] t, ContextFreeGrammar g, ParseTreeNodeStandardizer s, Class<? extends ParsedData> c) {
 		setTokenizers(t);
 		setGrammar(g);
 		setStandardizer(s);
@@ -111,11 +111,11 @@ public abstract class AbstractParser implements Parser {
 		return standardizer;
 	}
 	
-	public void setParsedDataClass(Class cls) {
+	public void setParsedDataClass(Class<? extends ParsedData> cls) {
 		this.parsedDataClass = cls;
 	}
 	
-	public Class getParsedDataClass() {
+	public Class<? extends ParsedData> getParsedDataClass() {
 		return parsedDataClass;
 	}
 
@@ -142,7 +142,7 @@ public abstract class AbstractParser implements Parser {
 	}
 	
 	public ParsedData[] getAllParses(String s) {
-		HashSet parsedDataHash = new HashSet();
+		Set<ParsedData> parsedDataHash = new HashSet<>();
 
 		ParseTreeNode[] parseTrees = getAllParseTrees(s);
 		for (int i = 0; i < parseTrees.length; i++) {
@@ -153,7 +153,7 @@ public abstract class AbstractParser implements Parser {
 		}
 		
 		ParsedData[] ret = new ParsedData[parsedDataHash.size()];
-		Iterator itParsedData = parsedDataHash.iterator();
+		Iterator<ParsedData> itParsedData = parsedDataHash.iterator();
 		int i = 0;
 		while (itParsedData.hasNext()) {
 			ret[i++] = (ParsedData) itParsedData.next();	
@@ -163,7 +163,7 @@ public abstract class AbstractParser implements Parser {
 	}		
 		
 	public ParsedData[] getAllParses(String[] s) {
-		HashSet parsedDataHash = new HashSet();
+		Set<ParsedData> parsedDataHash = new HashSet<>();
 
 		ParseTreeNode[] parseTrees = getAllParseTrees(s);
 		for (int i = 0; i < parseTrees.length; i++) {
@@ -174,7 +174,7 @@ public abstract class AbstractParser implements Parser {
 		}
 		
 		ParsedData[] ret = new ParsedData[parsedDataHash.size()];
-		Iterator itParsedData = parsedDataHash.iterator();
+		Iterator<ParsedData> itParsedData = parsedDataHash.iterator();
 		int i = 0;
 		while (itParsedData.hasNext()) {
 			ret[i++] = (ParsedData) itParsedData.next();	
@@ -201,7 +201,7 @@ public abstract class AbstractParser implements Parser {
 	//
 	
 	public ParseTreeNode getBestParseTree(String s) {
-		List[] tokens = getAllTokenizations(s);
+		List<Token>[] tokens = getAllTokenizations(s);
 
 		ParseTreeNode best = null;
 		double bestProb = -1.0;
@@ -219,7 +219,7 @@ public abstract class AbstractParser implements Parser {
 	}
 	
 	public ParseTreeNode getBestParseTree(String[] s) {
-		List[] tokens = getAllTokenizations(s);
+		List<Token>[] tokens = getAllTokenizations(s);
 
 		ParseTreeNode best = null;
 		double bestProb = -1.0;
@@ -237,9 +237,9 @@ public abstract class AbstractParser implements Parser {
 	}
 	
 	public ParseTreeNode[] getAllParseTrees(String s) {
-		HashSet parseTreeHash = new HashSet();
+		Set<ParseTreeNode> parseTreeHash = new LinkedHashSet<>();
 		
-		List[] tokenizations = getAllTokenizations(s);	
+		List<Token>[] tokenizations = getAllTokenizations(s);	
 		for (int i = 0; i < tokenizations.length; i++) {
 			ParseTreeNode[] treeArray = getAllParseTreesFromParser(tokenizations[i]);
 			for (int j = 0; j < treeArray.length; j++) {
@@ -248,7 +248,7 @@ public abstract class AbstractParser implements Parser {
 		}
 
 		ParseTreeNode[] ret = new ParseTreeNode[parseTreeHash.size()];
-		Iterator itTrees = parseTreeHash.iterator();
+		Iterator<ParseTreeNode> itTrees = parseTreeHash.iterator();
 		int i = 0;
 		while (itTrees.hasNext()) {
 			ret[i++] = (ParseTreeNode)itTrees.next();
@@ -259,9 +259,9 @@ public abstract class AbstractParser implements Parser {
 	}
 	
 	public ParseTreeNode[] getAllParseTrees(String[] s) {
-		HashSet parseTreeHash = new HashSet();
+		Set<ParseTreeNode> parseTreeHash = new LinkedHashSet<>();
 		
-		List[] tokenizations = getAllTokenizations(s);	
+		List<Token>[] tokenizations = getAllTokenizations(s);	
 		for (int i = 0; i < tokenizations.length; i++) {
 			ParseTreeNode[] treeArray = getAllParseTreesFromParser(tokenizations[i]);
 			for (int j = 0; j < treeArray.length; j++) {
@@ -270,10 +270,10 @@ public abstract class AbstractParser implements Parser {
 		}
 
 		ParseTreeNode[] ret = new ParseTreeNode[parseTreeHash.size()];
-		Iterator itTrees = parseTreeHash.iterator();
+		Iterator<ParseTreeNode> itTrees = parseTreeHash.iterator();
 		int i = 0;
 		while (itTrees.hasNext()) {
-			ret[i++] = (ParseTreeNode)itTrees.next();
+			ret[i++] = itTrees.next();
 		}
 		CfgUtils.sortParseTrees(ret);
 		
@@ -283,33 +283,34 @@ public abstract class AbstractParser implements Parser {
 	//
 	// **************************** Getting Tokenizations *********************
 	//
-	
-	public List getTokenization(String s) {
-		return tokenizers[0].tokenize(s);	
+
+	public List<Token> getTokenization(String s) {
+		return tokenizers[0].tokenize(s);
 	}
-	
+
 	/**
 	 * Returns the tokenization produced by the first (and perhaps only)
 	 * Tokenizer passed to the Constructor.
 	 */
-	public List getTokenization(String[] s) {
+	public List<Token> getTokenization(String[] s) {
 		return tokenizers[0].tokenize(s);
 	}
 
-	public List[] getAllTokenizations(String s) {
-		Set tokenizations = new LinkedHashSet();
+	public List<Token>[] getAllTokenizations(String s) {
+		Set<List<Token>> tokenizations = new LinkedHashSet<>();
 		for (int i = 0; i < tokenizers.length; i++) {
-			List tokens = tokenizers[i].tokenize(s);
+			List<Token> tokens = tokenizers[i].tokenize(s);
 			if (tokens.size() > 0) {
 				tokenizations.add(tokens);
 			}
 		}
 		
-		List[] ret = new List[tokenizations.size()];
-		Iterator itTokenizations = tokenizations.iterator();
+		@SuppressWarnings("unchecked")
+		List<Token>[] ret = (List<Token>[]) new List<?>[tokenizations.size()];
+		Iterator<List<Token>> itTokenizations = tokenizations.iterator();
 		int i = 0;
 		while (itTokenizations.hasNext()) {
-			ret[i++] = (List) itTokenizations.next();
+			ret[i++] = itTokenizations.next();
 		}
 		return ret;
 	}
@@ -318,20 +319,21 @@ public abstract class AbstractParser implements Parser {
 	 * Returns all <b>unique</b> tokenizations produced by all the 
 	 * the tokenizers, that is, an array of Lists of Strings.
 	 */
-	public List[] getAllTokenizations(String[] s) {
-		HashSet tokenizations = new HashSet();
+	public List<Token>[] getAllTokenizations(String[] s) {
+		Set<List<Token>> tokenizations = new LinkedHashSet<>();
 		for (int i = 0; i < tokenizers.length; i++) {
-			List tokens = tokenizers[i].tokenize(s);
+			List<Token> tokens = tokenizers[i].tokenize(s);
 			if (tokens.size() > 0) {
 				tokenizations.add(tokens);	
 			}
 		}
 
-		List[] ret = new List[tokenizations.size()];
-		Iterator itTokenizations = tokenizations.iterator();
+		@SuppressWarnings("unchecked")
+		List<Token>[] ret = (List<Token>[]) new List<?>[tokenizations.size()];
+		Iterator<List<Token>> itTokenizations = tokenizations.iterator();
 		int i = 0;
 		while (itTokenizations.hasNext()) {
-			ret[i++] = (List) itTokenizations.next();
+			ret[i++] = itTokenizations.next();
 		}
 		return ret;
 	}
@@ -340,7 +342,7 @@ public abstract class AbstractParser implements Parser {
 	// *********************** Abstract Methods ****************************
 	//
 	
-	protected abstract ParseTreeNode getBestParseTreeFromParser(List tokens);
-	protected abstract ParseTreeNode[] getAllParseTreesFromParser(List tokens);
+	protected abstract ParseTreeNode getBestParseTreeFromParser(List<Token> tokens);
+	protected abstract ParseTreeNode[] getAllParseTreesFromParser(List<Token> tokens);
 	
 }

@@ -40,8 +40,8 @@ public class Rule {
 	private Variable lhs;
 	
 	/** The right-hand side of this Rule */
-	private List rhs; // = new ArrayList();
-	private List unmodifiableRhs;
+	private List<Symbol> rhs; // = new ArrayList();
+	private List<Symbol> unmodifiableRhs;
 	
 	/** The probability of this Rule */
 	private double probability;
@@ -70,7 +70,7 @@ public class Rule {
 		}
 		
 		this.lhs = lhs;
-		this.rhs = new ArrayList(1);
+		this.rhs = new ArrayList<>(1);
 		this.rhs.add(rhs);
 		this.unmodifiableRhs = Collections.unmodifiableList(this.rhs);
 		
@@ -121,7 +121,7 @@ public class Rule {
 	 * the rhs is otherwise illegal (see above), or the probability is out of
 	 * range.
 	 */
-	public Rule(Variable lhs, List rhs, double probability) {
+	public Rule(Variable lhs, List<Symbol> rhs, double probability) {
 		if (lhs == null) {
 			throw new IllegalArgumentException("lhs cannot be null.");
 		} else if (rhs == null) {
@@ -152,7 +152,7 @@ public class Rule {
 		}
 
 		this.lhs = lhs;
-		this.rhs = new ArrayList(rhs);
+		this.rhs = new ArrayList<>(rhs);
 		this.unmodifiableRhs = Collections.unmodifiableList(this.rhs);
 		
 		setProbability(probability);
@@ -164,7 +164,7 @@ public class Rule {
 	 * 
 	 * @see #Rule(Variable, List, double)
 	 */
-	public Rule(Variable lhs, List rhs) {
+	public Rule(Variable lhs, List<Symbol> rhs) {
 		this(lhs, rhs, 0);	
 	}
 
@@ -193,7 +193,7 @@ public class Rule {
 	/**
 	 * Returns the right-hand side of this Rule as a list of Symbols.
 	 */
-	public List getRhs() {
+	public List<Symbol> getRhs() {
 		return unmodifiableRhs;
 	}
 

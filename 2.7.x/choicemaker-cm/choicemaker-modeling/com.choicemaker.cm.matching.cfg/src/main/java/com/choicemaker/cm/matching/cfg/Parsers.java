@@ -12,6 +12,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.jdom2.JDOMException;
@@ -24,12 +25,10 @@ import com.choicemaker.e2.CMExtension;
 import com.choicemaker.e2.platform.CMPlatformUtils;
 
 /**
- * Comment
- *
  * @author Adam Winkel
  */
 public final class Parsers {
-	private static HashMap parsers = new HashMap();
+	private static Map<String, Object> parsers = new HashMap<>();
 
 	static {
 		initRegisteredParsers();
@@ -51,7 +50,7 @@ public final class Parsers {
 		}
 	}
 
-	public static Set getParserKeys() {
+	public static Set<String> getParserKeys() {
 		return parsers.keySet();
 	}
 
@@ -172,7 +171,7 @@ public final class Parsers {
 	}
 
 	private static class CascadedParserDef extends ParserDef {
-		List kids = new ArrayList();
+		List<String> kids = new ArrayList<>();
 
 		public CascadedParserDef(String name) {
 			super(name);

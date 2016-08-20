@@ -41,7 +41,7 @@ public class ParsedData implements Serializable {
 	/**
 	 * Map from field names to field values.
 	 */
-	protected Map data = new HashMap();
+	protected Map<String, String> data = new HashMap<>();
 	
 	/** 
 	 * The probability of the the parse tree that was normalized
@@ -150,7 +150,7 @@ public class ParsedData implements Serializable {
 		return data.size();	
 	}
 	
-	public Set keySet() {
+	public Set<String> keySet() {
 		return data.keySet();	
 	}
 	
@@ -172,7 +172,7 @@ public class ParsedData implements Serializable {
 		if (data.size() != holder.data.size())
 			return false;
 			
-		Iterator itKeys = data.keySet().iterator();
+		Iterator<String> itKeys = data.keySet().iterator();
 		while (itKeys.hasNext()) {
 			String key = (String) itKeys.next();
 			String v1 = get(key);	

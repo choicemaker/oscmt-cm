@@ -13,6 +13,8 @@ import com.choicemaker.cm.matching.cfg.AbstractParser;
 import com.choicemaker.cm.matching.cfg.ContextFreeGrammar;
 import com.choicemaker.cm.matching.cfg.ParseTreeNode;
 import com.choicemaker.cm.matching.cfg.ParseTreeNodeStandardizer;
+import com.choicemaker.cm.matching.cfg.ParsedData;
+import com.choicemaker.cm.matching.cfg.Token;
 import com.choicemaker.cm.matching.cfg.Tokenizer;
 import com.choicemaker.cm.matching.cfg.cnf.NearlyCnfGrammar;
 
@@ -26,23 +28,26 @@ public class CykParser extends AbstractParser {
 	private CykParserChart cykParserChart;
 
 	public CykParser() {
-		// for subclasses...
 	}
 
-	public CykParser(Tokenizer t, ContextFreeGrammar g, ParseTreeNodeStandardizer s) {
+	public CykParser(Tokenizer t, ContextFreeGrammar g,
+			ParseTreeNodeStandardizer s) {
 		super(t, g, s);
 	}
-	
-	public CykParser(Tokenizer[] t, ContextFreeGrammar g, ParseTreeNodeStandardizer s) {
-		super(t, g, s);	
+
+	public CykParser(Tokenizer[] t, ContextFreeGrammar g,
+			ParseTreeNodeStandardizer s) {
+		super(t, g, s);
 	}
-	
-	public CykParser(Tokenizer t, ContextFreeGrammar g, ParseTreeNodeStandardizer s, Class c) {
+
+	public CykParser(Tokenizer t, ContextFreeGrammar g,
+			ParseTreeNodeStandardizer s, Class<? extends ParsedData> c) {
 		super(t, g, s, c);
 	}
-	
-	public CykParser(Tokenizer[] t, ContextFreeGrammar g, ParseTreeNodeStandardizer s, Class c) {
-		super(t, g, s, c);	
+
+	public CykParser(Tokenizer[] t, ContextFreeGrammar g,
+			ParseTreeNodeStandardizer s, Class<? extends ParsedData> c) {
+		super(t, g, s, c);
 	}
 
 	public void setGrammar(ContextFreeGrammar g) {
@@ -50,16 +55,17 @@ public class CykParser extends AbstractParser {
 		cykParserChart = new CykParserChart(new NearlyCnfGrammar(g));
 	}
 
-	protected ParseTreeNode getBestParseTreeFromParser(List tokens) {
+	protected ParseTreeNode getBestParseTreeFromParser(List<Token> tokens) {
 		return cykParserChart.getBestParseTree(tokens);
 	}
 
-	protected ParseTreeNode[] getAllParseTreesFromParser(List tokens) {
+	protected ParseTreeNode[] getAllParseTreesFromParser(List<Token> tokens) {
 		ParseTreeNode ptn = getBestParseTreeFromParser(tokens);
 		if (ptn == null) {
-			return new ParseTreeNode[0];	
+			return new ParseTreeNode[0];
 		} else {
-			return new ParseTreeNode[] {ptn};
+			return new ParseTreeNode[] {
+					ptn };
 		}
 	}
 

@@ -22,6 +22,8 @@ import com.choicemaker.cm.matching.cfg.standardizer.RecursiveStandardizer;
  *
  * @author   Adam Winkel
  */
+@SuppressWarnings({
+	"rawtypes" })
 public class StandardizerXmlConf {
 
 	public static ParseTreeNodeStandardizer readFromElement(Element e, SymbolFactory factory) throws XmlConfException {

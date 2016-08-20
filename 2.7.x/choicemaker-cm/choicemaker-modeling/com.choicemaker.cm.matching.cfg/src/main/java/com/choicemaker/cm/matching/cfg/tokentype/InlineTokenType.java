@@ -16,6 +16,8 @@ import com.choicemaker.util.DoubleValuedHashMap;
 /**
  * Represents a TokenType defined within the grammar.
  */
+@SuppressWarnings({
+	"rawtypes" })
 public class InlineTokenType extends TokenType {
 
 	protected DoubleValuedHashMap tokenMap;

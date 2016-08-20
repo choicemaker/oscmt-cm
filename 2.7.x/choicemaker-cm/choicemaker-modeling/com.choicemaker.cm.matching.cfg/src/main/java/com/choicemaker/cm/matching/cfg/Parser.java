@@ -23,13 +23,13 @@ public interface Parser {
 	public void addTokenizer(Tokenizer t);
 	public void setGrammar(ContextFreeGrammar g);
 	public void setStandardizer(ParseTreeNodeStandardizer s);
-	public void setParsedDataClass(Class cls);
+	public void setParsedDataClass(Class<? extends ParsedData> cls);
 	
 	public SymbolFactory getSymbolFactory();
 	public Tokenizer[] getTokenizers();
 	public ContextFreeGrammar getGrammar();
 	public ParseTreeNodeStandardizer getStandardizer();
-	public Class getParsedDataClass();
+	public Class<? extends ParsedData> getParsedDataClass();
 	
 	public ParsedData getBestParse(String s);
 	public ParsedData getBestParse(String[] s);
@@ -39,6 +39,6 @@ public interface Parser {
 	public ParseTreeNode getBestParseTree(String[] s);
 	public ParseTreeNode[] getAllParseTrees(String s);
 	public ParseTreeNode[] getAllParseTrees(String[] s);
-	public List[] getAllTokenizations(String s);
-	public List[] getAllTokenizations(String[] s);
+	public List<Token>[] getAllTokenizations(String s);
+	public List<Token>[] getAllTokenizations(String[] s);
 }

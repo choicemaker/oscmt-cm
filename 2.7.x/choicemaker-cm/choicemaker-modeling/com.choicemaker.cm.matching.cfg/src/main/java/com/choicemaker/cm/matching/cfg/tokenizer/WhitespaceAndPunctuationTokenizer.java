@@ -63,12 +63,12 @@ public class WhitespaceAndPunctuationTokenizer implements Tokenizer {
 		}
 	}
 	
-	public List tokenize(String s) {
+	public List<Token> tokenize(String s) {
 		if (dirty) {
 			recalcTranslationTable();
 		}
 		
-		List tokens = new ArrayList(8);
+		List<Token> tokens = new ArrayList<>(8);
 		
 		int len = s.length();
 		
@@ -113,11 +113,9 @@ public class WhitespaceAndPunctuationTokenizer implements Tokenizer {
 		return tokens;
 	}
 	
-	/**
-	 * TODO: implement tokenize(String[])
-	 */
-	public List tokenize(String[] s) {
-		throw new UnsupportedOperationException();
+	public List<Token> tokenize(String[] s) {
+		// FIXME implement WhitespaceAndPunctuationTokenizer.tokenized(String[])
+		throw new Error("not yet implemented");
 	}
 	
 	private void recalcTranslationTable() {

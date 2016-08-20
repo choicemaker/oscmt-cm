@@ -18,6 +18,8 @@ import com.choicemaker.cm.matching.cfg.Tokenizer;
  *
  * @author   Adam Winkel
  */
+@SuppressWarnings({
+	"rawtypes" })
 public class TokenizerXmlConf {
 
 	public static Tokenizer readFromElement(Element e) throws XmlConfException {

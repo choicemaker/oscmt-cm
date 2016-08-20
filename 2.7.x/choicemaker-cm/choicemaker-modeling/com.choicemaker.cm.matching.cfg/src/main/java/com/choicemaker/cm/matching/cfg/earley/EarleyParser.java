@@ -13,11 +13,11 @@ import com.choicemaker.cm.matching.cfg.AbstractParser;
 import com.choicemaker.cm.matching.cfg.ContextFreeGrammar;
 import com.choicemaker.cm.matching.cfg.ParseTreeNode;
 import com.choicemaker.cm.matching.cfg.ParseTreeNodeStandardizer;
+import com.choicemaker.cm.matching.cfg.ParsedData;
+import com.choicemaker.cm.matching.cfg.Token;
 import com.choicemaker.cm.matching.cfg.Tokenizer;
 
 /**
- * 
- * 
  * @author Adam Winkel
  */
 public class EarleyParser extends AbstractParser {
@@ -26,23 +26,27 @@ public class EarleyParser extends AbstractParser {
 		super();
 	}
 
-	public EarleyParser(Tokenizer t, ContextFreeGrammar g, ParseTreeNodeStandardizer s) {
+	public EarleyParser(Tokenizer t, ContextFreeGrammar g,
+			ParseTreeNodeStandardizer s) {
 		super(t, g, s);
 	}
-	
-	public EarleyParser(Tokenizer[] t, ContextFreeGrammar g, ParseTreeNodeStandardizer s) {
-		super(t, g, s);	
+
+	public EarleyParser(Tokenizer[] t, ContextFreeGrammar g,
+			ParseTreeNodeStandardizer s) {
+		super(t, g, s);
 	}
-	
-	public EarleyParser(Tokenizer t, ContextFreeGrammar g, ParseTreeNodeStandardizer s, Class c) {
-		super(t, g, s, c);
-	}
-	
-	public EarleyParser(Tokenizer[] t, ContextFreeGrammar g, ParseTreeNodeStandardizer s, Class c) {
+
+	public EarleyParser(Tokenizer t, ContextFreeGrammar g,
+			ParseTreeNodeStandardizer s, Class<? extends ParsedData> c) {
 		super(t, g, s, c);
 	}
 
-	protected ParseTreeNode getBestParseTreeFromParser(List tokens) {
+	public EarleyParser(Tokenizer[] t, ContextFreeGrammar g,
+			ParseTreeNodeStandardizer s, Class<? extends ParsedData> c) {
+		super(t, g, s, c);
+	}
+
+	protected ParseTreeNode getBestParseTreeFromParser(List<Token> tokens) {
 		EarleyParserChart chart = new EarleyParserChart(tokens, grammar);
 		if (chart.isParsed()) {
 			return chart.getBestParseTree();
@@ -51,7 +55,7 @@ public class EarleyParser extends AbstractParser {
 		}
 	}
 
-	protected ParseTreeNode[] getAllParseTreesFromParser(List tokens) {
+	protected ParseTreeNode[] getAllParseTreesFromParser(List<Token> tokens) {
 		EarleyParserChart chart = new EarleyParserChart(tokens, grammar);
 
 		ParseTreeNode[] ret = new ParseTreeNode[chart.getNumParseTrees()];			

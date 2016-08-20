@@ -139,8 +139,8 @@ public class DefaultStandardizer implements ParseTreeNodeStandardizer {
 	/**
 	 * Returns an L-to-R enumeration of the Tokens in the parse tree.
 	 */
-	protected List getTokens(ParseTreeNode node) {
-		List list = new ArrayList();
+	protected List<String> getTokens(ParseTreeNode node) {
+		List<String> list = new ArrayList<>();
 		getTokens(node, list);
 		return list;
 	}
@@ -148,7 +148,7 @@ public class DefaultStandardizer implements ParseTreeNodeStandardizer {
 	/**
 	 * Adds an L-to-R enumeration of <code>node</code>'s tokens to <code>list</code>.
 	 */	
-	protected void getTokens(ParseTreeNode node, List list) {
+	protected void getTokens(ParseTreeNode node, List<String> list) {
 		if (node.isLeaf()) {
 			Rule r = node.getRule();
 			TokenType type = (TokenType) r.getLhs();

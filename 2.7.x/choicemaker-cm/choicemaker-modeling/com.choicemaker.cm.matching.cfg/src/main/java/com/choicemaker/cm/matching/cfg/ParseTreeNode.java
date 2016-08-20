@@ -28,7 +28,7 @@ public class ParseTreeNode {
 
 	private Rule rule;
 	
-	private List children = new ArrayList();
+	private List<ParseTreeNode> children = new ArrayList<>();
 	private int numChildren;
 	
 	private double probability;
@@ -55,7 +55,7 @@ public class ParseTreeNode {
 	/**
 	 * Creates a new ParseTreeNode with the specified Rule and List of subtrees.
 	 */
-	public ParseTreeNode(Rule rule, List children) {
+	public ParseTreeNode(Rule rule, List<ParseTreeNode> children) {
 		this.rule = rule;
 		
 		this.children.addAll(children);
@@ -102,8 +102,8 @@ public class ParseTreeNode {
 	 * Returns a List of the subtrees of this ParseTreeNode, one for each Variable
 	 * on the right-hand side of this node's Rule.
 	 */
-	public List getChildren() {
-		return new ArrayList(children);	
+	public List<ParseTreeNode> getChildren() {
+		return new ArrayList<>(children);	
 	}
 
 	/**
@@ -208,9 +208,9 @@ public class ParseTreeNode {
 	/**
 	 * Reads a set of parse trees from the specified file and returns a List containing their roots.
 	 */
-	public static List readFromFile(String filename, SymbolFactory factory, ContextFreeGrammar cfg) throws IOException, ParseException {
+	public static List<ParseTreeNode> readFromFile(String filename, SymbolFactory factory, ContextFreeGrammar cfg) throws IOException, ParseException {
 		FileInputStream fis = new FileInputStream(new File(filename).getAbsoluteFile());
-		List list = readFromStream(fis, factory, cfg);
+		List<ParseTreeNode> list = readFromStream(fis, factory, cfg);
 		fis.close();
 		
 		return list;
@@ -220,7 +220,7 @@ public class ParseTreeNode {
 	 * Reads a set of parse trees from the specified InputStream and returns a List containing
 	 * their roots.
 	 */
-	public static List readFromStream(InputStream stream, SymbolFactory factory, ContextFreeGrammar cfg) throws IOException, ParseException {
+	public static List<ParseTreeNode> readFromStream(InputStream stream, SymbolFactory factory, ContextFreeGrammar cfg) throws IOException, ParseException {
 				
 		InputStreamReader rdr = new InputStreamReader(stream);
 		BufferedReader reader = new BufferedReader(rdr);
@@ -240,7 +240,7 @@ public class ParseTreeNode {
 		rdr.close();
 		reader.close();
 		
-		List list = new ArrayList();
+		List<ParseTreeNode> list = new ArrayList<>();
 		
 		int index = 0;
 		int len = s.length();
@@ -337,8 +337,8 @@ public class ParseTreeNode {
 			
 			Variable lhs = factory.getVariable(lhsString);
 			
-			List rhs = new ArrayList();
-			List subTrees = new ArrayList();
+			List<Symbol> rhs = new ArrayList<>();
+			List<ParseTreeNode> subTrees = new ArrayList<>();
 			
 			// now find all matched groups of parens (child rules) and recurse into them.
 			while (index < closeIndex) {

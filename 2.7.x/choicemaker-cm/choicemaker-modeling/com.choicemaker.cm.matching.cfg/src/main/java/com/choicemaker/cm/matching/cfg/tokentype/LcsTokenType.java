@@ -20,6 +20,8 @@ import com.choicemaker.cm.matching.gen.LongestCommonSubsequence;
  *
  * @author   Adam Winkel
  */
+@SuppressWarnings({
+		"rawtypes", "unchecked" })
 public class LcsTokenType extends TokenType {
 
 	protected HashMap members;
