@@ -16,24 +16,20 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * .
- *
  * @author Adam Winkel
  */
-@SuppressWarnings({
-		"rawtypes", "unchecked" })
-public class IntValuedHashMap extends HashMap {
+public class IntValuedHashMap<K> extends HashMap<K, Integer> {
 	private static final long serialVersionUID = 1L;
 
 	public IntValuedHashMap() {
 	}
 
-	public IntValuedHashMap(IntValuedHashMap map) {
+	public IntValuedHashMap(IntValuedHashMap<K> map) {
 		super(map);
 	}
 
 	@Override
-	public Object put(Object key, Object value) {
+	public Integer put(K key, Integer value) {
 		if (!(value instanceof Integer)) {
 			throw new IllegalArgumentException();
 		}
@@ -41,11 +37,11 @@ public class IntValuedHashMap extends HashMap {
 		return super.put(key, value);
 	}
 
-	public void putInt(Object key, int value) {
+	public void putInt(K key, int value) {
 		super.put(key, new Integer(value));
 	}
 
-	public int getInt(Object key) {
+	public int getInt(K key) {
 		Integer value = (Integer) get(key);
 		if (value != null)
 			return value.intValue();
@@ -53,13 +49,13 @@ public class IntValuedHashMap extends HashMap {
 			return 0;
 	}
 
-	public void increment(Object key) {
+	public void increment(K key) {
 		putInt(key, getInt(key) + 1);
 	}
 
-	public List sortedKeys() {
-		List keys = new ArrayList(keySet());
-		Collections.sort(keys, new MapKeyComparator(this));
+	public List<K> sortedKeys() {
+		List<K> keys = new ArrayList<>(keySet());
+		Collections.sort(keys, new MapKeyComparator<K,Integer>(this));
 		return keys;
 	}
 
