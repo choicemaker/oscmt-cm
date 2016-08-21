@@ -1,3 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE parser>
 <!-- 
 	NOTE: currently, this parser uses all the old NameParser crap.  
 	We should remove all the old junk create new Standardizers...
