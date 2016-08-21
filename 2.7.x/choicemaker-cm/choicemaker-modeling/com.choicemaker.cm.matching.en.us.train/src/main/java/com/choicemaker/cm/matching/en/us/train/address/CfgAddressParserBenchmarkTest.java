@@ -14,16 +14,15 @@ import com.choicemaker.cm.matching.cfg.Parser;
 import com.choicemaker.cm.matching.cfg.train.FlatFileRawDataReader;
 import com.choicemaker.cm.matching.cfg.train.ParserBenchmarkTest;
 import com.choicemaker.cm.matching.cfg.train.RawDataReader;
-import com.choicemaker.cm.matching.en.us.address.AddressParserUtils;
 
 /**
  * .
  * 
  * @author Adam Winkel
  */
-public class AddressParserBenchmarkTest extends ParserBenchmarkTest {
+public class CfgAddressParserBenchmarkTest extends ParserBenchmarkTest {
 
-	public AddressParserBenchmarkTest(String[] args) throws IOException, ParseException {
+	public CfgAddressParserBenchmarkTest(String[] args) throws IOException, ParseException {
 		super();
 		
 		if (args.length != 3) {
@@ -35,9 +34,9 @@ public class AddressParserBenchmarkTest extends ParserBenchmarkTest {
 		String grammarFile = args[1];
 		String rawDataFile = args[2];
 		
-		AddressParserUtils.initRelevantSetsAndMaps();
+		CfgAddressParserUtils.initRelevantSetsAndMaps();
 		
-		Parser parser = AddressParserUtils.createDefaultAddressParser(grammarFile);
+		Parser parser = CfgAddressParserUtils.createDefaultAddressParser(grammarFile);
 		RawDataReader reader = new FlatFileRawDataReader(rawDataFile);
 		
 		setType(type);
@@ -46,7 +45,7 @@ public class AddressParserBenchmarkTest extends ParserBenchmarkTest {
 	}
 
 	public static void main(String[] args) throws Exception {
-		AddressParserBenchmarkTest test = new AddressParserBenchmarkTest(args);
+		CfgAddressParserBenchmarkTest test = new CfgAddressParserBenchmarkTest(args);
 
 		test.runTest();
 		test.printResults();

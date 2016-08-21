@@ -12,12 +12,11 @@ import com.choicemaker.cm.matching.cfg.train.FlatFileRawDataReader;
 import com.choicemaker.cm.matching.cfg.train.ParsedDataCreator;
 import com.choicemaker.cm.matching.cfg.train.ParsedDataWriter;
 import com.choicemaker.cm.matching.cfg.train.RawDataReader;
-import com.choicemaker.cm.matching.en.us.address.AddressParserUtils;
 
 /**
  * @author   Adam Winkel
  */
-public final class AddressParsedDataCreator {
+public final class CfgAddressParsedDataCreator {
 
 	public static final String PARSE_TREES = "-parseTrees";
 	public static final String PARSED_DATA = "-parsedData";
@@ -34,8 +33,8 @@ public final class AddressParsedDataCreator {
 			System.exit(1);
 		}
 
-		AddressParserUtils.initRelevantSetsAndMaps();
-		Parser parser = AddressParserUtils.createEarleyAddressParser(args[1]);
+		CfgAddressParserUtils.initRelevantSetsAndMaps();
+		Parser parser = CfgAddressParserUtils.createEarleyAddressParser(args[1]);
 		RawDataReader reader = new FlatFileRawDataReader(args[2]);
 		ParsedDataWriter writer;
 		if (args.length > 3) {

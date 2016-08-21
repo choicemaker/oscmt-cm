@@ -5,42 +5,50 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *******************************************************************************/
-package com.choicemaker.cm.matching.en.us.train.address;
+package com.choicemaker.cm.matching.en.us.train.name;
 
+import java.io.FileInputStream;
+
+import com.choicemaker.cm.core.util.CommandLineArguments;
 import com.choicemaker.cm.matching.cfg.ContextFreeGrammar;
 import com.choicemaker.cm.matching.cfg.SymbolFactory;
 import com.choicemaker.cm.matching.cfg.train.GrammarTrainer;
 import com.choicemaker.cm.matching.cfg.train.ParsedDataReader;
 import com.choicemaker.cm.matching.cfg.xmlconf.ContextFreeGrammarXmlConf;
-import com.choicemaker.cm.matching.en.us.address.AddressParserUtils;
-import com.choicemaker.cm.matching.en.us.address.AddressSymbolFactory;
+import com.choicemaker.cm.matching.en.us.name.NameSymbolFactory;
+import com.choicemaker.e2.CMPlatformRunnable;
+
 
 /**
- * .
- * 
- * @author Adam Winkel
+ * @author   Adam Winkel
  */
-public class AddressGrammarTrainer {
-
-	public static void main(String[] args) throws Exception {
+public class CfgNameGrammarTrainer implements CMPlatformRunnable {
+		
+	public Object run(Object argObj) throws Exception {
+		String[] args = CommandLineArguments.eclipseArgsMapper(argObj);
+		
 		if (args.length < 2) {
-			System.err.println("Need at least two arguments: grammar file and parsed data files");	
+			System.err.println("Need at least two arguments: grammar file and parsed data file(s)");	
 			System.exit(1);
 		}
 		
-		AddressParserUtils.initRelevantSetsAndMaps();
+		String grammarFileName = args[0];
 		
-		SymbolFactory factory = new AddressSymbolFactory();
-		ContextFreeGrammar grammar = ContextFreeGrammarXmlConf.readFromFile(args[0], factory);
-		
+		SymbolFactory factory = new NameSymbolFactory();
+		ContextFreeGrammar grammar = ContextFreeGrammarXmlConf.readFromFile(grammarFileName, factory);
+				
 		GrammarTrainer trainer = new GrammarTrainer(grammar);
 
 		for (int i = 1; i < args.length; i++) {
-			ParsedDataReader rdr = new ParsedDataReader(args[i], factory, grammar);
+			FileInputStream is = new FileInputStream(args[i]);
+			ParsedDataReader rdr = new ParsedDataReader(is, factory, grammar);
 			trainer.readParseTrees(rdr);
+			is.close();
 		}
-		
+
 		trainer.writeAll();
+		
+		return null;
 	}
 
 }

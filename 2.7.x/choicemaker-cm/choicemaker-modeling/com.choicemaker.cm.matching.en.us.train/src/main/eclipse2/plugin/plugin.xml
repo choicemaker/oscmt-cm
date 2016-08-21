@@ -22,7 +22,7 @@
          point="com.choicemaker.e2.applications">
       <application>
          <run
-               class="com.choicemaker.cm.matching.en.us.train.name.NameGrammarTrainer">
+               class="com.choicemaker.cm.matching.en.us.train.name.CfgNameGrammarTrainer">
          </run>
       </application>
    </extension>
@@ -31,7 +31,7 @@
          point="com.choicemaker.e2.applications">
       <application>
          <run
-               class="com.choicemaker.cm.matching.en.us.train.name.NameParsedDataCreator">
+               class="com.choicemaker.cm.matching.en.us.train.name.CfgNameParsedDataCreator">
          </run>
       </application>
    </extension>

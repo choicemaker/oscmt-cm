@@ -8,12 +8,10 @@
 package com.choicemaker.cm.matching.en.us.train.address;
 
 import com.choicemaker.cm.matching.cfg.ContextFreeGrammar;
-import com.choicemaker.cm.matching.cfg.Parser;
 import com.choicemaker.cm.matching.cfg.SymbolFactory;
+import com.choicemaker.cm.matching.cfg.train.ParsedDataFilter;
 import com.choicemaker.cm.matching.cfg.train.ParsedDataReader;
-import com.choicemaker.cm.matching.cfg.train.ParserAccuracyTest;
 import com.choicemaker.cm.matching.cfg.xmlconf.ContextFreeGrammarXmlConf;
-import com.choicemaker.cm.matching.en.us.address.AddressParserUtils;
 import com.choicemaker.cm.matching.en.us.address.AddressSymbolFactory;
 
 /**
@@ -21,28 +19,29 @@ import com.choicemaker.cm.matching.en.us.address.AddressSymbolFactory;
  * 
  * @author Adam Winkel
  */
-public class AddressParserAccuracyTest extends ParserAccuracyTest {
-
-	public AddressParserAccuracyTest(Parser p) {
-		super(p);	
-	}
+public class CfgAddressFilter {
 
 	public static void main(String[] args) throws Exception {
-		AddressParserUtils.initRelevantSetsAndMaps();		
-		SymbolFactory factory = new AddressSymbolFactory();
-		ContextFreeGrammar grammar = ContextFreeGrammarXmlConf.readFromFile(args[0], factory);
-
-		Parser parser = AddressParserUtils.createDefaultAddressParser(args[0]);
-
-		AddressParserAccuracyTest test = new AddressParserAccuracyTest(parser);
-
-		for (int i = 1; i < args.length; i++) {
-			System.out.println("// ******* Processing: " + args[i] + " *******");
-			ParsedDataReader rdr = new ParsedDataReader(args[i], factory, grammar);
-			test.processData(rdr);
+		if (args.length != 3) {
+			System.err.println("Must have three args!");
+			System.exit(1);	
 		}
 		
-		test.printStats();
+		CfgAddressParserUtils.initRelevantSetsAndMaps();
+		SymbolFactory factory = new AddressSymbolFactory();
+		ContextFreeGrammar grammar = ContextFreeGrammarXmlConf.readFromFile(args[1], factory);
+		ParsedDataReader rdr = new ParsedDataReader(args[2], factory, grammar);
+
+		args[0] = args[0].intern();
+		if (args[0] == "-parsed") {
+			ParsedDataFilter.filterRawData(rdr, ParsedDataFilter.PARSED);
+		} else if (args[0] == "-unparsed") {
+			ParsedDataFilter.filterRawData(rdr, ParsedDataFilter.UNPARSED);
+		} else if (args[0] == "-all") {
+			ParsedDataFilter.filterRawData(rdr, ParsedDataFilter.ALL);
+		} else {
+			System.err.println("Unknown first argument: " + args[0]);	
+		}
 	}
 
 }

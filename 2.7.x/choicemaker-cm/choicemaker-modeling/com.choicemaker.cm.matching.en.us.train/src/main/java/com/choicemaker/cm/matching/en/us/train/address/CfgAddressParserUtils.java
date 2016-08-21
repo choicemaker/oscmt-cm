@@ -5,7 +5,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *******************************************************************************/
-package com.choicemaker.cm.matching.en.us.address;
+package com.choicemaker.cm.matching.en.us.train.address;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -17,16 +17,21 @@ import com.choicemaker.cm.matching.cfg.Tokenizer;
 import com.choicemaker.cm.matching.cfg.cyk.CykParser;
 import com.choicemaker.cm.matching.cfg.earley.EarleyParser;
 import com.choicemaker.cm.matching.cfg.xmlconf.ContextFreeGrammarXmlConf;
-import com.choicemaker.cm.matching.en.us.AddressParser;
+import com.choicemaker.cm.matching.en.us.CfgAddressParser;
 import com.choicemaker.cm.matching.en.us.ParsedAddress;
+import com.choicemaker.cm.matching.en.us.address.AddressStandardizer;
+import com.choicemaker.cm.matching.en.us.address.AddressSymbolFactory;
+import com.choicemaker.cm.matching.en.us.address.AddressTokenizer;
 import com.choicemaker.cm.matching.gen.Maps;
 import com.choicemaker.cm.matching.gen.Sets;
 
 /**
+ * Utilities used by command-line training and test applications for CFG
+ * address parsers.
+ * 
  * @author ajwinkel
- *
  */
-public class AddressParserUtils {
+public class CfgAddressParserUtils {
 
 	private static final String DEFAULT_DATA_DIR = "../com.choicemaker.cm.matching.en.us.ny.nyc/etc/data";
 
@@ -86,7 +91,7 @@ public class AddressParserUtils {
 	 * Initialize the relevant Sets and Maps as resource streams relative to the 
 	 * given class and &quot;plugin/locale_en_us/etc/data&quot;.
 	 */
-	public static void initRelevantSetsAndMaps(Class cls) throws IOException {
+	public static void initRelevantSetsAndMaps(Class<?> cls) throws IOException {
 		initRelevantSetsAndMaps(cls, DEFAULT_DATA_DIR);	
 	}
 
@@ -94,7 +99,7 @@ public class AddressParserUtils {
 	 * Initialize the relevant Sets and Maps as resource streams relative to the 
 	 * given class and directory.
 	 */	
-	public static void initRelevantSetsAndMaps(Class cls, String rel) throws IOException {		
+	public static void initRelevantSetsAndMaps(Class<?> cls, String rel) throws IOException {		
 		Maps.addMap("wordCounts", Maps.readFileMap(cls.getResourceAsStream(rel + "/wordCounts.txt"), "String", "int"));
 		Maps.addMap("standardWords", Maps.readFileMap(cls.getResourceAsStream(rel + "/standardWords.txt"), "String", "String"));
 		
@@ -200,12 +205,12 @@ public class AddressParserUtils {
 		};	
 	}
 
-	public static AddressParser createDefaultAddressParser(String grammarFile) throws IOException, ParseException {
+	public static CfgAddressParser createDefaultAddressParser(String grammarFile) throws IOException, ParseException {
 		SymbolFactory f = new AddressSymbolFactory();
 		ContextFreeGrammar g = ContextFreeGrammarXmlConf.readFromFile(grammarFile, f);
 		ParseTreeNodeStandardizer s = new AddressStandardizer(f);
 		
-		return new AddressParser(getAllTokenizers(), g, s);
+		return new CfgAddressParser(getAllTokenizers(), g, s);
 	}
 
 	public static CykParser createCykAddressParser(String grammarFile) throws IOException, ParseException {

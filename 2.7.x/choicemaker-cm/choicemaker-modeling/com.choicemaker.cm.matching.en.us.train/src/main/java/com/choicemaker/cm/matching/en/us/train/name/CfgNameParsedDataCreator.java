@@ -17,11 +17,9 @@ import com.choicemaker.cm.matching.cfg.train.RawDataReader;
 import com.choicemaker.e2.CMPlatformRunnable;
 
 /**
- * .
- *
  * @author   Adam Winkel
  */
-public final class NameParsedDataCreator implements CMPlatformRunnable {
+public final class CfgNameParsedDataCreator implements CMPlatformRunnable {
 
 	public static final String PARSE_TREES = "-parseTrees";
 	public static final String PARSED_DATA = "-parsedData";
