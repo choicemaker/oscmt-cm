@@ -129,8 +129,8 @@
    <extension
          point="com.choicemaker.cm.matching.cfg.parser">
       <parser
-            name="en.us.defaultAddressParser"
-            file="etc/parsers/en.us.defaultAddressParser.xml">
+            name="en.us.defaultCfgAddressParser"
+            file="etc/parsers/en.us.defaultCfgAddressParser.xml">
       </parser>
       <parser
             name="en.us.defaultCfgNameParser"

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE parser>
 <!-- This parser definition is exactly the same as that used for regular address parsing. -->
-<parser>
+<parser class="com.choicemaker.cm.matching.en.us.CfgAddressParser">
 	<symbolFactory class="com.choicemaker.cm.matching.en.us.address.AddressSymbolFactory" />
 	<tokenizer class="com.choicemaker.cm.matching.en.us.address.AddressTokenizer" />
 	<tokenizer class="com.choicemaker.cm.matching.en.us.address.AddressTokenizer">
