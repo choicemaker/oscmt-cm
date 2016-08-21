@@ -40,7 +40,7 @@ public class SuffixTree {
 		addAll(strings);
 	}
 
-	public void addAll(Collection strings) {
+	public void addAll(Collection<String> strings) {
 		Iterator it = strings.iterator();
 		while (it.hasNext()) {
 			add((String) it.next());

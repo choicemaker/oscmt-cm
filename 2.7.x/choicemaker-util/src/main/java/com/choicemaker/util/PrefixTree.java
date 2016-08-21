@@ -18,15 +18,9 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * .
- *
  * @author Adam Winkel
  */
-@SuppressWarnings({
-		"rawtypes", "unchecked" })
 public class PrefixTree {
-
-	TreeMap map = new TreeMap();
 
 	PrefixTreeNode root;
 
@@ -34,7 +28,7 @@ public class PrefixTree {
 		root = new PrefixTreeNode();
 	}
 
-	public PrefixTree(Collection strings) {
+	public PrefixTree(Collection<String> strings) {
 		this();
 		addAll(strings);
 	}
@@ -44,8 +38,8 @@ public class PrefixTree {
 		addAll(strings);
 	}
 
-	public void addAll(Collection strings) {
-		Iterator it = strings.iterator();
+	public void addAll(Collection<String> strings) {
+		Iterator<String> it = strings.iterator();
 		while (it.hasNext()) {
 			add((String) it.next());
 		}
@@ -77,7 +71,7 @@ public class PrefixTree {
 		return root.getShortestPrefix(s);
 	}
 
-	public List getAllPrefixes(String s) {
+	public List<String> getAllPrefixes(String s) {
 		return root.getAllPrefixes(s);
 	}
 
@@ -90,7 +84,7 @@ public class PrefixTree {
 
 		Character c;
 
-		protected Map kids;
+		protected Map<Character, PrefixTreeNode> kids;
 
 		public PrefixTreeNode() {
 			this('\0');
@@ -126,7 +120,7 @@ public class PrefixTree {
 			if (child == null) {
 				child = new PrefixTreeNode(next);
 				if (kids == null) {
-					kids = new TreeMap();
+					kids = new TreeMap<>();
 				}
 				kids.put(nextCharacter, child);
 			}
@@ -213,13 +207,13 @@ public class PrefixTree {
 			return -1;
 		}
 
-		public List getAllPrefixes(String s) {
-			List list = new ArrayList();
+		public List<String> getAllPrefixes(String s) {
+			List<String> list = new ArrayList<>();
 			getAllPrefixes(s, 0, list);
 			return list;
 		}
 
-		protected void getAllPrefixes(String s, int index, List prefixes) {
+		protected void getAllPrefixes(String s, int index, List<String> prefixes) {
 			if (isPrefix) {
 				prefixes.add(s.substring(0, index));
 			}
