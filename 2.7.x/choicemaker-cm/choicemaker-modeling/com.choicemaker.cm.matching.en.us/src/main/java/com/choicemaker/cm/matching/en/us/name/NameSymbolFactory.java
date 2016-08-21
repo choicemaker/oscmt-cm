@@ -25,6 +25,7 @@ public class NameSymbolFactory extends SimpleSymbolFactory {
 	/**
 	 * Create a new NameSymbolFactory.
 	 */
+	@SuppressWarnings("unchecked")
 	public NameSymbolFactory() {
 
 		//

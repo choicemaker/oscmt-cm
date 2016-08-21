@@ -71,14 +71,14 @@ public class NameTokenizer extends SimpleTokenizer {
 	 * unique separators at the beginning and end of the list of tokens,
 	 * depending on how many arguments we've gotten.
 	 */
-	public List tokenize(String[] s) {
+	public List<Token> tokenize(String[] s) {
 		s = filterNonNull(s);
 		if (s.length < 1 || s.length > 3) {
 			throw new IllegalArgumentException(
 				"We are not equipped to tokenize names with " + s.length + " fields.");
 		}
 		
-		List tokens = super.tokenize(s, SEPARATORS[1], NULL_TOKEN);
+		List<Token> tokens = super.tokenize(s, SEPARATORS[1], NULL_TOKEN);
 		tokens.add(0, SEPARATORS[s.length]);
 		tokens.add(SEPARATORS[s.length]);
 		return tokens;

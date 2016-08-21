@@ -16,6 +16,7 @@ import com.choicemaker.cm.matching.cfg.ParseTreeNode;
 import com.choicemaker.cm.matching.cfg.ParseTreeNodeStandardizer;
 import com.choicemaker.cm.matching.cfg.ParsedData;
 import com.choicemaker.cm.matching.cfg.SymbolFactory;
+import com.choicemaker.cm.matching.cfg.Token;
 import com.choicemaker.cm.matching.cfg.Tokenizer;
 import com.choicemaker.util.Precondition;
 
@@ -140,11 +141,11 @@ public class AddressParser {
 		return delegate.getStandardizer();
 	}
 
-	public void setParsedDataClass(Class cls) {
+	public void setParsedDataClass(Class<? extends ParsedData> cls) {
 		delegate.setParsedDataClass(cls);
 	}
 
-	public Class getParsedDataClass() {
+	public Class<? extends ParsedData> getParsedDataClass() {
 		return delegate.getParsedDataClass();
 	}
 
@@ -198,19 +199,19 @@ public class AddressParser {
 		return delegate.getAllParseTrees(s);
 	}
 
-	public List getTokenization(String s) {
+	public List<Token> getTokenization(String s) {
 		return delegate.getTokenization(s);
 	}
 
-	public List getTokenization(String[] s) {
+	public List<Token> getTokenization(String[] s) {
 		return delegate.getTokenization(s);
 	}
 
-	public List[] getAllTokenizations(String s) {
+	public List<Token>[] getAllTokenizations(String s) {
 		return delegate.getAllTokenizations(s);
 	}
 
-	public List[] getAllTokenizations(String[] s) {
+	public List<Token>[] getAllTokenizations(String[] s) {
 		return delegate.getAllTokenizations(s);
 	}
 

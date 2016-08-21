@@ -49,19 +49,19 @@ public class AddressTokenizer extends SimpleTokenizer {
 	 */
 	public AddressTokenizer() { }
 
-	public void setSplitPreDirections(Collection dirs)  {
+	public void setSplitPreDirections(Collection<String> dirs)  {
 		this.preDirections.addAll(dirs);	
 	}
 	
-	public void setSplitSuffixes(Collection suffs) {
+	public void setSplitSuffixes(Collection<String> suffs) {
 		this.streetSuffixes.addAll(suffs);
 	}
 
-	public void setSplitPostDirections(Collection dirs) {
+	public void setSplitPostDirections(Collection<String> dirs) {
 		this.postDirections.addAll(dirs);	
 	}
 
-	public void setSplitAptTypes(Collection aptTypes) {
+	public void setSplitAptTypes(Collection<String> aptTypes) {
 		this.aptTypes.addAll(aptTypes);	
 	}
 
@@ -101,10 +101,10 @@ public class AddressTokenizer extends SimpleTokenizer {
 	 * Overrides the SimpleTokenizer's implementation to break up &quot;smushed&quot;
 	 * Strings.
 	 */
-	protected List createTokens(List strings) {
+	protected List<Token> createTokens(List<String> strings) {
 		int max = strings.size();
 		
-		List tokens = new ArrayList(max);
+		List<Token> tokens = new ArrayList<>(max);
 		for (int i = 0; i < max; i++) {
 			
 			String s = ((String)strings.get(i)).trim();
