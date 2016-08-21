@@ -40,7 +40,10 @@ import com.choicemaker.cm.matching.cfg.cyk.CykParser;
  * @author   Adam Winkel
  */
 public class CfgAddressParser extends CykParser {
-	
+
+	public CfgAddressParser() {
+	}
+
 	/**
 	 * Creates a new AddressParser with the specified tokenizer, grammar, and standardizer.
 	 * 
