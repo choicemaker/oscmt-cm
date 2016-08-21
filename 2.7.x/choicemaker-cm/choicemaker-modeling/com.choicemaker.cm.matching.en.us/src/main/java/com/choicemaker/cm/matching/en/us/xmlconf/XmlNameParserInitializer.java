@@ -16,8 +16,8 @@ import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.xmlconf.XmlModuleInitializer;
 
 /**
- * Deprecated XML initializer for ad hoc name parser. Ad hoc name parsers are no
- * longer configured as CM Analyzer " modules. Instead, they are as plugins. See
+ * Deprecated XML initializer for ad hoc name parsers. Ad hoc name parsers are no
+ * longer configured as CM Analyzer " modules. Instead, they are specified as plugins. See
  * the com.choicemaker.cm.matching.en.us plugin descriptor for the relevant
  * extension point.
  * <p/>
