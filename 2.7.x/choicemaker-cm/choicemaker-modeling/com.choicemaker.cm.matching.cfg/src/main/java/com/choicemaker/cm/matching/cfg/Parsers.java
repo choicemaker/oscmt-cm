@@ -156,6 +156,8 @@ public final class Parsers {
 				URL rUrl = new URL(pUrl, relPath);
 				Parser p =
 					ParserXmlConf.readFromStream(rUrl.openStream(), pUrl);
+				// Parser p =
+				//	ParserXmlConf.readFromStream(rUrl.openStream());
 				p.setName(name);
 				return p;
 			} catch (XmlConfException e) {
