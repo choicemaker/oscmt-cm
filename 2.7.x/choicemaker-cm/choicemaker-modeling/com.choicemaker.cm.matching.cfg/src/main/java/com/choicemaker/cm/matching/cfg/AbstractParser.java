@@ -197,7 +197,7 @@ public abstract class AbstractParser implements Parser {
 	}
 	
 	//
-	// *********************** Public tokenizatoin methods *************
+	// *********************** Public tokenization methods *************
 	//
 	
 	public ParseTreeNode getBestParseTree(String s) {
