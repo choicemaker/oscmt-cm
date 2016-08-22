@@ -565,10 +565,10 @@ public class XmlConfigurator implements ChoiceMakerConfigurator,
 	// throw new Error("not yet implemented");
 	// }
 
-	@Override
-	public ClassLoader getRmiClassLoader() {
-		return new PpsClassLoader(new URL[0], null);
-	}
+//	@Override
+//	public ClassLoader getRmiClassLoader() {
+//		return new PpsClassLoader(new URL[0], null);
+//	}
 
 	@Override
 	public File getWorkingDirectory() {

@@ -51,8 +51,9 @@ public interface ChoiceMakerExtensionPoint {
 	public static final String CM_MATCHING_ADHOC_NAMEPARSER =
 		"com.choicemaker.cm.matching.en.us.adhocNameParser";
 
-	public static final String CM_MATCHING_CFG_CASCADEDPARSER =
-		"com.choicemaker.cm.matching.cfg.cascadedParser";
+	// public static final String CM_MATCHING_CFG_CASCADEDPARSER =
+	//	"com.choicemaker.cm.matching.cfg.cascadedParser";
+
 	public static final String CM_MATCHING_CFG_PARSER =
 		"com.choicemaker.cm.matching.cfg.parser";
 

@@ -73,10 +73,10 @@ final class InstalledConfiguration implements
 		return getDelegate().getClassLoader();
 	}
 
-	@Override
-	public ClassLoader getRmiClassLoader() {
-		return getDelegate().getRmiClassLoader();
-	}
+//	@Override
+//	public ClassLoader getRmiClassLoader() {
+//		return getDelegate().getRmiClassLoader();
+//	}
 
 //	@Override
 //	public List getProbabilityModelConfigurations() {

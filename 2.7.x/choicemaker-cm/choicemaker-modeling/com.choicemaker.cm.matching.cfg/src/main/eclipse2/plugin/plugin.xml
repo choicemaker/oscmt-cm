@@ -18,6 +18,6 @@
 
 
    <extension-point id="parser" name="parser" schema="schema/parser.exsd"/>
-   <extension-point id="cascadedParser" name="cascadedParser" schema="schema/cascadedParser.exsd"/>
+   <!-- extension-point id="cascadedParser" name="cascadedParser" schema="schema/cascadedParser.exsd"/ -->
 
 </plugin>

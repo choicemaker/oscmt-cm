@@ -20,20 +20,18 @@ import com.choicemaker.cm.matching.cfg.TokenType;
 	"rawtypes" })
 public class TokenTypeXmlConf {
 
-	public static TokenType readFromElement(Element e) throws XmlConfException {
+	public static TokenType readFromElement(Element e, ClassLoader cl) throws XmlConfException {
 		String name = e.getAttributeValue("name");
 		if (name == null) {
 			throw new XmlConfException("Element " + e.getName() + " does not define a 'name' attribute");
 		}
 		
-		Class cls = ParserXmlConf.getClass(e, null);
-		if (cls == null) {
-			throw new XmlConfException("Element " + e.getName() + " does not define a 'class' attribute");
-		}
+		Class cls = ParserXmlConf.getClass(e, cl, null);
+		assert cls != null ;
 		
 		TokenType tt = (TokenType) ParserXmlConf.instantiate(cls, new Class[] {String.class}, new Object[] {name});
 		
-		ParserXmlConf.invoke(tt, e.getChildren());
+		ParserXmlConf.invoke(tt, e.getChildren(), cl);
 		
 		return tt;
 	}

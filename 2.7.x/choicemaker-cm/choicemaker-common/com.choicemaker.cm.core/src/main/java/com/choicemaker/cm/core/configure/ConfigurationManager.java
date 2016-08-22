@@ -54,9 +54,14 @@ public class ConfigurationManager {
 		return getConfiguration().getClassLoader();
 	}
 
-	public ClassLoader getRmiClassLoader() {
-		return getConfiguration().getRmiClassLoader();
-	}
+//	public ClassLoader getRmiClassLoader() {
+//		ClassLoader retVal = null;
+//		InstalledConfiguration c = getConfiguration();
+//		if (c != null) {
+//			retVal = c.getRmiClassLoader();
+//		}
+//		return retVal;
+//	}
 
 //	public List getProbabilityModelConfigurations() {
 //		return getConfiguration().getProbabilityModelConfigurations();

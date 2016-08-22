@@ -121,12 +121,12 @@ public class EmbeddedExtensionPointTest {
 				.testComChoicemakerCmIoBlockingAutomatedBaseDatabaseAccessor(registry);
 	}
 
-	@Test
-	public void testComChoicemakerCmMatchingCfgCascadedParser() {
-		CMPluginRegistry registry = getPluginRegistry();
-		ExtensionPointTest
-				.testComChoicemakerCmMatchingCfgCascadedParser(registry);
-	}
+//	@Test
+//	public void testComChoicemakerCmMatchingCfgCascadedParser() {
+//		CMPluginRegistry registry = getPluginRegistry();
+//		ExtensionPointTest
+//				.testComChoicemakerCmMatchingCfgCascadedParser(registry);
+//	}
 
 	@Test
 	public void testComChoicemakerCmMatchingCfgParser() {

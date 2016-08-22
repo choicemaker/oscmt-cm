@@ -161,10 +161,10 @@ class ListBackedConfiguration implements ChoiceMakerConfiguration {
 	// throw new Error("not yet implemented");
 	// }
 
-	@Override
-	public ClassLoader getRmiClassLoader() {
-		return getClassLoader();
-	}
+//	@Override
+//	public ClassLoader getRmiClassLoader() {
+//		return getClassLoader();
+//	}
 
 	@Override
 	public File getWorkingDirectory() {

@@ -95,10 +95,10 @@ public class MojoConfiguration implements ChoiceMakerConfiguration {
 		throw new Error("not yet implemented");
 	}
 
-	@Override
-	public ClassLoader getRmiClassLoader() {
-		throw new Error("not yet implemented");
-	}
+//	@Override
+//	public ClassLoader getRmiClassLoader() {
+//		throw new Error("not yet implemented");
+//	}
 
 	@Override
 	public File getWorkingDirectory() {

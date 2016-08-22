@@ -9,9 +9,7 @@ package com.choicemaker.cm.matching.cfg;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -82,6 +80,7 @@ public final class Parsers {
 					.getExtensions(ChoiceMakerExtensionPoint.CM_MATCHING_CFG_PARSER);
 		for (int i = 0; i < extensions.length; i++) {
 			CMExtension ext = extensions[i];
+			ClassLoader cl = ext.getDeclaringPluginDescriptor().getPluginClassLoader();
 			URL pUrl = ext.getDeclaringPluginDescriptor().getInstallURL();
 			CMConfigurationElement[] els = ext.getConfigurationElements();
 			for (int j = 0; j < els.length; j++) {
@@ -90,43 +89,42 @@ public final class Parsers {
 				String name = el.getAttribute("name");
 				String file = el.getAttribute("file");
 
-				Parsers.put(new ParserDef(name, pUrl, file));
+				Parsers.put(new ParserDef(name, cl, pUrl, file));
 			}
 		}
 	}
 
 	static void initRegisteredCascadedParsers() {
-		CMExtension[] extensions = CMPlatformUtils
-				.getExtensions(ChoiceMakerExtensionPoint.CM_MATCHING_CFG_CASCADEDPARSER);
-		for (int i = 0; i < extensions.length; i++) {
-			CMExtension ext = extensions[i];
-			CMConfigurationElement[] els = ext.getConfigurationElements();
-			for (int j = 0; j < els.length; j++) {
-				CMConfigurationElement[] parserEls = els[j].getChildren();
-
-				CascadedParserDef cp =
-					new CascadedParserDef(els[j].getAttribute("name"));
-				for (int k = 0; k < parserEls.length; k++) {
-					CMConfigurationElement el = parserEls[k];
-
-					String name = el.getAttribute("name");
-					if (name != null) {
-						if (Parsers.has(name)) {
-							cp.addParser(name);
-						} else {
-							throw new RuntimeException("Parser named " + name
-									+ " doesn't exist!");
-						}
-					} else {
-						throw new RuntimeException(
-								"Parser element must define either a name or a file attribute");
-					}
-				}
-
-				Parsers.put(cp);
-			}
-		}
-
+//		CMExtension[] extensions = CMPlatformUtils.getExtensions(
+//				ChoiceMakerExtensionPoint.CM_MATCHING_CFG_CASCADEDPARSER);
+//		for (int i = 0; i < extensions.length; i++) {
+//			CMExtension ext = extensions[i];
+//			CMConfigurationElement[] els = ext.getConfigurationElements();
+//			for (int j = 0; j < els.length; j++) {
+//				CMConfigurationElement[] parserEls = els[j].getChildren();
+//
+//				CascadedParserDef cp =
+//					new CascadedParserDef(els[j].getAttribute("name"));
+//				for (int k = 0; k < parserEls.length; k++) {
+//					CMConfigurationElement el = parserEls[k];
+//
+//					String name = el.getAttribute("name");
+//					if (name != null) {
+//						if (Parsers.has(name)) {
+//							cp.addParser(name);
+//						} else {
+//							throw new RuntimeException(
+//									"Parser named " + name + " doesn't exist!");
+//						}
+//					} else {
+//						throw new RuntimeException(
+//								"Parser element must define either a name or a file attribute");
+//					}
+//				}
+//
+//				Parsers.put(cp);
+//			}
+//		}
 	}
 
 	private Parsers() {
@@ -136,15 +134,17 @@ public final class Parsers {
 		protected String name;
 		protected URL pUrl;
 		protected String relPath;
+		protected ClassLoader classLoader;
 
-		protected ParserDef(String name) {
-			this.name = name;
-		}
+//		protected ParserDef(String name) {
+//			this.name = name;
+//		}
 
-		public ParserDef(String name, URL pUrl, String relPath) {
+		public ParserDef(String name, ClassLoader cl, URL pUrl, String relPath) {
 			this.name = name;
 			this.pUrl = pUrl;
 			this.relPath = relPath;
+			this.classLoader = cl;
 		}
 
 		public String getName() {
@@ -155,7 +155,7 @@ public final class Parsers {
 			try {
 				URL rUrl = new URL(pUrl, relPath);
 				Parser p =
-					ParserXmlConf.readFromStream(rUrl.openStream(), pUrl);
+					ParserXmlConf.readFromStream(rUrl.openStream(), classLoader, pUrl);
 				p.setName(name);
 				return p;
 			} catch (XmlConfException e) {
@@ -170,26 +170,26 @@ public final class Parsers {
 		}
 	}
 
-	private static class CascadedParserDef extends ParserDef {
-		List<String> kids = new ArrayList<>();
-
-		public CascadedParserDef(String name) {
-			super(name);
-		}
-
-		public void addParser(String name) {
-			kids.add(name);
-		}
-
-		public Parser load() {
-			CascadedParser cp = new CascadedParser();
-			cp.setName(name);
-			for (int i = 0; i < kids.size(); i++) {
-				Parser kid = Parsers.get((String) kids.get(i));
-				cp.addParser(kid);
-			}
-			return cp;
-		}
-	}
+//	private static class CascadedParserDef extends ParserDef {
+//		List<String> kids = new ArrayList<>();
+//
+//		public CascadedParserDef(String name) {
+//			super(name);
+//		}
+//
+//		public void addParser(String name) {
+//			kids.add(name);
+//		}
+//
+//		public Parser load() {
+//			CascadedParser cp = new CascadedParser();
+//			cp.setName(name);
+//			for (int i = 0; i < kids.size(); i++) {
+//				Parser kid = Parsers.get((String) kids.get(i));
+//				cp.addParser(kid);
+//			}
+//			return cp;
+//		}
+//	}
 
 }

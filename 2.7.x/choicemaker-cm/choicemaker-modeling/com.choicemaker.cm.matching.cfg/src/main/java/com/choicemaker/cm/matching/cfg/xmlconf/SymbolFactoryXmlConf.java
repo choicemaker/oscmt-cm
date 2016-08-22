@@ -24,14 +24,14 @@ import com.choicemaker.cm.matching.cfg.TokenType;
 	"rawtypes" })
 public class SymbolFactoryXmlConf {
 
-	public static SymbolFactory readFromElement(Element e) throws XmlConfException {
-		Class cls = ParserXmlConf.getClass(e, SimpleSymbolFactory.class);
+	public static SymbolFactory readFromElement(Element e, ClassLoader cl) throws XmlConfException {
+		Class cls = ParserXmlConf.getClass(e, cl, SimpleSymbolFactory.class);
 		SymbolFactory factory = (SymbolFactory) ParserXmlConf.instantiate(cls);
 		
 		List children = e.getChildren("tokenType");
 		for (int i = 0; i < children.size(); i++) {
 			Element child = (Element) children.get(i);
-			TokenType tt = TokenTypeXmlConf.readFromElement(child);
+			TokenType tt = TokenTypeXmlConf.readFromElement(child, cl);
 			factory.addVariable(tt);
 		}
 		

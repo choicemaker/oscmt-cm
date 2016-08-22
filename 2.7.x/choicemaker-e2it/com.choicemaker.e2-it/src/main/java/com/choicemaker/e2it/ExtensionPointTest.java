@@ -22,7 +22,7 @@ import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_CORE_RSREADER
 import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_CORE_RSSERIALIZER;
 import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_IO_DB_BASE_DATABASEABSTRACTION;
 import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_IO_BLOCKING_AUTOMATED_BASE_DATABASEACCESSOR;
-import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_MATCHING_CFG_CASCADEDPARSER;
+// import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_MATCHING_CFG_CASCADEDPARSER;
 import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_MATCHING_CFG_PARSER;
 import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_MATCHING_GEN_MAP;
 import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_MATCHING_GEN_RELATION;
@@ -173,13 +173,13 @@ public class ExtensionPointTest {
 		assertTrue(ep != null);
 	}
 
-	public static void testComChoicemakerCmMatchingCfgCascadedParser(
-			CMPluginRegistry registry) {
-		assertTrue(registry != null);
-		CMExtensionPoint ep =
-			registry.getExtensionPoint(CM_MATCHING_CFG_CASCADEDPARSER);
-		assertTrue(ep != null);
-	}
+//	public static void testComChoicemakerCmMatchingCfgCascadedParser(
+//			CMPluginRegistry registry) {
+//		assertTrue(registry != null);
+//		CMExtensionPoint ep =
+//			registry.getExtensionPoint(CM_MATCHING_CFG_CASCADEDPARSER);
+//		assertTrue(ep != null);
+//	}
 
 	public static void testComChoicemakerCmMatchingCfgParser(
 			CMPluginRegistry registry) {

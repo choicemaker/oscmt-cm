@@ -26,10 +26,10 @@ import com.choicemaker.cm.matching.cfg.standardizer.RecursiveStandardizer;
 	"rawtypes" })
 public class StandardizerXmlConf {
 
-	public static ParseTreeNodeStandardizer readFromElement(Element e, SymbolFactory factory) throws XmlConfException {
-		Class cls = ParserXmlConf.getClass(e, RecursiveStandardizer.class);
+	public static ParseTreeNodeStandardizer readFromElement(Element e, SymbolFactory factory, ClassLoader cl) throws XmlConfException {
+		Class cls = ParserXmlConf.getClass(e, cl, RecursiveStandardizer.class);
 		Class[] argTypes = ParserXmlConf.buildArgTypes(e);
-		Object[] args = ParserXmlConf.buildArgs(e);
+		Object[] args = ParserXmlConf.buildArgs(e, cl);
 
 		ParseTreeNodeStandardizer standardizer = null;
 
@@ -67,7 +67,7 @@ public class StandardizerXmlConf {
 			if (kidName == "property") {
 				ParserXmlConf.setProperty(standardizer, kid);
 			} else if (kidName == "method") {
-				ParserXmlConf.invokeMethod(standardizer, kid);
+				ParserXmlConf.invokeMethod(standardizer, kid, cl);
 			} else if (kidName == "standardizer") {
 				if (isRecursive) {
 					String vName = kid.getAttributeValue("variable");
@@ -76,7 +76,7 @@ public class StandardizerXmlConf {
 					}
 
 					Variable variable = factory.getVariable(vName);
-					ParseTreeNodeStandardizer kidStandardizer = readFromElement(kid, factory);
+					ParseTreeNodeStandardizer kidStandardizer = readFromElement(kid, factory, cl);
 
 					((RecursiveStandardizer)standardizer).putStandardizer(variable, kidStandardizer);
 				} else {

@@ -74,7 +74,7 @@ public interface ChoiceMakerConfiguration {
 
 //	String getReloadClassPath();
 
-	ClassLoader getRmiClassLoader();
+//	ClassLoader getRmiClassLoader();
 
 	File getWorkingDirectory();
 

@@ -22,11 +22,11 @@ import com.choicemaker.cm.matching.cfg.Tokenizer;
 	"rawtypes" })
 public class TokenizerXmlConf {
 
-	public static Tokenizer readFromElement(Element e) throws XmlConfException {
-		Class cls = ParserXmlConf.getClass(e, SimpleTokenizer.class);
+	public static Tokenizer readFromElement(Element e, ClassLoader cl) throws XmlConfException {
+		Class cls = ParserXmlConf.getClass(e, cl, SimpleTokenizer.class);
 		Tokenizer tokenizer = (Tokenizer) ParserXmlConf.instantiate(cls);
 		
-		ParserXmlConf.invoke(tokenizer, e.getChildren());
+		ParserXmlConf.invoke(tokenizer, e.getChildren(), cl);
 
 		return tokenizer;
 	}
