@@ -155,11 +155,10 @@ public class OracleMarkedRecordPairSource implements MarkedRecordPairSource {
 
 	/**
 	 * This method loads the records into a map.
-	 *
 	 */
-	public static Map createRecordMap(DbReaderParallel recordReader)
-			throws SQLException {
-		Map retVal = new HashMap();
+	public static Map<String, Record> createRecordMap(
+			DbReaderParallel recordReader) throws SQLException {
+		Map<String, Record> retVal = new HashMap<>();
 		while (recordReader.hasNext()) {
 			Record q = recordReader.getNext();
 			retVal.put(q.getId().toString(), q);
@@ -167,8 +166,9 @@ public class OracleMarkedRecordPairSource implements MarkedRecordPairSource {
 		return retVal;
 	}
 
-	public static MutableMarkedRecordPair getNextPairInternal(Map recordMap,
-			ResultSet markedPairs) throws IOException {
+	public static MutableMarkedRecordPair getNextPairInternal(
+			Map<String, Record> recordMap, ResultSet markedPairs)
+			throws IOException {
 		MutableMarkedRecordPair retVal = null;
 		try {
 			if (markedPairs.next()) {
@@ -206,7 +206,7 @@ public class OracleMarkedRecordPairSource implements MarkedRecordPairSource {
 	 * A (serializable) map of record ids to full records, computed when this
 	 * record source is opened.
 	 */
-	private Map recordMap;
+	private Map<String, Record> recordMap;
 
 	// Cache
 
@@ -412,7 +412,7 @@ public class OracleMarkedRecordPairSource implements MarkedRecordPairSource {
 	}
 
 	public void close() throws IOException {
-		List exceptions = new ArrayList();
+		List<String> exceptions = new ArrayList<>();
 		try {
 			if (pairCursor != null)
 				pairCursor.close();

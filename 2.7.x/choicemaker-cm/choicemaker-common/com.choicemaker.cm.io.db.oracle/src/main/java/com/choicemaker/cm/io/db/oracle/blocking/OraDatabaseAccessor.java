@@ -43,7 +43,8 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 	private static final char BS_SEP = '^';
 	private static final char TB_VAL_SEP = '`';
 	private static final int MAX_LEN = 3950;
-	private static Logger logger = Logger.getLogger(OraDatabaseAccessor.class.getName());
+	private static Logger logger =
+		Logger.getLogger(OraDatabaseAccessor.class.getName());
 	private DataSource ds;
 	private Connection connection;
 	private DbReaderParallel dbr;
@@ -58,32 +59,28 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 	public OraDatabaseAccessor() {
 	}
 
-	public OraDatabaseAccessor(DataSource ds, String condition1, String condition2) {
+	public OraDatabaseAccessor(DataSource ds, String condition1,
+			String condition2) {
 		this.ds = ds;
 		this.condition1 = condition1;
 		this.condition2 = condition2;
 	}
 
 	/** @deprecated */
-	public OraDatabaseAccessor(
-		DataSource ds,
-		String condition1,
-		String condition2,
-		String startSession,
-		String endSession) {
+	public OraDatabaseAccessor(DataSource ds, String condition1,
+			String condition2, String startSession, String endSession) {
 		this(ds, condition1, condition2);
 		this.setStartSession(startSession);
 		this.setEndSession(endSession);
 	}
 
-	
 	public void setDataSource(DataSource dataSource) {
 		ds = dataSource;
 	}
-	
+
 	public void setCondition(Object condition) {
-		if (condition instanceof String []) {
-			String [] cs = (String [])condition;
+		if (condition instanceof String[]) {
+			String[] cs = (String[]) condition;
 			condition1 = cs[0];
 			condition2 = cs[1];
 		} else if (condition instanceof String) {
@@ -92,13 +89,10 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 	}
 
 	public DatabaseAccessor cloneWithNewConnection()
-		throws CloneNotSupportedException {
-		DatabaseAccessor retVal = new OraDatabaseAccessor(
-				this.ds,
-				this.condition1,
-				this.condition2,
-				this.getStartSession(),
-				this.getEndSession());
+			throws CloneNotSupportedException {
+		DatabaseAccessor retVal =
+			new OraDatabaseAccessor(this.ds, this.condition1, this.condition2,
+					this.getStartSession(), this.getEndSession());
 		return retVal;
 	}
 
@@ -108,14 +102,15 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 		ImmutableProbabilityModel model = blocker.getModel();
 		Accessor acc = model.getAccessor();
 		dbr = ((DbAccessor) acc).getDbReaderParallel(databaseConfiguration);
-		String query = getQuery(blocker,dbr);
-		
+		String query = getQuery(blocker, dbr);
+
 		logger.fine("query length: " + query.length());
 		logger.fine("query: " + query);
-		
+
 		try {
 			connection = ds.getConnection();
-//			connection.setAutoCommit(false); // 2015-04-01a EJB3 CHANGE rphall
+			// connection.setAutoCommit(false); // 2015-04-01a EJB3 CHANGE
+			// rphall
 
 			if (getStartSession() != null) {
 				Statement stmt = connection.createStatement();
@@ -126,20 +121,22 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 			if (query.length() >= MAX_LEN) {
 				PreparedStatement prep = null;
 				try {
-					prep = connection.prepareStatement("INSERT INTO tb_cmt_temp_q VALUES(?)");
+					prep = connection.prepareStatement(
+							"INSERT INTO tb_cmt_temp_q VALUES(?)");
 					while (query.length() >= MAX_LEN) {
 						int pos = query.lastIndexOf(BS_SEP, MAX_LEN);
 						String pre = query.substring(0, pos);
 						if (logger.isLoggable(Level.FINE)) {
-							logger.fine("INSERT INTO tb_cmt_temp_q VALUES('" + pre + ")");
+							logger.fine("INSERT INTO tb_cmt_temp_q VALUES('"
+									+ pre + ")");
 						}
 						prep.setString(1, pre);
 						prep.execute();
 						query = query.substring(pos + 1, query.length());
 					}
-					//					Statement st = connection.createStatement();
-					//					st.executeQuery("delete from tb_cmt_temp_q");
-					//					st.close();
+					// Statement st = connection.createStatement();
+					// st.executeQuery("delete from tb_cmt_temp_q");
+					// st.close();
 				} finally {
 					if (prep != null) {
 						try {
@@ -153,27 +150,22 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 			OracleRemoteDebugging.doDebugging(connection);
 
 			if (logger.isLoggable(Level.FINE)) {
-				logger.fine(
-					"call CMTBlocking.Blocking('"
-						+ blocker.getBlockingConfiguration().getName()
-						+ "', '"
-						+ query
-						+ "', '"
-						+ condition1
-						+ "', '"
-						+ condition2
-						+ "' ,'"
-						+ acc.getSchemaName() + ":r:" + databaseConfiguration
-						+ "', '?')");
+				logger.fine("call CMTBlocking.Blocking('"
+						+ blocker.getBlockingConfiguration().getName() + "', '"
+						+ query + "', '" + condition1 + "', '" + condition2
+						+ "' ,'" + acc.getSchemaName() + ":r:"
+						+ databaseConfiguration + "', '?')");
 			}
 
-			stmt = connection.prepareCall("call CMTBlocking.Blocking(?, ?, ?, ?, ?, ?)");
+			stmt = connection
+					.prepareCall("call CMTBlocking.Blocking(?, ?, ?, ?, ?, ?)");
 			stmt.setFetchSize(100);
 			stmt.setString(1, blocker.getBlockingConfiguration().getName());
 			stmt.setString(2, query);
 			stmt.setString(3, condition1);
 			stmt.setString(4, condition2);
-			stmt.setString(5, acc.getSchemaName() + ":r:" + databaseConfiguration);
+			stmt.setString(5,
+					acc.getSchemaName() + ":r:" + databaseConfiguration);
 			stmt.registerOutParameter(6, OracleTypes.CURSOR);
 			logger.fine("execute");
 			stmt.execute();
@@ -182,7 +174,8 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 			outer.setFetchSize(100);
 			int len = dbr.getNoCursors();
 			if (len == 1) {
-				rs = new ResultSet[] { outer };
+				rs = new ResultSet[] {
+						outer };
 				outer = null;
 			} else {
 				outer.next();
@@ -198,8 +191,8 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 		} catch (SQLException ex) {
 			logger.severe("call CMTBlocking.Blocking('"
 					+ blocker.getBlockingConfiguration().getName() + "', '"
-					+ query + "', '" + condition1 + "', '" + condition2
-					+ "' ,'" + acc.getSchemaName() + ":r:" + databaseConfiguration
+					+ query + "', '" + condition1 + "', '" + condition2 + "' ,'"
+					+ acc.getSchemaName() + ":r:" + databaseConfiguration
 					+ "', '?'): " + ex.toString());
 			throw new IOException(ex.toString());
 		}
@@ -245,12 +238,12 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 			// database using EJB3 managed connections. They should not be
 			// explicitly closed, but rather rely on the EJB3 container to
 			// do so.
-//			try {
-//				connection.commit();
-//			} catch (java.sql.SQLException e) {
-//				ex = e;
-//				logger.severe("Commiting." + e.toString());
-//			}
+			// try {
+			// connection.commit();
+			// } catch (java.sql.SQLException e) {
+			// ex = e;
+			// logger.severe("Commiting." + e.toString());
+			// }
 			// END EJB3 CHANGE
 			if (getEndSession() != null) {
 				try {
@@ -289,8 +282,9 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 	}
 
 	// Public for testing
-	public static String getQuery(AutomatedBlocker blocker, DbReaderParallel dbr) {
-		
+	public static String getQuery(AutomatedBlocker blocker,
+			DbReaderParallel dbr) {
+
 		// Preconditions
 		if (blocker == null || dbr == null) {
 			throw new IllegalArgumentException("null argument");
@@ -299,7 +293,8 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 		StringBuffer b = new StringBuffer(4000);
 		boolean firstBlockingSet = true;
 		String masterId = null;
-		Iterator iBlockingSets = blocker.getBlockingSets().iterator();
+		Iterator<IBlockingSet> iBlockingSets =
+			blocker.getBlockingSets().iterator();
 		while (iBlockingSets.hasNext()) {
 			IBlockingSet bs = (IBlockingSet) iBlockingSets.next();
 			if (firstBlockingSet) {
@@ -308,9 +303,9 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 			} else {
 				b.append(BS_SEP);
 			}
-			//			bs.sortValues(false);
-			//			bs.sortTables(true, false);
-			b.append(getHints(bs,dbr));
+			// bs.sortValues(false);
+			// bs.sortTables(true, false);
+			b.append(getHints(bs, dbr));
 			b.append(" v0.");
 			b.append(masterId);
 			b.append(" FROM ");
@@ -320,7 +315,8 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 					b.append(",");
 				}
 				IGroupTable gt = bs.getTable(j);
-				b.append(gt.getTable().getName()).append(" v").append(gt.getNumber());
+				b.append(gt.getTable().getName()).append(" v")
+						.append(gt.getNumber());
 			}
 			b.append(TB_VAL_SEP);
 			int numValues = bs.numFields();
@@ -331,7 +327,8 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 				IBlockingValue bv = bs.getBlockingValue(j);
 				IBlockingField bf = bv.getBlockingField();
 				IDbField dbf = bf.getDbField();
-				b.append("v").append(bs.getGroupTable(bf).getNumber()).append(".").append(dbf.getName()).append("=");
+				b.append("v").append(bs.getGroupTable(bf).getNumber())
+						.append(".").append(dbf.getName()).append("=");
 				if (mustQuote(bf.getDbField().getType())) {
 					b.append("'" + escape(bv.getValue()) + "'");
 				} else {
@@ -344,7 +341,7 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 
 	// Public for testing
 	public static String getHints(IBlockingSet bs, DbReaderParallel dbr) {
-		
+
 		// Preconditions
 		if (bs == null || dbr == null) {
 			throw new IllegalArgumentException("null argument");
@@ -354,15 +351,18 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 		int numTables = bs.getNumTables();
 		if (numFields > 1 && numFields > numTables) {
 			StringBuffer joins = null;
-			Map indices = dbr.getIndices();
+			@SuppressWarnings("unchecked")
+			Map<String, Map<String, ?>> indices = dbr.getIndices();
 			for (int i = 0; i < numTables; ++i) {
 				IGroupTable gt = bs.getTable(i);
 				IBlockingValue[] bvs = bs.getBlockingValues(gt);
-				Map tableIndices = (Map)indices.get(gt.getTable().getName());
+				Map<String, ?> tableIndices =
+					(Map<String, ?>) indices.get(gt.getTable().getName());
 				if (bvs.length > 1 && tableIndices != null) {
 					String[] fields = new String[bvs.length];
 					for (int j = 0; j < fields.length; j++) {
-						fields[j] = bvs[j].getBlockingField().getDbField().getName();
+						fields[j] =
+							bvs[j].getBlockingField().getDbField().getName();
 					}
 					Arrays.sort(fields);
 					StringBuffer rep = new StringBuffer(fields.length * 32);
@@ -370,14 +370,15 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 						rep.append(fields[j]);
 						rep.append('|');
 					}
-					Index[] uis = (Index[])tableIndices.get(rep.toString());
-					if(uis != null && uis.length > 1) {
-						if(joins == null) joins = new StringBuffer(127);
+					Index[] uis = (Index[]) tableIndices.get(rep.toString());
+					if (uis != null && uis.length > 1) {
+						if (joins == null)
+							joins = new StringBuffer(127);
 						joins.append("index_join(v");
 						joins.append(gt.getNumber());
 						joins.append(' ');
 						joins.append(uis[0].getName());
-						for(int j = 1; j < uis.length; ++j) {
+						for (int j = 1; j < uis.length; ++j) {
 							joins.append(',');
 							joins.append(uis[j].getName());
 						}
@@ -394,22 +395,18 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 			return "";
 		}
 	}
-	
+
 	public static boolean mustQuote(String type) {
-		return !(
-			type == "byte"
-				|| type == "short"
-				|| type == "int"
-				|| type == "long"
-				|| type == "float"
-				|| type == "double");
+		return !(type == "byte" || type == "short" || type == "int"
+				|| type == "long" || type == "float" || type == "double");
 	}
 
 	private static String escape(String s) {
 		int len = s.length();
 		int pos = 0;
 		char ch;
-		while (pos < len && (ch = s.charAt(pos)) != BS_SEP && ch != TB_VAL_SEP && ch != '\'' && ch >= 32) {
+		while (pos < len && (ch = s.charAt(pos)) != BS_SEP && ch != TB_VAL_SEP
+				&& ch != '\'' && ch >= 32) {
 			++pos;
 		}
 		if (pos == len) {

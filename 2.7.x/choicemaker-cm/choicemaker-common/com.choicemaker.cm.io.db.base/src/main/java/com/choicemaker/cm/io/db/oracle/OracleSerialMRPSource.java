@@ -25,6 +25,7 @@ import javax.sql.DataSource;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.ImmutableRecordPair;
 import com.choicemaker.cm.core.MarkedRecordPairSource;
+import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.Sink;
 import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
 import com.choicemaker.cm.core.base.PMManager;
@@ -42,13 +43,13 @@ import com.choicemaker.cm.io.db.base.DbReaderParallel;
  * @author rphall (refactored)
  *
  */
-public class OracleSerialMRPSource implements MarkedRecordPairSource,
-		Serializable {
+public class OracleSerialMRPSource
+		implements MarkedRecordPairSource, Serializable {
 
 	private static final long serialVersionUID = 271L;
 
-	private static Logger logger = Logger.getLogger(OracleSerialMRPSource.class
-			.getName());
+	private static Logger logger =
+		Logger.getLogger(OracleSerialMRPSource.class.getName());
 
 	// Properties
 	private String dataSourceName;
@@ -60,7 +61,7 @@ public class OracleSerialMRPSource implements MarkedRecordPairSource,
 	 * A (serializable) map of record ids to full records, computed when this
 	 * record source is opened.
 	 */
-	private Map recordMap;
+	private Map<String, Record> recordMap;
 
 	// Cache
 
@@ -105,7 +106,8 @@ public class OracleSerialMRPSource implements MarkedRecordPairSource,
 	public void open() throws IOException {
 		try {
 			// Get the database reader for specified database configuration
-			dbr = OracleMarkedRecordPairSource.getDatabaseReader(getModel(),conf);
+			dbr = OracleMarkedRecordPairSource.getDatabaseReader(getModel(),
+					conf);
 			final int noCursors = dbr.getNoCursors();
 
 			// Get a database connection (and optionally configure debugging)
@@ -114,22 +116,26 @@ public class OracleSerialMRPSource implements MarkedRecordPairSource,
 
 			// Execute the stored procedure that retrieves records and marked
 			// pairs
-			stmt = OracleMarkedRecordPairSource.prepareCmtTrainingAccessSnaphot(conn);
-			OracleMarkedRecordPairSource.executeCmtTrainingAccessSnaphot(stmt, selection, dbr);
+			stmt = OracleMarkedRecordPairSource
+					.prepareCmtTrainingAccessSnaphot(conn);
+			OracleMarkedRecordPairSource.executeCmtTrainingAccessSnaphot(stmt,
+					selection, dbr);
 
 			// Update the result sets representing records and marked pairs
-			markedPairs = (ResultSet) stmt.getObject(OracleMarkedRecordPairSource.PARAM_IDX_PAIR_CURSOR);
-			cursorOfRecordCursors =
-				(ResultSet) stmt.getObject(OracleMarkedRecordPairSource.PARAM_IDX_RECORD_CURSOR_CURSOR);
-			recordCursors =
-				OracleMarkedRecordPairSource.createRecordCursors(cursorOfRecordCursors, noCursors);
+			markedPairs = (ResultSet) stmt.getObject(
+					OracleMarkedRecordPairSource.PARAM_IDX_PAIR_CURSOR);
+			cursorOfRecordCursors = (ResultSet) stmt.getObject(
+					OracleMarkedRecordPairSource.PARAM_IDX_RECORD_CURSOR_CURSOR);
+			recordCursors = OracleMarkedRecordPairSource
+					.createRecordCursors(cursorOfRecordCursors, noCursors);
 
 			// Create the map of record ids to full records
 			dbr.open(recordCursors);
 			this.recordMap = OracleMarkedRecordPairSource.createRecordMap(dbr);
 
 			// Get the first currentPair
-			this.currentPair = OracleMarkedRecordPairSource.getNextPairInternal(recordMap, markedPairs);
+			this.currentPair = OracleMarkedRecordPairSource
+					.getNextPairInternal(recordMap, markedPairs);
 
 		} catch (java.sql.SQLException e) {
 			throw new IOException("", e);
@@ -144,14 +150,16 @@ public class OracleSerialMRPSource implements MarkedRecordPairSource,
 		return getNextMarkedRecordPair();
 	}
 
-	public MutableMarkedRecordPair getNextMarkedRecordPair() throws IOException {
+	public MutableMarkedRecordPair getNextMarkedRecordPair()
+			throws IOException {
 		MutableMarkedRecordPair retVal = currentPair;
-		this.currentPair = OracleMarkedRecordPairSource.getNextPairInternal(recordMap, markedPairs);
+		this.currentPair = OracleMarkedRecordPairSource
+				.getNextPairInternal(recordMap, markedPairs);
 		return retVal;
 	}
 
 	public void close() throws IOException {
-		List exceptions = new ArrayList();
+		List<String> exceptions = new ArrayList<>();
 		try {
 			if (markedPairs != null)
 				markedPairs.close();
