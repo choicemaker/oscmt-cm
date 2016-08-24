@@ -25,40 +25,50 @@ import com.choicemaker.cm.core.RecordSource;
 /**
  * Evaluation of matches.
  *
- * @author    Martin Buechi
+ * @author Martin Buechi
  */
 public class RecordDecisionMaker {
 
-	private static Logger logger = Logger.getLogger(RecordDecisionMaker.class.getName());
-	private static Logger profiler = Logger.getLogger("profile." + RecordDecisionMaker.class.getName());
+	private static Logger logger =
+		Logger.getLogger(RecordDecisionMaker.class.getName());
+	private static Logger profiler =
+		Logger.getLogger("profile." + RecordDecisionMaker.class.getName());
 
 	/**
-	 * Returns the sorted set of all records from source <code>src</code> that match the
-	 * query record <code>q</code> with a probability of at least <code>lowerThreshold</code>.
+	 * Returns the sorted set of all records from source <code>src</code> that
+	 * match the query record <code>q</code> with a probability of at least
+	 * <code>lowerThreshold</code>.
 	 *
-	 * @param   q  The query record.
-	 * @param   src  The record source of match records.
-	 * @param   model  The probability model used for the matching.
-	 * @param   lt  The differ threshold (minimum match probability for a match record to be returned).
-	 * @param   ut  The match threshold.
-	 * @return  The sorted (probability descending) set of <code>Match<code>es.
+	 * @param q
+	 *            The query record.
+	 * @param src
+	 *            The record source of match records.
+	 * @param model
+	 *            The probability model used for the matching.
+	 * @param lt
+	 *            The differ threshold (minimum match probability for a match
+	 *            record to be returned).
+	 * @param ut
+	 *            The match threshold.
+	 * @return The sorted (probability descending) set of <code>Match<code>es.
 	 */
-	public SortedSet getMatches(Record q, RecordSource src, ImmutableProbabilityModel model, float lt, float ut)
-		throws java.io.IOException {
+	public SortedSet<Match> getMatches(Record q, RecordSource src,
+			ImmutableProbabilityModel model, float lt, float ut)
+			throws java.io.IOException {
 		int numMatched = 0;
 		int numAdded = 0;
-		SortedSet matches = new TreeSet();
+		SortedSet<Match> matches = new TreeSet<>();
 		try {
 			long t = System.currentTimeMillis();
 			src.open();
 			t = System.currentTimeMillis() - t;
 			profiler.fine("Time in Blocker.open() " + t);
-			
+
 			t = System.currentTimeMillis();
 			Evaluator eval = model.getEvaluator();
 			t = System.currentTimeMillis() - t;
 			profiler.fine("Time in model.getEvaluator() " + t);
-						
+
 			t = System.currentTimeMillis();
 			while (src.hasNext()) {
 				++numMatched;
@@ -70,19 +80,22 @@ public class RecordDecisionMaker {
 			}
 			t = System.currentTimeMillis() - t;
 			profiler.fine("Time in matching " + t);
-			
+
 		} finally {
 			src.close();
 		}
 		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("Number matched: " + numMatched + ", number above lower threshold: " + numAdded);
+			logger.fine("Number matched: " + numMatched
+					+ ", number above lower threshold: " + numAdded);
 		}
 		return matches;
 	}
-	
-	public static SortedSet getPairs(Record q, RecordSource src, ImmutableProbabilityModel model, float lt, float ut) throws IOException {
+
+	public static SortedSet<Match> getPairs(Record q, RecordSource src,
+			ImmutableProbabilityModel model, float lt, float ut)
+			throws IOException {
 		int numMatched = 0;
-		SortedSet matches = new TreeSet();
+		SortedSet<Match> matches = new TreeSet<>();
 		try {
 			src.open();
 			Evaluator eval = model.getEvaluator();
