@@ -7,6 +7,8 @@
  *******************************************************************************/
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
+import static javax.ejb.TransactionAttributeType.REQUIRES_NEW;
+
 import java.sql.SQLException;
 import java.util.Hashtable;
 import java.util.Map;
@@ -14,6 +16,7 @@ import java.util.logging.Logger;
 
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
+import javax.ejb.TransactionAttribute;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -62,6 +65,7 @@ public class AbaStatisticsSingleton implements AbaStatisticsController {
 	}
 
 	@Override
+	@TransactionAttribute(REQUIRES_NEW)
 	public void updateReferenceStatistics(String urlString)
 			throws DatabaseException {
 		DataSource ds = null;
