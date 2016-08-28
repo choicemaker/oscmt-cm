@@ -32,6 +32,7 @@ import javax.sql.DataSource;
 
 import com.choicemaker.cm.core.ImmutableMarkedRecordPair;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.db.base.DbReaderParallel;
 import com.choicemaker.cm.io.db.oracle.OracleRemoteDebugging;
@@ -93,7 +94,7 @@ public class AccessSnapshotApp {
 
 		// Create the map of record ids to full records
 		dbr.open(recordCursors);
-		Map<?, ?> recordMap = createRecordMap(dbr);
+		Map<String, Record> recordMap = createRecordMap(dbr);
 		System.out.println("Number of records: " + recordMap.size());
 
 		// Get the first currentPair
