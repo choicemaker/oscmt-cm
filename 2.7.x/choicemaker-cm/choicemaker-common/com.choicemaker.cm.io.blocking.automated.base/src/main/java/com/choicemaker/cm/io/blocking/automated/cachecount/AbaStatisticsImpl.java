@@ -27,9 +27,14 @@ public class AbaStatisticsImpl implements AbaStatistics {
 		this.counts = counts;
 	}
 
+	// API BUG 2016-08-28 rphall
+	// Blocking values are tied to a particular blocking configuration. Stats
+	// also tied to a particular blocking configuration. Hence, the
+	// parameter for blocking configuration is never used by any implementation
 	public long computeBlockingValueCounts(
-			IBlockingConfiguration configuration,
+			IBlockingConfiguration unused_and_unnecessary,
 			IBlockingValue[] blockingValues) {
+	// END BUG
 		for (int i = 0; i < blockingValues.length; ++i) {
 			IBlockingValue bv = blockingValues[i];
 			IBlockingField bf = bv.getBlockingField();

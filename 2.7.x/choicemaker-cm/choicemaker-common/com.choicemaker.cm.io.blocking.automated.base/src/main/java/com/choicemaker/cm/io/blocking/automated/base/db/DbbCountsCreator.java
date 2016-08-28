@@ -671,11 +671,15 @@ public class DbbCountsCreator {
 									.getName().equals(bcClassName)) {
 								++j;
 							}
-
-							// DEPRECATED 2014-11-18 rphall
-							// model.properties().put("countSource", ccs[j]);
-							// END DEPRECATED
+							// BUG 2016-08-28 rphall
+							// A model might have multiple blocking configurations
+							// and thus multiple entries in the css[] array.
+							// This step overwrites any previously cached stats
+							// (index by model) with the stats for the last
+							// blocking configuration found in the previous
+							// step.
 							cache.putStatistics(model, ccs[j]);
+							// END BUG
 						}
 					}
 				}
