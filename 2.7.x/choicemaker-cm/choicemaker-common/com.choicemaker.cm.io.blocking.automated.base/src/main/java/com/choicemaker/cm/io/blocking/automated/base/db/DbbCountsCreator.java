@@ -41,15 +41,103 @@ import com.choicemaker.cm.io.db.base.DatabaseAbstraction;
 import com.choicemaker.cm.io.db.base.DbAccessor;
 
 /**
- * Database Blocking Counts Creator
+ * Database Blocking Counts Creator. This class has no instance data. It is a
+ * collection of methods for maintaining ABA statistics in a database and
+ * caching them in memory.
+ * <p>
+ * ABA statistics fall into two categories: meta-data about the statistics and
+ * the statistics themselves. Meta-data consists of information about which
+ * blocking configurations use which tables and which fields within those
+ * tables, as well as the primary keys for the tables, threshold values for
+ * recording statistics, and timestamps for when statistics were last computed.
+ * There is also one seldom used piece of meta-data about the schema used for
+ * snapshots.
+ * <p>
+ * ABA statistics themselves are simple. For fields, the only statistic that is
+ * collected is the number of times data values appear in the field. This
+ * statistic is recorded for a particular value only if the value occurs more
+ * than a threshold value. For tables, the only statistic that is collected is
+ * the number of rows in the table.
+ * <p>
+ * Meta-data is maintained in the following tables:
+ * <ul>
+ * <li>TB_CMT_CONFIG: a table of properties for blocking configuration. The
+ * table has three columns:
+ * <ol>
+ * <li>CONFIG the name of the blocking configuration that owns a property</li>
+ * <li>NAME the name of a property</li>
+ * <li>VALUE the value assigned to the property</li>
+ * </ol>
+ * The TB_CMT_CONFIG table is mostly used to record the primary keys of tables,
+ * but this data is then duplicated in other meta-data tables as a performance
+ * optimization.<br/>
+ * </li>
+ * <li>TB_CMT_COUNT_CONFIG_FIELDS: a denormalized table that maps blocking
+ * configurations to tables and fields. As an optimization, the meaning of the
+ * columns depends on whether a row stores information about a table or a field.
+ * The table has 5 columns:
+ * <ol>
+ * <li>CONFIG the name of the blocking configuration that uses a table or a
+ * field</li>
+ * <li>VIEWNAME the name of a table or view</li>
+ * <li>COLUMNNAME of a field used in blocking</li>
+ * <li>MASTERID the primary key on the table (denormalized)</li>
+ * <li>MINCOUNT a threshold count, below which statistics are not kept for a
+ * value in the field</li>
+ * </ol>
+ * <br/>
+ * </li>
+ * <li>TB_CMT_COUNT_FIELDS: a denormalized table of that defines an alternative
+ * key, FieldId, that is an integer value unique to each table and table-field
+ * pair. The table also tracks the last time that statistics were updated for a
+ * table or a table-field pair. The table has six columns:
+ * <ol>
+ * <li>FIELDID an alternative key to assigned to a table or a table-field pair
+ * </li>
+ * <li>VIEWNAME the name of a table or view</li>
+ * <li>COLUMNNAME of a field used in blocking. If an entry is refers to a table,
+ * this value will be null</li>
+ * <li>MASTERID the primary key on the table (denormalized)</li>
+ * <li>MINCOUNT a threshold count, below which statistics are not kept for a
+ * value in the field. If an entry refers to a table, this value will be null.
+ * </li>
+ * <li>LASTUPDATE the last time statistics were updated for the fields</li>
+ * </ol>
+ * <br/>
+ * </li>
+ * </ul>
+ * <p>
+ * <p>
+ * ABA statistics are maintain in the TB_CMT_COUNTS table.
+ * <ul>
+ * <li>TB_CMT_COUNTS: a table of counts for fields and tables. The table has
+ * three columns, the meaning of which depends on whether an entry tracks a
+ * table or a field:
+ * <ol>
+ * <li>FIELDID the alternative key of a table or a table-field pair</li>
+ * <li>VALUE the value of a field or the literal value <code>table</code> for a
+ * table</li>
+ * <li>COUNT the number of times a value occurs within a field, if this count is
+ * above the <code>MINCOUNT</threshold> specified (redundantly) in the meta-data
+ * tables. For a table, this is the number of rows within the table.</li>
+ * </ol>
+ * </li>
  * 
  * @author mbuechi
+ * @author rphall (Documentation)
  */
 public class DbbCountsCreator {
 
-	private static Logger logger = Logger.getLogger(DbbCountsCreator.class
-			.getName());
+	private static Logger logger =
+		Logger.getLogger(DbbCountsCreator.class.getName());
 
+	/**
+	 * Installs ABA statistical meta-data in a database.
+	 * 
+	 * @param ds
+	 *            a non-null connection to the database
+	 * @throws SQLException
+	 */
 	public void install(DataSource ds) throws SQLException {
 		final String METHOD = "DbbCountsCreator.install: ";
 		if (ds == null) {
@@ -74,6 +162,7 @@ public class DbbCountsCreator {
 		logger.info("DEBUG " + METHOD + "exiting");
 	}
 
+	// Used by install(DataSource)
 	private void setConfigFields(final Connection connection)
 			throws SQLException {
 		final String METHOD = "DbbCountsCreator.setConfigFields: ";
@@ -114,22 +203,19 @@ public class DbbCountsCreator {
 				stmt.execute(query);
 				for (int j = 0; j < bc.getDbFields().length; ++j) {
 					IDbField df = bc.getDbFields()[j];
-					query =
-						"INSERT INTO TB_CMT_COUNT_CONFIG_FIELDS VALUES(" + "'"
-								+ name + "'," + "'" + df.getTable().getName()
-								+ "'," + "'" + df.getName() + "'," + "'"
-								+ df.getTable().getUniqueId() + "',"
-								+ df.getDefaultCount() + ")";
+					query = "INSERT INTO TB_CMT_COUNT_CONFIG_FIELDS VALUES("
+							+ "'" + name + "'," + "'" + df.getTable().getName()
+							+ "'," + "'" + df.getName() + "'," + "'"
+							+ df.getTable().getUniqueId() + "',"
+							+ df.getDefaultCount() + ")";
 					logger.info("DEBUG " + query);
 					stmt.execute(query);
 				}
 				for (int j = 0; j < bc.getDbTables().length; ++j) {
 					IDbTable dt = bc.getDbTables()[j];
-					query =
-						"INSERT INTO TB_CMT_COUNT_CONFIG_FIELDS VALUES(" + "'"
-								+ name + "'," + "'" + dt.getName() + "',"
-								+ "null," + "'" + dt.getUniqueId() + "',"
-								+ "null)";
+					query = "INSERT INTO TB_CMT_COUNT_CONFIG_FIELDS VALUES("
+							+ "'" + name + "'," + "'" + dt.getName() + "',"
+							+ "null," + "'" + dt.getUniqueId() + "'," + "null)";
 					logger.info("DEBUG " + query);
 					stmt.execute(query);
 				}
@@ -146,7 +232,9 @@ public class DbbCountsCreator {
 		logger.info("DEBUG " + METHOD + "exiting");
 	}
 
-	private void setMainFields(final Connection connection) throws SQLException {
+	// Used by install(DataSource)
+	private void setMainFields(final Connection connection)
+			throws SQLException {
 		final String METHOD = "DbbCountsCreator.setMainFields: ";
 		assert connection != null;
 		logger.info("DEBUG " + METHOD + "entering");
@@ -161,15 +249,14 @@ public class DbbCountsCreator {
 				maxId = rs.getInt(1);
 			}
 			rs.close();
-			query =
-				"SELECT ViewName, ColumnName, MasterId, MIN(MinCount) "
-						+ "FROM TB_CMT_COUNT_CONFIG_FIELDS t1 "
-						+ "WHERE ColumnName IS NOT NULL AND NOT EXISTS ("
-						+ "SELECT * FROM TB_CMT_COUNT_FIELDS t2 "
-						+ "WHERE t1.ViewName = t2.ViewName AND "
-						+ "t1.ColumnName = t2.ColumnName AND "
-						+ "t1.MasterId = t2.MasterId) "
-						+ "GROUP BY ViewName, ColumnName, MasterId";
+			query = "SELECT ViewName, ColumnName, MasterId, MIN(MinCount) "
+					+ "FROM TB_CMT_COUNT_CONFIG_FIELDS t1 "
+					+ "WHERE ColumnName IS NOT NULL AND NOT EXISTS ("
+					+ "SELECT * FROM TB_CMT_COUNT_FIELDS t2 "
+					+ "WHERE t1.ViewName = t2.ViewName AND "
+					+ "t1.ColumnName = t2.ColumnName AND "
+					+ "t1.MasterId = t2.MasterId) "
+					+ "GROUP BY ViewName, ColumnName, MasterId";
 			logger.info("DEBUG " + query);
 			rs = stmt.executeQuery(query);
 			// Some JDBC drivers don't support multiple statements or result
@@ -184,18 +271,20 @@ public class DbbCountsCreator {
 			Iterator<String> iL = l.iterator();
 			while (iL.hasNext()) {
 
-				query =
-					"INSERT INTO TB_CMT_COUNT_FIELDS VALUES(" + (++maxId)
-							+ ", '" + iL.next() + "','" + iL.next() + "','"
-							+ iL.next() + "'," + iL.next() + ", null)";
+				query = "INSERT INTO TB_CMT_COUNT_FIELDS VALUES(" + (++maxId)
+						+ ", '" + iL.next() + "','" + iL.next() + "','"
+						+ iL.next() + "'," + iL.next() + ", null)";
 				logger.info("DEBUG " + query);
 				stmt.execute(query);
 			}
 			l.clear();
-			query =
-				"SELECT DISTINCT ViewName, MasterId FROM TB_CMT_COUNT_CONFIG_FIELDS t1 WHERE ColumnName IS NULL AND NOT EXISTS "
-						+ "(SELECT * FROM TB_CMT_COUNT_FIELDS t2 WHERE t1.ViewName = t2.ViewName AND t2.ColumnName IS NULL "
-						+ "AND t1.MasterId = t2.MasterId)";
+			query = "SELECT DISTINCT ViewName, MasterId "
+					+ "FROM TB_CMT_COUNT_CONFIG_FIELDS t1 "
+					+ "WHERE ColumnName IS NULL AND NOT EXISTS "
+					+ "(SELECT * FROM TB_CMT_COUNT_FIELDS t2 "
+					+ " WHERE t1.ViewName = t2.ViewName "
+					+ "AND t2.ColumnName IS NULL "
+					+ "AND t1.MasterId = t2.MasterId)";
 			logger.info("DEBUG " + query);
 			rs = stmt.executeQuery(query);
 			while (rs.next()) {
@@ -206,34 +295,34 @@ public class DbbCountsCreator {
 			rs.close();
 			iL = l.iterator();
 			while (iL.hasNext()) {
-				query =
-					"INSERT INTO TB_CMT_COUNT_FIELDS VALUES(" + (++maxId)
-							+ ", '" + iL.next() + "', null, '" + iL.next()
-							+ "', null, null)";
+				query = "INSERT INTO TB_CMT_COUNT_FIELDS VALUES(" + (++maxId)
+						+ ", '" + iL.next() + "', null, '" + iL.next()
+						+ "', null, null)";
 				logger.info("DEBUG " + query);
 				stmt.execute(query);
 			}
-			query =
-				"DELETE FROM TB_CMT_COUNTS WHERE fieldId NOT IN ("
-						+ "SELECT fieldId FROM TB_CMT_COUNT_FIELDS f, "
-						+ "TB_CMT_COUNT_CONFIG_FIELDS k "
-						+ "WHERE f.ViewName = k.ViewName AND ("
-						+ "(f.ColumnName IS NULL AND k.ColumnName IS NULL) OR "
-						+ "(f.ColumnName = k.ColumnName)" + ") )";
+			query = "DELETE FROM TB_CMT_COUNTS WHERE fieldId NOT IN ("
+					+ "SELECT fieldId FROM TB_CMT_COUNT_FIELDS f, "
+					+ "TB_CMT_COUNT_CONFIG_FIELDS k "
+					+ "WHERE f.ViewName = k.ViewName AND ("
+					+ "(f.ColumnName IS NULL AND k.ColumnName IS NULL) OR "
+					+ "(f.ColumnName = k.ColumnName)" + ") )";
 			logger.info("DEBUG " + query);
 			stmt.execute(query);
-			query =
-				"DELETE FROM TB_CMT_COUNT_FIELDS "
-						+ "WHERE ColumnName IS NOT NULL AND  NOT EXISTS ("
-						+ "SELECT * FROM TB_CMT_COUNT_CONFIG_FIELDS t2 "
-						+ "WHERE TB_CMT_COUNT_FIELDS.ViewName = t2.ViewName AND "
-						+ "TB_CMT_COUNT_FIELDS.ColumnName = t2.ColumnName AND "
-						+ "TB_CMT_COUNT_FIELDS.MasterId = t2.MasterId)";
+			query = "DELETE FROM TB_CMT_COUNT_FIELDS "
+					+ "WHERE ColumnName IS NOT NULL AND  NOT EXISTS ("
+					+ "SELECT * FROM TB_CMT_COUNT_CONFIG_FIELDS t2 "
+					+ "WHERE TB_CMT_COUNT_FIELDS.ViewName = t2.ViewName AND "
+					+ "TB_CMT_COUNT_FIELDS.ColumnName = t2.ColumnName AND "
+					+ "TB_CMT_COUNT_FIELDS.MasterId = t2.MasterId)";
 			logger.info("DEBUG " + query);
 			stmt.execute(query);
 			query =
 				"DELETE FROM TB_CMT_COUNT_FIELDS WHERE ColumnName IS NULL AND "
-						+ "NOT EXISTS (SELECT * FROM TB_CMT_COUNT_CONFIG_FIELDS t2 WHERE TB_CMT_COUNT_FIELDS.ViewName = t2.ViewName AND TB_CMT_COUNT_FIELDS.MasterId = t2.MasterId "
+						+ "NOT EXISTS ("
+						+ "SELECT * FROM TB_CMT_COUNT_CONFIG_FIELDS t2 "
+						+ "WHERE TB_CMT_COUNT_FIELDS.ViewName = t2.ViewName "
+						+ "AND TB_CMT_COUNT_FIELDS.MasterId = t2.MasterId "
 						+ "AND t2.ColumnName IS NULL)";
 			logger.info("DEBUG " + query);
 			stmt.execute(query);
@@ -251,18 +340,45 @@ public class DbbCountsCreator {
 		logger.info("DEBUG " + METHOD + "exiting");
 	}
 
-	// public void create(DataSource ds, boolean neverComputedOnly)
-	// throws SQLException {
-	// DatabaseAbstraction dba =
-	// getDatabaseAbstractionManager().lookupDatabaseAbstraction(ds);
-	// create(ds, dba, neverComputedOnly);
-	// }
-
+	/**
+	 * Computes ABA statistical data for fields and tables.
+	 * 
+	 * @param ds
+	 *            a non-null data source
+	 * @param databaseAbstraction
+	 *            a non-null database abstraction
+	 * @param neverComputedOnly
+	 *            if true computes stats only for fields and tables for which
+	 *            stats have never been computed; if false, computes stats for
+	 *            all fields and tables, even if they have been compute
+	 *            previously.
+	 * @throws SQLException
+	 */
 	public void create(DataSource ds, DatabaseAbstraction databaseAbstraction,
 			boolean neverComputedOnly) throws SQLException {
 		create(ds, databaseAbstraction, neverComputedOnly, true);
 	}
 
+	/**
+	 * Computes ABA statistical data for fields and tables.
+	 * 
+	 * @param ds
+	 *            a non-null data source
+	 * @param databaseAbstraction
+	 *            a non-null database abstraction
+	 * @param neverComputedOnly
+	 *            if true computes stats only for fields and tables for which
+	 *            stats have never been computed; if false, computes stats for
+	 *            all fields and tables, even if they have been compute
+	 *            previously.
+	 * @param commitChanges
+	 *            if true, newly computed stats are committed the database; if
+	 *            false, assumes that the application (or application container)
+	 *            will do the commit. (Data sources managed by a JEE container
+	 *            should be committed by the container, not an application
+	 *            component.)
+	 * @throws SQLException
+	 */
 	public void create(DataSource ds, DatabaseAbstraction databaseAbstraction,
 			boolean neverComputedOnly, boolean commitChanges)
 			throws SQLException {
@@ -271,8 +387,8 @@ public class DbbCountsCreator {
 			throw new IllegalArgumentException(METHOD + "null data source");
 		}
 		if (databaseAbstraction == null) {
-			throw new IllegalArgumentException(METHOD
-					+ "null database abstraction");
+			throw new IllegalArgumentException(
+					METHOD + "null database abstraction");
 		}
 		logger.info("DEBUG " + METHOD + "entering");
 
@@ -293,11 +409,10 @@ public class DbbCountsCreator {
 			String delete;
 			String query;
 			if (neverComputedOnly) {
-				delete =
-					"DELETE FROM TB_CMT_COUNTS WHERE NOT EXISTS "
-							+ "(SELECT * FROM TB_CMT_COUNT_FIELDS f "
-							+ "WHERE TB_CMT_COUNTS.FieldId = f.FieldId "
-							+ "AND f.lastUpdate IS NOT NULL)";
+				delete = "DELETE FROM TB_CMT_COUNTS WHERE NOT EXISTS "
+						+ "(SELECT * FROM TB_CMT_COUNT_FIELDS f "
+						+ "WHERE TB_CMT_COUNTS.FieldId = f.FieldId "
+						+ "AND f.lastUpdate IS NOT NULL)";
 				query =
 					"SELECT * FROM TB_CMT_COUNT_FIELDS WHERE LastUpdate IS NULL";
 
@@ -340,10 +455,9 @@ public class DbbCountsCreator {
 				String minCount = (String) iL.next();
 				if (column == null || column.length() == 0) {
 					// table
-					query =
-						"INSERT INTO TB_CMT_COUNTS SELECT " + fieldId
-								+ ", 'table', COUNT(DISTINCT " + uniqueId
-								+ ") FROM " + table;
+					query = "INSERT INTO TB_CMT_COUNTS SELECT " + fieldId
+							+ ", 'table', COUNT(DISTINCT " + uniqueId
+							+ ") FROM " + table;
 					logger.info("DEBUG " + query);
 					_latest_query = query;
 					stmt.execute(query);
@@ -356,31 +470,27 @@ public class DbbCountsCreator {
 					_latest_query = query;
 					ResultSet tmpRs = stmt.executeQuery(query);
 					int columnType = tmpRs.getMetaData().getColumnType(1);
-					boolean isDate =
-						columnType == Types.DATE
-								|| columnType == Types.TIMESTAMP;
+					boolean isDate = columnType == Types.DATE
+							|| columnType == Types.TIMESTAMP;
 					tmpRs.close();
 
-					query =
-						"INSERT INTO TB_CMT_COUNTS SELECT "
-								+ fieldId
-								+ ","
-								+ (isDate ? databaseAbstraction
-										.getDateFieldExpression(column)
-										: column) + ", COUNT(" + uniqueId
-								+ ") FROM " + table + " WHERE " + column
-								+ " IS NOT NULL " + "GROUP BY " + column
-								+ " HAVING COUNT(" + uniqueId + ") > "
-								+ minCount;
+					query = "INSERT INTO TB_CMT_COUNTS SELECT " + fieldId + ","
+							+ (isDate
+									? databaseAbstraction
+											.getDateFieldExpression(column)
+									: column)
+							+ ", COUNT(" + uniqueId + ") FROM " + table
+							+ " WHERE " + column + " IS NOT NULL " + "GROUP BY "
+							+ column + " HAVING COUNT(" + uniqueId + ") > "
+							+ minCount;
 					logger.info("DEBUG " + query);
 					_latest_query = query;
 					stmt.execute(query);
 				}
 
-				query =
-					"UPDATE TB_CMT_COUNT_FIELDS SET LastUpdate = "
-							+ databaseAbstraction.getSysdateExpression()
-							+ " WHERE FieldId = " + fieldId;
+				query = "UPDATE TB_CMT_COUNT_FIELDS SET LastUpdate = "
+						+ databaseAbstraction.getSysdateExpression()
+						+ " WHERE FieldId = " + fieldId;
 				logger.info("DEBUG " + query);
 				_latest_query = query;
 				stmt.execute(query);
@@ -389,10 +499,9 @@ public class DbbCountsCreator {
 					logger.info(METHOD + "commiting ABA statistics to DB");
 					connection.commit();
 				} else {
-					String msg =
-						"skipping commit of ABA statistics to DB "
-								+ "-- assuming a managed connection will "
-								+ "automagically commit them instead.";
+					String msg = "skipping commit of ABA statistics to DB "
+							+ "-- assuming a managed connection will "
+							+ "automagically commit them instead.";
 					logger.info(METHOD + msg);
 				}
 			}
@@ -426,6 +535,18 @@ public class DbbCountsCreator {
 		}
 	}
 
+	/**
+	 * Updates a cache with statistics from the database.
+	 * 
+	 * @param ds
+	 *            a non-null data source that connects to the database
+	 * @param databaseAbstraction
+	 *            a non-null database abstraction that handles data formats and
+	 *            other DBMS-specific conversions
+	 * @param cache
+	 *            a non-null statistics cache
+	 * @throws SQLException
+	 */
 	public void setCacheCountSources(DataSource ds,
 			DatabaseAbstraction databaseAbstraction, AbaStatisticsCache cache)
 			throws SQLException {
@@ -434,7 +555,8 @@ public class DbbCountsCreator {
 			throw new IllegalArgumentException(METHOD + "null data source");
 		}
 		if (cache == null) {
-			throw new IllegalArgumentException(METHOD + "null statistics cache");
+			throw new IllegalArgumentException(
+					METHOD + "null statistics cache");
 		}
 		logger.info("DEBUG " + METHOD + "entering");
 
@@ -470,9 +592,8 @@ public class DbbCountsCreator {
 							String uniqueId = dbf.getTable().getUniqueId();
 							int tableSize =
 								getTableSize(tableSizes, dbf.getTable());
-							f =
-								new CountField(100, dbf.getDefaultCount(),
-										tableSize, column, view, uniqueId);
+							f = new CountField(100, dbf.getDefaultCount(),
+									tableSize, column, view, uniqueId);
 							countFields.add(f);
 
 							String query =
@@ -492,8 +613,8 @@ public class DbbCountsCreator {
 								logger.info("DEBUG " + query);
 								rs = stmt.executeQuery(query);
 								while (rs.next()) {
-									f.putValueCount(rs.getString(1),
-											CountField.getInteger(rs.getInt(2)));
+									f.putValueCount(rs.getString(1), CountField
+											.getInteger(rs.getInt(2)));
 								}
 								rs.close();
 
@@ -503,33 +624,37 @@ public class DbbCountsCreator {
 						}
 						bcCountFields[j] = f;
 					}
-					ccs[i] =
-						new AbaStatisticsImpl(getTableSize(tableSizes,
-								bc.getDbTables()[0]), bcCountFields);
+					ccs[i] = new AbaStatisticsImpl(
+							getTableSize(tableSizes, bc.getDbTables()[0]),
+							bcCountFields);
 				}
 				for (ImmutableProbabilityModel model : models) {
-					final DbAccessor dbAccessor = (DbAccessor) model.getAccessor();
+					final DbAccessor dbAccessor =
+						(DbAccessor) model.getAccessor();
 					String[] dbcNames = dbAccessor.getDbConfigurations();
 					for (String dn : dbcNames) {
-						final BlockingAccessor bAccessor = (BlockingAccessor) model.getAccessor();
-						final String[] bcNames = bAccessor.getBlockingConfigurations();
+						final BlockingAccessor bAccessor =
+							(BlockingAccessor) model.getAccessor();
+						final String[] bcNames =
+							bAccessor.getBlockingConfigurations();
 						for (String bcName : bcNames) {
-							logger.info("DEBUG " + "Using blocking configuration: "
-									+ bcName);
+							logger.info(
+									"DEBUG " + "Using blocking configuration: "
+											+ bcName);
 							IBlockingConfiguration bc =
-									bAccessor
-										.getBlockingConfiguration(bcName, dn);
+								bAccessor.getBlockingConfiguration(bcName, dn);
 							final String bcClassName = bc.getClass().getName();
 
 							// This would be simpler if the collection of
-							// AbaStatisticsImpl instances were not an array, but rather
-							// a Map. The key could remain as className, but it would be
-							// more resilient and less dependent on implementation if
-							// the key were a concatenation of the names of a model and
+							// AbaStatisticsImpl instances were not an array,
+							// but rather a Map. The key could remain as
+							// className, but it would be more resilient and
+							// less dependent on implementation if the key were
+							// a concatenation of the names of a model and
 							// a blocking configuration.
 							int j = 0;
-							while (!blockingConfigurations[j].getClass().getName()
-									.equals(bcClassName)) {
+							while (!blockingConfigurations[j].getClass()
+									.getName().equals(bcClassName)) {
 								++j;
 							}
 
@@ -564,10 +689,9 @@ public class DbbCountsCreator {
 			throws SQLException {
 		logger.info("DEBUG " + "readTableSizes...");
 		Map<DbTable, Integer> l = new HashMap<>();
-		String query =
-			"SELECT ViewName, MasterId, Count "
-					+ "FROM TB_CMT_COUNT_FIELDS f, TB_CMT_COUNTS c "
-					+ "WHERE f.FieldId = c.FieldId AND f.ColumnName IS NULL";
+		String query = "SELECT ViewName, MasterId, Count "
+				+ "FROM TB_CMT_COUNT_FIELDS f, TB_CMT_COUNTS c "
+				+ "WHERE f.FieldId = c.FieldId AND f.ColumnName IS NULL";
 		logger.info("DEBUG " + query);
 		ResultSet rs = stmt.executeQuery(query);
 		while (rs.next()) {
@@ -578,8 +702,9 @@ public class DbbCountsCreator {
 			String msg =
 				"Required views for automated blocking were not found. "
 						+ "Automated blocking will not work without them. "
-						+ "Use CM-Analyzer to produce a script that will create them, "
-						+ "then run the script to add them to the database.";
+						+ "Use CM-Analyzer to produce a script that will "
+						+ "create them, then run the script to add them "
+						+ "to the database.";
 			logger.warning(msg);
 		}
 		logger.info("DEBUG " + "...readTableSizes");
@@ -590,15 +715,17 @@ public class DbbCountsCreator {
 		int retVal = 0;
 		Integer s = (Integer) tableSizes.get(dbt);
 		if (s == null) {
-			String msg = "Table size is null. Have ABA statistics been computed?";
+			String msg =
+				"Table size is null. Have ABA statistics been computed?";
 			logger.severe(msg);
-//			throw new IllegalStateException(msg);
+			// throw new IllegalStateException(msg);
 		} else {
 			retVal = s.intValue();
 			if (retVal == 0) {
-				String msg = "Table size is zero. Have ABA statistics been computed?";
+				String msg =
+					"Table size is zero. Have ABA statistics been computed?";
 				logger.severe(msg);
-//				throw new IllegalStateException(msg);
+				// throw new IllegalStateException(msg);
 			} else if (retVal < 0) {
 				String msg = "negative ABA table size: " + retVal;
 				logger.severe(msg);
