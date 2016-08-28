@@ -168,7 +168,9 @@ public class DbbCountsCreator {
 
 	/**
 	 * Installs meta-data into the TB_CMT_COUNT_CONFIG_FIELDS table.
-	 * @param connection a non-null connection
+	 *
+	 * @param connection
+	 *            a non-null connection
 	 * @throws SQLException
 	 */
 	private void setConfigFields(final Connection connection)
@@ -242,7 +244,9 @@ public class DbbCountsCreator {
 
 	/**
 	 * Installs meta-data into the TB_CMT_COUNT_FIELDS table.
-	 * @param connection a non-null connection
+	 *
+	 * @param connection
+	 *            a non-null connection
 	 * @throws SQLException
 	 */
 	private void setMainFields(final Connection connection)
@@ -366,8 +370,9 @@ public class DbbCountsCreator {
 	 *            previously.
 	 * @throws SQLException
 	 */
-	public void computeAbaStatistics(DataSource ds, DatabaseAbstraction databaseAbstraction,
-			boolean onlyUncomputed) throws SQLException {
+	public void computeAbaStatistics(DataSource ds,
+			DatabaseAbstraction databaseAbstraction, boolean onlyUncomputed)
+			throws SQLException {
 		computeAbaStatistics(ds, databaseAbstraction, onlyUncomputed, true);
 	}
 
@@ -391,9 +396,9 @@ public class DbbCountsCreator {
 	 *            component.)
 	 * @throws SQLException
 	 */
-	public void computeAbaStatistics(DataSource ds, DatabaseAbstraction databaseAbstraction,
-			boolean onlyUncomputed, boolean commitChanges)
-			throws SQLException {
+	public void computeAbaStatistics(DataSource ds,
+			DatabaseAbstraction databaseAbstraction, boolean onlyUncomputed,
+			boolean commitChanges) throws SQLException {
 		final String METHOD = "DbbCountsCreator.create: ";
 		if (ds == null) {
 			throw new IllegalArgumentException(METHOD + "null data source");
@@ -572,161 +577,203 @@ public class DbbCountsCreator {
 		}
 		logger.info("DEBUG " + METHOD + "entering");
 
-		// BUG 2009-08-21 rphall
-		// The "models" instance data can be null (because of
-		// a flawed constructor) and if so, this method fails quietly
 		ImmutableProbabilityModel[] models = PMManager.getModels();
-		if (models != null) {
+		if (models == null) {
+			String msg = "No models: statistics can not be updated";
+			throw new IllegalStateException(msg);
+		}
 
-			Connection connection = null;
-			Statement stmt = null;
-			try {
-				connection = ds.getConnection();
+		Connection connection = null;
+		try {
+			connection = ds.getConnection();
 
-				stmt = connection.createStatement();
-				List<CountField> countFields = new ArrayList<>();
-				Map<DbTable, Integer> tableSizes = readTableSizes(stmt);
+			List<CountField> countFields = new ArrayList<>();
+			Map<DbTable, Integer> tableSizes = readTableSizes(connection);
 
-				IBlockingConfiguration[] blockingConfigurations =
-					getBlockingConfigurations(models);
-				AbaStatisticsImpl[] ccs =
-					new AbaStatisticsImpl[blockingConfigurations.length];
-				for (int i = 0; i < blockingConfigurations.length; ++i) {
-					IBlockingConfiguration bc = blockingConfigurations[i];
-					ICountField[] bcCountFields =
-						new ICountField[bc.getDbFields().length];
-					for (int j = 0; j < bc.getDbFields().length; ++j) {
-						IDbField dbf = bc.getDbFields()[j];
-						CountField f = find(countFields, dbf);
-						if (f == null) { // read in
-							String column = dbf.getName();
-							String view = dbf.getTable().getName();
-							String uniqueId = dbf.getTable().getUniqueId();
-							int tableSize =
-								getTableSize(tableSizes, dbf.getTable());
-							f = new CountField(100, dbf.getDefaultCount(),
-									tableSize, column, view, uniqueId);
-							countFields.add(f);
+			IBlockingConfiguration[] blockingConfigurations =
+				getBlockingConfigurations(models);
+			for (IBlockingConfiguration bc : blockingConfigurations) {
+				ICountField[] bcCountFields =
+					new ICountField[bc.getDbFields().length];
+				for (int j = 0; j < bc.getDbFields().length; ++j) {
 
-							String query =
-								"SELECT FieldId FROM TB_CMT_COUNT_FIELDS "
-										+ "WHERE ViewName = '" + view
-										+ "' AND ColumnName = '" + column
-										+ "' AND MasterId = '" + uniqueId + "'";
-							logger.info("DEBUG " + query);
-							ResultSet rs = stmt.executeQuery(query);
-							if (rs.next()) {
-								int fieldId = rs.getInt(1);
-								rs.close();
-
-								query =
-									"SELECT Value, Count FROM TB_CMT_COUNTS "
-											+ "WHERE FieldId = " + fieldId;
-								logger.info("DEBUG " + query);
-								rs = stmt.executeQuery(query);
-								while (rs.next()) {
-									String value = rs.getString(1);
-									Integer count =
-										CountField.valueOf(rs.getInt(2));
-									f.putValueCount(value, count);
-								}
-								rs.close();
-
-							} else {
-								rs.close();
-							}
-						}
-						bcCountFields[j] = f;
+					IDbField dbf = bc.getDbFields()[j];
+					CountField f = find(countFields, dbf);
+					if (f == null) {
+						f = readCountField(connection, tableSizes, dbf);
+						countFields.add(f);
 					}
-					ccs[i] = new AbaStatisticsImpl(
-							getTableSize(tableSizes, bc.getDbTables()[0]),
-							bcCountFields);
+					assert f != null;
+					bcCountFields[j] = f;
 				}
-				for (ImmutableProbabilityModel model : models) {
-					final DbAccessor dbAccessor =
-						(DbAccessor) model.getAccessor();
-					String[] dbcNames = dbAccessor.getDbConfigurations();
-					for (String dn : dbcNames) {
-						final BlockingAccessor bAccessor =
-							(BlockingAccessor) model.getAccessor();
-						final String[] bcNames =
-							bAccessor.getBlockingConfigurations();
-						for (String bcName : bcNames) {
-							logger.info(
-									"DEBUG " + "Using blocking configuration: "
-											+ bcName);
-							IBlockingConfiguration bc =
-								bAccessor.getBlockingConfiguration(bcName, dn);
-							final String bcClassName = bc.getClass().getName();
-
-							// This would be simpler if the collection of
-							// AbaStatisticsImpl instances were not an array,
-							// but rather a Map. The key could remain as
-							// className, but it would be more resilient and
-							// less dependent on implementation if the key were
-							// a concatenation of the names of a model and
-							// a blocking configuration.
-							int j = 0;
-							while (!blockingConfigurations[j].getClass()
-									.getName().equals(bcClassName)) {
-								++j;
-							}
-							// BUG 2016-08-28 rphall
-							// A model might have multiple blocking configurations
-							// and thus multiple entries in the css[] array.
-							// This step overwrites any previously cached stats
-							// (index by model) with the stats for the last
-							// blocking configuration found in the previous
-							// step.
-							cache.putStatistics(model, ccs[j]);
-							// END BUG
-						}
-					}
-				}
-			} finally {
-				if (stmt != null) {
-					try {
-						stmt.close();
-					} catch (SQLException e) {
-						logger.severe(METHOD + e.toString());
-					}
-				}
-				if (connection != null) {
-					try {
-						connection.close();
-					} catch (SQLException e1) {
-						logger.severe(METHOD + e1.toString());
-					}
+				AbaStatisticsImpl ccs = new AbaStatisticsImpl(
+						getTableSize(tableSizes, bc.getDbTables()[0]),
+						bcCountFields);
+				cache.putStatistics(bc, ccs);
+			}
+		} finally {
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e1) {
+					logger.severe(METHOD + e1.toString());
 				}
 			}
-
 		}
 	}
 
-	private Map<DbTable, Integer> readTableSizes(Statement stmt)
+	private CountField readCountField(Connection connection,
+			Map<DbTable, Integer> tableSizes, IDbField dbf)
 			throws SQLException {
-		logger.info("DEBUG " + "readTableSizes...");
-		Map<DbTable, Integer> l = new HashMap<>();
-		String query = "SELECT ViewName, MasterId, Count "
-				+ "FROM TB_CMT_COUNT_FIELDS f, TB_CMT_COUNTS c "
-				+ "WHERE f.FieldId = c.FieldId AND f.ColumnName IS NULL";
-		logger.info("DEBUG " + query);
-		ResultSet rs = stmt.executeQuery(query);
-		while (rs.next()) {
-			l.put(new DbTable(rs.getString(1), 0, rs.getString(2)),
-					new Integer(Math.max(1, rs.getInt(3))));
+		final String column = dbf.getName();
+		final String view = dbf.getTable().getName();
+		final String uniqueId = dbf.getTable().getUniqueId();
+		final int tableSize = getTableSize(tableSizes, dbf.getTable());
+
+		CountField retVal = new CountField(100, dbf.getDefaultCount(), tableSize,
+				column, view, uniqueId);
+
+		Integer FieldId = retrieveFieldId(connection, view, column, uniqueId);
+		if (FieldId != null) {
+			updateCounts(connection, retVal, FieldId.intValue());
 		}
-		if (l.size() == 0) {
-			String msg =
-				"Required views for automated blocking were not found. "
-						+ "Automated blocking will not work without them. "
-						+ "Use CM-Analyzer to produce a script that will "
-						+ "create them, then run the script to add them "
-						+ "to the database.";
+
+		return retVal;
+	}
+
+	private void updateCounts(Connection c, CountField f, int fieldId)
+			throws SQLException {
+		String query = "SELECT Value, Count FROM TB_CMT_COUNTS "
+				+ "WHERE FieldId = " + fieldId;
+		logger.info("DEBUG " + query);
+		Statement stmt = null;
+		ResultSet rs = null;
+		Integer FieldId = null;
+		try {
+			stmt = c.createStatement();
+			rs = stmt.executeQuery(query);
+			while (rs.next()) {
+				String value = rs.getString(1);
+				Integer count = CountField.valueOf(rs.getInt(2));
+				f.putValueCount(value, count);
+			}
+			if (f.getValueCountSize() == 0) {
+				String msg = "No value/count entries for field id " + FieldId;
+				logger.warning(msg);
+			} else {
+				String msg = "Field id " + fieldId + ": "
+						+ f.getValueCountSize() + " value/count entries";
+				logger.fine(msg);
+			}
+
+		} finally {
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (SQLException x) {
+					String msg = "Unable to close statement; " + x;
+					logger.warning(msg);
+				}
+			}
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException x) {
+					String msg = "Unable to close result set; " + x;
+					logger.warning(msg);
+				}
+			}
+		}
+	}
+
+	private Integer retrieveFieldId(Connection c, String view, String column,
+			String masterId) throws SQLException {
+		String query = "SELECT FieldId FROM TB_CMT_COUNT_FIELDS "
+				+ "WHERE ViewName = '" + view + "' AND ColumnName = '" + column
+				+ "' AND MasterId = '" + masterId + "'";
+		logger.info("DEBUG " + query);
+		Statement stmt = null;
+		ResultSet rs = null;
+		Integer retVal = null;
+		try {
+			stmt = c.createStatement();
+			rs = stmt.executeQuery(query);
+			if (rs.next()) {
+				retVal = rs.getInt(1);
+				rs.close();
+			}
+		} finally {
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (SQLException x) {
+					String msg = "Unable to close statement; " + x;
+					logger.warning(msg);
+				}
+			}
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException x) {
+					String msg = "Unable to close result set; " + x;
+					logger.warning(msg);
+				}
+			}
+		}
+		if (retVal == null) {
+			String msg = "Unable to retrieve field id " + "for view:" + view
+					+ ", column:" + column + ", masterId:" + masterId;
 			logger.warning(msg);
 		}
+		return retVal;
+	}
+
+	private Map<DbTable, Integer> readTableSizes(Connection c)
+			throws SQLException {
+		logger.info("DEBUG " + "readTableSizes...");
+		Map<DbTable, Integer> retVal = new HashMap<>();
+		Statement stmt = null;
+		ResultSet rs = null;
+		try {
+			String query = "SELECT ViewName, MasterId, Count "
+					+ "FROM TB_CMT_COUNT_FIELDS f, TB_CMT_COUNTS c "
+					+ "WHERE f.FieldId = c.FieldId AND f.ColumnName IS NULL";
+			logger.info("DEBUG " + query);
+			stmt = c.createStatement();
+			rs = stmt.executeQuery(query);
+			while (rs.next()) {
+				retVal.put(new DbTable(rs.getString(1), 0, rs.getString(2)),
+						new Integer(Math.max(1, rs.getInt(3))));
+			}
+			if (retVal.size() == 0) {
+				String msg =
+					"Required views for automated blocking were not found. "
+							+ "Automated blocking will not work without them. "
+							+ "Use CM-Analyzer to produce a script that will "
+							+ "create them, then run the script to add them "
+							+ "to the database.";
+				logger.warning(msg);
+			}
+		} finally {
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (SQLException x) {
+					String msg = "Unable to close statement; " + x;
+					logger.warning(msg);
+				}
+			}
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException x) {
+					String msg = "Unable to close result set; " + x;
+					logger.warning(msg);
+				}
+			}
+		}
 		logger.info("DEBUG " + "...readTableSizes");
-		return l;
+		return retVal;
 	}
 
 	private int getTableSize(Map<DbTable, Integer> tableSizes, IDbTable dbt) {

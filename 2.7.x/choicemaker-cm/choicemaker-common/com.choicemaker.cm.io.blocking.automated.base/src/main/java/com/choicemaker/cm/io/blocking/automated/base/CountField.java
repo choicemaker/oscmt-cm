@@ -99,6 +99,13 @@ public class CountField implements Serializable, ICountField {
 	}
 
 	@Override
+	public int getValueCountSize() {
+		assert valueCount != null;
+		int retVal = valueCount.size();
+		return retVal;
+	}
+
+	@Override
 	public Integer getCountForValue(String value) {
 		Integer retVal = null;
 		if (value != null) {

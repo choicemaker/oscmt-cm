@@ -10,10 +10,33 @@ package com.choicemaker.cm.io.blocking.automated;
 import java.io.IOException;
 
 /**
- * Computes and sets the number of occurrences ('counts') of blocking values
- * for a particular blocking configuration.
+ * Computes and sets the number of occurrences ('counts') of blocking values for
+ * a particular blocking configuration.
  */
 public interface AbaStatistics {
+
+	/**
+	 * API BUG. Blocking values are tied to a particular
+	 * blocking configuration. Stats are implicitly tied to a particular
+	 * blocking configuration. Hence, the parameter for blocking configuration
+	 * is never used by any implementation
+	 * @param configuration unused and unnecessary
+	 * @param blockingValues non-null array of blocking values to be used
+	 * to compute counts
+	 * @return ?
+	 * @throws IOException
+	 * @deprecated
+	 */
+	@Deprecated
 	long computeBlockingValueCounts(IBlockingConfiguration configuration,
 			IBlockingValue[] blockingValues) throws IOException;
+
+	/**
+	 * @param configuration unused and unnecessary
+	 * @param blockingValues non-null array of blocking values to be used
+	 * to compute counts
+	 * @return ?
+	 */
+	long computeBlockingValueCounts(IBlockingValue[] blockingValues);
+
 }

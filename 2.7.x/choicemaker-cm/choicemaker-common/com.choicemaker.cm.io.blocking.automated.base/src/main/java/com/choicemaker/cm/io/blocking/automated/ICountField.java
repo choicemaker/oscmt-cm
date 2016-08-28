@@ -27,4 +27,6 @@ public interface ICountField {
 
 	String getUniqueId();
 
+	int getValueCountSize();
+
 }

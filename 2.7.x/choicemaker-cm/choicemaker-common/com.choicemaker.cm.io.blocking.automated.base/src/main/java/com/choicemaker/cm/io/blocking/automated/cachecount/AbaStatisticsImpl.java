@@ -15,8 +15,9 @@ import com.choicemaker.cm.io.blocking.automated.ICountField;
 
 /**
  * In-memory implementation of ABA statistics
- * @author    mbuechi (implemented as 'CacheCountSource')
- * @author    rphall (renamed 'AbaStatisticsImpl')
+ *
+ * @author mbuechi (implemented as 'CacheCountSource')
+ * @author rphall (renamed 'AbaStatisticsImpl')
  */
 public class AbaStatisticsImpl implements AbaStatistics {
 	private int mainTableSize;
@@ -27,14 +28,16 @@ public class AbaStatisticsImpl implements AbaStatistics {
 		this.counts = counts;
 	}
 
-	// API BUG 2016-08-28 rphall
-	// Blocking values are tied to a particular blocking configuration. Stats
-	// also tied to a particular blocking configuration. Hence, the
-	// parameter for blocking configuration is never used by any implementation
+	@Override
+	@Deprecated
 	public long computeBlockingValueCounts(
 			IBlockingConfiguration unused_and_unnecessary,
 			IBlockingValue[] blockingValues) {
-	// END BUG
+		return computeBlockingValueCounts(blockingValues);
+	}
+
+	@Override
+	public long computeBlockingValueCounts(IBlockingValue[] blockingValues) {
 		for (int i = 0; i < blockingValues.length; ++i) {
 			IBlockingValue bv = blockingValues[i];
 			IBlockingField bf = bv.getBlockingField();
