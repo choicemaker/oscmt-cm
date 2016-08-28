@@ -162,7 +162,7 @@ public class DbbCountsCreatorIT {
 	public void testInstall() {
 		DbbCountsCreator cc = new DbbCountsCreator();
 		try {
-			cc.install(dataSource);
+			cc.installAbaMetaData(dataSource);
 		} catch (SQLException e) {
 			logger.severe(e.toString());
 			fail(e.toString());

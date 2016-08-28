@@ -89,11 +89,11 @@ public class AbaStatisticsSingleton implements AbaStatisticsController {
 		DatabaseAbstraction dba = mgr.lookupDatabaseAbstraction(ds);
 		DbbCountsCreator countsCreator = new DbbCountsCreator();
 		try {
-			countsCreator.install(ds);
-			final boolean neverComputeOnly = false;
+			countsCreator.installAbaMetaData(ds);
+			final boolean onlyUncomputed = false;
 			final boolean commitChanges = false;
-			countsCreator.create(ds, dba, neverComputeOnly, commitChanges);
-			countsCreator.setCacheCountSources(ds, dba, this);
+			countsCreator.computeAbaStatistics(ds, dba, onlyUncomputed, commitChanges);
+			countsCreator.updateAbaStatisticsCache(ds, dba, this);
 		} catch (SQLException e) {
 			String msg =
 				"Unable to compute ABA statistics for '" + urlString + "': "

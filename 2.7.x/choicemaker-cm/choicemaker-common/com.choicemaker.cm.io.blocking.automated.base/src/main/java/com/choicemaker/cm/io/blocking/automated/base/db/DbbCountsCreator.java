@@ -70,7 +70,11 @@ import com.choicemaker.cm.io.db.base.DbAccessor;
  * </ol>
  * The TB_CMT_CONFIG table is mostly used to record the primary keys of tables,
  * but this data is then duplicated in other meta-data tables as a performance
- * optimization.<br/>
+ * optimization. The TB_CMT_CONFIG table is populated by scripts generated from
+ * model schemas. This table is not referenced in Java code, only in Oracle
+ * stored procedures, and even there, it doesn't appear to be read, only
+ * written. In other words, the table can probably be dropped and removed from
+ * generation scripts.<br/>
  * </li>
  * <li>TB_CMT_COUNT_CONFIG_FIELDS: a denormalized table that maps blocking
  * configurations to tables and fields. As an optimization, the meaning of the
@@ -132,13 +136,13 @@ public class DbbCountsCreator {
 		Logger.getLogger(DbbCountsCreator.class.getName());
 
 	/**
-	 * Installs ABA statistical meta-data in a database.
+	 * Installs ABA statistical meta-data into a database.
 	 * 
 	 * @param ds
 	 *            a non-null connection to the database
 	 * @throws SQLException
 	 */
-	public void install(DataSource ds) throws SQLException {
+	public void installAbaMetaData(DataSource ds) throws SQLException {
 		final String METHOD = "DbbCountsCreator.install: ";
 		if (ds == null) {
 			throw new IllegalArgumentException(METHOD + "null data source");
@@ -162,7 +166,11 @@ public class DbbCountsCreator {
 		logger.info("DEBUG " + METHOD + "exiting");
 	}
 
-	// Used by install(DataSource)
+	/**
+	 * Installs meta-data into the TB_CMT_COUNT_CONFIG_FIELDS table.
+	 * @param connection a non-null connection
+	 * @throws SQLException
+	 */
 	private void setConfigFields(final Connection connection)
 			throws SQLException {
 		final String METHOD = "DbbCountsCreator.setConfigFields: ";
@@ -232,7 +240,11 @@ public class DbbCountsCreator {
 		logger.info("DEBUG " + METHOD + "exiting");
 	}
 
-	// Used by install(DataSource)
+	/**
+	 * Installs meta-data into the TB_CMT_COUNT_FIELDS table.
+	 * @param connection a non-null connection
+	 * @throws SQLException
+	 */
 	private void setMainFields(final Connection connection)
 			throws SQLException {
 		final String METHOD = "DbbCountsCreator.setMainFields: ";
@@ -347,16 +359,16 @@ public class DbbCountsCreator {
 	 *            a non-null data source
 	 * @param databaseAbstraction
 	 *            a non-null database abstraction
-	 * @param neverComputedOnly
+	 * @param onlyUncomputed
 	 *            if true computes stats only for fields and tables for which
 	 *            stats have never been computed; if false, computes stats for
-	 *            all fields and tables, even if they have been compute
+	 *            all fields and tables, even if they have been computed
 	 *            previously.
 	 * @throws SQLException
 	 */
-	public void create(DataSource ds, DatabaseAbstraction databaseAbstraction,
-			boolean neverComputedOnly) throws SQLException {
-		create(ds, databaseAbstraction, neverComputedOnly, true);
+	public void computeAbaStatistics(DataSource ds, DatabaseAbstraction databaseAbstraction,
+			boolean onlyUncomputed) throws SQLException {
+		computeAbaStatistics(ds, databaseAbstraction, onlyUncomputed, true);
 	}
 
 	/**
@@ -366,7 +378,7 @@ public class DbbCountsCreator {
 	 *            a non-null data source
 	 * @param databaseAbstraction
 	 *            a non-null database abstraction
-	 * @param neverComputedOnly
+	 * @param onlyUncomputed
 	 *            if true computes stats only for fields and tables for which
 	 *            stats have never been computed; if false, computes stats for
 	 *            all fields and tables, even if they have been compute
@@ -379,8 +391,8 @@ public class DbbCountsCreator {
 	 *            component.)
 	 * @throws SQLException
 	 */
-	public void create(DataSource ds, DatabaseAbstraction databaseAbstraction,
-			boolean neverComputedOnly, boolean commitChanges)
+	public void computeAbaStatistics(DataSource ds, DatabaseAbstraction databaseAbstraction,
+			boolean onlyUncomputed, boolean commitChanges)
 			throws SQLException {
 		final String METHOD = "DbbCountsCreator.create: ";
 		if (ds == null) {
@@ -408,7 +420,7 @@ public class DbbCountsCreator {
 			stmt.execute(q0);
 			String delete;
 			String query;
-			if (neverComputedOnly) {
+			if (onlyUncomputed) {
 				delete = "DELETE FROM TB_CMT_COUNTS WHERE NOT EXISTS "
 						+ "(SELECT * FROM TB_CMT_COUNT_FIELDS f "
 						+ "WHERE TB_CMT_COUNTS.FieldId = f.FieldId "
@@ -547,7 +559,7 @@ public class DbbCountsCreator {
 	 *            a non-null statistics cache
 	 * @throws SQLException
 	 */
-	public void setCacheCountSources(DataSource ds,
+	public void updateAbaStatisticsCache(DataSource ds,
 			DatabaseAbstraction databaseAbstraction, AbaStatisticsCache cache)
 			throws SQLException {
 		final String METHOD = "DbbCountsCreator.setCacheCountSources: ";

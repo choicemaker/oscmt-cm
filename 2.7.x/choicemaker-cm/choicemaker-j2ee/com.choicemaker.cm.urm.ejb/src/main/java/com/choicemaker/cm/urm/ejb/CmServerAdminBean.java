@@ -205,24 +205,14 @@ public class CmServerAdminBean implements SessionBean {
 			Context ctx = new InitialContext();
 			Object o = ctx.lookup(urlString);
 			ds = (DataSource) o;
-			// <BUGFIX>
-			// 2008-12-04 rphall
-			// This public method should force updates on all
-			// counts, since that's what a user probably intends.
-			// See the old com.choicemaker.cm.server.ejb.impl.AdminServiceBean
-			// which forces an update on all counts in the updateCounts method.
-			// NOTE: This fix has not been implemented yet, even though it is simple.
-			//
-			//new CountsUpdate().updateCounts(ds, true);
-			// </BUGFIX>
 			DatabaseAbstractionManager mgr = new AggregateDatabaseAbstractionManager();
 			DatabaseAbstraction dba = mgr.lookupDatabaseAbstraction(ds);
 			DbbCountsCreator countsCreator = new DbbCountsCreator();
-			countsCreator.install(ds);
-			final boolean neverComputeOnly = false;
+			countsCreator.installAbaMetaData(ds);
+			final boolean onlyUncomputed = false;
 			final boolean commitChanges = false;
-			countsCreator.create(ds, dba, neverComputeOnly, commitChanges);
-			countsCreator.setCacheCountSources(ds, dba, statsController);
+			countsCreator.computeAbaStatistics(ds, dba, onlyUncomputed, commitChanges);
+			countsCreator.updateAbaStatisticsCache(ds, dba, statsController);
 		} catch (NamingException e) {
 			log.severe(e.toString());
 			throw new ConfigException(e.toString());

@@ -401,7 +401,7 @@ public class SingleRecordProcessing implements Serializable {
 				new AggregateDatabaseAbstractionManager();
 			DatabaseAbstraction dba = mgr.lookupDatabaseAbstraction(ds);
 			DbbCountsCreator cc = new DbbCountsCreator();
-			cc.setCacheCountSources(ds, dba, getAbaStatisticsController());
+			cc.updateAbaStatisticsCache(ds, dba, getAbaStatisticsController());
 		} catch (SQLException | DatabaseException e) {
 			String msg = "Unable to cache master ABA statistics: " + e;
 			getLogger().severe(msg);

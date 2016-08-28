@@ -103,10 +103,10 @@ public class SqlServerUtils {
 			new SqlServerDatabaseAbstractionManager();
 		DatabaseAbstraction dba = mgr.lookupDatabaseAbstraction(ds);
 		DbbCountsCreator cr = new DbbCountsCreator();
-		cr.install(ds);
+		cr.installAbaMetaData(ds);
 		// "true" means to do them only if we haven't done them before...
-		cr.create(ds, dba, true);
-		cr.setCacheCountSources(ds, dba, statsCache);
+		cr.computeAbaStatistics(ds, dba, true);
+		cr.updateAbaStatisticsCache(ds, dba, statsCache);
 
 		lastModel = model;
 		lastDs = ds;

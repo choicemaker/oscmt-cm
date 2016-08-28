@@ -250,7 +250,7 @@ public class OnlineMatchBaseBean implements SessionBean {
 				DatabaseAbstractionManager mgr = new AggregateDatabaseAbstractionManager();
 				DatabaseAbstraction dba = mgr.lookupDatabaseAbstraction(ds);
 				DbbCountsCreator countsCreator = new DbbCountsCreator();
-				countsCreator.setCacheCountSources(ds,dba,statsController);
+				countsCreator.updateAbaStatisticsCache(ds,dba,statsController);
 				isCountsUpdated = true;
 				// END BUGFIX
 			}
