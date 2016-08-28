@@ -111,7 +111,7 @@ public class InMemoryDataSource {
 			IntArrayList value = (IntArrayList)entry.getValue();
 			int numRecords = value.size();
 			if (numRecords > defaultCount) {
-				biggerThanDefault.put(entry.getKey(), CountField.getInteger(numRecords));
+				biggerThanDefault.put(entry.getKey(), CountField.valueOf(numRecords));
 			}
 		}
 

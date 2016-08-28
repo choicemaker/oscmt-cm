@@ -21,13 +21,22 @@ import com.choicemaker.cm.io.blocking.automated.ICountField;
  */
 
 public class CountField implements Serializable, ICountField {
-	
+
 	private static final long serialVersionUID = 271;
 
 	private static final int NUM_INTS = 1000;
 	private static final Integer[] ints = new Integer[NUM_INTS];
 
-	public static Integer getInteger(int value) {
+	/**
+	 * A memory optimization that works like Integer.valueOf(int), but with a
+	 * guarantee that values 0 to NUM_INTS are cached. In contrast, the API
+	 * for Integer.valueOf(int) only guarantees that values between -127 to 127
+	 * are cached (as of Java 1.8).
+	 *
+	 * @param value
+	 * @return
+	 */
+	public static Integer valueOf(int value) {
 		if (value < NUM_INTS) {
 			Integer i = ints[value];
 			if (i != null) {
@@ -50,7 +59,7 @@ public class CountField implements Serializable, ICountField {
 	public CountField(int mapSize, int defaultCount, int tableSize, String column, String view, String uniqueId) {
 		if (mapSize > 1) {
 			valueCount = new HashMap<>(mapSize);
-			
+
 		} else {
 			valueCount = new HashMap<>();
 		}
@@ -60,24 +69,24 @@ public class CountField implements Serializable, ICountField {
 		this.view = view;
 		this.uniqueId = uniqueId;
 	}
-	
+
 	public CountField(int mapSize, int defaultCount, int tableSize) {
 		this(mapSize, defaultCount, tableSize, null, null, null);
 	}
-	
+
 	@Override
 	public void putValueCount(String value, Integer count) {
 		if (value != null && count != null) {
 			valueCount.put(value, count);
 		}
 	}
-	
+
 	@Override
 	public void putAll(Map<String,Integer> m) {
 		if (m != null) {
 			for (Entry<String,Integer> entry : m.entrySet()) {
 				String value = entry.getKey();
-				Integer count = entry.getValue(); 
+				Integer count = entry.getValue();
 				if (value != null && count != null) {
 					if (!(value instanceof String) || !(count instanceof Integer)) {
 						String msg = "Invalid entry: " + value + "/" + count;

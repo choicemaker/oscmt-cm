@@ -91,7 +91,7 @@ import com.choicemaker.cm.io.db.base.DbAccessor;
  * </ol>
  * <br/>
  * </li>
- * <li>TB_CMT_COUNT_FIELDS: a denormalized table of that defines an alternative
+ * <li>TB_CMT_COUNT_FIELDS: a denormalized table that defines an alternative
  * key, FieldId, that is an integer value unique to each table and table-field
  * pair. The table also tracks the last time that statistics were updated for a
  * table or a table-field pair. The table has six columns:
@@ -126,7 +126,7 @@ import com.choicemaker.cm.io.db.base.DbAccessor;
  * tables. For a table, this is the number of rows within the table.</li>
  * </ol>
  * </li>
- * 
+ *
  * @author mbuechi
  * @author rphall (Documentation)
  */
@@ -137,7 +137,7 @@ public class DbbCountsCreator {
 
 	/**
 	 * Installs ABA statistical meta-data into a database.
-	 * 
+	 *
 	 * @param ds
 	 *            a non-null connection to the database
 	 * @throws SQLException
@@ -354,7 +354,7 @@ public class DbbCountsCreator {
 
 	/**
 	 * Computes ABA statistical data for fields and tables.
-	 * 
+	 *
 	 * @param ds
 	 *            a non-null data source
 	 * @param databaseAbstraction
@@ -373,7 +373,7 @@ public class DbbCountsCreator {
 
 	/**
 	 * Computes ABA statistical data for fields and tables.
-	 * 
+	 *
 	 * @param ds
 	 *            a non-null data source
 	 * @param databaseAbstraction
@@ -549,7 +549,7 @@ public class DbbCountsCreator {
 
 	/**
 	 * Updates a cache with statistics from the database.
-	 * 
+	 *
 	 * @param ds
 	 *            a non-null data source that connects to the database
 	 * @param databaseAbstraction
@@ -625,8 +625,10 @@ public class DbbCountsCreator {
 								logger.info("DEBUG " + query);
 								rs = stmt.executeQuery(query);
 								while (rs.next()) {
-									f.putValueCount(rs.getString(1), CountField
-											.getInteger(rs.getInt(2)));
+									String value = rs.getString(1);
+									Integer count =
+										CountField.valueOf(rs.getInt(2));
+									f.putValueCount(value, count);
 								}
 								rs.close();
 
