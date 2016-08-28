@@ -428,7 +428,7 @@ public class MutableProbabilityModel implements IProbabilityModel {
 		int[] oldClueNums = new int[newSize];
 		if (acc != null) {
 			ClueDesc[] oldDesc = acc.getClueSet().getClueDesc();
-			HashMap m = new HashMap();
+			HashMap<String, ClueDesc> m = new HashMap<>();
 			for (int i = 0; i < oldDesc.length; ++i) {
 				m.put(oldDesc[i].getName(), oldDesc[i]);
 			}
@@ -469,7 +469,7 @@ public class MutableProbabilityModel implements IProbabilityModel {
 		CMExtension[] exts =
 			CMPlatformUtils
 					.getExtensions(ChoiceMakerExtensionPoint.CM_CORE_ACCESSOR);
-		Class[] interfaces = new Class[exts.length];
+		Class<?>[] interfaces = new Class[exts.length];
 		for (int i = 0; i < interfaces.length; i++) {
 			CMExtension ext = exts[i];
 			try {
@@ -498,7 +498,7 @@ public class MutableProbabilityModel implements IProbabilityModel {
 				throw new ModelConfigurationException(e.toString(), e);
 			}
 		}
-		Class accessorClass = accessor.getClass();
+		Class<?> accessorClass = accessor.getClass();
 		this.accessorClassName = accessor.getClass().getName();
 
 		ClassLoader cl2 = accessorClass.getClassLoader();
