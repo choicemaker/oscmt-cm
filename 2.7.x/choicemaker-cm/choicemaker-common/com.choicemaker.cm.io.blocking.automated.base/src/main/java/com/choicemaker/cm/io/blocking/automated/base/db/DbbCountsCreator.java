@@ -136,7 +136,8 @@ public class DbbCountsCreator {
 	public static final String sqlDeleteCountConfigFields =
 		"DELETE FROM TB_CMT_COUNT_CONFIG_FIELDS WHERE config = ?";
 
-	public static final String msgQuery1Bind(String config) {
+	public static final String msgBindSqlDeleteCountConfigFields(
+			String config) {
 		StringBuilder sb = new StringBuilder().append("BIND ");
 		sb.append(sqlDeleteCountConfigFields).append(": ");
 		sb.append("[config:").append(config).append("]");
@@ -149,8 +150,9 @@ public class DbbCountsCreator {
 				+ "CONFIG,VIEWNAME,COLUMNNAME,MASTERID,MINCOUNT) "
 				+ "VALUES(?, ?, ?, ?, ?)";
 
-	public static final String msgQuery2Bind(String config, String view,
-			String column, String masterId, Integer minCount) {
+	public static final String msgBindSqlInsertFieldIntoCountConfigFields(
+			String config, String view, String column, String masterId,
+			Integer minCount) {
 		StringBuilder sb = new StringBuilder().append("BIND ");
 		sb.append(sqlInsertFieldIntoCountConfigFields).append(": ");
 		sb.append("[config:").append(config).append("], ");
@@ -165,8 +167,8 @@ public class DbbCountsCreator {
 	public static final String sqlInsertTableIntoCountConfigFields =
 		"INSERT INTO TB_CMT_COUNT_CONFIG_FIELDS VALUES(?,?,null,?,null)";
 
-	public static final String msgQuery3Bind(String config, String view,
-			String masterId) {
+	public static final String msgBindSqlInsertTableIntoCountConfigFields(
+			String config, String view, String masterId) {
 		StringBuilder sb = new StringBuilder().append("BIND ");
 		sb.append(sqlInsertTableIntoCountConfigFields).append(": ");
 		sb.append("[config:").append(config).append("], ");
@@ -237,7 +239,7 @@ public class DbbCountsCreator {
 					+ sqlInsertTableIntoCountConfigFields);
 			stmt3 = connection
 					.prepareStatement(sqlInsertTableIntoCountConfigFields);
-			
+
 			// Get the registered model configurations
 			ImmutableProbabilityModel[] models = PMManager.getModels();
 			if (models == null) {
@@ -254,7 +256,7 @@ public class DbbCountsCreator {
 					}
 				}
 			}
-			
+
 			// Get the blocking configurations defined by the models
 			IBlockingConfiguration[] bcs = getBlockingConfigurations(models);
 			if (logger.isLoggable(Level.FINE)) {
@@ -265,14 +267,15 @@ public class DbbCountsCreator {
 					logger.fine("DEBUG " + "blocking config count: " + bcount);
 				}
 			}
-			
+
 			// Iterate over the blocking configurations
 			for (IBlockingConfiguration bc : bcs) {
 				final String bcName = bc.getName();
 				logger.fine("Blocking configuration: " + bcName);
 
-				// For each blocking configuation, delete all tables and rows				// TB_CMT_COUNT_CONFIG_FIELDS
-				logger.fine(msgQuery1Bind(bcName));
+				// For each blocking configuration, delete all tables and rows
+				// // TB_CMT_COUNT_CONFIG_FIELDS
+				logger.fine(msgBindSqlDeleteCountConfigFields(bcName));
 				stmt1.setString(1, bcName);
 				int rowsDeleted = stmt1.executeUpdate();
 				logger.fine("TB_CMT_COUNT_CONFIG_FIELDS rows deleted: "
@@ -285,8 +288,8 @@ public class DbbCountsCreator {
 					final String column = df.getName();
 					final String masterId = df.getTable().getUniqueId();
 					final int minCount = df.getDefaultCount();
-					String msg =
-						msgQuery2Bind(bcName, view, column, masterId, minCount);
+					String msg = msgBindSqlInsertFieldIntoCountConfigFields(
+							bcName, view, column, masterId, minCount);
 					logger.fine(msg);
 					stmt2.setString(1, bcName);
 					stmt2.setString(2, view);
@@ -303,7 +306,8 @@ public class DbbCountsCreator {
 				for (IDbTable dt : bc.getDbTables()) {
 					final String view = dt.getName();
 					final String masterId = dt.getUniqueId();
-					String msg = msgQuery3Bind(bcName, view, masterId);
+					String msg = msgBindSqlInsertTableIntoCountConfigFields(
+							bcName, view, masterId);
 					logger.fine(msg);
 					stmt3.setString(1, bcName);
 					stmt3.setString(2, view);
