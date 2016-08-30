@@ -133,9 +133,14 @@ import com.choicemaker.cm.io.db.base.DbAccessor;
  */
 public class DbbCountsCreator {
 
+	/**
+	 * Delete all rows from the TB_CMT_COUNT_CONFIG_FIELDS table that
+	 * correspond to a specific blocking configuration
+	 */
 	public static final String sqlDeleteCountConfigFields =
 		"DELETE FROM TB_CMT_COUNT_CONFIG_FIELDS WHERE config = ?";
 
+	/** Debug message for binding parameters to {@link #sqlDeleteCountConfigFields} */
 	public static final String msgBindSqlDeleteCountConfigFields(
 			String config) {
 		StringBuilder sb = new StringBuilder().append("BIND ");
@@ -145,11 +150,16 @@ public class DbbCountsCreator {
 		return retVal;
 	}
 
+	/**
+	 * Insert a field entry into TB_CMT_COUNT_CONFIG_FIELDS for the specified
+	 * parameters.
+	 */
 	public static final String sqlInsertFieldIntoCountConfigFields =
 		"INSERT INTO TB_CMT_COUNT_CONFIG_FIELDS("
 				+ "CONFIG,VIEWNAME,COLUMNNAME,MASTERID,MINCOUNT) "
 				+ "VALUES(?, ?, ?, ?, ?)";
 
+	/** Debug message for binding parameters to {@link #sqlInsertFieldIntoCountConfigFields} */
 	public static final String msgBindSqlInsertFieldIntoCountConfigFields(
 			String config, String view, String column, String masterId,
 			Integer minCount) {
@@ -164,9 +174,14 @@ public class DbbCountsCreator {
 		return retVal;
 	}
 
+	/**
+	 * Insert a table entry into TB_CMT_COUNT_CONFIG_FIELDS for the specified
+	 * parameters.
+	 */
 	public static final String sqlInsertTableIntoCountConfigFields =
 		"INSERT INTO TB_CMT_COUNT_CONFIG_FIELDS VALUES(?,?,null,?,null)";
 
+	/** Debug message for binding parameters to {@link #sqlInsertTableIntoCountConfigFields} */
 	public static final String msgBindSqlInsertTableIntoCountConfigFields(
 			String config, String view, String masterId) {
 		StringBuilder sb = new StringBuilder().append("BIND ");
@@ -177,6 +192,104 @@ public class DbbCountsCreator {
 		String retVal = sb.toString();
 		return retVal;
 	}
+
+	/** Find the largest fieldId defined in the TB_CMT_COUNT_FIELDS table*/
+	public static final String query5 = "SELECT MAX(FieldId) FROM TB_CMT_COUNT_FIELDS";
+
+	/**
+	 * Find fields in TB_CMT_COUNT_CONFIG_FIELDS that are not defined in
+	 * TB_CMT_COUNT_FIELDS
+	 */
+	public static final String query6 =
+		"SELECT ViewName, ColumnName, MasterId, MIN(MinCount) "
+				+ "FROM TB_CMT_COUNT_CONFIG_FIELDS t1 "
+				+ "WHERE ColumnName IS NOT NULL AND NOT EXISTS ("
+				+ "SELECT * FROM TB_CMT_COUNT_FIELDS t2 "
+				+ "WHERE t1.ViewName = t2.ViewName AND "
+				+ "t1.ColumnName = t2.ColumnName AND "
+				+ "t1.MasterId = t2.MasterId) "
+				+ "GROUP BY ViewName, ColumnName, MasterId";
+
+	/** Create an entry for a field in TB_CMT_COUNT_FIELDS */
+	public static final String query7 = "INSERT INTO TB_CMT_COUNT_FIELDS("
+			+ "FIELDID, VIEWNAME, COLUMNNAME, MASTERID, MINCOUNT, LASTUPDATE) "
+			+ "VALUES(?, ?, ?, ?, ?, null)";
+
+	/** Debug message for binding parameters to {@link #query7} */
+	public static final String msgBindQuery7(
+			int fieldId, String view, String column, String masterId, int minCount) {
+		StringBuilder sb = new StringBuilder().append("BIND ");
+		sb.append(query7).append(": ");
+		sb.append("[fieldId:").append(fieldId).append("], ");
+		sb.append("[view:").append(view).append("], ");
+		sb.append("[column:").append(column).append("], ");
+		sb.append("[masterId:").append(masterId).append("], ");
+		sb.append("[minCount:").append(minCount).append("], ");
+		String retVal = sb.toString();
+		return retVal;
+	}
+
+	/**
+	 * Find tables in TB_CMT_COUNT_CONFIG_FIELDS that are not defined in
+	 * TB_CMT_COUNT_FIELDS
+	 */
+	public static final String query8 = "SELECT DISTINCT ViewName, MasterId "
+			+ "FROM TB_CMT_COUNT_CONFIG_FIELDS t1 "
+			+ "WHERE ColumnName IS NULL AND NOT EXISTS "
+			+ "(SELECT * FROM TB_CMT_COUNT_FIELDS t2 "
+			+ "WHERE t1.ViewName = t2.ViewName AND t2.ColumnName IS NULL "
+			+ "AND t1.MasterId = t2.MasterId)";
+			
+	/** Create an entry for a table in TB_CMT_COUNT_FIELDS */
+	public static final String query9 = "INSERT INTO TB_CMT_COUNT_FIELDS("
+			+ "FIELDID, VIEWNAME, COLUMNNAME, MASTERID, MINCOUNT, LASTUPDATE) "
+			+ "VALUES(?, ?, null, ?, null, null)";
+
+	/** Debug message for binding parameters to {@link #query9} */
+	public static final String msgBindQuery9(
+			int fieldId, String view, String masterId) {
+		StringBuilder sb = new StringBuilder().append("BIND ");
+		sb.append(query7).append(": ");
+		sb.append("[fieldId:").append(fieldId).append("], ");
+		sb.append("[view:").append(view).append("], ");
+		sb.append("[masterId:").append(masterId).append("]");
+		String retVal = sb.toString();
+		return retVal;
+	}
+
+	/**
+	 * Remove entries from TB_CMT_COUNTS that do not correspond to fields or
+	 * tables defined in TB_CMT_COUNT_CONFIG_FIELDS
+	 */
+	public static final String query10 =
+		"DELETE FROM TB_CMT_COUNTS WHERE fieldId NOT IN ("
+				+ "SELECT fieldId FROM TB_CMT_COUNT_FIELDS f, "
+				+ "TB_CMT_COUNT_CONFIG_FIELDS k "
+				+ "WHERE f.ViewName = k.ViewName AND ("
+				+ "(f.ColumnName IS NULL AND k.ColumnName IS NULL) OR "
+				+ "(f.ColumnName = k.ColumnName)" + ") )";
+
+	/**
+	 * Remove entries from TB_CMT_COUNT_FIELDS that do not correspond to fields
+	 * defined in TB_CMT_COUNT_CONFIG_FIELDS
+	 */
+	public static final String query11 = "DELETE FROM TB_CMT_COUNT_FIELDS "
+			+ "WHERE ColumnName IS NOT NULL AND  NOT EXISTS ("
+			+ "SELECT * FROM TB_CMT_COUNT_CONFIG_FIELDS t2 "
+			+ "WHERE TB_CMT_COUNT_FIELDS.ViewName = t2.ViewName AND "
+			+ "TB_CMT_COUNT_FIELDS.ColumnName = t2.ColumnName AND "
+			+ "TB_CMT_COUNT_FIELDS.MasterId = t2.MasterId)";
+
+	/**
+	 * Remove entries from TB_CMT_COUNT_FIELDS that do not correspond to tables
+	 * defined in TB_CMT_COUNT_CONFIG_FIELDS
+	 */
+	public static final String query12 = "DELETE FROM TB_CMT_COUNT_FIELDS WHERE ColumnName IS NULL AND "
+			+ "NOT EXISTS ("
+			+ "SELECT * FROM TB_CMT_COUNT_CONFIG_FIELDS t2 "
+			+ "WHERE TB_CMT_COUNT_FIELDS.ViewName = t2.ViewName "
+			+ "AND TB_CMT_COUNT_FIELDS.MasterId = t2.MasterId "
+			+ "AND t2.ColumnName IS NULL)";
 
 	private static Logger logger =
 		Logger.getLogger(DbbCountsCreator.class.getName());
@@ -359,93 +472,140 @@ public class DbbCountsCreator {
 		assert connection != null;
 		logger.fine("DEBUG " + METHOD + "entering");
 		Statement stmt = null;
+		PreparedStatement stmt1 = null;
+		PreparedStatement stmt2 = null;
 		try {
+			ResultSet rs = null;
 			stmt = connection.createStatement();
-			int maxId = -1;
-			String query = "SELECT MAX(FieldId) FROM TB_CMT_COUNT_FIELDS";
-			logger.fine("DEBUG " + query);
-			ResultSet rs = stmt.executeQuery(query);
-			if (rs.next()) {
-				maxId = rs.getInt(1);
-			}
-			rs.close();
-			query = "SELECT ViewName, ColumnName, MasterId, MIN(MinCount) "
-					+ "FROM TB_CMT_COUNT_CONFIG_FIELDS t1 "
-					+ "WHERE ColumnName IS NOT NULL AND NOT EXISTS ("
-					+ "SELECT * FROM TB_CMT_COUNT_FIELDS t2 "
-					+ "WHERE t1.ViewName = t2.ViewName AND "
-					+ "t1.ColumnName = t2.ColumnName AND "
-					+ "t1.MasterId = t2.MasterId) "
-					+ "GROUP BY ViewName, ColumnName, MasterId";
-			logger.fine("DEBUG " + query);
-			rs = stmt.executeQuery(query);
-			// Some JDBC drivers don't support multiple statements or result
-			// sets on a single connection.
-			ArrayList<String> l = new ArrayList<>();
-			while (rs.next()) {
-				for (int i = 1; i <= 4; ++i) {
-					l.add(rs.getString(i));
-				}
-			}
-			rs.close();
-			Iterator<String> iL = l.iterator();
-			while (iL.hasNext()) {
 
-				query = "INSERT INTO TB_CMT_COUNT_FIELDS VALUES(" + (++maxId)
-						+ ", '" + iL.next() + "','" + iL.next() + "','"
-						+ iL.next() + "'," + iL.next() + ", null)";
-				logger.fine("DEBUG " + query);
-				stmt.execute(query);
-			}
-			l.clear();
-			query = "SELECT DISTINCT ViewName, MasterId "
-					+ "FROM TB_CMT_COUNT_CONFIG_FIELDS t1 "
-					+ "WHERE ColumnName IS NULL AND NOT EXISTS "
-					+ "(SELECT * FROM TB_CMT_COUNT_FIELDS t2 "
-					+ " WHERE t1.ViewName = t2.ViewName "
-					+ "AND t2.ColumnName IS NULL "
-					+ "AND t1.MasterId = t2.MasterId)";
-			logger.fine("DEBUG " + query);
-			rs = stmt.executeQuery(query);
-			while (rs.next()) {
-				for (int i = 1; i <= 2; ++i) {
-					l.add(rs.getString(i));
+			// Find the largest fieldId that's been defined in the
+			// TB_CMT_COUNT_FIELDS table
+			logger.info("SQL to find max fieldId in TB_CMT_COUNT_FIELDS: "
+					+ query5);
+			int maxId = -1;
+			try {
+				assert rs == null;
+				rs = stmt.executeQuery(query5);
+				if (rs.next()) {
+					maxId = rs.getInt(1);
 				}
+			} finally {
+				rs.close();
+				rs = null;
 			}
-			rs.close();
-			iL = l.iterator();
-			while (iL.hasNext()) {
-				query = "INSERT INTO TB_CMT_COUNT_FIELDS VALUES(" + (++maxId)
-						+ ", '" + iL.next() + "', null, '" + iL.next()
-						+ "', null, null)";
-				logger.fine("DEBUG " + query);
-				stmt.execute(query);
+			assert maxId >= 0;
+			logger.info("max fieldId in TB_CMT_COUNT_FIELDS: " + maxId);
+
+			// Select fields from the TB_CMT_COUNT_CONFIG_FIELDS table that
+			// are not defined in the TB_CMT_COUNT_FIELDS table
+			logger.info("SQL to select fields missing from TB_CMT_COUNT_FIELDS: "
+					+ query6);
+			List<String[]> missingFieldEntries = new ArrayList<>();
+			try {
+				assert rs == null;
+				rs = stmt.executeQuery(query6);
+				while (rs.next()) {
+					String[] entry = new String[4];
+					for (int i = 1; i <= 4; ++i) {
+						int idx = i - 1;
+						entry[idx] = rs.getString(i);
+					}
+					missingFieldEntries.add(entry);
+				}
+			} finally {
+				rs.close();
+				rs = null;
 			}
-			query = "DELETE FROM TB_CMT_COUNTS WHERE fieldId NOT IN ("
-					+ "SELECT fieldId FROM TB_CMT_COUNT_FIELDS f, "
-					+ "TB_CMT_COUNT_CONFIG_FIELDS k "
-					+ "WHERE f.ViewName = k.ViewName AND ("
-					+ "(f.ColumnName IS NULL AND k.ColumnName IS NULL) OR "
-					+ "(f.ColumnName = k.ColumnName)" + ") )";
-			logger.fine("DEBUG " + query);
-			stmt.execute(query);
-			query = "DELETE FROM TB_CMT_COUNT_FIELDS "
-					+ "WHERE ColumnName IS NOT NULL AND  NOT EXISTS ("
-					+ "SELECT * FROM TB_CMT_COUNT_CONFIG_FIELDS t2 "
-					+ "WHERE TB_CMT_COUNT_FIELDS.ViewName = t2.ViewName AND "
-					+ "TB_CMT_COUNT_FIELDS.ColumnName = t2.ColumnName AND "
-					+ "TB_CMT_COUNT_FIELDS.MasterId = t2.MasterId)";
-			logger.fine("DEBUG " + query);
-			stmt.execute(query);
-			query =
-				"DELETE FROM TB_CMT_COUNT_FIELDS WHERE ColumnName IS NULL AND "
-						+ "NOT EXISTS ("
-						+ "SELECT * FROM TB_CMT_COUNT_CONFIG_FIELDS t2 "
-						+ "WHERE TB_CMT_COUNT_FIELDS.ViewName = t2.ViewName "
-						+ "AND TB_CMT_COUNT_FIELDS.MasterId = t2.MasterId "
-						+ "AND t2.ColumnName IS NULL)";
-			logger.fine("DEBUG " + query);
-			stmt.execute(query);
+
+			// Create entries for missing fields in the TB_CMT_COUNT_FIELDS table
+			int fieldsInserted = 0;
+			logger.info("SQL to insert missing fields into TB_CMT_COUNT_FIELDS: "
+					+ query7);
+			stmt1 = connection.prepareStatement(query7);
+			for (String[] entry : missingFieldEntries) {
+				int fieldId = ++maxId;
+				String view = entry[0];
+				String column = entry[1];
+				String masterId = entry[2];
+				int minCount = Integer.valueOf(entry[3]);
+				String msg = msgBindQuery7(fieldId, view, column, masterId, minCount);
+				logger.fine(msg);
+				stmt1.setInt(1, fieldId);
+				stmt1.setString(2, view);
+				stmt1.setString(3, column);
+				stmt1.setString(4, masterId);
+				stmt1.setInt(5, minCount);
+				fieldsInserted += stmt1.executeUpdate();
+			}
+			logger.fine("TB_CMT_COUNT_CONFIG_FIELDS missing fields inserted: "
+					+ fieldsInserted);
+
+			// Select tables from the TB_CMT_COUNT_CONFIG_FIELDS table that
+			// are not defined in the TB_CMT_COUNT_FIELDS table
+			logger.info("SQL to insert missing tables into TB_CMT_COUNT_FIELDS: "
+					+ query8);
+			stmt1 = connection.prepareStatement(query8);
+			List<String[]> missingTableEntries = new ArrayList<>();
+			try {
+				assert rs == null;
+				rs = stmt.executeQuery(query8);
+				while (rs.next()) {
+					String[] entry = new String[2];
+					for (int i = 1; i <= 2; ++i) {
+						int idx = i - 1;
+						entry[idx] = rs.getString(i);
+					}
+					missingTableEntries.add(entry);
+				}
+			} finally {
+				rs.close();
+				rs = null;
+			}
+
+			// Create entries for missing fields in the TB_CMT_COUNT_FIELDS table
+			int tablesInserted = 0;
+			logger.info("SQL to insert missing tables into TB_CMT_COUNT_FIELDS: "
+					+ query9);
+			stmt2 = connection.prepareStatement(query9);
+			for (String[] entry : missingFieldEntries) {
+				int fieldId = ++maxId;
+				String view = entry[0];
+				String masterId = entry[1];
+				String msg = msgBindQuery9(fieldId, view, masterId);
+				logger.fine(msg);
+				stmt2.setInt(1, fieldId);
+				stmt2.setString(2, view);
+				stmt2.setString(4, masterId);
+				tablesInserted += stmt2.executeUpdate();
+			}
+			logger.fine("TB_CMT_COUNT_CONFIG_FIELDS missing tables inserted: "
+					+ tablesInserted);
+
+			// Remove entries from TB_CMT_COUNTS where the fieldId does
+			// not correspond to some column or table defined by the
+			// just updated TB_CMT_COUNT_CONFIG_FIELDS table 
+			logger.info("SQL to obsolete entries in TB_CMT_COUNTS: "
+					+ query10);
+			int countsRemoved = stmt.executeUpdate(query10);
+			logger.info("Obsolete entries removed from TB_CMT_COUNTS" + countsRemoved);
+
+			// Remove entries from the TB_CMT_COUNT_FIELDS where the entry
+			// represents a field but the field does not correspond to a field
+			// defined by the just updated TB_CMT_COUNT_CONFIG_FIELDS table
+			logger.info("SQL to obsolete fields in TB_CMT_COUNT_FIELDS: "
+					+ query11);
+			int fieldsRemoved = stmt.executeUpdate(query11);
+			logger.info("Obsolete entries removed from TB_CMT_COUNTS" + fieldsRemoved);
+
+			// Remove entries from the TB_CMT_COUNT_FIELDS where the entry
+			// represents a table but the table does not correspond to a table
+			// defined by the just updated TB_CMT_COUNT_CONFIG_FIELDS table
+			logger.info("SQL to obsolete tables in TB_CMT_COUNT_FIELDS: "
+					+ query12);
+			int tablesRemoved = stmt.executeUpdate(query12);
+			logger.info("Obsolete entries removed from TB_CMT_COUNTS" + tablesRemoved);
+
+			assert rs == null;
 
 		} finally {
 			if (stmt != null) {
@@ -454,6 +614,23 @@ public class DbbCountsCreator {
 				} catch (SQLException e) {
 					logger.severe(METHOD + e.toString());
 				}
+				stmt = null;
+			}
+			if (stmt1 != null) {
+				try {
+					stmt1.close();
+				} catch (SQLException e) {
+					logger.severe(METHOD + e.toString());
+				}
+				stmt1 = null;
+			}
+			if (stmt2 != null) {
+				try {
+					stmt2.close();
+				} catch (SQLException e) {
+					logger.severe(METHOD + e.toString());
+				}
+				stmt2 = null;
 			}
 		}
 
