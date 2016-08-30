@@ -10,6 +10,7 @@ package com.choicemaker.cm.io.blocking.automated.base.db;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -132,6 +133,49 @@ import com.choicemaker.cm.io.db.base.DbAccessor;
  */
 public class DbbCountsCreator {
 
+	public static final String sqlDeleteCountConfigFields =
+		"DELETE FROM TB_CMT_COUNT_CONFIG_FIELDS WHERE config = ?";
+
+	public static final String msgQuery1Bind(String config) {
+		StringBuilder sb = new StringBuilder().append("BIND ");
+		sb.append(sqlDeleteCountConfigFields).append(": ");
+		sb.append("[config:").append(config).append("]");
+		String retVal = sb.toString();
+		return retVal;
+	}
+
+	public static final String sqlInsertFieldIntoCountConfigFields =
+		"INSERT INTO TB_CMT_COUNT_CONFIG_FIELDS("
+				+ "CONFIG,VIEWNAME,COLUMNNAME,MASTERID,MINCOUNT) "
+				+ "VALUES(?, ?, ?, ?, ?)";
+
+	public static final String msgQuery2Bind(String config, String view,
+			String column, String masterId, Integer minCount) {
+		StringBuilder sb = new StringBuilder().append("BIND ");
+		sb.append(sqlInsertFieldIntoCountConfigFields).append(": ");
+		sb.append("[config:").append(config).append("], ");
+		sb.append("[view:").append(view).append("], ");
+		sb.append("[column:").append(column).append("], ");
+		sb.append("[masterId:").append(masterId).append("], ");
+		sb.append("[minCount:").append(minCount).append("]");
+		String retVal = sb.toString();
+		return retVal;
+	}
+
+	public static final String sqlInsertTableIntoCountConfigFields =
+		"INSERT INTO TB_CMT_COUNT_CONFIG_FIELDS VALUES(?,?,null,?,null)";
+
+	public static final String msgQuery3Bind(String config, String view,
+			String masterId) {
+		StringBuilder sb = new StringBuilder().append("BIND ");
+		sb.append(sqlInsertTableIntoCountConfigFields).append(": ");
+		sb.append("[config:").append(config).append("], ");
+		sb.append("[view:").append(view).append("], ");
+		sb.append("[masterId:").append(masterId).append("]");
+		String retVal = sb.toString();
+		return retVal;
+	}
+
 	private static Logger logger =
 		Logger.getLogger(DbbCountsCreator.class.getName());
 
@@ -147,13 +191,13 @@ public class DbbCountsCreator {
 		if (ds == null) {
 			throw new IllegalArgumentException(METHOD + "null data source");
 		}
-		logger.info("DEBUG " + METHOD + "entering");
+		logger.fine("DEBUG " + METHOD + "entering");
 
 		Connection connection = null;
 		try {
 			connection = ds.getConnection();
-			setConfigFields(connection);
-			setMainFields(connection);
+			installCountConfigFieldsMetaData(connection);
+			installCountFieldsMetaData(connection);
 		} finally {
 			if (connection != null) {
 				try {
@@ -163,7 +207,7 @@ public class DbbCountsCreator {
 				}
 			}
 		}
-		logger.info("DEBUG " + METHOD + "exiting");
+		logger.fine("DEBUG " + METHOD + "exiting");
 	}
 
 	/**
@@ -173,73 +217,129 @@ public class DbbCountsCreator {
 	 *            a non-null connection
 	 * @throws SQLException
 	 */
-	private void setConfigFields(final Connection connection)
+	private void installCountConfigFieldsMetaData(final Connection connection)
 			throws SQLException {
 		final String METHOD = "DbbCountsCreator.setConfigFields: ";
 		assert connection != null;
-		logger.info("DEBUG " + METHOD + "entering");
-		Statement stmt = null;
+		logger.fine("DEBUG " + METHOD + "entering");
+		PreparedStatement stmt1 = null;
+		PreparedStatement stmt2 = null;
+		PreparedStatement stmt3 = null;
 		try {
-			stmt = connection.createStatement();
+			logger.info("SQL to delete TB_CMT_COUNT_CONFIG_FIELDS: "
+					+ sqlDeleteCountConfigFields);
+			stmt1 = connection.prepareStatement(sqlDeleteCountConfigFields);
+			logger.info("SQL to insert field into TB_CMT_COUNT_CONFIG_FIELDS: "
+					+ sqlInsertFieldIntoCountConfigFields);
+			stmt2 = connection
+					.prepareStatement(sqlInsertFieldIntoCountConfigFields);
+			logger.info("SQL to insert table into TB_CMT_COUNT_CONFIG_FIELDS:  "
+					+ sqlInsertTableIntoCountConfigFields);
+			stmt3 = connection
+					.prepareStatement(sqlInsertTableIntoCountConfigFields);
+			
+			// Get the registered model configurations
 			ImmutableProbabilityModel[] models = PMManager.getModels();
+			if (models == null) {
+				String msg = METHOD + "null models";
+				logger.severe(msg);
+				throw new IllegalStateException(msg);
+			}
 			if (logger.isLoggable(Level.FINE)) {
-				if (models == null) {
-					logger.warning(METHOD + "null models");
-				} else {
+				if (models != null) {
 					final int mcount = models == null ? 0 : models.length;
-					logger.info("DEBUG " + "model count: " + mcount);
+					logger.info("Model configurations: " + mcount);
 					for (ImmutableProbabilityModel m : models) {
-						logger.info("DEBUG " + METHOD + m.getModelName());
+						logger.fine("Model configuration: " + m.getModelName());
 					}
 				}
 			}
+			
+			// Get the blocking configurations defined by the models
 			IBlockingConfiguration[] bcs = getBlockingConfigurations(models);
 			if (logger.isLoggable(Level.FINE)) {
 				if (bcs == null) {
 					logger.warning(METHOD + "null bcs");
 				} else {
 					final int bcount = bcs == null ? 0 : bcs.length;
-					logger.info("DEBUG " + "blocking config count: " + bcount);
+					logger.fine("DEBUG " + "blocking config count: " + bcount);
 				}
 			}
-			for (int i = 0; i < bcs.length; ++i) {
-				IBlockingConfiguration bc = bcs[i];
-				logger.info("DEBUG " + METHOD + bc.getName());
-				String name = bc.getName();
-				String query =
-					"DELETE FROM TB_CMT_COUNT_CONFIG_FIELDS WHERE config = \'"
-							+ name + "\'";
-				logger.info("DEBUG " + query);
-				stmt.execute(query);
-				for (int j = 0; j < bc.getDbFields().length; ++j) {
-					IDbField df = bc.getDbFields()[j];
-					query = "INSERT INTO TB_CMT_COUNT_CONFIG_FIELDS VALUES("
-							+ "'" + name + "'," + "'" + df.getTable().getName()
-							+ "'," + "'" + df.getName() + "'," + "'"
-							+ df.getTable().getUniqueId() + "',"
-							+ df.getDefaultCount() + ")";
-					logger.info("DEBUG " + query);
-					stmt.execute(query);
+			
+			// Iterate over the blocking configurations
+			for (IBlockingConfiguration bc : bcs) {
+				final String bcName = bc.getName();
+				logger.fine("Blocking configuration: " + bcName);
+
+				// For each blocking configuation, delete all tables and rows				// TB_CMT_COUNT_CONFIG_FIELDS
+				logger.fine(msgQuery1Bind(bcName));
+				stmt1.setString(1, bcName);
+				int rowsDeleted = stmt1.executeUpdate();
+				logger.fine("TB_CMT_COUNT_CONFIG_FIELDS rows deleted: "
+						+ rowsDeleted);
+
+				// For each blocking configuration, insert fields
+				int fieldsInserted = 0;
+				for (IDbField df : bc.getDbFields()) {
+					final String view = df.getTable().getName();
+					final String column = df.getName();
+					final String masterId = df.getTable().getUniqueId();
+					final int minCount = df.getDefaultCount();
+					String msg =
+						msgQuery2Bind(bcName, view, column, masterId, minCount);
+					logger.fine(msg);
+					stmt2.setString(1, bcName);
+					stmt2.setString(2, view);
+					stmt2.setString(3, column);
+					stmt2.setString(4, masterId);
+					stmt2.setInt(5, minCount);
+					fieldsInserted += stmt2.executeUpdate();
 				}
-				for (int j = 0; j < bc.getDbTables().length; ++j) {
-					IDbTable dt = bc.getDbTables()[j];
-					query = "INSERT INTO TB_CMT_COUNT_CONFIG_FIELDS VALUES("
-							+ "'" + name + "'," + "'" + dt.getName() + "',"
-							+ "null," + "'" + dt.getUniqueId() + "'," + "null)";
-					logger.info("DEBUG " + query);
-					stmt.execute(query);
+				logger.fine("TB_CMT_COUNT_CONFIG_FIELDS fields inserted: "
+						+ fieldsInserted);
+
+				// For each blocking configuration, insert tables
+				int tablesInserted = 0;
+				for (IDbTable dt : bc.getDbTables()) {
+					final String view = dt.getName();
+					final String masterId = dt.getUniqueId();
+					String msg = msgQuery3Bind(bcName, view, masterId);
+					logger.fine(msg);
+					stmt3.setString(1, bcName);
+					stmt3.setString(2, view);
+					stmt3.setString(3, masterId);
+					tablesInserted += stmt3.executeUpdate();
 				}
+				logger.fine("TB_CMT_COUNT_CONFIG_FIELDS tables inserted: "
+						+ tablesInserted);
 			}
 		} finally {
-			if (stmt != null) {
+			if (stmt1 != null) {
 				try {
-					stmt.close();
+					stmt1.close();
 				} catch (SQLException e) {
 					logger.severe(METHOD + e.toString());
 				}
+				stmt1 = null;
+			}
+			if (stmt2 != null) {
+				try {
+					stmt2.close();
+				} catch (SQLException e) {
+					logger.severe(METHOD + e.toString());
+				}
+				stmt2 = null;
+			}
+			if (stmt3 != null) {
+				try {
+					stmt3.close();
+				} catch (SQLException e) {
+					logger.severe(METHOD + e.toString());
+				}
+				stmt3 = null;
 			}
 		}
-		logger.info("DEBUG " + METHOD + "exiting");
+		logger.fine("DEBUG " + METHOD + "exiting");
 	}
 
 	/**
@@ -249,17 +349,17 @@ public class DbbCountsCreator {
 	 *            a non-null connection
 	 * @throws SQLException
 	 */
-	private void setMainFields(final Connection connection)
+	private void installCountFieldsMetaData(final Connection connection)
 			throws SQLException {
 		final String METHOD = "DbbCountsCreator.setMainFields: ";
 		assert connection != null;
-		logger.info("DEBUG " + METHOD + "entering");
+		logger.fine("DEBUG " + METHOD + "entering");
 		Statement stmt = null;
 		try {
 			stmt = connection.createStatement();
 			int maxId = -1;
 			String query = "SELECT MAX(FieldId) FROM TB_CMT_COUNT_FIELDS";
-			logger.info("DEBUG " + query);
+			logger.fine("DEBUG " + query);
 			ResultSet rs = stmt.executeQuery(query);
 			if (rs.next()) {
 				maxId = rs.getInt(1);
@@ -273,7 +373,7 @@ public class DbbCountsCreator {
 					+ "t1.ColumnName = t2.ColumnName AND "
 					+ "t1.MasterId = t2.MasterId) "
 					+ "GROUP BY ViewName, ColumnName, MasterId";
-			logger.info("DEBUG " + query);
+			logger.fine("DEBUG " + query);
 			rs = stmt.executeQuery(query);
 			// Some JDBC drivers don't support multiple statements or result
 			// sets on a single connection.
@@ -290,7 +390,7 @@ public class DbbCountsCreator {
 				query = "INSERT INTO TB_CMT_COUNT_FIELDS VALUES(" + (++maxId)
 						+ ", '" + iL.next() + "','" + iL.next() + "','"
 						+ iL.next() + "'," + iL.next() + ", null)";
-				logger.info("DEBUG " + query);
+				logger.fine("DEBUG " + query);
 				stmt.execute(query);
 			}
 			l.clear();
@@ -301,7 +401,7 @@ public class DbbCountsCreator {
 					+ " WHERE t1.ViewName = t2.ViewName "
 					+ "AND t2.ColumnName IS NULL "
 					+ "AND t1.MasterId = t2.MasterId)";
-			logger.info("DEBUG " + query);
+			logger.fine("DEBUG " + query);
 			rs = stmt.executeQuery(query);
 			while (rs.next()) {
 				for (int i = 1; i <= 2; ++i) {
@@ -314,7 +414,7 @@ public class DbbCountsCreator {
 				query = "INSERT INTO TB_CMT_COUNT_FIELDS VALUES(" + (++maxId)
 						+ ", '" + iL.next() + "', null, '" + iL.next()
 						+ "', null, null)";
-				logger.info("DEBUG " + query);
+				logger.fine("DEBUG " + query);
 				stmt.execute(query);
 			}
 			query = "DELETE FROM TB_CMT_COUNTS WHERE fieldId NOT IN ("
@@ -323,7 +423,7 @@ public class DbbCountsCreator {
 					+ "WHERE f.ViewName = k.ViewName AND ("
 					+ "(f.ColumnName IS NULL AND k.ColumnName IS NULL) OR "
 					+ "(f.ColumnName = k.ColumnName)" + ") )";
-			logger.info("DEBUG " + query);
+			logger.fine("DEBUG " + query);
 			stmt.execute(query);
 			query = "DELETE FROM TB_CMT_COUNT_FIELDS "
 					+ "WHERE ColumnName IS NOT NULL AND  NOT EXISTS ("
@@ -331,7 +431,7 @@ public class DbbCountsCreator {
 					+ "WHERE TB_CMT_COUNT_FIELDS.ViewName = t2.ViewName AND "
 					+ "TB_CMT_COUNT_FIELDS.ColumnName = t2.ColumnName AND "
 					+ "TB_CMT_COUNT_FIELDS.MasterId = t2.MasterId)";
-			logger.info("DEBUG " + query);
+			logger.fine("DEBUG " + query);
 			stmt.execute(query);
 			query =
 				"DELETE FROM TB_CMT_COUNT_FIELDS WHERE ColumnName IS NULL AND "
@@ -340,7 +440,7 @@ public class DbbCountsCreator {
 						+ "WHERE TB_CMT_COUNT_FIELDS.ViewName = t2.ViewName "
 						+ "AND TB_CMT_COUNT_FIELDS.MasterId = t2.MasterId "
 						+ "AND t2.ColumnName IS NULL)";
-			logger.info("DEBUG " + query);
+			logger.fine("DEBUG " + query);
 			stmt.execute(query);
 
 		} finally {
@@ -353,7 +453,7 @@ public class DbbCountsCreator {
 			}
 		}
 
-		logger.info("DEBUG " + METHOD + "exiting");
+		logger.fine("DEBUG " + METHOD + "exiting");
 	}
 
 	/**
@@ -407,7 +507,7 @@ public class DbbCountsCreator {
 			throw new IllegalArgumentException(
 					METHOD + "null database abstraction");
 		}
-		logger.info("DEBUG " + METHOD + "entering");
+		logger.fine("DEBUG " + METHOD + "entering");
 
 		// Debugging
 		String _latest_query = null;
@@ -450,10 +550,10 @@ public class DbbCountsCreator {
 				query = "SELECT * FROM TB_CMT_COUNT_FIELDS";
 				// END DESIGN BUG
 			}
-			logger.info("DEBUG " + delete);
+			logger.fine("DEBUG " + delete);
 			_latest_query = delete;
 			stmt.execute(delete);
-			logger.info("DEBUG " + query);
+			logger.fine("DEBUG " + query);
 			_latest_query = query;
 			ResultSet rs = stmt.executeQuery(query);
 			List<String> l = new ArrayList<>();
@@ -475,7 +575,7 @@ public class DbbCountsCreator {
 					query = "INSERT INTO TB_CMT_COUNTS SELECT " + fieldId
 							+ ", 'table', COUNT(DISTINCT " + uniqueId
 							+ ") FROM " + table;
-					logger.info("DEBUG " + query);
+					logger.fine("DEBUG " + query);
 					_latest_query = query;
 					stmt.execute(query);
 
@@ -483,7 +583,7 @@ public class DbbCountsCreator {
 					// field
 					query =
 						"SELECT " + column + " FROM " + table + " WHERE 0 = 1";
-					logger.info("DEBUG " + query);
+					logger.fine("DEBUG " + query);
 					_latest_query = query;
 					ResultSet tmpRs = stmt.executeQuery(query);
 					int columnType = tmpRs.getMetaData().getColumnType(1);
@@ -500,7 +600,7 @@ public class DbbCountsCreator {
 							+ " WHERE " + column + " IS NOT NULL " + "GROUP BY "
 							+ column + " HAVING COUNT(" + uniqueId + ") > "
 							+ minCount;
-					logger.info("DEBUG " + query);
+					logger.fine("DEBUG " + query);
 					_latest_query = query;
 					stmt.execute(query);
 				}
@@ -508,18 +608,18 @@ public class DbbCountsCreator {
 				query = "UPDATE TB_CMT_COUNT_FIELDS SET LastUpdate = "
 						+ databaseAbstraction.getSysdateExpression()
 						+ " WHERE FieldId = " + fieldId;
-				logger.info("DEBUG " + query);
+				logger.fine("DEBUG " + query);
 				_latest_query = query;
 				stmt.execute(query);
 
 				if (commitChanges) {
-					logger.info(METHOD + "commiting ABA statistics to DB");
+					logger.fine(METHOD + "commiting ABA statistics to DB");
 					connection.commit();
 				} else {
 					String msg = "skipping commit of ABA statistics to DB "
 							+ "-- assuming a managed connection will "
 							+ "automagically commit them instead.";
-					logger.info(METHOD + msg);
+					logger.fine(METHOD + msg);
 				}
 			}
 
@@ -575,7 +675,7 @@ public class DbbCountsCreator {
 			throw new IllegalArgumentException(
 					METHOD + "null statistics cache");
 		}
-		logger.info("DEBUG " + METHOD + "entering");
+		logger.fine("DEBUG " + METHOD + "entering");
 
 		ImmutableProbabilityModel[] models = PMManager.getModels();
 		if (models == null) {
@@ -630,8 +730,8 @@ public class DbbCountsCreator {
 		final String uniqueId = dbf.getTable().getUniqueId();
 		final int tableSize = getTableSize(tableSizes, dbf.getTable());
 
-		CountField retVal = new CountField(100, dbf.getDefaultCount(), tableSize,
-				column, view, uniqueId);
+		CountField retVal = new CountField(100, dbf.getDefaultCount(),
+				tableSize, column, view, uniqueId);
 
 		Integer FieldId = retrieveFieldId(connection, view, column, uniqueId);
 		if (FieldId != null) {
@@ -645,7 +745,7 @@ public class DbbCountsCreator {
 			throws SQLException {
 		String query = "SELECT Value, Count FROM TB_CMT_COUNTS "
 				+ "WHERE FieldId = " + fieldId;
-		logger.info("DEBUG " + query);
+		logger.fine("DEBUG " + query);
 		Statement stmt = null;
 		ResultSet rs = null;
 		Integer FieldId = null;
@@ -691,7 +791,7 @@ public class DbbCountsCreator {
 		String query = "SELECT FieldId FROM TB_CMT_COUNT_FIELDS "
 				+ "WHERE ViewName = '" + view + "' AND ColumnName = '" + column
 				+ "' AND MasterId = '" + masterId + "'";
-		logger.info("DEBUG " + query);
+		logger.fine("DEBUG " + query);
 		Statement stmt = null;
 		ResultSet rs = null;
 		Integer retVal = null;
@@ -730,7 +830,7 @@ public class DbbCountsCreator {
 
 	private Map<DbTable, Integer> readTableSizes(Connection c)
 			throws SQLException {
-		logger.info("DEBUG " + "readTableSizes...");
+		logger.fine("DEBUG " + "readTableSizes...");
 		Map<DbTable, Integer> retVal = new HashMap<>();
 		Statement stmt = null;
 		ResultSet rs = null;
@@ -738,7 +838,7 @@ public class DbbCountsCreator {
 			String query = "SELECT ViewName, MasterId, Count "
 					+ "FROM TB_CMT_COUNT_FIELDS f, TB_CMT_COUNTS c "
 					+ "WHERE f.FieldId = c.FieldId AND f.ColumnName IS NULL";
-			logger.info("DEBUG " + query);
+			logger.fine("DEBUG " + query);
 			stmt = c.createStatement();
 			rs = stmt.executeQuery(query);
 			while (rs.next()) {
@@ -772,7 +872,7 @@ public class DbbCountsCreator {
 				}
 			}
 		}
-		logger.info("DEBUG " + "...readTableSizes");
+		logger.fine("DEBUG " + "...readTableSizes");
 		return retVal;
 	}
 
