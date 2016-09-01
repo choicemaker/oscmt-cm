@@ -375,8 +375,8 @@ public class DbbCountsCreator {
 	}
 
 	static FieldValueCounts readFieldValueCounts(PreparedStatement stmt1,
-			PreparedStatement stmt2, Map<DbTable, Integer> tableSizes, IDbField dbf)
-			throws SQLException {
+			PreparedStatement stmt2, Map<DbTable, Integer> tableSizes,
+			IDbField dbf) throws SQLException {
 		final String column = dbf.getName();
 		final String view = dbf.getTable().getName();
 		final String uniqueId = dbf.getTable().getUniqueId();
@@ -618,7 +618,7 @@ public class DbbCountsCreator {
 			Map<DbTable, Integer> tableSizes = selectTableSizes(connection);
 			IBlockingConfiguration[] blockingConfigurations =
 				getBlockingConfigurations(models);
-			
+
 			List<FieldValueCounts> countFields = new ArrayList<>();
 			for (IBlockingConfiguration bc : blockingConfigurations) {
 				ICountField[] bcCountFields =
