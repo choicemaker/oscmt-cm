@@ -602,45 +602,73 @@ public class DbbCountsCreatorSQL {
 		logger.fine("DEBUG " + "...readTableSizes");
 		return retVal;
 	}
+	
+	public static final String sqlSelectFieldIdCountFields =
+		"SELECT FieldId FROM TB_CMT_COUNT_FIELDS "
+				+ "WHERE ViewName = ? AND ColumnName = ? AND MasterId = ?";
+	
+	static void bindSqlSelectFieldIdCountFields(PreparedStatement stmt1,
+			String view, String column, String uniqueId) throws SQLException {
+		logger.fine(msgBindSqlSelectFieldIdCountFields(view, column, uniqueId));
+		stmt1.setString(1, view);
+		stmt1.setString(2, column);
+		stmt1.setString(3, uniqueId);
+	}
 
-	static Integer selectFieldId(Connection c, String view, String column,
+	static String msgBindSqlSelectFieldIdCountFields(String view,
+			String column, String uniqueId) {
+		StringBuilder sb = new StringBuilder().append("BIND ");
+		sb.append(sqlSelectFieldIdCountFields).append(": ");
+		sb.append("[table:").append(view).append("], ");
+		sb.append("[column:").append(column).append("], ");
+		sb.append("[masterId:").append(uniqueId).append("]");
+		String retVal = sb.toString();
+		return retVal;
+	}
+
+	static int selectFieldId(PreparedStatement stmt1, String view, String column,
 			String masterId) throws SQLException {
-		String query = "SELECT FieldId FROM TB_CMT_COUNT_FIELDS "
-				+ "WHERE ViewName = '" + view + "' AND ColumnName = '" + column
-				+ "' AND MasterId = '" + masterId + "'";
-		logger.fine("DEBUG " + query);
-		Statement stmt = null;
 		ResultSet rs = null;
-		Integer retVal = null;
+		int retVal = 0;
 		try {
-			stmt = c.createStatement();
-			rs = stmt.executeQuery(query);
+			bindSqlSelectFieldIdCountFields(stmt1,view,column,masterId);
+			rs = stmt1.executeQuery();
 			if (rs.next()) {
 				retVal = rs.getInt(1);
-				rs.close();
+			}
+			if (rs.next()) {
+				StringBuilder sb = new StringBuilder();
+				sb.append("Multiple field ids for ");
+				sb.append("[table:").append(view).append("], ");
+				sb.append("[column:").append(column).append("], ");
+				sb.append("[masterId:").append(masterId).append("]");
+				String msg = sb.toString();
+				logger.severe(msg);
+				throw new IllegalStateException(msg);
 			}
 		} finally {
-			if (stmt != null) {
-				try {
-					stmt.close();
-				} catch (SQLException x) {
-					String msg = "Unable to close statement; " + x;
-					logger.warning(msg);
-				}
-			}
-			if (rs != null) {
-				try {
-					rs.close();
-				} catch (SQLException x) {
-					String msg = "Unable to close result set; " + x;
-					logger.warning(msg);
-				}
-			}
+			closeResultSet(rs);
+			rs = null;
 		}
-		if (retVal == null) {
-			String msg = "Unable to retrieve field id " + "for view:" + view
-					+ ", column:" + column + ", masterId:" + masterId;
+		if (retVal == 0) {
+			StringBuilder sb = new StringBuilder();
+			sb.append("Unable to retrieve field id for ");
+			sb.append("[table:").append(view).append("], ");
+			sb.append("[column:").append(column).append("], ");
+			sb.append("[masterId:").append(masterId).append("]");
+			String msg = sb.toString();
 			logger.warning(msg);
+		}
+		if (retVal < 0) {
+			StringBuilder sb = new StringBuilder();
+			sb.append("Illegal field id (");
+			sb.append(retVal).append(" for "); 
+			sb.append("[table:").append(view).append("], ");
+			sb.append("[column:").append(column).append("], ");
+			sb.append("[masterId:").append(masterId).append("]");
+			String msg = sb.toString();
+			logger.severe(msg);
+			throw new IllegalStateException(msg);
 		}
 		return retVal;
 	}
@@ -698,37 +726,47 @@ public class DbbCountsCreatorSQL {
 			closeStatement(stmt);
 		}
 	}
-
-	static void updateCounts(Connection c, FieldValueCounts f, int fieldId)
+	
+	public static final String sqlSelectValueCount =
+			"SELECT Value, Count FROM TB_CMT_COUNTS  WHERE FieldId = ?";
+	
+	static void bindSqlSelectValueCount(PreparedStatement stmt1, int fieldId)
 			throws SQLException {
-		String query = "SELECT Value, Count FROM TB_CMT_COUNTS "
-				+ "WHERE FieldId = " + fieldId;
-		logger.fine("DEBUG " + query);
-		Statement stmt = null;
+		logger.fine(msgBindSqlSelectValueCount(fieldId));
+		stmt1.setInt(1, fieldId);
+	}
+
+	static String msgBindSqlSelectValueCount(int fieldId) {
+		StringBuilder sb = new StringBuilder().append("BIND ");
+		sb.append(sqlSelectValueCount).append(": ");
+		sb.append("[fieldId:").append(fieldId).append("]");
+		String retVal = sb.toString();
+		return retVal;
+	}
+
+	static void updateCounts(PreparedStatement stmt2, FieldValueCounts f, int fieldId)
+			throws SQLException {
 		ResultSet rs = null;
-		Integer FieldId = null;
 		try {
-			stmt = c.createStatement();
-			rs = stmt.executeQuery(query);
+			bindSqlSelectValueCount(stmt2, fieldId);
+			rs = stmt2.executeQuery();
 			while (rs.next()) {
 				String value = rs.getString(1);
 				Integer count = FieldValueCounts.valueOf(rs.getInt(2));
 				f.putValueCount(value, count);
 			}
 			if (f.getValueCountSize() == 0) {
-				String msg = "No value/count entries for field id " + FieldId;
+				String msg = "No value/count entries for field id " + fieldId;
 				logger.warning(msg);
 			} else {
 				String msg = "Field id " + fieldId + ": "
 						+ f.getValueCountSize() + " value/count entries";
 				logger.fine(msg);
 			}
-	
+
 		} finally {
 			closeResultSet(rs);
 			rs = null;
-			closeStatement(stmt);
-			stmt = null;
 		}
 	}
 
@@ -738,7 +776,8 @@ public class DbbCountsCreatorSQL {
 		logger.fine(msgBindQuery21(sysdate, strFieldId));
 		int fieldId = -1;
 		try {
-			Integer.parseInt(strFieldId);
+			fieldId = Integer.parseInt(strFieldId);
+			assert fieldId > -1;
 			stmt1.setInt(1, fieldId);
 			retVal = stmt1.executeUpdate();
 		} catch (NumberFormatException x) {

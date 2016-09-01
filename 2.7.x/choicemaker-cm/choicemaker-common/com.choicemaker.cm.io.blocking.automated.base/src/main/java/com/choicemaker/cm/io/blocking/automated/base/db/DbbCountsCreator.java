@@ -374,8 +374,8 @@ public class DbbCountsCreator {
 		}
 	}
 
-	static FieldValueCounts readFieldValueCounts(Connection connection,
-			Map<DbTable, Integer> tableSizes, IDbField dbf)
+	static FieldValueCounts readFieldValueCounts(PreparedStatement stmt1,
+			PreparedStatement stmt2, Map<DbTable, Integer> tableSizes, IDbField dbf)
 			throws SQLException {
 		final String column = dbf.getName();
 		final String view = dbf.getTable().getName();
@@ -385,9 +385,9 @@ public class DbbCountsCreator {
 		FieldValueCounts retVal = new FieldValueCounts(100,
 				dbf.getDefaultCount(), tableSize, column, view, uniqueId);
 
-		Integer FieldId = selectFieldId(connection, view, column, uniqueId);
-		if (FieldId != null) {
-			updateCounts(connection, retVal, FieldId.intValue());
+		int fieldId = selectFieldId(stmt1, view, column, uniqueId);
+		if (fieldId > 0) {
+			updateCounts(stmt2, retVal, fieldId);
 		}
 
 		return retVal;
@@ -604,14 +604,22 @@ public class DbbCountsCreator {
 		}
 
 		Connection connection = null;
+		PreparedStatement stmt1 = null;
+		PreparedStatement stmt2 = null;
 		try {
 			connection = ds.getConnection();
+			logger.info("SQL to select fieldId from TB_CMT_COUNT_FIELDS: "
+					+ sqlSelectFieldIdCountFields);
+			stmt1 = connection.prepareStatement(sqlSelectFieldIdCountFields);
+			logger.info("SQL to select field, value, count from TB_CMT_COUNTS: "
+					+ sqlSelectValueCount);
+			stmt2 = connection.prepareStatement(sqlSelectValueCount);
 
-			List<FieldValueCounts> countFields = new ArrayList<>();
 			Map<DbTable, Integer> tableSizes = selectTableSizes(connection);
-
 			IBlockingConfiguration[] blockingConfigurations =
 				getBlockingConfigurations(models);
+			
+			List<FieldValueCounts> countFields = new ArrayList<>();
 			for (IBlockingConfiguration bc : blockingConfigurations) {
 				ICountField[] bcCountFields =
 					new ICountField[bc.getDbFields().length];
@@ -620,7 +628,7 @@ public class DbbCountsCreator {
 					IDbField dbf = bc.getDbFields()[j];
 					FieldValueCounts f = find(countFields, dbf);
 					if (f == null) {
-						f = readFieldValueCounts(connection, tableSizes, dbf);
+						f = readFieldValueCounts(stmt1, stmt2, tableSizes, dbf);
 						countFields.add(f);
 					}
 					assert f != null;
@@ -632,6 +640,8 @@ public class DbbCountsCreator {
 				cache.putStatistics(bc, ccs);
 			}
 		} finally {
+			closeStatement(stmt1);
+			closeStatement(stmt2);
 			closeConnection(connection);
 		}
 		logger.fine(METHOD + "exiting");
