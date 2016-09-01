@@ -20,7 +20,7 @@ import com.choicemaker.cm.io.blocking.automated.ICountField;
  * @author    rphall (CM 2.7 revision)
  */
 
-public class CountField implements Serializable, ICountField {
+public class FieldValueCounts implements Serializable, ICountField {
 
 	private static final long serialVersionUID = 271;
 
@@ -56,7 +56,7 @@ public class CountField implements Serializable, ICountField {
 	private final String view;
 	private final String uniqueId;
 
-	public CountField(int mapSize, int defaultCount, int tableSize, String column, String view, String uniqueId) {
+	public FieldValueCounts(int mapSize, int defaultCount, int tableSize, String column, String view, String uniqueId) {
 		if (mapSize > 1) {
 			valueCount = new HashMap<>(mapSize);
 
@@ -70,7 +70,7 @@ public class CountField implements Serializable, ICountField {
 		this.uniqueId = uniqueId;
 	}
 
-	public CountField(int mapSize, int defaultCount, int tableSize) {
+	public FieldValueCounts(int mapSize, int defaultCount, int tableSize) {
 		this(mapSize, defaultCount, tableSize, null, null, null);
 	}
 
