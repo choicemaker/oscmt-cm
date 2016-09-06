@@ -31,6 +31,7 @@ import com.choicemaker.cm.io.blocking.automated.AbaStatisticsCache;
 import com.choicemaker.cm.io.blocking.automated.BlockingAccessor;
 import com.choicemaker.cm.io.blocking.automated.DatabaseAccessor;
 import com.choicemaker.cm.io.blocking.automated.base.db.DbbCountsCreator;
+import com.choicemaker.cm.io.blocking.automated.util.BlockingConfigurationUtils;
 import com.choicemaker.cm.io.db.base.DataSources;
 import com.choicemaker.cm.io.db.base.DatabaseAbstraction;
 import com.choicemaker.cm.io.db.base.DatabaseAbstractionManager;
@@ -49,8 +50,6 @@ public class SqlServerUtils {
 
 	private static boolean connectionPoolsInited = false;
 
-	// private static boolean productionModelsInited = false;
-
 	static void maybeInitConnectionPools() {
 		if (!connectionPoolsInited) {
 			// init the connections. Note: this is only for ConnectionPool
@@ -63,38 +62,19 @@ public class SqlServerUtils {
 		}
 	}
 
-	// static void maybeInitProductionModels() {
-	// if (!productionModelsInited) {
-	// try {
-	// CompilerFactory factory = CompilerFactory.getInstance ();
-	// ICompiler compiler = factory.getDefaultCompiler();
-	// ProbabilityModelsXmlConf.loadProductionProbabilityModels(compiler);
-	// } catch (XmlConfException ex) {
-	// ex.printStackTrace();
-	// }
-	//
-	// //try {
-	// // // populates the "multi" query in each accessProvider's properties
-	// object.
-	// // SqlDbObjectMaker.getAllModels();
-	// //} catch (IOException ex) {
-	// // ex.printStackTrace();
-	// //}
-	//
-	// productionModelsInited = true;
-	// }
-	// }
-
 	private static ImmutableProbabilityModel lastModel;
 	private static DataSource lastDs;
 
 	static void maybeUpdateCounts(DataSource ds,
-			ImmutableProbabilityModel model, AbaStatisticsCache statsCache)
+			ImmutableProbabilityModel model, String blockingConfiguration,
+			String databaseConfiguration, AbaStatisticsCache statsCache)
 			throws SQLException, DatabaseException {
 
+		String bcId = BlockingConfigurationUtils.createBlockingConfigurationId(
+				model, blockingConfiguration, databaseConfiguration);
 		if (model == lastModel
 				&& ds == lastDs
-				&& statsCache.getStatistics(model) != null) {
+				&& statsCache.getStatistics(bcId) != null) {
 
 			return;
 		}

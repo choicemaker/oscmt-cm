@@ -27,17 +27,19 @@ import com.choicemaker.cm.args.PersistableSqlRecordSource;
 import com.choicemaker.cm.core.DatabaseException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.io.blocking.automated.AbaStatistics;
+import com.choicemaker.cm.io.blocking.automated.IBlockingConfiguration;
 import com.choicemaker.cm.io.blocking.automated.base.db.DbbCountsCreator;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.AbaStatisticsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SqlRecordSourceController;
+import com.choicemaker.cm.io.blocking.automated.util.BlockingConfigurationUtils;
 import com.choicemaker.cm.io.db.base.DatabaseAbstraction;
 import com.choicemaker.cm.io.db.base.DatabaseAbstractionManager;
 
 @Singleton
 public class AbaStatisticsSingleton implements AbaStatisticsController {
 
-	private static final Logger log = Logger
-			.getLogger(MatchSchedulerSingleton.class.getName());
+	private static final Logger log =
+		Logger.getLogger(AbaStatisticsSingleton.class.getName());
 
 	// -- Injected data
 
@@ -78,9 +80,8 @@ public class AbaStatisticsSingleton implements AbaStatisticsController {
 			Object o = ctx.lookup(urlString);
 			ds = (DataSource) o;
 		} catch (NamingException e) {
-			String msg =
-				"Unable to acquire DataSource from JNDI URL '" + urlString
-						+ "': " + e;
+			String msg = "Unable to acquire DataSource from JNDI URL '"
+					+ urlString + "': " + e;
 			log.severe(msg);
 			throw new DatabaseException(msg, e);
 		}
@@ -92,42 +93,46 @@ public class AbaStatisticsSingleton implements AbaStatisticsController {
 			countsCreator.installAbaMetaData(ds);
 			final boolean onlyUncomputed = false;
 			final boolean commitChanges = false;
-			countsCreator.computeAbaStatistics(ds, dba, onlyUncomputed, commitChanges);
+			countsCreator.computeAbaStatistics(ds, dba, onlyUncomputed,
+					commitChanges);
 			countsCreator.updateAbaStatisticsCache(ds, dba, this);
 		} catch (SQLException e) {
-			String msg =
-				"Unable to compute ABA statistics for '" + urlString + "': "
-						+ e;
+			String msg = "Unable to compute ABA statistics for '" + urlString
+					+ "': " + e;
 			log.severe(msg);
 			throw new DatabaseException(msg, e);
 		}
 	}
 
 	@Override
-	public void putStatistics(ImmutableProbabilityModel model,
-			AbaStatistics counts) {
-		final String METHOD = "AbaStatisticsSingleton.putStatistics: ";
-		if (model == null || counts == null) {
-			String msg = METHOD + "null constructor argument";
-			throw new IllegalArgumentException(msg);
-		}
-		String name = model.getModelName();
-		assert name != null && name.equals(name.trim()) && !name.isEmpty();
-		this.cachedStats.put(name, counts);
+	public String computeBlockingConfigurationId(ImmutableProbabilityModel m,
+			String blockingConfiguration, String databaseConfiguration) {
+		return BlockingConfigurationUtils.createBlockingConfigurationId(m,
+				blockingConfiguration, databaseConfiguration);
 	}
 
 	@Override
-	public AbaStatistics getStatistics(ImmutableProbabilityModel model) {
-		final String METHOD = "AbaStatisticsSingleton.getStatistics: ";
-		if (model == null) {
-			String msg = METHOD + "null model";
-			throw new IllegalArgumentException(msg);
-		}
-		String name = model.getModelName();
-		assert name != null && name.equals(name.trim()) && !name.isEmpty();
-		AbaStatistics retVal = this.cachedStats.get(name);
-		assert retVal != null;
+	public void putStatistics(String blockingConfigurationId,
+			AbaStatistics counts) {
+		this.cachedStats.put(blockingConfigurationId, counts);
+	}
+
+	@Override
+	public void putStatistics(IBlockingConfiguration bc, AbaStatistics counts) {
+		String blockingConfigurationId = bc.getBlockingConfiguationId();
+		putStatistics(blockingConfigurationId, counts);
+	}
+
+	@Override
+	public AbaStatistics getStatistics(String blockingConfigurationId) {
+		AbaStatistics retVal = this.cachedStats.get(blockingConfigurationId);
 		return retVal;
+	}
+
+	@Override
+	public AbaStatistics getStatistics(IBlockingConfiguration bc) {
+		String blockingConfigurationId = bc.getBlockingConfiguationId();
+		return getStatistics(blockingConfigurationId);
 	}
 
 }

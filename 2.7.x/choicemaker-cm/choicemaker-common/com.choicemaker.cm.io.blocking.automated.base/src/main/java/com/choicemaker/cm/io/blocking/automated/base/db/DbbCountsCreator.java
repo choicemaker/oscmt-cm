@@ -70,9 +70,8 @@ import com.choicemaker.cm.io.db.base.DbAccessor;
  * The TB_CMT_CONFIG table is mostly used to record the primary keys of tables,
  * but this data is also duplicated in other meta-data tables. The TB_CMT_CONFIG
  * table is populated by scripts generated from model schemas. This table is not
- * referenced in Java code, only in Oracle stored procedures, and even there, it
- * doesn't appear to be read, only written. In other words, the table can
- * probably be dropped and removed from generation scripts.<br/>
+ * referenced in Java code, only in Oracle stored procedures, such as the body
+ * of the Blocking procedure in the CMTBlocking package.<br/>
  * </li>
  * <li>TB_CMT_COUNT_CONFIG_FIELDS: a denormalized table that maps blocking
  * configurations to tables and fields. As an optimization, the meaning of the
@@ -242,7 +241,7 @@ public class DbbCountsCreator {
 
 			// Loop over the blocking configurations
 			for (IBlockingConfiguration bc : bcs) {
-				final String bcName = bc.getName();
+				final String bcName = bc.getBlockingConfiguationId();
 				logger.fine("Blocking configuration: " + bcName);
 
 				// For each blocking configuration, delete all tables and rows

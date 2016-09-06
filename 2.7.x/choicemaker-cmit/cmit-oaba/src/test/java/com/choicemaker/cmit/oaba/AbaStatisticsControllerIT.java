@@ -48,13 +48,13 @@ import com.choicemaker.e2.ejb.EjbPlatform;
 @RunWith(Arquillian.class)
 public class AbaStatisticsControllerIT {
 
-	private static final Logger logger = Logger
-			.getLogger(AbaStatisticsControllerIT.class.getName());
+	private static final Logger logger =
+		Logger.getLogger(AbaStatisticsControllerIT.class.getName());
 
 	private static final boolean TESTS_AS_EJB_MODULE = false;
 
-	private final static String LOG_SOURCE = AbaStatisticsControllerIT.class
-			.getSimpleName();
+	private final static String LOG_SOURCE =
+		AbaStatisticsControllerIT.class.getSimpleName();
 
 	/**
 	 * Creates an EAR deployment in which the OABA server JAR is missing the
@@ -63,7 +63,8 @@ public class AbaStatisticsControllerIT {
 	 */
 	@Deployment
 	public static EnterpriseArchive createEarArchive() {
-		Class<?>[] removedClasses = { MatchDedupMDB.class };
+		Class<?>[] removedClasses = {
+				MatchDedupMDB.class };
 		return OabaDeploymentUtils.createEarArchive(removedClasses,
 				TESTS_AS_EJB_MODULE);
 	}
@@ -141,10 +142,10 @@ public class AbaStatisticsControllerIT {
 		final String dbConfig1 = c.getReferenceDatabaseConfiguration();
 
 		final OabaParameters bp =
-			new OabaParametersEntity(c.getModelConfigurationName(), c
-					.getThresholds().getDifferThreshold(), c.getThresholds()
-					.getMatchThreshold(), blkConf0, staging, dbConfig0, master,
-					dbConfig1, c.getOabaTask());
+			new OabaParametersEntity(c.getModelConfigurationName(),
+					c.getThresholds().getDifferThreshold(),
+					c.getThresholds().getMatchThreshold(), blkConf0, staging,
+					dbConfig0, master, dbConfig1, c.getOabaTask());
 		te.add(bp);
 		final OabaParameters retVal = paramsController.save(bp);
 		te.add(retVal);
@@ -154,11 +155,9 @@ public class AbaStatisticsControllerIT {
 
 	@Before
 	public void setUp() throws Exception {
-		te =
-			new TestEntityCounts(logger, oabaController, paramsController,
-					oabaSettingsController, serverController,
-					processingController, opPropController, rsController,
-					ridController);
+		te = new TestEntityCounts(logger, oabaController, paramsController,
+				oabaSettingsController, serverController, processingController,
+				opPropController, rsController, ridController);
 	}
 
 	public void checkCounts() {
@@ -189,7 +188,12 @@ public class AbaStatisticsControllerIT {
 		String modelName = params.getModelConfigurationName();
 		ImmutableProbabilityModel model =
 			PMManager.getImmutableModelInstance(modelName);
-		AbaStatistics stats = statsController.getStatistics(model);
+		String blockingConfiguration = params.getBlockingConfiguration();
+		String databaseConfiguration =
+			params.getReferenceRsDatabaseConfiguration();
+		String bcId = statsController.computeBlockingConfigurationId(model,
+				blockingConfiguration, databaseConfiguration);
+		AbaStatistics stats = statsController.getStatistics(bcId);
 		assertTrue(stats != null);
 		checkCounts();
 	}

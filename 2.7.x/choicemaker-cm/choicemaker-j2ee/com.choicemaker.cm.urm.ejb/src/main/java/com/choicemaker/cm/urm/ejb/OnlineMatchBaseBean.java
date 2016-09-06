@@ -45,6 +45,7 @@ import com.choicemaker.cm.io.blocking.automated.base.BlockingSetReporter;
 import com.choicemaker.cm.io.blocking.automated.base.db.DbbCountsCreator;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.AbaStatisticsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.AggregateDatabaseAbstractionManager;
+import com.choicemaker.cm.io.blocking.automated.util.BlockingConfigurationUtils;
 import com.choicemaker.cm.io.db.base.DatabaseAbstraction;
 import com.choicemaker.cm.io.db.base.DatabaseAbstractionManager;
 import com.choicemaker.cm.io.db.base.DbAccessor;
@@ -121,7 +122,7 @@ public class OnlineMatchBaseBean implements SessionBean {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	public OnlineMatchBaseBean() {
 		super();
@@ -308,7 +309,8 @@ public class OnlineMatchBaseBean implements SessionBean {
 			String blockingConfigName = null;
 			AbaSettings FIXME = null;
 			// END FIXME
-			AbaStatistics stats = statsController.getStatistics(model);
+			String bcId = BlockingConfigurationUtils.createBlockingConfigurationId(model, blockingConfigName, dbConfigName);
+			AbaStatistics stats = statsController.getStatistics(bcId);
 			recordSource =
 				new Blocker2(
 					databaseAccessor,
@@ -450,7 +452,7 @@ public class OnlineMatchBaseBean implements SessionBean {
 		}
 	}
 
-	/** This method takes the SQL string specified in 
+	/** This method takes the SQL string specified in
 	 * <code>SubsetDbRecordCollection</code> and converts that to the condition
 	 * string as expected by <code>DatabaseAccessor</code>, particularly by
 	 * <code>OraDatabaseAccessor</code>.
@@ -458,11 +460,11 @@ public class OnlineMatchBaseBean implements SessionBean {
 	 * For example: SQL String =
 	 * "select mci_id from tb_patient where id_stat_cd = 'A' order by mci_id"
 	 * <p>
-	 * return = 
+	 * return =
 	 * "TB_PATIENT T WHERE B.MCI_ID = T.MCI_ID AND ID_STAT_CD = 'A'"
 	 * <p>
 	 * @author PC (3/27/2007)
-	 * 
+	 *
 	 * @param input
 	 * @param key
 	 * @return

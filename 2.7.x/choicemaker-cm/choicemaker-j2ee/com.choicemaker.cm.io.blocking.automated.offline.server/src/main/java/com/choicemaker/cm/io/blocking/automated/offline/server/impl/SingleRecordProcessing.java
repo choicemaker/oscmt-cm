@@ -50,6 +50,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.AbaStatistics
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SqlRecordSourceController;
+import com.choicemaker.cm.io.blocking.automated.util.BlockingConfigurationUtils;
 import com.choicemaker.cm.io.db.base.DatabaseAbstraction;
 import com.choicemaker.cm.io.db.base.DatabaseAbstractionManager;
 import com.choicemaker.e2.CMConfigurationElement;
@@ -242,8 +243,16 @@ public class SingleRecordProcessing implements Serializable {
 		getLogger().fine("DatabaseConfiguration: " + databaseConfiguration);
 
 		cacheAbaStatistics(masterDS);
+		final String bcId =
+			BlockingConfigurationUtils.createBlockingConfigurationId(model,
+					blockingConfiguration, databaseConfiguration);
 		final AbaStatistics stats =
-			getAbaStatisticsController().getStatistics(model);
+			getAbaStatisticsController().getStatistics(bcId);
+		if (stats == null) {
+			String msg = "Abastatistics are not available for blocking configuration: " + bcId;
+			logger.severe(msg);
+			throw new IllegalStateException(msg);
+		}
 
 		final String dbaName = getReferenceAccessorName(oabaParams);
 		getLogger().fine("DatabaseAccessor: " + dbaName);

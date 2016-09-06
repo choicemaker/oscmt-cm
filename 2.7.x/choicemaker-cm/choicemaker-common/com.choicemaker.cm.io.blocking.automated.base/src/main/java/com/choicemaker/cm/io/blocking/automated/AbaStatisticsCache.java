@@ -7,10 +7,20 @@
  *******************************************************************************/
 package com.choicemaker.cm.io.blocking.automated;
 
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
+
 public interface AbaStatisticsCache {
+
+	public String computeBlockingConfigurationId(ImmutableProbabilityModel m,
+			String blockingConfiguration, String databaseConfiguration);
+
+	public void putStatistics(String blockingConfigurationId,
+			AbaStatistics counts);
 
 	public void putStatistics(IBlockingConfiguration bc,
 			AbaStatistics counts);
+
+	public AbaStatistics getStatistics(String bcId);
 
 	public AbaStatistics getStatistics(IBlockingConfiguration bc);
 

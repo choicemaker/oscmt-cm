@@ -18,16 +18,23 @@ import com.choicemaker.cm.io.blocking.automated.IBlockingValue;
 import com.choicemaker.cm.io.blocking.automated.IDbField;
 import com.choicemaker.cm.io.blocking.automated.IDbTable;
 import com.choicemaker.cm.io.blocking.automated.IQueryField;
+import com.choicemaker.cm.io.blocking.automated.util.BlockingConfigurationUtils;
 
-public abstract class BlockingConfiguration implements IBlockingConfiguration,
-	Serializable {
-	
+public abstract class BlockingConfiguration
+		implements IBlockingConfiguration, Serializable {
+
 	private static final long serialVersionUID = 271;
 
-	public String name;
-	public IDbTable[] dbTables;
-	public IDbField[] dbFields;
-	public IBlockingField[] blockingFields;
+	/**
+	 * A misnamed field that holds the id of a configuration. This field is
+	 * directly used by generated code, so it should not be changed to something
+	 * more appropriate, like <code>id</code>
+	 */
+	protected String name;
+
+	protected IDbTable[] dbTables;
+	protected IDbField[] dbFields;
+	protected IBlockingField[] blockingFields;
 
 	private ArrayList<IBlockingValue>[] values;
 
@@ -72,9 +79,9 @@ public abstract class BlockingConfiguration implements IBlockingConfiguration,
 			if (thisBase == null) {
 				res = new BlockingValue(getBlockingFields()[index], value);
 			} else {
-				res =
-					new BlockingValue(getBlockingFields()[index], value,
-							new IBlockingValue[][] { thisBase });
+				res = new BlockingValue(getBlockingFields()[index], value,
+						new IBlockingValue[][] {
+								thisBase });
 			}
 			l.add(res);
 		} else {
@@ -86,16 +93,16 @@ public abstract class BlockingConfiguration implements IBlockingConfiguration,
 				newBase[len] = thisBase;
 				res.setBase(newBase);
 			}
-		}		
+		}
 
 		return res;
 	}
 
 	@Override
-	public String getName() {
+	public String getBlockingConfiguationId() {
 		return name;
 	}
-	
+
 	@Override
 	public IDbTable[] getDbTables() {
 		return dbTables;
@@ -112,8 +119,29 @@ public abstract class BlockingConfiguration implements IBlockingConfiguration,
 	}
 
 	@Override
+	public int hashCode() {
+		return BlockingConfigurationUtils.hashCode(this);
+	}
+
+	@Override
+	public boolean equals(IBlockingConfiguration bc) {
+		return BlockingConfigurationUtils.equals(this, bc);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof IBlockingConfiguration))
+			return false;
+		return equals((IBlockingConfiguration) obj);
+	}
+
+	@Override
 	public String toString() {
-		return "BlockingConfiguration [name=" + name + ", dbTables="
+		return "BlockingConfiguration [id=" + name + ", dbTables="
 				+ Arrays.toString(dbTables) + ", dbFields="
 				+ Arrays.toString(dbFields) + ", blockingFields="
 				+ Arrays.toString(blockingFields) + ", values="
@@ -126,8 +154,9 @@ public abstract class BlockingConfiguration implements IBlockingConfiguration,
 		public IDbTable[] dbts;
 		public IDbField[] dbfs;
 		public IBlockingField[] bfs;
-		
-		public DbConfiguration(String name, IQueryField[] qfs, IDbTable[] dbts, IDbField[] dbfs, IBlockingField[] bfs) {
+
+		public DbConfiguration(String name, IQueryField[] qfs, IDbTable[] dbts,
+				IDbField[] dbfs, IBlockingField[] bfs) {
 			this.name = name;
 			this.qfs = qfs;
 			this.dbts = dbts;
@@ -141,6 +170,6 @@ public abstract class BlockingConfiguration implements IBlockingConfiguration,
 					+ Arrays.toString(qfs) + ", dbts=" + Arrays.toString(dbts)
 					+ ", dbfs=" + Arrays.toString(dbfs) + ", bfs="
 					+ Arrays.toString(bfs) + "]";
-		}	
+		}
 	}
 }

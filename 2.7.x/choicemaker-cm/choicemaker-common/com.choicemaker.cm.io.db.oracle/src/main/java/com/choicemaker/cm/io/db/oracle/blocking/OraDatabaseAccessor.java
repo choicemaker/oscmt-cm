@@ -151,7 +151,7 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("call CMTBlocking.Blocking('"
-						+ blocker.getBlockingConfiguration().getName() + "', '"
+						+ blocker.getBlockingConfiguration().getBlockingConfiguationId() + "', '"
 						+ query + "', '" + condition1 + "', '" + condition2
 						+ "' ,'" + acc.getSchemaName() + ":r:"
 						+ databaseConfiguration + "', '?')");
@@ -160,7 +160,7 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 			stmt = connection
 					.prepareCall("call CMTBlocking.Blocking(?, ?, ?, ?, ?, ?)");
 			stmt.setFetchSize(100);
-			stmt.setString(1, blocker.getBlockingConfiguration().getName());
+			stmt.setString(1, blocker.getBlockingConfiguration().getBlockingConfiguationId());
 			stmt.setString(2, query);
 			stmt.setString(3, condition1);
 			stmt.setString(4, condition2);
@@ -190,7 +190,7 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 			dbr.open(rs);
 		} catch (SQLException ex) {
 			logger.severe("call CMTBlocking.Blocking('"
-					+ blocker.getBlockingConfiguration().getName() + "', '"
+					+ blocker.getBlockingConfiguration().getBlockingConfiguationId() + "', '"
 					+ query + "', '" + condition1 + "', '" + condition2 + "' ,'"
 					+ acc.getSchemaName() + ":r:" + databaseConfiguration
 					+ "', '?'): " + ex.toString());

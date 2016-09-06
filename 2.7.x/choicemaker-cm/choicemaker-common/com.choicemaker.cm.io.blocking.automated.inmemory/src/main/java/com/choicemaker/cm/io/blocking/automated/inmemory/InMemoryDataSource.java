@@ -21,7 +21,7 @@ import com.choicemaker.cm.io.blocking.automated.IBlockingSet;
 import com.choicemaker.cm.io.blocking.automated.IBlockingValue;
 import com.choicemaker.cm.io.blocking.automated.ICountField;
 import com.choicemaker.cm.io.blocking.automated.IDbField;
-import com.choicemaker.cm.io.blocking.automated.base.CountField;
+import com.choicemaker.cm.io.blocking.automated.base.FieldValueCounts;
 import com.choicemaker.cm.io.blocking.automated.cachecount.AbaStatisticsImpl;
 import com.choicemaker.util.IntArrayList;
 
@@ -111,12 +111,12 @@ public class InMemoryDataSource {
 			IntArrayList value = (IntArrayList)entry.getValue();
 			int numRecords = value.size();
 			if (numRecords > defaultCount) {
-				biggerThanDefault.put(entry.getKey(), CountField.valueOf(numRecords));
+				biggerThanDefault.put(entry.getKey(), FieldValueCounts.valueOf(numRecords));
 			}
 		}
 
-		// create a CountField object to represent our results
-		ICountField cf = new CountField(
+		// create a FieldValueCounts object to represent our results
+		ICountField cf = new FieldValueCounts(
 			2, // initial size of cf.m (which is replaced in the next line anyway anyway).
 			defaultCount,
 			fieldMap.size(),
