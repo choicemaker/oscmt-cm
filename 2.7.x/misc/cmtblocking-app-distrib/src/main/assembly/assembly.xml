@@ -20,5 +20,16 @@
         <include>*.bat</include>
 		</includes>
 		</fileSet>
+		<fileSet>
+		<directory>${basedir}/src/main/resources</directory>
+		<outputDirectory></outputDirectory>
+		<includes>
+        <include>**</include>
+		</includes>
+		<excludes>
+        <exclude>**/*_local.properties</exclude>
+        <exclude>**/*.script</exclude>
+		</excludes>
+		</fileSet>
 	</fileSets>
 </assembly>

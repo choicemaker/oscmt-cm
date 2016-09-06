@@ -1,2 +1,4 @@
 bin
 *.script
+*_local.properties
+/tmp*
