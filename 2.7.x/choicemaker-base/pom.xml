@@ -82,6 +82,7 @@
     <plugin.maven-failsafe.version>2.18.1</plugin.maven-failsafe.version>
     <plugin.maven-help.version>2.2</plugin.maven-help.version>
     <plugin.maven-jar.version>2.4</plugin.maven-jar.version>
+    <!-- plugin.maven-jar.version>3.0.2</plugin.maven-jar.version -->
     <plugin.maven-javadoc.version>2.10.3</plugin.maven-javadoc.version>
     <plugin.maven-jxr.version>2.3</plugin.maven-jxr.version>
     <!-- plugin.maven-pmd.version>2.7.1</plugin.maven-pmd.version -->
@@ -284,6 +285,12 @@
 
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>${plugin.maven-jar.version}</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-source-plugin</artifactId>
           <version>${plugin.maven-source.version}</version>
         </plugin>
@@ -428,6 +435,11 @@
         <version>${choicemaker.release.version}</version>
         <classifier>distrib</classifier>
         <type>zip</type>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>cmtblocking-app</artifactId>
+        <version>${choicemaker.release.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>

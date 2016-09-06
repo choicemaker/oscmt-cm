@@ -1,0 +1,1 @@
+Sample:b:batch:patient| v0.mci_id FROM ST_PATIENT_NAMES v0^v0.last_name='ALEJANDRO  BRITO'|/*+ index(t DSI_C003813) */|TB_PATIENT t WHERE b.MCI_ID = t.MCI_ID AND t.ID_STAT_CD IN ('T','A')|Sample:r:patient
