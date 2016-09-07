@@ -52,7 +52,7 @@ public class BlockingScript {
 		return retVal;
 	}
 	
-	private static class LineIterator implements Iterator {
+	private static class LineIterator implements Iterator<String> {
 		private final LineNumberReader lnr;
 		private String currentLine = null;
 		public LineIterator(LineNumberReader r) {
@@ -62,7 +62,7 @@ public class BlockingScript {
 		public boolean hasNext() {
 			return this.currentLine != null;
 		}
-		public Object next() {
+		public String next() {
 			if (this.currentLine == null) {
 				throw new NoSuchElementException("no more lines");
 			}
@@ -83,7 +83,7 @@ public class BlockingScript {
 		}
 	}
 	
-	public Iterator getIterator() throws FileNotFoundException {
+	public Iterator<String> getIterator() throws FileNotFoundException {
 		final LineNumberReader r = file == null? getDefaultLineReader() : getLineReader(file);
 		return new LineIterator(r);
 	}

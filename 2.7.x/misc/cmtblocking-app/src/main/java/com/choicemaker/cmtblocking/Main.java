@@ -10,133 +10,69 @@
  */
 package com.choicemaker.cmtblocking;
 
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import static com.choicemaker.cmtblocking.LogUtil.*;
+
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Iterator;
 
 /**
- *
- * @author   rphall 
- * @version   $Revision: 1.5.2.2 $ $Date: 2010/04/08 16:14:18 $
+ * Reads through a script and for each line in the script, invokes the Oracle
+ * stored procedure <code>Blocking</code> in the <code>CMTBlocking</code>
+ * package.
+ * 
+ * @author rphall
+ * @version $Revision: 1.5.2.2 $ $Date: 2010/04/08 16:14:18 $
  */
 public class Main {
 
-	/** Prints the following usage message:<pre>
-		* Usage: java com.choicemaker.cmtblocking.Main [<configFile>]
-		*   where [<configFile>] is an optional properties file
-		*   that specifies the name of a jdbcProperties file
-		*   and the name of a blockingScript file
-	 * </pre>
-	 * @see Configuration#PN_JDBC_PROPERTIES
-	 * @see Configuration#PN_SCRIPT_FILE
-	 * @return a usage message
-	 */
-	public static String printUsage() {
-		StringWriter sw = new StringWriter();
-		PrintWriter pw = new PrintWriter(sw);
-		pw.println("Usage: java " + Main.class.getName() + " [<configFile>]");
-		pw.println("  where [<configFile>] is an optional properties file");
-		pw.println("  that specifies the name of a jdbcProperties file");
-		pw.println("  and the name of a blockingScript file");
-		return sw.toString();
-	}
-
-	private static void logInfo(String msg) {
-		LogUtil.logExtendedInfo("Main", msg);
-	}
-
-	private static void logException(String msg, Throwable x) {
-		LogUtil.logExtendedException("Main", msg, x);
-	}
+	private static final String SOURCE = "Main";
 
 	public static void main(String[] args) {
 
-		if (args == null || args.length > 1) {
-			String msg = printUsage();
-			throw new IllegalArgumentException(msg);
-		}
+		CJBS cjbs = CJBS.parseArgs(SOURCE, args);
+		assert cjbs != null;
 
-		Configuration config = null;
-		try {
-			String configFileName = args.length == 1 ? args[0] : null;
-			config = new Configuration(configFileName);
-			config.logInfo();
-		} catch (Exception x) {
-			logException("Unable to construct configuration", x);
-		}
-
-		JdbcParams jdbcParams = null;
-		if (config != null) {
-			try {
-				jdbcParams = config.getJdbcParams();
-				jdbcParams.logInfo();
-			} catch (Exception x) {
-				logException("Unable to get JDBC parameters", x);
-			}
-		}
-
-		BlockingParams blockingParams = null;
-		if (config != null) {
-			try {
-				blockingParams = config.getBlockingParams();
-				blockingParams.logInfo();
-			} catch (Exception x) {
-				logException("Unable to get Blocking parameters", x);
-			}
-		}
-
-		Iterator scriptIterator = null;
-		if (config != null) {
-			try {
-				BlockingScript script = config.getBlockingScript();
-				script.logInfo();
-				scriptIterator = script.getIterator();
-			} catch (FileNotFoundException x) {
-				logException("Unable to get blocking script", x);
-			}
-		}
-
-		if (jdbcParams != null && blockingParams != null && scriptIterator != null) {
+		if (cjbs.jdbcParams != null && cjbs.blockingParams != null
+				&& cjbs.scriptIterator != null) {
 
 			Connection conn = null;
 			try {
 
-				logInfo("Opening JDBC connection...");
-				conn = jdbcParams.getConnection();
-				logInfo("JDBC connection opened");
+				logExtendedInfo(SOURCE, "Opening JDBC connection...");
+				conn = cjbs.jdbcParams.getConnection();
+				logExtendedInfo(SOURCE, "JDBC connection opened");
 
-				logInfo("Starting script");
-				while (scriptIterator.hasNext()) {
+				logExtendedInfo(SOURCE, "Starting script");
+				while (cjbs.scriptIterator.hasNext()) {
 
-					String line = (String) scriptIterator.next();
+					String line = (String) cjbs.scriptIterator.next();
 					BlockingCallArguments bca =
 						BlockingCallArguments.parseScriptLine(line);
 
 					try {
-						logInfo("Starting blocking call...");
+						logExtendedInfo(SOURCE, "Starting blocking call...");
 						bca.logInfo();
-						BlockingCall.doBlocking(conn, blockingParams,bca);
-						logInfo("Blocking call returned");
+						BlockingCall.doBlocking(conn, cjbs.blockingParams, bca);
+						logExtendedInfo(SOURCE, "Blocking call returned");
 					} catch (Exception x2) {
-						logException("Blocking call failed", x2);
+						logExtendedException(SOURCE, "Blocking call failed",
+								x2);
 					}
 
 				}
-				logInfo("Finished script");
+				logExtendedInfo(SOURCE, "Finished script");
 
 			} catch (SQLException x) {
-				logException("Unable to open JDBC connection", x);
+				logExtendedException(SOURCE, "Unable to open JDBC connection",
+						x);
 			} finally {
 				if (conn != null) {
 					try {
-						logInfo("Closing JDBC connection...");
+						logExtendedInfo(SOURCE, "Closing JDBC connection...");
 						conn.close();
-						logInfo("JDBC connection closed");
+						logExtendedInfo(SOURCE, "JDBC connection closed");
 					} catch (SQLException x) {
-						logException(x.getMessage(), x);
+						logExtendedException(SOURCE, x.getMessage(), x);
 					} finally {
 						conn = null;
 					}
