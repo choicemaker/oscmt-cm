@@ -68,6 +68,9 @@
 
     <module>example_models</module>
     <module>misc/compiler-app</module>
+    <module>misc/cmtblocking-app</module>
+    <module>misc/cmtblocking-app-distrib</module>
+    <module>misc/logfrequencypartitioner-app</module>
 
     <module>choicemaker-utilit</module>
     <module>choicemaker-e2it</module>
