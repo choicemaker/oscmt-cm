@@ -25,16 +25,18 @@ import oracle.jdbc.OracleTypes;
  * @version   $Revision: 1.5.2.2 $ $Date: 2010/04/08 16:14:18 $
  */
 public class BlockingCall {
+	
+	public static final String SOURCE = "Blocking";
 
 	private BlockingCall() {
 	}
 
 	private static void logInfo(String msg) {
-		LogUtil.logExtendedInfo("BlockingCall", msg);
+		LogUtil.logExtendedInfo(SOURCE, msg);
 	}
 
 	private static void logException(String msg, Throwable x) {
-		LogUtil.logExtendedException("BlockingCall", msg, x);
+		LogUtil.logExtendedException(SOURCE, msg, x);
 	}
 
 	public static void doBlocking(
@@ -114,7 +116,7 @@ public class BlockingCall {
 
 	}
 
-	private static void retrieveData(Connection connection, ResultSet[] rs) {
+	static void retrieveData(Connection connection, ResultSet[] rs) {
 		for (int i = 0; i < rs.length; i++) {
 			if (rs[i] != null) {
 				logInfo("Retrieving data from result set " + i);

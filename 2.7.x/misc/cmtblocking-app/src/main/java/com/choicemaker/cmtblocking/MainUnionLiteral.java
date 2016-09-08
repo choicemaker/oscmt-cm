@@ -45,14 +45,14 @@ public class MainUnionLiteral {
 				while (cjbs.scriptIterator.hasNext()) {
 
 					String line = (String) cjbs.scriptIterator.next();
-					UnionLiteralSql bca =
-						UnionLiteralSql.parseScriptLine(line);
+					UnionLiteral ul = new UnionLiteral(line);
+					String sql = ul.computeSql();
+					logExtendedInfo(SOURCE, "sql: " + sql);
 
 					try {
 						logExtendedInfo(SOURCE, "Starting blocking call...");
-						bca.logInfo();
-						BlockingCall.doBlocking(conn, cjbs.blockingParams, bca);
-						logExtendedInfo(SOURCE, "Blocking call returned");
+						UnionLiteral.doSql(conn, cjbs.blockingParams, sql);
+						logExtendedInfo(SOURCE, "SQL call returned");
 					} catch (Exception x2) {
 						logExtendedException(SOURCE, "Blocking call failed",
 								x2);

@@ -10,32 +10,55 @@
  */
 package com.choicemaker.cmtblocking;
 
+import static com.choicemaker.cmtblocking.BlockingCallArguments.BLOCK_CONFIG;
+import static com.choicemaker.cmtblocking.BlockingCallArguments.CONDITION_1;
+import static com.choicemaker.cmtblocking.BlockingCallArguments.CONDITION_2;
+import static com.choicemaker.cmtblocking.BlockingCallArguments.QUERY;
+import static com.choicemaker.cmtblocking.BlockingCallArguments.READ_CONFIG;
+import static com.choicemaker.cmtblocking.BlockingCallArguments.SEPARATOR;
+import static com.choicemaker.cmtblocking.BlockingCallArguments.fieldNames;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import com.choicemaker.util.SystemPropertyUtils;
+
 /**
  *
- * @author   rphall 
- * @version   $Revision: 1.4.2.2 $ $Date: 2010/04/08 16:14:18 $
+ * @author rphall
+ * @version $Revision: 1.4.2.2 $ $Date: 2010/04/08 16:14:18 $
  */
-public class UnionLiteralSql {
+public class UnionLiteral {
 
-	private Map map = new HashMap();
+	private static final String SOURCE = "UnionLiteral";
 
-	private static final String SEPARATOR = "|";
-	private static final String BLOCK_CONFIG = "blockConfig";
-	private static final String QUERY = "query";
-	private static final String CONDITION_1 = "condition1";
-	private static final String CONDITION_2 = "condition2";
-	private static final String READ_CONFIG = "readConfig";
-	private static final String[] fieldNames =
-		new String[] {
-			BLOCK_CONFIG,
-			QUERY,
-			CONDITION_1,
-			CONDITION_2,
-			READ_CONFIG };
+	public static final String SELECT_SEPARATOR_REGEX = "\\^";
+
+	public static final String COMPRESSED_WHERE = "`";
+
+	public static final String SELECT = "SELECT ";
+
+	public static final String WHERE = " WHERE ";
+
+	public static final String UNION = "UNION ";
+
+	public static final String EOL = SystemPropertyUtils.PV_LINE_SEPARATOR;
+
+	private static void logInfo(String msg) {
+		LogUtil.logExtendedInfo(SOURCE, msg);
+	}
+
+	private static void logException(String msg, Throwable x) {
+		LogUtil.logExtendedException(SOURCE, msg, x);
+	}
+
+	private Map<String, String> map = new HashMap<>();
 
 	public String getBlockConfig() {
 		return (String) this.map.get(BLOCK_CONFIG);
@@ -59,15 +82,15 @@ public class UnionLiteralSql {
 
 	/**
 	 * Expects a line of 5 fields, separated by "|"
+	 * 
 	 * @param line
 	 * @return a new set of blocking call arguments
 	 */
-	public static UnionLiteralSql parseScriptLine(String line) {
+	public UnionLiteral(String line) {
 		if (line == null || line.trim().length() == 0) {
 			throw new IllegalArgumentException("null or blank line");
 		}
 
-		UnionLiteralSql retVal = new UnionLiteralSql();
 		int count = 0;
 		StringTokenizer st = new StringTokenizer(line, SEPARATOR);
 		while (st.hasMoreTokens()) {
@@ -75,23 +98,18 @@ public class UnionLiteralSql {
 			if (value != null && value.trim().length() == 0) {
 				value = null;
 			}
-			if (count < fieldNames.length) {
-				retVal.map.put(fieldNames[count], value);
+			if (count < fieldNames().length) {
+				map.put(fieldNames()[count], value);
 				++count;
-			} else if (count >= fieldNames.length) {
+			} else if (count >= fieldNames().length) {
 				throw new IllegalArgumentException(
-					"too many fields in '" + line + "'");
+						"too many fields in '" + line + "'");
 			}
 		}
-		if (count < fieldNames.length) {
+		if (count < fieldNames().length) {
 			throw new IllegalArgumentException(
-				"'" + line + "' missing '" + fieldNames[count] + "'");
+					"'" + line + "' missing '" + fieldNames()[count] + "'");
 		}
-
-		return retVal;
-	}
-
-	private UnionLiteralSql() {
 	}
 
 	void logInfo() {
@@ -102,8 +120,82 @@ public class UnionLiteralSql {
 		logInfo("Read configuration: '" + getReadConfig() + "'");
 	}
 
-	private void logInfo(String msg) {
-		LogUtil.logExtendedInfo("BlockingCallArguments", msg);
+	public static void doSql(Connection connection,
+			BlockingParams blockingParams, String sql) throws SQLException {
+		logInfo("prepareCall( '" + sql + "' )");
+		Statement stmt = null;
+		try {
+			stmt = connection.createStatement();
+			stmt.setFetchSize(100);
+
+			ResultSet outer = null;
+			try {
+
+				logInfo("execute and retrieve outer");
+				outer = stmt.executeQuery(sql);
+
+				outer.setFetchSize(100);
+				outer.next();
+				ResultSetMetaData metaData = outer.getMetaData();
+				int numberOfColumns = metaData.getColumnCount();
+
+				ResultSet[] rs = new ResultSet[numberOfColumns];
+				for (int i = 0; i < numberOfColumns; i++) {
+					int colNum = i + 1;
+					logInfo("Retrieve column '" + colNum
+							+ "' of first row of outer blocking result set");
+					Object o = outer.getObject(colNum);
+					if (o instanceof ResultSet) {
+						logInfo("retrieve nested cursor: " + i);
+						rs[i] = (ResultSet) outer.getObject(colNum);
+						rs[i].setFetchSize(100);
+					}
+					logInfo("open dbr");
+				}
+				BlockingCall.retrieveData(connection, rs);
+
+			} finally {
+				try {
+					if (outer != null) {
+						outer.close();
+						outer = null;
+					}
+				} catch (SQLException x2) {
+					logException("unable to close outer result set", x2);
+				}
+			}
+
+		} finally {
+			try {
+				if (stmt != null) {
+					stmt.close();
+					stmt = null;
+				}
+			} catch (SQLException x2) {
+				logException("unable to close prepared SQL", x2);
+			}
+		}
+	}
+
+	public String computeSql() {
+		return computeSql(getQuery());
+	}
+
+	public static String computeSql(String s) {
+		StringBuilder sb = new StringBuilder();
+		boolean isFirst = true;
+		String[] stmts = s.split(SELECT_SEPARATOR_REGEX);
+		for (String compressed : stmts) {
+			if (isFirst) {
+				isFirst = false;
+			} else {
+				sb.append(UNION);
+			}
+			String partial = compressed.replace(COMPRESSED_WHERE, WHERE);
+			sb.append(SELECT).append(partial).append(EOL);
+		}
+		String retVal = sb.toString();
+		return retVal;
 	}
 
 }

@@ -10,32 +10,34 @@
  */
 package com.choicemaker.cmtblocking;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
 /**
  *
- * @author   rphall 
- * @version   $Revision: 1.4.2.2 $ $Date: 2010/04/08 16:14:18 $
+ * @author rphall
+ * @version $Revision: 1.4.2.2 $ $Date: 2010/04/08 16:14:18 $
  */
 public class BlockingCallArguments {
 
-	private Map map = new HashMap();
+	private Map<String, String> map = new HashMap<>();
 
-	private static final String SEPARATOR = "|";
-	private static final String BLOCK_CONFIG = "blockConfig";
-	private static final String QUERY = "query";
-	private static final String CONDITION_1 = "condition1";
-	private static final String CONDITION_2 = "condition2";
-	private static final String READ_CONFIG = "readConfig";
-	private static final String[] fieldNames =
-		new String[] {
-			BLOCK_CONFIG,
-			QUERY,
-			CONDITION_1,
-			CONDITION_2,
-			READ_CONFIG };
+	public static final String SEPARATOR = "|";
+
+	static final String BLOCK_CONFIG = "blockConfig";
+	static final String QUERY = "query";
+	static final String CONDITION_1 = "condition1";
+	static final String CONDITION_2 = "condition2";
+	static final String READ_CONFIG = "readConfig";
+
+	private static final String[] _fieldNames = new String[] {
+			BLOCK_CONFIG, QUERY, CONDITION_1, CONDITION_2, READ_CONFIG };
+
+	static final String[] fieldNames() {
+		return Arrays.copyOf(_fieldNames, _fieldNames.length);
+	}
 
 	public String getBlockConfig() {
 		return (String) this.map.get(BLOCK_CONFIG);
@@ -59,6 +61,7 @@ public class BlockingCallArguments {
 
 	/**
 	 * Expects a line of 5 fields, separated by "|"
+	 * 
 	 * @param line
 	 * @return a new set of blocking call arguments
 	 */
@@ -75,17 +78,17 @@ public class BlockingCallArguments {
 			if (value != null && value.trim().length() == 0) {
 				value = null;
 			}
-			if (count < fieldNames.length) {
-				retVal.map.put(fieldNames[count], value);
+			if (count < fieldNames().length) {
+				retVal.map.put(fieldNames()[count], value);
 				++count;
-			} else if (count >= fieldNames.length) {
+			} else if (count >= fieldNames().length) {
 				throw new IllegalArgumentException(
-					"too many fields in '" + line + "'");
+						"too many fields in '" + line + "'");
 			}
 		}
-		if (count < fieldNames.length) {
+		if (count < fieldNames().length) {
 			throw new IllegalArgumentException(
-				"'" + line + "' missing '" + fieldNames[count] + "'");
+					"'" + line + "' missing '" + fieldNames()[count] + "'");
 		}
 
 		return retVal;
