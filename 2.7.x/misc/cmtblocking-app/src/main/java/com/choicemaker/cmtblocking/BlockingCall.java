@@ -21,11 +21,11 @@ import oracle.jdbc.OracleTypes;
 
 /**
  *
- * @author   rphall 
- * @version   $Revision: 1.5.2.2 $ $Date: 2010/04/08 16:14:18 $
+ * @author rphall
+ * @version $Revision: 1.5.2.2 $ $Date: 2010/04/08 16:14:18 $
  */
 public class BlockingCall {
-	
+
 	public static final String SOURCE = "Blocking";
 
 	private BlockingCall() {
@@ -39,15 +39,14 @@ public class BlockingCall {
 		LogUtil.logExtendedException(SOURCE, msg, x);
 	}
 
-	public static void doBlocking(
-		Connection connection,
-		BlockingParams blockingParams,
-		BlockingCallArguments args)
-		throws SQLException, IOException {
+	public static void doBlocking(Connection connection,
+			BlockingParams blockingParams, BlockingCallArguments args)
+			throws SQLException, IOException {
 
 		final String sql = blockingParams.getSQL();
 		logInfo("prepareCall( '" + sql + "' )");
-		// FIXME see if eliminating redundant prepareCall invocations improves performance
+		// FIXME see if eliminating redundant prepareCall invocations improves
+		// performance
 		CallableStatement stmt = null;
 		try {
 			stmt = connection.prepareCall(sql);
@@ -78,9 +77,7 @@ public class BlockingCall {
 				ResultSet[] rs = new ResultSet[numberOfColumns];
 				for (int i = 0; i < numberOfColumns; i++) {
 					int colNum = i + 1;
-					logInfo(
-						"Retrieve column '"
-							+ colNum
+					logInfo("Retrieve column '" + colNum
 							+ "' of first row of outer blocking result set");
 					Object o = outer.getObject(colNum);
 					if (o instanceof ResultSet) {

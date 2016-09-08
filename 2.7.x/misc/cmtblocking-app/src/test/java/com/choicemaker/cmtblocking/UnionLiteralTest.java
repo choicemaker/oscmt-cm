@@ -1,7 +1,7 @@
 package com.choicemaker.cmtblocking;
 
-import static com.choicemaker.cmtblocking.BlockingCallArguments.*;
-import static org.junit.Assert.*;
+import static com.choicemaker.cmtblocking.BlockingCallArguments.SEPARATOR;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -70,11 +70,13 @@ public class UnionLiteralTest {
 	public static final String line = blockConfig + SEPARATOR + compressedSql
 			+ SEPARATOR + EMPTY + SEPARATOR + EMPTY + SEPARATOR + readConfig;
 
-	public static final String line1 = blockConfig + SEPARATOR + compressedSql
-			+ SEPARATOR + condition1 + SEPARATOR + EMPTY + SEPARATOR + readConfig;
+	public static final String line1 =
+		blockConfig + SEPARATOR + compressedSql + SEPARATOR + condition1
+				+ SEPARATOR + EMPTY + SEPARATOR + readConfig;
 
-	public static final String line2 = blockConfig + SEPARATOR + compressedSql
-			+ SEPARATOR + EMPTY + SEPARATOR + condition2 + SEPARATOR + readConfig;
+	public static final String line2 =
+		blockConfig + SEPARATOR + compressedSql + SEPARATOR + EMPTY + SEPARATOR
+				+ condition2 + SEPARATOR + readConfig;
 
 	@Test
 	public void testUnionLiteral() {

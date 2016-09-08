@@ -23,26 +23,28 @@ import java.util.Properties;
 
 /**
  *
- * @author   rphall 
- * @version   $Revision: 1.3.2.2 $ $Date: 2010/04/08 16:14:18 $
+ * @author rphall
+ * @version $Revision: 1.3.2.2 $ $Date: 2010/04/08 16:14:18 $
  */
 public class BlockingParams {
 
 	private static boolean INITIALIZED = false;
-	
-	public static final String PN_SCHEMA ="schema";
-	public static final String PN_PACKAGE ="package";
-	public static final String PN_PROCEDURE ="procedure";
 
-	private static final String DEFAULTS = "com/choicemaker/cmtblocking/defaultBlocking.properties";
+	public static final String PN_SCHEMA = "schema";
+	public static final String PN_PACKAGE = "package";
+	public static final String PN_PROCEDURE = "procedure";
+
+	private static final String DEFAULTS =
+		"com/choicemaker/cmtblocking/defaultBlocking.properties";
 
 	private static final Properties defaults = new Properties();
-	
+
 	private static void loadDefaultProperties() throws IOException {
-		InputStream is = BlockingParams.class.getClassLoader().getResourceAsStream(DEFAULTS);
+		InputStream is =
+			BlockingParams.class.getClassLoader().getResourceAsStream(DEFAULTS);
 		defaults.load(is);
 	}
-	
+
 	private static void init() throws IOException, SQLException {
 		if (!INITIALIZED) {
 			loadDefaultProperties();
@@ -54,8 +56,8 @@ public class BlockingParams {
 	private final Properties properties;
 
 	public BlockingParams(String blockingFileName)
-		throws FileNotFoundException, SQLException, IOException {
-			
+			throws FileNotFoundException, SQLException, IOException {
+
 		if (!INITIALIZED) {
 			init();
 		}
@@ -86,13 +88,14 @@ public class BlockingParams {
 		String retVal = sb.toString();
 		return retVal;
 	}
-	
+
 	public int getNumberOfSqlArguments() {
 		int retVal = 0;
 		String sql = getSQL();
 		CharacterIterator iter = new StringCharacterIterator(sql);
-		for(char c = iter.first(); c != CharacterIterator.DONE; c = iter.next()) {
-			if(c=='?') {
+		for (char c = iter.first(); c != CharacterIterator.DONE; c =
+			iter.next()) {
+			if (c == '?') {
 				++retVal;
 			}
 		}
@@ -109,7 +112,7 @@ public class BlockingParams {
 		logInfo("SQL: '" + getSQL() + "'");
 		logInfo("Number Of SQL Arguments: '" + getNumberOfSqlArguments() + "'");
 	}
-	
+
 	private void logInfo(String msg) {
 		LogUtil.logExtendedInfo("CMTBlockingParams", msg);
 	}

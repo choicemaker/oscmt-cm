@@ -24,37 +24,39 @@ import java.util.Properties;
 
 /**
  *
- * @author   rphall 
- * @version   $Revision: 1.3.2.2 $ $Date: 2010/04/08 16:14:18 $
+ * @author rphall
+ * @version $Revision: 1.3.2.2 $ $Date: 2010/04/08 16:14:18 $
  */
 public class JdbcParams {
 
 	private static boolean INITIALIZED = false;
-	
-	public static final String PN_DRIVER_TYPE ="driverType";
-	public static final String PN_SERVER_NAME ="serverName";
-	public static final String PN_NETWORK_PROTOCOL ="networkProtocol";
-	public static final String PN_DATABASE_NAME ="databaseName";
-	public static final String PN_PORT_NUMBER ="portNumber";
-	public static final String PN_USER ="user";
-	public static final String PN_PASSWORD ="password";
-	public static final String PN_CONNECTION_LIMIT ="connectionLimit";
-	public static final String PN_AUTO_COMMIT ="autoCommit";
 
-	private static final String DEFAULTS = "com/choicemaker/cmtblocking/defaultJDBC.properties";
+	public static final String PN_DRIVER_TYPE = "driverType";
+	public static final String PN_SERVER_NAME = "serverName";
+	public static final String PN_NETWORK_PROTOCOL = "networkProtocol";
+	public static final String PN_DATABASE_NAME = "databaseName";
+	public static final String PN_PORT_NUMBER = "portNumber";
+	public static final String PN_USER = "user";
+	public static final String PN_PASSWORD = "password";
+	public static final String PN_CONNECTION_LIMIT = "connectionLimit";
+	public static final String PN_AUTO_COMMIT = "autoCommit";
+
+	private static final String DEFAULTS =
+		"com/choicemaker/cmtblocking/defaultJDBC.properties";
 
 	private static final Properties defaults = new Properties();
-	
+
 	private static void loadDefaultProperties() throws IOException {
-		InputStream is = JdbcParams.class.getClassLoader().getResourceAsStream(DEFAULTS);
+		InputStream is =
+			JdbcParams.class.getClassLoader().getResourceAsStream(DEFAULTS);
 		defaults.load(is);
 	}
-	
+
 	private static void registerJdbcDriver() throws SQLException {
 		Driver driver = new oracle.jdbc.driver.OracleDriver();
-			DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-				} // static
-				
+		DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
+	} // static
+
 	private static void init() throws IOException, SQLException {
 		if (!INITIALIZED) {
 			loadDefaultProperties();
@@ -67,8 +69,8 @@ public class JdbcParams {
 	private final Properties properties;
 
 	public JdbcParams(String jdbcFileName)
-		throws FileNotFoundException, SQLException, IOException {
-			
+			throws FileNotFoundException, SQLException, IOException {
+
 		if (!INITIALIZED) {
 			init();
 		}

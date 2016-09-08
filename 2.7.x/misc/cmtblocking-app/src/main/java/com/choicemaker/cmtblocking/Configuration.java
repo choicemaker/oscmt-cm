@@ -19,11 +19,11 @@ import java.util.Properties;
 
 /**
  *
- * @author   rphall 
- * @version   $Revision: 1.3.2.2 $ $Date: 2010/04/08 16:14:18 $
+ * @author rphall
+ * @version $Revision: 1.3.2.2 $ $Date: 2010/04/08 16:14:18 $
  */
 public class Configuration {
-	
+
 	public static final String PN_JDBC_PROPERTIES = "jdbcProperties";
 	public static final String PN_BLOCKING_PROPERTIES = "blockingProperties";
 	public static final String PN_BLOCKING_SCRIPT = "blockingScript";
@@ -38,7 +38,8 @@ public class Configuration {
 			Properties properties = new Properties();
 			properties.load(new FileInputStream(configfile));
 			this.jdbcFileName = properties.getProperty(PN_JDBC_PROPERTIES);
-			this.blockingFileName = properties.getProperty(PN_BLOCKING_PROPERTIES);
+			this.blockingFileName =
+				properties.getProperty(PN_BLOCKING_PROPERTIES);
 			this.scriptFileName = properties.getProperty(PN_BLOCKING_SCRIPT);
 		} else {
 			this.jdbcFileName = null;
@@ -60,12 +61,12 @@ public class Configuration {
 	}
 
 	public JdbcParams getJdbcParams()
-		throws FileNotFoundException, SQLException, IOException {
+			throws FileNotFoundException, SQLException, IOException {
 		return new JdbcParams(this.getJdbcFileName());
 	}
 
 	public BlockingParams getBlockingParams()
-		throws FileNotFoundException, SQLException, IOException {
+			throws FileNotFoundException, SQLException, IOException {
 		return new BlockingParams(this.getBlockingFileName());
 	}
 

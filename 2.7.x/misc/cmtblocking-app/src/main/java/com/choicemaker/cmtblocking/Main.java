@@ -10,7 +10,8 @@
  */
 package com.choicemaker.cmtblocking;
 
-import static com.choicemaker.cmtblocking.LogUtil.*;
+import static com.choicemaker.cmtblocking.LogUtil.logExtendedException;
+import static com.choicemaker.cmtblocking.LogUtil.logExtendedInfo;
 
 import java.sql.Connection;
 import java.sql.SQLException;

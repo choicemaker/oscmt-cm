@@ -16,8 +16,8 @@ import java.util.Date;
 
 /**
  *
- * @author   rphall 
- * @version   $Revision: 1.1.2.2 $ $Date: 2010/04/08 16:14:18 $
+ * @author rphall
+ * @version $Revision: 1.1.2.2 $ $Date: 2010/04/08 16:14:18 $
  */
 public class LogUtil {
 
@@ -26,10 +26,8 @@ public class LogUtil {
 		System.out.println("[" + date + "] " + extra + ": " + msg);
 	}
 
-	public static void logExtendedException(
-		String extra,
-		String msg,
-		Throwable x) {
+	public static void logExtendedException(String extra, String msg,
+			Throwable x) {
 		Date date = new Date();
 		System.err.println("[" + date + "] " + extra + ": " + msg);
 

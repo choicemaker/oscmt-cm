@@ -29,8 +29,7 @@ public class CJBS {
 	public final Iterator<String> scriptIterator;
 
 	public CJBS(Configuration config, JdbcParams jdbcParams,
-			BlockingParams blockingParams,
-			Iterator<String> scriptIterator) {
+			BlockingParams blockingParams, Iterator<String> scriptIterator) {
 		this.config = config;
 		this.jdbcParams = jdbcParams;
 		this.blockingParams = blockingParams;
@@ -49,7 +48,8 @@ public class CJBS {
 			config = new Configuration(configFileName);
 			config.logInfo();
 		} catch (Exception x) {
-			logExtendedException(source, "Unable to construct configuration", x);
+			logExtendedException(source, "Unable to construct configuration",
+					x);
 		}
 
 		JdbcParams jdbcParams = null;
@@ -58,7 +58,8 @@ public class CJBS {
 				jdbcParams = config.getJdbcParams();
 				jdbcParams.logInfo();
 			} catch (Exception x) {
-				logExtendedException(source, "Unable to get JDBC parameters", x);
+				logExtendedException(source, "Unable to get JDBC parameters",
+						x);
 			}
 		}
 
@@ -68,7 +69,8 @@ public class CJBS {
 				blockingParams = config.getBlockingParams();
 				blockingParams.logInfo();
 			} catch (Exception x) {
-				logExtendedException(source, "Unable to get Blocking parameters", x);
+				logExtendedException(source,
+						"Unable to get Blocking parameters", x);
 			}
 		}
 
@@ -79,7 +81,8 @@ public class CJBS {
 				script.logInfo();
 				scriptIterator = script.getIterator();
 			} catch (FileNotFoundException x) {
-				logExtendedException(source, "Unable to get blocking script", x);
+				logExtendedException(source, "Unable to get blocking script",
+						x);
 			}
 		}
 
