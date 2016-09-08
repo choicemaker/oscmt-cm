@@ -41,6 +41,10 @@ public class MainUnionLiteral {
 				logExtendedInfo(SOURCE, "Opening JDBC connection...");
 				conn = cjbs.jdbcParams.getConnection();
 				logExtendedInfo(SOURCE, "JDBC connection opened");
+				
+				logExtendedInfo(SOURCE, "Preparing connection...");
+				UnionLiteral.prepareConnection(conn, cjbs.blockingParams);
+				logExtendedInfo(SOURCE, "Connection prepared");
 
 				logExtendedInfo(SOURCE, "Starting script");
 				while (cjbs.scriptIterator.hasNext()) {

@@ -198,4 +198,9 @@ public class UnionLiteral {
 		return retVal;
 	}
 
+	public static void prepareConnection(Connection conn,
+			BlockingParams blockingParams) throws SQLException {
+		logInfo("prepareConnection -- NOP");
+	}
+
 }
