@@ -200,7 +200,20 @@ public class UnionLiteral {
 
 	public static void prepareConnection(Connection conn,
 			BlockingParams blockingParams) throws SQLException {
-		logInfo("prepareConnection -- NOP");
+		Statement st = null;
+		boolean returnIsResultSet = false;
+		try {
+			logInfo("Alter session; set NLS_DATE_FORMAT");
+			st = conn.createStatement();
+			returnIsResultSet =
+				st.execute("ALTER SESSION SET nls_date_format = 'YYYY-MM-DD'");
+		} finally {
+			if (returnIsResultSet) {
+				BlockingCall.closeResultSet(st.getResultSet());
+			}
+			BlockingCall.closeStatement(st);
+			st = null;
+		}
 	}
 
 }

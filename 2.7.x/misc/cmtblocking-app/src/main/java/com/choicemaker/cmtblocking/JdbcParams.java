@@ -42,7 +42,7 @@ public class JdbcParams {
 	public static final String PN_PASSWORD = "password";
 	public static final String PN_CONNECTION_LIMIT = "connectionLimit";
 	public static final String PN_AUTO_COMMIT = "autoCommit";
-	public static final String PN_CONNECTION_MODIFIERS = "InitializationString=ALTER SESSION SET NLS_DATE_FORMAT='YYYY-MM-DD'";
+	public static final String PN_CONNECTION_MODIFIERS = "connectionModifiers";
 
 	private static final String DEFAULTS =
 		"com/choicemaker/cmtblocking/defaultJDBC.properties";
@@ -101,7 +101,7 @@ public class JdbcParams {
 		sb.append(properties.get(PN_DATABASE_NAME));
 		String modifiers = properties.getProperty(PN_CONNECTION_MODIFIERS);
 		if (StringUtils.nonEmptyString(modifiers)) {
-			sb.append(":");
+			sb.append(";");
 			sb.append(modifiers);
 		}
 		String retVal = sb.toString();

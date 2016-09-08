@@ -71,15 +71,10 @@ public class MainUnionLiteral {
 						x);
 			} finally {
 				if (conn != null) {
-					try {
-						logExtendedInfo(SOURCE, "Closing JDBC connection...");
-						conn.close();
-						logExtendedInfo(SOURCE, "JDBC connection closed");
-					} catch (SQLException x) {
-						logExtendedException(SOURCE, x.getMessage(), x);
-					} finally {
-						conn = null;
-					}
+					logExtendedInfo(SOURCE, "Closing JDBC connection...");
+					Main.closeConnection(SOURCE, conn);
+					conn = null;
+					logExtendedInfo(SOURCE, "JDBC connection closed");
 				}
 			}
 		}

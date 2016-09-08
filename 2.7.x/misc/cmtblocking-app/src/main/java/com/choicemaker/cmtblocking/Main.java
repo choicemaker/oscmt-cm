@@ -68,19 +68,24 @@ public class Main {
 						x);
 			} finally {
 				if (conn != null) {
-					try {
-						logExtendedInfo(SOURCE, "Closing JDBC connection...");
-						conn.close();
-						logExtendedInfo(SOURCE, "JDBC connection closed");
-					} catch (SQLException x) {
-						logExtendedException(SOURCE, x.getMessage(), x);
-					} finally {
-						conn = null;
-					}
+					logExtendedInfo(SOURCE, "Closing JDBC connection...");
+					closeConnection(SOURCE, conn);
+					conn = null;
+					logExtendedInfo(SOURCE, "JDBC connection closed");
 				}
 			}
 		}
 
 	} // main(String[])
+
+	static void closeConnection(String source, Connection connection) {
+		if (connection != null) {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				logExtendedException(source, "Unable to close statement: ", e);
+			}
+		}
+	}
 
 } // class Main
