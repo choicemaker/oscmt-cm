@@ -29,8 +29,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import com.choicemaker.util.SystemPropertyUtils;
-
 /**
  *
  * @author rphall
@@ -204,7 +202,7 @@ public class UnionParameterized {
 			literals.add(literal);
 		}
 		parameterize(literals);
-		String[] retVal = sb.toString();
+		String[] retVal = null; // FIXME sb.toString();
 		return retVal;
 	}
 

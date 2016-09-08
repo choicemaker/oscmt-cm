@@ -38,19 +38,19 @@ public class UnionLiteralTest {
 				+ EOL
 				+ "UNION SELECT /*+ index_join(v0 i3,i6) */ v0.mci_id FROM ST_PATIENT_NAMES v0 WHERE v0.first_name='DOE' AND v0.sound_last_name='P362'"
 				+ EOL
-				+ "UNION SELECT  v0.mci_id FROM ST_MOTHERS_MAIDEN_NAME v0,ST_PATIENT_NAMES v1 WHERE v0.mothers_maiden_name='JOHN' AND v1.last_name='DOE'"
+				+ "UNION SELECT  v0.mci_id FROM ST_MOTHERS_MAIDEN_NAME v0,ST_PATIENT_NAMES v1 WHERE v0.mci_id = v1.mci_id AND v0.mothers_maiden_name='JOHN' AND v1.last_name='DOE'"
 				+ EOL
 				+ "UNION SELECT /*+ index_join(v0 i4,i7) */ v0.mci_id FROM ST_PATIENT_NAMES v0 WHERE v0.dob='1970-01-01' AND v0.last_name='DOE'"
 				+ EOL
 				+ "UNION SELECT  v0.mci_id FROM ST_PATIENT_NAMES v0 WHERE v0.first_name='JOHN' AND v0.last_name='DOE'"
 				+ EOL
-				+ "UNION SELECT  v0.mci_id FROM ST_MOTHERS_MAIDEN_NAME v0,ST_PATIENT_NAMES v1 WHERE v0.mothers_maiden_name='JOHN' AND v1.dob_y_m='197001'"
+				+ "UNION SELECT  v0.mci_id FROM ST_MOTHERS_MAIDEN_NAME v0,ST_PATIENT_NAMES v1 WHERE v0.mci_id = v1.mci_id AND v0.mothers_maiden_name='JOHN' AND v1.dob_y_m='197001'"
 				+ EOL
 				+ "UNION SELECT  v0.mci_id FROM ST_PATIENT_NAMES v0 WHERE v0.last_name='JOHN' AND v0.dob_y_m='197001'"
 				+ EOL
 				+ "UNION SELECT /*+ index_join(v0 i3,i8) */ v0.mci_id FROM ST_PATIENT_NAMES v0 WHERE v0.first_name='DOE' AND v0.dob_y_m='197001'"
 				+ EOL
-				+ "UNION SELECT  v0.mci_id FROM ST_MOTHERS_MAIDEN_NAME v0,ST_PATIENT_NAMES v1 WHERE v0.mothers_maiden_name='JOHN' AND v1.sound_first_name='L000'"
+				+ "UNION SELECT  v0.mci_id FROM ST_MOTHERS_MAIDEN_NAME v0,ST_PATIENT_NAMES v1 WHERE v0.mci_id = v1.mci_id AND v0.mothers_maiden_name='JOHN' AND v1.sound_first_name='L000'"
 				+ EOL
 				+ "UNION SELECT  v0.mci_id FROM ST_PATIENT_NAMES v0 WHERE v0.last_name='JOHN' AND v0.sound_first_name='L000'"
 				+ EOL

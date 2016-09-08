@@ -23,10 +23,16 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import com.choicemaker.util.Precondition;
 import com.choicemaker.util.SystemPropertyUtils;
 
 /**
@@ -42,13 +48,99 @@ public class UnionLiteral {
 
 	public static final String COMPRESSED_WHERE = "`";
 
-	public static final String SELECT = "SELECT ";
+	public static final String PREFIX = "SELECT ";
 
-	public static final String WHERE = " WHERE ";
+	public static final String WHERE_IDX_0 = " WHERE ";
+
+	public static final String WHERE_IDX_1 =
+		" WHERE v0.mci_id = v1.mci_id AND ";
 
 	public static final String UNION = "UNION ";
 
-	public static final String EOL = SystemPropertyUtils.PV_LINE_SEPARATOR;
+	public static final String SUFFIX = SystemPropertyUtils.PV_LINE_SEPARATOR;
+
+	public static final String REGEX_WORD_BOUNDARY = "\\b";
+
+	public static final String TABLE_ALIAS_BASE = "v";
+
+	public static String regexTableAlias(int idx) {
+		Precondition.assertBoolean("negative index", idx > -1);
+		StringBuilder sb = new StringBuilder().append(REGEX_WORD_BOUNDARY)
+				.append(TABLE_ALIAS_BASE).append(idx)
+				.append(REGEX_WORD_BOUNDARY);
+		String retVal = sb.toString();
+		return retVal;
+	}
+
+	private static AtomicReference<Map<Integer, Pattern>> tableAliasPatternsRef =
+		new AtomicReference<>(null);
+	
+	private static final int LARGEST_IDX_EVER_EXPECTED_AND_THEN_SOME = 10;
+
+	private static Map<Integer, Pattern> createTableAliasPatterns() {
+		Map<Integer, Pattern> map = new LinkedHashMap<>();
+		for (int idx = 0; idx < LARGEST_IDX_EVER_EXPECTED_AND_THEN_SOME; idx++) {
+			String regex = regexTableAlias(idx);
+			Pattern p = Pattern.compile(regex);
+			map.put(idx, p);
+		}
+		return Collections.unmodifiableMap(map);
+	}
+
+	static Map<Integer, Pattern> tableAliasPatterns() {
+		Map<Integer, Pattern> retVal = tableAliasPatternsRef.get();
+		if (retVal == null) {
+			Map<Integer, Pattern> update = createTableAliasPatterns();
+			boolean updated = tableAliasPatternsRef.compareAndSet(null, update);
+			retVal = tableAliasPatternsRef.get();
+			assert updated || !update.equals(retVal);
+		}
+		assert retVal != null;
+		return retVal;
+	}
+
+	/**
+	 * Returns the index <code>N</code> of the largest table alias
+	 * <code>vN</code> found in the specified String, assuming that all tables
+	 * indices up to <code>N</code> are also present.
+	 * 
+	 * @param s
+	 *            possibly null.
+	 * @return -1 if s is null or s does not contain a table alias
+	 */
+	public static int largestTableAliasIndex(String s) {
+		final Map<Integer, Pattern> patterns = tableAliasPatterns();
+		int retVal = -1;
+		for (int i : patterns.keySet()) {
+			// This method requires keys in ascending order
+			assert i == retVal + 1;
+			Pattern p = patterns.get(i);
+			Matcher m = p.matcher(s);
+			if (!m.find()) {
+				break;
+			}
+			retVal = i;
+		}
+
+		// Sanity checks if assertions are enabled
+		boolean assertOn = false;
+		assert assertOn = true;
+		if (assertOn && retVal > -1) {
+			int i = 0;
+			for (; i <= retVal; i++) {
+				Pattern p = patterns.get(i);
+				Matcher m = p.matcher(s);
+				assert m.find();
+			}
+			for (i=retVal+1 ; i< LARGEST_IDX_EVER_EXPECTED_AND_THEN_SOME; i++) {
+				Pattern p = patterns.get(i);
+				Matcher m = p.matcher(s);
+				assert !m.find();
+			}
+		}
+		
+		return retVal;
+	}
 
 	private static void logInfo(String msg) {
 		LogUtil.logExtendedInfo(SOURCE, msg);
@@ -191,8 +283,25 @@ public class UnionLiteral {
 			} else {
 				sb.append(UNION);
 			}
-			String partial = compressed.replace(COMPRESSED_WHERE, WHERE);
-			sb.append(SELECT).append(partial).append(EOL);
+	
+			String partial = null;
+			int largestAliasIdx = largestTableAliasIndex(compressed);
+			switch (largestAliasIdx) {
+			case -1:
+				partial = compressed;
+				break;
+			case 0:
+				partial = compressed.replace(COMPRESSED_WHERE, WHERE_IDX_0);
+				break;
+			case 1:
+				partial = compressed.replace(COMPRESSED_WHERE, WHERE_IDX_1);
+				break;
+			default:
+				String msg = "Not yet implemented for alias index " + largestAliasIdx;
+				throw new Error(msg);
+			}
+			assert partial != null;
+			sb.append(PREFIX).append(partial).append(SUFFIX);
 		}
 		String retVal = sb.toString();
 		return retVal;
