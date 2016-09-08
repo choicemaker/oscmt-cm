@@ -27,7 +27,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.SortedSet;
 import java.util.StringTokenizer;
+import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -226,25 +228,22 @@ public class UnionLiteral {
 				logInfo("execute and retrieve outer");
 				outer = stmt.executeQuery(sql);
 
+				logInfo("Counting ids from result set...");
 				outer.setFetchSize(100);
-				outer.next();
-				ResultSetMetaData metaData = outer.getMetaData();
-				int numberOfColumns = metaData.getColumnCount();
-
-				ResultSet[] rs = new ResultSet[numberOfColumns];
-				for (int i = 0; i < numberOfColumns; i++) {
-					int colNum = i + 1;
-					logInfo("Retrieve column '" + colNum
-							+ "' of first row of outer blocking result set");
-					Object o = outer.getObject(colNum);
-					if (o instanceof ResultSet) {
-						logInfo("retrieve nested cursor: " + i);
-						rs[i] = (ResultSet) outer.getObject(colNum);
-						rs[i].setFetchSize(100);
+				int idCount = 0;
+				SortedSet<String> distinctIds = new TreeSet<>();
+				while (outer.next()) {
+					++idCount;
+					if (idCount == 1) {
+						ResultSetMetaData metaData = outer.getMetaData();
+						int numberOfColumns = metaData.getColumnCount();
+						assert numberOfColumns == 1;
 					}
-					logInfo("open dbr");
+					String id = outer.getString(1);
+					distinctIds.add(id);
 				}
-				BlockingCall.retrieveData(connection, rs);
+				logInfo("Total number of ids: " + idCount);
+				logInfo("Number of distinct ids: " + distinctIds.size());
 
 			} finally {
 				try {
