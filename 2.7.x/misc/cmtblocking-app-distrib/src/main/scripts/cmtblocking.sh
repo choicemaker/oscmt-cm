@@ -29,6 +29,9 @@ for f in $LIB/* ; do
   fi
 done
 
+# Uncomment the following line to enable assertions
+JAVA_OPTS="$JAVA_OPTS -ea"
+
 # Uncomment the following line to enable remote debugging
 #JAVA_OPTS="$JAVA_OPTS -debug"
 #JAVA_OPTS="$JAVA_OPTS -Xdebug -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=y"

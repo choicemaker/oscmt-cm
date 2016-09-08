@@ -102,19 +102,26 @@ public class BlockingCall {
 
 	}
 
-	static void retrieveData(Connection connection, ResultSet[] rs) {
+	static void retrieveData(Connection connection, ResultSet[] rs)
+			throws SQLException {
+		int total = 0;
 		for (int i = 0; i < rs.length; i++) {
 			if (rs[i] != null) {
-				logInfo("Retrieving data from result set " + i);
-				// try {
-				// FIXME retrieve the result set
-				// } finally {
-				closeResultSet(rs[i]);
-				rs[i] = null;
-				// }
-				logInfo("Retrieved data from result set " + i);
+				logInfo("Counting rows from result set " + i);
+				try {
+					int count = 0;
+					while (rs[i].next()) {
+						++count;
+					}
+					logInfo("result set " + i + ": " + count);
+					total += count;
+				} finally {
+					closeResultSet(rs[i]);
+					rs[i] = null;
+				}
 			}
 		}
+		logInfo("Total rows from all result sets " + total);
 	}
 
 	static void closeResultSet(ResultSet rs) {
