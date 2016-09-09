@@ -15,6 +15,8 @@ import static com.choicemaker.cmtblocking.LogUtil.logExtendedInfo;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Properties;
+import java.util.Set;
 
 import com.choicemaker.cm.io.db.oracle.OracleRemoteDebugging;
 
@@ -31,6 +33,8 @@ public class Main {
 	private static final String SOURCE = "Main";
 
 	public static void main(String[] args) {
+
+		logSystemProperties();
 
 		CJBS cjbs = CJBS.parseArgs(SOURCE, args);
 		assert cjbs != null;
@@ -93,6 +97,19 @@ public class Main {
 		}
 
 	} // main(String[])
+
+	static void logSystemProperties() {
+		Properties p = System.getProperties();
+		Set<Object> keys = p.keySet();
+		for (Object o : keys) {
+			if (o instanceof String) {
+				String key = (String) o;
+				String value = p.getProperty(key);
+				String msg = "System property '" + key + "'/'" + value + "'";
+				logExtendedInfo(SOURCE, msg);
+			}
+		}
+	}
 
 	static void closeConnection(String source, Connection connection) {
 		if (connection != null) {

@@ -10,6 +10,8 @@
  */
 package com.choicemaker.cmtblocking;
 
+import static com.choicemaker.cmtblocking.Main.*;
+
 import static com.choicemaker.cmtblocking.LogUtil.logExtendedException;
 import static com.choicemaker.cmtblocking.LogUtil.logExtendedInfo;
 
@@ -28,6 +30,8 @@ public class MainUnionLiteral {
 	private static final String SOURCE = "MainUnionLiteral";
 
 	public static void main(String[] args) {
+
+		logSystemProperties();
 
 		CJBS cjbs = CJBS.parseArgs(SOURCE, args);
 		assert cjbs != null;
