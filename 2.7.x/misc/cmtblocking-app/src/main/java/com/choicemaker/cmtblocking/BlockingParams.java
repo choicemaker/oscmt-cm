@@ -20,6 +20,7 @@ import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 import java.util.Enumeration;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 /**
  *
@@ -27,6 +28,9 @@ import java.util.Properties;
  * @version $Revision: 1.3.2.2 $ $Date: 2010/04/08 16:14:18 $
  */
 public class BlockingParams {
+
+	private static final Logger logger =
+		Logger.getLogger(BlockingParams.class.getName());
 
 	private static boolean INITIALIZED = false;
 
@@ -39,17 +43,17 @@ public class BlockingParams {
 
 	private static final Properties defaults = new Properties();
 
-	private static void loadDefaultProperties() throws IOException {
-		InputStream is =
-			BlockingParams.class.getClassLoader().getResourceAsStream(DEFAULTS);
-		defaults.load(is);
-	}
-
 	private static void init() throws IOException, SQLException {
 		if (!INITIALIZED) {
 			loadDefaultProperties();
 			INITIALIZED = true;
 		}
+	}
+
+	private static void loadDefaultProperties() throws IOException {
+		InputStream is =
+			BlockingParams.class.getClassLoader().getResourceAsStream(DEFAULTS);
+		defaults.load(is);
 	}
 
 	private final File file;
@@ -74,6 +78,19 @@ public class BlockingParams {
 
 	} // ctor(String)
 
+	public int getNumberOfSqlArguments() {
+		int retVal = 0;
+		String sql = getSQL();
+		CharacterIterator iter = new StringCharacterIterator(sql);
+		for (char c = iter.first(); c != CharacterIterator.DONE; c =
+			iter.next()) {
+			if (c == '?') {
+				++retVal;
+			}
+		}
+		return retVal;
+	}
+
 	public String getSQL() {
 		StringBuffer sb = new StringBuffer("call ");
 		String s = properties.getProperty(PN_SCHEMA);
@@ -89,21 +106,8 @@ public class BlockingParams {
 		return retVal;
 	}
 
-	public int getNumberOfSqlArguments() {
-		int retVal = 0;
-		String sql = getSQL();
-		CharacterIterator iter = new StringCharacterIterator(sql);
-		for (char c = iter.first(); c != CharacterIterator.DONE; c =
-			iter.next()) {
-			if (c == '?') {
-				++retVal;
-			}
-		}
-		return retVal;
-	}
-
 	void logInfo() {
-		Enumeration e = this.properties.propertyNames();
+		Enumeration<?> e = this.properties.propertyNames();
 		while (e.hasMoreElements()) {
 			String key = (String) e.nextElement();
 			String value = this.properties.getProperty(key);
@@ -114,7 +118,7 @@ public class BlockingParams {
 	}
 
 	private void logInfo(String msg) {
-		LogUtil.logExtendedInfo("CMTBlockingParams", msg);
+		LogUtil.logExtendedInfo(logger, msg);
 	}
 
 }

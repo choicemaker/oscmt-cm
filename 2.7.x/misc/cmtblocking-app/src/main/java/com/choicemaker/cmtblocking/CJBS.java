@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Iterator;
+import java.util.logging.Logger;
 
 import com.choicemaker.util.Precondition;
 
@@ -23,20 +24,7 @@ import com.choicemaker.util.Precondition;
  *
  */
 public class CJBS {
-	public final Configuration config;
-	public final JdbcParams jdbcParams;
-	public final BlockingParams blockingParams;
-	public final Iterator<String> scriptIterator;
-
-	public CJBS(Configuration config, JdbcParams jdbcParams,
-			BlockingParams blockingParams, Iterator<String> scriptIterator) {
-		this.config = config;
-		this.jdbcParams = jdbcParams;
-		this.blockingParams = blockingParams;
-		this.scriptIterator = scriptIterator;
-	}
-
-	public static CJBS parseArgs(String source, String[] args) {
+	public static CJBS parseArgs(String source, Logger logger, String[] args) {
 		if (args == null || args.length > 1) {
 			String msg = printUsage(source);
 			throw new IllegalArgumentException(msg);
@@ -48,7 +36,7 @@ public class CJBS {
 			config = new Configuration(configFileName);
 			config.logInfo();
 		} catch (Exception x) {
-			logExtendedException(source, "Unable to construct configuration",
+			logExtendedException(logger, "Unable to construct configuration",
 					x);
 		}
 
@@ -58,7 +46,7 @@ public class CJBS {
 				jdbcParams = config.getJdbcParams();
 				jdbcParams.logInfo();
 			} catch (Exception x) {
-				logExtendedException(source, "Unable to get JDBC parameters",
+				logExtendedException(logger, "Unable to get JDBC parameters",
 						x);
 			}
 		}
@@ -69,7 +57,7 @@ public class CJBS {
 				blockingParams = config.getBlockingParams();
 				blockingParams.logInfo();
 			} catch (Exception x) {
-				logExtendedException(source,
+				logExtendedException(logger,
 						"Unable to get Blocking parameters", x);
 			}
 		}
@@ -81,7 +69,7 @@ public class CJBS {
 				script.logInfo();
 				scriptIterator = script.getIterator();
 			} catch (FileNotFoundException x) {
-				logExtendedException(source, "Unable to get blocking script",
+				logExtendedException(logger, "Unable to get blocking script",
 						x);
 			}
 		}
@@ -90,7 +78,6 @@ public class CJBS {
 			new CJBS(config, jdbcParams, blockingParams, scriptIterator);
 		return retVal;
 	}
-
 	/**
 	 * Prints the following usage message:
 	 * 
@@ -115,5 +102,19 @@ public class CJBS {
 		pw.println("  that specifies the name of a jdbcProperties file");
 		pw.println("  and the name of a blockingScript file");
 		return sw.toString();
+	}
+	public final Configuration config;
+	public final JdbcParams jdbcParams;
+
+	public final BlockingParams blockingParams;
+
+	public final Iterator<String> scriptIterator;
+
+	public CJBS(Configuration config, JdbcParams jdbcParams,
+			BlockingParams blockingParams, Iterator<String> scriptIterator) {
+		this.config = config;
+		this.jdbcParams = jdbcParams;
+		this.blockingParams = blockingParams;
+		this.scriptIterator = scriptIterator;
 	}
 }

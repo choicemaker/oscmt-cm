@@ -15,6 +15,7 @@ import static com.choicemaker.cmtblocking.LogUtil.logExtendedInfo;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.io.db.oracle.OracleRemoteDebugging;
 
@@ -28,13 +29,15 @@ import com.choicemaker.cm.io.db.oracle.OracleRemoteDebugging;
  */
 public class Main {
 
-	static final String SOURCE = "Main";
+	private static final Logger logger = Logger.getLogger(Main.class.getName());
+
+	private static final String SOURCE = Main.class.getSimpleName();
 
 	public static void main(String[] args) {
 
-		LogUtil.logSystemProperties();
+		LogUtil.logSystemProperties(logger);
 
-		CJBS cjbs = CJBS.parseArgs(SOURCE, args);
+		CJBS cjbs = CJBS.parseArgs(SOURCE, logger, args);
 		assert cjbs != null;
 
 		if (cjbs.jdbcParams != null && cjbs.blockingParams != null
@@ -43,53 +46,53 @@ public class Main {
 			Connection conn = null;
 			try {
 
-				logExtendedInfo(SOURCE, "Opening JDBC connection...");
+				logExtendedInfo(logger, "Opening JDBC connection...");
 				conn = cjbs.jdbcParams.getConnection();
-				logExtendedInfo(SOURCE, "JDBC connection opened");
+				logExtendedInfo(logger, "JDBC connection opened");
 
-				logExtendedInfo(SOURCE,
+				logExtendedInfo(logger,
 						"Configuring Oracle remote debugging...");
 				OracleRemoteDebugging.doDebugging(conn);
-				logExtendedInfo(SOURCE, "Oracle remote debugging configured");
+				logExtendedInfo(logger, "Oracle remote debugging configured");
 
-				logExtendedInfo(SOURCE, "Committing connection...");
+				logExtendedInfo(logger, "Committing connection...");
 				conn.commit();
-				logExtendedInfo(SOURCE, "Connection committed");
+				logExtendedInfo(logger, "Connection committed");
 
-				logExtendedInfo(SOURCE, "Starting script");
+				logExtendedInfo(logger, "Starting script");
 				while (cjbs.scriptIterator.hasNext()) {
 
-					String line = (String) cjbs.scriptIterator.next();
+					String line = cjbs.scriptIterator.next();
 					BlockingCallArguments bca =
 						BlockingCallArguments.parseScriptLine(line);
 
 					try {
-						logExtendedInfo(SOURCE, "Starting blocking call...");
+						logExtendedInfo(logger, "Starting blocking call...");
 						bca.logInfo();
 						BlockingCall.doBlocking(conn, cjbs.blockingParams, bca);
-						logExtendedInfo(SOURCE, "Blocking call returned");
+						logExtendedInfo(logger, "Blocking call returned");
 
-						logExtendedInfo(SOURCE, "Committing connection...");
+						logExtendedInfo(logger, "Committing connection...");
 						conn.commit();
-						logExtendedInfo(SOURCE, "Connection committed");
+						logExtendedInfo(logger, "Connection committed");
 
 					} catch (Exception x2) {
-						logExtendedException(SOURCE, "Blocking call failed",
+						logExtendedException(logger, "Blocking call failed",
 								x2);
 					}
 
 				}
-				logExtendedInfo(SOURCE, "Finished script");
+				logExtendedInfo(logger, "Finished script");
 
 			} catch (SQLException x) {
-				logExtendedException(SOURCE, "Unable to open JDBC connection",
+				logExtendedException(logger, "Unable to open JDBC connection",
 						x);
 			} finally {
 				if (conn != null) {
-					logExtendedInfo(SOURCE, "Closing JDBC connection...");
-					JdbcUtil.closeConnection(SOURCE, conn);
+					logExtendedInfo(logger, "Closing JDBC connection...");
+					JdbcUtil.closeConnection(conn);
 					conn = null;
-					logExtendedInfo(SOURCE, "JDBC connection closed");
+					logExtendedInfo(logger, "JDBC connection closed");
 				}
 			}
 		}

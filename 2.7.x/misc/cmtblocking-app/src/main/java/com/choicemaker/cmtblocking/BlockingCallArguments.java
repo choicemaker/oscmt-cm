@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.logging.Logger;
 
 /**
  *
@@ -22,41 +23,22 @@ import java.util.StringTokenizer;
  */
 public class BlockingCallArguments {
 
-	private Map<String, String> map = new HashMap<>();
+	private static final Logger logger =
+		Logger.getLogger(BlockingCallArguments.class.getName());
 
 	public static final String SEPARATOR = "|";
 
 	static final String BLOCK_CONFIG = "blockConfig";
+
 	static final String QUERY = "query";
 	static final String CONDITION_1 = "condition1";
 	static final String CONDITION_2 = "condition2";
 	static final String READ_CONFIG = "readConfig";
-
 	private static final String[] _fieldNames = new String[] {
 			BLOCK_CONFIG, QUERY, CONDITION_1, CONDITION_2, READ_CONFIG };
 
 	static final String[] fieldNames() {
 		return Arrays.copyOf(_fieldNames, _fieldNames.length);
-	}
-
-	public String getBlockConfig() {
-		return (String) this.map.get(BLOCK_CONFIG);
-	}
-
-	public String getQuery() {
-		return (String) this.map.get(QUERY);
-	}
-
-	public String getCondition1() {
-		return (String) this.map.get(CONDITION_1);
-	}
-
-	public String getCondition2() {
-		return (String) this.map.get(CONDITION_2);
-	}
-
-	public String getReadConfig() {
-		return (String) this.map.get(READ_CONFIG);
 	}
 
 	/**
@@ -94,7 +76,29 @@ public class BlockingCallArguments {
 		return retVal;
 	}
 
+	private Map<String, String> map = new HashMap<>();
+
 	private BlockingCallArguments() {
+	}
+
+	public String getBlockConfig() {
+		return this.map.get(BLOCK_CONFIG);
+	}
+
+	public String getCondition1() {
+		return this.map.get(CONDITION_1);
+	}
+
+	public String getCondition2() {
+		return this.map.get(CONDITION_2);
+	}
+
+	public String getQuery() {
+		return this.map.get(QUERY);
+	}
+
+	public String getReadConfig() {
+		return this.map.get(READ_CONFIG);
 	}
 
 	void logInfo() {
@@ -106,7 +110,7 @@ public class BlockingCallArguments {
 	}
 
 	private void logInfo(String msg) {
-		LogUtil.logExtendedInfo("BlockingCallArguments", msg);
+		LogUtil.logExtendedInfo(logger, msg);
 	}
 
 }

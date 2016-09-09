@@ -6,21 +6,23 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Logger;
 
 public class JdbcUtil {
 
-	public static final String SOURCE = "JdbcUtil";
+	private static final Logger logger =
+		Logger.getLogger(JdbcUtil.class.getName());
 
-//	private static void logInfo(String msg) {
-//		LogUtil.logExtendedInfo(SOURCE, msg);
-//	}
+	// private static void logInfo(String msg) {
+	// LogUtil.logExtendedInfo(SOURCE, msg);
+	// }
 
-	static void closeConnection(String source, Connection connection) {
+	static void closeConnection(Connection connection) {
 		if (connection != null) {
 			try {
 				connection.close();
 			} catch (SQLException e) {
-				logExtendedException(source, "Unable to close statement: ", e);
+				logExtendedException(logger, "Unable to close statement: ", e);
 			}
 		}
 	}
@@ -46,7 +48,7 @@ public class JdbcUtil {
 	}
 
 	private static void logException(String msg, Throwable x) {
-		LogUtil.logExtendedException(SOURCE, msg, x);
+		LogUtil.logExtendedException(logger, msg, x);
 	}
 
 	private JdbcUtil() {

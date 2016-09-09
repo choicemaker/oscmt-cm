@@ -31,6 +31,7 @@ import java.util.SortedSet;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -44,7 +45,8 @@ import com.choicemaker.util.SystemPropertyUtils;
  */
 public class UnionLiteral {
 
-	private static final String SOURCE = "UnionLiteral";
+	private static final Logger logger =
+		Logger.getLogger(UnionLiteral.class.getName());
 
 	public static final String SELECT_SEPARATOR_REGEX = "\\^";
 
@@ -65,153 +67,55 @@ public class UnionLiteral {
 
 	public static final String TABLE_ALIAS_BASE = "v";
 
-	public static String regexTableAlias(int idx) {
-		Precondition.assertBoolean("negative index", idx > -1);
-		StringBuilder sb = new StringBuilder().append(REGEX_WORD_BOUNDARY)
-				.append(TABLE_ALIAS_BASE).append(idx)
-				.append(REGEX_WORD_BOUNDARY);
+	private static AtomicReference<Map<Integer, Pattern>> tableAliasPatternsRef =
+		new AtomicReference<>(null);
+
+	private static final int LARGEST_IDX_EVER_EXPECTED_AND_THEN_SOME = 10;
+
+	public static String computeSql(String s) {
+		StringBuilder sb = new StringBuilder();
+		boolean isFirst = true;
+		String[] stmts = s.split(SELECT_SEPARATOR_REGEX);
+		for (String compressed : stmts) {
+			if (isFirst) {
+				isFirst = false;
+			} else {
+				sb.append(UNION);
+			}
+
+			String partial = null;
+			int largestAliasIdx = largestTableAliasIndex(compressed);
+			switch (largestAliasIdx) {
+			case -1:
+				partial = compressed;
+				break;
+			case 0:
+				partial = compressed.replace(COMPRESSED_WHERE, WHERE_IDX_0);
+				break;
+			case 1:
+				partial = compressed.replace(COMPRESSED_WHERE, WHERE_IDX_1);
+				break;
+			default:
+				String msg =
+					"Not yet implemented for alias index " + largestAliasIdx;
+				throw new Error(msg);
+			}
+			assert partial != null;
+			sb.append(PREFIX).append(partial).append(SUFFIX);
+		}
 		String retVal = sb.toString();
 		return retVal;
 	}
 
-	private static AtomicReference<Map<Integer, Pattern>> tableAliasPatternsRef =
-		new AtomicReference<>(null);
-	
-	private static final int LARGEST_IDX_EVER_EXPECTED_AND_THEN_SOME = 10;
-
 	private static Map<Integer, Pattern> createTableAliasPatterns() {
 		Map<Integer, Pattern> map = new LinkedHashMap<>();
-		for (int idx = 0; idx < LARGEST_IDX_EVER_EXPECTED_AND_THEN_SOME; idx++) {
+		for (int idx =
+			0; idx < LARGEST_IDX_EVER_EXPECTED_AND_THEN_SOME; idx++) {
 			String regex = regexTableAlias(idx);
 			Pattern p = Pattern.compile(regex);
 			map.put(idx, p);
 		}
 		return Collections.unmodifiableMap(map);
-	}
-
-	static Map<Integer, Pattern> tableAliasPatterns() {
-		Map<Integer, Pattern> retVal = tableAliasPatternsRef.get();
-		if (retVal == null) {
-			Map<Integer, Pattern> update = createTableAliasPatterns();
-			boolean updated = tableAliasPatternsRef.compareAndSet(null, update);
-			retVal = tableAliasPatternsRef.get();
-			assert updated || !update.equals(retVal);
-		}
-		assert retVal != null;
-		return retVal;
-	}
-
-	/**
-	 * Returns the index <code>N</code> of the largest table alias
-	 * <code>vN</code> found in the specified String, assuming that all tables
-	 * indices up to <code>N</code> are also present.
-	 * 
-	 * @param s
-	 *            possibly null.
-	 * @return -1 if s is null or s does not contain a table alias
-	 */
-	public static int largestTableAliasIndex(String s) {
-		final Map<Integer, Pattern> patterns = tableAliasPatterns();
-		int retVal = -1;
-		for (int i : patterns.keySet()) {
-			// This method requires keys in ascending order
-			assert i == retVal + 1;
-			Pattern p = patterns.get(i);
-			Matcher m = p.matcher(s);
-			if (!m.find()) {
-				break;
-			}
-			retVal = i;
-		}
-
-		// Sanity checks if assertions are enabled
-		boolean assertOn = false;
-		assert assertOn = true;
-		if (assertOn && retVal > -1) {
-			int i = 0;
-			for (; i <= retVal; i++) {
-				Pattern p = patterns.get(i);
-				Matcher m = p.matcher(s);
-				assert m.find();
-			}
-			for (i=retVal+1 ; i< LARGEST_IDX_EVER_EXPECTED_AND_THEN_SOME; i++) {
-				Pattern p = patterns.get(i);
-				Matcher m = p.matcher(s);
-				assert !m.find();
-			}
-		}
-		
-		return retVal;
-	}
-
-	private static void logInfo(String msg) {
-		LogUtil.logExtendedInfo(SOURCE, msg);
-	}
-
-	private static void logException(String msg, Throwable x) {
-		LogUtil.logExtendedException(SOURCE, msg, x);
-	}
-
-	private Map<String, String> map = new HashMap<>();
-
-	public String getBlockConfig() {
-		return (String) this.map.get(BLOCK_CONFIG);
-	}
-
-	public String getQuery() {
-		return (String) this.map.get(QUERY);
-	}
-
-	public String getCondition1() {
-		return (String) this.map.get(CONDITION_1);
-	}
-
-	public String getCondition2() {
-		return (String) this.map.get(CONDITION_2);
-	}
-
-	public String getReadConfig() {
-		return (String) this.map.get(READ_CONFIG);
-	}
-
-	/**
-	 * Expects a line of 5 fields, separated by "|"
-	 * 
-	 * @param line
-	 * @return a new set of blocking call arguments
-	 */
-	public UnionLiteral(String line) {
-		if (line == null || line.trim().length() == 0) {
-			throw new IllegalArgumentException("null or blank line");
-		}
-
-		int count = 0;
-		StringTokenizer st = new StringTokenizer(line, SEPARATOR);
-		while (st.hasMoreTokens()) {
-			String value = st.nextToken();
-			if (value != null && value.trim().length() == 0) {
-				value = null;
-			}
-			if (count < fieldNames().length) {
-				map.put(fieldNames()[count], value);
-				++count;
-			} else if (count >= fieldNames().length) {
-				throw new IllegalArgumentException(
-						"too many fields in '" + line + "'");
-			}
-		}
-		if (count < fieldNames().length) {
-			throw new IllegalArgumentException(
-					"'" + line + "' missing '" + fieldNames()[count] + "'");
-		}
-	}
-
-	void logInfo() {
-		logInfo("Blocking configuration: '" + getBlockConfig() + "'");
-		logInfo("Query: '" + getQuery() + "'");
-		logInfo("Condition 1: '" + getCondition1() + "'");
-		logInfo("Condition 2: '" + getCondition2() + "'");
-		logInfo("Read configuration: '" + getReadConfig() + "'");
 	}
 
 	public static void doSql(Connection connection,
@@ -268,42 +172,56 @@ public class UnionLiteral {
 		}
 	}
 
-	public String computeSql() {
-		return computeSql(getQuery());
+	/**
+	 * Returns the index <code>N</code> of the largest table alias
+	 * <code>vN</code> found in the specified String, assuming that all tables
+	 * indices up to <code>N</code> are also present.
+	 * 
+	 * @param s
+	 *            possibly null.
+	 * @return -1 if s is null or s does not contain a table alias
+	 */
+	public static int largestTableAliasIndex(String s) {
+		final Map<Integer, Pattern> patterns = tableAliasPatterns();
+		int retVal = -1;
+		for (int i : patterns.keySet()) {
+			// This method requires keys in ascending order
+			assert i == retVal + 1;
+			Pattern p = patterns.get(i);
+			Matcher m = p.matcher(s);
+			if (!m.find()) {
+				break;
+			}
+			retVal = i;
+		}
+
+		// Sanity checks if assertions are enabled
+		boolean assertOn = false;
+		assert assertOn = true;
+		if (assertOn && retVal > -1) {
+			int i = 0;
+			for (; i <= retVal; i++) {
+				Pattern p = patterns.get(i);
+				Matcher m = p.matcher(s);
+				assert m.find();
+			}
+			for (i =
+				retVal + 1; i < LARGEST_IDX_EVER_EXPECTED_AND_THEN_SOME; i++) {
+				Pattern p = patterns.get(i);
+				Matcher m = p.matcher(s);
+				assert !m.find();
+			}
+		}
+
+		return retVal;
 	}
 
-	public static String computeSql(String s) {
-		StringBuilder sb = new StringBuilder();
-		boolean isFirst = true;
-		String[] stmts = s.split(SELECT_SEPARATOR_REGEX);
-		for (String compressed : stmts) {
-			if (isFirst) {
-				isFirst = false;
-			} else {
-				sb.append(UNION);
-			}
-	
-			String partial = null;
-			int largestAliasIdx = largestTableAliasIndex(compressed);
-			switch (largestAliasIdx) {
-			case -1:
-				partial = compressed;
-				break;
-			case 0:
-				partial = compressed.replace(COMPRESSED_WHERE, WHERE_IDX_0);
-				break;
-			case 1:
-				partial = compressed.replace(COMPRESSED_WHERE, WHERE_IDX_1);
-				break;
-			default:
-				String msg = "Not yet implemented for alias index " + largestAliasIdx;
-				throw new Error(msg);
-			}
-			assert partial != null;
-			sb.append(PREFIX).append(partial).append(SUFFIX);
-		}
-		String retVal = sb.toString();
-		return retVal;
+	private static void logException(String msg, Throwable x) {
+		LogUtil.logExtendedException(logger, msg, x);
+	}
+
+	private static void logInfo(String msg) {
+		LogUtil.logExtendedInfo(logger, msg);
 	}
 
 	public static void prepareConnection(Connection conn,
@@ -327,6 +245,93 @@ public class UnionLiteral {
 			JdbcUtil.closeStatement(st);
 			st = null;
 		}
+	}
+
+	public static String regexTableAlias(int idx) {
+		Precondition.assertBoolean("negative index", idx > -1);
+		StringBuilder sb = new StringBuilder().append(REGEX_WORD_BOUNDARY)
+				.append(TABLE_ALIAS_BASE).append(idx)
+				.append(REGEX_WORD_BOUNDARY);
+		String retVal = sb.toString();
+		return retVal;
+	}
+
+	static Map<Integer, Pattern> tableAliasPatterns() {
+		Map<Integer, Pattern> retVal = tableAliasPatternsRef.get();
+		if (retVal == null) {
+			Map<Integer, Pattern> update = createTableAliasPatterns();
+			boolean updated = tableAliasPatternsRef.compareAndSet(null, update);
+			retVal = tableAliasPatternsRef.get();
+			assert updated || !update.equals(retVal);
+		}
+		assert retVal != null;
+		return retVal;
+	}
+
+	private Map<String, String> map = new HashMap<>();
+
+	/**
+	 * Expects a line of 5 fields, separated by "|"
+	 * 
+	 * @param line
+	 * @return a new set of blocking call arguments
+	 */
+	public UnionLiteral(String line) {
+		if (line == null || line.trim().length() == 0) {
+			throw new IllegalArgumentException("null or blank line");
+		}
+
+		int count = 0;
+		StringTokenizer st = new StringTokenizer(line, SEPARATOR);
+		while (st.hasMoreTokens()) {
+			String value = st.nextToken();
+			if (value != null && value.trim().length() == 0) {
+				value = null;
+			}
+			if (count < fieldNames().length) {
+				map.put(fieldNames()[count], value);
+				++count;
+			} else if (count >= fieldNames().length) {
+				throw new IllegalArgumentException(
+						"too many fields in '" + line + "'");
+			}
+		}
+		if (count < fieldNames().length) {
+			throw new IllegalArgumentException(
+					"'" + line + "' missing '" + fieldNames()[count] + "'");
+		}
+	}
+
+	public String computeSql() {
+		return computeSql(getQuery());
+	}
+
+	public String getBlockConfig() {
+		return this.map.get(BLOCK_CONFIG);
+	}
+
+	public String getCondition1() {
+		return this.map.get(CONDITION_1);
+	}
+
+	public String getCondition2() {
+		return this.map.get(CONDITION_2);
+	}
+
+	public String getQuery() {
+		return this.map.get(QUERY);
+	}
+
+	public String getReadConfig() {
+		return this.map.get(READ_CONFIG);
+	}
+
+	void logInfo() {
+		logInfo("Blocking configuration: '" + getBlockConfig() + "'");
+		logInfo("Query: '" + getQuery() + "'");
+		logInfo("Condition 1: '" + getCondition1() + "'");
+		logInfo("Condition 2: '" + getCondition2() + "'");
+		logInfo("Read configuration: '" + getReadConfig() + "'");
 	}
 
 }

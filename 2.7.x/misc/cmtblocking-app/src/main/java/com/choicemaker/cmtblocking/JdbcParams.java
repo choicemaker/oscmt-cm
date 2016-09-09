@@ -21,6 +21,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Enumeration;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import com.choicemaker.util.StringUtils;
 
@@ -30,6 +31,9 @@ import com.choicemaker.util.StringUtils;
  * @version $Revision: 1.3.2.2 $ $Date: 2010/04/08 16:14:18 $
  */
 public class JdbcParams {
+
+	private static final Logger logger =
+		Logger.getLogger(JdbcParams.class.getName());
 
 	private static boolean INITIALIZED = false;
 
@@ -49,17 +53,6 @@ public class JdbcParams {
 
 	private static final Properties defaults = new Properties();
 
-	private static void loadDefaultProperties() throws IOException {
-		InputStream is =
-			JdbcParams.class.getClassLoader().getResourceAsStream(DEFAULTS);
-		defaults.load(is);
-	}
-
-	private static void registerJdbcDriver() throws SQLException {
-		Driver driver = new oracle.jdbc.driver.OracleDriver();
-		DriverManager.registerDriver(driver);
-	} // static
-
 	private static void init() throws IOException, SQLException {
 		if (!INITIALIZED) {
 			loadDefaultProperties();
@@ -68,7 +61,22 @@ public class JdbcParams {
 		}
 	}
 
+	private static void loadDefaultProperties() throws IOException {
+		InputStream is =
+			JdbcParams.class.getClassLoader().getResourceAsStream(DEFAULTS);
+		defaults.load(is);
+	}
+
+	private static void logInfo(String msg) {
+		LogUtil.logExtendedInfo(logger, msg);
+	}
+
+	private static void registerJdbcDriver() throws SQLException {
+		Driver driver = new oracle.jdbc.driver.OracleDriver();
+		DriverManager.registerDriver(driver);
+	} // static
 	private final File file;
+
 	private final Properties properties;
 
 	public JdbcParams(String jdbcFileName)
@@ -90,6 +98,19 @@ public class JdbcParams {
 
 	} // ctor(String)
 
+	public Connection getConnection() throws SQLException {
+
+		String strUrl = getUrlString();
+		Connection retVal =
+			DriverManager.getConnection(strUrl, this.properties);
+
+		String strAutoCommit = this.properties.getProperty("autoCommit");
+		boolean bAutoCommit = Boolean.valueOf(strAutoCommit).booleanValue();
+		retVal.setAutoCommit(bAutoCommit);
+
+		return retVal;
+	} // getConnection()
+
 	private String getUrlString() {
 		StringBuffer sb = new StringBuffer("jdbc:oracle:");
 		sb.append(properties.get(PN_DRIVER_TYPE));
@@ -108,19 +129,6 @@ public class JdbcParams {
 		return retVal;
 	}
 
-	public Connection getConnection() throws SQLException {
-
-		String strUrl = getUrlString();
-		Connection retVal =
-			DriverManager.getConnection(strUrl, this.properties);
-
-		String strAutoCommit = this.properties.getProperty("autoCommit");
-		boolean bAutoCommit = Boolean.valueOf(strAutoCommit).booleanValue();
-		retVal.setAutoCommit(bAutoCommit);
-
-		return retVal;
-	} // getConnection()
-
 	void logInfo() {
 		Enumeration<?> e = this.properties.propertyNames();
 		while (e.hasMoreElements()) {
@@ -128,10 +136,6 @@ public class JdbcParams {
 			String value = this.properties.getProperty(key);
 			logInfo("key/value: '" + key + "'/'" + value + "'");
 		}
-	}
-
-	private static void logInfo(String msg) {
-		LogUtil.logExtendedInfo("JdbcParams", msg);
 	}
 
 }

@@ -16,6 +16,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 /**
  *
@@ -23,6 +24,9 @@ import java.util.Properties;
  * @version $Revision: 1.3.2.2 $ $Date: 2010/04/08 16:14:18 $
  */
 public class Configuration {
+
+	private static final Logger logger =
+		Logger.getLogger(Configuration.class.getName());
 
 	public static final String PN_JDBC_PROPERTIES = "jdbcProperties";
 	public static final String PN_BLOCKING_PROPERTIES = "blockingProperties";
@@ -48,21 +52,8 @@ public class Configuration {
 		}
 	}
 
-	public String getJdbcFileName() {
-		return this.jdbcFileName;
-	}
-
 	public String getBlockingFileName() {
 		return this.blockingFileName;
-	}
-
-	public String getScriptFileName() {
-		return this.scriptFileName;
-	}
-
-	public JdbcParams getJdbcParams()
-			throws FileNotFoundException, SQLException, IOException {
-		return new JdbcParams(this.getJdbcFileName());
 	}
 
 	public BlockingParams getBlockingParams()
@@ -74,6 +65,19 @@ public class Configuration {
 		return new BlockingScript(this.getScriptFileName());
 	}
 
+	public String getJdbcFileName() {
+		return this.jdbcFileName;
+	}
+
+	public JdbcParams getJdbcParams()
+			throws FileNotFoundException, SQLException, IOException {
+		return new JdbcParams(this.getJdbcFileName());
+	}
+
+	public String getScriptFileName() {
+		return this.scriptFileName;
+	}
+
 	void logInfo() {
 		logInfo("jdbcFileName = '" + this.jdbcFileName + "'");
 		logInfo("blockingFileName = '" + this.blockingFileName + "'");
@@ -81,7 +85,7 @@ public class Configuration {
 	}
 
 	private void logInfo(String msg) {
-		LogUtil.logExtendedInfo("Configuration", msg);
+		LogUtil.logExtendedInfo(logger, msg);
 	}
 
 }

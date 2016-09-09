@@ -14,10 +14,10 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
+import java.util.logging.Logger;
 
 /**
  *
@@ -26,23 +26,20 @@ import java.util.Set;
  */
 public class LogUtil {
 
-	public static void logExtendedInfo(String extra, String msg) {
-		Date date = new Date();
-		System.out.println("[" + date + "] " + extra + ": " + msg);
-	}
-
-	public static void logExtendedException(String extra, String msg,
+	public static void logExtendedException(Logger logger, String msg,
 			Throwable x) {
-		Date date = new Date();
-		System.err.println("[" + date + "] " + extra + ": " + msg);
-
+		logger.warning(msg + ": " + x.toString());
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);
 		x.printStackTrace(pw);
-		System.err.println(sw.toString());
+		logger.fine(sw.toString());
 	}
 
-	static void logSystemProperties() {
+	public static void logExtendedInfo(Logger logger, String msg) {
+		logger.info(msg);
+	}
+
+	static void logSystemProperties(Logger logger) {
 		Properties p = System.getProperties();
 		List<String> sortedKeys = new ArrayList<>();
 		Set<Object> keys = p.keySet();
@@ -56,7 +53,7 @@ public class LogUtil {
 		for (String key : sortedKeys) {
 			String value = p.getProperty(key);
 			String msg = "System property '" + key + "'/'" + value + "'";
-			logExtendedInfo(Main.SOURCE, msg);
+			logExtendedInfo(logger, msg);
 		}
 	}
 

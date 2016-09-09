@@ -16,6 +16,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.logging.Logger;
 
 import oracle.jdbc.OracleTypes;
 
@@ -26,14 +27,8 @@ import oracle.jdbc.OracleTypes;
  */
 public class BlockingCall {
 
-	public static final String SOURCE = "Blocking";
-
-	private BlockingCall() {
-	}
-
-	private static void logInfo(String msg) {
-		LogUtil.logExtendedInfo(SOURCE, msg);
-	}
+	private static final Logger logger =
+		Logger.getLogger(BlockingCall.class.getName());
 
 	public static void doBlocking(Connection connection,
 			BlockingParams blockingParams, BlockingCallArguments args)
@@ -97,6 +92,10 @@ public class BlockingCall {
 
 	}
 
+	private static void logInfo(String msg) {
+		LogUtil.logExtendedInfo(logger, msg);
+	}
+
 	static void retrieveData(Connection connection, ResultSet[] rs)
 			throws SQLException {
 		int total = 0;
@@ -117,6 +116,9 @@ public class BlockingCall {
 			}
 		}
 		logInfo("Total rows from all result sets " + total);
+	}
+
+	private BlockingCall() {
 	}
 
 }

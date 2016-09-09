@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.logging.Logger;
 
 /**
  *
@@ -36,7 +37,8 @@ import java.util.StringTokenizer;
  */
 public class UnionParameterized {
 
-	private static final String SOURCE = "UnionLiteral";
+	private static final Logger logger =
+		Logger.getLogger(UnionParameterized.class.getName());
 
 	public static final String SELECT_SEPARATOR_REGEX = "\\^";
 
@@ -47,10 +49,10 @@ public class UnionParameterized {
 
 	public static final String WHERE = " WHERE ";
 
-//	public static final String UNION = "UNION ";
-//
-//	public static final String EOL = SystemPropertyUtils.PV_LINE_SEPARATOR;
-//
+	// public static final String UNION = "UNION ";
+	//
+	// public static final String EOL = SystemPropertyUtils.PV_LINE_SEPARATOR;
+	//
 	public static final String SQL_ALTER_SESSION =
 		"ALTER SESSION SET nls_date_format = 'YYYY-MM-DD'";
 
@@ -60,74 +62,19 @@ public class UnionParameterized {
 	public static final String SQL_SELECT_IDS =
 		"Select distinct id from tb_cmt_temp_ids";
 
-	private static void logInfo(String msg) {
-		LogUtil.logExtendedInfo(SOURCE, msg);
-	}
-
-	private static void logException(String msg, Throwable x) {
-		LogUtil.logExtendedException(SOURCE, msg, x);
-	}
-
-	private Map<String, String> map = new HashMap<>();
-
-	public String getBlockConfig() {
-		return (String) this.map.get(BLOCK_CONFIG);
-	}
-
-	public String getQuery() {
-		return (String) this.map.get(QUERY);
-	}
-
-	public String getCondition1() {
-		return (String) this.map.get(CONDITION_1);
-	}
-
-	public String getCondition2() {
-		return (String) this.map.get(CONDITION_2);
-	}
-
-	public String getReadConfig() {
-		return (String) this.map.get(READ_CONFIG);
-	}
-
-	/**
-	 * Expects a line of 5 fields, separated by "|"
-	 * 
-	 * @param line
-	 * @return a new set of blocking call arguments
-	 */
-	public UnionParameterized(String line) {
-		if (line == null || line.trim().length() == 0) {
-			throw new IllegalArgumentException("null or blank line");
+	public static String[] computeSql(String s) {
+		List<String> literals = new ArrayList<>();
+		String[] stmts = s.split(SELECT_SEPARATOR_REGEX);
+		for (String compressed : stmts) {
+			String partial = compressed.replace(COMPRESSED_WHERE, WHERE);
+			StringBuilder sb =
+				new StringBuilder().append(INSERT_SELECT).append(partial);
+			String literal = sb.toString();
+			literals.add(literal);
 		}
-
-		int count = 0;
-		StringTokenizer st = new StringTokenizer(line, SEPARATOR);
-		while (st.hasMoreTokens()) {
-			String value = st.nextToken();
-			if (value != null && value.trim().length() == 0) {
-				value = null;
-			}
-			if (count < fieldNames().length) {
-				map.put(fieldNames()[count], value);
-				++count;
-			} else if (count >= fieldNames().length) {
-				throw new IllegalArgumentException(
-						"too many fields in '" + line + "'");
-			}
-		}
-		if (count < fieldNames().length) {
-			throw new IllegalArgumentException(
-					"'" + line + "' missing '" + fieldNames()[count] + "'");
-		}
-	}
-
-	void logInfo() {
-		logInfo("Blocking configuration: '" + getBlockConfig() + "'");
-		logInfo("Query: '" + getQuery() + "'");
-		logInfo("Condition 1: '" + getCondition1() + "'");
-		logInfo("Condition 2: '" + getCondition2() + "'");
-		logInfo("Read configuration: '" + getReadConfig() + "'");
+		parameterize(literals);
+		String[] retVal = null; // FIXME sb.toString();
+		return retVal;
 	}
 
 	public static void doSql(Connection connection,
@@ -187,28 +134,17 @@ public class UnionParameterized {
 		}
 	}
 
-	public String[] computeSql() {
-		return computeSql(getQuery());
+	private static void logException(String msg, Throwable x) {
+		LogUtil.logExtendedException(logger, msg, x);
 	}
 
-	public static String[] computeSql(String s) {
-		List<String> literals = new ArrayList<>();
-		String[] stmts = s.split(SELECT_SEPARATOR_REGEX);
-		for (String compressed : stmts) {
-			String partial = compressed.replace(COMPRESSED_WHERE, WHERE);
-			StringBuilder sb =
-				new StringBuilder().append(INSERT_SELECT).append(partial);
-			String literal = sb.toString();
-			literals.add(literal);
-		}
-		parameterize(literals);
-		String[] retVal = null; // FIXME sb.toString();
-		return retVal;
+	private static void logInfo(String msg) {
+		LogUtil.logExtendedInfo(logger, msg);
 	}
 
 	private static void parameterize(List<String> literals) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public static void prepareConnection(Connection conn,
@@ -243,6 +179,72 @@ public class UnionParameterized {
 			JdbcUtil.closeStatement(st);
 			st = null;
 		}
+	}
+
+	private Map<String, String> map = new HashMap<>();
+
+	/**
+	 * Expects a line of 5 fields, separated by "|"
+	 * 
+	 * @param line
+	 * @return a new set of blocking call arguments
+	 */
+	public UnionParameterized(String line) {
+		if (line == null || line.trim().length() == 0) {
+			throw new IllegalArgumentException("null or blank line");
+		}
+
+		int count = 0;
+		StringTokenizer st = new StringTokenizer(line, SEPARATOR);
+		while (st.hasMoreTokens()) {
+			String value = st.nextToken();
+			if (value != null && value.trim().length() == 0) {
+				value = null;
+			}
+			if (count < fieldNames().length) {
+				map.put(fieldNames()[count], value);
+				++count;
+			} else if (count >= fieldNames().length) {
+				throw new IllegalArgumentException(
+						"too many fields in '" + line + "'");
+			}
+		}
+		if (count < fieldNames().length) {
+			throw new IllegalArgumentException(
+					"'" + line + "' missing '" + fieldNames()[count] + "'");
+		}
+	}
+
+	public String[] computeSql() {
+		return computeSql(getQuery());
+	}
+
+	public String getBlockConfig() {
+		return this.map.get(BLOCK_CONFIG);
+	}
+
+	public String getCondition1() {
+		return this.map.get(CONDITION_1);
+	}
+
+	public String getCondition2() {
+		return this.map.get(CONDITION_2);
+	}
+
+	public String getQuery() {
+		return this.map.get(QUERY);
+	}
+
+	public String getReadConfig() {
+		return this.map.get(READ_CONFIG);
+	}
+
+	void logInfo() {
+		logInfo("Blocking configuration: '" + getBlockConfig() + "'");
+		logInfo("Query: '" + getQuery() + "'");
+		logInfo("Condition 1: '" + getCondition1() + "'");
+		logInfo("Condition 2: '" + getCondition2() + "'");
+		logInfo("Read configuration: '" + getReadConfig() + "'");
 	}
 
 }

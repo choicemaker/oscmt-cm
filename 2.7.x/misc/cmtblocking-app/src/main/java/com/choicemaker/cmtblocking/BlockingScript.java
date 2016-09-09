@@ -20,6 +20,7 @@ import java.io.LineNumberReader;
 import java.io.Reader;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.logging.Logger;
 
 /**
  *
@@ -28,8 +29,59 @@ import java.util.NoSuchElementException;
  */
 public class BlockingScript {
 
+	private static class LineIterator implements Iterator<String> {
+		private final LineNumberReader lnr;
+		private String currentLine = null;
+
+		public LineIterator(LineNumberReader r) {
+			this.lnr = r;
+			nextLine();
+		}
+
+		@Override
+		public boolean hasNext() {
+			return this.currentLine != null;
+		}
+
+		@Override
+		public String next() {
+			if (this.currentLine == null) {
+				throw new NoSuchElementException("no more lines");
+			}
+			String retVal = this.currentLine;
+			nextLine();
+			return retVal;
+		}
+
+		private void nextLine() {
+			try {
+				currentLine = lnr.readLine();
+			} catch (IOException x) {
+				logException("Unexpected IOException", x);
+				throw new RuntimeException("Unexpected IOException", x);
+			}
+		}
+
+		@Override
+		public void remove() {
+			throw new UnsupportedOperationException();
+		}
+	}
+
+	private static final Logger logger =
+		Logger.getLogger(BlockingScript.class.getName());
+
 	private static final String DEFAULT_SCRIPT =
 		"com/choicemaker/cmtblocking/default.script";
+
+	private static void logException(String msg, Throwable x) {
+		LogUtil.logExtendedException(logger, msg, x);
+	}
+
+	private static void logInfo(String msg) {
+		LogUtil.logExtendedInfo(logger, msg);
+	}
+
 	private final File file;
 
 	public BlockingScript(String scriptFileName) {
@@ -48,53 +100,17 @@ public class BlockingScript {
 		return retVal;
 	}
 
+	public Iterator<String> getIterator() throws FileNotFoundException {
+		final LineNumberReader r =
+			file == null ? getDefaultLineReader() : getLineReader(file);
+		return new LineIterator(r);
+	}
+
 	private LineNumberReader getLineReader(File file)
 			throws FileNotFoundException {
 		FileReader r = new FileReader(file);
 		LineNumberReader retVal = new LineNumberReader(r);
 		return retVal;
-	}
-
-	private static class LineIterator implements Iterator<String> {
-		private final LineNumberReader lnr;
-		private String currentLine = null;
-
-		public LineIterator(LineNumberReader r) {
-			this.lnr = r;
-			nextLine();
-		}
-
-		public boolean hasNext() {
-			return this.currentLine != null;
-		}
-
-		public String next() {
-			if (this.currentLine == null) {
-				throw new NoSuchElementException("no more lines");
-			}
-			String retVal = this.currentLine;
-			nextLine();
-			return retVal;
-		}
-
-		public void remove() {
-			throw new UnsupportedOperationException();
-		}
-
-		private void nextLine() {
-			try {
-				currentLine = lnr.readLine();
-			} catch (IOException x) {
-				logException("Unexpected IOException", x);
-				throw new RuntimeException("Unexpected IOException", x);
-			}
-		}
-	}
-
-	public Iterator<String> getIterator() throws FileNotFoundException {
-		final LineNumberReader r =
-			file == null ? getDefaultLineReader() : getLineReader(file);
-		return new LineIterator(r);
 	}
 
 	void logInfo() {
@@ -104,14 +120,6 @@ public class BlockingScript {
 
 			logInfo("using script at '" + file.getAbsolutePath() + "'");
 		}
-	}
-
-	private static void logInfo(String msg) {
-		LogUtil.logExtendedInfo("BlockingScript", msg);
-	}
-
-	private static void logException(String msg, Throwable x) {
-		LogUtil.logExtendedException("BlockingScript", msg, x);
 	}
 
 }

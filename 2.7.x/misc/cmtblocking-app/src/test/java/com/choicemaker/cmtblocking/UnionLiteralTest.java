@@ -79,6 +79,13 @@ public class UnionLiteralTest {
 				+ condition2 + SEPARATOR + readConfig;
 
 	@Test
+	public void testComputeSqlString() {
+		UnionLiteral ul = new UnionLiteral(line);
+		String computedSql = ul.computeSql();
+		assertTrue(expectedSql.equals(computedSql));
+	}
+
+	@Test
 	public void testUnionLiteral() {
 
 		UnionLiteral ul;
@@ -103,13 +110,6 @@ public class UnionLiteralTest {
 		assertTrue(ul.getCondition1() == null);
 		assertTrue(condition2.equals(ul.getCondition2()));
 		assertTrue(readConfig.equals(ul.getReadConfig()));
-	}
-
-	@Test
-	public void testComputeSqlString() {
-		UnionLiteral ul = new UnionLiteral(line);
-		String computedSql = ul.computeSql();
-		assertTrue(expectedSql.equals(computedSql));
 	}
 
 }
