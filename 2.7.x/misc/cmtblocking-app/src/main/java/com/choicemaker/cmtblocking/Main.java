@@ -45,9 +45,14 @@ public class Main {
 				conn = cjbs.jdbcParams.getConnection();
 				logExtendedInfo(SOURCE, "JDBC connection opened");
 
-				logExtendedInfo(SOURCE, "Configuring Oracle remote debugging...");
+				logExtendedInfo(SOURCE,
+						"Configuring Oracle remote debugging...");
 				OracleRemoteDebugging.doDebugging(conn);
 				logExtendedInfo(SOURCE, "Oracle remote debugging configured");
+
+				logExtendedInfo(SOURCE, "Committing connection...");
+				conn.commit();
+				logExtendedInfo(SOURCE, "Connection committed");
 
 				logExtendedInfo(SOURCE, "Starting script");
 				while (cjbs.scriptIterator.hasNext()) {
@@ -61,6 +66,11 @@ public class Main {
 						bca.logInfo();
 						BlockingCall.doBlocking(conn, cjbs.blockingParams, bca);
 						logExtendedInfo(SOURCE, "Blocking call returned");
+
+						logExtendedInfo(SOURCE, "Committing connection...");
+						conn.commit();
+						logExtendedInfo(SOURCE, "Connection committed");
+
 					} catch (Exception x2) {
 						logExtendedException(SOURCE, "Blocking call failed",
 								x2);
