@@ -30,7 +30,7 @@ public class MainUnionParameterized {
 
 	public static void main(String[] args) {
 
-		logSystemProperties();
+		LogUtil.logSystemProperties();
 
 		CJBS cjbs = CJBS.parseArgs(SOURCE, args);
 		assert cjbs != null;
@@ -75,7 +75,7 @@ public class MainUnionParameterized {
 			} finally {
 				if (conn != null) {
 					logExtendedInfo(SOURCE, "Closing JDBC connection...");
-					Main.closeConnection(SOURCE, conn);
+					JdbcUtil.closeConnection(SOURCE, conn);
 					conn = null;
 					logExtendedInfo(SOURCE, "JDBC connection closed");
 				}

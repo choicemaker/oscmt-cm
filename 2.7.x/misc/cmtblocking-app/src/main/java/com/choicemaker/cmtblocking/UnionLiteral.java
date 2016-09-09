@@ -322,9 +322,9 @@ public class UnionLiteral {
 
 		} finally {
 			if (returnIsResultSet) {
-				BlockingCall.closeResultSet(st.getResultSet());
+				JdbcUtil.closeResultSet(st.getResultSet());
 			}
-			BlockingCall.closeStatement(st);
+			JdbcUtil.closeStatement(st);
 			st = null;
 		}
 	}

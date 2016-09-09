@@ -16,7 +16,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 import oracle.jdbc.OracleTypes;
 
@@ -34,10 +33,6 @@ public class BlockingCall {
 
 	private static void logInfo(String msg) {
 		LogUtil.logExtendedInfo(SOURCE, msg);
-	}
-
-	private static void logException(String msg, Throwable x) {
-		LogUtil.logExtendedException(SOURCE, msg, x);
 	}
 
 	public static void doBlocking(Connection connection,
@@ -91,12 +86,12 @@ public class BlockingCall {
 				retrieveData(connection, rs);
 
 			} finally {
-				closeResultSet(outer);
+				JdbcUtil.closeResultSet(outer);
 				outer = null;
 			}
 
 		} finally {
-			closeStatement(stmt);
+			JdbcUtil.closeStatement(stmt);
 			stmt = null;
 		}
 
@@ -116,32 +111,12 @@ public class BlockingCall {
 					logInfo("result set " + i + ": " + count);
 					total += count;
 				} finally {
-					closeResultSet(rs[i]);
+					JdbcUtil.closeResultSet(rs[i]);
 					rs[i] = null;
 				}
 			}
 		}
 		logInfo("Total rows from all result sets " + total);
-	}
-
-	static void closeResultSet(ResultSet rs) {
-		if (rs != null) {
-			try {
-				rs.close();
-			} catch (SQLException e) {
-				logException("Unable to close result set: ", e);
-			}
-		}
-	}
-
-	static void closeStatement(Statement stmt) {
-		if (stmt != null) {
-			try {
-				stmt.close();
-			} catch (SQLException e) {
-				logException("Unable to close statement: ", e);
-			}
-		}
 	}
 
 }

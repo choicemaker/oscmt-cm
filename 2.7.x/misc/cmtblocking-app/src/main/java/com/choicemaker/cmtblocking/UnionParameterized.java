@@ -221,9 +221,9 @@ public class UnionParameterized {
 			returnIsResultSet = st.execute(SQL_ALTER_SESSION);
 		} finally {
 			if (returnIsResultSet) {
-				BlockingCall.closeResultSet(st.getResultSet());
+				JdbcUtil.closeResultSet(st.getResultSet());
 			}
-			BlockingCall.closeStatement(st);
+			JdbcUtil.closeStatement(st);
 			st = null;
 		}
 	}
@@ -238,9 +238,9 @@ public class UnionParameterized {
 			returnIsResultSet = st.execute(SQL_TRUNCATE_TABLE);
 		} finally {
 			if (returnIsResultSet) {
-				BlockingCall.closeResultSet(st.getResultSet());
+				JdbcUtil.closeResultSet(st.getResultSet());
 			}
-			BlockingCall.closeStatement(st);
+			JdbcUtil.closeStatement(st);
 			st = null;
 		}
 	}
