@@ -29,6 +29,9 @@ for f in $LIB/* ; do
   fi
 done
 
+# Uncomment the following line to specify the logging configuration
+#JAVA_OPTS="$JAVA_OPTS -Djava.util.logging.SimpleFormatter.format='%1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS.%1$tL %4$s %2$s %5$s%6$s%n'"
+
 # Uncomment the following line to enable assertions
 JAVA_OPTS="$JAVA_OPTS -ea"
 
