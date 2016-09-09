@@ -315,6 +315,11 @@ public class UnionLiteral {
 			st = conn.createStatement();
 			returnIsResultSet =
 				st.execute("ALTER SESSION SET nls_date_format = 'YYYY-MM-DD'");
+
+			// logInfo("Configuring Oracle remote debugging...");
+			// OracleRemoteDebugging.doDebugging(conn);
+			// logInfo("Oracle remote debugging configured");
+
 		} finally {
 			if (returnIsResultSet) {
 				BlockingCall.closeResultSet(st.getResultSet());

@@ -16,6 +16,8 @@ import static com.choicemaker.cmtblocking.LogUtil.logExtendedInfo;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import com.choicemaker.cm.io.db.oracle.OracleRemoteDebugging;
+
 /**
  * Reads through a script and for each line in the script, invokes the Oracle
  * stored procedure <code>Blocking</code> in the <code>CMTBlocking</code>
@@ -42,6 +44,10 @@ public class Main {
 				logExtendedInfo(SOURCE, "Opening JDBC connection...");
 				conn = cjbs.jdbcParams.getConnection();
 				logExtendedInfo(SOURCE, "JDBC connection opened");
+
+				logExtendedInfo(SOURCE, "Configuring Oracle remote debugging...");
+				OracleRemoteDebugging.doDebugging(conn);
+				logExtendedInfo(SOURCE, "Oracle remote debugging configured");
 
 				logExtendedInfo(SOURCE, "Starting script");
 				while (cjbs.scriptIterator.hasNext()) {
