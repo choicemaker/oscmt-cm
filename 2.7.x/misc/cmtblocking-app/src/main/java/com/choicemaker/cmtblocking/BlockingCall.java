@@ -12,6 +12,7 @@ package com.choicemaker.cmtblocking;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.CallableStatement;
@@ -127,13 +128,14 @@ public class BlockingCall {
 	public static String getMd5Hash(String sql) {
 		String retVal = null;
 		try {
-			byte[] messageBytes;
-			messageBytes = sql.getBytes(ENCODING);
+			byte[] messageBytes = sql.getBytes(ENCODING);
 			MessageDigest md = MessageDigest.getInstance(DIGEST_ALGO);
 			byte[] digestBytes = md.digest(messageBytes);
-			retVal = new String(digestBytes);
-		} catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
-			throw new Error("Unexcepted: " + e.toString());
+			BigInteger i = new BigInteger(1, digestBytes);
+			retVal = String.format("%1$032x", i);
+		} catch (NumberFormatException | NoSuchAlgorithmException
+				| UnsupportedEncodingException e) {
+			throw new Error("Unexpected: " + e.toString());
 		}
 		assert retVal != null;
 		return retVal;
