@@ -34,7 +34,7 @@ public class CJBS {
 		try {
 			String configFileName = args.length == 1 ? args[0] : null;
 			config = new Configuration(configFileName);
-			config.logInfo();
+			logInfo(logger, config);
 		} catch (Exception x) {
 			logExtendedException(logger, "Unable to construct configuration",
 					x);
@@ -78,6 +78,14 @@ public class CJBS {
 			new CJBS(config, jdbcParams, blockingParams, scriptIterator);
 		return retVal;
 	}
+
+	static void logInfo(Logger log, Configuration config) {
+		log.info("repetitionCount = '" + config.getRepetitionCount());
+		log.info("jdbcFileName = '" + config.getJdbcFileName() + "'");
+		log.info("blockingFileName = '" + config.getBlockingFileName() + "'");
+		log.info("scriptFileName = '" + config.getScriptFileName() + "'");
+	}
+
 	/**
 	 * Prints the following usage message:
 	 * 
@@ -103,11 +111,10 @@ public class CJBS {
 		pw.println("  and the name of a blockingScript file");
 		return sw.toString();
 	}
+
 	public final Configuration config;
 	public final JdbcParams jdbcParams;
-
 	public final BlockingParams blockingParams;
-
 	public final Iterator<String> scriptIterator;
 
 	public CJBS(Configuration config, JdbcParams jdbcParams,

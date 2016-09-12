@@ -28,10 +28,12 @@ public class Configuration {
 	private static final Logger logger =
 		Logger.getLogger(Configuration.class.getName());
 
+	public static final String PN_REPETITION_COUNT = "repetitionCount";
 	public static final String PN_JDBC_PROPERTIES = "jdbcProperties";
 	public static final String PN_BLOCKING_PROPERTIES = "blockingProperties";
 	public static final String PN_BLOCKING_SCRIPT = "blockingScript";
 
+	private final int repetitionCount;
 	private String jdbcFileName;
 	private String blockingFileName;
 	private String scriptFileName;
@@ -41,15 +43,39 @@ public class Configuration {
 			File configfile = new File(configFileName);
 			Properties properties = new Properties();
 			properties.load(new FileInputStream(configfile));
+			String sRepCount = properties.getProperty(PN_REPETITION_COUNT);
+			int repCount;
+			try {
+				repCount = sRepCount == null ? 1 : Integer.parseInt(sRepCount);
+				if (repCount < 0) {
+					String msg = "Negative repetition count: " + repCount;
+					logger.warning(msg);
+				}
+			} catch (NumberFormatException x) {
+				String msg = "Invalid repetition count: '" + sRepCount + "'";
+				logger.warning(msg);
+				repCount = 0;
+			}
+			assert repCount >= 0;
+			this.repetitionCount = repCount;
+			if (repetitionCount == 0) {
+				String msg = "Repetition count set to zero (0)";
+				logger.warning(msg);;
+			}
 			this.jdbcFileName = properties.getProperty(PN_JDBC_PROPERTIES);
 			this.blockingFileName =
 				properties.getProperty(PN_BLOCKING_PROPERTIES);
 			this.scriptFileName = properties.getProperty(PN_BLOCKING_SCRIPT);
 		} else {
+			this.repetitionCount = 0;
 			this.jdbcFileName = null;
 			this.blockingFileName = null;
 			this.scriptFileName = null;
 		}
+	}
+
+	public int getRepetitionCount() {
+		return this.repetitionCount;
 	}
 
 	public String getBlockingFileName() {
@@ -76,16 +102,6 @@ public class Configuration {
 
 	public String getScriptFileName() {
 		return this.scriptFileName;
-	}
-
-	void logInfo() {
-		logInfo("jdbcFileName = '" + this.jdbcFileName + "'");
-		logInfo("blockingFileName = '" + this.blockingFileName + "'");
-		logInfo("scriptFileName = '" + this.scriptFileName + "'");
-	}
-
-	private void logInfo(String msg) {
-		LogUtil.logExtendedInfo(logger, msg);
 	}
 
 }

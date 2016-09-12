@@ -15,6 +15,8 @@ import static com.choicemaker.cmtblocking.LogUtil.logExtendedInfo;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import com.choicemaker.cm.io.db.oracle.OracleRemoteDebugging;
@@ -43,6 +45,7 @@ public class Main {
 		if (cjbs.jdbcParams != null && cjbs.blockingParams != null
 				&& cjbs.scriptIterator != null) {
 
+			Map<String, Integer> hashedSqlSeq = new HashMap<>();
 			Connection conn = null;
 			try {
 
@@ -69,7 +72,8 @@ public class Main {
 					try {
 						logExtendedInfo(logger, "Starting blocking call...");
 						bca.logInfo();
-						BlockingCall.doBlocking(conn, cjbs.blockingParams, bca);
+						BlockingCall.doBlocking(conn, cjbs.blockingParams, bca,
+								cjbs.config.getRepetitionCount(), hashedSqlSeq);
 						logExtendedInfo(logger, "Blocking call returned");
 
 						logExtendedInfo(logger, "Committing connection...");
