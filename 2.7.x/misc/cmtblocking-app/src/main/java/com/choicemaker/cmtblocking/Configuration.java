@@ -32,11 +32,13 @@ public class Configuration {
 	public static final String PN_JDBC_PROPERTIES = "jdbcProperties";
 	public static final String PN_BLOCKING_PROPERTIES = "blockingProperties";
 	public static final String PN_BLOCKING_SCRIPT = "blockingScript";
+	public static final String PN_SQL_ID_MAP_FILE = "sqlIdMapFile";
 
 	private final int repetitionCount;
 	private String jdbcFileName;
 	private String blockingFileName;
 	private String scriptFileName;
+	private String sqlIdMapFileName;
 
 	public Configuration(String configFileName) throws IOException {
 		if (configFileName != null && configFileName.trim().length() > 0) {
@@ -66,6 +68,7 @@ public class Configuration {
 			this.blockingFileName =
 				properties.getProperty(PN_BLOCKING_PROPERTIES);
 			this.scriptFileName = properties.getProperty(PN_BLOCKING_SCRIPT);
+			this.scriptFileName = properties.getProperty(PN_SQL_ID_MAP_FILE);
 		} else {
 			this.repetitionCount = 0;
 			this.jdbcFileName = null;
@@ -102,6 +105,10 @@ public class Configuration {
 
 	public String getScriptFileName() {
 		return this.scriptFileName;
+	}
+
+	public String getSqlIdMapFileName() {
+		return sqlIdMapFileName;
 	}
 
 }

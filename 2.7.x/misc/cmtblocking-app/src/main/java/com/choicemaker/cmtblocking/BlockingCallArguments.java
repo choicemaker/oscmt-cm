@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Logger;
 
 /**
@@ -77,6 +78,8 @@ public class BlockingCallArguments {
 	}
 
 	private Map<String, String> map = new HashMap<>();
+	private final AtomicReference<String> sqlIdRef =
+		new AtomicReference<>(null);
 
 	private BlockingCallArguments() {
 	}
@@ -97,20 +100,36 @@ public class BlockingCallArguments {
 		return this.map.get(QUERY);
 	}
 
+	public String getQueryId() {
+		String retVal = sqlIdRef.get();
+		if (retVal == null) {
+			String sql = getQuery();
+			String sqlId = AppUtils.computeMd5Hash(sql);
+			boolean alreadySet = sqlIdRef.compareAndSet(null, sqlId);
+			retVal = sqlIdRef.get();
+			if (alreadySet) {
+				logger.warning("SqlId already set: " + retVal);
+			}
+		}
+		assert retVal != null;
+		assert retVal == AppUtils.computeMd5Hash(getQuery());
+		return retVal;
+	}
+
 	public String getReadConfig() {
 		return this.map.get(READ_CONFIG);
 	}
 
-	void logInfo() {
-		logInfo("Blocking configuration: '" + getBlockConfig() + "'");
-		logInfo("Query: '" + getQuery() + "'");
-		logInfo("Condition 1: '" + getCondition1() + "'");
-		logInfo("Condition 2: '" + getCondition2() + "'");
-		logInfo("Read configuration: '" + getReadConfig() + "'");
-	}
-
-	private void logInfo(String msg) {
-		LogUtil.logExtendedInfo(logger, msg);
+	void logArguments(String tag) {
+		LogUtil.logExtendedInfo(logger,
+				tag + "Blocking configuration: '" + getBlockConfig() + "'");
+		LogUtil.logExtendedInfo(logger, tag + "Query: '" + getQuery() + "'");
+		LogUtil.logExtendedInfo(logger,
+				tag + "Condition 1: '" + getCondition1() + "'");
+		LogUtil.logExtendedInfo(logger,
+				tag + "Condition 2: '" + getCondition2() + "'");
+		LogUtil.logExtendedInfo(logger,
+				tag + "Read configuration: '" + getReadConfig() + "'");
 	}
 
 }

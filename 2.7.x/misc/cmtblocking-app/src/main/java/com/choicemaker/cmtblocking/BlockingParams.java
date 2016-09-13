@@ -80,7 +80,7 @@ public class BlockingParams {
 
 	public int getNumberOfSqlArguments() {
 		int retVal = 0;
-		String sql = getSQL();
+		String sql = getStoredProcedureSQL();
 		CharacterIterator iter = new StringCharacterIterator(sql);
 		for (char c = iter.first(); c != CharacterIterator.DONE; c =
 			iter.next()) {
@@ -91,7 +91,7 @@ public class BlockingParams {
 		return retVal;
 	}
 
-	public String getSQL() {
+	public String getStoredProcedureSQL() {
 		StringBuffer sb = new StringBuffer("call ");
 		String s = properties.getProperty(PN_SCHEMA);
 		if (s != null && s.trim().length() > 0) {
@@ -113,7 +113,7 @@ public class BlockingParams {
 			String value = this.properties.getProperty(key);
 			logInfo("key/value: '" + key + "'/'" + value + "'");
 		}
-		logInfo("SQL: '" + getSQL() + "'");
+		logInfo("SQL: '" + getStoredProcedureSQL() + "'");
 		logInfo("Number Of SQL Arguments: '" + getNumberOfSqlArguments() + "'");
 	}
 

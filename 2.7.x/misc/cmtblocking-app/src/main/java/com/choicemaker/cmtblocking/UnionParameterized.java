@@ -109,7 +109,7 @@ public class UnionParameterized {
 					}
 					logInfo("open dbr");
 				}
-				final String sqlId = BlockingCall.getMd5Hash(sql);
+				final String sqlId = AppUtils.computeMd5Hash(sql);
 				final String SQL_TAG = String.format("(SqlId:%s) ", sqlId);
 				BlockingCall.retrieveData(connection, rs, SQL_TAG);
 

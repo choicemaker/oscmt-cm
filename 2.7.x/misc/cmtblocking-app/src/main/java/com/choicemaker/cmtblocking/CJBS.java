@@ -2,13 +2,16 @@ package com.choicemaker.cmtblocking;
 
 import static com.choicemaker.cmtblocking.LogUtil.logExtendedException;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Iterator;
 import java.util.logging.Logger;
 
 import com.choicemaker.util.Precondition;
+import com.mchange.lang.StringUtils;
 
 /**
  * Result of parsing a configuration file:
@@ -24,7 +27,25 @@ import com.choicemaker.util.Precondition;
  *
  */
 public class CJBS {
+
+	public static final String SQL_ID_MAP_FILE_PREFIX = "SqlIdMap_";
+	public static final String SQL_ID_MAP_FILE_SUFFIX = ".txt";
+
+	static void logInfo(Logger log, Configuration config) {
+		log.info("configuration repetitionCount = '"
+				+ config.getRepetitionCount());
+		log.info("configuration jdbcFileName = '" + config.getJdbcFileName()
+				+ "'");
+		log.info("configuration blockingFileName = '"
+				+ config.getBlockingFileName() + "'");
+		log.info("configuration scriptFileName = '" + config.getScriptFileName()
+				+ "'");
+		log.info("configuration sqlIdMapFile = '" + config.getSqlIdMapFileName()
+				+ "'");
+	}
+
 	public static CJBS parseArgs(String source, Logger logger, String[] args) {
+
 		if (args == null || args.length > 1) {
 			String msg = printUsage(source);
 			throw new IllegalArgumentException(msg);
@@ -74,16 +95,17 @@ public class CJBS {
 			}
 		}
 
-		CJBS retVal =
-			new CJBS(config, jdbcParams, blockingParams, scriptIterator);
-		return retVal;
-	}
+		File sqlIdMapFile = null;
+		if (config != null) {
+			String fileName = config.getSqlIdMapFileName();
+			if (StringUtils.nonEmptyString(fileName)) {
+				sqlIdMapFile = new File(fileName);
+			}
+		}
 
-	static void logInfo(Logger log, Configuration config) {
-		log.info("repetitionCount = '" + config.getRepetitionCount());
-		log.info("jdbcFileName = '" + config.getJdbcFileName() + "'");
-		log.info("blockingFileName = '" + config.getBlockingFileName() + "'");
-		log.info("scriptFileName = '" + config.getScriptFileName() + "'");
+		CJBS retVal = new CJBS(config, jdbcParams, blockingParams,
+				scriptIterator, sqlIdMapFile);
+		return retVal;
 	}
 
 	/**
@@ -116,12 +138,30 @@ public class CJBS {
 	public final JdbcParams jdbcParams;
 	public final BlockingParams blockingParams;
 	public final Iterator<String> scriptIterator;
+	public final File sqlIdMap;
 
 	public CJBS(Configuration config, JdbcParams jdbcParams,
 			BlockingParams blockingParams, Iterator<String> scriptIterator) {
+		this(config, jdbcParams, blockingParams, scriptIterator, null);
+	}
+
+	public CJBS(Configuration config, JdbcParams jdbcParams,
+			BlockingParams blockingParams, Iterator<String> scriptIterator,
+			File mapFile) {
 		this.config = config;
 		this.jdbcParams = jdbcParams;
 		this.blockingParams = blockingParams;
 		this.scriptIterator = scriptIterator;
+		if (mapFile == null) {
+			try {
+				mapFile = File.createTempFile(SQL_ID_MAP_FILE_PREFIX,
+						SQL_ID_MAP_FILE_SUFFIX);
+			} catch (IOException e) {
+				throw new Error("Unexpected: " + e.toString());
+			}
+		}
+		assert mapFile != null;
+		this.sqlIdMap = mapFile;
 	}
+
 }

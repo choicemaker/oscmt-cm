@@ -11,15 +11,12 @@
 package com.choicemaker.cmtblocking;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -38,19 +35,20 @@ public class BlockingCall {
 	public static void doBlocking(final Connection connection,
 			final BlockingParams blockingParams,
 			final BlockingCallArguments args, final int repeatCount,
-			final Map<String, Integer> hashedSQL)
-			throws SQLException, IOException {
+			Map<String, String> sqlQueryIds) throws SQLException, IOException {
 
-		final String sql = blockingParams.getSQL();
-		final String sqlId = getMd5Hash(sql);
-		final String SQL_TAG = String.format("(SqlId:%s) ", sqlId);
-		logInfo(SQL_TAG + "prepareCall( '" + sql + "' )");
+		// Block and retrieve records using the stored procedure
+		final String storedProcedureSQL =
+			blockingParams.getStoredProcedureSQL();
+		logInfo("prepareCall( '" + storedProcedureSQL + "' )");
 		CallableStatement stmt = null;
 		try {
-			stmt = connection.prepareCall(sql);
+			stmt = connection.prepareCall(storedProcedureSQL);
 			stmt.setFetchSize(100);
+			Map<String, Integer> sqlQuerySequences = new HashMap<>();
 			for (int i = 0; i < repeatCount; i++) {
-				blockAndRetrieveData(connection, stmt, args, hashedSQL, sqlId);
+				blockAndRetrieveData(connection, stmt, args, sqlQueryIds,
+						sqlQuerySequences);
 			}
 		} finally {
 			JdbcUtil.closeStatement(stmt);
@@ -61,13 +59,17 @@ public class BlockingCall {
 
 	static void blockAndRetrieveData(final Connection connection,
 			final CallableStatement stmt, final BlockingCallArguments args,
-			final Map<String, Integer> hashedSQL, final String sqlId)
-			throws SQLException {
+			final Map<String, String> sqlQueryIds,
+			final Map<String, Integer> sqlQuerySequences) throws SQLException {
 
-		final int sqlSequence = getSequnceId(hashedSQL, sqlId);
-		final String SEQ_TAG =
-			String.format("(SqlId:%s,SequenceId:%d) ", sqlId, sqlSequence);
+		// Create an id and sequence for the sqlQuery and a tag for log entries
+		final String sqlQuery = args.getQuery();
+		final String sqlId = AppUtils.getRegisteredSqlId(sqlQueryIds, sqlQuery);
+		final int seqId = AppUtils.getSequenceId(sqlQuerySequences, sqlId);
+		final String SEQ_TAG = AppUtils.createSequenceTag(sqlId, seqId);
+
 		logInfo(SEQ_TAG + "set arguments");
+		args.logArguments(SEQ_TAG);
 		stmt.setString(1, args.getBlockConfig());
 		stmt.setString(2, args.getQuery());
 		stmt.setString(3, args.getCondition1());
@@ -108,37 +110,6 @@ public class BlockingCall {
 			JdbcUtil.closeResultSet(outer);
 			outer = null;
 		}
-	}
-
-	public static int getSequnceId(Map<String, Integer> sequenceMap,
-			String sequenceKey) {
-		Integer sequenceId = sequenceMap.get(sequenceKey);
-		if (sequenceId == null) {
-			sequenceId = Integer.valueOf(0);
-		}
-		int retVal = 1 + sequenceId.intValue();
-		sequenceMap.put(sequenceKey, Integer.valueOf(retVal));
-		return retVal;
-	}
-
-	public static final String DIGEST_ALGO = "MD5";
-
-	public static final String ENCODING = "UTF-8";
-
-	public static String getMd5Hash(String sql) {
-		String retVal = null;
-		try {
-			byte[] messageBytes = sql.getBytes(ENCODING);
-			MessageDigest md = MessageDigest.getInstance(DIGEST_ALGO);
-			byte[] digestBytes = md.digest(messageBytes);
-			BigInteger i = new BigInteger(1, digestBytes);
-			retVal = String.format("%1$032x", i);
-		} catch (NumberFormatException | NoSuchAlgorithmException
-				| UnsupportedEncodingException e) {
-			throw new Error("Unexpected: " + e.toString());
-		}
-		assert retVal != null;
-		return retVal;
 	}
 
 	private static void logInfo(String msg) {
