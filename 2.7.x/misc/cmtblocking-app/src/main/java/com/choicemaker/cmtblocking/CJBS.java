@@ -33,7 +33,7 @@ public class CJBS {
 
 	static void logInfo(Logger log, Configuration config) {
 		log.info("configuration repetitionCount = '"
-				+ config.getRepetitionCount());
+				+ config.getRepetitionCount()+ "'");
 		log.info("configuration jdbcFileName = '" + config.getJdbcFileName()
 				+ "'");
 		log.info("configuration blockingFileName = '"
