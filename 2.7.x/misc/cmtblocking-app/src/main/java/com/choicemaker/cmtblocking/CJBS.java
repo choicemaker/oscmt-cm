@@ -11,7 +11,7 @@ import java.util.Iterator;
 import java.util.logging.Logger;
 
 import com.choicemaker.util.Precondition;
-import com.mchange.lang.StringUtils;
+import com.choicemaker.util.StringUtils;
 
 /**
  * Result of parsing a configuration file:
@@ -28,12 +28,12 @@ import com.mchange.lang.StringUtils;
  */
 public class CJBS {
 
-	public static final String SQL_ID_MAP_FILE_PREFIX = "SqlIdMap_";
-	public static final String SQL_ID_MAP_FILE_SUFFIX = ".txt";
+	public static final String DEFAULT_MAP_FILE_PREFIX = "SqlIdMap_";
+	public static final String DEFAULT_MAP_FILE_SUFFIX = ".txt";
 
 	static void logInfo(Logger log, Configuration config) {
 		log.info("configuration repetitionCount = '"
-				+ config.getRepetitionCount()+ "'");
+				+ config.getRepetitionCount() + "'");
 		log.info("configuration jdbcFileName = '" + config.getJdbcFileName()
 				+ "'");
 		log.info("configuration blockingFileName = '"
@@ -45,6 +45,15 @@ public class CJBS {
 	}
 
 	public static CJBS parseArgs(String source, Logger logger, String[] args) {
+		return parseArgs(source, logger, args, DEFAULT_MAP_FILE_PREFIX,
+				DEFAULT_MAP_FILE_SUFFIX);
+	}
+
+	public static CJBS parseArgs(String source, Logger logger, String[] args,
+			String defaultMapFilePrefix, String defaultMapFileSuffix) {
+
+		Precondition.assertNonEmptyString(defaultMapFilePrefix);
+		Precondition.assertNonEmptyString(defaultMapFileSuffix);
 
 		if (args == null || args.length > 1) {
 			String msg = printUsage(source);
@@ -103,8 +112,9 @@ public class CJBS {
 			}
 		}
 
-		CJBS retVal = new CJBS(config, jdbcParams, blockingParams,
-				scriptIterator, sqlIdMapFile);
+		CJBS retVal =
+			new CJBS(config, jdbcParams, blockingParams, scriptIterator,
+					sqlIdMapFile, defaultMapFilePrefix, defaultMapFileSuffix);
 		return retVal;
 	}
 
@@ -142,20 +152,39 @@ public class CJBS {
 
 	public CJBS(Configuration config, JdbcParams jdbcParams,
 			BlockingParams blockingParams, Iterator<String> scriptIterator) {
-		this(config, jdbcParams, blockingParams, scriptIterator, null);
+		this(config, jdbcParams, blockingParams, scriptIterator, null,
+				DEFAULT_MAP_FILE_PREFIX, DEFAULT_MAP_FILE_SUFFIX);
+	}
+
+	public CJBS(Configuration config, JdbcParams jdbcParams,
+			BlockingParams blockingParams, Iterator<String> scriptIterator,
+			String defaultMapFilePrefix, String defaultMapFileSuffix) {
+		this(config, jdbcParams, blockingParams, scriptIterator, null,
+				defaultMapFilePrefix, defaultMapFileSuffix);
 	}
 
 	public CJBS(Configuration config, JdbcParams jdbcParams,
 			BlockingParams blockingParams, Iterator<String> scriptIterator,
 			File mapFile) {
+		this(config, jdbcParams, blockingParams, scriptIterator, mapFile, null,
+				null);
+	}
+
+	protected CJBS(Configuration config, JdbcParams jdbcParams,
+			BlockingParams blockingParams, Iterator<String> scriptIterator,
+			File mapFile, String defaultMapFilePrefix,
+			String defaultMapFileSuffix) {
+		Precondition.assertBoolean(mapFile != null
+				|| (StringUtils.nonEmptyString(defaultMapFilePrefix)
+						&& StringUtils.nonEmptyString(defaultMapFileSuffix)));
 		this.config = config;
 		this.jdbcParams = jdbcParams;
 		this.blockingParams = blockingParams;
 		this.scriptIterator = scriptIterator;
 		if (mapFile == null) {
 			try {
-				mapFile = File.createTempFile(SQL_ID_MAP_FILE_PREFIX,
-						SQL_ID_MAP_FILE_SUFFIX);
+				mapFile = File.createTempFile(defaultMapFilePrefix,
+						defaultMapFileSuffix);
 			} catch (IOException e) {
 				throw new Error("Unexpected: " + e.toString());
 			}
