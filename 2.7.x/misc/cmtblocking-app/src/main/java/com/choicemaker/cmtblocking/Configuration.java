@@ -68,12 +68,13 @@ public class Configuration {
 			this.blockingFileName =
 				properties.getProperty(PN_BLOCKING_PROPERTIES);
 			this.scriptFileName = properties.getProperty(PN_BLOCKING_SCRIPT);
-			this.scriptFileName = properties.getProperty(PN_SQL_ID_MAP_FILE);
+			this.sqlIdMapFileName = properties.getProperty(PN_SQL_ID_MAP_FILE);
 		} else {
 			this.repetitionCount = 0;
 			this.jdbcFileName = null;
 			this.blockingFileName = null;
 			this.scriptFileName = null;
+			this.sqlIdMapFileName = null;
 		}
 	}
 
