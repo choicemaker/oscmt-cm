@@ -75,6 +75,10 @@ public class MainLoadTableBlockingArgs {
 				Map<Integer, String> blockingQueryIndices = processQueries(
 						maxBlockingArgsIndex, stmtInsertBlockingArgs, cjbs);
 				writeBlockingQueryIndices(cjbs, blockingQueryIndices);
+
+				logExtendedInfo(logger, "Committing connection...");
+				conn.commit();
+				logExtendedInfo(logger, "Connection committed");
 			} finally {
 				if (conn != null) {
 					logExtendedInfo(logger, "Closing JDBC connection...");
@@ -150,11 +154,19 @@ public class MainLoadTableBlockingArgs {
 		return retVal;
 	}
 
-	private static void insertBlockingArgs(PreparedStatement stmtInsertBlockingArgs,
+	private static void insertBlockingArgs(PreparedStatement stmt,
 			int blockingArgsIndex, BlockingCallArguments bca,
-			Map<Integer, String> retVal) {
-		// TODO Auto-generated method stub
-
+			Map<Integer, String> retVal) throws SQLException {
+		// "INSERT INTO TEST_BLOCKING_ARGS( "
+		// + "ARGS_ID, BLOCKING_CONF, CONDITION_1, CONDITION_2, "
+		// + "READ_CONFIG) VALUES( :v0, :v1, :v2, :v3, :v4 )";
+		stmt.setInt(1, blockingArgsIndex);
+		stmt.setString(1, bca.getBlockConfig());
+		stmt.setString(3, bca.getQuery());
+		stmt.setString(4, bca.getReadConfig());
+		boolean isResultSet = stmt.execute();
+		assert !isResultSet;
+		assert stmt.getUpdateCount() == 1;
 	}
 
 	private static void writeBlockingQueryIndices(CJBS cjbs,
