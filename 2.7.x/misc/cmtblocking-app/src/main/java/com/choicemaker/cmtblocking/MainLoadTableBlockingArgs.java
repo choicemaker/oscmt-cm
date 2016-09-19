@@ -51,8 +51,8 @@ public class MainLoadTableBlockingArgs {
 
 	static final String SQL_INSERT_BLOCKING_ARGS =
 		"INSERT INTO TEST_BLOCKING_ARGS( "
-				+ "ARGS_ID, BLOCKING_CONF, CONDITION_1, CONDITION_2, "
-				+ "READ_CONFIG) VALUES( :v0, :v1, :v2, :v3, :v4 )";
+				+ "ARGS_ID, BLOCKING_CONF, QUERY, CONDITION_1, CONDITION_2, "
+				+ "READ_CONFIG) VALUES( :v0, :v1, :v2, :v3, :v4, :v5 )";
 
 	public static void main(String[] args) throws IOException, SQLException {
 
@@ -155,18 +155,21 @@ public class MainLoadTableBlockingArgs {
 	}
 
 	private static void insertBlockingArgs(PreparedStatement stmt,
-			int blockingArgsIndex, BlockingCallArguments bca,
+			final int blockingArgsIndex, BlockingCallArguments bca,
 			Map<Integer, String> retVal) throws SQLException {
 		// "INSERT INTO TEST_BLOCKING_ARGS( "
-		// + "ARGS_ID, BLOCKING_CONF, CONDITION_1, CONDITION_2, "
-		// + "READ_CONFIG) VALUES( :v0, :v1, :v2, :v3, :v4 )";
+		// + "ARGS_ID, BLOCKING_CONF, QUERY, CONDITION_1, CONDITION_2, "
+		// + "READ_CONFIG) VALUES( :v0, :v1, :v2, :v3, :v4, :v5 )";
 		stmt.setInt(1, blockingArgsIndex);
-		stmt.setString(1, bca.getBlockConfig());
+		stmt.setString(2, bca.getBlockConfig());
 		stmt.setString(3, bca.getQuery());
-		stmt.setString(4, bca.getReadConfig());
+		stmt.setString(4, bca.getCondition1());
+		stmt.setString(5, bca.getCondition2());
+		stmt.setString(6, bca.getReadConfig());
 		boolean isResultSet = stmt.execute();
 		assert !isResultSet;
 		assert stmt.getUpdateCount() == 1;
+		retVal.put(blockingArgsIndex, bca.getQuery());
 	}
 
 	private static void writeBlockingQueryIndices(CJBS cjbs,
