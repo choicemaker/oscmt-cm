@@ -20,8 +20,8 @@ import java.util.Map;
  *
  * @author rphall
  */
-public abstract class AbstractAggregateValidator
-	implements IAggregateValidator {
+public abstract class AbstractAggregateValidator<T>
+	implements IAggregateValidator<T> {
 
 //	private static Logger logger =
 //		Logger.getLogger(AbstractAggregateValidator.class.getName());
@@ -52,40 +52,40 @@ public abstract class AbstractAggregateValidator
 	 * Sets the validators used by this validator.
 	 * @param validatorMap a map of validator names to validator instances
 	 */
-	public abstract void setValidators(Map validatorMap);
+	public abstract void setValidators(Map<String, IValidator<T>> validatorMap);
 
 	/**
 	 * Adds a validator to the validators used by this validator.
 	 * @param name the plugin name of the validator
 	 * @param validator the validator
 	 */
-	public abstract void addValidator(String name, IValidator validator);
+	public abstract void addValidator(String name, IValidator<T> validator);
 
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.validation.eclipse.IValidator#equals(IValidator)
 	 */
-	public boolean equals(IValidator validator) {
+	public boolean equals(IValidator<?> validator) {
 		boolean retVal = false;
 		if (validator != null) {
-			Class thisClass = this.getClass();
-			Class thatClass = validator.getClass();
+			Class<?> thisClass = this.getClass();
+			Class<?> thatClass = validator.getClass();
 			if (thisClass.equals(thatClass)) {
-				AbstractAggregateValidator that =
-					(AbstractAggregateValidator) validator;
+				@SuppressWarnings("unchecked")
+				AbstractAggregateValidator<T> that =
+					(AbstractAggregateValidator<T>) validator;
 				String[] theseNames = this.getValidatorNames();
 				String[] thoseNames = that.getValidatorNames();
-				 ;
 				if (theseNames != null
 					&& thoseNames != null
 					&& Arrays.equals(theseNames,thoseNames)) {
 
 					retVal = true;
-					Map thisMap = this.getValidatorMap();
-					Map thatMap = that.getValidatorMap();
+					Map<String, IValidator<T>> thisMap = this.getValidatorMap();
+					Map<String, IValidator<T>> thatMap = that.getValidatorMap();
 					for (int i = 0; retVal && i < theseNames.length; i++) {
 						String thisName = theseNames[i];
-						IValidator thisValidator = (IValidator) thisMap.get(thisName);
-						IValidator thatValidator = (IValidator) thatMap.get(thisName);
+						IValidator<T> thisValidator = thisMap.get(thisName);
+						IValidator<T> thatValidator = thatMap.get(thisName);
 						retVal =
 							retVal
 								&& thisValidator != null

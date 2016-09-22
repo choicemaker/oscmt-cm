@@ -19,7 +19,7 @@ import com.choicemaker.cm.validation.ValidatorCreationException;
  *
  * @author rphall
  */
-public interface IValidatorFactory {
+public interface IValidatorFactory<T> {
 
 	public final String VALIDATOR_FACTORY_EXTENSION_POINT =
 		ChoiceMakerExtensionPoint.CM_VALIDATION_ECLIPSE_VALIDATORFACTORY;
@@ -33,7 +33,7 @@ public interface IValidatorFactory {
 	 * @throws ValidatorCreationException if validator name is valid
 	 * but the validator can not be created.
 	 */
-	public IValidator createValidator(String name)
+	public IValidator<T> createValidator(String name)
 		throws NoSuchElementException, ValidatorCreationException;
 
 	/**
@@ -42,7 +42,8 @@ public interface IValidatorFactory {
 	 * @return a non-null, but possibly empty map of validators keyed
 	 * by validator name.
 	 */
-	public Map createValidators() throws ValidatorCreationException;
+	public Map<String, IValidator<T>> createValidators()
+			throws ValidatorCreationException;
 
 	/**
 	 * Returns the identifier of the validator extension point
@@ -66,4 +67,3 @@ public interface IValidatorFactory {
 	public void setHandledValidatorExtensionPoint(String id);
 
 }
-

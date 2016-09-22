@@ -13,7 +13,7 @@ package com.choicemaker.cm.validation;
  *
  * @author rphall
  */
-public abstract class AbstractValidator implements IValidator {
+public abstract class AbstractValidator<T> implements IValidator<T> {
 
 	/**
 	 * If <code>o</code> is an instance of IValidator, this method
@@ -21,14 +21,14 @@ public abstract class AbstractValidator implements IValidator {
 	 * invokes <code>v.equals(Object)</code>. A null validator never
 	 * equals another validator, even another null one.
 	 */
-	public static boolean validatorEquals(IValidator v, Object o) {
+	public static boolean validatorEquals(IValidator<?> v, Object o) {
 		boolean retVal = false;
 		if (v != null && o instanceof IValidator) {
-			retVal = v.equals((IValidator)o);
+			retVal = v.equals((IValidator<?>)o);
 		} else if (v != null) {
 			retVal = v.equals(o);
 		} else {
-			retVal = false;
+			assert retVal == false;
 		}
 		return retVal;
 	}
@@ -49,7 +49,7 @@ public abstract class AbstractValidator implements IValidator {
 	public boolean equals(Object o) {
 		boolean retVal;
 		if (o instanceof IValidator) {
-			retVal = this.equals((IValidator)o);
+			retVal = this.equals((IValidator<?>)o);
 		} else {
 			retVal = super.equals(o);
 		}

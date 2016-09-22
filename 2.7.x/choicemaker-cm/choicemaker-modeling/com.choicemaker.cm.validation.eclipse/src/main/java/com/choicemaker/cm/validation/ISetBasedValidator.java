@@ -15,7 +15,7 @@ import java.util.Set;
  *
  * @author rphall
  */
-public interface ISetBasedValidator extends IValidator {
+public interface ISetBasedValidator<T> extends IValidator<T> {
 
 	/**
 	 * Gets the name of the Sets instance
@@ -32,7 +32,7 @@ public interface ISetBasedValidator extends IValidator {
 	 * Returns the set of data used by this validator.
 	 * @return a non-null Set
 	 */
-	public Set getSetContents();
+	public Set<?> getSetContents();
 
 }
 

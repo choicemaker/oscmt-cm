@@ -46,7 +46,7 @@ public class SimpleValidatorFactory extends AbstractValidatorFactory {
 
 		String validatorName = el.getAttribute("name");
 		Object o = el.createExecutableExtension("class");
-		IValidator validator = (IValidator) o;
+		IValidator<?> validator = (IValidator<?>) o;
 		NamedValidator retVal = new NamedValidator(validatorName, validator);
 		return retVal;
 	}

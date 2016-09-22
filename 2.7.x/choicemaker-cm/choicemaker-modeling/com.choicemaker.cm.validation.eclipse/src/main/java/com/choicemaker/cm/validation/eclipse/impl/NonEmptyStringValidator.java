@@ -12,12 +12,10 @@ import com.choicemaker.cm.validation.IValidator;
 import com.choicemaker.util.StringUtils;
 
 /**
- * A simple validator for testing aggregation. This class extends
- * AbstractValidator, rather than implementing IValidator directly,
- * in order to test the AbstractValidator.equals(Object) method.
+ * A simple validator for checking that a String is neither null or blank.
  * @author rphall
  */
-public class NonEmptyStringValidator extends AbstractValidator {
+public class NonEmptyStringValidator extends AbstractValidator<String> {
 
 
 	/**
@@ -31,15 +29,15 @@ public class NonEmptyStringValidator extends AbstractValidator {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.validation.eclipse.IValidator#getValidationTypes()
 	 */
-	public Class[] getValidationTypes() {
-		Class[] retVal = new Class[] { String.class };
+	public Class<?>[] getValidationTypes() {
+		Class<?>[] retVal = new Class[] { String.class };
 		return retVal;
 	}
 
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.validation.eclipse.IValidator#isValid(java.lang.Object)
 	 */
-	public boolean isValid(Object object) {
+	public boolean isValid(String object) {
 		boolean retVal = false;
 		if (object != null && (object instanceof String)) {
 			String value = (String) object;
@@ -48,7 +46,7 @@ public class NonEmptyStringValidator extends AbstractValidator {
 		return retVal;
 	}
 	
-	public boolean equals(IValidator validator) {
+	public boolean equals(IValidator<?> validator) {
 		boolean retVal = false;
 		if (validator != null
 			&& validator.getClass().equals(this.getClass())) {

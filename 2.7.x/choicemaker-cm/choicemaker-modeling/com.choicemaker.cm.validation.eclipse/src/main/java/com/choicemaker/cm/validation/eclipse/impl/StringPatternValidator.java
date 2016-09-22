@@ -10,7 +10,6 @@ package com.choicemaker.cm.validation.eclipse.impl;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -21,6 +20,7 @@ import java.util.regex.PatternSyntaxException;
 import com.choicemaker.cm.matching.gen.Sets;
 import com.choicemaker.cm.validation.AbstractSetBasedValidator;
 import com.choicemaker.cm.validation.IPatternMatcher;
+import com.choicemaker.util.Precondition;
 import com.choicemaker.util.StringUtils;
 
 /**
@@ -31,7 +31,7 @@ import com.choicemaker.util.StringUtils;
  * @author rphall
  */
 public class StringPatternValidator
-	extends AbstractSetBasedValidator
+	extends AbstractSetBasedValidator<String>
 	implements IPatternMatcher {
 
 	/** The hash character (#) */
@@ -39,6 +39,17 @@ public class StringPatternValidator
 
 	protected static Logger logger =
 		Logger.getLogger(StringPatternValidator.class.getName());
+	
+	protected static final String INMEMORY_SET_NAME_PREFIX = "InMemorySet_";
+
+	protected static <T> String generateSetName(Collection<T> set) {
+		String retVal = null;
+		if (set != null) {
+			retVal = INMEMORY_SET_NAME_PREFIX + set.hashCode();
+		}
+		return retVal;
+	}
+
 	protected Pattern[] patterns;
 
 	protected String setName;
@@ -49,6 +60,16 @@ public class StringPatternValidator
 	 * be called to finish construction.
 	 */
 	public StringPatternValidator() {
+	}
+
+	/**
+	 * Constructs a validator from an in-memory set of patterns.
+	 * A generated name is assigned to this validator.
+	 * @param A non-null collection of regex expressions.
+	 */
+	public StringPatternValidator(Collection<String> regexCollection) {
+		String generatedName = generateSetName(regexCollection);
+		initializeSetNameAndPatterns(generatedName, regexCollection);
 	}
 
 	/**
@@ -63,6 +84,7 @@ public class StringPatternValidator
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.validation.eclipse.ISetBasedValidator#getNamedSet()
 	 */
+	@Override
 	public String getNamedSet() {
 		if (this.setName == null) {
 			throw new IllegalStateException("set name not initialized");
@@ -73,21 +95,20 @@ public class StringPatternValidator
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.validation.eclipse.ISetBasedValidator#setNamedSet(String)
 	 */
+	@Override
 	public void setNamedSet(String setName) {
 		initializeSetNameAndPatterns(setName);
 	}
 
-	private void initializeSetNameAndPatterns(String setName) {
-		// Precondition
-		if (!StringUtils.nonEmptyString(setName)) {
-			throw new IllegalArgumentException("null or blank set name");
-		}
-
+	private void initializeSetNameAndPatterns(String setName, Collection<String> regexCollection) {
+		// Preconditions
+		Precondition.assertNonEmptyString("Null or blank set name", setName);
+		Precondition.assertNonNullArgument("Null regex collection", regexCollection);
+		Precondition.assertBoolean("empty regex collection", regexCollection.size() > 0);
+		
 		this.setName = setName;
-		List patternList = new ArrayList();
-		Collection c = Sets.getCollection(this.setName);
-		for (Iterator i = c.iterator(); i.hasNext();) {
-			String s = (String) i.next();
+		List<Pattern> patternList = new ArrayList<>();
+		for (String s : regexCollection) {
 			boolean nonEmptyString = StringUtils.nonEmptyString(s);
 			if (nonEmptyString && !s.startsWith(COMMENT_FLAG)) {
 				logger.fine(setName + ": adding '" + s + "'");
@@ -106,12 +127,19 @@ public class StringPatternValidator
 				logger.fine(setName + ": skipping blank line");
 			}
 		}
-		this.patterns = (Pattern[]) patternList.toArray(new Pattern[0]);
+		this.patterns = patternList.toArray(new Pattern[0]);
+	}
+
+	private void initializeSetNameAndPatterns(String setName) {
+		Precondition.assertNonEmptyString("Null or blank set name", setName);
+		Collection<String> c = Sets.getCollection(setName);
+		initializeSetNameAndPatterns(setName,c);
 	}
 
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.validation.IPatternMatcher#getPatterns()
 	 */
+	@Override
 	public Pattern[] getPatterns() {
 		if (this.patterns == null) {
 			throw new IllegalStateException("patterns not initialized");
@@ -128,29 +156,31 @@ public class StringPatternValidator
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.validation.eclipse.ISetBasedValidator#getSetContents()
 	 */
-	public Set getSetContents() {
+	@Override
+	public Set<String> getSetContents() {
 		if (this.patterns == null) {
 			throw new IllegalStateException("patterns not initialized");
 		}
 
-		Set retVal = new HashSet();
+		Set<String> retVal = new HashSet<>();
 		for (int i = 0; i < this.patterns.length; i++) {
 			retVal.add(this.patterns[i].pattern());
 		}
 		return retVal;
 	}
 
-	public Class[] getValidationTypes() {
+	public Class<?>[] getValidationTypes() {
 		return new Class[] { String.class };
 	}
 
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.validation.eclipse.IValidator#isValid(java.lang.String)
 	 */
-	public boolean isValid(Object object) {
+	@Override
+	public boolean isValid(String object) {
 		boolean retVal = false;
 		if (object != null && object instanceof String) {
-			retVal = isMatch((String) object);
+			retVal = isMatch(object);
 		}
 		return retVal;
 	}
@@ -158,6 +188,7 @@ public class StringPatternValidator
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.validation.IPatternMatcher#isMatch(java.lang.String)
 	 */
+	@Override
 	public boolean isMatch(String s) {
 		boolean retVal = false;
 		Matcher[] matches = getAllMatches(s);
@@ -170,6 +201,7 @@ public class StringPatternValidator
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.validation.IPatternMatcher#getFirstMatch(java.lang.String)
 	 */
+	@Override
 	public Matcher getFirstMatch(String s) {
 		Matcher retVal = null;
 		Matcher[] matches = getAllMatches(s,true);
@@ -182,6 +214,7 @@ public class StringPatternValidator
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.validation.IPatternMatcher#getAllMatches(java.lang.String)
 	 */
+	@Override
 	public Matcher[] getAllMatches(String s) {
 		return getAllMatches(s,false);
 	}
@@ -192,7 +225,7 @@ public class StringPatternValidator
 			throw new IllegalStateException("patterns not initialized");
 		}
 
-		List matches = new ArrayList();
+		List<Matcher> matches = new ArrayList<>();
 		for (int i = 0; i < this.patterns.length; i++) {
 			Matcher matcher = this.patterns[i].matcher(s);
 			if (matcher.matches()) {
@@ -202,9 +235,8 @@ public class StringPatternValidator
 				} 
 			}
 		}
-		Matcher[] retVal = (Matcher[]) matches.toArray(new Matcher[matches.size()]);
+		Matcher[] retVal = matches.toArray(new Matcher[matches.size()]);
 		return retVal;
 	}
 
 }
-

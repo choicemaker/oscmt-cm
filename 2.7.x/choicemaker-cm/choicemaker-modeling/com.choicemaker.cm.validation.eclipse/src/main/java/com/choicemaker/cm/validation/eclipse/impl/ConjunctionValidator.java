@@ -26,7 +26,7 @@ import com.choicemaker.util.StringUtils;
  * in order for the method of this class to evaluate to <code>true</code>.
  * @author rphall
  */
-public class ConjunctionValidator extends AbstractAggregateValidator {
+public class ConjunctionValidator<T> extends AbstractAggregateValidator<T> {
 	
 //	private static Logger logger =
 //		Logger.getLogger(SetBasedValidatorFactory.class.getName());

@@ -15,7 +15,7 @@ import java.util.Map;
  *
  * @author rphall
  */
-public interface IAggregateValidator extends IValidator {
+public interface IAggregateValidator<T> extends IValidator<T> {
 
 	/**
 	 * Gets a map of names to instances of the validators used by this validator.
@@ -23,7 +23,7 @@ public interface IAggregateValidator extends IValidator {
 	 * in com.choicemaker.cm.validation.eclipse
 	 * @return a non-null, but possibly empty map of name to delegate validators.
 	 */
-	public Map getValidatorMap();
+	public Map<String, IValidator<T>> getValidatorMap();
 
 	/**
 	 * Gets the plugin names of the validators used by this validator.
@@ -37,7 +37,7 @@ public interface IAggregateValidator extends IValidator {
 	 * Gets the validators used by this validator.
 	 * @return a non-null, but possibly empty array of delegate validators.
 	 */
-	public IValidator[] getValidators();
+	public IValidator<T>[] getValidators();
 
 }
 

@@ -10,7 +10,6 @@ package com.choicemaker.cm.validation.eclipse.impl;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -32,14 +31,14 @@ import com.choicemaker.util.StringUtils;
 public final class Validators {
 
 	private static Logger logger = Logger.getLogger(Validators.class.getName());
-
+	
 	/**
 	 * Cached map of validator configuration names to validators.
 	 * Do not use directly (except in {@link #addValidator(String,IValidator)};
 	 * use {@link #getValidators()} instead.
 	 * @see #getValidators()
 	*/
-	private static Map validators = null;
+	private static Map<String, IValidator<?>> validators = null;
 
 	/** Synchronization object for creating the validatorFactories singleton */
 	private static final Object validatorsInit = new Object();
@@ -53,7 +52,7 @@ public final class Validators {
 	 * managed by this class can not be created.
 	 * <p>see createValidatorMap()</p>
 	 */
-	public static Map getValidators() throws ValidatorCreationException {
+	public static Map<String, IValidator<?>> getValidators() throws ValidatorCreationException {
 		if (validators == null) {
 			synchronized (validatorsInit) {
 				if (validators == null) {
@@ -74,7 +73,8 @@ public final class Validators {
 	 * @throws ValidatorCreationException if the validator collection
 	 * managed by this class can not be created.
 	 */
-	public static void addValidator(String name, IValidator validator)
+	@SuppressWarnings("unchecked")
+	public static void addValidator(String name, IValidator<?> validator)
 		throws ValidatorCreationException {
 		// Preconditions
 		if (!StringUtils.nonEmptyString(name)) {
@@ -85,6 +85,7 @@ public final class Validators {
 		}
 
 		synchronized (Validators.validatorsInit) {
+			@SuppressWarnings("rawtypes")
 			Map newValidatorMap = cloneMap(getValidators());
 			Object alreadyPresent = newValidatorMap.put(name, validator);
 			if (alreadyPresent != null) {
@@ -102,6 +103,8 @@ public final class Validators {
 
 	}
 
+	@SuppressWarnings({
+			"rawtypes", "unchecked" })
 	private static Map cloneMap(Map map) {
 		Map retVal = new HashMap();
 		retVal.putAll(map);
@@ -118,8 +121,9 @@ public final class Validators {
 	 * @throws ValidatorCreationException if the validator collection
 	 * managed by this class can not be created.
 	 */
-	public static IValidator getValidator(String name)
+	public static IValidator<?> getValidator(String name)
 		throws ValidatorCreationException {
+		@SuppressWarnings("rawtypes")
 		IValidator retVal = (IValidator) getValidators().get(name);
 		if (retVal == null) {
 			String msg = "unknown validator '" + name + "'";
@@ -136,7 +140,7 @@ public final class Validators {
 	 * @throws ValidatorCreationException if the validator collection
 	 * managed by this class can not be created.
 	 */
-	public static Collection getValidatorNames()
+	public static Collection<String> getValidatorNames()
 		throws ValidatorCreationException {
 		return getValidators().keySet();
 	}
@@ -154,16 +158,17 @@ public final class Validators {
 	 * can not be created.
 	 * @see #getValidators()
 	 */
-	public static Map createValidatorMapFromRegistry()
+	@SuppressWarnings("unchecked")
+	public static Map<String, IValidator<?>> createValidatorMapFromRegistry()
 		throws ValidatorCreationException {
 
-		Map retVal = new HashMap();
-		Map factories = AbstractValidatorFactory.createValidatorFactoryMap();
-		Set handledExtensionPoints = factories.keySet();
-		for (Iterator i = handledExtensionPoints.iterator(); i.hasNext();) {
-			String handledExtensionPoint = (String) i.next();
-			IValidatorFactory factory =
-				(IValidatorFactory) factories.get(handledExtensionPoint);
+		Map<String, IValidator<?>> retVal = new HashMap<>();
+		Map<?, ?> factories = AbstractValidatorFactory.createValidatorFactoryMap();
+		Set<String> handledExtensionPoints = (Set<String>) factories.keySet();
+		for (String handledExtensionPoint : handledExtensionPoints) {
+			IValidatorFactory<?> factory =
+				(IValidatorFactory<?>) factories.get(handledExtensionPoint);
+			@SuppressWarnings("rawtypes")
 			Map v = factory.createValidators();
 			retVal.putAll(v);
 		}
@@ -181,10 +186,12 @@ public final class Validators {
 	 * @throws ValidatorCreationException if the validator collection
 	 * managed by this class can not be created.
 	 */
+	@SuppressWarnings("unchecked")
 	public static boolean isValid(String name, Object value)
 		throws ValidatorCreationException {
 		boolean retVal = false;
 		if (name != null && value != null) {
+			@SuppressWarnings("rawtypes")
 			IValidator validator = (IValidator) getValidators().get(name);
 			if (validator != null) {
 				retVal = validator.isValid(value);

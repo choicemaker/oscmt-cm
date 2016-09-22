@@ -16,7 +16,7 @@ import com.choicemaker.cm.validation.IValidator;
  * validators on a matching model.
  * @author rphall
  */
-public class AlwaysTrueValidator extends AbstractValidator {
+public class AlwaysTrueValidator extends AbstractValidator<Object> {
 
 
 	/**
@@ -30,8 +30,8 @@ public class AlwaysTrueValidator extends AbstractValidator {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.validation.eclipse.IValidator#getValidationTypes()
 	 */
-	public Class[] getValidationTypes() {
-		Class[] retVal = new Class[] { Object.class };
+	public Class<?>[] getValidationTypes() {
+		Class<?>[] retVal = new Class[] { Object.class };
 		return retVal;
 	}
 
@@ -42,7 +42,7 @@ public class AlwaysTrueValidator extends AbstractValidator {
 		return true;
 	}
 	
-	public boolean equals(IValidator validator) {
+	public boolean equals(IValidator<?> validator) {
 		boolean retVal = false;
 		if (validator != null
 			&& validator.getClass().equals(this.getClass())) {

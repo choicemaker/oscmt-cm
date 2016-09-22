@@ -45,7 +45,7 @@ public class SetBasedValidatorFactory extends AbstractValidatorFactory {
 
 		String validatorName = el.getAttribute("name");
 		Object o = el.createExecutableExtension("class");
-		AbstractSetBasedValidator validator = (AbstractSetBasedValidator) o;
+		AbstractSetBasedValidator<?> validator = (AbstractSetBasedValidator<?>) o;
 		String setName = el.getAttribute("set");
 		validator.setNamedSet(setName);
 

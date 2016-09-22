@@ -18,7 +18,7 @@ import java.util.Set;
  *
  * @author rphall
  */
-public abstract class AbstractSetBasedValidator implements ISetBasedValidator {
+public abstract class AbstractSetBasedValidator<T> implements ISetBasedValidator<T> {
 
 //	private static Logger logger =
 //		Logger.getLogger(AbstractSetBasedValidator.class.getName());
@@ -31,16 +31,17 @@ public abstract class AbstractSetBasedValidator implements ISetBasedValidator {
 	public AbstractSetBasedValidator() {
 	}
 
-	public boolean equals(IValidator validator) {
+	public boolean equals(IValidator<?> validator) {
 		boolean retVal = false;
 		if (validator != null) {
-			Class thisClass = this.getClass();
-			Class thatClass = validator.getClass();
+			Class<?> thisClass = this.getClass();
+			Class<?> thatClass = validator.getClass();
 			if (thisClass.equals(thatClass)) {
-				AbstractSetBasedValidator that =
-					(AbstractSetBasedValidator) validator;
-				Set thisSet = this.getSetContents();
-				Set thatSet = that.getSetContents();
+				@SuppressWarnings("unchecked")
+				AbstractSetBasedValidator<T> that =
+					(AbstractSetBasedValidator<T>) validator;
+				Set<?> thisSet = this.getSetContents();
+				Set<?> thatSet = that.getSetContents();
 				if (thisSet != null && thatSet != null) {
 					retVal = thisSet.equals(thatSet);
 				}

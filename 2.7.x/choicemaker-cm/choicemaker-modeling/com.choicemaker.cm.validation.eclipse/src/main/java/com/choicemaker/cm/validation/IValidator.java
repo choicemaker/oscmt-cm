@@ -12,7 +12,7 @@ package com.choicemaker.cm.validation;
  *
  * @author rphall
  */
-public interface IValidator {
+public interface IValidator<T> {
 
 	/**
 	 * Checks if two validators are functionally identical; i.e.
@@ -20,7 +20,7 @@ public interface IValidator {
 	 * perform the validation checks.
 	 * @see #hashCode()
 	 */
-	public boolean equals(IValidator validator);
+	public boolean equals(IValidator<?> validator);
 
 	/**
 	 * To work as expected, implementors must override
@@ -37,7 +37,7 @@ public interface IValidator {
 	 * Returns the a hashcode that should be the same for
 	 * two instances of the same implementation class that
 	 * perform the same validation checks. The hashcode should
-	 * be unique by implemenation class, and within an implementation
+	 * be unique by implementation class, and within an implementation
 	 * class, unique by the set of validation checks that are performed.
 	 * @see #equals(IValidator)
 	 */
@@ -46,7 +46,7 @@ public interface IValidator {
 	/**
 	 * Validates an object.
 	 */
-	public boolean isValid(Object object);
+	public boolean isValid(T object);
 
 }
 

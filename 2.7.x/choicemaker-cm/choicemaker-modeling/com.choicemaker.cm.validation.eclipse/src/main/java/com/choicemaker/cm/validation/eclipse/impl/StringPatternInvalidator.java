@@ -20,7 +20,7 @@ public class StringPatternInvalidator extends StringPatternValidator {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.validation.eclipse.IValidator#isValid(java.lang.String)
 	 */
-	public boolean isValid(Object object) {
+	public boolean isValid(String object) {
 		boolean retVal = true;
 		if (object != null && object instanceof String) {
 			retVal = !isMatch((String) object);

@@ -10,7 +10,6 @@ package com.choicemaker.cm.validation.eclipse.impl;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -24,14 +23,14 @@ import com.choicemaker.util.StringUtils;
  *
  * @author rphall
  */
-public class StringInvalidator extends AbstractSetBasedValidator {
+public class StringInvalidator extends AbstractSetBasedValidator<String> {
 
 	/** The hash character (#) */
 	public static final String COMMENT_FLAG = "#";
 
 	private static Logger logger = Logger.getLogger(StringInvalidator.class.getName());
 
-	private Set strings;
+	private Set<String> strings;
 
 	private String setName;
 
@@ -65,15 +64,15 @@ public class StringInvalidator extends AbstractSetBasedValidator {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.validation.eclipse.ISetBasedValidator#getSetContents()
 	 */
-	public Set getSetContents() {
+	public Set<String> getSetContents() {
 		if (this.strings == null) {
 			throw new IllegalStateException("strings not initialized");
 		}
-		Set retVal = Collections.unmodifiableSet(strings);
+		Set<String> retVal = Collections.unmodifiableSet(strings);
 		return retVal;
 	}
 
-	public Class[] getValidationTypes() {
+	public Class<?>[] getValidationTypes() {
 		return new Class[] { String.class };
 	}
 
@@ -83,7 +82,7 @@ public class StringInvalidator extends AbstractSetBasedValidator {
 		if (!StringUtils.nonEmptyString(_setName)) {
 			throw new IllegalArgumentException("null or blank set name");
 		}
-		Collection c = Sets.getCollection(_setName);
+		Collection<String> c = Sets.getCollection(_setName);
 		if (c == null) {
 			String msg = "No set named '" + _setName + "'";
 			logger.severe(msg);
@@ -91,9 +90,8 @@ public class StringInvalidator extends AbstractSetBasedValidator {
 		}
 
 		this.setName = _setName;
-		this.strings = new HashSet();
-		for (Iterator i = c.iterator(); i.hasNext();) {
-			String s = (String) i.next();
+		this.strings = new HashSet<>();
+		for (String s : c) {
 			boolean nonEmpty = StringUtils.nonEmptyString(s);
 			if (nonEmpty && !s.startsWith(COMMENT_FLAG)) {
 				logger.fine(this.setName + ": adding '" + s + "'");
@@ -110,7 +108,7 @@ public class StringInvalidator extends AbstractSetBasedValidator {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.validation.eclipse.IValidator#isValid(java.lang.String)
 	 */
-	public boolean isValid(Object object) {
+	public boolean isValid(String object) {
 		// Preconditions
 		if (this.strings == null) {
 			throw new IllegalStateException("strings not initialized");
