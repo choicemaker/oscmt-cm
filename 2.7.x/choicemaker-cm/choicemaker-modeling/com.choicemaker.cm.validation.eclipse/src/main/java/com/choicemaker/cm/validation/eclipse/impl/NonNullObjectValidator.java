@@ -16,6 +16,14 @@ import com.choicemaker.cm.validation.IValidator;
  */
 public class NonNullObjectValidator extends AbstractValidator<Object> {
 
+	/** A thread-safe instance */
+	private static final NonNullObjectValidator instance = new NonNullObjectValidator();
+
+	/** Returns a thread-safe instance */
+	public static NonNullObjectValidator getThreadSafeInstance() {
+		return instance;
+	}
+
 	/**
 	 * Constructs an NonNullObjectValidator instance.
 	 */
@@ -37,7 +45,7 @@ public class NonNullObjectValidator extends AbstractValidator<Object> {
 		boolean retVal = object != null;
 		return retVal;
 	}
-	
+
 	public boolean equals(IValidator<?> validator) {
 		boolean retVal = false;
 		if (validator != null
