@@ -11,35 +11,46 @@ import com.choicemaker.cm.validation.AbstractValidator;
 import com.choicemaker.cm.validation.IValidator;
 
 /**
- * A simple validator for checking that an object is not null.
+ * A simple validator for checking that an object is not null. Instances are
+ * thread safe since they have no instance data.
+ * 
  * @author rphall
  */
 public class NonNullObjectValidator extends AbstractValidator<Object> {
 
-	/** A thread-safe instance */
-	private static final NonNullObjectValidator instance = new NonNullObjectValidator();
+	private static final NonNullObjectValidator instance =
+		new NonNullObjectValidator();
 
-	/** Returns a thread-safe instance */
 	public static NonNullObjectValidator getThreadSafeInstance() {
 		return instance;
 	}
 
 	/**
-	 * Constructs an NonNullObjectValidator instance.
+	 * Constructs an NonNullObjectValidator instance. The
+	 * {@link #getThreadSafeInstance()} method is preferred to constructing a
+	 * new instance, since it avoids allocating and then garbage collecting
+	 * additional instances.
 	 */
 	public NonNullObjectValidator() {
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.validation.eclipse.IValidator#getValidationTypes()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.validation.eclipse.IValidator#getValidationTypes()
 	 */
 	public Class<?>[] getValidationTypes() {
-		Class<?>[] retVal = new Class[] { Object.class };
+		Class<?>[] retVal = new Class[] {
+				Object.class };
 		return retVal;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.validation.eclipse.IValidator#isValid(java.lang.Object)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.choicemaker.cm.validation.eclipse.IValidator#isValid(java.lang.
+	 * Object)
 	 */
 	public boolean isValid(Object object) {
 		boolean retVal = object != null;
@@ -48,8 +59,7 @@ public class NonNullObjectValidator extends AbstractValidator<Object> {
 
 	public boolean equals(IValidator<?> validator) {
 		boolean retVal = false;
-		if (validator != null
-			&& validator.getClass().equals(this.getClass())) {
+		if (validator != null && validator.getClass().equals(this.getClass())) {
 			retVal = true;
 		}
 		return retVal;
@@ -60,4 +70,3 @@ public class NonNullObjectValidator extends AbstractValidator<Object> {
 	}
 
 }
-
