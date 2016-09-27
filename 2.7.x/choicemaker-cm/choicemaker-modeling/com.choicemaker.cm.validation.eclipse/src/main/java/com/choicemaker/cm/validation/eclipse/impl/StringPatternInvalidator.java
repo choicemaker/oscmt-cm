@@ -7,6 +7,7 @@
  *******************************************************************************/
 package com.choicemaker.cm.validation.eclipse.impl;
 
+import java.util.Collection;
 
 /**
  * Validates a non-null name by checking that it does <em>NOT</em> match
@@ -16,6 +17,24 @@ package com.choicemaker.cm.validation.eclipse.impl;
  * @author rphall
  */
 public class StringPatternInvalidator extends StringPatternValidator {
+
+	/**
+	 * Constructs an invalidator from an in-memory set of patterns.
+	 * A generated name is assigned to this invalidator.
+	 * @param A non-null collection of regex expressions.
+	 */
+	public StringPatternInvalidator(Collection<String> regexCollection) {
+		super(regexCollection);
+	}
+
+	/**
+	 * Constructs an invalidator from a named set of patterns.
+	 * @param setName a named set in the collection
+	 * com.choicemaker.cm.matching.gen.Sets;
+	 */
+	public StringPatternInvalidator(String setName) {
+		super(setName);
+	}
 
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.validation.eclipse.IValidator#isValid(java.lang.String)

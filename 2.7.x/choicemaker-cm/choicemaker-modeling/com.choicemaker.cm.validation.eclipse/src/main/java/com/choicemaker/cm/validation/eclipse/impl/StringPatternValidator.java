@@ -73,7 +73,7 @@ public class StringPatternValidator
 	}
 
 	/**
-	 * Constructs a validitor from a named set of patterns.
+	 * Constructs a validator from a named set of patterns.
 	 * @param setName a named set in the collection
 	 * com.choicemaker.cm.matching.gen.Sets;
 	 */
