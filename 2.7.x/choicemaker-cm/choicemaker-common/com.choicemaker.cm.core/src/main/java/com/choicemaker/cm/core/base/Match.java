@@ -11,6 +11,7 @@
 package com.choicemaker.cm.core.base;
 
 import java.util.Arrays;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.Decision;
 import com.choicemaker.cm.core.Record;
@@ -18,11 +19,18 @@ import com.choicemaker.cm.core.Record;
 /**
  * A match consisting of the ID of the matching record and the
  * match probability.
+ * <p>
+ * <strong>FIXME:</strong> This class has a pathological definition of
+ * {@code equals(Object)}
  *
  * @author    Martin Buechi
  */
+@SuppressWarnings("rawtypes")
 public class Match implements /* ImmutableUnsafeMatch, */ Comparable {
-	
+
+	private static final Logger logger =
+		Logger.getLogger(Match.class.getName());
+
 	public final static double PROBABILITY_TOLERANCE = .000001;
 	
 	/** The decision */
@@ -61,6 +69,7 @@ public class Match implements /* ImmutableUnsafeMatch, */ Comparable {
 	}
 
 	/** Match before differ, differ before hold. Then by probability descending */
+	@SuppressWarnings("unchecked")
 	public int compareTo(Object o) {
 		Match m = (Match) o;
 		int d = decision.compareTo(m.decision);
@@ -75,11 +84,19 @@ public class Match implements /* ImmutableUnsafeMatch, */ Comparable {
 		}
 	}
 
+	/**
+	 * <strong>FIXME:</strong> The implementation of this method is
+	 * pathological.
+	 */
 	public boolean equals(Object o) {
+		// FIXME
+		final String msg = "pathological method for equals(Object)";
+		logger.warning(msg);
+
 		if (o instanceof Match) {
 			Match that = (Match) o;
-			boolean bProb =
-				(Math.abs(that.probability - this.probability) < PROBABILITY_TOLERANCE);
+			boolean bProb = (Math.abs(that.probability
+					- this.probability) < PROBABILITY_TOLERANCE);
 			boolean bId = (that.id.equals(this.id));
 			return (bProb && bId);
 		} else {
