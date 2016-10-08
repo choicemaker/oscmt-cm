@@ -9,6 +9,7 @@ import static com.choicemaker.cm.io.db.oracle.OracleJdbcProperties.PN_JDBC_POOL_
 import static com.choicemaker.cm.io.db.oracle.OracleJdbcProperties.PN_JDBC_POOL_MAX_SIZE;
 import static com.choicemaker.cm.io.db.oracle.OracleJdbcProperties.PN_JDBC_URL;
 import static com.choicemaker.cm.io.db.oracle.OracleJdbcProperties.PN_JDBC_USER;
+import static com.choicemaker.cmit.io.db.oracle.OracleTestProperties.DEFAULT_JDBC_URL;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -23,8 +24,8 @@ import oracle.ucp.jdbc.PoolDataSourceFactory;
 
 public class OracleTestUtils {
 
-	public static final Logger logger = Logger.getLogger(OracleTestUtils.class
-			.getName());
+	public static final Logger logger =
+		Logger.getLogger(OracleTestUtils.class.getName());
 
 	public static DataSource configureDatasource(Properties p)
 			throws SQLException {
@@ -41,8 +42,7 @@ public class OracleTestUtils {
 		retVal.setConnectionFactoryClassName(value);
 
 		key = PN_JDBC_URL;
-		value =
-			p.getProperty(key, OracleTestProperties.DEFAULT_JDBC_URL);
+		value = p.getProperty(key, DEFAULT_JDBC_URL);
 		logProperty(key, value);
 		retVal.setURL(value);
 
@@ -94,9 +94,8 @@ public class OracleTestUtils {
 		try {
 			retVal = Integer.valueOf(s);
 		} catch (NumberFormatException x) {
-			String msg =
-				"Invalid value ('" + s + "') for property '" + key + "': "
-						+ x.toString();
+			String msg = "Invalid value ('" + s + "') for property '" + key
+					+ "': " + x.toString();
 			logger.severe(msg);
 			throw new IllegalArgumentException(msg);
 		}
