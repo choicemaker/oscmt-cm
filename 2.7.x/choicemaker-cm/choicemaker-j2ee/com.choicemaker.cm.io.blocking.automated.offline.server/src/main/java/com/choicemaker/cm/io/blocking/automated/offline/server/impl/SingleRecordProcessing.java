@@ -15,7 +15,7 @@ import java.io.Serializable;
 import java.io.StringWriter;
 import java.sql.SQLException;
 import java.util.Iterator;
-import java.util.SortedSet;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.sql.DataSource;
@@ -296,7 +296,7 @@ public class SingleRecordProcessing implements Serializable {
 				getLogger().fine(q.getId() + " " + rs + " " + model);
 
 				Object data = null;
-				SortedSet<Match> s = null;
+				List<Match> s = null;
 				try {
 					s =
 						dm.getMatches(q, rs, model,

@@ -131,7 +131,7 @@ public class OnlineMatchAnalyzerBean extends OnlineMatchBaseBean {
 					externalId,
 					Level.FINE);
 			}
-			SortedSet sortedMatches = getMatches(startTime,
+			List sortedMatches = getMatches(startTime,
 						 queryRecord, 
 						 masterCollection,
 						 modelName, 

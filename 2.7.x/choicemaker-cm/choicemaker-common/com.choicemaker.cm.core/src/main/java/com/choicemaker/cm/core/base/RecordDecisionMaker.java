@@ -11,8 +11,9 @@
 package com.choicemaker.cm.core.base;
 
 import java.io.IOException;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -52,12 +53,13 @@ public class RecordDecisionMaker {
 	 *            The match threshold.
 	 * @return The sorted (probability descending) set of <code>Match<code>es.
 	 */
-	public SortedSet<Match> getMatches(Record q, RecordSource src,
+	@SuppressWarnings("unchecked")
+	public List<Match> getMatches(Record q, RecordSource src,
 			ImmutableProbabilityModel model, float lt, float ut)
 			throws java.io.IOException {
 		int numMatched = 0;
 		int numAdded = 0;
-		SortedSet<Match> matches = new TreeSet<>();
+		List<Match> matches = new ArrayList<>();
 		try {
 			long t = System.currentTimeMillis();
 			src.open();
@@ -78,6 +80,7 @@ public class RecordDecisionMaker {
 					matches.add(m);
 				}
 			}
+			Collections.sort(matches);
 			t = System.currentTimeMillis() - t;
 			profiler.fine("Time in matching " + t);
 
@@ -91,11 +94,12 @@ public class RecordDecisionMaker {
 		return matches;
 	}
 
-	public static SortedSet<Match> getPairs(Record q, RecordSource src,
+	@SuppressWarnings("unchecked")
+	public static List<Match> getPairs(Record q, RecordSource src,
 			ImmutableProbabilityModel model, float lt, float ut)
 			throws IOException {
 		int numMatched = 0;
-		SortedSet<Match> matches = new TreeSet<>();
+		List<Match> matches = new ArrayList<>();
 		try {
 			src.open();
 			Evaluator eval = model.getEvaluator();
@@ -109,6 +113,7 @@ public class RecordDecisionMaker {
 				Decision d = eval.getDecision(a, p, lt, ut);
 				matches.add(new Match(d, p, m.getId(), m, a));
 			}
+			Collections.sort(matches);
 		} finally {
 			src.close();
 		}

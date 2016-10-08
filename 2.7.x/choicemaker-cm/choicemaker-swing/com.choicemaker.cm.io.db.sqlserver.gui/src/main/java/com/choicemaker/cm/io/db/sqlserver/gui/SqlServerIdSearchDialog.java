@@ -25,9 +25,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Properties;
-import java.util.SortedSet;
 import java.util.logging.Logger;
 
 import javax.sql.DataSource;
@@ -380,7 +380,7 @@ public class SqlServerIdSearchDialog extends JDialog {
 			new Blocker2(dbAccessor, model, q, limitPBS, stbgl, limitSBS,
 					stats, dbConfiguration, blockingConfiguration);
 		Thresholds t = modelMaker.getThresholds();
-		SortedSet matches = null;
+		List<Match> matches = null;
 		try {
 			matches =
 				RecordDecisionMaker.getPairs(q, blocker, model,
@@ -392,8 +392,8 @@ public class SqlServerIdSearchDialog extends JDialog {
 		}
 
 		Object actualId = q.getId();
-		ArrayList pairs = new ArrayList(matches.size());
-		Iterator it = matches.iterator();
+		List<MutableMarkedRecordPair> pairs = new ArrayList<>(matches.size());
+		Iterator<Match> it = matches.iterator();
 		while (it.hasNext()) {
 			Match match = (Match) it.next();
 			Record m = match.m;

@@ -11,8 +11,7 @@
 package com.choicemaker.cm.core.report;
 
 import java.util.Collections;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.List;
 
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
@@ -22,10 +21,11 @@ import com.choicemaker.cm.core.Record;
  *
  * @author   Martin Buechi
  */
+@SuppressWarnings("rawtypes")
 public class Report {
 	private static final ReporterPlugin[] NO_PLUGINS = new ReporterPlugin[0];
 //	private static final String[] NO_ARGS = new String[0];
-	private static final SortedSet NO_MATCHES = Collections.unmodifiableSortedSet(new TreeSet());
+	private static final List NO_MATCHES = Collections.EMPTY_LIST;
 	
 	private float differThreshold;
 	private float matchThreshold;
@@ -36,7 +36,7 @@ public class Report {
 	private String purpose;
 	private Record queryRecord;
 	private int numReturnedByBlocking;
-	private SortedSet matches;
+	private List matches;
 	private ReporterPlugin[] plugins;
 
 	public Report(
@@ -49,7 +49,7 @@ public class Report {
 		String purpose,
 		Record queryRecord,
 		int numReturnedByBlocking,
-		SortedSet matches,
+		List matches,
 		ReporterPlugin[] plugins) {
 		this.differThreshold = differThreshold;
 		this.matchThreshold = matchThreshold;
@@ -72,7 +72,7 @@ public class Report {
 		return endTime;
 	}
 
-	public SortedSet getMatches() {
+	public List getMatches() {
 		return matches;
 	}
 

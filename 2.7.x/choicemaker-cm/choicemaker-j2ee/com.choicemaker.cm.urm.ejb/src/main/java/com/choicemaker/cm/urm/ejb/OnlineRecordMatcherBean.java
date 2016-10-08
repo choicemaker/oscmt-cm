@@ -10,7 +10,7 @@ package com.choicemaker.cm.urm.ejb;
 import java.rmi.RemoteException;
 import java.sql.SQLException;
 import java.util.Iterator;
-import java.util.SortedSet;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -161,7 +161,7 @@ public class OnlineRecordMatcherBean extends OnlineMatchBaseBean {
 					externalId,
 					Level.FINE);
 			}
-			SortedSet s = getMatches(startTime,
+			List s = getMatches(startTime,
 									 queryRecord, 
 			   						 masterCollection,
 			   						 modelName, 

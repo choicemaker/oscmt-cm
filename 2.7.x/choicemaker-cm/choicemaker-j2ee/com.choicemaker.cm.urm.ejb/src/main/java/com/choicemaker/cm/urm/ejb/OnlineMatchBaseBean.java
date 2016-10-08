@@ -10,6 +10,7 @@ package com.choicemaker.cm.urm.ejb;
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.SortedSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -202,7 +203,7 @@ public class OnlineMatchBaseBean implements SessionBean {
 	}
 
 	@SuppressWarnings("null")
-	protected SortedSet getMatches(
+	protected List getMatches(
 		long startTime,
 		ISingleRecord queryRecord,
 		DbRecordCollection masterCollection,
@@ -225,7 +226,7 @@ public class OnlineMatchBaseBean implements SessionBean {
 		ImmutableProbabilityModel model = null;
 		Record q = null;
 		AutomatedBlocker recordSource = null;
-		SortedSet retVal = null;
+		List retVal = null;
 
 		try {
 			//validate input parameters
@@ -398,7 +399,7 @@ public class OnlineMatchBaseBean implements SessionBean {
 		int maxNumMatches,
 		String externalId,
 		AutomatedBlocker recordSource,
-		SortedSet retVal) {
+		List retVal) {
 		ReporterPlugin[] reporterPlugins =
 			new ReporterPlugin[] { new BlockingSetReporter(recordSource)};
 		try {
@@ -430,7 +431,7 @@ public class OnlineMatchBaseBean implements SessionBean {
 		String externalId,
 		Throwable thrown) {
 		final int numRecordsRetrieved = 0;
-		final SortedSet results = null;
+		final List results = null;
 		ReporterPlugin[] reporterPlugins =
 			new ReporterPlugin[] { new ErrorReporter(thrown)};
 		try {
