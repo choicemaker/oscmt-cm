@@ -22,8 +22,8 @@ import com.choicemaker.cm.io.db.base.DatabaseAbstractionManager;
  * @author rphall
  * @deprecated
  */
-public class OraDatabaseAbstractionManager implements
-		DatabaseAbstractionManager {
+public class OraDatabaseAbstractionManager
+		implements DatabaseAbstractionManager {
 
 	public DatabaseAbstraction lookupDatabaseAbstraction(DataSource ds)
 			throws DatabaseException {
@@ -38,36 +38,38 @@ public class OraDatabaseAbstractionManager implements
 
 		// Oracle DataSource implementations
 		try {
-			if (ds.isWrapperFor(Class
-					.forName("oracle.jdbc.pool.OracleConnectionPoolDataSource"))) {
+			if (ds.isWrapperFor(Class.forName(
+					"oracle.jdbc.pool.OracleConnectionPoolDataSource"))) {
 				retVal = new OraDatabaseAbstraction();
 
-			} else if (ds.isWrapperFor(Class
-					.forName("oracle.jdbc.pool.OracleDataSource"))) {
+			} else if (ds.isWrapperFor(
+					Class.forName("oracle.jdbc.pool.OracleDataSource"))) {
 				retVal = new OraDatabaseAbstraction();
 
-			} else if (ds.isWrapperFor(Class
-					.forName("oracle.jdbc.xa.OracleXADataSource"))) {
+			} else if (ds.isWrapperFor(
+					Class.forName("oracle.jdbc.xa.OracleXADataSource"))) {
 				retVal = new OraDatabaseAbstraction();
 
 			} else if (ds.isWrapperFor(Class
 					.forName("oracle.jdbc.xa.client.OracleXADataSource"))) {
+				retVal = new OraDatabaseAbstraction();
+
+			} else if (ds.isWrapperFor(
+					Class.forName("oracle.ucp.jdbc.PoolDataSourceImpl"))) {
 				retVal = new OraDatabaseAbstraction();
 			}
 
 			// Error if unknown
 			else {
 				assert retVal == null;
-				String msg =
-					"Unknown DataSource implementation: '"
-							+ ds.getClass().getName() + "'";
+				String msg = "Unknown DataSource implementation: '"
+						+ ds.getClass().getName() + "'";
 				throw new DatabaseException(msg);
 			}
 
 		} catch (Exception e) {
-			String msg =
-				"Unable to lookup database abstraction for '"
-						+ ds.getClass().getName() + "': " + e.toString();
+			String msg = "Unable to lookup database abstraction for '"
+					+ ds.getClass().getName() + "': " + e.toString();
 			;
 			throw new DatabaseException(msg, e);
 		}
@@ -79,4 +81,3 @@ public class OraDatabaseAbstractionManager implements
 	}
 
 }
-
