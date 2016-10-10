@@ -21,54 +21,149 @@ import java.util.StringTokenizer;
 @SuppressWarnings({
 		"rawtypes", "unchecked" })
 public class StringUtils {
-	/**
-	 * Returns <code>true</code> iff <code>s</code> is not null and
-	 * <code>s.length() &gt; 0</code> and the string itself is not "NULL".
-	 *
-	 * @param s
-	 *            The string to be tested.
-	 * @return whether <code>s</code> is neither <code>null</code> nor
-	 *         <code>""</code>.
-	 */
-	public static boolean nonEmptyString(String s) {
-		return s != null && s.trim().length() > 0;
-	}
 
 	/**
-	 * Returns the first character of a string or <code>null</code> if the
-	 * latter is empty.
-	 * 
-	 * @param s
-	 *            The string from which the first character is to be returned.
-	 * @return The first character of <code>s</code> or <code>'\0'</code> if the
-	 *         latter is empty.
-	 */
-	public static char getChar(String s) {
-		if (s == null || s.length() == 0) {
-			return '\0';
-		} else {
-			return s.charAt(0);
-		}
-	}
-
-	/**
-	 * Returns a boolean array whose length is the length of the input string
-	 * and whose elements are true at the indices where the string contains
-	 * digits.
+	 * Returns true iff <code>s</code> is non-null and contains at least one
+	 * letter.
 	 * 
 	 * @param s
 	 *            the input String
-	 * @return a boolean array whose length is the length of the input string
-	 *         and whose elements are true at the indices where the string
-	 *         contains digits.
+	 * @return true iff <code>s</code> contains at least one letter
 	 */
-	public static boolean[] findNumbers(String s) {
-		int len = s.length();
-		boolean[] numbers = new boolean[len];
-		for (int i = 0; i < len; ++i) {
-			numbers[i] = Character.isDigit(s.charAt(i));
+	public static boolean containsDigits(String s) {
+		if (s == null) {
+			return false;
 		}
-		return numbers;
+
+		for (int i = s.length() - 1; i >= 0; i--) {
+			if (Character.isDigit(s.charAt(i))) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Returns true iff <code>s</code> is non-null and contains at least one
+	 * letter or digit
+	 * 
+	 * @param s
+	 *            the input String
+	 * @return true iff <code>s</code> contains at least one letter or digit
+	 */
+	public static boolean containsDigitsOrLetters(String s) {
+		if (s == null) {
+			return false;
+		}
+
+		for (int i = s.length() - 1; i >= 0; i--) {
+			char c = s.charAt(i);
+			if (Character.isLetter(c) || Character.isDigit(c)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Returns true iff <code>s</code> is non-null and contains at least one
+	 * letter.
+	 * 
+	 * @param s
+	 *            the input String
+	 * @return true iff <code>s</code> contains at least one letter
+	 */
+	public static boolean containsLetters(String s) {
+		if (s == null) {
+			return false;
+		}
+
+		for (int i = s.length() - 1; i >= 0; i--) {
+			if (Character.isLetter(s.charAt(i))) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Returns true iff <code>s</code> is non-null and contains non-digit
+	 * characters.
+	 * 
+	 * @param s
+	 *            the input String
+	 * @return true iff <code>s</code> contains at least one character that is
+	 *         not a digit.
+	 */
+	public static boolean containsNonDigits(String s) {
+		if (s == null) {
+			return false;
+		}
+
+		int len = s.length();
+		int pos = 0;
+		while (pos < len) {
+			char c = s.charAt(pos);
+			if (!Character.isDigit(c)) {
+				return true;
+			}
+			pos++;
+		}
+		return false;
+	}
+
+	/**
+	 * Returns true iff <code>s</code> is non-null and contains non-letter
+	 * characters.
+	 * 
+	 * @param s
+	 *            the input String
+	 * @return true iff <code>s</code> contains at least one character that is
+	 *         not a letter
+	 */
+	public static boolean containsNonLetters(String s) {
+		if (s == null) {
+			return false;
+		}
+
+		int len = s.length();
+		int pos = 0;
+		while (pos < len) {
+			char c = s.charAt(pos);
+			if (!Character.isLetter(c)) {
+				return true;
+			}
+			pos++;
+		}
+		return false;
+	}
+
+	/**
+	 * Returns true iff <code>s</code> is non-null and contains at least one
+	 * character that is not a letter, digit, or underscore character.
+	 * 
+	 * @param s
+	 *            the input String
+	 * @return true iff <code>s</code> contains at least one non-word character
+	 */
+	public static boolean containsNonWordChars(String s) {
+		if (s == null) {
+			return false;
+		}
+
+		int len = s.length();
+		int pos = 0;
+		while (pos < len) {
+			char c = s.charAt(pos);
+			if (!(Character.isLetter(c) || Character.isDigit(c) || c == '_')) {
+				return true;
+			}
+			pos++;
+		}
+		return false;
 	}
 
 	/**
@@ -132,286 +227,142 @@ public class StringUtils {
 	}
 
 	/**
-	 * Returns true if one string begins or ends with the other.
+	 * Returns a boolean array whose length is the length of the input string
+	 * and whose elements are true at the indices where the string contains
+	 * digits.
+	 * 
+	 * @param s
+	 *            the input String
+	 * @return a boolean array whose length is the length of the input string
+	 *         and whose elements are true at the indices where the string
+	 *         contains digits.
+	 */
+	public static boolean[] findNumbers(String s) {
+		int len = s.length();
+		boolean[] numbers = new boolean[len];
+		for (int i = 0; i < len; ++i) {
+			numbers[i] = Character.isDigit(s.charAt(i));
+		}
+		return numbers;
+	}
+
+	/**
+	 * Returns the first character of a string or <code>null</code> if the
+	 * latter is empty.
+	 * 
+	 * @param s
+	 *            The string from which the first character is to be returned.
+	 * @return The first character of <code>s</code> or <code>'\0'</code> if the
+	 *         latter is empty.
+	 */
+	public static char getChar(String s) {
+		if (s == null || s.length() == 0) {
+			return '\0';
+		} else {
+			return s.charAt(0);
+		}
+	}
+
+	/**
+	 * Joins <code>s1</code> and <code>s2</code> with a space.
 	 * 
 	 * @param s1
 	 *            the first String
 	 * @param s2
 	 *            the second String
-	 * @return true if one string begins or ends with the other.
+	 * @return <code>s1 + &quot; &quot; + s2</code>
 	 */
-	public static boolean overlap(String s1, String s2) {
-		String sa, sb;
-		if (s1.length() >= s2.length()) {
-			sa = s1.trim();
-			sb = s2.trim();
-		} else {
-			sa = s2.trim();
-			sb = s1.trim();
-		}
-		return sa.startsWith(sb) || sa.endsWith(sb);
+	public static String join(String s1, String s2) {
+		return join(new String[] {
+				s1, s2 });
 	}
 
 	/**
-	 * Returns the same input string but with the following replacements:
-	 * <code>'.'</code> with <code>';'</code> and <code>','</code> with
-	 * <code>spaces</code> and simply remove <code>"'"</code>. Does not create
-	 * leading spaces. Removes all trailing spaces. FIXME: move this mis-named
-	 * method to AddressParser package com.choicemaker.cm.matching.en.us (the
-	 * only place it is used)
+	 * Joins <code>s1</code>, <code>s2</code>, and <code>s3</code> with spaces.
 	 * 
-	 * @param s
-	 *            the input String
-	 * @return a mangled version of the input
-	 * @deprecated Will be removed in ChoiceMaker v3.0
+	 * @param s1
+	 *            the first String
+	 * @param s2
+	 *            the second String
+	 * @param s3
+	 *            the third String
+	 * @return <code>s1 + &quot; &quot; + s2 + &quot; &quot; + s3</code>
 	 */
-	@Deprecated
-	public static String removePunctuation(String s) {
-		if (s == null) {
-			return null;
-		} else {
-			int len = s.length();
-			int pos = 0;
-			char ch;
-			while (pos < len && (ch = s.charAt(pos)) != '.' && ch != ';'
-					&& ch != ',' && ch != '\'') {
-				++pos;
-			}
-			if (pos == len) {
-				// BUG: may return trailing spaces
-				return s;
-			} else {
-				char[] res = new char[len];
-				for (int i = 0; i < pos; ++i) {
-					res[i] = s.charAt(i);
-				}
-				int out = pos;
-				while (pos < len) {
-					ch = s.charAt(pos);
-					if (ch == '.' || ch == ';' || ch == ',') {
-						if (out != 0) {
-							res[out++] = ' ';
-						}
-					} else if (ch != '\'' && out != 0) {
-						res[out++] = ch;
-					}
-					++pos;
-				}
-				while (out > 0 && res[out - 1] == ' ') {
-					--out;
-				}
-				return new String(res, 0, out);
-			}
-		}
+	public static String join(String s1, String s2, String s3) {
+		return join(new String[] {
+				s1, s2, s3 });
 	}
 
 	/**
-	 * Remove the apostrophes from the input String.
+	 * Joins <code>s1</code>, <code>s2</code>, <code>s3</code>, and
+	 * <code>s4</code> with spaces.
 	 * 
-	 * @param s
-	 *            the input String
-	 * @return the input with apostrophes removed
-	 * @deprecated Will be removed in ChoiceMaker v3.0
+	 * @param s1
+	 *            the first String
+	 * @param s2
+	 *            the second String
+	 * @param s3
+	 *            the third String
+	 * @param s4
+	 *            the fourth String
+	 * @return <code>s1 + &quot; &quot; + s2 + &quot; &quot; + s3 + &quot; &quot; + s4</code>
 	 */
-	@Deprecated
-	public static String removeApostrophies(String s) {
-		if (s == null) {
-			return null;
-		} else {
-			int len = s.length();
-			int pos = 0;
-			while (pos < len && s.charAt(pos) != '\'') {
-				++pos;
-			}
-			if (pos == len) {
-				return s;
-			} else {
-				char[] res = new char[len];
-				for (int i = 0; i < pos; ++i) {
-					res[i] = s.charAt(i);
-				}
-				int out = pos;
-				while (pos < len) {
-					char ch = s.charAt(pos);
-					if (ch != '\'') {
-						res[out++] = ch;
-					}
-					++pos;
-				}
-				return new String(res, 0, out);
-			}
-		}
+	public static String join(String s1, String s2, String s3, String s4) {
+		return join(new String[] {
+				s1, s2, s3, s4 });
 	}
 
 	/**
-	 * Returns a copy of <code>s</code> with all non-digit characters removed.
+	 * Joins the elements of <code>s</code> with spaces. Null elements are
+	 * skipped and do not cause space to be inserted into the returned String.
 	 * 
 	 * @param s
-	 *            the input String
-	 * @return a copy with non-digits removed
+	 *            an array of Strings to join
+	 * @return the elements of <code>s</code> joined with spaces.
 	 */
-	public static String removeNonDigits(String s) {
-		if (s == null) {
-			return null;
-		} else {
-			int len = s.length();
-			int pos = 0;
-			while (pos < len && Character.isDigit(s.charAt(pos))) {
-				++pos;
-			}
-			if (pos == len) {
-				return s;
-			} else {
-				char[] res = new char[len];
-				for (int i = 0; i < pos; ++i) {
-					res[i] = s.charAt(i);
-				}
-				int out = pos;
-				while (pos < len) {
-					char ch = s.charAt(pos);
-					if (Character.isDigit(ch)) {
-						res[out++] = ch;
-					}
-					++pos;
-				}
-				return new String(res, 0, out);
-			}
-		}
+	public static String join(String[] s) {
+		return join(s, " ");
 	}
 
 	/**
-	 * Returns a copy of <code>s</code> with all non-digit characters removed
-	 * and only keep the last n characters if s.length is greater than n.
+	 * Joins the elements of <code>s</code> with <code>delim</code>. Null
+	 * elements are skipped and do not cause the delimter to be inserted.
 	 * 
 	 * @param s
-	 *            - the input String
-	 * @param n
-	 *            - the maximum number of characters to return. If s.length is
-	 *            greater than n, then return the last n letters.
-	 * @return a string with only non-digit characters
+	 *            an array of Strings to join
+	 * @param delim
+	 *            the delimiter
+	 * @return the elements of <code>s</code> joined by <code>delim</code>
 	 */
-	public static String removeNonDigitsMaxLength(String s, int n) {
-		String str = removeNonDigits(s);
-		int i = str.length() - n;
-		if (i > 0)
-			return str.substring(i);
-		else
-			return str;
+	public static String join(String[] s, char delim) {
+		return join(s, String.valueOf(delim));
 	}
 
 	/**
-	 * Returns a copy of s with all non-(digit or letter) characters removed.
+	 * Joins the elements of <code>s</code> with <code>delim</code>. Null
+	 * elements are skipped and do not cause the delimter to be inserted.
 	 * 
 	 * @param s
-	 *            the input String
-	 * @return a copy of the input with all non-digit and -letter characters
-	 *         removed
-	 * @deprecated Will be removed in ChoiceMaker v3.0
-	 * @see #removeNonDigitsLetters(java.lang.String)
+	 *            an array of Strings to join
+	 * @param delim
+	 *            the delimiter
+	 * @return the elements of <code>s</code> joined by <code>delim</code>
 	 */
-	@Deprecated
-	public static String removeNonDigitsLetters(StringBuffer s) {
-		if (s == null) {
-			return null;
-		} else {
-			int len = s.length();
-			int pos = 0;
-			while (pos < len && Character.isLetterOrDigit(s.charAt(pos))) {
-				++pos;
-			}
-			if (pos == len) {
-				return s.toString();
-			} else {
-				char[] res = new char[len];
-				for (int i = 0; i < pos; ++i) {
-					res[i] = s.charAt(i);
+	public static String join(String[] s, String delim) {
+		boolean started = false;
+		StringBuffer buff = new StringBuffer();
+		for (int i = 0; i < s.length; i++) {
+			if (nonEmptyString(s[i])) {
+				if (started) {
+					buff.append(delim);
+					buff.append(s[i]);
+				} else {
+					buff.append(s[i]);
+					started = true;
 				}
-				int out = pos;
-				while (pos < len) {
-					char ch = s.charAt(pos);
-					if (Character.isLetterOrDigit(ch)) {
-						res[out++] = ch;
-					}
-					++pos;
-				}
-				return new String(res, 0, out);
 			}
 		}
-	}
-
-	/**
-	 * Returns a copy of s with all non-(digit or letter) characters removed. If
-	 * the input is <code>null</code>, returns <code>null</code>.
-	 * 
-	 * @param s
-	 *            the input string
-	 * @return a version of s with non-digits and -letters removed
-	 */
-	public static String removeNonDigitsLetters(String s) {
-		if (s == null) {
-			return null;
-		} else {
-			int len = s.length();
-			int pos = 0;
-			while (pos < len && Character.isLetterOrDigit(s.charAt(pos))) {
-				++pos;
-			}
-			if (pos == len) {
-				return s.toString();
-			} else {
-				char[] res = new char[len];
-				for (int i = 0; i < pos; ++i) {
-					res[i] = s.charAt(i);
-				}
-				int out = pos;
-				while (pos < len) {
-					char ch = s.charAt(pos);
-					if (Character.isLetterOrDigit(ch)) {
-						res[out++] = ch;
-					}
-					++pos;
-				}
-				return new String(res, 0, out);
-			}
-		}
-	}
-
-	/**
-	 * Returns a copy of s with all non-letters removed. If the input is
-	 * <code>null</code>, returns <code>null</code>.
-	 * 
-	 * @param s
-	 *            the input string
-	 * @return a version of s with non-letters removed
-	 */
-	public static String removeNonLetters(String s) {
-		if (s == null) {
-			return null;
-		} else {
-			int len = s.length();
-			int pos = 0;
-			while (pos < len && Character.isLetter(s.charAt(pos))) {
-				++pos;
-			}
-			if (pos == len) {
-				return s.toString();
-			} else {
-				char[] res = new char[len];
-				for (int i = 0; i < pos; ++i) {
-					res[i] = s.charAt(i);
-				}
-				int out = pos;
-				while (pos < len) {
-					char ch = s.charAt(pos);
-					if (Character.isLetter(ch)) {
-						res[out++] = ch;
-					}
-					++pos;
-				}
-
-				return new String(res, 0, out);
-			}
-		}
+		return buff.toString();
 	}
 
 	/**
@@ -445,212 +396,66 @@ public class StringUtils {
 	}
 
 	/**
-	 * Returns true iff <code>s</code> is non-null and contains at least one
-	 * character that is not a letter, digit, or underscore character.
-	 * 
+	 * Returns <code>true</code> iff <code>s</code> is not null and
+	 * <code>s.length() &gt; 0</code> and the string itself is not "NULL".
+	 *
 	 * @param s
-	 *            the input String
-	 * @return true iff <code>s</code> contains at least one non-word character
+	 *            The string to be tested.
+	 * @return whether <code>s</code> is neither <code>null</code> nor
+	 *         <code>""</code>.
 	 */
-	public static boolean containsNonWordChars(String s) {
-		if (s == null) {
-			return false;
-		}
-
-		int len = s.length();
-		int pos = 0;
-		while (pos < len) {
-			char c = s.charAt(pos);
-			if (!(Character.isLetter(c) || Character.isDigit(c) || c == '_')) {
-				return true;
-			}
-			pos++;
-		}
-		return false;
+	public static boolean nonEmptyString(String s) {
+		return s != null && s.trim().length() > 0;
 	}
 
 	/**
-	 * Returns true iff <code>s</code> is non-null and contains non-digit
-	 * characters.
+	 * Returns the number of position-wise character matches between the two
+	 * input Strings. For example
+	 * <p>
+	 * <code>numMatchingCharacters(&quot;ABCD&quot;, &quot;AXXD&quot;)</code>
+	 * </p>
+	 * returns 2.
 	 * 
-	 * @param s
-	 *            the input String
-	 * @return true iff <code>s</code> contains at least one character that is
-	 *         not a digit.
+	 * @param s1
+	 *            the first string
+	 * @param s2
+	 *            the second string
+	 * @return the number of position-wise character matches between
+	 *         <code>s1</code> and <code>s2</code>
 	 */
-	public static boolean containsNonDigits(String s) {
-		if (s == null) {
-			return false;
+	public static int numMatchingCharacters(String s1, String s2) {
+		if (s1 == null || s2 == null) {
+			return 0;
 		}
-
-		int len = s.length();
-		int pos = 0;
-		while (pos < len) {
-			char c = s.charAt(pos);
-			if (!Character.isDigit(c)) {
-				return true;
+		int len = Math.min(s1.length(), s2.length());
+		int res = 0;
+		for (int i = 0; i < len; ++i) {
+			if (s1.charAt(i) == s2.charAt(i)) {
+				++res;
 			}
-			pos++;
 		}
-		return false;
+		return res;
 	}
 
 	/**
-	 * Returns true iff <code>s</code> is non-null and contains non-letter
-	 * characters.
+	 * Returns true if one string begins or ends with the other.
 	 * 
-	 * @param s
-	 *            the input String
-	 * @return true iff <code>s</code> contains at least one character that is
-	 *         not a letter
+	 * @param s1
+	 *            the first String
+	 * @param s2
+	 *            the second String
+	 * @return true if one string begins or ends with the other.
 	 */
-	public static boolean containsNonLetters(String s) {
-		if (s == null) {
-			return false;
-		}
-
-		int len = s.length();
-		int pos = 0;
-		while (pos < len) {
-			char c = s.charAt(pos);
-			if (!Character.isLetter(c)) {
-				return true;
-			}
-			pos++;
-		}
-		return false;
-	}
-
-	/**
-	 * Returns true iff <code>s</code> is non-null and contains at least one
-	 * letter.
-	 * 
-	 * @param s
-	 *            the input String
-	 * @return true iff <code>s</code> contains at least one letter
-	 */
-	public static boolean containsLetters(String s) {
-		if (s == null) {
-			return false;
-		}
-
-		for (int i = s.length() - 1; i >= 0; i--) {
-			if (Character.isLetter(s.charAt(i))) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	/**
-	 * Returns true iff <code>s</code> is non-null and contains at least one
-	 * letter.
-	 * 
-	 * @param s
-	 *            the input String
-	 * @return true iff <code>s</code> contains at least one letter
-	 */
-	public static boolean containsDigits(String s) {
-		if (s == null) {
-			return false;
-		}
-
-		for (int i = s.length() - 1; i >= 0; i--) {
-			if (Character.isDigit(s.charAt(i))) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	/**
-	 * Returns true iff <code>s</code> is non-null and contains at least one
-	 * letter or digit
-	 * 
-	 * @param s
-	 *            the input String
-	 * @return true iff <code>s</code> contains at least one letter or digit
-	 */
-	public static boolean containsDigitsOrLetters(String s) {
-		if (s == null) {
-			return false;
-		}
-
-		for (int i = s.length() - 1; i >= 0; i--) {
-			char c = s.charAt(i);
-			if (Character.isLetter(c) || Character.isDigit(c)) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	/**
-	 * Trims all leading zeros, even a terminal zero. NOTE: any leading white
-	 * space is NOT trimmed.
-	 * 
-	 * <pre>
-	 *       null --&gt; null
-	 * "        " --&gt; "        "
-	 * "       0" --&gt; "       0"
-	 * "00000009" --&gt; "9"
-	 * "00000000" --&gt; ""
-	 * </pre>
-	 * 
-	 * @param s
-	 *            may be null
-	 * @return possibly null
-	 */
-	public static String removeLeadingZeros(String s) {
-		if (s == null) {
-			return null;
+	public static boolean overlap(String s1, String s2) {
+		String sa, sb;
+		if (s1.length() >= s2.length()) {
+			sa = s1.trim();
+			sb = s2.trim();
 		} else {
-			int index = 0;
-			while (index < s.length() && s.charAt(index) == '0') {
-				index++;
-			}
-
-			if (index > 0) {
-				return s.substring(index);
-			} else {
-				return s;
-			}
+			sa = s2.trim();
+			sb = s1.trim();
 		}
-	}
-
-	/**
-	 * Trims the input string and strips all leading zeros, but leaves any
-	 * terminal zero. NOTE: any leading white space is NOT trimmed.
-	 * 
-	 * <pre>
-	 *       null --&gt; null
-	 * "        " --&gt; "        "
-	 * "       0" --&gt; "       0"
-	 * "00000009" --&gt; "9"
-	 * "00000000" --&gt; "0"
-	 * </pre>
-	 * 
-	 * @param s
-	 *            may be null
-	 * @return possibly null
-	 */
-	public static String removeLeadingNonterminalZeros(String s) {
-		String retVal = null;
-		if (s != null) {
-			/*
-			 * From StackOverflow,
-			 * "How to remove leading zeros from alphanumeric text?",
-			 * http://links.rph.cx/1T0rm1V. The ^ anchor ensures that the 0+
-			 * being matched is at the beginning of the input. The (?!$)
-			 * negative lookahead ensures that not the entire string will be
-			 * matched.
-			 */
-			retVal = s.replaceFirst("^0+(?!$)", "");
-		}
-		return retVal;
+		return sa.startsWith(sb) || sa.endsWith(sb);
 	}
 
 	/**
@@ -787,32 +592,330 @@ public class StringUtils {
 	}
 
 	/**
-	 * Returns the number of position-wise character matches between the two
-	 * input Strings. For example
-	 * <p>
-	 * <code>numMatchingCharacters(&quot;ABCD&quot;, &quot;AXXD&quot;)</code>
-	 * </p>
-	 * returns 2.
+	 * Remove the apostrophes from the input String.
 	 * 
-	 * @param s1
-	 *            the first string
-	 * @param s2
-	 *            the second string
-	 * @return the number of position-wise character matches between
-	 *         <code>s1</code> and <code>s2</code>
+	 * @param s
+	 *            the input String
+	 * @return the input with apostrophes removed
+	 * @deprecated Will be removed in ChoiceMaker v3.0
 	 */
-	public static int numMatchingCharacters(String s1, String s2) {
-		if (s1 == null || s2 == null) {
-			return 0;
-		}
-		int len = Math.min(s1.length(), s2.length());
-		int res = 0;
-		for (int i = 0; i < len; ++i) {
-			if (s1.charAt(i) == s2.charAt(i)) {
-				++res;
+	@Deprecated
+	public static String removeApostrophies(String s) {
+		if (s == null) {
+			return null;
+		} else {
+			int len = s.length();
+			int pos = 0;
+			while (pos < len && s.charAt(pos) != '\'') {
+				++pos;
+			}
+			if (pos == len) {
+				return s;
+			} else {
+				char[] res = new char[len];
+				for (int i = 0; i < pos; ++i) {
+					res[i] = s.charAt(i);
+				}
+				int out = pos;
+				while (pos < len) {
+					char ch = s.charAt(pos);
+					if (ch != '\'') {
+						res[out++] = ch;
+					}
+					++pos;
+				}
+				return new String(res, 0, out);
 			}
 		}
-		return res;
+	}
+
+	/**
+	 * Trims the input string and strips all leading zeros, but leaves any
+	 * terminal zero. NOTE: any leading white space is NOT trimmed.
+	 * 
+	 * <pre>
+	 *       null --&gt; null
+	 * "        " --&gt; "        "
+	 * "       0" --&gt; "       0"
+	 * "00000009" --&gt; "9"
+	 * "00000000" --&gt; "0"
+	 * </pre>
+	 * 
+	 * @param s
+	 *            may be null
+	 * @return possibly null
+	 */
+	public static String removeLeadingNonterminalZeros(String s) {
+		String retVal = null;
+		if (s != null) {
+			/*
+			 * From StackOverflow,
+			 * "How to remove leading zeros from alphanumeric text?",
+			 * http://links.rph.cx/1T0rm1V. The ^ anchor ensures that the 0+
+			 * being matched is at the beginning of the input. The (?!$)
+			 * negative lookahead ensures that not the entire string will be
+			 * matched.
+			 */
+			retVal = s.replaceFirst("^0+(?!$)", "");
+		}
+		return retVal;
+	}
+
+	/**
+	 * Trims all leading zeros, even a terminal zero. NOTE: any leading white
+	 * space is NOT trimmed.
+	 * 
+	 * <pre>
+	 *       null --&gt; null
+	 * "        " --&gt; "        "
+	 * "       0" --&gt; "       0"
+	 * "00000009" --&gt; "9"
+	 * "00000000" --&gt; ""
+	 * </pre>
+	 * 
+	 * @param s
+	 *            may be null
+	 * @return possibly null
+	 */
+	public static String removeLeadingZeros(String s) {
+		if (s == null) {
+			return null;
+		} else {
+			int index = 0;
+			while (index < s.length() && s.charAt(index) == '0') {
+				index++;
+			}
+
+			if (index > 0) {
+				return s.substring(index);
+			} else {
+				return s;
+			}
+		}
+	}
+
+	/**
+	 * Returns a copy of <code>s</code> with all non-digit characters removed.
+	 * 
+	 * @param s
+	 *            the input String
+	 * @return a copy with non-digits removed
+	 */
+	public static String removeNonDigits(String s) {
+		if (s == null) {
+			return null;
+		} else {
+			int len = s.length();
+			int pos = 0;
+			while (pos < len && Character.isDigit(s.charAt(pos))) {
+				++pos;
+			}
+			if (pos == len) {
+				return s;
+			} else {
+				char[] res = new char[len];
+				for (int i = 0; i < pos; ++i) {
+					res[i] = s.charAt(i);
+				}
+				int out = pos;
+				while (pos < len) {
+					char ch = s.charAt(pos);
+					if (Character.isDigit(ch)) {
+						res[out++] = ch;
+					}
+					++pos;
+				}
+				return new String(res, 0, out);
+			}
+		}
+	}
+
+	/**
+	 * Returns a copy of s with all non-(digit or letter) characters removed. If
+	 * the input is <code>null</code>, returns <code>null</code>.
+	 * 
+	 * @param s
+	 *            the input string
+	 * @return a version of s with non-digits and -letters removed
+	 */
+	public static String removeNonDigitsLetters(String s) {
+		if (s == null) {
+			return null;
+		} else {
+			int len = s.length();
+			int pos = 0;
+			while (pos < len && Character.isLetterOrDigit(s.charAt(pos))) {
+				++pos;
+			}
+			if (pos == len) {
+				return s.toString();
+			} else {
+				char[] res = new char[len];
+				for (int i = 0; i < pos; ++i) {
+					res[i] = s.charAt(i);
+				}
+				int out = pos;
+				while (pos < len) {
+					char ch = s.charAt(pos);
+					if (Character.isLetterOrDigit(ch)) {
+						res[out++] = ch;
+					}
+					++pos;
+				}
+				return new String(res, 0, out);
+			}
+		}
+	}
+
+	/**
+	 * Returns a copy of s with all non-(digit or letter) characters removed.
+	 * 
+	 * @param s
+	 *            the input String
+	 * @return a copy of the input with all non-digit and -letter characters
+	 *         removed
+	 * @deprecated Will be removed in ChoiceMaker v3.0
+	 * @see #removeNonDigitsLetters(java.lang.String)
+	 */
+	@Deprecated
+	public static String removeNonDigitsLetters(StringBuffer s) {
+		if (s == null) {
+			return null;
+		} else {
+			int len = s.length();
+			int pos = 0;
+			while (pos < len && Character.isLetterOrDigit(s.charAt(pos))) {
+				++pos;
+			}
+			if (pos == len) {
+				return s.toString();
+			} else {
+				char[] res = new char[len];
+				for (int i = 0; i < pos; ++i) {
+					res[i] = s.charAt(i);
+				}
+				int out = pos;
+				while (pos < len) {
+					char ch = s.charAt(pos);
+					if (Character.isLetterOrDigit(ch)) {
+						res[out++] = ch;
+					}
+					++pos;
+				}
+				return new String(res, 0, out);
+			}
+		}
+	}
+
+	/**
+	 * Returns a copy of <code>s</code> with all non-digit characters removed
+	 * and only keep the last n characters if s.length is greater than n.
+	 * 
+	 * @param s
+	 *            - the input String
+	 * @param n
+	 *            - the maximum number of characters to return. If s.length is
+	 *            greater than n, then return the last n letters.
+	 * @return a string with only non-digit characters
+	 */
+	public static String removeNonDigitsMaxLength(String s, int n) {
+		String str = removeNonDigits(s);
+		int i = str.length() - n;
+		if (i > 0)
+			return str.substring(i);
+		else
+			return str;
+	}
+
+	/**
+	 * Returns a copy of s with all non-letters removed. If the input is
+	 * <code>null</code>, returns <code>null</code>.
+	 * 
+	 * @param s
+	 *            the input string
+	 * @return a version of s with non-letters removed
+	 */
+	public static String removeNonLetters(String s) {
+		if (s == null) {
+			return null;
+		} else {
+			int len = s.length();
+			int pos = 0;
+			while (pos < len && Character.isLetter(s.charAt(pos))) {
+				++pos;
+			}
+			if (pos == len) {
+				return s.toString();
+			} else {
+				char[] res = new char[len];
+				for (int i = 0; i < pos; ++i) {
+					res[i] = s.charAt(i);
+				}
+				int out = pos;
+				while (pos < len) {
+					char ch = s.charAt(pos);
+					if (Character.isLetter(ch)) {
+						res[out++] = ch;
+					}
+					++pos;
+				}
+
+				return new String(res, 0, out);
+			}
+		}
+	}
+
+	/**
+	 * Returns the same input string but with the following replacements:
+	 * <code>'.'</code> with <code>';'</code> and <code>','</code> with
+	 * <code>spaces</code> and simply remove <code>"'"</code>. Does not create
+	 * leading spaces. Removes all trailing spaces. FIXME: move this mis-named
+	 * method to AddressParser package com.choicemaker.cm.matching.en.us (the
+	 * only place it is used)
+	 * 
+	 * @param s
+	 *            the input String
+	 * @return a mangled version of the input
+	 * @deprecated Will be removed in ChoiceMaker v3.0
+	 */
+	@Deprecated
+	public static String removePunctuation(String s) {
+		if (s == null) {
+			return null;
+		} else {
+			int len = s.length();
+			int pos = 0;
+			char ch;
+			while (pos < len && (ch = s.charAt(pos)) != '.' && ch != ';'
+					&& ch != ',' && ch != '\'') {
+				++pos;
+			}
+			if (pos == len) {
+				// BUG: may return trailing spaces
+				return s;
+			} else {
+				char[] res = new char[len];
+				for (int i = 0; i < pos; ++i) {
+					res[i] = s.charAt(i);
+				}
+				int out = pos;
+				while (pos < len) {
+					ch = s.charAt(pos);
+					if (ch == '.' || ch == ';' || ch == ',') {
+						if (out != 0) {
+							res[out++] = ' ';
+						}
+					} else if (ch != '\'' && out != 0) {
+						res[out++] = ch;
+					}
+					++pos;
+				}
+				while (out > 0 && res[out - 1] == ' ') {
+					--out;
+				}
+				return new String(res, 0, out);
+			}
+		}
 	}
 
 	/**
@@ -897,108 +1000,6 @@ public class StringUtils {
 
 			return (String[]) out.toArray(new String[out.size()]);
 		}
-	}
-
-	/**
-	 * Joins <code>s1</code> and <code>s2</code> with a space.
-	 * 
-	 * @param s1
-	 *            the first String
-	 * @param s2
-	 *            the second String
-	 * @return <code>s1 + &quot; &quot; + s2</code>
-	 */
-	public static String join(String s1, String s2) {
-		return join(new String[] {
-				s1, s2 });
-	}
-
-	/**
-	 * Joins <code>s1</code>, <code>s2</code>, and <code>s3</code> with spaces.
-	 * 
-	 * @param s1
-	 *            the first String
-	 * @param s2
-	 *            the second String
-	 * @param s3
-	 *            the third String
-	 * @return <code>s1 + &quot; &quot; + s2 + &quot; &quot; + s3</code>
-	 */
-	public static String join(String s1, String s2, String s3) {
-		return join(new String[] {
-				s1, s2, s3 });
-	}
-
-	/**
-	 * Joins <code>s1</code>, <code>s2</code>, <code>s3</code>, and
-	 * <code>s4</code> with spaces.
-	 * 
-	 * @param s1
-	 *            the first String
-	 * @param s2
-	 *            the second String
-	 * @param s3
-	 *            the third String
-	 * @param s4
-	 *            the fourth String
-	 * @return <code>s1 + &quot; &quot; + s2 + &quot; &quot; + s3 + &quot; &quot; + s4</code>
-	 */
-	public static String join(String s1, String s2, String s3, String s4) {
-		return join(new String[] {
-				s1, s2, s3, s4 });
-	}
-
-	/**
-	 * Joins the elements of <code>s</code> with spaces. Null elements are
-	 * skipped and do not cause space to be inserted into the returned String.
-	 * 
-	 * @param s
-	 *            an array of Strings to join
-	 * @return the elements of <code>s</code> joined with spaces.
-	 */
-	public static String join(String[] s) {
-		return join(s, " ");
-	}
-
-	/**
-	 * Joins the elements of <code>s</code> with <code>delim</code>. Null
-	 * elements are skipped and do not cause the delimter to be inserted.
-	 * 
-	 * @param s
-	 *            an array of Strings to join
-	 * @param delim
-	 *            the delimiter
-	 * @return the elements of <code>s</code> joined by <code>delim</code>
-	 */
-	public static String join(String[] s, char delim) {
-		return join(s, String.valueOf(delim));
-	}
-
-	/**
-	 * Joins the elements of <code>s</code> with <code>delim</code>. Null
-	 * elements are skipped and do not cause the delimter to be inserted.
-	 * 
-	 * @param s
-	 *            an array of Strings to join
-	 * @param delim
-	 *            the delimiter
-	 * @return the elements of <code>s</code> joined by <code>delim</code>
-	 */
-	public static String join(String[] s, String delim) {
-		boolean started = false;
-		StringBuffer buff = new StringBuffer();
-		for (int i = 0; i < s.length; i++) {
-			if (nonEmptyString(s[i])) {
-				if (started) {
-					buff.append(delim);
-					buff.append(s[i]);
-				} else {
-					buff.append(s[i]);
-					started = true;
-				}
-			}
-		}
-		return buff.toString();
 	}
 
 	public static String toUpperCase(String s) {
