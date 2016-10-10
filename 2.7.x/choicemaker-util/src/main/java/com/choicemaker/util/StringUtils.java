@@ -167,6 +167,30 @@ public class StringUtils {
 	}
 
 	/**
+	 * Counts the number of occurrences of the {@code needle} character in the
+	 * {@code haystack} string.
+	 * 
+	 * @param haystack
+	 *            the string to be searched. If {@code haystack} is null,
+	 *            returns 0.
+	 * @param needle
+	 *            the character to be counted
+	 * @return returns the number of occurrences of {@code needle} in
+	 *         {@code haystack} or 0 if {@code haystack} is null
+	 */
+	public static int countOccurrences(String haystack, char needle) {
+		int retVal = 0;
+		if (haystack != null) {
+			for (int i = 0; i < haystack.length(); i++) {
+				if (haystack.charAt(i) == needle) {
+					retVal++;
+				}
+			}
+		}
+		return retVal;
+	}
+
+	/**
 	 * Returns the number of digits in <code>str</code>.
 	 * 
 	 * @param s
