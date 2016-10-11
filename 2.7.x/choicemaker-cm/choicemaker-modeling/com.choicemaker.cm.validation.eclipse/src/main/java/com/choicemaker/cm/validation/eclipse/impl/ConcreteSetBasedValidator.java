@@ -10,7 +10,11 @@ public class ConcreteSetBasedValidator<T> extends AbstractSetBasedValidator<T> {
 
 	protected final Set<T> set;
 	protected final String setName;
-	
+
+	// /** A default constructor required by the plugin registry */
+	// public ConcreteSetBasedValidator() {
+	// }
+
 	public ConcreteSetBasedValidator(Set<T> set) {
 		Precondition.assertNonNullArgument("null set", set);
 		this.set = set;
@@ -32,15 +36,20 @@ public class ConcreteSetBasedValidator<T> extends AbstractSetBasedValidator<T> {
 		boolean retVal = set.contains(object);
 		return retVal;
 	}
-	
+
 	/**
 	 * Not supported by this implementation
-	 * @param setName unused
-	 * @throws UnsupportedOperationException always
+	 * 
+	 * @param setName
+	 *            unused
+	 * @throws UnsupportedOperationException
+	 *             always
 	 */
 	@Override
-	public void setNamedSet(String setName) throws UnsupportedOperationException {
-		throw new UnsupportedOperationException("setNamedSet(String() is not supported");
+	public void setNamedSet(String setName)
+			throws UnsupportedOperationException {
+		throw new UnsupportedOperationException(
+				"setNamedSet(String() is not supported");
 	}
 
 }
