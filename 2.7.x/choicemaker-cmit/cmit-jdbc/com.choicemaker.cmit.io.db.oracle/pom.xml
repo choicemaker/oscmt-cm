@@ -142,8 +142,10 @@ END REMOVE -->
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>simple-person-plugin</artifactId>
-<!--
+<!-- 2016-10-10 rphall Changed scope from 'compile' to 'test'
+-->
       <scope>test</scope>
+<!--
 -->
     </dependency>
     <dependency>
