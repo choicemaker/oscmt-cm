@@ -51,12 +51,9 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParameter
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SqlRecordSourceController;
 import com.choicemaker.cm.io.blocking.automated.util.BlockingConfigurationUtils;
+import com.choicemaker.cm.io.blocking.automated.util.DatabaseAccessorUtils;
 import com.choicemaker.cm.io.db.base.DatabaseAbstraction;
 import com.choicemaker.cm.io.db.base.DatabaseAbstractionManager;
-import com.choicemaker.e2.CMConfigurationElement;
-import com.choicemaker.e2.CMExtension;
-import com.choicemaker.e2.E2Exception;
-import com.choicemaker.e2.platform.CMPlatformUtils;
 
 // import com.choicemaker.cm.core.base.Accessor;
 
@@ -82,9 +79,6 @@ public class SingleRecordProcessing implements Serializable {
 
 	/** Facility code for batch record matching, single-record mode */
 	public static final String FACILITY_BATCH_MATCH_SRM = "BATCH_MATCH_SRM";
-
-	public static final String DATABASE_ACCESSOR =
-		ChoiceMakerExtensionPoint.CM_IO_BLOCKING_AUTOMATED_BASE_DATABASEACCESSOR;
 
 	public static final String MATCH_CANDIDATE =
 		ChoiceMakerExtensionPoint.CM_CORE_MATCHCANDIDATE;
@@ -159,9 +153,8 @@ public class SingleRecordProcessing implements Serializable {
 			ProcessingEventLog processingLog, ServerConfiguration serverConfig,
 			ImmutableProbabilityModel model) throws BlockingException {
 
-		getLogger().info(
-				"Starting Single Record Match with maxSingle = "
-						+ oabaSettings.getMaxSingle());
+		getLogger().info("Starting Single Record Match with maxSingle = "
+				+ oabaSettings.getMaxSingle());
 		final long t0 = System.currentTimeMillis();
 
 		// Get the data sources that will be used
@@ -187,10 +180,9 @@ public class SingleRecordProcessing implements Serializable {
 		final IMatchRecord2SinkSourceFactory<?> factory =
 			OabaFileUtils.getMatchChunkFactory(batchJob);
 
-		final int FINAL_MS_INDEX_INCLUSIVE =
-			handleSingleMatching(stageDS, masterDS, factory, batchJob,
-					oabaParams, oabaSettings, FINAL_STAGING_INDEX_INCLUSIVE,
-					maxMatches);
+		final int FINAL_MS_INDEX_INCLUSIVE = handleSingleMatching(stageDS,
+				masterDS, factory, batchJob, oabaParams, oabaSettings,
+				FINAL_STAGING_INDEX_INCLUSIVE, maxMatches);
 
 		assert FINAL_MS_INDEX_INCLUSIVE >= INITIAL_MS_INDEX_INCLUSIVE;
 		assert FINAL_MS_INDEX_INCLUSIVE > FINAL_STAGING_INDEX_INCLUSIVE;
@@ -249,7 +241,9 @@ public class SingleRecordProcessing implements Serializable {
 		final AbaStatistics stats =
 			getAbaStatisticsController().getStatistics(bcId);
 		if (stats == null) {
-			String msg = "Abastatistics are not available for blocking configuration: " + bcId;
+			String msg =
+				"Abastatistics are not available for blocking configuration: "
+						+ bcId;
 			logger.severe(msg);
 			throw new IllegalStateException(msg);
 		}
@@ -289,19 +283,17 @@ public class SingleRecordProcessing implements Serializable {
 			while (stage.hasNext()) {
 
 				Record q = stage.getNext();
-				AutomatedBlocker rs =
-					new Blocker2(databaseAccessor, model, q, limitPBS, stbsgl,
-							limitSBS, stats, databaseConfiguration,
-							blockingConfiguration);
+				AutomatedBlocker rs = new Blocker2(databaseAccessor, model, q,
+						limitPBS, stbsgl, limitSBS, stats,
+						databaseConfiguration, blockingConfiguration);
 				getLogger().fine(q.getId() + " " + rs + " " + model);
 
 				Object data = null;
 				List<Match> s = null;
 				try {
-					s =
-						dm.getMatches(q, rs, model,
-								oabaParams.getLowThreshold(),
-								oabaParams.getHighThreshold());
+					s = dm.getMatches(q, rs, model,
+							oabaParams.getLowThreshold(),
+							oabaParams.getHighThreshold());
 				} catch (IOException x) {
 					logErrorMatchingRecord(data, q, x, batchJob);
 					logger.fine("Continuing iteration over staging records");
@@ -314,10 +306,9 @@ public class SingleRecordProcessing implements Serializable {
 					Match m = iS.next();
 					final String noteInfo =
 						MatchRecordUtils.getNotesAsDelimitedString(m.ac, model);
-					MatchRecord2 mr2 =
-						new MatchRecord2(q.getId(), m.id,
-								RECORD_SOURCE_ROLE.MASTER, m.probability,
-								m.decision, noteInfo);
+					MatchRecord2 mr2 = new MatchRecord2(q.getId(), m.id,
+							RECORD_SOURCE_ROLE.MASTER, m.probability,
+							m.decision, noteInfo);
 					try {
 						currentSink.writeMatch(mr2);
 					} catch (BlockingException x) {
@@ -335,13 +326,12 @@ public class SingleRecordProcessing implements Serializable {
 					}
 				}
 			}
-			getLogger()
-					.info("...finished finding matches of staging records to master records...");
+			getLogger().info(
+					"...finished finding matches of staging records to master records...");
 
 		} catch (BlockingException | IOException x) {
-			String msg =
-				"Failed while processing pairwise sink index: "
-						+ currentSinkIndex + ": " + x.toString();
+			String msg = "Failed while processing pairwise sink index: "
+					+ currentSinkIndex + ": " + x.toString();
 			getLogger().severe(msg);
 			throw new BlockingException(msg);
 
@@ -436,48 +426,15 @@ public class SingleRecordProcessing implements Serializable {
 
 	protected DatabaseAccessor getReferenceAccessor(String dbaName)
 			throws BlockingException {
-
-		final CMExtension dbaExt =
-			CMPlatformUtils.getExtension(DATABASE_ACCESSOR, dbaName);
-		if (dbaExt == null) {
-			String msg = "null DatabaseAccessor extension for: " + dbaName;
-			getLogger().severe(msg);
-			throw new IllegalStateException(msg);
-		}
-
-		DatabaseAccessor retVal = null;
-		try {
-			final CMConfigurationElement[] configElements =
-				dbaExt.getConfigurationElements();
-			if (configElements == null || configElements.length == 0) {
-				String msg = "No database accessor configurations: " + dbaName;
-				getLogger().severe(msg);
-				throw new IllegalStateException(msg);
-			} else if (configElements.length != 1) {
-				String msg =
-					"Multiple database accessor configurations for " + dbaName
-							+ ": " + configElements.length;
-				getLogger().warning(msg);
-			} else {
-				assert configElements.length == 1;
-			}
-			final CMConfigurationElement configElement = configElements[0];
-			Object o = configElement.createExecutableExtension("class");
-			assert o != null;
-			assert o instanceof DatabaseAccessor;
-			retVal = (DatabaseAccessor) o;
-		} catch (E2Exception e) {
-			String msg = "Unable to construct database accessor: " + e;
-			getLogger().severe(msg);
-			throw new BlockingException(msg);
-		}
+		DatabaseAccessor retVal =
+			DatabaseAccessorUtils.getDatabaseAccessor(dbaName);
 		assert retVal != null;
 		return retVal;
 	}
 
 	protected void setMaxTempPairwiseIndex(BatchJob job, int max) {
-		BatchJobUtils
-				.setMaxTempPairwiseIndex(getPropertyController(), job, max);
+		BatchJobUtils.setMaxTempPairwiseIndex(getPropertyController(), job,
+				max);
 	}
 
 	protected int getMaxTempPairwiseIndex(BatchJob job) {
