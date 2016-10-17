@@ -1,8 +1,10 @@
 package com.choicemaker.cmit.io.db.oracle;
 
+import static com.choicemaker.cm.io.db.oracle.OracleJdbcProperties.DEFAULT_CONNECTION_AUTOCOMMIT;
 import static com.choicemaker.cm.io.db.oracle.OracleJdbcProperties.DEFAULT_JDBC_DATASOURCE_CLASS;
 import static com.choicemaker.cm.io.db.oracle.OracleJdbcProperties.DEFAULT_JDBC_POOL_INITIAL_SIZE;
 import static com.choicemaker.cm.io.db.oracle.OracleJdbcProperties.DEFAULT_JDBC_POOL_MAX_SIZE;
+import static com.choicemaker.cm.io.db.oracle.OracleJdbcProperties.PN_CONNECTION_AUTOCOMMIT;
 import static com.choicemaker.cm.io.db.oracle.OracleJdbcProperties.PN_JDBC_DATASOURCE_CLASS;
 import static com.choicemaker.cm.io.db.oracle.OracleJdbcProperties.PN_JDBC_PASSWORD;
 import static com.choicemaker.cm.io.db.oracle.OracleJdbcProperties.PN_JDBC_POOL_INITIAL_SIZE;
@@ -19,6 +21,7 @@ import java.util.logging.Logger;
 
 import javax.sql.DataSource;
 
+import oracle.jdbc.OracleConnection;
 import oracle.ucp.jdbc.PoolDataSource;
 import oracle.ucp.jdbc.PoolDataSourceFactory;
 
@@ -65,6 +68,10 @@ public class OracleTestUtils {
 		key = PN_JDBC_POOL_MAX_SIZE;
 		intValue = getPropertyIntValue(p, key, DEFAULT_JDBC_POOL_MAX_SIZE);
 		retVal.setMaxPoolSize(intValue);
+		
+		key = PN_CONNECTION_AUTOCOMMIT;
+		value = p.getProperty(key, DEFAULT_CONNECTION_AUTOCOMMIT);
+		retVal.setConnectionProperty(OracleConnection.CONNECTION_PROPERTY_AUTOCOMMIT, value);
 
 		return retVal;
 	}

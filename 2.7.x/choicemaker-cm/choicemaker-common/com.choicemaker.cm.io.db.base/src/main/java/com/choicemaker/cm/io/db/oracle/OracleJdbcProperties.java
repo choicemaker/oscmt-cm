@@ -21,6 +21,10 @@ public interface OracleJdbcProperties {
 
 	public static final String DEFAULT_JDBC_POOL_MAX_SIZE = "20";
 
+	public static final String PN_CONNECTION_AUTOCOMMIT = "jdbcAutoCommit";
+
+	public static final String DEFAULT_CONNECTION_AUTOCOMMIT = "false";
+
 	public static final String PN_POOL_NAME = "poolName";
 
 	public static final String PN_JDBC_URL = "jdbcUrl";
