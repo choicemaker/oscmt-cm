@@ -68,7 +68,7 @@ public class OracleTestUtils {
 		key = PN_JDBC_POOL_MAX_SIZE;
 		intValue = getPropertyIntValue(p, key, DEFAULT_JDBC_POOL_MAX_SIZE);
 		retVal.setMaxPoolSize(intValue);
-		
+
 		key = PN_CONNECTION_AUTOCOMMIT;
 		value = p.getProperty(key, DEFAULT_CONNECTION_AUTOCOMMIT);
 		retVal.setConnectionProperty(OracleConnection.CONNECTION_PROPERTY_AUTOCOMMIT, value);
