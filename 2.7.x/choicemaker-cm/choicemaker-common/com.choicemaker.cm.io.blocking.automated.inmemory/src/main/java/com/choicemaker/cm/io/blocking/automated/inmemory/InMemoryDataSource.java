@@ -19,7 +19,7 @@ import com.choicemaker.cm.io.blocking.automated.AbaStatistics;
 import com.choicemaker.cm.io.blocking.automated.IBlockingConfiguration;
 import com.choicemaker.cm.io.blocking.automated.IBlockingSet;
 import com.choicemaker.cm.io.blocking.automated.IBlockingValue;
-import com.choicemaker.cm.io.blocking.automated.ICountField;
+import com.choicemaker.cm.io.blocking.automated.IFieldValueCounts;
 import com.choicemaker.cm.io.blocking.automated.IDbField;
 import com.choicemaker.cm.io.blocking.automated.base.FieldValueCounts;
 import com.choicemaker.cm.io.blocking.automated.cachecount.AbaStatisticsImpl;
@@ -86,7 +86,7 @@ public class InMemoryDataSource {
 //		int mainTableSize = recordList.size();
 
 		int numFields = bc.getDbFields().length;
-		ICountField[] countFields = new ICountField[numFields];
+		IFieldValueCounts[] countFields = new IFieldValueCounts[numFields];
 		for (int i = 0; i < numFields; i++) {
 			countFields[i] = createCountField(i);
 		}
@@ -94,7 +94,7 @@ public class InMemoryDataSource {
 		return new AbaStatisticsImpl(recordList.size(), countFields);
 	}
 
-	private ICountField createCountField(int index) {
+	private IFieldValueCounts createCountField(int index) {
 		IDbField dbf = bc.getDbFields()[index];
 
 		// get the  {field value} --> {set of record indices} map
@@ -116,7 +116,7 @@ public class InMemoryDataSource {
 		}
 
 		// create a FieldValueCounts object to represent our results
-		ICountField cf = new FieldValueCounts(
+		IFieldValueCounts cf = new FieldValueCounts(
 			2, // initial size of cf.m (which is replaced in the next line anyway anyway).
 			defaultCount,
 			fieldMap.size(),

@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.choicemaker.cm.io.blocking.automated.ICountField;
+import com.choicemaker.cm.io.blocking.automated.IFieldValueCounts;
 
 /**
  *
@@ -20,7 +20,7 @@ import com.choicemaker.cm.io.blocking.automated.ICountField;
  * @author    rphall (CM 2.7 revision)
  */
 
-public class FieldValueCounts implements Serializable, ICountField {
+public class FieldValueCounts implements Serializable, IFieldValueCounts {
 
 	private static final long serialVersionUID = 271;
 

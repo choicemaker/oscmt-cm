@@ -12,9 +12,9 @@ import java.io.IOException;
 public interface CountsCreator {
 	int getMainTableSize() throws IOException;
 
-	ICountField getField(int index) throws IOException;
+	IFieldValueCounts getField(int index) throws IOException;
 
-	ICountField[] getFields() throws IOException;
+	IFieldValueCounts[] getFields() throws IOException;
 
 	void close() throws IOException;
 }

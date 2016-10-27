@@ -11,7 +11,7 @@ import com.choicemaker.cm.io.blocking.automated.AbaStatistics;
 import com.choicemaker.cm.io.blocking.automated.IBlockingConfiguration;
 import com.choicemaker.cm.io.blocking.automated.IBlockingField;
 import com.choicemaker.cm.io.blocking.automated.IBlockingValue;
-import com.choicemaker.cm.io.blocking.automated.ICountField;
+import com.choicemaker.cm.io.blocking.automated.IFieldValueCounts;
 
 /**
  * In-memory implementation of ABA statistics
@@ -21,9 +21,9 @@ import com.choicemaker.cm.io.blocking.automated.ICountField;
  */
 public class AbaStatisticsImpl implements AbaStatistics {
 	private int mainTableSize;
-	private ICountField[] counts;
+	private IFieldValueCounts[] counts;
 
-	public AbaStatisticsImpl(int mainTableSize, ICountField[] counts) {
+	public AbaStatisticsImpl(int mainTableSize, IFieldValueCounts[] counts) {
 		this.mainTableSize = mainTableSize;
 		this.counts = counts;
 	}
@@ -47,7 +47,7 @@ public class AbaStatisticsImpl implements AbaStatistics {
 				bv.setTableSize(mainTableSize);
 				bv.setCount(mainTableSize);
 			} else {
-				ICountField f = counts[fieldNum];
+				IFieldValueCounts f = counts[fieldNum];
 				bv.setTableSize(f.getTableSize());
 				Integer count = f.getCountForValue(bv.getValue());
 				if (count != null) {

@@ -30,7 +30,7 @@ import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.AbaStatisticsCache;
 import com.choicemaker.cm.io.blocking.automated.BlockingAccessor;
 import com.choicemaker.cm.io.blocking.automated.IBlockingConfiguration;
-import com.choicemaker.cm.io.blocking.automated.ICountField;
+import com.choicemaker.cm.io.blocking.automated.IFieldValueCounts;
 import com.choicemaker.cm.io.blocking.automated.IDbField;
 import com.choicemaker.cm.io.blocking.automated.IDbTable;
 import com.choicemaker.cm.io.blocking.automated.base.FieldValueCounts;
@@ -626,8 +626,8 @@ public class DbbCountsCreator {
 
 			List<FieldValueCounts> countFields = new ArrayList<>();
 			for (IBlockingConfiguration bc : blockingConfigurations) {
-				ICountField[] bcCountFields =
-					new ICountField[bc.getDbFields().length];
+				IFieldValueCounts[] bcCountFields =
+					new IFieldValueCounts[bc.getDbFields().length];
 				for (int j = 0; j < bc.getDbFields().length; ++j) {
 
 					IDbField dbf = bc.getDbFields()[j];
