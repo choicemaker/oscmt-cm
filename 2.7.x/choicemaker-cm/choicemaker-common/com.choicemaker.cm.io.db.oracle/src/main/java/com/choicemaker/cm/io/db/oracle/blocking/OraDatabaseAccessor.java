@@ -109,9 +109,8 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 
 		try {
 			connection = ds.getConnection();
-			// HACK
-			connection.setAutoCommit(false);
-			// END HACK
+			// connection.setAutoCommit(false); // 2015-04-01a EJB3 CHANGE
+			// rphall
 
 			if (getStartSession() != null) {
 				Statement stmt = connection.createStatement();
@@ -122,11 +121,6 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 			if (query.length() >= MAX_LEN) {
 				PreparedStatement prep = null;
 				try {
-					// HACK
-					Statement st = connection.createStatement();
-					st.executeQuery("delete from tb_cmt_temp_q");
-					st.close();
-					// END HACK
 					prep = connection.prepareStatement(
 							"INSERT INTO tb_cmt_temp_q VALUES(?)");
 					while (query.length() >= MAX_LEN) {
@@ -140,6 +134,9 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 						prep.execute();
 						query = query.substring(pos + 1, query.length());
 					}
+					// Statement st = connection.createStatement();
+					// st.executeQuery("delete from tb_cmt_temp_q");
+					// st.close();
 				} finally {
 					if (prep != null) {
 						try {
@@ -154,18 +151,16 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("call CMTBlocking.Blocking('"
-						+ blocker.getBlockingConfiguration()
-								.getBlockingConfiguationId()
-						+ "', '" + query + "', '" + condition1 + "', '"
-						+ condition2 + "' ,'" + acc.getSchemaName() + ":r:"
+						+ blocker.getBlockingConfiguration().getBlockingConfiguationId() + "', '"
+						+ query + "', '" + condition1 + "', '" + condition2
+						+ "' ,'" + acc.getSchemaName() + ":r:"
 						+ databaseConfiguration + "', '?')");
 			}
 
 			stmt = connection
 					.prepareCall("call CMTBlocking.Blocking(?, ?, ?, ?, ?, ?)");
 			stmt.setFetchSize(100);
-			stmt.setString(1, blocker.getBlockingConfiguration()
-					.getBlockingConfiguationId());
+			stmt.setString(1, blocker.getBlockingConfiguration().getBlockingConfiguationId());
 			stmt.setString(2, query);
 			stmt.setString(3, condition1);
 			stmt.setString(4, condition2);
@@ -195,11 +190,10 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 			dbr.open(rs);
 		} catch (SQLException ex) {
 			logger.severe("call CMTBlocking.Blocking('"
-					+ blocker.getBlockingConfiguration()
-							.getBlockingConfiguationId()
-					+ "', '" + query + "', '" + condition1 + "', '" + condition2
-					+ "' ,'" + acc.getSchemaName() + ":r:"
-					+ databaseConfiguration + "', '?'): " + ex.toString());
+					+ blocker.getBlockingConfiguration().getBlockingConfiguationId() + "', '"
+					+ query + "', '" + condition1 + "', '" + condition2 + "' ,'"
+					+ acc.getSchemaName() + ":r:" + databaseConfiguration
+					+ "', '?'): " + ex.toString());
 			throw new IOException(ex.toString());
 		}
 	}
@@ -239,14 +233,18 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 			logger.severe("Closing statement." + e.toString());
 		}
 		if (connection != null) {
-			// HACK
-			try {
-				connection.commit();
-			} catch (java.sql.SQLException e) {
-				ex = e;
-				logger.severe("Commiting." + e.toString());
-			}
-			// END HACK
+			// EJB3 CHANGE 2015-04-01 rphall
+			// Database accessors are used only when blocking against a SQL
+			// database using EJB3 managed connections. They should not be
+			// explicitly closed, but rather rely on the EJB3 container to
+			// do so.
+			// try {
+			// connection.commit();
+			// } catch (java.sql.SQLException e) {
+			// ex = e;
+			// logger.severe("Commiting." + e.toString());
+			// }
+			// END EJB3 CHANGE
 			if (getEndSession() != null) {
 				try {
 					Statement stmt = connection.createStatement();
