@@ -49,12 +49,14 @@ public interface IFieldValueCounts {
 	 */
 	int getDefaultCount();
 
-	/** Returns the number of rows in the table that contains the column to which
+	/**
+	 * Returns the number of rows in the table that contains the column to which
 	 * this statistic applies
 	 */
 	int getTableSize();
 
-	/** Returns the name of the primary key column for the table that contains
+	/**
+	 * Returns the name of the primary key column for the table that contains
 	 * the column to which this statistic applies.
 	 */
 	String getUniqueId();
@@ -67,6 +69,13 @@ public interface IFieldValueCounts {
 	 * statistic applies
 	 */
 	String getView();
+
+	/**
+	 * Returns a(n unmodifiable) map of values that have been explicitly mapped
+	 * to counts. The map excludes any values that are only implicitly mapped to
+	 * the default count.
+	 */
+	Map<String, Integer> getValueCountMap();
 
 	void putAll(Map<String, Integer> m);
 

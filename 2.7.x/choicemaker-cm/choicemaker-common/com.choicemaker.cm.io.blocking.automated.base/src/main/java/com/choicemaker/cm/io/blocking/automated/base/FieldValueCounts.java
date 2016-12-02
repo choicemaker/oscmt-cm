@@ -8,6 +8,7 @@
 package com.choicemaker.cm.io.blocking.automated.base;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -19,7 +20,6 @@ import com.choicemaker.cm.io.blocking.automated.IFieldValueCounts;
  * @author    mbuechi (CM 2.3)
  * @author    rphall (CM 2.7 revision)
  */
-
 public class FieldValueCounts implements Serializable, IFieldValueCounts {
 
 	private static final long serialVersionUID = 271;
@@ -49,19 +49,68 @@ public class FieldValueCounts implements Serializable, IFieldValueCounts {
 		}
 	}
 
-	private final int defaultCount;
-	private final int tableSize;
-	private final Map<String,Integer> valueCount;
-	private final String column;
-	private final String view;
-	private final String uniqueId;
+	private int defaultCount;
+	private int tableSize;
+	private Map<String,Integer> valueCountMap;
+	private String column;
+	private String view;
+	private String uniqueId;
+
+	@Override
+	public Map<String, Integer> getValueCountMap() {
+		return Collections.unmodifiableMap(valueCountMap);
+	}
+
+	public void setValueCountMap(Map<String, Integer> valueCountMap) {
+		this.valueCountMap = valueCountMap;
+	}
+
+	public void setDefaultCount(int defaultCount) {
+		this.defaultCount = defaultCount;
+	}
+
+	public void setTableSize(int tableSize) {
+		this.tableSize = tableSize;
+	}
+
+	public void setColumn(String column) {
+		this.column = column;
+	}
+
+	public void setView(String view) {
+		this.view = view;
+	}
+
+	public void setUniqueId(String uniqueId) {
+		this.uniqueId = uniqueId;
+	}
+
+	public FieldValueCounts() {
+		this.valueCountMap = new HashMap<>();
+		this.defaultCount = 0;
+		this.tableSize = 0;
+		this.column = null;
+		this.view = null;
+		this.uniqueId = null;
+	}
+
+	public FieldValueCounts(IFieldValueCounts ifvc) {
+		Map<String, Integer> vcMap = ifvc.getValueCountMap();
+		this.valueCountMap = new HashMap<>(vcMap.size());
+		this.valueCountMap.putAll(vcMap);
+		this.defaultCount = ifvc.getDefaultCount();
+		this.tableSize = ifvc.getTableSize();
+		this.column = ifvc.getColumn();
+		this.view = ifvc.getView();
+		this.uniqueId = ifvc.getUniqueId();
+	}
 
 	public FieldValueCounts(int mapSize, int defaultCount, int tableSize, String column, String view, String uniqueId) {
 		if (mapSize > 1) {
-			valueCount = new HashMap<>(mapSize);
+			valueCountMap = new HashMap<>(mapSize);
 
 		} else {
-			valueCount = new HashMap<>();
+			valueCountMap = new HashMap<>();
 		}
 		this.defaultCount = defaultCount;
 		this.tableSize = tableSize;
@@ -77,7 +126,7 @@ public class FieldValueCounts implements Serializable, IFieldValueCounts {
 	@Override
 	public void putValueCount(String value, Integer count) {
 		if (value != null && count != null) {
-			valueCount.put(value, count);
+			valueCountMap.put(value, count);
 		}
 	}
 
@@ -92,7 +141,7 @@ public class FieldValueCounts implements Serializable, IFieldValueCounts {
 						String msg = "Invalid entry: " + value + "/" + count;
 						throw new IllegalArgumentException(msg);
 					}
-					this.valueCount.put(value, count);
+					this.valueCountMap.put(value, count);
 				}
 			}
 		}
@@ -100,8 +149,8 @@ public class FieldValueCounts implements Serializable, IFieldValueCounts {
 
 	@Override
 	public int getValueCountSize() {
-		assert valueCount != null;
-		int retVal = valueCount.size();
+		assert valueCountMap != null;
+		int retVal = valueCountMap.size();
 		return retVal;
 	}
 
@@ -109,7 +158,7 @@ public class FieldValueCounts implements Serializable, IFieldValueCounts {
 	public Integer getCountForValue(String value) {
 		Integer retVal = null;
 		if (value != null) {
-			retVal = (Integer) valueCount.get(value);
+			retVal = valueCountMap.get(value);
 		}
 		return retVal;
 	}
@@ -140,9 +189,59 @@ public class FieldValueCounts implements Serializable, IFieldValueCounts {
 	}
 
 	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((column == null) ? 0 : column.hashCode());
+		result = prime * result + defaultCount;
+		result = prime * result + tableSize;
+		result =
+			prime * result + ((uniqueId == null) ? 0 : uniqueId.hashCode());
+		result =
+			prime * result + ((valueCountMap == null) ? 0 : valueCountMap.hashCode());
+		result = prime * result + ((view == null) ? 0 : view.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		FieldValueCounts other = (FieldValueCounts) obj;
+		if (column == null) {
+			if (other.column != null)
+				return false;
+		} else if (!column.equals(other.column))
+			return false;
+		if (defaultCount != other.defaultCount)
+			return false;
+		if (tableSize != other.tableSize)
+			return false;
+		if (uniqueId == null) {
+			if (other.uniqueId != null)
+				return false;
+		} else if (!uniqueId.equals(other.uniqueId))
+			return false;
+		if (valueCountMap == null) {
+			if (other.valueCountMap != null)
+				return false;
+		} else if (!valueCountMap.equals(other.valueCountMap))
+			return false;
+		if (view == null) {
+			if (other.view != null)
+				return false;
+		} else if (!view.equals(other.view))
+			return false;
+		return true;
+	}
+
+	@Override
 	public String toString() {
-		return "CountField [tableSize=" + tableSize + ", column=" + column
-				+ ", view=" + view + ", uniqueId=" + uniqueId + "]";
+		return "FieldValueCounts [view=" + view + ", field=" + column + "]";
 	}
 
 }

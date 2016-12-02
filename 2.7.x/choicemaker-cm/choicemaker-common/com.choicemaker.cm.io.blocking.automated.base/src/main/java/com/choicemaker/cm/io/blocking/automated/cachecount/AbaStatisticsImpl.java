@@ -7,11 +7,14 @@
  *******************************************************************************/
 package com.choicemaker.cm.io.blocking.automated.cachecount;
 
+import java.util.Arrays;
+
 import com.choicemaker.cm.io.blocking.automated.AbaStatistics;
 import com.choicemaker.cm.io.blocking.automated.IBlockingConfiguration;
 import com.choicemaker.cm.io.blocking.automated.IBlockingField;
 import com.choicemaker.cm.io.blocking.automated.IBlockingValue;
 import com.choicemaker.cm.io.blocking.automated.IFieldValueCounts;
+import com.choicemaker.cm.io.blocking.automated.base.FieldValueCounts;
 
 /**
  * In-memory implementation of ABA statistics
@@ -21,11 +24,25 @@ import com.choicemaker.cm.io.blocking.automated.IFieldValueCounts;
  */
 public class AbaStatisticsImpl implements AbaStatistics {
 	private int mainTableSize;
-	private IFieldValueCounts[] counts;
+	private FieldValueCounts[] counts;
 
-	public AbaStatisticsImpl(int mainTableSize, IFieldValueCounts[] counts) {
+	public AbaStatisticsImpl(int mainTableSize, final IFieldValueCounts[] arIFVC) {
 		this.mainTableSize = mainTableSize;
-		this.counts = counts;
+		if (arIFVC == null) {
+			this.counts= null;
+		} else {
+			this.counts = new FieldValueCounts[arIFVC.length];
+			for (int i = 0 ; i<arIFVC.length; i++) {
+				IFieldValueCounts ifvc = arIFVC[i];
+				if (ifvc == null) {
+					counts[i] = null;
+				} else if (ifvc instanceof FieldValueCounts) {
+					counts[i] = (FieldValueCounts) ifvc;
+				} else {
+					counts[i] = new FieldValueCounts(ifvc);
+				}
+			}
+		}
 	}
 
 	@Override
@@ -59,4 +76,36 @@ public class AbaStatisticsImpl implements AbaStatistics {
 		}
 		return mainTableSize;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + Arrays.hashCode(counts);
+		result = prime * result + mainTableSize;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		AbaStatisticsImpl other = (AbaStatisticsImpl) obj;
+		if (!Arrays.equals(counts, other.counts))
+			return false;
+		if (mainTableSize != other.mainTableSize)
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "AbaStatisticsImpl [mainTableSize=" + mainTableSize + ", counts="
+				+ Arrays.toString(counts) + "]";
+	}
+
 }
