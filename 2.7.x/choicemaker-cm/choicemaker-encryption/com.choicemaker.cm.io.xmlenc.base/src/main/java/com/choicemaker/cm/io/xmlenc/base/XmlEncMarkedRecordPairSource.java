@@ -162,8 +162,8 @@ public class XmlEncMarkedRecordPairSource extends XmlMarkedRecordPairSource {
 			super.setInputStream(decrypted);
 			super.open();
 
-		} catch (Exception e) {
-			String msg = "Exception thrown during open(); failure deferred: "
+		} catch (Throwable e) {
+			String msg = "Exception or error thrown during open(); failure deferred: "
 					+ e.toString();
 			logger.warning(msg);
 			setThrown(e);

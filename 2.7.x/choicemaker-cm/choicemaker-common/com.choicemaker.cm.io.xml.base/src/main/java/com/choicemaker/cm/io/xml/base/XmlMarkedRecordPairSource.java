@@ -100,17 +100,30 @@ public class XmlMarkedRecordPairSource extends XMLFilterImpl implements
 	}
 
 	public void open() {
-		setThrown(null);
-		DefaultHandler handler = ((XmlAccessor) model.getAccessor()).getXmlReader();
-		setContentHandler(handler);
-		((XmlReader) handler).open(this);
-		out = 0;
-		setSize(0);
-		depth = 0;
-		setMayHaveMore(true);
-		setReadMore(true);
-		thread = new Thread(this);
-		thread.start();
+		try {
+			setThrown(null);
+			DefaultHandler handler =
+				((XmlAccessor) model.getAccessor()).getXmlReader();
+			setContentHandler(handler);
+			((XmlReader) handler).open(this);
+			out = 0;
+			setSize(0);
+			depth = 0;
+			setMayHaveMore(true);
+			setReadMore(true);
+			thread = new Thread(this);
+			thread.start();
+
+		} catch (Throwable e) {
+			String msg =
+				"Exception or error thrown during open(); failure deferred: "
+						+ e.toString();
+			logger.warning(msg);
+			setThrown(e);
+			// assert getSize() == 0;
+			// assert isMayHaveMore() == false;
+			// assert isReadMore() == false;
+		}
 	}
 
 	public synchronized boolean hasNext() throws IOException {
