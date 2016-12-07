@@ -7,6 +7,8 @@
  *******************************************************************************/
 package com.choicemaker.cm.ml.me.gui;
 
+import java.util.logging.Logger;
+
 import javax.swing.DefaultCellEditor;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
@@ -29,6 +31,9 @@ import com.choicemaker.cm.modelmaker.gui.utils.NullFloat;
  * @author  Martin Buechi
  */
 public class MeGuiFactory extends MlGuiFactory {
+	private static final Logger logger =
+		Logger.getLogger(MeGuiFactory.class.getName());
+
 	private ClueTableModelPlugin clueTableModelPlugin;
 	private ActiveClueTableModelPlugin activeClueTableModelPlugin;
 
@@ -64,7 +69,12 @@ public class MeGuiFactory extends MlGuiFactory {
 						float we = Float.parseFloat(value.toString());
 						((MaximumEntropy) model.getMachineLearner()).getWeights()[row] = we;
 					} catch (NumberFormatException ex) {
-						// ignore
+						String msg =
+							"Maximum Entropy ClueTableModelPlugin.setValue"
+									+ "(value: '" + value.toString()
+									+ "', row: " + row + ", col: " + col + "): "
+									+ ex.toString();
+						logger.warning(msg);
 					}
 				}
 				public int getColumnCount() {
@@ -114,6 +124,16 @@ public class MeGuiFactory extends MlGuiFactory {
 				public int getRowCount() {
 					throw new UnsupportedOperationException();
 				}
+
+				@Override
+				public boolean isSortAscending() {
+					return false;
+				}
+
+				@Override
+				public int getSortColumn() {
+					return startColumn;
+				}
 			};
 		}
 		return activeClueTableModelPlugin;
@@ -133,7 +153,7 @@ public class MeGuiFactory extends MlGuiFactory {
 	/**
 	 * @see com.choicemaker.cm.core.base.DynamicDispatchHandler#getHandledType()
 	 */
-	public Class getHandledType() {
+	public Class<?> getHandledType() {
 		return MaximumEntropy.class;
 	}
 

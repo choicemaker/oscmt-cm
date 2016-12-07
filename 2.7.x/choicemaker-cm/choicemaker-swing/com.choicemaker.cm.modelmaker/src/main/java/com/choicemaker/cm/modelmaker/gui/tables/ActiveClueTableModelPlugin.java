@@ -21,4 +21,14 @@ public abstract class ActiveClueTableModelPlugin extends ClueTableModelPlugin {
 	public void setMarkedRecordPair(MutableMarkedRecordPair markedRecordPair) {
 		this.markedRecordPair = markedRecordPair;
 	}
+
+	/** By default, the initial sort is ascending */
+	public boolean isSortAscending() {
+		return true;
+	}
+
+	/** By default, the sort column is the first column in the table */
+	public int getSortColumn() {
+		return 0;
+	}
 }

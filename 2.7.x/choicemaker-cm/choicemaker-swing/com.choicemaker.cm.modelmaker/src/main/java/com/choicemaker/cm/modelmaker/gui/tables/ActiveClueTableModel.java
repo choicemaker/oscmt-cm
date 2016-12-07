@@ -36,7 +36,7 @@ import com.choicemaker.cm.modelmaker.gui.utils.NullInteger;
 
 /**
  * Table model for the ActiveClueTable.
- * 
+ *
  * @author S. Yoakum-Stover
  */
 public class ActiveClueTableModel extends SortableTableModel {
@@ -53,7 +53,7 @@ public class ActiveClueTableModel extends SortableTableModel {
 	private TableColumn[] columns;
 	private ActiveClueTableModelPlugin plugin;
 	private int numPluginColumns;
-		
+
 	static final private ColumnDefinition[] NB_PRE_COLUMNS =
 		{
 			new ColumnDefinition(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.table.common.id"), 80, JLabel.RIGHT),
@@ -83,12 +83,13 @@ public class ActiveClueTableModel extends SortableTableModel {
 		System.arraycopy(NB_PRE_COLUMNS, 0, BOOLEAN_PRE_COLUMNS, 0, BOOLEAN_PRE_COLUMNS.length);
 	}
 
-	public static final int COL_ID = 0;
-	public static final int COL_NAME = 1;
-	public static final int COL_WEIGHT = 2;
-	public static final int COL_DECISION = 3;
-	public static final int COL_TYPE = 4;
-	public static final int COL_REPORT = 5;
+	// Unused
+	// private static final int COL_ID = 0;
+	// private static final int COL_NAME = 1;
+	// private static final int COL_WEIGHT = 2;
+	// private static final int COL_DECISION = 3;
+	// private static final int COL_TYPE = 4;
+	// private static final int COL_REPORT = 5;
 
 	ActiveClueTableModel(ImmutableProbabilityModel pModel) {
 		this.pModel = pModel;
@@ -105,17 +106,22 @@ public class ActiveClueTableModel extends SortableTableModel {
 			cols.add(getTextColumn(preColumns[i], i));
 			colNames.add(preColumns[i].getName());
 		}
-		
+
 		MachineLearner ml = model.getMachineLearner();
 		if (ml != null && !(ml instanceof com.choicemaker.cm.core.base.DoNothingMachineLearning)) {
 			plugin = MlGuiFactories.getGui(ml).getActiveClueTableModelPlugin();
 			plugin.setModel(model);
 			plugin.setStartColumn(preColumns.length);
 			numPluginColumns = plugin.getColumnCount();
+			// 2016-12-06 rphall
+			// Let the machine learner sort the table initially
+			sortAsc = plugin.isSortAscending();
+			sortCol = plugin.getSortColumn();
 		} else {
 			numPluginColumns = 0;
 		}
-		
+
+
 		for (int i = 0; i < numPluginColumns; i++) {
 			cols.add(plugin.getColumn(i));
 			colNames.add(plugin.getColumnName(i));
@@ -123,7 +129,7 @@ public class ActiveClueTableModel extends SortableTableModel {
 		columns = (TableColumn[]) cols.toArray(new TableColumn[cols.size()]);
 		columnNames = (String[]) colNames.toArray(new String[colNames.size()]);
 	}
-	
+
 	private TableColumn getTextColumn(ColumnDefinition cd, int columnNumber) {
 		DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
 		renderer.setHorizontalAlignment(cd.getAlignment());
@@ -133,11 +139,11 @@ public class ActiveClueTableModel extends SortableTableModel {
 		//TableColumn......................................
 		return new TableColumn(columnNumber, cd.getWidth(), renderer, editor);
 	}
-	
+
 	TableColumn[] getColumns() {
 		return columns;
 	}
-		
+
 	public void sort() {
 		Collections.sort(rows, new ClueDataComparator(sortCol, sortAsc));
 	}
@@ -147,8 +153,13 @@ public class ActiveClueTableModel extends SortableTableModel {
 			plugin.setMarkedRecordPair(record);
 		}
 		ClueDesc[] descriptions = pModel.getClueSet().getClueDesc();
-		sortCol = 0;
-		sortAsc = true;
+		if (plugin != null) {
+			sortCol = plugin.getSortColumn();
+			sortAsc = plugin.isSortAscending();
+		} else {
+			sortCol = 0;
+			sortAsc = true;
+		}
 		this.record = record;
 		rows = new Vector(10);
 		activeClues = record.getActiveClues();
@@ -171,7 +182,7 @@ public class ActiveClueTableModel extends SortableTableModel {
 				if(cluesToEvaluate[i] && !desc.rule) {
 					Object[] c = getCommonRowData(desc);
 					c[5] = new NullInteger(values[i]);
-					addPluginData(c, i);					
+					addPluginData(c, i);
 					rows.add(new ClTableRow(desc, c));
 				}
 			}
@@ -179,7 +190,7 @@ public class ActiveClueTableModel extends SortableTableModel {
 		}
 		sort();
 	}
-	
+
 	private Object[] getCommonRowData(ClueDesc desc) {
 		Object[] c = new Object[getColumnCount()];
 		c[0] = new NullInteger(desc.getNumber(), "  ");
@@ -188,14 +199,14 @@ public class ActiveClueTableModel extends SortableTableModel {
 		c[3] = ClTableRow.getType(desc);
 		c[4] = ClTableRow.getModifier(desc);
 		return c;
-	}		
-	
+	}
+
 	private void addPluginData(Object[] c, int row) {
 		for (int j = 0; j < numPluginColumns; j++) {
 			c[preColumns.length + j] = plugin.getValueAt(row, j);
 		}
 	}
-	
+
 	private void addRuleRows(ClueDesc[] descriptions, ActiveClues activeClues, Object trueValue) {
 		int[] activeRules = activeClues.getRules();
 		for (int i = 0; i < activeRules.length; i++) {
@@ -205,7 +216,7 @@ public class ActiveClueTableModel extends SortableTableModel {
 			c[5] = trueValue;
 			addPluginData(c, clueNum);
 			rows.add(new ClTableRow(desc, c));
-		}			
+		}
 	}
 
 	public void reset() {
@@ -257,9 +268,9 @@ public class ActiveClueTableModel extends SortableTableModel {
 
 	/**
 	 * Returns the value for the cell at <code>columnIndex</code> and
-	 * <code>rowIndex</code>. This method behaves correctly even if 
+	 * <code>rowIndex</code>. This method behaves correctly even if
 	 * we don't have any data.
-	 * 
+	 *
 	 * @param rowIndex the row whose value is to be queried
 	 * @param columnIndex
 	 *                 the column whose value is to be queried
