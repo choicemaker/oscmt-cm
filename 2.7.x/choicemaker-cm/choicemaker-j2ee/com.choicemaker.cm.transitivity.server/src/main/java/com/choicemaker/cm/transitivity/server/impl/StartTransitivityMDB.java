@@ -337,7 +337,7 @@ public class StartTransitivityMDB extends AbstractTransitivityMDB {
 	/**
 	 * This method removes any pre-existing transMatch* files
 	 * 
-	 * @param jobID
+	 * @param transJob a transitivity batch job
 	 */
 	private void removeOldFiles(BatchJob transJob) throws BlockingException {
 		try {
