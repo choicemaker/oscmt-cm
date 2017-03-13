@@ -26,7 +26,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessingEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.core.SuffixTreeNode;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.BlockSinkSourceFactory;
-import com.choicemaker.cm.io.blocking.automated.offline.utils.BlocksSpliterMap;
+import com.choicemaker.cm.io.blocking.automated.offline.utils.BlocksSplitterMap;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.ControlChecker;
 import com.choicemaker.util.IntArrayList;
 import com.choicemaker.util.LongArrayList;
@@ -59,7 +59,7 @@ public class OversizedDedupService {
 	private ProcessingEventLog status;
 
 	// this splitter has 1 file for a range of block sizes
-	private BlocksSpliterMap spliter;
+	private BlocksSplitterMap splitter;
 
 	private int numBlocksIn = 0;
 	private int numAfterExact = 0;
@@ -136,7 +136,7 @@ public class OversizedDedupService {
 			int startPoint = Integer.parseInt(temp.substring(ind + 1));
 
 			log.info("Recovering from remove exact " + s + " " + startPoint);
-			recoverSpliter(s);
+			recoverSplitter(s);
 
 			removeExact(startPoint);
 
@@ -147,7 +147,7 @@ public class OversizedDedupService {
 			int s = Integer.parseInt(status.getCurrentProcessingEventInfo());
 
 			log.info("Recovering from remove subsumed " + s);
-			recoverSpliter(s);
+			recoverSplitter(s);
 
 			removeSubsumed(0);
 
@@ -156,22 +156,22 @@ public class OversizedDedupService {
 			int s = Integer.parseInt(status.getCurrentProcessingEventInfo());
 
 			log.info("Recovering from subsumed removal " + s);
-			recoverSpliter(s);
+			recoverSplitter(s);
 
 			removeSubsumed(0);
 		}
 		time = System.currentTimeMillis() - time;
 	}
 
-	private void recoverSpliter(int s) throws BlockingException {
-		spliter = new BlocksSpliterMap(osFactory);
+	private void recoverSplitter(int s) throws BlockingException {
+		splitter = new BlocksSplitterMap(osFactory);
 		// this is not exact because we really don't have the os block size
 		// distribution.
 		// we just need some ordering.
 		for (int i = 0; i < s; i++) {
-			spliter.setSize(i, 1);
+			splitter.setSize(i, 1);
 		}
-		spliter.recovery(s);
+		splitter.recovery(s);
 	}
 
 	/**
@@ -206,12 +206,12 @@ public class OversizedDedupService {
 		Arrays.sort(sArray);
 
 		// use map implementation
-		spliter = new BlocksSpliterMap(osFactory);
+		splitter = new BlocksSplitterMap(osFactory);
 		for (i = 0; i < sizes.size(); i++) {
-			spliter.setSize(sArray[i], 1);
+			splitter.setSize(sArray[i], 1);
 		}
 
-		spliter.Initialize();
+		splitter.Initialize();
 
 		osSource.open();
 
@@ -221,7 +221,7 @@ public class OversizedDedupService {
 			// Any side effects?
 			/* LongArrayList recordIds = */
 			bs.getRecordIDs();
-			spliter.writeToSink(bs);
+			splitter.writeToSink(bs);
 
 			numBlocksIn++;
 
@@ -238,7 +238,7 @@ public class OversizedDedupService {
 	 */
 	private void removeExact(int startPoint) throws BlockingException {
 
-		IBlockSource[] sources = spliter.getSources();
+		IBlockSource[] sources = splitter.getSources();
 		int s = sources.length;
 
 		for (int i = startPoint; i < s && !stop; i++) {
@@ -317,7 +317,7 @@ public class OversizedDedupService {
 	 */
 	private void removeSubsumed(int startPoint) throws BlockingException {
 		// get the split sinks in order of block size
-		IBlockSource[] sources = spliter.getSources();
+		IBlockSource[] sources = splitter.getSources();
 		int s = sources.length;
 
 		// Initialize
@@ -353,7 +353,7 @@ public class OversizedDedupService {
 		// write toSink
 		writeUnsubsumed3(subsumedBlockSets, osSink);
 
-		spliter.removeAll();
+		splitter.removeAll();
 		osSource.delete();
 
 		status.setCurrentProcessingEvent(OabaProcessingEvent.DONE_DEDUP_OVERSIZED);
@@ -377,7 +377,7 @@ public class OversizedDedupService {
 
 		subsumedBlockSets.sort();
 
-		ArrayList parts = spliter.getSinks();
+		ArrayList parts = splitter.getSinks();
 
 		int counter = 0; // counter for the blocks read
 		int ind = 0; // current index on subsumedBlockSets
