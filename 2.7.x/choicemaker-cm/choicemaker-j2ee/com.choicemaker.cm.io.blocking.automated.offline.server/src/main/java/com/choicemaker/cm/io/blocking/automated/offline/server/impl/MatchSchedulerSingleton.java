@@ -42,6 +42,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParameter
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
+import com.choicemaker.cm.io.blocking.automated.offline.services.ChunkService3;
 
 /**
  * This bean delegates the different chunks to different matcher message beans.
@@ -146,7 +147,12 @@ public class MatchSchedulerSingleton extends AbstractSchedulerSingleton {
 	@Override
 	protected void cleanUp(BatchJob batchJob, OabaJobMessage sd)
 			throws BlockingException {
-		log.info("cleanUp");
+		if (ChunkService3.isKeepFilesRequested()) {
+			log.info("Intermediate chunk files retained");
+			return;
+		}
+
+		log.info("Cleanup: removing intermediate chunck files");
 
 		final long jobId = batchJob.getId();
 		OabaParameters params =
