@@ -1,6 +1,10 @@
 package com.choicemaker.util;
 
 import java.util.Properties;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
+import java.util.logging.Logger;
 
 /**
  * Some missing manifest constants and set/unset methods.
@@ -278,6 +282,29 @@ public class SystemPropertyUtils {
 	public static void unsetProperty(String key) {
 		Properties p = System.getProperties();
 		p.remove(key);
+	}
+
+	public static SortedMap<String,String> listSystemProperties() {
+		Properties p = System.getProperties();
+		SortedMap<String,String> retVal = new TreeMap<>();
+		Set<Object> keys = p.keySet();
+		for (Object k : keys) {
+			Object v = p.get(k);
+			if (k instanceof String && v instanceof String) {
+				retVal.put((String)k, (String)v);
+			}
+		}
+		return retVal;
+	}
+
+	public static void logSystemProperties(Logger logger) {
+		SortedMap<String,String> p = listSystemProperties();
+		Set<String> sortedKeys = p.keySet();
+		for (String key : sortedKeys) {
+			String value = p.get(key);
+			String msg = "System property '" + key + "'/'" + value + "'";
+			logger.info(msg);
+		}
 	}
 
 }

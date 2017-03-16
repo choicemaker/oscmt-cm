@@ -68,10 +68,8 @@ public class ChunkService3 {
 	 */
 	public static final String PN_KEEP_FILES = "oaba.ChunkService3.keepFiles";
 
-	/**
-	 * Checks the system property {@link #PN_KEEP_FILES} and caches the result
-	 */
-	private boolean isKeepFilesRequested() {
+	/** Checks the system property {@link #PN_KEEP_FILES} */
+	public static boolean isKeepFilesRequested() {
 		String value = System.getProperty(PN_KEEP_FILES, "false");
 		Boolean _keepFiles = Boolean.valueOf(value);
 		boolean retVal = _keepFiles.booleanValue();
@@ -280,9 +278,11 @@ public class ChunkService3 {
 				createDataFiles();
 			}
 
+		/* REMOVEME
 		} else if (status.getCurrentProcessingEventId() == OabaProcessing.EVT_DONE_CREATE_CHUNK_IDS
 				|| status.getCurrentProcessingEventId() == OabaProcessing.EVT_CREATE_CHUNK_OVERSIZED_IDS) {
 
+		*/
 		} else if (status.getCurrentProcessingEventId() == OabaProcessing.EVT_DONE_CREATE_CHUNK_IDS
 				|| status.getCurrentProcessingEventId() == OabaProcessing.EVT_CREATE_CHUNK_OVERSIZED_IDS) {
 
