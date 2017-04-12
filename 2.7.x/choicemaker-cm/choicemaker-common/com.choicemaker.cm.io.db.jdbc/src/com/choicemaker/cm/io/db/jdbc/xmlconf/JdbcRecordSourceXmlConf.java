@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: MySQLRecordSourceXmlConf.java,v $        $Revision: 1.1.78.1 $ $Date: 2009/11/18 01:00:19 $
+ * @(#)$RCSfile: JdbcRecordSourceXmlConf.java,v $        $Revision: 1.1.78.1 $ $Date: 2009/11/18 01:00:19 $
  *
  * Copyright (c) 2001 ChoiceMaker Technologies, Inc.
  * 41 East 11th Street, New York, NY 10003
@@ -9,7 +9,7 @@
  * ChoiceMaker Technologies Inc. ("Confidential Information").
  */
 
-package com.choicemaker.cm.io.db.mysql.xmlconf;
+package com.choicemaker.cm.io.db.jdbc.xmlconf;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -24,7 +24,7 @@ import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.xmlconf.RecordSourceXmlConfigurator;
 import com.choicemaker.cm.core.xmlconf.XmlConfException;
 import com.choicemaker.cm.io.db.base.xmlconf.ConnectionPoolDataSourceXmlConf;
-import com.choicemaker.cm.io.db.mysql.MySQLRecordSource;
+import com.choicemaker.cm.io.db.jdbc.JdbcRecordSource;
 
 /**
  * Handling of Db Marked Record Pair sources.
@@ -32,7 +32,7 @@ import com.choicemaker.cm.io.db.mysql.MySQLRecordSource;
  * @author    Martin Buechi
  * @version   $Revision: 1.1.78.1 $ $Date: 2009/11/18 01:00:19 $
  */
-public class MySQLRecordSourceXmlConf implements RecordSourceXmlConfigurator {
+public class JdbcRecordSourceXmlConf implements RecordSourceXmlConfigurator {
 	
 	public static final String EXTENSION_POINT_ID = "com.choicemaker.cm.io.db.db2.DB2RsReader";
 
@@ -41,7 +41,7 @@ public class MySQLRecordSourceXmlConf implements RecordSourceXmlConfigurator {
 	}
 
 	public Class getHandledType() {
-		return MySQLRecordSource.class;
+		return JdbcRecordSource.class;
 	}
 
 	/**
@@ -59,7 +59,7 @@ public class MySQLRecordSourceXmlConf implements RecordSourceXmlConfigurator {
 	 */
 	public void add(RecordSource s) throws XmlConfException {
 		try {
-			MySQLRecordSource src = (MySQLRecordSource) s;
+			JdbcRecordSource src = (JdbcRecordSource) s;
 			String fileName = src.getFileName();
 			Element e = new Element("RecordSource");
 			e.setAttribute("class", EXTENSION_POINT_ID);
@@ -81,7 +81,7 @@ public class MySQLRecordSourceXmlConf implements RecordSourceXmlConfigurator {
 		String dataSourceName = e.getAttributeValue("dataSourceName");
 		String dbConfiguration = e.getAttributeValue("dbConfiguration");
 		String idsQuery = e.getChildText("idsQuery");
-		return new MySQLRecordSource(fileName, model, dataSourceName, dbConfiguration, idsQuery);
+		return new JdbcRecordSource(fileName, model, dataSourceName, dbConfiguration, idsQuery);
 	}
 	
 	static {

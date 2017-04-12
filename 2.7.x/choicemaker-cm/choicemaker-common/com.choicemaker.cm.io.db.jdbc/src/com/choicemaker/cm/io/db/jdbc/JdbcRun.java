@@ -2,14 +2,14 @@
  * Created on Feb 10, 2005
  *
  */
-package com.choicemaker.cm.io.db.mysql;
+package com.choicemaker.cm.io.db.jdbc;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-//import com.mysql.jdbc.Driver;
+//import com.jdbc.jdbc.Driver;
 
 /**
  * Connection tester object. 
@@ -17,19 +17,19 @@ import java.sql.ResultSet;
  * @author pcheung
  *
  */
-public class MySQLRun {
+public class JdbcRun {
 
-	public MySQLRun () {
+	public JdbcRun () {
 	}
 	
 	public static void test () {
 		
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.jdbc.jdbc.Driver");
 			
 			//type 2 client.  make sure my_es_db is already cataloged.			
 			Connection conn = DriverManager.getConnection
-				("jdbc:mysql://noho.choicemaker.com/es?user=root&password=CHANGEME");
+				("jdbc:jdbc://noho.choicemaker.com/es?user=root&password=CHANGEME");
 			
 			PreparedStatement stmt = conn.prepareStatement( "select count(*) from sid_master" );
 			
@@ -52,11 +52,11 @@ public class MySQLRun {
 
 	public static void test2 () {
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.jdbc.jdbc.Driver");
 			
 			//type 2 client.  make sure my_es_db is already cataloged.			
 			Connection conn = DriverManager.getConnection
-				("jdbc:mysql://noho.choicemaker.com/es?user=root&password=CHANGEME");
+				("jdbc:jdbc://noho.choicemaker.com/es?user=root&password=CHANGEME");
 			
 			PreparedStatement stmt = conn.prepareStatement
 				("select state_student_id, cmt_student_fn_upper from cmt_master where state_student_id = '2'");

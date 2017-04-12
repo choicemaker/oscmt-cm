@@ -2,7 +2,7 @@
  * Created on Feb 15, 2005
  *
  */
-package com.choicemaker.cm.io.db.mysql.dbom;
+package com.choicemaker.cm.io.db.jdbc.dbom;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -28,7 +28,7 @@ import com.choicemaker.cm.io.db.base.DbView;
  * @author pcheung
  *
  */
-public class MySQLDbObjectMaker implements ObjectMaker /* IPlatformRunnable */ {
+public class JdbcDbObjectMaker implements ObjectMaker /* IPlatformRunnable */ {
 
 
 	public static void processAllModels(Writer w, boolean insertGo) throws IOException {
@@ -40,7 +40,7 @@ public class MySQLDbObjectMaker implements ObjectMaker /* IPlatformRunnable */ {
 
 
 	public void generateObjects(File outDir) throws IOException {
-		File outFile = new File(outDir, "MySQL_Custom_Objects.txt");
+		File outFile = new File(outDir, "Jdbc_Custom_Objects.txt");
 		Writer w = new FileWriter(outFile);
 		Set alreadyHandledRetrieval = new HashSet();
 		Set alreadyHandledBlocking = new HashSet();
@@ -135,7 +135,7 @@ public class MySQLDbObjectMaker implements ObjectMaker /* IPlatformRunnable */ {
 				}
 				String multiStr = multi.toString();
 				//w.write("INSERT INTO TB_CMT_CURSORS VALUES('" + dbConf + "','" + multiStr + "');" + Constants.LINE_SEPARATOR);
-				model.properties().put(dbConf + ":MYSQL", multiStr);
+				model.properties().put(dbConf + ":JDBC", multiStr);
 			}
 		}
 	}
@@ -212,7 +212,7 @@ public class MySQLDbObjectMaker implements ObjectMaker /* IPlatformRunnable */ {
 //		ICompiler compiler = factory.getDefaultCompiler();
 //
 //		ProbabilityModelsXmlConf.loadProductionProbabilityModels(compiler);
-//		MySQLDbObjectMaker dom = new MySQLDbObjectMaker ();
+//		JdbcDbObjectMaker dom = new JdbcDbObjectMaker ();
 //		dom.generateObjects (new File (args[2]));
 //	}
 

@@ -2,7 +2,7 @@
  * Created on Feb 15, 2005
  *
  */
-package com.choicemaker.cm.io.db.mysql.blocking;
+package com.choicemaker.cm.io.db.jdbc.blocking;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -25,17 +25,17 @@ import com.choicemaker.cm.io.blocking.automated.base.BlockingValue;
 import com.choicemaker.cm.io.blocking.automated.base.DatabaseAccessor;
 import com.choicemaker.cm.io.db.base.DbAccessor;
 import com.choicemaker.cm.io.db.base.DbReaderSequential;
-import com.choicemaker.cm.io.db.mysql.dbom.MySQLDbObjectMaker;
+import com.choicemaker.cm.io.db.jdbc.dbom.JdbcDbObjectMaker;
 
 /**
- * This is the accessor for MySQL.
+ * This is the accessor for Jdbc.
  * 
  * @author pcheung
  *
  */
-public class MySQLDatabaseAccessor implements DatabaseAccessor {
+public class JdbcDatabaseAccessor implements DatabaseAccessor {
 
-	private static Logger logger = Logger.getLogger(MySQLDatabaseAccessor.class);
+	private static Logger logger = Logger.getLogger(JdbcDatabaseAccessor.class);
 
 	private DataSource ds;
 	private Connection connection;
@@ -79,7 +79,7 @@ public class MySQLDatabaseAccessor implements DatabaseAccessor {
 			//third, get the data
 			stmt = connection.createStatement();
 			stmt.setFetchSize(100);
-			ResultSet rs = stmt.executeQuery(MySQLDbObjectMaker.getMultiQuery(blocker.getModel(), dbrName));
+			ResultSet rs = stmt.executeQuery(JdbcDbObjectMaker.getMultiQuery(blocker.getModel(), dbrName));
 			rs.setFetchSize(100);
 			dbr.open(rs, stmt);
 		} catch (SQLException ex) {

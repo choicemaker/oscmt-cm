@@ -2,7 +2,7 @@
  * Created on Feb 5, 2004
  *
  */
-package com.choicemaker.cm.io.db.mysql;
+package com.choicemaker.cm.io.db.jdbc;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -22,8 +22,8 @@ import com.choicemaker.cm.core.util.ChainedIOException;
 import com.choicemaker.cm.io.db.base.DataSources;
 import com.choicemaker.cm.io.db.base.DbAccessor;
 import com.choicemaker.cm.io.db.base.DbReaderSequential;
-import com.choicemaker.cm.io.db.mysql.blocking.MySQLDatabaseAccessor;
-import com.choicemaker.cm.io.db.mysql.dbom.MySQLDbObjectMaker;
+import com.choicemaker.cm.io.db.jdbc.blocking.JdbcDatabaseAccessor;
+import com.choicemaker.cm.io.db.jdbc.dbom.JdbcDbObjectMaker;
 
 /**
  * The object reads the record data from DB2.
@@ -31,9 +31,9 @@ import com.choicemaker.cm.io.db.mysql.dbom.MySQLDbObjectMaker;
  * @author pcheung
  *
  */
-public class MySQLRecordSource implements RecordSource {
+public class JdbcRecordSource implements RecordSource {
 
-	private static Logger log = Logger.getLogger(MySQLDatabaseAccessor.class);
+	private static Logger log = Logger.getLogger(JdbcDatabaseAccessor.class);
 
 	private String fileName;
 
@@ -48,11 +48,11 @@ public class MySQLRecordSource implements RecordSource {
 	
 	private DbReaderSequential dbr;
 	
-	public MySQLRecordSource() {
+	public JdbcRecordSource() {
 		// do nothing...
 	}
 	
-	public MySQLRecordSource(String fileName, ImmutableProbabilityModel model, String dsName, String dbConfiguration, String idsQuery) {
+	public JdbcRecordSource(String fileName, ImmutableProbabilityModel model, String dsName, String dbConfiguration, String idsQuery) {
 		this.model = model;
 		setDataSourceName(dsName);
 		this.dbConfiguration = dbConfiguration;
@@ -71,7 +71,7 @@ public class MySQLRecordSource implements RecordSource {
 
 			//first create the temp table.
 			stmt = connection.createStatement();
-			String str = MySQLDatabaseAccessor.getCreateTemp (dbr);
+			String str = JdbcDatabaseAccessor.getCreateTemp (dbr);
 			log.debug (str);
 			stmt.executeUpdate( str );
 			connection.commit();
@@ -80,7 +80,7 @@ public class MySQLRecordSource implements RecordSource {
 			
 			//create the index for the temp table
 			stmt = connection.createStatement();
-			str = MySQLDatabaseAccessor.getCreateTempIndex();
+			str = JdbcDatabaseAccessor.getCreateTempIndex();
 			log.debug (str);
 			stmt.executeUpdate( str );
 			connection.commit();
@@ -98,7 +98,7 @@ public class MySQLRecordSource implements RecordSource {
 			//third gets the sql query
 			stmt = connection.createStatement();
 			stmt.setFetchSize(100);
-			str = MySQLDbObjectMaker.getMultiQuery(model, dbConfiguration);
+			str = JdbcDbObjectMaker.getMultiQuery(model, dbConfiguration);
 			log.debug(str);
 			ResultSet rs = stmt.executeQuery(str);
 			

@@ -2,7 +2,7 @@
  * Created on Sep 8, 2004
  *
  */
-package com.choicemaker.cm.io.db.mysql;
+package com.choicemaker.cm.io.db.jdbc;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -23,7 +23,7 @@ import com.choicemaker.cm.io.composite.base.CompositeRecordSource;
 import com.choicemaker.cm.io.db.base.DataSources;
 import com.choicemaker.cm.io.db.base.DbAccessor;
 import com.choicemaker.cm.io.db.base.DbReaderSequential;
-import com.choicemaker.cm.io.db.mysql.blocking.MySQLDatabaseAccessor;
+import com.choicemaker.cm.io.db.jdbc.blocking.JdbcDatabaseAccessor;
 
 /**
  * This version is a workaround for DB2RecordSource.  The DB2RecordSource encounters 
@@ -35,9 +35,9 @@ import com.choicemaker.cm.io.db.mysql.blocking.MySQLDatabaseAccessor;
  * @author pcheung
  *
  */
-public class MySQLCompositeRecordSource implements RecordSource {
+public class JdbcCompositeRecordSource implements RecordSource {
 	
-	private static final Logger log = Logger.getLogger(MySQLCompositeRecordSource.class);
+	private static final Logger log = Logger.getLogger(JdbcCompositeRecordSource.class);
 
 	
 	private CompositeRecordSource compositeSource;
@@ -55,7 +55,7 @@ public class MySQLCompositeRecordSource implements RecordSource {
 	/**
 	 * Default Constructor that does nothing.
 	 */
-	public MySQLCompositeRecordSource (){
+	public JdbcCompositeRecordSource (){
 	}
 	
 	
@@ -67,7 +67,7 @@ public class MySQLCompositeRecordSource implements RecordSource {
 	 * @param dbConfiguration - db configuration name in the schema file.
 	 * @param maxSize - maximum number of records in each of the composite.
 	 */
-	public MySQLCompositeRecordSource(DataSource ds, ImmutableProbabilityModel model, String idsQuery,
+	public JdbcCompositeRecordSource(DataSource ds, ImmutableProbabilityModel model, String idsQuery,
 		String dbConfiguration, int maxSize) {
 		this.model = model;
 		this.idsQuery = idsQuery;
@@ -86,7 +86,7 @@ public class MySQLCompositeRecordSource implements RecordSource {
 	 * @param dbConfiguration - db configuration name in the schema file.
 	 * @param maxSize - maximum number of records in each of the composite.
 	 */
-	public MySQLCompositeRecordSource(String dsName, ImmutableProbabilityModel model, String idsQuery,
+	public JdbcCompositeRecordSource(String dsName, ImmutableProbabilityModel model, String idsQuery,
 		String dbConfiguration, int maxSize) {
 		this.model = model;
 		this.idsQuery = idsQuery;
@@ -170,7 +170,7 @@ public class MySQLCompositeRecordSource implements RecordSource {
 					
 				log.debug (subQuery); 
 					
-				MySQLRecordSource srs = new MySQLRecordSource ();
+				JdbcRecordSource srs = new JdbcRecordSource ();
 				srs.setDataSource(dsName,ds);
 				srs.setModel(model);
 				srs.setDbConfiguration(dbConfiguration);
@@ -205,7 +205,7 @@ public class MySQLCompositeRecordSource implements RecordSource {
 			if (count < maxSize) {
 				String subQuery = setMinMax (idsQuery, idName, min, max);
 
-				MySQLRecordSource srs = new MySQLRecordSource ();
+				JdbcRecordSource srs = new JdbcRecordSource ();
 				srs.setDataSource(dsName,ds);
 				srs.setModel(model);
 				srs.setDbConfiguration(dbConfiguration);
@@ -237,7 +237,7 @@ public class MySQLCompositeRecordSource implements RecordSource {
 					
 					log.debug (subQuery); 
 					
-					MySQLRecordSource srs = new MySQLRecordSource ();
+					JdbcRecordSource srs = new JdbcRecordSource ();
 					srs.setDataSource(dsName,ds);
 					srs.setModel(model);
 					srs.setDbConfiguration(dbConfiguration);
@@ -262,7 +262,7 @@ public class MySQLCompositeRecordSource implements RecordSource {
 	private ResultSet getStats (Connection connection, DbReaderSequential dbr) throws SQLException {
 		//first create the temp table.
 		stmt = connection.createStatement();
-		String str = MySQLDatabaseAccessor.getCreateTemp (dbr);
+		String str = JdbcDatabaseAccessor.getCreateTemp (dbr);
 		log.debug (str);
 		stmt.executeUpdate( str );
 		connection.commit();
@@ -270,7 +270,7 @@ public class MySQLCompositeRecordSource implements RecordSource {
 
 		//create the index for the temp table
 		stmt = connection.createStatement();
-		str = MySQLDatabaseAccessor.getCreateTempIndex();
+		str = JdbcDatabaseAccessor.getCreateTempIndex();
 		log.debug (str);
 		stmt.executeUpdate( str );
 		connection.commit();
