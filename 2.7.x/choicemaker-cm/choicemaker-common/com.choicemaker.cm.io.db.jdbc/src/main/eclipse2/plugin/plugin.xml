@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin
-   id="com.choicemaker.cm.io.db.mysql"
-   name="com.choicemaker.cm.io.db.mysql"
-   version="2.5.0">
+   id="com.choicemaker.cm.io.db.jdbc"
+   name="com.choicemaker.cm.io.db.jdbc"
+   version="2.7.1">
 
    <runtime>
-      <library name="mysql.jar"/>
+      <library name="jdbc.jar"/>
    </runtime>
    <requires>
       <import plugin="com.choicemaker.cm.core"/>
