@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.util.ConvUtils;
@@ -68,8 +69,8 @@ import com.choicemaker.util.StringUtils;
  * projects that include only one country:
  * GeoHelper.dist(GeoHepler.geoPoint("zip"
  * ,19067),GeoHepler.geoPoint("town","PANewtown"));
- * GeoHelper.dist(GeoHepler.geoPoint
- * ("postalCode","H1A 1A1"),GeoHepler.geoPoint("town","QCMontreal"));
+ * GeoHelper.dist(GeoHepler.geoPoint ("postalCode","H1A 1A1"
+ * ),GeoHepler.geoPoint("town","QCMontreal"));
  * 
  * In the projects that include multiple countries:
  * GeoHelper.dist(GeoHepler.geoPoint
@@ -85,7 +86,8 @@ import com.choicemaker.util.StringUtils;
 
 public class GeoHelper {
 
-	private static Logger logger = Logger.getLogger(GeoHelper.class.getName());
+	private static final Logger logger =
+		Logger.getLogger(GeoHelper.class.getName());
 
 	/** earth's mean radius in miles (6371 km) */
 	private static double EARTH_RADIOUS = 3963.1;
@@ -93,7 +95,11 @@ public class GeoHelper {
 	/** 1 mile = 1.609344 kilometers */
 	private static double KM_IN_MILE = 1.609344;
 
-	private static double RPG = Math.PI / 1800000.00;
+	private static double RPG = Math.PI / 180.00;
+
+	@Deprecated
+	private static double RPG_INT = Math.PI / 1800000.00;
+
 	private static Map<String, GeoMap> maps = new HashMap<>();
 
 	public GeoHelper() {
@@ -172,18 +178,43 @@ public class GeoHelper {
 	 * @return Distance.
 	 */
 	public static double dist(GeoPoint gp1, GeoPoint gp2) {
-		double dist = 0;
 		if (gp1 == null || gp2 == null)
 			return -1;
-		double dLat = (gp2.lat - gp1.lat) * RPG;
-		double dLon = (gp2.lon - gp1.lon) * RPG;
-		double lat1 = gp1.lat * RPG;
-		double lat2 = gp2.lat * RPG;
 
-		double a =
-			Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(lat1)
-					* Math.cos(lat2) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
-		dist = EARTH_RADIOUS * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+		final double dLat = (gp2.latitude - gp1.latitude) * RPG;
+		final double dLon = (gp2.longitude - gp1.longitude) * RPG;
+		final double lat1 = gp1.latitude * RPG;
+		final double lat2 = gp2.latitude * RPG;
+		final double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
+				+ Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLon / 2)
+						* Math.sin(dLon / 2);
+		final double dist =
+			EARTH_RADIOUS * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+		// Trick to set flag if assertion is enabled
+		boolean assertOn = false;
+		assert assertOn = true;
+
+		// If assertion or logging is enabled, compare to deprecated method
+		if (logger.isLoggable(Level.WARNING) || assertOn) {
+			double PRECISION = 0.002; // 0.002 miles == 10 feet
+			double _dLat = (gp2.lat - gp1.lat) * RPG_INT;
+			double _dLon = (gp2.lon - gp1.lon) * RPG_INT;
+			double _lat1 = gp1.lat * RPG_INT;
+			double _lat2 = gp2.lat * RPG_INT;
+			double _a = Math.sin(_dLat / 2) * Math.sin(_dLat / 2)
+					+ Math.cos(_lat1) * Math.cos(_lat2) * Math.sin(_dLon / 2)
+							* Math.sin(_dLon / 2);
+			final double _dist = EARTH_RADIOUS * 2
+					* Math.atan2(Math.sqrt(_a), Math.sqrt(1 - _a));
+			if (Math.abs(_dist - dist) > PRECISION) {
+				String msg = "Revised geo-distance computation (" + dist
+						+ ") != deprecrated computation (" + _dist + ")";
+				logger.warning(msg);
+				assert false : msg;
+			}
+		}
+
 		return dist;
 	}
 
@@ -206,8 +237,8 @@ public class GeoHelper {
 		if (map == null)
 			return null;
 		if (map.keyType.intern() == "int") {
-			return (GeoPoint) map.getMap().get(
-					new Integer(geoEntityDescription));
+			return (GeoPoint) map.getMap()
+					.get(new Integer(geoEntityDescription));
 		} else {
 			try {
 				String keyString =
@@ -216,10 +247,9 @@ public class GeoHelper {
 					ConvUtils.convertString2Object(keyString, map.getKeyType());
 				return (GeoPoint) map.getMap().get(key);
 			} catch (IllegalArgumentException _e) {
-				String msg =
-					"Error looking up geoPoint for geoType '" + geoEntityType
-							+ "', geoEntityDesc " + geoEntityDescription + ": "
-							+ _e.toString();
+				String msg = "Error looking up geoPoint for geoType '"
+						+ geoEntityType + "', geoEntityDesc "
+						+ geoEntityDescription + ": " + _e.toString();
 				logger.severe(msg);
 				return null;
 			}
@@ -260,16 +290,14 @@ public class GeoHelper {
 					StringUtils.removeNonDigitsLetters(geoEntityDescription);
 				geoEntityDescription = geoEntityDescription.toUpperCase();
 			}
-			Object key =
-				ConvUtils.convertString2Object(geoEntityDescription,
-						map.getKeyType());
+			Object key = ConvUtils.convertString2Object(geoEntityDescription,
+					map.getKeyType());
 			return (GeoPoint) map.getMap().get(key);
 		} catch (IllegalArgumentException _e) {
-			String msg =
-					"Error looking up geoPoint for geoType '" + geoEntityType
-							+ "', geoEntityDesc " + geoEntityDescription + ": "
-							+ _e.toString();
-				logger.severe(msg);
+			String msg = "Error looking up geoPoint for geoType '"
+					+ geoEntityType + "', geoEntityDesc " + geoEntityDescription
+					+ ": " + _e.toString();
+			logger.severe(msg);
 			logger.severe(_e.toString());
 			return null;
 		}
@@ -304,9 +332,8 @@ public class GeoHelper {
 					keyLen = Integer.parseInt(lenStr);
 				} catch (Exception ex) {
 					String msg =
-							"Invalid length '" + lenStr + "': "
-									+ ex.toString();
-						logger.severe(msg);
+						"Invalid length '" + lenStr + "': " + ex.toString();
+					logger.severe(msg);
 					logger.severe(ex.toString());
 				}
 				;
@@ -325,9 +352,8 @@ public class GeoHelper {
 						try {
 							fieldLen = Integer.parseInt(fieldLenStr);
 						} catch (Exception ex) {
-							String msg =
-								"Invalid length '" + fieldLenStr + "': "
-										+ ex.toString();
+							String msg = "Invalid length '" + fieldLenStr
+									+ "': " + ex.toString();
 							logger.severe(msg);
 						}
 						;
@@ -342,8 +368,8 @@ public class GeoHelper {
 					XmlGeoInitializer.readFileMap(url.openStream(), keyType, m);
 					addMap(name, m);
 				} catch (IOException ex) {
-					logger.severe("Error reading file: '" + fileName + "': "
-							+ ex);
+					logger.severe(
+							"Error reading file: '" + fileName + "': " + ex);
 				}
 			}
 		}
