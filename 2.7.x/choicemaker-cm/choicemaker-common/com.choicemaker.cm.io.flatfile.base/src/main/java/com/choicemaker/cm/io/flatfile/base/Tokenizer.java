@@ -228,6 +228,16 @@ public class Tokenizer {
 		return s != null && s.length() > 0 ? Long.parseLong(s) : 0L;
 	}
 
+	public float nextFloat(int width) {
+		String s = nextTrimedString(width);
+		return s != null && s.length() > 0 ? Float.parseFloat(s) : 0L;
+	}
+
+	public float getFloat(int start, int width) {
+		String s = getTrimedString(start, width);
+		return s != null && s.length() > 0 ? Float.parseFloat(s) : 0L;
+	}
+
 	public Date nextDate(int width) {
 		String s = nextTrimedString(width);
 		return s != null && s.length() > 0 ? DateHelper.parse(s) : null;

@@ -12,12 +12,9 @@ package com.choicemaker.cmtblocking;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Properties;
-import java.util.Set;
 import java.util.logging.Logger;
+
+import com.choicemaker.util.SystemPropertyUtils;
 
 /**
  *
@@ -40,21 +37,7 @@ public class LogUtil {
 	}
 
 	static void logSystemProperties(Logger logger) {
-		Properties p = System.getProperties();
-		List<String> sortedKeys = new ArrayList<>();
-		Set<Object> keys = p.keySet();
-		for (Object o : keys) {
-			if (o instanceof String) {
-				String key = (String) o;
-				sortedKeys.add(key);
-			}
-		}
-		Collections.sort(sortedKeys);
-		for (String key : sortedKeys) {
-			String value = p.getProperty(key);
-			String msg = "System property '" + key + "'/'" + value + "'";
-			logExtendedInfo(logger, msg);
-		}
+		SystemPropertyUtils.logSystemProperties(logger);
 	}
 
 } // class LogUtil

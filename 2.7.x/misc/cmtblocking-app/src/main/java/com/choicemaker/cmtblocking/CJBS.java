@@ -14,7 +14,8 @@ import com.choicemaker.util.Precondition;
 import com.choicemaker.util.StringUtils;
 
 /**
- * Result of parsing a configuration file:
+ * <u>C</u>onfiguration object, <u>J</u>DBC parameters, <u>B</u>locking parameters and
+ * <u>S</u>cript iterator, created by parsing a properties file:
  * <ul>
  * <li>Configuration</li>
  * <li>Jdbc parameters</li>

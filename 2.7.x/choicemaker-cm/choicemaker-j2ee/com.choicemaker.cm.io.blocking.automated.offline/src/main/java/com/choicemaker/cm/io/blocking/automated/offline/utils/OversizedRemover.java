@@ -36,8 +36,8 @@ public class OversizedRemover {
 	// outofmemoryexception
 	private IBlockSinkSourceFactory bFactory;
 
-	// private BlocksSpliterMap spliter;
-	private BlocksSpliter2 spliter;
+	// private BlocksSplitterMap splitter;
+	private BlocksSplitter2 splitter;
 
 	private int numBlocksIn; // number of blocks before remove subsumed
 	private int numBlocksOut; // number of blocks after remove subsumed
@@ -66,9 +66,9 @@ public class OversizedRemover {
 		 * 
 		 * if (!sizes.contains(I)) sizes.add(I); } source.close();
 		 * 
-		 * //use map implementation spliter = new BlocksSpliterMap (bFactory);
+		 * //use map implementation splitter = new BlocksSplitterMap (bFactory);
 		 * Iterator it = sizes.iterator(); while (it.hasNext ()) { Integer I =
-		 * (Integer) it.next(); spliter.setSize(I.intValue(), 1);
+		 * (Integer) it.next(); splitter.setSize(I.intValue(), 1);
 		 * 
 		 * System.out.println ("oversized size: " + I.intValue()); }
 		 */
@@ -88,8 +88,8 @@ public class OversizedRemover {
 		source.close();
 
 		// use map implementation
-		// spliter = new BlocksSpliterMap (bFactory);
-		spliter = new BlocksSpliter2(bFactory, min, max, 100);
+		// splitter = new BlocksSplitterMap (bFactory);
+		splitter = new BlocksSplitter2(bFactory, min, max, 100);
 
 	}
 
@@ -105,7 +105,7 @@ public class OversizedRemover {
 		t = System.currentTimeMillis() - t;
 		System.out.println("Done split " + t);
 
-		ArrayList parts = spliter.getSinks();
+		ArrayList parts = splitter.getSinks();
 
 		// hashmap containing sum and block
 		HashMap sumMap = new HashMap();
@@ -145,7 +145,7 @@ public class OversizedRemover {
 		// write toSink
 		writeUnsubsumed3(sumMap, sink);
 
-		spliter.removeAll();
+		splitter.removeAll();
 	}
 
 	private long getSum(LongArrayList list) {
@@ -201,7 +201,7 @@ public class OversizedRemover {
 	 */
 	private void splitBlocks(IBlockSource ibs) throws BlockingException {
 
-		spliter.Initialize();
+		splitter.Initialize();
 
 		ibs.open();
 
@@ -213,7 +213,7 @@ public class OversizedRemover {
 			LongArrayList recordIds = bs.getRecordIDs();
 			recordIds.sort();
 
-			spliter.writeToSink(bs);
+			splitter.writeToSink(bs);
 
 			numBlocksIn++;
 		}

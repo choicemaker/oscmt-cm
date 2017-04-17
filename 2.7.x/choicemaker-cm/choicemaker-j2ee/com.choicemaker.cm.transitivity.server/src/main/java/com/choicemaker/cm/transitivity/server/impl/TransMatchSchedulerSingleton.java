@@ -40,6 +40,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigu
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractSchedulerSingleton;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaFileUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
+import com.choicemaker.cm.io.blocking.automated.offline.services.ChunkService3;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityParametersController;
 
 /**
@@ -159,7 +160,12 @@ public class TransMatchSchedulerSingleton extends AbstractSchedulerSingleton {
 	@Override
 	protected void cleanUp(BatchJob batchJob, OabaJobMessage sd)
 			throws BlockingException {
-		log.info("cleanUp");
+		if (ChunkService3.isKeepFilesRequested()) {
+			log.info("Intermediate chunk files retained");
+			return;
+		}
+
+		log.info("Cleanup: removing intermediate chunck files");
 
 		final long jobId = batchJob.getId();
 		TransitivityParameters params =
