@@ -9,8 +9,8 @@ package com.choicemaker.cm.io.blocking.automated.offline.server.ejb;
 
 import java.io.Serializable;
 
+import com.choicemaker.cm.core.base.RECORD_SOURCE_ROLE;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
-import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE_ROLE;
 
 public interface RecordIdTranslation<T extends Comparable<T>> extends
 		Serializable, Comparable<RecordIdTranslation<T>> {

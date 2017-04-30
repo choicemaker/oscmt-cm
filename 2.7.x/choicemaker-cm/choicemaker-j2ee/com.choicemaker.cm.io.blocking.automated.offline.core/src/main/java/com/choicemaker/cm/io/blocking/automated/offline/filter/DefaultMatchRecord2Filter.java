@@ -9,7 +9,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.filter;
 
 import java.util.logging.Logger;
 
-import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
+import com.choicemaker.cm.core.base.MatchRecord2;
 
 /**
  * A stripped down Filter implementation that only limits the probability range

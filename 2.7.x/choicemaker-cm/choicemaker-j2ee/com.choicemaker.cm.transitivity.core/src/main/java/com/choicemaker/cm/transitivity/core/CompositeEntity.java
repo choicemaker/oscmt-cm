@@ -13,7 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeMap;
 
-import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
+import com.choicemaker.cm.core.base.MatchRecord2;
 
 /**
  * This object represents a subgraph of records that are related to each other,

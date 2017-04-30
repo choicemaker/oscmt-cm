@@ -14,7 +14,7 @@ import java.util.Stack;
 import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.Decision;
-import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
+import com.choicemaker.cm.core.base.MatchRecord2;
 
 
 /**

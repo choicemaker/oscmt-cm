@@ -9,8 +9,8 @@ package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
 import java.util.Comparator;
 
+import com.choicemaker.cm.core.util.MatchRecordUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
-import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecordUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaPairResult;
 
 public class OabaPairResultComparator<T extends Comparable<T>> implements

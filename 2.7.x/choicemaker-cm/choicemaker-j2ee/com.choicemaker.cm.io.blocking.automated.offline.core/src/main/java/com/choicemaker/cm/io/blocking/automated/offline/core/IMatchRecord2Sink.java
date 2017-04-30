@@ -12,7 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
+import com.choicemaker.cm.core.base.MatchRecord2;
 
 /**
  * This is a sink that stores MatchRecord2.

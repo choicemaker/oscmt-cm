@@ -12,7 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeSet;
 
-import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
+import com.choicemaker.cm.core.base.MatchRecord2;
 import com.choicemaker.cm.transitivity.core.CompositeEntity;
 import com.choicemaker.cm.transitivity.core.GraphCompactor;
 import com.choicemaker.cm.transitivity.core.INode;

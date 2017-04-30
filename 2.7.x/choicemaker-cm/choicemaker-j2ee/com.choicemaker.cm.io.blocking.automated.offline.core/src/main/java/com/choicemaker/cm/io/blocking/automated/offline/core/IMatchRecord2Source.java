@@ -7,7 +7,7 @@
  *******************************************************************************/
 package com.choicemaker.cm.io.blocking.automated.offline.core;
 
-import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
+import com.choicemaker.cm.core.base.MatchRecord2;
 
 /**
  * This is a source that reads MatchRecord2.

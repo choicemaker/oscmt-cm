@@ -18,10 +18,10 @@ import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.base.Evaluator;
 import com.choicemaker.cm.core.base.Match;
+import com.choicemaker.cm.core.base.MatchRecord2;
 import com.choicemaker.cm.core.base.PMManager;
-import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE_ROLE;
-import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
-import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecordUtils;
+import com.choicemaker.cm.core.base.RECORD_SOURCE_ROLE;
+import com.choicemaker.cm.core.util.MatchRecordUtils;
 import com.choicemaker.cm.transitivity.core.TransitivityException;
 
 /**

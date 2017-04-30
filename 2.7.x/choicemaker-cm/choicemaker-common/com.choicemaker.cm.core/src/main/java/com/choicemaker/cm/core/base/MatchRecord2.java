@@ -5,12 +5,12 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *******************************************************************************/
-package com.choicemaker.cm.io.blocking.automated.offline.data;
+package com.choicemaker.cm.core.base;
 
 import java.io.Serializable;
 
 import com.choicemaker.cm.core.Decision;
-import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE_ROLE;
+import com.choicemaker.cm.core.util.MatchRecordUtils;
 
 /**
  * A MatchRecord has a pair of id's and a match probability on this pair.

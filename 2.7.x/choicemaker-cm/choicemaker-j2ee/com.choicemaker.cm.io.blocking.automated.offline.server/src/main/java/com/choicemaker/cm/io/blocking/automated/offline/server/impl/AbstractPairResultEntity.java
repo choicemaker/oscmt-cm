@@ -46,9 +46,9 @@ import javax.persistence.TableGenerator;
 
 import com.choicemaker.cm.args.PersistentObject;
 import com.choicemaker.cm.core.Decision;
+import com.choicemaker.cm.core.base.RECORD_SOURCE_ROLE;
+import com.choicemaker.cm.core.util.MatchRecordUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
-import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE_ROLE;
-import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecordUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaPairResult;
 import com.choicemaker.util.HashUtils;
 
