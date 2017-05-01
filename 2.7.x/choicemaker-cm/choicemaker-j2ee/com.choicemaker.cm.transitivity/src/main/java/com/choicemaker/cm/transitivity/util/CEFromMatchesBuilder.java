@@ -21,7 +21,7 @@ import com.choicemaker.cm.core.base.Match;
 import com.choicemaker.cm.core.base.MatchRecord2;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.base.RECORD_SOURCE_ROLE;
-import com.choicemaker.cm.core.util.MatchRecordUtils;
+import com.choicemaker.cm.core.util.MatchUtils;
 import com.choicemaker.cm.transitivity.core.TransitivityException;
 
 /**
@@ -85,7 +85,7 @@ public class CEFromMatchesBuilder {
 		while (matches.hasNext()) {
 			Match m = (Match) matches.next();
 			final String noteInfo =
-				MatchRecordUtils.getNotesAsDelimitedString(m.ac, this.model);
+				MatchUtils.getNotesAsDelimitedString(m.ac, this.model);
 			MatchRecord2 mr =
 				new MatchRecord2(q.getId(), m.id, RECORD_SOURCE_ROLE.STAGING,
 						m.probability, m.decision, noteInfo);
@@ -134,7 +134,7 @@ public class CEFromMatchesBuilder {
 			final boolean[] enabledClues = model.getCluesToEvaluate();
 			final boolean isStage = true;
 			retVal =
-				MatchRecordUtils.compareRecords(clueSet, enabledClues, model, r1, r2,
+				MatchUtils.compareRecords(clueSet, enabledClues, model, r1, r2,
 						isStage, differThreshold, matchThreshold);
 		}
 		return retVal;

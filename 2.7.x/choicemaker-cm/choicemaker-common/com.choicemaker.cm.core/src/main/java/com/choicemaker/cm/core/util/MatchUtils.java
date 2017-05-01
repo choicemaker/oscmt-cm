@@ -24,7 +24,7 @@ import com.choicemaker.cm.core.base.Evaluator;
 import com.choicemaker.cm.core.base.MatchRecord2;
 import com.choicemaker.cm.core.base.RECORD_SOURCE_ROLE;
 
-public class MatchRecordUtils {
+public class MatchUtils {
 
 	/**
 	 * This method compares two records and returns a MatchRecord2 object.
@@ -49,7 +49,7 @@ public class MatchRecordUtils {
 			final Decision d = e.getDecision(ac, p, low, high);
 			if (d == MATCH || d == HOLD) {
 				final String notes =
-					MatchRecordUtils.getNotesAsDelimitedString(ac, model);
+					MatchUtils.getNotesAsDelimitedString(ac, model);
 				final RECORD_SOURCE_ROLE role = isStage ? STAGING : MASTER;
 				// If both id's are staging, the smaller one should be first
 				@SuppressWarnings("unchecked")
@@ -81,7 +81,7 @@ public class MatchRecordUtils {
 	/** This delimits the clues names in MatchResult2.getInfo (). */
 	public static final char EXPORT_NOTE_SEPARATOR = '|';
 
-	private MatchRecordUtils() {
+	private MatchUtils() {
 	}
 
 	/**

@@ -42,7 +42,7 @@ import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.base.ImmutableThresholds;
 import com.choicemaker.cm.core.base.MatchRecord2;
 import com.choicemaker.cm.core.base.PMManager;
-import com.choicemaker.cm.core.util.MatchRecordUtils;
+import com.choicemaker.cm.core.util.MatchUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ComparisonPair;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSet;
@@ -457,7 +457,7 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 		final boolean[] enabledClues = model.getCluesToEvaluate();
 		final float low = t.getDifferThreshold();
 		final float high = t.getMatchThreshold();
-		return MatchRecordUtils.compareRecords(clueSet, enabledClues, model, q,
+		return MatchUtils.compareRecords(clueSet, enabledClues, model, q,
 				m, isStage, low, high);
 	}
 

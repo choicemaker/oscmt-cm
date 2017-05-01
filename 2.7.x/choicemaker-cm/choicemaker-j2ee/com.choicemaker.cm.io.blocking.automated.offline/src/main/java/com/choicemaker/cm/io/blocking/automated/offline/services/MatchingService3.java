@@ -20,7 +20,7 @@ import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.base.MatchRecord2;
-import com.choicemaker.cm.core.util.MatchRecordUtils;
+import com.choicemaker.cm.core.util.MatchUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ComparisonPair;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkDataSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSet;
@@ -402,7 +402,7 @@ public class MatchingService3 {
 		MatchRecord2 mr = null;
 		if ((q != null) && (m != null)) {
 			mr =
-				MatchRecordUtils.compareRecords(clueSet, enabledClues, model,
+				MatchUtils.compareRecords(clueSet, enabledClues, model,
 						q, m, isStage, low, high);
 		}
 		return mr;

@@ -37,7 +37,7 @@ import com.choicemaker.cm.core.base.MatchRecord2;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.base.RECORD_SOURCE_ROLE;
 import com.choicemaker.cm.core.base.RecordDecisionMaker;
-import com.choicemaker.cm.core.util.MatchRecordUtils;
+import com.choicemaker.cm.core.util.MatchUtils;
 import com.choicemaker.cm.io.blocking.automated.AbaStatistics;
 import com.choicemaker.cm.io.blocking.automated.AutomatedBlocker;
 import com.choicemaker.cm.io.blocking.automated.DatabaseAccessor;
@@ -305,7 +305,7 @@ public class SingleRecordProcessing implements Serializable {
 				while (iS.hasNext()) {
 					Match m = iS.next();
 					final String noteInfo =
-						MatchRecordUtils.getNotesAsDelimitedString(m.ac, model);
+						MatchUtils.getNotesAsDelimitedString(m.ac, model);
 					MatchRecord2 mr2 = new MatchRecord2(q.getId(), m.id,
 							RECORD_SOURCE_ROLE.MASTER, m.probability,
 							m.decision, noteInfo);
