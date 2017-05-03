@@ -473,16 +473,16 @@ public class DbbCountsCreatorSQL {
 			String query = onlyUncomputed ? query15 : query17;
 			logger.info(
 					"SQL to select entries from TB_CMT_COUNT_FIELDS: " + query);
-			int rowsSelected = stmt.executeUpdate(query);
-			logger.fine("TB_CMT_COUNT_FIELDS selected: " + rowsSelected);
+//			int rowsSelected = stmt.executeUpdate(query);
+//			logger.fine("TB_CMT_COUNT_FIELDS selected: " + rowsSelected);
 			rs = stmt.executeQuery(query);
 			while (rs.next()) {
 				String[] entry = new String[5];
 				for (int i = 1; i <= 5; ++i) {
 					int idx = i - 1;
 					entry[idx] = rs.getString(i);
-					retVal.add(entry);
 				}
+				retVal.add(entry);
 			}
 		} finally {
 			closeResultSet(rs);
@@ -496,7 +496,7 @@ public class DbbCountsCreatorSQL {
 	/** Template to insert table size into TB_CMT_COUNTS */
 	public static final String template18 =
 		"INSERT INTO TB_CMT_COUNTS(FIELDID, VALUE, COUNT) "
-				+ "SELECT $fieldId  as FIELDID, $table as VALUE, "
+				+ "SELECT $fieldId  as FIELDID, '$table' as VALUE, "
 				+ "COUNT(DISTINCT $uniqueId) as COUNT FROM $table";
 
 	/** Instantiation of {@link #template18} */
