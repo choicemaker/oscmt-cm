@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <project
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
   xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -7,79 +7,53 @@
 
   <parent>
     <groupId>com.choicemaker.cm</groupId>
-    <artifactId>choicemaker-common</artifactId>
+    <artifactId>choicemaker-cm</artifactId>
     <version>2.7.1-SNAPSHOT</version>
-    <relativePath>../choicemaker-common/pom.xml</relativePath>
+    <relativePath>../pom.xml</relativePath>
   </parent>
 
-  <artifactId>com.choicemaker.cm.core.util25</artifactId>
-  <packaging>jar</packaging>
-  <name>ChoiceMaker Core</name>
+  <artifactId>choicemaker-27migration</artifactId>
+  <packaging>pom</packaging>
 
-  <properties>
-    <eclipse.plugin.runtime.library.name>util25.jar</eclipse.plugin.runtime.library.name>
-    <eclipse.plugin.src.zip.name>util25src.zip</eclipse.plugin.src.zip.name>
-  </properties>
+  <name>ChoiceMaker Migration Modules, 2.5 to 2.7</name>
+  <description><![CDATA[
+  Temporary ChoiceMaker modules that aid migrations from
+  ChoiceMaker 2.5 to 2.7
+  ]]>
+  </description>
+
+  <modules>
+    <module>com.choicemaker.cm.core.util25</module>
+  </modules>
 
   <build>
     <plugins>
+
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-source-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>attach-sources</id>
-            <phase>package</phase>
-            <goals>
-              <goal>jar-no-fork</goal>
-            </goals>
-          </execution>
-        </executions>
+        <artifactId>maven-site-plugin</artifactId>
+        <configuration>
+          <skip>${maven.javadoc.skip}</skip>
+          <skipDeploy>${maven.javadoc.skip}</skipDeploy>
+        </configuration>
       </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>javadoc</id>
-            <phase>package</phase>
-            <configuration />
-            <goals>
-              <goal>jar</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
+
     </plugins>
   </build>
 
-  <dependencies>
-    <dependency>
-      <groupId>com.choicemaker.util</groupId>
-      <artifactId>choicemaker-util</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>choicemaker-assembly</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.choicemaker.e2</groupId>
-      <artifactId>com.choicemaker.e2</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.jdom</groupId>
-      <artifactId>jdom2</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.jasypt</groupId>
-      <artifactId>jasypt</artifactId>
-      <classifier>lite</classifier>
-    </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
+  <reporting>
+    <plugins>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>${plugin.maven-javadoc.version}</version>
+        <configuration>
+          <skip>${maven.javadoc.skip}</skip>
+          <failOnError>false</failOnError>
+        </configuration>
+      </plugin>
+
+    </plugins>
+  </reporting>
 
 </project>
