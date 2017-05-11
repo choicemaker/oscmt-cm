@@ -167,30 +167,6 @@ public class StringUtils {
 	}
 
 	/**
-	 * Counts the number of occurrences of the {@code needle} character in the
-	 * {@code haystack} string.
-	 * 
-	 * @param haystack
-	 *            the string to be searched. If {@code haystack} is null,
-	 *            returns 0.
-	 * @param needle
-	 *            the character to be counted
-	 * @return returns the number of occurrences of {@code needle} in
-	 *         {@code haystack} or 0 if {@code haystack} is null
-	 */
-	public static int countOccurrences(String haystack, char needle) {
-		int retVal = 0;
-		if (haystack != null) {
-			for (int i = 0; i < haystack.length(); i++) {
-				if (haystack.charAt(i) == needle) {
-					retVal++;
-				}
-			}
-		}
-		return retVal;
-	}
-
-	/**
 	 * Returns the number of digits in <code>str</code>.
 	 * 
 	 * @param s
@@ -248,6 +224,30 @@ public class StringUtils {
 			}
 		}
 		return count;
+	}
+
+	/**
+	 * Counts the number of occurrences of the {@code needle} character in the
+	 * {@code haystack} string.
+	 * 
+	 * @param haystack
+	 *            the string to be searched. If {@code haystack} is null,
+	 *            returns 0.
+	 * @param needle
+	 *            the character to be counted
+	 * @return returns the number of occurrences of {@code needle} in
+	 *         {@code haystack} or 0 if {@code haystack} is null
+	 */
+	public static int countOccurrences(String haystack, char needle) {
+		int retVal = 0;
+		if (haystack != null) {
+			for (int i = 0; i < haystack.length(); i++) {
+				if (haystack.charAt(i) == needle) {
+					retVal++;
+				}
+			}
+		}
+		return retVal;
 	}
 
 	/**
@@ -421,7 +421,7 @@ public class StringUtils {
 
 	/**
 	 * Returns <code>true</code> iff <code>s</code> is not null and
-	 * <code>s.length() &gt; 0</code> and the string itself is not "NULL".
+	 * <code>s.trim().length() &gt; 0</code>.
 	 *
 	 * @param s
 	 *            The string to be tested.
@@ -992,8 +992,9 @@ public class StringUtils {
 	}
 
 	public static String[] splitOnNonLetters(String s) {
+		String[] retVal;
 		if (s == null) {
-			return new String[0];
+			retVal = new String[0];
 		} else {
 			ArrayList out = new ArrayList();
 			StringBuffer buff = new StringBuffer();
@@ -1021,9 +1022,18 @@ public class StringUtils {
 
 				idx++;
 			}
-
-			return (String[]) out.toArray(new String[out.size()]);
+			retVal = (String[]) out.toArray(new String[out.size()]);
 		}
+
+		return retVal;
+	}
+
+	/**
+	 * Same functionality as {@link #removeLeadingZeros(String). All leading
+	 * zeros, even if it is also the last character in the String, are removed.
+	 */
+	public static String trimLeadingZeros(String s) {
+		return removeLeadingZeros(s);
 	}
 
 	public static String toUpperCase(String s) {
