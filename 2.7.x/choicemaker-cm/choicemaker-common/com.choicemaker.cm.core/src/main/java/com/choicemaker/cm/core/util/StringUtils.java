@@ -10,9 +10,6 @@
  */
 package com.choicemaker.cm.core.util;
 
-import java.util.ArrayList;
-import java.util.StringTokenizer;
-
 /**
  * Duplicates <code>com.choicemaker.util.StringUtils</code> so ChoiceMaker 2.5
  * models can be used without modification in ChoiceMaker 2.7.
@@ -33,17 +30,7 @@ public class StringUtils {
 	 * @return true iff <code>s</code> contains at least one letter
 	 */
 	public static boolean containsDigits(String s) {
-		if (s == null) {
-			return false;
-		}
-
-		for (int i = s.length() - 1; i >= 0; i--) {
-			if (Character.isDigit(s.charAt(i))) {
-				return true;
-			}
-		}
-
-		return false;
+		return com.choicemaker.util.StringUtils.containsDigits(s);
 	}
 
 	/**
@@ -55,18 +42,7 @@ public class StringUtils {
 	 * @return true iff <code>s</code> contains at least one letter or digit
 	 */
 	public static boolean containsDigitsOrLetters(String s) {
-		if (s == null) {
-			return false;
-		}
-
-		for (int i = s.length() - 1; i >= 0; i--) {
-			char c = s.charAt(i);
-			if (Character.isLetter(c) || Character.isDigit(c)) {
-				return true;
-			}
-		}
-
-		return false;
+		return com.choicemaker.util.StringUtils.containsDigitsOrLetters(s);
 	}
 
 	/**
@@ -78,17 +54,7 @@ public class StringUtils {
 	 * @return true iff <code>s</code> contains at least one letter
 	 */
 	public static boolean containsLetters(String s) {
-		if (s == null) {
-			return false;
-		}
-
-		for (int i = s.length() - 1; i >= 0; i--) {
-			if (Character.isLetter(s.charAt(i))) {
-				return true;
-			}
-		}
-
-		return false;
+		return com.choicemaker.util.StringUtils.containsLetters(s);
 	}
 
 	/**
@@ -101,20 +67,7 @@ public class StringUtils {
 	 *         not a digit.
 	 */
 	public static boolean containsNonDigits(String s) {
-		if (s == null) {
-			return false;
-		}
-
-		int len = s.length();
-		int pos = 0;
-		while (pos < len) {
-			char c = s.charAt(pos);
-			if (!Character.isDigit(c)) {
-				return true;
-			}
-			pos++;
-		}
-		return false;
+		return com.choicemaker.util.StringUtils.containsNonDigits(s);
 	}
 
 	/**
@@ -127,20 +80,7 @@ public class StringUtils {
 	 *         not a letter
 	 */
 	public static boolean containsNonLetters(String s) {
-		if (s == null) {
-			return false;
-		}
-
-		int len = s.length();
-		int pos = 0;
-		while (pos < len) {
-			char c = s.charAt(pos);
-			if (!Character.isLetter(c)) {
-				return true;
-			}
-			pos++;
-		}
-		return false;
+		return com.choicemaker.util.StringUtils.containsNonLetters(s);
 	}
 
 	/**
@@ -152,20 +92,7 @@ public class StringUtils {
 	 * @return true iff <code>s</code> contains at least one non-word character
 	 */
 	public static boolean containsNonWordChars(String s) {
-		if (s == null) {
-			return false;
-		}
-
-		int len = s.length();
-		int pos = 0;
-		while (pos < len) {
-			char c = s.charAt(pos);
-			if (!(Character.isLetter(c) || Character.isDigit(c) || c == '_')) {
-				return true;
-			}
-			pos++;
-		}
-		return false;
+		return com.choicemaker.util.StringUtils.containsNonWordChars(s);
 	}
 
 	/**
@@ -176,14 +103,7 @@ public class StringUtils {
 	 * @return the number of digits found in <code>s</code>
 	 */
 	public static int countDigits(String s) {
-		int len = s.length();
-		int count = 0;
-		for (int i = 0; i < len; ++i) {
-			if (Character.isDigit(s.charAt(i))) {
-				++count;
-			}
-		}
-		return count;
+		return com.choicemaker.util.StringUtils.countDigits(s);
 	}
 
 	/**
@@ -198,16 +118,7 @@ public class StringUtils {
 	 * @return the number of digits found in <code>s</code>
 	 */
 	public static int countDigits(String s, int limit) {
-		if (s == null)
-			return 0;
-		int len = s.length();
-		int count = 0;
-		for (int i = 0; (count <= limit) && (i < len); ++i) {
-			if (Character.isDigit(s.charAt(i))) {
-				count++;
-			}
-		}
-		return count;
+		return com.choicemaker.util.StringUtils.countDigits(s, limit);
 	}
 
 	/**
@@ -218,14 +129,7 @@ public class StringUtils {
 	 * @return the number of letters found in <code>s</code>
 	 */
 	public static int countLetters(String s) {
-		int len = s.length();
-		int count = 0;
-		for (int i = 0; i < len; ++i) {
-			if (Character.isLetter(s.charAt(i))) {
-				++count;
-			}
-		}
-		return count;
+		return com.choicemaker.util.StringUtils.countLetters(s);
 	}
 
 	/**
@@ -241,15 +145,7 @@ public class StringUtils {
 	 *         {@code haystack} or 0 if {@code haystack} is null
 	 */
 	public static int countOccurrences(String haystack, char needle) {
-		int retVal = 0;
-		if (haystack != null) {
-			for (int i = 0; i < haystack.length(); i++) {
-				if (haystack.charAt(i) == needle) {
-					retVal++;
-				}
-			}
-		}
-		return retVal;
+		return com.choicemaker.util.StringUtils.countOccurrences(haystack, needle);
 	}
 
 	/**
@@ -264,12 +160,7 @@ public class StringUtils {
 	 *         contains digits.
 	 */
 	public static boolean[] findNumbers(String s) {
-		int len = s.length();
-		boolean[] numbers = new boolean[len];
-		for (int i = 0; i < len; ++i) {
-			numbers[i] = Character.isDigit(s.charAt(i));
-		}
-		return numbers;
+		return com.choicemaker.util.StringUtils.findNumbers(s);
 	}
 
 	/**
@@ -282,11 +173,7 @@ public class StringUtils {
 	 *         latter is empty.
 	 */
 	public static char getChar(String s) {
-		if (s == null || s.length() == 0) {
-			return '\0';
-		} else {
-			return s.charAt(0);
-		}
+		return com.choicemaker.util.StringUtils.getChar(s);
 	}
 
 	/**
@@ -299,8 +186,7 @@ public class StringUtils {
 	 * @return <code>s1 + &quot; &quot; + s2</code>
 	 */
 	public static String join(String s1, String s2) {
-		return join(new String[] {
-				s1, s2 });
+		return com.choicemaker.util.StringUtils.join(s1,s2);
 	}
 
 	/**
@@ -315,8 +201,7 @@ public class StringUtils {
 	 * @return <code>s1 + &quot; &quot; + s2 + &quot; &quot; + s3</code>
 	 */
 	public static String join(String s1, String s2, String s3) {
-		return join(new String[] {
-				s1, s2, s3 });
+		return com.choicemaker.util.StringUtils.join(s1, s2, s3);
 	}
 
 	/**
@@ -334,8 +219,7 @@ public class StringUtils {
 	 * @return <code>s1 + &quot; &quot; + s2 + &quot; &quot; + s3 + &quot; &quot; + s4</code>
 	 */
 	public static String join(String s1, String s2, String s3, String s4) {
-		return join(new String[] {
-				s1, s2, s3, s4 });
+		return com.choicemaker.util.StringUtils.join(s1, s2, s3, s4);
 	}
 
 	/**
@@ -347,7 +231,7 @@ public class StringUtils {
 	 * @return the elements of <code>s</code> joined with spaces.
 	 */
 	public static String join(String[] s) {
-		return join(s, " ");
+		return com.choicemaker.util.StringUtils.join(s);
 	}
 
 	/**
@@ -361,7 +245,7 @@ public class StringUtils {
 	 * @return the elements of <code>s</code> joined by <code>delim</code>
 	 */
 	public static String join(String[] s, char delim) {
-		return join(s, String.valueOf(delim));
+		return com.choicemaker.util.StringUtils.join(s, delim);
 	}
 
 	/**
@@ -375,20 +259,7 @@ public class StringUtils {
 	 * @return the elements of <code>s</code> joined by <code>delim</code>
 	 */
 	public static String join(String[] s, String delim) {
-		boolean started = false;
-		StringBuffer buff = new StringBuffer();
-		for (int i = 0; i < s.length; i++) {
-			if (nonEmptyString(s[i])) {
-				if (started) {
-					buff.append(delim);
-					buff.append(s[i]);
-				} else {
-					buff.append(s[i]);
-					started = true;
-				}
-			}
-		}
-		return buff.toString();
+		return com.choicemaker.util.StringUtils.join(s, delim);
 	}
 
 	/**
@@ -400,25 +271,7 @@ public class StringUtils {
 	 * @return a string with only letters and spaces
 	 */
 	public static String keepLettersAndSpaces(String in) {
-		if (in == null) {
-			return null;
-		}
-
-		int len = in.length();
-		StringBuffer out = new StringBuffer(len);
-		boolean lastSpace = true;
-		for (int i = 0; i < len; i++) {
-			char c = in.charAt(i);
-			if (Character.isLetter(c)) {
-				out.append(c);
-				lastSpace = false;
-			} else if (!lastSpace) {
-				out.append(' ');
-				lastSpace = true;
-			}
-		}
-
-		return out.toString().trim();
+		return com.choicemaker.util.StringUtils.keepLettersAndSpaces(in);
 	}
 
 	/**
@@ -431,7 +284,7 @@ public class StringUtils {
 	 *         <code>""</code>.
 	 */
 	public static boolean nonEmptyString(String s) {
-		return s != null && s.trim().length() > 0;
+		return com.choicemaker.util.StringUtils.nonEmptyString(s);
 	}
 
 	/**
@@ -450,17 +303,7 @@ public class StringUtils {
 	 *         <code>s1</code> and <code>s2</code>
 	 */
 	public static int numMatchingCharacters(String s1, String s2) {
-		if (s1 == null || s2 == null) {
-			return 0;
-		}
-		int len = Math.min(s1.length(), s2.length());
-		int res = 0;
-		for (int i = 0; i < len; ++i) {
-			if (s1.charAt(i) == s2.charAt(i)) {
-				++res;
-			}
-		}
-		return res;
+		return com.choicemaker.util.StringUtils.numMatchingCharacters(s1, s2);
 	}
 
 	/**
@@ -473,15 +316,7 @@ public class StringUtils {
 	 * @return true if one string begins or ends with the other.
 	 */
 	public static boolean overlap(String s1, String s2) {
-		String sa, sb;
-		if (s1.length() >= s2.length()) {
-			sa = s1.trim();
-			sb = s2.trim();
-		} else {
-			sa = s2.trim();
-			sb = s1.trim();
-		}
-		return sa.startsWith(sb) || sa.endsWith(sb);
+		return com.choicemaker.util.StringUtils.overlap(s1, s2);
 	}
 
 	/**
@@ -498,7 +333,7 @@ public class StringUtils {
 	 *         with zeros if necessary
 	 */
 	public static String padLeft(String s, int len) {
-		return padLeft(s, len, '0');
+		return com.choicemaker.util.StringUtils.padLeft(s, len);
 	}
 
 	/**
@@ -523,17 +358,7 @@ public class StringUtils {
 	 *         with <code>c</code> if necessary
 	 */
 	public static String padLeft(String s, int len, char c) {
-		int cur = s.length();
-		if (cur < len) {
-			StringBuffer buff = new StringBuffer(len);
-			while (cur++ < len) {
-				buff.append(c);
-			}
-			buff.append(s);
-			return buff.toString();
-		} else {
-			return s;
-		}
+		return com.choicemaker.util.StringUtils.padLeft(s, len, c);
 	}
 
 	/**
@@ -550,7 +375,7 @@ public class StringUtils {
 	 *         with zeros if necessary
 	 */
 	public static String padRight(String s, int len) {
-		return padRight(s, len, '0');
+		return com.choicemaker.util.StringUtils.padRight(s, len);
 	}
 
 	/**
@@ -569,17 +394,7 @@ public class StringUtils {
 	 *         with <code>c</code> if necessary
 	 */
 	public static String padRight(String s, int len, char c) {
-		int cur = s.length();
-		if (cur < len) {
-			StringBuffer buff = new StringBuffer(len);
-			buff.append(s);
-			while (cur++ < len) {
-				buff.append(c);
-			}
-			return buff.toString();
-		} else {
-			return s;
-		}
+		return com.choicemaker.util.StringUtils.padRight(s, len, c);
 	}
 
 	/**
@@ -594,11 +409,7 @@ public class StringUtils {
 	 *             if s cannot be converted to a long.
 	 */
 	public static long parseLong(String s) {
-		if (s == null || s.length() == 0) {
-			return -1;
-		} else {
-			return Long.parseLong(s);
-		}
+		return com.choicemaker.util.StringUtils.parseLong(s);
 	}
 
 	/**
@@ -614,7 +425,7 @@ public class StringUtils {
 	 * @return the <code>long</code> value of s
 	 */
 	public static long parseLongString(String s) {
-		return parseLong(removeNonDigitsMaxLength(s, 18));
+		return com.choicemaker.util.StringUtils.parseLongString(s);
 	}
 
 	/**
@@ -627,32 +438,7 @@ public class StringUtils {
 	 */
 	@Deprecated
 	public static String removeApostrophies(String s) {
-		if (s == null) {
-			return null;
-		} else {
-			int len = s.length();
-			int pos = 0;
-			while (pos < len && s.charAt(pos) != '\'') {
-				++pos;
-			}
-			if (pos == len) {
-				return s;
-			} else {
-				char[] res = new char[len];
-				for (int i = 0; i < pos; ++i) {
-					res[i] = s.charAt(i);
-				}
-				int out = pos;
-				while (pos < len) {
-					char ch = s.charAt(pos);
-					if (ch != '\'') {
-						res[out++] = ch;
-					}
-					++pos;
-				}
-				return new String(res, 0, out);
-			}
-		}
+		return com.choicemaker.util.StringUtils.removeApostrophies(s);
 	}
 
 	/**
@@ -672,19 +458,7 @@ public class StringUtils {
 	 * @return possibly null
 	 */
 	public static String removeLeadingNonterminalZeros(String s) {
-		String retVal = null;
-		if (s != null) {
-			/*
-			 * From StackOverflow,
-			 * "How to remove leading zeros from alphanumeric text?",
-			 * http://links.rph.cx/1T0rm1V. The ^ anchor ensures that the 0+
-			 * being matched is at the beginning of the input. The (?!$)
-			 * negative lookahead ensures that not the entire string will be
-			 * matched.
-			 */
-			retVal = s.replaceFirst("^0+(?!$)", "");
-		}
-		return retVal;
+		return com.choicemaker.util.StringUtils.removeLeadingNonterminalZeros(s);
 	}
 
 	/**
@@ -704,20 +478,7 @@ public class StringUtils {
 	 * @return possibly null
 	 */
 	public static String removeLeadingZeros(String s) {
-		if (s == null) {
-			return null;
-		} else {
-			int index = 0;
-			while (index < s.length() && s.charAt(index) == '0') {
-				index++;
-			}
-
-			if (index > 0) {
-				return s.substring(index);
-			} else {
-				return s;
-			}
-		}
+		return com.choicemaker.util.StringUtils.removeLeadingZeros(s);
 	}
 
 	/**
@@ -728,32 +489,7 @@ public class StringUtils {
 	 * @return a copy with non-digits removed
 	 */
 	public static String removeNonDigits(String s) {
-		if (s == null) {
-			return null;
-		} else {
-			int len = s.length();
-			int pos = 0;
-			while (pos < len && Character.isDigit(s.charAt(pos))) {
-				++pos;
-			}
-			if (pos == len) {
-				return s;
-			} else {
-				char[] res = new char[len];
-				for (int i = 0; i < pos; ++i) {
-					res[i] = s.charAt(i);
-				}
-				int out = pos;
-				while (pos < len) {
-					char ch = s.charAt(pos);
-					if (Character.isDigit(ch)) {
-						res[out++] = ch;
-					}
-					++pos;
-				}
-				return new String(res, 0, out);
-			}
-		}
+		return com.choicemaker.util.StringUtils.removeNonDigits(s);
 	}
 
 	/**
@@ -765,32 +501,7 @@ public class StringUtils {
 	 * @return a version of s with non-digits and -letters removed
 	 */
 	public static String removeNonDigitsLetters(String s) {
-		if (s == null) {
-			return null;
-		} else {
-			int len = s.length();
-			int pos = 0;
-			while (pos < len && Character.isLetterOrDigit(s.charAt(pos))) {
-				++pos;
-			}
-			if (pos == len) {
-				return s.toString();
-			} else {
-				char[] res = new char[len];
-				for (int i = 0; i < pos; ++i) {
-					res[i] = s.charAt(i);
-				}
-				int out = pos;
-				while (pos < len) {
-					char ch = s.charAt(pos);
-					if (Character.isLetterOrDigit(ch)) {
-						res[out++] = ch;
-					}
-					++pos;
-				}
-				return new String(res, 0, out);
-			}
-		}
+		return com.choicemaker.util.StringUtils.removeNonDigitsLetters(s);
 	}
 
 	/**
@@ -805,32 +516,7 @@ public class StringUtils {
 	 */
 	@Deprecated
 	public static String removeNonDigitsLetters(StringBuffer s) {
-		if (s == null) {
-			return null;
-		} else {
-			int len = s.length();
-			int pos = 0;
-			while (pos < len && Character.isLetterOrDigit(s.charAt(pos))) {
-				++pos;
-			}
-			if (pos == len) {
-				return s.toString();
-			} else {
-				char[] res = new char[len];
-				for (int i = 0; i < pos; ++i) {
-					res[i] = s.charAt(i);
-				}
-				int out = pos;
-				while (pos < len) {
-					char ch = s.charAt(pos);
-					if (Character.isLetterOrDigit(ch)) {
-						res[out++] = ch;
-					}
-					++pos;
-				}
-				return new String(res, 0, out);
-			}
-		}
+		return com.choicemaker.util.StringUtils.removeNonDigitsLetters(s);
 	}
 
 	/**
@@ -845,12 +531,7 @@ public class StringUtils {
 	 * @return a string with only non-digit characters
 	 */
 	public static String removeNonDigitsMaxLength(String s, int n) {
-		String str = removeNonDigits(s);
-		int i = str.length() - n;
-		if (i > 0)
-			return str.substring(i);
-		else
-			return str;
+		return com.choicemaker.util.StringUtils.removeNonDigitsMaxLength(s, n);
 	}
 
 	/**
@@ -862,33 +543,7 @@ public class StringUtils {
 	 * @return a version of s with non-letters removed
 	 */
 	public static String removeNonLetters(String s) {
-		if (s == null) {
-			return null;
-		} else {
-			int len = s.length();
-			int pos = 0;
-			while (pos < len && Character.isLetter(s.charAt(pos))) {
-				++pos;
-			}
-			if (pos == len) {
-				return s.toString();
-			} else {
-				char[] res = new char[len];
-				for (int i = 0; i < pos; ++i) {
-					res[i] = s.charAt(i);
-				}
-				int out = pos;
-				while (pos < len) {
-					char ch = s.charAt(pos);
-					if (Character.isLetter(ch)) {
-						res[out++] = ch;
-					}
-					++pos;
-				}
-
-				return new String(res, 0, out);
-			}
-		}
+		return com.choicemaker.util.StringUtils.removeNonLetters(s);
 	}
 
 	/**
@@ -906,42 +561,7 @@ public class StringUtils {
 	 */
 	@Deprecated
 	public static String removePunctuation(String s) {
-		if (s == null) {
-			return null;
-		} else {
-			int len = s.length();
-			int pos = 0;
-			char ch;
-			while (pos < len && (ch = s.charAt(pos)) != '.' && ch != ';'
-					&& ch != ',' && ch != '\'') {
-				++pos;
-			}
-			if (pos == len) {
-				// BUG: may return trailing spaces
-				return s;
-			} else {
-				char[] res = new char[len];
-				for (int i = 0; i < pos; ++i) {
-					res[i] = s.charAt(i);
-				}
-				int out = pos;
-				while (pos < len) {
-					ch = s.charAt(pos);
-					if (ch == '.' || ch == ';' || ch == ',') {
-						if (out != 0) {
-							res[out++] = ' ';
-						}
-					} else if (ch != '\'' && out != 0) {
-						res[out++] = ch;
-					}
-					++pos;
-				}
-				while (out > 0 && res[out - 1] == ' ') {
-					--out;
-				}
-				return new String(res, 0, out);
-			}
-		}
+		return com.choicemaker.util.StringUtils.removePunctuation(s);
 	}
 
 	/**
@@ -953,7 +573,7 @@ public class StringUtils {
 	 * @return an array of <code>s</code>'s split pieces
 	 */
 	public static String[] split(String s) {
-		return split(s, " ");
+		return com.choicemaker.util.StringUtils.split(s);
 	}
 
 	/**
@@ -967,7 +587,7 @@ public class StringUtils {
 	 * @return an array of <code>s</code>'s split pieces
 	 */
 	public static String[] split(String s, char delim) {
-		return split(s, String.valueOf(delim));
+		return com.choicemaker.util.StringUtils.split(s, delim);
 	}
 
 	/**
@@ -981,53 +601,11 @@ public class StringUtils {
 	 * @return an array of <code>s</code>'s split pieces
 	 */
 	public static String[] split(String s, String delim) {
-		if (s == null) {
-			return new String[0];
-		} else {
-			StringTokenizer t = new StringTokenizer(s, delim);
-			String[] ret = new String[t.countTokens()];
-			for (int i = 0; i < ret.length; i++) {
-				ret[i] = t.nextToken();
-			}
-			return ret;
-		}
+		return com.choicemaker.util.StringUtils.split(s, delim);
 	}
 
 	public static String[] splitOnNonLetters(String s) {
-		String[] retVal;
-		if (s == null) {
-			retVal = new String[0];
-		} else {
-			ArrayList out = new ArrayList();
-			StringBuffer buff = new StringBuffer();
-			int len = s.length();
-			int idx = 0;
-			while (true) {
-				if (idx >= len) {
-					if (buff.length() > 0) {
-						out.add(buff.toString());
-					}
-
-					break;
-				}
-
-				char c = s.charAt(idx);
-
-				if (!Character.isLetter(c)) {
-					if (buff.length() > 0) {
-						out.add(buff.toString());
-					}
-					buff.setLength(0);
-				} else {
-					buff.append(c);
-				}
-
-				idx++;
-			}
-			retVal = (String[]) out.toArray(new String[out.size()]);
-		}
-
-		return retVal;
+		return com.choicemaker.util.StringUtils.splitOnNonLetters(s);
 	}
 
 	/**
@@ -1035,15 +613,11 @@ public class StringUtils {
 	 * zeros, even if it is also the last character in the String, are removed.
 	 */
 	public static String trimLeadingZeros(String s) {
-		return removeLeadingZeros(s);
+		return com.choicemaker.util.StringUtils.trimLeadingZeros(s);
 	}
 
 	public static String toUpperCase(String s) {
-		String retVal = null;
-		if (s != null) {
-			retVal = s.toUpperCase();
-		}
-		return retVal;
+		return com.choicemaker.util.StringUtils.toUpperCase(s);
 	}
 
 }
