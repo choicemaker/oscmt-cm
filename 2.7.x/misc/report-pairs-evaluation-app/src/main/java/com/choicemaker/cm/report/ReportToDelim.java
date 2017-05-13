@@ -8,7 +8,7 @@
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
-package com.choicemaker.cm.core.util;
+package com.choicemaker.cm.report;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -28,7 +28,19 @@ import org.xml.sax.helpers.XMLReaderFactory;
 import com.choicemaker.cm.core.Constants;
 
 /**
- * Description
+ * Quick and dirty application that reads an XML Report file and produces a
+ * summary in comma-separated value (CSV) format. For each query result of the
+ * input report, the summary contains one line with the following metrics:<ul>
+ * <li>Differ threshold, 0.0 - 1.0</li>
+ * <li>Match threshold, <code>&lt;differ threshold&gt:</code> - 1.0</li>
+ * <li>Maximum blocked candidates (cutoff)</li>
+ * <li>Model configuration name</li>
+ * <li>Submission (a.k.a. start) time of the query</li>
+ * <li>Duration of the query</li>
+ * <li>Query type (?)</li>
+ * <li>Number of blocked candidates<li>
+ * </ul>
+ * All in all, not a terribly useful summary.
  * 
  * @author  Martin Buechi
  */
