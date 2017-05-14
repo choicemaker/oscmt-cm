@@ -12,8 +12,8 @@
     <relativePath>../../choicemaker-cm/pom.xml</relativePath>
   </parent>
 
-  <artifactId>report-pairs-evaluation-app</artifactId>
-  <name>ChoiceMaker Report Pairs Evaluation App</name>
+  <artifactId>report-processing</artifactId>
+  <name>ChoiceMaker Report Processing Applications</name>
   <packaging>jar</packaging>
 
   <properties>
