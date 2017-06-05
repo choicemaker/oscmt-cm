@@ -10,9 +10,9 @@ package com.choicemaker.cm.io.blocking.automated.offline.impl;
 import java.util.Iterator;
 
 import com.choicemaker.cm.core.BlockingException;
+import com.choicemaker.cm.core.base.MatchRecord2;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
-import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 
 /**
  * This wrapper object takes a MatchRecord2Sink and makes it look like

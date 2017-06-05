@@ -7,7 +7,7 @@
  *******************************************************************************/
 package com.choicemaker.cm.transitivity.util;
 
-import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE_ROLE;
+import com.choicemaker.cm.core.base.RECORD_SOURCE_ROLE;
 
 /**
  * @author pcheung

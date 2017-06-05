@@ -8,12 +8,12 @@
 package com.choicemaker.cm.io.blocking.automated.offline.impl;
 
 import com.choicemaker.cm.core.BlockingException;
+import com.choicemaker.cm.core.base.MatchRecord2;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2SinkSourceFactory;
-import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 
 /**
  * This is a wrapper on MatchRecord2SinkSourceFactory to make look like a

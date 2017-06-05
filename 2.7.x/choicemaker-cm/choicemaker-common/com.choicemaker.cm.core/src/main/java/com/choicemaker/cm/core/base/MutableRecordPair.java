@@ -15,45 +15,26 @@ import com.choicemaker.cm.core.IRecordPair;
 import com.choicemaker.cm.core.Record;
 
 /**
- * A replacement for the deprecated RecordPair class, which
- * allows direct access to field members.
+ * A replacement for the deprecated RecordPair class, which allows direct access
+ * to field members.
+ * 
  * @author rphall
  */
 public class MutableRecordPair extends RecordData implements IRecordPair {
 
-	/**
-	 * The clues that fired on a pair.
-	 * @deprecated use get/setProbability instead. This is field
-	 * is still used by generated code, but shouldn't used elsewhere.
-	 */
+	/** The clues that fired on a pair */
 	private ActiveClues af;
 
-	/**
-	 * The decision assigned by ChoiceMaker.
-	 * @deprecated use get/setCmDecision instead. This is field
-	 * is still used by generated code, but shouldn't used elsewhere.
-	 */
+	/** The decision assigned by ChoiceMaker */
 	private Decision cmDecision;
 
-	/**
-	 * The other record, usually called the match record.
-	 * @deprecated use get/setMatchRecord() instead. This is field
-	 * is still used by generated code, but shouldn't used elsewhere.
-	 */
+	/** The other record, usually called the match record */
 	private Record m;
 
-	/**
-	 * The probability assigned by ChoiceMaker.
-	 * @deprecated use get/setProbability instead. This is field
-	 * is still used by generated code, but shouldn't used elsewhere.
-	 */
+	/** The probability assigned by ChoiceMaker */
 	private float probability;
 
-	/**
-	 * One of the records, usually called the query record.
-	 * @deprecated use get/setQueryRecord() instead. This is field
-	 * is still used by generated code, but shouldn't used elsewhere.
-	 */
+	/** One of the records, usually called the query record */
 	private Record q;
 
 	public MutableRecordPair() {
@@ -62,8 +43,10 @@ public class MutableRecordPair extends RecordData implements IRecordPair {
 	/**
 	 * Constructor.
 	 *
-	 * @param   q  One of the records.
-	 * @param   m  The other record.
+	 * @param q
+	 *            One of the records.
+	 * @param m
+	 *            The other record.
 	 */
 	public MutableRecordPair(Record q, Record m) {
 		setQueryRecord(q);
@@ -125,4 +108,3 @@ public class MutableRecordPair extends RecordData implements IRecordPair {
 	}
 
 }
-

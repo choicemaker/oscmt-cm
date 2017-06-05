@@ -8,9 +8,9 @@
 package com.choicemaker.cm.io.blocking.automated.offline.impl;
 
 import com.choicemaker.cm.core.BlockingException;
+import com.choicemaker.cm.core.base.MatchRecord2;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
-import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 
 /**
  * This wrapper object takes MatchRecord2Source and makes it look like a

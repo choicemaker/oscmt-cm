@@ -9,7 +9,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.filter;
 
 import java.io.Serializable;
 
-import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
+import com.choicemaker.cm.core.base.MatchRecord2;
 
 /**
  * Checks if a MatchRecord2 pair satisfies a filter constraint

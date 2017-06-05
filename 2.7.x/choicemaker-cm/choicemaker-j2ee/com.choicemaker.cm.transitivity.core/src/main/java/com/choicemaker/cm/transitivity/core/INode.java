@@ -9,7 +9,7 @@ package com.choicemaker.cm.transitivity.core;
 
 import java.util.List;
 
-import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE_ROLE;
+import com.choicemaker.cm.core.base.RECORD_SOURCE_ROLE;
 
 /**
  * This represents a node in the transitivity graph.  A node could represent an

@@ -9,8 +9,8 @@ package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
 import java.util.Comparator;
 
+import com.choicemaker.cm.core.util.MatchUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
-import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecordUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaPairResult;
 
 public class OabaPairResultComparator<T extends Comparable<T>> implements
@@ -61,8 +61,8 @@ public class OabaPairResultComparator<T extends Comparable<T>> implements
 			if (retVal == EQUALS)
 				retVal = o1.getDecision().compareTo(o2.getDecision());
 			if (retVal == EQUALS) {
-				String notes1 = MatchRecordUtils.notesToString(o1.getNotes());
-				String notes2 = MatchRecordUtils.notesToString(o2.getNotes());
+				String notes1 = MatchUtils.notesToString(o1.getNotes());
+				String notes2 = MatchUtils.notesToString(o2.getNotes());
 				if (notes1 == null && notes2 != null) {
 					retVal = LESS_THAN;
 				}

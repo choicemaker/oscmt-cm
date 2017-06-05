@@ -36,7 +36,10 @@ public class GeoHelperTest {
 		// CORRECT ORDER
 		GeoPoint gp2 = new GeoPoint(floatLatitude2, floatLongitude2);
 
+		// Compute expected distance on the Internet,
+		// e.g. http://www.movable-type.co.uk/scripts/latlong.html
 		float expectedDistance = 11.74f;
+
 		float computedDistance = (float) GeoHelper.dist(gp1, gp2);
 		float diffDistance = Math.abs(computedDistance - expectedDistance);
 		final float PRECISION = 0.01f; // 0.01 miles = 53 ft

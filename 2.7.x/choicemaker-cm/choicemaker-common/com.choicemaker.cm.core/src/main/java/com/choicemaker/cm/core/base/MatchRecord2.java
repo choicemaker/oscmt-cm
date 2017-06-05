@@ -5,12 +5,12 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *******************************************************************************/
-package com.choicemaker.cm.io.blocking.automated.offline.data;
+package com.choicemaker.cm.core.base;
 
 import java.io.Serializable;
 
 import com.choicemaker.cm.core.Decision;
-import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE_ROLE;
+import com.choicemaker.cm.core.util.MatchUtils;
 
 /**
  * A MatchRecord has a pair of id's and a match probability on this pair.
@@ -56,7 +56,7 @@ public class MatchRecord2<T extends Comparable<T>> implements
 	public MatchRecord2(T i1, T i2, RECORD_SOURCE_ROLE source, float f,
 			Decision type, String notes) {
 		if (i1 == null || i2 == null || source == null
-				|| !MatchRecordUtils.isValidProbability(f) || type == null) {
+				|| !MatchUtils.isValidProbability(f) || type == null) {
 			throw new IllegalArgumentException("invalid argument");
 		}
 		recordID1 = i1;
@@ -74,7 +74,7 @@ public class MatchRecord2<T extends Comparable<T>> implements
 	}
 
 	public String[] getNotes() {
-		return MatchRecordUtils.notesFromDelimitedString(notes);
+		return MatchUtils.notesFromDelimitedString(notes);
 	}
 
 	public String getNotesAsDelimitedString() {

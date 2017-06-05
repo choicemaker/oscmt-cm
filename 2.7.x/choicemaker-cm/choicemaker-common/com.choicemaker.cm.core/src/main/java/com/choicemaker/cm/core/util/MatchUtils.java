@@ -5,13 +5,12 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *******************************************************************************/
-package com.choicemaker.cm.io.blocking.automated.offline.data;
+package com.choicemaker.cm.core.util;
 
 import static com.choicemaker.cm.core.Decision.HOLD;
 import static com.choicemaker.cm.core.Decision.MATCH;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.Constants.EXPORT_NOTE_SEPARATOR;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE_ROLE.MASTER;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE_ROLE.STAGING;
+import static com.choicemaker.cm.core.base.RECORD_SOURCE_ROLE.MASTER;
+import static com.choicemaker.cm.core.base.RECORD_SOURCE_ROLE.STAGING;
 
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -22,10 +21,10 @@ import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.base.ActiveClues;
 import com.choicemaker.cm.core.base.Evaluator;
-import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
-import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE_ROLE;
+import com.choicemaker.cm.core.base.MatchRecord2;
+import com.choicemaker.cm.core.base.RECORD_SOURCE_ROLE;
 
-public class MatchRecordUtils {
+public class MatchUtils {
 
 	/**
 	 * This method compares two records and returns a MatchRecord2 object.
@@ -50,7 +49,7 @@ public class MatchRecordUtils {
 			final Decision d = e.getDecision(ac, p, low, high);
 			if (d == MATCH || d == HOLD) {
 				final String notes =
-					MatchRecordUtils.getNotesAsDelimitedString(ac, model);
+					MatchUtils.getNotesAsDelimitedString(ac, model);
 				final RECORD_SOURCE_ROLE role = isStage ? STAGING : MASTER;
 				// If both id's are staging, the smaller one should be first
 				@SuppressWarnings("unchecked")
@@ -75,15 +74,19 @@ public class MatchRecordUtils {
 
 	/** Inclusive minimum match probability */
 	public static final double MIN_PROBABILITY = 0.0;
+
 	/** Inclusive maximum match probability */
 	public static final double MAX_PROBABILITY = 1.0;
 
-	private MatchRecordUtils() {
+	/** This delimits the clues names in MatchResult2.getInfo (). */
+	public static final char EXPORT_NOTE_SEPARATOR = '|';
+
+	private MatchUtils() {
 	}
 
 	/**
 	 * This method concatenates the notes into a single string delimited by
-	 * Constants.EXPORT_NOTE_SEPARATOR.
+	 * EXPORT_NOTE_SEPARATOR.
 	 */
 	public static String getNotesAsDelimitedString(ActiveClues ac,
 			ImmutableProbabilityModel model) {
@@ -95,7 +98,7 @@ public class MatchRecordUtils {
 
 	/**
 	 * This method concatenates the notes into a single string delimited by
-	 * Constants.EXPORT_NOTE_SEPARATOR.
+	 * EXPORT_NOTE_SEPARATOR.
 	 * 
 	 * @param notes
 	 */
@@ -105,7 +108,7 @@ public class MatchRecordUtils {
 			StringBuffer sb = new StringBuffer();
 			for (int i = 0; i < notes.length; i++) {
 				sb.append(notes[i]);
-				sb.append(Constants.EXPORT_NOTE_SEPARATOR);
+				sb.append(EXPORT_NOTE_SEPARATOR);
 			}
 			sb.deleteCharAt(sb.length() - 1);
 			retVal = sb.toString();

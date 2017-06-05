@@ -5,7 +5,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *******************************************************************************/
-package com.choicemaker.cm.io.blocking.automated.offline.core;
+package com.choicemaker.cm.core.base;
 
 /**
  * Defines the role of a record source in a linkage process.

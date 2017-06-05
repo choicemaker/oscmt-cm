@@ -15,11 +15,11 @@ import java.util.StringTokenizer;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.Decision;
+import com.choicemaker.cm.core.base.MatchRecord2;
+import com.choicemaker.cm.core.base.RECORD_SOURCE_ROLE;
 import com.choicemaker.cm.io.blocking.automated.offline.core.EXTERNAL_DATA_FORMAT;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
-import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE_ROLE;
-import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 
 /**
  * This object handles reading MatchRecord objects from a file.

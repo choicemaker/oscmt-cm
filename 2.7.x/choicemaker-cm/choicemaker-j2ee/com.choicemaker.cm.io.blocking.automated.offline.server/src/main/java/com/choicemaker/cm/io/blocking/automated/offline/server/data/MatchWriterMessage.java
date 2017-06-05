@@ -10,7 +10,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.server.data;
 import java.io.Serializable;
 import java.util.List;
 
-import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
+import com.choicemaker.cm.core.base.MatchRecord2;
 
 /**
  * @author pcheung

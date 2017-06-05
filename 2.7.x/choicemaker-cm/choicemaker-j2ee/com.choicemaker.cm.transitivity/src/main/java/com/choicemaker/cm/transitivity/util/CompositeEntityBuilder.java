@@ -13,9 +13,9 @@ import java.util.List;
 import java.util.TreeSet;
 
 import com.choicemaker.cm.core.BlockingException;
+import com.choicemaker.cm.core.base.MatchRecord2;
+import com.choicemaker.cm.core.base.RECORD_SOURCE_ROLE;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
-import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE_ROLE;
-import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 import com.choicemaker.cm.transitivity.core.CompositeEntity;
 import com.choicemaker.cm.transitivity.core.Link;
 import com.choicemaker.cm.transitivity.core.TransitivityException;

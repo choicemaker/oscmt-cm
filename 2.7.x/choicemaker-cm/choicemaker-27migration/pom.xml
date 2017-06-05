@@ -12,38 +12,18 @@
     <relativePath>../pom.xml</relativePath>
   </parent>
 
-  <artifactId>choicemaker-common</artifactId>
+  <artifactId>choicemaker-27migration</artifactId>
   <packaging>pom</packaging>
 
-  <name>ChoiceMaker Common</name>
+  <name>ChoiceMaker Migration Modules, 2.5 to 2.7</name>
   <description><![CDATA[
-  ChoiceMaker modules that are used in modeling, application development and
-  system integration.
+  Temporary ChoiceMaker modules that aid migrations from
+  ChoiceMaker 2.5 to 2.7
   ]]>
   </description>
 
   <modules>
-    <module>com.choicemaker.cm.args</module>
-    <module>com.choicemaker.cm.core</module>
-    <module>com.choicemaker.cm.analyzer.base</module>
-    <module>com.choicemaker.cm.io.blocking.automated.base</module>
-    <module>com.choicemaker.cm.io.blocking.automated.inmemory</module>
-    <module>com.choicemaker.cm.io.blocking.base</module>
-    <module>com.choicemaker.cm.io.blocking.exact.base</module>
-    <module>com.choicemaker.cm.io.composite.base</module>
-    <module>com.choicemaker.cm.io.db.base</module>
-<!--
-    <module>com.choicemaker.cm.io.db.jdbc</module>
-    <module>com.choicemaker.cm.io.db.postgres</module>
--->
-    <module>com.choicemaker.cm.io.db.oracle</module>
-    <module>com.choicemaker.cm.io.db.sqlserver</module>
-    <module>com.choicemaker.cm.io.flatfile.base</module>
-    <module>com.choicemaker.cm.io.xml.base</module>
-    <module>com.choicemaker.cm.ml.me.base</module>
-    <module>com.choicemaker.cm.compiler</module>
-    <!-- module>com.choicemaker.cm.persist</module -->
-    <module>com.choicemaker.cm.compiler.tools.jdk180</module>
+    <module>com.choicemaker.cm.core.util25</module>
   </modules>
 
   <build>

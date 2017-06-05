@@ -21,12 +21,12 @@ import com.choicemaker.cm.core.ClueSet;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.RecordSource;
+import com.choicemaker.cm.core.base.MatchRecord2;
+import com.choicemaker.cm.core.util.MatchUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ComparisonArray;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockMatcher2;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
-import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
-import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecordUtils;
 
 /**
  * This object performs the matching of the blocks using the block source and
@@ -594,7 +594,7 @@ public class BlockMatcher2<T extends Comparable<T>> implements
 			boolean[] enabledClues, ImmutableProbabilityModel model, Record q,
 			Record m, boolean isStage, float low, float high) {
 		this.compares++;
-		return MatchRecordUtils.compareRecords(clueSet, enabledClues, model, q,
+		return MatchUtils.compareRecords(clueSet, enabledClues, model, q,
 				m, isStage, low, high);
 	}
 

@@ -8,9 +8,9 @@
 package com.choicemaker.cm.transitivity.util;
 
 import com.choicemaker.cm.core.BlockingException;
+import com.choicemaker.cm.core.base.MatchRecord2;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ISource;
-import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2Factory;
 import com.choicemaker.cm.transitivity.core.CompositeEntity;
 
