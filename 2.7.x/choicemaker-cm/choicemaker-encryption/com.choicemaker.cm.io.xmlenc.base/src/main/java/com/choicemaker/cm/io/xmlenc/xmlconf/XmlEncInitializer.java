@@ -21,11 +21,11 @@ import org.jdom2.output.XMLOutputter;
 import com.amazonaws.util.StringInputStream;
 import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.configure.ConfigurationUtils;
-import com.choicemaker.cm.core.util.StringUtils;
 import com.choicemaker.cm.core.xmlconf.XmlModuleInitializer;
 import com.choicemaker.cm.io.xmlenc.mgmt.InMemoryXmlEncManager;
 import com.choicemaker.cm.io.xmlenc.mgmt.XmlEncryptionManager;
 import com.choicemaker.xmlencryption.CredentialSet;
+import com.choicemaker.util.StringUtils;
 
 /**
  * XML configuration for an in-memory XML EncryptionManager.
