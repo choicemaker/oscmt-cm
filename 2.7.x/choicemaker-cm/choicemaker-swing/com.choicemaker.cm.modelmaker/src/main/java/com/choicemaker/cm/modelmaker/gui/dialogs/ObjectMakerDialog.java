@@ -238,9 +238,9 @@ public class ObjectMakerDialog extends JDialog implements Enable {
 	}
 
 	private void getPlugins() {
-		ArrayList makers = new ArrayList();
-		ArrayList descs = new ArrayList();
-		ArrayList defs = new ArrayList();
+		ArrayList<ObjectMaker> makers = new ArrayList<>();
+		ArrayList<String> descs = new ArrayList<>();
+		ArrayList<Boolean> defs = new ArrayList<>();
 
 		String extPtName = ChoiceMakerExtensionPoint.CM_CORE_OBJECTGENERATOR;
 		CMExtensionPoint pt = CMPlatformUtils.getExtensionPoint(extPtName);
@@ -251,20 +251,39 @@ public class ObjectMakerDialog extends JDialog implements Enable {
 			for (int j = 0; j < els.length; j++) {
 				CMConfigurationElement element = els[j];
 				try {
-					makers.add(element.createExecutableExtension("class"));
+					Object o = element.createExecutableExtension("class");
+					if (o == null) {
+						String msg = "Null instance created for extension '"
+								+ extension.getUniqueIdentifier() + "' ('"
+								+ extPtName + "')";
+						logger.severe(msg);
+						msg = "PLUGIN ERROR: " + msg;
+						this.modelMaker.getMessagePanel().postMessage(msg);
+						continue;
+					} else if (!(o instanceof ObjectMaker)) {
+						String msg = "Invalid class specified for extension '"
+								+ extension.getUniqueIdentifier() + "' ('"
+								+ extPtName + "'): " + o.getClass().getName();
+						logger.severe(msg);
+						msg = "PLUGIN ERROR: " + msg;
+						this.modelMaker.getMessagePanel().postMessage(msg);
+						continue;
+					}
+					assert o != null && (o instanceof ObjectMaker);
+					ObjectMaker maker = (ObjectMaker) o;
+					makers.add(maker);
 					descs.add(element.getAttribute("description"));
-					defs.add(new Boolean("true".equals(element
-							.getAttribute("default"))));
+					defs.add(new Boolean(
+							"true".equals(element.getAttribute("default"))));
 				} catch (Exception ex) {
-					ex.printStackTrace();
+					logger.severe(ex.toString());
 				}
 			}
 		}
 
-		objectMakers =
-			(ObjectMaker[]) makers.toArray(new ObjectMaker[makers.size()]);
-		descriptions = (String[]) descs.toArray(new String[descs.size()]);
-		defaults = (Boolean[]) defs.toArray(new Boolean[defs.size()]);
+		objectMakers = makers.toArray(new ObjectMaker[makers.size()]);
+		descriptions = descs.toArray(new String[descs.size()]);
+		defaults = defs.toArray(new Boolean[defs.size()]);
 	}
 
 	private void createContent() {
