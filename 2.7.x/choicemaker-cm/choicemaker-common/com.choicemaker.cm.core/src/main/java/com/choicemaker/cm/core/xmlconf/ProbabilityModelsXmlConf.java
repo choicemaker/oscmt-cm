@@ -229,6 +229,7 @@ public class ProbabilityModelsXmlConf {
 				URL resourceUrl =
 					((URLClassLoader) classLoader).findResource(resourcePath);
 				if (resourceUrl == null) {
+					final String accessorName0 = accessorName;
 					CompilationArguments arguments = new CompilationArguments();
 					// String[] args = { clueFileName };
 					String[] args =
@@ -240,6 +241,12 @@ public class ProbabilityModelsXmlConf {
 					if (accessorName == null) {
 						throw new CompilerException("Compilation error: "
 								+ statusOutput.toString());
+					}
+					if (!accessorName.equals(accessorName0)) {
+						String msg = "Accessor name has changed from '"
+								+ accessorName0 + "' to '" + accessorName
+								+ "'. Save the model to update the accessor name.";
+						logger.warning(msg);
 					}
 				}
 			}
@@ -261,7 +268,6 @@ public class ProbabilityModelsXmlConf {
 			}
 			boolean[] cluesToEvaluate =
 				ArrayHelper.getTrueArray(clueDesc.length);
-			@SuppressWarnings("unchecked")
 			List<Element> cl = m.getChildren("clue");
 			int[] oldClueNums = new int[cl.size()];
 			int i = 0;
@@ -342,7 +348,9 @@ public class ProbabilityModelsXmlConf {
 			XmlConfigurator.getInstance().getCore()
 					.getChild("productionProbabilityModels");
 		if (x != null) {
+			@SuppressWarnings("rawtypes")
 			List l = x.getChildren("model");
+			@SuppressWarnings("rawtypes")
 			Iterator i = l.iterator();
 			while (i.hasNext()) {
 				Element e = (Element) i.next();
@@ -383,10 +391,12 @@ public class ProbabilityModelsXmlConf {
 					}
 				}
 
+				@SuppressWarnings("rawtypes")
 				List props = e.getChildren("property");
 				if (props != null && props.size() > 0) {
 					logger.warning("Model properties are deprecated.");
-					for (Iterator iProps = props.iterator(); iProps.hasNext();) {
+					for (@SuppressWarnings("rawtypes")
+					Iterator iProps = props.iterator(); iProps.hasNext();) {
 						Element p = (Element) iProps.next();
 						String key = p.getAttributeValue("name").intern();
 						String value = p.getAttributeValue("value").intern();
