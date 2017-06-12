@@ -107,7 +107,7 @@ public class ObjectMakerDialog extends JDialog implements Enable {
 	}
 
 	private void generateObjects() {
-		final List errorMsgs = new ArrayList();
+		final List<String> errorMsgs = new ArrayList<>();
 		final File outDir = getOutDir();
 		if (!outDir.isDirectory()) {
 			outDir.mkdirs();
@@ -168,7 +168,8 @@ public class ObjectMakerDialog extends JDialog implements Enable {
 
 	private static final String INDENT = "   ";
 
-	private String createMessage(String status, String results, List errorMsgs) {
+	private String createMessage(String status, String results,
+			List<String> errorMsgs) {
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);
 		pw.println(status);
@@ -183,17 +184,20 @@ public class ObjectMakerDialog extends JDialog implements Enable {
 		return retVal;
 	}
 
-	private void logStatus(String status, String results, List errorMsgs, Level level) {
+	private void logStatus(String status, String results,
+			List<String> errorMsgs, Level level) {
 		final String msg = createMessage(status, results,errorMsgs);
 		logger.log(level, msg);
 	}
 
-	private void reportStatus(String status, String results, List errorMsgs) {
+	private void reportStatus(String status, String results,
+			List<String> errorMsgs) {
 		final String msg = createMessage(status, results,errorMsgs);
 		this.modelMaker.getMessagePanel().postMessage(msg);
 	}
 
-	private void displayStatus(String status, String results, List errorMsgs) {
+	private void displayStatus(String status, String results,
+			List<String> errorMsgs) {
 		StringBuilder sb = new StringBuilder("<html>");
 		sb.append("<body style='width: 200px; padding: 5px;'>");
 		sb.append(status);
