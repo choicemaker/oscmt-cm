@@ -52,7 +52,7 @@ public class Tokenizer {
 	public String tag;
 	public int pos;
 	private char[] buf = new char[8192];
-	private boolean wn;
+	private boolean wasNull;
 
 	/** Constructs an fixed-width tokenizer */
 	public Tokenizer(BufferedReader reader) {
@@ -72,7 +72,10 @@ public class Tokenizer {
 
 	/**
 	 * Fully parameterized constructor. Note that specifying fixed-width and a
-	 * non-zero separator will result in the separator being ignored.
+	 * non-zero separator will result in the separator being ignored. Also, the
+	 * tagWidth is used only with fixed-width tokenization; when a token
+	 * separator is specified, the tag is the first token in the line,
+	 * regardless of the token length.
 	 * 
 	 * @param reader
 	 *            non-null BufferedReader
@@ -91,7 +94,7 @@ public class Tokenizer {
 
 		Precondition.assertNonNullArgument("null reader", reader);
 		Precondition.assertBoolean("invalid tag width: " + tagWidth,
-				tagWidth > 0);
+				tagWidth >= 0);
 
 		if (separator != (char) 0 && fixedWidth) {
 			logWarning("CONSTRUCTOR",
@@ -132,7 +135,7 @@ public class Tokenizer {
 			lineLength = line.length();
 			logFinest(METHOD, "lineLength = " + lineLength);
 			if (tagged) {
-				String s = nextTrimedString(tagWidth);
+				String s = nextTrimmedString(tagWidth);
 				if (s != null) {
 					tag = s.intern();
 					logFinest(METHOD, "tag = '" + tag + "'");
@@ -145,6 +148,7 @@ public class Tokenizer {
 			assert retVal == true;
 		} else {
 			logFinest(METHOD, "null line");
+			wasNull = true;
 			tag = null;
 			retVal = false;
 		}
@@ -167,7 +171,7 @@ public class Tokenizer {
 	}
 
 	public boolean wasNull() {
-		return wn;
+		return wasNull;
 	}
 
 	/**
@@ -210,14 +214,20 @@ public class Tokenizer {
 		return s != null ? s.trim().intern() : null;
 	}
 
+	@Deprecated
 	public String nextTrimedString(int width) {
+		String s = nextString(width);
+		return s != null ? s.trim() : null;
+	}
+
+	public String nextTrimmedString(int width) {
 		String s = nextString(width);
 		return s != null ? s.trim() : null;
 	}
 
 	@Deprecated
 	public String getTrimedString(int start, int width) {
-		return getTrimmedString(start,width);
+		return getTrimmedString(start, width);
 	}
 
 	public String getTrimmedString(int start, int width) {
@@ -230,16 +240,16 @@ public class Tokenizer {
 			return null;
 		if (fixedWidth) {
 			if (pos >= lineLength) {
-				wn = true;
+				wasNull = true;
 				return null;
 			} else {
 				pos += width;
-				wn = false;
+				wasNull = false;
 				return line.substring(pos - width, pos);
 			}
 		} else {
 			if (pos >= lineLength) {
-				wn = true;
+				wasNull = true;
 				return null;
 			} else {
 				int bpos = 0;
@@ -250,7 +260,7 @@ public class Tokenizer {
 					++pos;
 				}
 				++pos;
-				wn = false;
+				wasNull = false;
 				return new String(buf, 0, bpos);
 			}
 		}
@@ -259,14 +269,14 @@ public class Tokenizer {
 	public String getString(int start, int width) {
 		if (fixedWidth) {
 			if (start < lineLength) {
-				wn = false;
+				wasNull = false;
 				if (start + width <= lineLength) {
 					return line.substring(start, start + width);
 				} else {
 					return line.substring(start);
 				}
 			} else {
-				wn = true;
+				wasNull = true;
 				return null;
 			}
 		} else {
@@ -302,7 +312,7 @@ public class Tokenizer {
 	}
 
 	public int nextInt(int width) {
-		String s = nextTrimedString(width);
+		String s = nextTrimmedString(width);
 		return s != null && s.length() > 0 ? Integer.parseInt(s) : 0;
 	}
 
@@ -312,7 +322,7 @@ public class Tokenizer {
 	}
 
 	public long nextLong(int width) {
-		String s = nextTrimedString(width);
+		String s = nextTrimmedString(width);
 		return s != null && s.length() > 0 ? Long.parseLong(s) : 0L;
 	}
 
@@ -322,7 +332,7 @@ public class Tokenizer {
 	}
 
 	public float nextFloat(int width) {
-		String s = nextTrimedString(width);
+		String s = nextTrimmedString(width);
 		return s != null && s.length() > 0 ? Float.parseFloat(s) : 0L;
 	}
 
@@ -332,7 +342,7 @@ public class Tokenizer {
 	}
 
 	public Date nextDate(int width) {
-		String s = nextTrimedString(width);
+		String s = nextTrimmedString(width);
 		return s != null && s.length() > 0 ? DateHelper.parse(s) : null;
 	}
 
