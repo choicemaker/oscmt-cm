@@ -204,7 +204,7 @@ public class FlatFileMarkedRecordPairSource implements MarkedRecordPairSource {
 	}
 
 	private void getNextMain() throws IOException {
-		if (tokenizer.lineRead()) {
+		if (tokenizer.isLineAvailable()) {
 			Decision decision = Decision.valueOf(tokenizer.nextTrimedString(descWidths[3]));
 			Date date = tokenizer.nextDate(descWidths[4]);
 			String user = tokenizer.nextTrimedString(descWidths[5]);

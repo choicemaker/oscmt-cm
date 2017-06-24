@@ -183,7 +183,7 @@ public class FlatFileRecordSource implements RecordSource {
 			tokenizer = multiTokenizers[1];
 			
 			// AJW
-			multiFileLineRead = tokenizer.lineRead();
+			multiFileLineRead = tokenizer.isLineAvailable();
 			
 			recordReader = ffa.getMultiFileFlatFileReader(multiTokenizers, tagged);
 		} else {
@@ -218,11 +218,11 @@ public class FlatFileRecordSource implements RecordSource {
 
 		if (multiFile) {
 			if (multiFileLineRead) {
-				multiFileLineRead = tokenizer.lineRead();
+				multiFileLineRead = tokenizer.isLineAvailable();
 				record = recordReader.getRecord();
 			}
 		} else {
-			if (tokenizer.lineRead()) {
+			if (tokenizer.isLineAvailable()) {
 				record = recordReader.getRecord();
 				if (singleLine) {
 					tokenizer.readLine();
