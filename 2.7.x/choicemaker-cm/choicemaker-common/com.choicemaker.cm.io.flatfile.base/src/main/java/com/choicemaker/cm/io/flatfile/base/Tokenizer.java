@@ -130,11 +130,19 @@ public class Tokenizer {
 		logFinest(METHOD, "line = " + (line == null ? null : "'" + line + "'"));
 		pos = 0;
 		boolean retVal;
-		if (line != null) {
-			retVal = true;
+		if (line == null) {
+			logFinest(METHOD, "null line");
+			wasNull = true;
+			retVal = false;
+			tag = null;
+		} else {
 			lineLength = line.length();
-			logFinest(METHOD, "lineLength = " + lineLength);
+			logFinest(METHOD, "non-null line, length = " + lineLength);
+			wasNull = false;
+			retVal = true;
+			assert tagged || tag == null ;
 			if (tagged) {
+				// Line must have a tag
 				String s = nextTrimmedString(tagWidth);
 				if (s != null) {
 					tag = s.intern();
@@ -146,14 +154,9 @@ public class Tokenizer {
 				}
 			}
 			assert retVal == true;
-		} else {
-			logFinest(METHOD, "null line");
-			wasNull = true;
-			tag = null;
-			retVal = false;
 		}
-		assert retVal && line != null;
-		assert tagged && tag != null;
+		assert retVal == (line != null) ;
+		assert tagged == (tag != null) ;
 		return retVal;
 	}
 
@@ -175,7 +178,7 @@ public class Tokenizer {
 	}
 
 	/**
-	 * Skip characters in the current line until the {@code n}th separator have
+	 * Skip characters in the current line until the {@code n}th separator has
 	 * been found or the line is exhausted. This method does nothing for
 	 * fixed-width input, or if the current line is null.
 	 * 
