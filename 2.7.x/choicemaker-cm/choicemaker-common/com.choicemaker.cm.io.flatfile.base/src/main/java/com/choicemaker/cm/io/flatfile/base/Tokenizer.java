@@ -156,7 +156,7 @@ public class Tokenizer {
 			assert retVal == true;
 		}
 		assert retVal == (line != null) ;
-		assert tagged == (tag != null) ;
+		assert (line ==null) || (tagged == (tag != null));
 		return retVal;
 	}
 
