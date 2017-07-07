@@ -29,18 +29,29 @@ public class FlatFileOutput {
 
 	public static void write(
 		Writer w,
-		String s,
+		String str,
 		boolean fixedLength,
 		char sep,
 		boolean filter,
 		boolean first,
 		int len)
 		throws IOException {
-		if (s == null) {
-			s = "";
+
+		char [] s;
+		if (str == null) {
+			s = new char[0];
+		} else {
+			s = str.toCharArray();
+
+			//remove line characters
+			int size = s.length;
+			for (int i=0; i<size; i++) {
+				if (s[i] == '\n' || s[i] == '\r') s[i] = ' ';
+			}
 		}
+
 		if (fixedLength) {
-			int l = s.length();
+			int l = s.length;
 			if (l == len) {
 				w.write(s);
 			} else if (l < len) {
@@ -287,27 +298,42 @@ public class FlatFileOutput {
 	}
 
 	public static String remove(String s, char sep) {
-		int len = s.length();
-		int pos = 0;
-		while (pos < len && s.charAt(pos) != sep) {
-			++pos;
+		String retVal;
+		if (s == null) {
+			retVal = null;
+		} else {
+			char[] c = s.toCharArray();
+			char[] res = remove(c,sep);
+			retVal = new String(res);
 		}
-		if (pos == len) {
+		return retVal;
+	}
+
+
+	/** This method removes all instances of character sep from char array s.
+	 * 
+	 * @param s - array of character to filter
+	 * @param sep - the character to remove.
+	 * @return a new char array that could be shorter
+	 */
+	public static char [] remove(char [] s, char sep) {
+		final int len = s.length;
+		int count = 0;
+		for (int i=0 ; i < len; i++) {
+			if (s[i] != sep) {
+				count ++;
+			}
+		}
+		if (count == len) {
 			return s;
 		} else {
-			char[] res = new char[len];
-			for (int i = 0; i < pos; ++i) {
-				res[i] = s.charAt(i);
+			char[] res = new char[count];
+			count = 0;
+			for (int i = 0; i < len; i++) {
+				if (s[i] != sep) res[count++] = s[i];
 			}
-			int out = pos;
-			while (pos < len) {
-				char ch = s.charAt(pos);
-				if (ch != sep) {
-					res[out++] = ch;
-				}
-				++pos;
-			}
-			return new String(res, 0, out);
+			return res;
 		}
 	}
+
 }
