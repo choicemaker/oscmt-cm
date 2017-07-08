@@ -105,7 +105,7 @@ public class DbReaderConfigurationsGenerator implements GeneratorPlugin {
 			t = "Short";
 		} else if (t == "char") {
 			t = "String";
-			c1 = "com.choicemaker.cm.core.util.StringUtils.getChar(";
+			c1 = "com.choicemaker.util.StringUtils.getChar(";
 			c2 = ")";
 		} else if (t == "int") {
 			t = "Int";
