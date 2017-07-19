@@ -17,7 +17,6 @@ import org.apache.log4j.Logger;
 import com.choicemaker.cm.core.Accessor;
 import com.choicemaker.cm.core.Constants;
 import com.choicemaker.cm.core.Record;
-import com.choicemaker.cm.core.util.StringUtils;
 import com.choicemaker.cm.io.blocking.automated.base.AutomatedBlocker;
 import com.choicemaker.cm.io.blocking.automated.base.BlockingField;
 import com.choicemaker.cm.io.blocking.automated.base.BlockingSet;
@@ -26,6 +25,8 @@ import com.choicemaker.cm.io.blocking.automated.base.DatabaseAccessor;
 import com.choicemaker.cm.io.db.base.DbAccessor;
 import com.choicemaker.cm.io.db.base.DbReaderSequential;
 import com.choicemaker.cm.io.db.jdbc.dbom.JdbcDbObjectMaker;
+
+import com.choicemaker.util.StringUtils;
 
 /**
  * This is the accessor for Jdbc.
