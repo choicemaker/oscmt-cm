@@ -12,6 +12,8 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.Vector;
 
+import com.choicemaker.util.EnumUtils;
+
 /**
  * A map that defines co-ordinates for geo-entities of a certain type. Each map
  * can be either TreeMap or HashMap. In addition to map itselt the object stores
@@ -25,14 +27,30 @@ import java.util.Vector;
  * 
  */
 public class GeoMap {
+	
+	private static enum MAP_TYPE {
+		tree, hash;
+		Map<Integer,GeoPoint> newInstance() {
+			Map<Integer,GeoPoint> retVal;
+			switch(this) {
+			case tree:
+				retVal = new TreeMap<>();
+				break;
+			case hash:
+			default:
+				retVal = new HashMap<>();
+			}
+			return retVal;
+		}
+	}
 
 	/**
 	 * Supply information about name and length of a key filed.
 	 * 
 	 */
 	public class KeyField {
-		public String name;
-		public int length;
+		public final String name;
+		public final int length;
 
 		public KeyField(String name, int length) {
 			this.name = name;
@@ -40,20 +58,14 @@ public class GeoMap {
 		}
 	}
 
-	Map<Integer, GeoPoint> map;
-	String type;
-	String keyType;
-	int keyLen = -1;
-	Vector<GeoMap.KeyField> fields;
+	private final Map<Integer, GeoPoint> map;
+	public final String keyType;
+	private final int keyLen;
+	private Vector<GeoMap.KeyField> fields;
 
 	public GeoMap(String mapType, String keyType, int keyLen) {
-		if (mapType.equals("tree")) {
-			this.map = new TreeMap<>();
-			this.type = "tree";
-		} else {
-			this.map = new HashMap<>();
-			this.type = "hash";
-		}
+		MAP_TYPE _mapType = EnumUtils.valueOfIgnoreCase(MAP_TYPE.class, mapType);
+		this.map = _mapType.newInstance();
 		this.keyType = keyType;
 		this.keyLen = keyLen;
 	}
@@ -65,10 +77,7 @@ public class GeoMap {
 	public Vector<GeoMap.KeyField> getFields() {
 		return this.fields;
 	}
-/*
-			return (GeoPoint) map.getMap().get(
-					new Integer(geoEntityDescription));
- */
+
 	public Map<Integer, GeoPoint> getMap() {
 		return map;
 	}

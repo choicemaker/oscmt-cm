@@ -5,7 +5,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *******************************************************************************/
-package com.choicemaker.cm.matching.geo.xmlconf;
+package com.choicemaker.cm.matching.geo.eclipse;
 
 import java.io.BufferedReader;
 import java.io.File;
