@@ -22,8 +22,19 @@ import com.choicemaker.util.StringUtils;
 public class DateUtils2 {
 
 	private static Logger logger = Logger.getLogger(DateUtils2.class.getName());
+	
+	public static final long MILLISECS_PER_SEC = 1000 ;
 
-	// private static Calendar calendar = Calendar.getInstance();
+	public static final long MILLISECS_PER_MIN = MILLISECS_PER_SEC * 60 ;
+
+	public static final long MILLISECS_PER_HOUR = MILLISECS_PER_MIN * 60 ;
+
+	public static final long MILLISECS_PER_DAY = MILLISECS_PER_HOUR * 24 ;
+
+	/** Assumes 365.25 days per year */
+	public static final long MILLISECS_PER_YEAR = (long) (MILLISECS_PER_DAY * 365.25) ;
+
+	public static final long MILLISECS_PER_DECADE = MILLISECS_PER_YEAR * 10;
 
 	/**
 	 * Removes the separators from the date leaving just the
@@ -144,7 +155,23 @@ public class DateUtils2 {
 		long t1 = d1.getTime();
 		long t2 = d2.getTime();
 		long diff = java.lang.Math.abs(t1 - t2);
-		float daysDiff = diff / 86400000f; //diff in days
+		float daysDiff = diff / MILLISECS_PER_DAY;
+		return daysDiff;
+	}
+
+	/**
+	 * Returns the difference between d1 and d2 in 365.25-day years.
+	 * The result is unlikely to be an integer.
+	 *
+	 * @param d1 the first date
+	 * @param d2 the second date
+	 * @return the difference between d1 and d2 in days
+	 */
+	public static float yearsApart(Date d1, Date d2) {
+		long t1 = d1.getTime();
+		long t2 = d2.getTime();
+		long diff = java.lang.Math.abs(t1 - t2);
+		float daysDiff = diff / MILLISECS_PER_YEAR ;
 		return daysDiff;
 	}
 
@@ -455,8 +482,6 @@ public class DateUtils2 {
 		return isOverlappingWithinMilliseconds(startDate1,endDate1,startDate2,endDate2,0);
 	}
 
-	public static final long MILLIS_PER_DAY = 24 * 60 * 60 * 1000;
-
 	public static boolean isOverlappingWithinDays(
 		Date startDate1,
 		Date endDate1,
@@ -464,7 +489,7 @@ public class DateUtils2 {
 		Date endDate2,
 		int days
 		) {
-		long millis = days * MILLIS_PER_DAY;
+		long millis = days * MILLISECS_PER_DAY;
 		return isOverlappingWithinMilliseconds(startDate1,endDate1,startDate2,endDate2,millis);
 	}
 
