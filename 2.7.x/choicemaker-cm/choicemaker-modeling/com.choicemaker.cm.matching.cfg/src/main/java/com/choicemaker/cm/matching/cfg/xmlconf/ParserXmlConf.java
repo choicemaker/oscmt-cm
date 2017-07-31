@@ -292,8 +292,21 @@ public class ParserXmlConf {
 		try {
 			return constructor.newInstance(args);
 		} catch (IllegalArgumentException | InstantiationException
-				| IllegalAccessException | InvocationTargetException ex) {
+				| IllegalAccessException ex) {
 			throw new XmlConfException(ex.toString(), ex);
+		} catch (InvocationTargetException ite) {
+			String msg;
+			if (ite.getMessage() != null && !ite.getMessage().isEmpty()) {
+				msg = ite.getMessage();
+			} else {
+				msg = ite.getClass().getSimpleName();
+			}
+			Throwable t = ite.getTargetException();
+			if (t != null && t.getMessage() != null
+					&& !t.getMessage().isEmpty()) {
+				msg += ": " + t.getMessage();
+			}
+			throw new XmlConfException(msg, ite);
 		}
 	}
 
@@ -498,11 +511,21 @@ public class ParserXmlConf {
 			return DateHelper.parse(value);
 		} else if (type == Set.class || type == Collection.class) {
 			Set<String> s = new HashSet<>();
-			s.addAll(Sets.getCollection(value));
-			if (s.isEmpty()) {
-				List<String> names = new ArrayList<>(Sets.getCollectionNames());
-				System.out.println(names);
+			Collection<String> c = Sets.getCollection(value);
+			if (c == null) {
+				String msg = "Missing collection: '" + value + "'";
+				logger.warning(msg);
+			} else if (c.isEmpty()) {
+				String msg = "Empty collection: '" + value + "'";
+				logger.warning(msg);
+			} else {
+				s.addAll(c);
+				assert !s.isEmpty() ;
 			}
+//			if (s.isEmpty()) {
+//				List<String> names = new ArrayList<>(Sets.getCollectionNames());
+//				System.out.println(names);
+//			}
 			return s;
 		} else if (type == Map.class) {
 			return Maps.getMap(value);
