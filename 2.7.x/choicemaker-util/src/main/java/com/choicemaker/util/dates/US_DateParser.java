@@ -19,6 +19,12 @@ public final class US_DateParser extends AbstractDateParser {
 
 	private static AtomicReference<Pattern> US_PATTERN = new AtomicReference<>(
 			null);
+	
+	private static final US_DateParser defaultParser = new US_DateParser();
+	
+	public static final US_DateParser getDefaultParser() {
+		return defaultParser;
+	}
 
 	public US_DateParser() {
 		super(REGEX_US, US_GROUP_YEAR, US_GROUP_MONTH, US_GROUP_DAY);
