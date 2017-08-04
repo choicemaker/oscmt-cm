@@ -115,7 +115,7 @@ public class DateUtils extends DateHelper {
 				endDate2);
 	}
 
-	public static final long MILLIS_PER_DAY = DateUtils2.MILLIS_PER_DAY;
+	public static final long MILLIS_PER_DAY = DateUtils2.MILLISECS_PER_DAY;
 
 	public static boolean isOverlappingWithinDays(Date startDate1,
 			Date endDate1, Date startDate2, Date endDate2, int days) {
