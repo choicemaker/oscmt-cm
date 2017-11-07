@@ -10,6 +10,7 @@ package com.choicemaker.cm.io.blocking.automated.inmemory;
 import java.io.IOException;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
@@ -27,6 +28,8 @@ import com.choicemaker.cm.io.blocking.automated.base.Blocker2;
  * @author ajwinkel
  */
 public class InMemoryAutomatedBlocker implements InMemoryBlocker {
+	
+	private final static Logger logger = Logger.getLogger(InMemoryBlocker.class.getName());
 
 	// passed by constructor.
 	private final ImmutableProbabilityModel model;
@@ -124,19 +127,34 @@ public class InMemoryAutomatedBlocker implements InMemoryBlocker {
 			try {
 				blocker.open();
 				threwException = false;
-			} catch (UnderspecifiedQueryException ex) {
+			} catch (UnderspecifiedQueryException | RuntimeException ex) {
+				Comparable<?> id = null;
+				if (this.blocker != null
+						&& this.blocker.getQueryRecord() != null) {
+					id = this.blocker.getQueryRecord().getId();
+				}
+				String msg = "Blocker failed to open for record id '"
+						+ id + "': " + ex.toString();
+				logger.severe(msg);
 			}
 
 		}
 
 		public boolean hasNext() throws IOException {
+			if (threwException) {
+				logger.severe("Blocker has no additional candidates because of an earlier exception");
+			}
 			return !threwException && blocker.hasNext();
 		}
 
 		public Record getNext() throws IOException {
+			if (threwException) {
+				logger.severe("Blocker can not return next candidate because of an earlier exception");
+			}
 			if (!threwException) {
 				return blocker.getNext();
 			} else {
+				logger.severe("Blocker fails");
 				throw new NoSuchElementException();
 			}
 		}
