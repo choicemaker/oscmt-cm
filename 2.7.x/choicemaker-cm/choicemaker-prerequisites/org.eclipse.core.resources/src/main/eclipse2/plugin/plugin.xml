@@ -14,8 +14,10 @@
     </library>
   </runtime>
   <requires>
+<!-- REMOVEME
      <import plugin="org.apache.ant"/>
      <import plugin="org.eclipse.ant.core"/>
+-->
   </requires>
 
 
