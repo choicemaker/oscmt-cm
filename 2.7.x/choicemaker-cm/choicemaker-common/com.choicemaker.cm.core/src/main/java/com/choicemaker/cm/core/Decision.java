@@ -11,7 +11,7 @@ import java.io.ObjectStreamException;
 import java.io.Serializable;
 
 /**
- * Typesafe enum for decisions on record pairs. Decisions are also known as
+ * Type-safe enum for decisions on record pairs. Decisions are also known as
  * futures.
  *
  * @author Martin Buechi
@@ -44,7 +44,7 @@ public class Decision implements Serializable, Comparable {
 		assert name != null && name.equals(name.trim()) && !name.isEmpty();
 		assert singleChar != null && singleChar.equals(singleChar.trim())
 				&& singleChar.length() == 1;
-		this.name = name;
+		this.name = name.intern();
 		this.singleCharAsString = singleChar;
 		this.singleChar = this.singleCharAsString.charAt(0);
 		this.no = no;
@@ -76,29 +76,35 @@ public class Decision implements Serializable, Comparable {
 	}
 
 	/**
-	 * Returns the corresponding <code>Decision</code>.
+	 * Returns the corresponding <code>Decision</code>
 	 * 
-	 * @return The corresponding <code>Decision</code>.
+	 * @param name
+	 *            must be <code>match</code>, <code>hold</code> or
+	 *            <code>differ</code> (case insensitive)
+	 * @return a non-null <code>Decision</code>
 	 * @throws IllegalArgumentException
 	 *             if <code>name</code> is not a valid decision.
 	 */
 	public static Decision valueOf(String name) {
 		name = name.toLowerCase().intern();
-		if ("differ" == name) {
+		if (DIFFER.name == name) {
 			return DIFFER;
-		} else if ("hold" == name) {
+		} else if (HOLD.name == name) {
 			return HOLD;
-		} else if ("match" == name) {
+		} else if (MATCH.name == name) {
 			return MATCH;
 		} else {
-			throw new IllegalArgumentException(name
-					+ " is not a valid Decision.");
+			throw new IllegalArgumentException(
+					name + " is not a valid Decision.");
 		}
 	}
 
 	/**
 	 * Returns the corresponding <code>Decision</code>.
 	 * 
+	 * @param name
+	 *            must be <code>m</code>, <code>h</code> or <code>d</code> (case
+	 *            insensitive)
 	 * @return The corresponding <code>Decision</code>.
 	 * @throws IllegalArgumentException
 	 *             if <code>name</code> is not a valid decision.
@@ -112,14 +118,17 @@ public class Decision implements Serializable, Comparable {
 		} else if (name == 'm') {
 			return MATCH;
 		} else {
-			throw new IllegalArgumentException(name
-					+ " is not a valid Decision.");
+			throw new IllegalArgumentException(
+					name + " is not a valid Decision.");
 		}
 	}
 
 	/**
 	 * Returns the corresponding <code>Decision</code>.
 	 * 
+	 * @param <code>no</code>
+	 *            must be <code>0 (differ)</code>, <code>1 (match)</code> or
+	 *            <code>2 (hold)</code> (case insensitive)
 	 * @return The corresponding <code>Decision</code>.
 	 * @throws IndexOutOfBoundsException
 	 *             if <code>no</code> is out of the range
