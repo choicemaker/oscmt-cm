@@ -5,7 +5,7 @@ import com.choicemaker.util.StringUtils;
 /**
  * Generated holder class for the node type person. See package documentation for details.
  */
-public class PersonRecordHolder implements com.choicemaker.demo.simple_person_matching.gendata.gend.Person.IPersonRecordHolder, java.io.Serializable {
+public class PersonRecordHolder implements com.choicemaker.demo.simple_person_matching.gendata.gend.Person.IPersonRecordHolder, java.io.Serializable, com.choicemaker.cm.core.Identifiable<Integer> {
 /** Default constructor. Initializes all all arrays for nested record to zero length arrays and all other values to their defaults (0/null). */public PersonRecordHolder() {
 }
 public void accept(com.choicemaker.cm.urm.base.IRecordVisitor ext){	ext.visit((com.choicemaker.cm.urm.base.IRecordHolder)this); }
@@ -312,7 +312,7 @@ this.zip = __v;
  * Returns the ID of the record holder. 
  * @return  Returns the ID of the node.
 */
-public java.lang.Comparable getId() {
+public Integer getId() {
 return new Integer(recordId);
 }
 /** Copy constructor. Performs a deep copy of the nodes, but not the values.

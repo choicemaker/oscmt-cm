@@ -611,53 +611,75 @@ public class GeneratorImpl implements IGenerator {
 				+ "*/"
 				+ Constants.LINE_SEPARATOR);
 	}
-	private void createInterfaceClasses(Element r, Element outer) throws GenException {
+	private void createInterfaceClasses(final Element r, final Element outer) throws GenException {
 		try {
-			String thisRecordName = r.getAttributeValue(CoreTags.NAME);
-			String className = r.getAttributeValue(CoreTags.HOLDER_CLASS_NAME);
-			String urmClassName = r.getAttributeValue(CoreTags.URM_HOLDER_CLASS_NAME);
-			String baseInterfaceName = r.getAttributeValue(CoreTags.BASE_INTERFACE_NAME);
-			String urmBaseInterfaceName = r.getAttributeValue(CoreTags.URM_BASE_INTERFACE_NAME);
-			String interfaceName = r.getAttributeValue(CoreTags.INTERFACE_NAME);
-			String fileName = getExternalSourceCodePackageRoot() + File.separator + className + ".java";
-			String urmFileName = getExternalSourceCodePackageRoot() + File.separator + urmClassName + ".java";
-			String interfaceFileName = getExternalSourceCodePackageRoot() + File.separator + interfaceName + ".java";
-			String baseInterfaceFileName =
+			final String thisRecordName = r.getAttributeValue(CoreTags.NAME);
+			final String className = r.getAttributeValue(CoreTags.HOLDER_CLASS_NAME);
+			final String urmClassName = r.getAttributeValue(CoreTags.URM_HOLDER_CLASS_NAME);
+			final String baseInterfaceName = r.getAttributeValue(CoreTags.BASE_INTERFACE_NAME);
+			final String urmBaseInterfaceName = r.getAttributeValue(CoreTags.URM_BASE_INTERFACE_NAME);
+			final String interfaceName = r.getAttributeValue(CoreTags.INTERFACE_NAME);
+			final String fileName = getExternalSourceCodePackageRoot() + File.separator + className + ".java";
+			final String urmFileName = getExternalSourceCodePackageRoot() + File.separator + urmClassName + ".java";
+			final String interfaceFileName = getExternalSourceCodePackageRoot() + File.separator + interfaceName + ".java";
+			final String baseInterfaceFileName =
 				getExternalSourceCodePackageRoot() + File.separator + baseInterfaceName + ".java";
-			String urmBaseInterfaceFileName =
+			final String urmBaseInterfaceFileName =
 							getExternalSourceCodePackageRoot() + File.separator + urmBaseInterfaceName + ".java";
+
+			final List<Element> fields = r.getChildren("field");
+			Iterator<Element>i = fields.iterator();
+			String _keyFieldName=null;
+			String _keyFieldType=null;
+			while (i.hasNext()) {
+				Element e = (Element) i.next();
+				String typeName = e.getAttributeValue("type");
+				String fieldName = e.getAttributeValue("name");
+				if ("true".equals(e.getAttributeValue("key"))){
+					_keyFieldName =	fieldName;
+					_keyFieldType =	typeName;
+					break;
+				}
+			}
+			final String keyFieldName=_keyFieldName;
+			final String keyFieldType=_keyFieldType;
+			final String keyFieldObjectType=GeneratorHelper.getObjectType(keyFieldType);
 
 			addGeneratedFile(fileName);
 			addGeneratedFile(interfaceFileName);
 			addGeneratedFile(baseInterfaceFileName);
 
-			FileOutputStream fs = new FileOutputStream(new File(fileName).getAbsoluteFile());
-			FileOutputStream ifs = new FileOutputStream(new File(interfaceFileName).getAbsoluteFile());
-			FileOutputStream bifs = new FileOutputStream(new File(baseInterfaceFileName).getAbsoluteFile());
-			FileOutputStream ufs = null;
-			FileOutputStream ubifs = null;
+			final FileOutputStream fs = new FileOutputStream(new File(fileName).getAbsoluteFile());
+			final FileOutputStream ifs = new FileOutputStream(new File(interfaceFileName).getAbsoluteFile());
+			final FileOutputStream bifs = new FileOutputStream(new File(baseInterfaceFileName).getAbsoluteFile());
 
-			Writer w1 = new OutputStreamWriter(new BufferedOutputStream(fs));
-			Writer iw = new OutputStreamWriter(new BufferedOutputStream(ifs));
-			Writer biw = new OutputStreamWriter(new BufferedOutputStream(bifs));
-			Writer uw = null;
+			final Writer w1 = new OutputStreamWriter(new BufferedOutputStream(fs));
+			final Writer iw = new OutputStreamWriter(new BufferedOutputStream(ifs));
+			final Writer biw = new OutputStreamWriter(new BufferedOutputStream(bifs));
 
-
-			DoubleWriter w;
-			Writer 		 ubiw = null;
-
+			FileOutputStream _ufs = null;
+			FileOutputStream _ubifs = null;
+			Writer _uw = null;
+			DoubleWriter _w = null;
+			Writer _ubiw = null;
 			if(outer == null && version.isDefined()){
-				ufs = new FileOutputStream(new File(urmFileName).getAbsoluteFile());
-				ubifs = new FileOutputStream(new File(urmBaseInterfaceFileName).getAbsoluteFile());
+				_ufs = new FileOutputStream(new File(urmFileName).getAbsoluteFile());
+				_ubifs = new FileOutputStream(new File(urmBaseInterfaceFileName).getAbsoluteFile());
 				addGeneratedFile(urmFileName);
 				addGeneratedFile(urmBaseInterfaceFileName);
-				uw = new OutputStreamWriter(new BufferedOutputStream(ufs));
-				w =  new DoubleWriter(w1,uw);
-				ubiw = new OutputStreamWriter(new BufferedOutputStream(ubifs));
+				_uw = new OutputStreamWriter(new BufferedOutputStream(_ufs));
+				_w =  new DoubleWriter(w1,_uw);
+				_ubiw = new OutputStreamWriter(new BufferedOutputStream(_ubifs));
 			}
 			else {
-				w = new DoubleWriter(w1,null);
+				_w = new DoubleWriter(w1,null);
 			}
+
+			final FileOutputStream ufs = _ufs;
+			final FileOutputStream ubifs = _ubifs;
+			final Writer uw = _uw;
+			final DoubleWriter w = _w;
+			final Writer ubiw = _ubiw;
 
 			w.write("// Generated by ChoiceMaker. Do not edit." + Constants.LINE_SEPARATOR);
 			iw.write("// Generated by ChoiceMaker. Do not edit." + Constants.LINE_SEPARATOR);
@@ -695,7 +717,10 @@ public class GeneratorImpl implements IGenerator {
 					+ getExternalPackage()
 					+ "."
 					+ urmBaseInterfaceName
-					+ ", java.io.Serializable {"
+					+ ", java.io.Serializable"
+					+ ", com.choicemaker.cm.core.Identifiable<"
+					+ keyFieldObjectType
+					+ "> {"
 					+ Constants.LINE_SEPARATOR);
 
 			biw.write(
@@ -758,10 +783,14 @@ public class GeneratorImpl implements IGenerator {
 						+ Constants.LINE_SEPARATOR);
 			}
 			w.write("}" + Constants.LINE_SEPARATOR);
-			if(version.isDefined()&& outer == null)
-				w.write("public void accept(com.choicemaker.cm.urm.base.IRecordVisitor ext){	ext.visit((com.choicemaker.cm.urm.base.IRecordHolder)this); }"+ Constants.LINE_SEPARATOR);
+			if (version.isDefined() && outer == null) {
+//				w.write("public void accept(com.choicemaker.cm.urm.base.IRecordVisitor ext){	ext.visit((com.choicemaker.cm.urm.base.IRecordHolder)this); }"
+//						+ Constants.LINE_SEPARATOR);
+				uw.write(
+						"public void accept(com.choicemaker.cm.urm.base.IRecordVisitor ext){	ext.visit((com.choicemaker.cm.urm.base.IRecordHolder)this); }"
+								+ Constants.LINE_SEPARATOR);
+			}
 
-			List<Element> fields = r.getChildren("field");
 			if (outer != null) {
 				w.write("/** Zero length array to be used by outer node class. */" + Constants.LINE_SEPARATOR);
 				w.write(
@@ -794,18 +823,13 @@ public class GeneratorImpl implements IGenerator {
 				biw.write("public void setOuter(" + iface + " outer);" + Constants.LINE_SEPARATOR);
 
 			}
-			Iterator<Element>i = fields.iterator();
+
+			i = fields.iterator();
 			DerivedSource beanSource = DerivedSource.valueOf("bean");
-			String keyFiledName=null;
-			String keyFiledType=null;
 			while (i.hasNext()) {
 				Element e = (Element) i.next();
 				String typeName = e.getAttributeValue("type");
 				String fieldName = e.getAttributeValue("name");
-				if ("true".equals(e.getAttributeValue("key"))){
-					keyFiledName =	fieldName;
-					keyFiledType =	typeName;
-				}
 
 				boolean trans = "true".equals(e.getAttributeValue("transient"));
 				boolean derived = GeneratorHelper.isDerived(e, beanSource);
@@ -840,36 +864,36 @@ public class GeneratorImpl implements IGenerator {
 					iw.write(getMethod + ";" + Constants.LINE_SEPARATOR);
 				}
 			}
-			if(outer == null && version.isDefined() && keyFiledName != null){
+			if(outer == null && version.isDefined() && keyFieldName != null){
 				writeGetIdJavaDoc(uw);
-				uw.write("public java.lang.Comparable getId() {" + Constants.LINE_SEPARATOR);
+				uw.write("public " + keyFieldObjectType + " getId() {" + Constants.LINE_SEPARATOR);
 				String retResval = null;
 				boolean isString = false;
-				if (keyFiledType.equals("byte"))
+				if (keyFieldType.equals("byte"))
 					retResval = "new Byte(";
-				else if (keyFiledType.equals("short"))
+				else if (keyFieldType.equals("short"))
 					retResval = "new Short(";
-				else if (keyFiledType.equals("char"))
+				else if (keyFieldType.equals("char"))
 				retResval = "new Char(";
-				else if (keyFiledType.equals("int"))
+				else if (keyFieldType.equals("int"))
 				retResval = "new Integer(";
-				else if (keyFiledType.equals("long"))
+				else if (keyFieldType.equals("long"))
 				retResval = "new Long(";
-				else if (keyFiledType.equals("float"))
+				else if (keyFieldType.equals("float"))
 				retResval = "new Float(";
-				else if (keyFiledType.equals("double"))
+				else if (keyFieldType.equals("double"))
 				retResval = "new Double(";
-				else if (keyFiledType.equals("boolean"))
+				else if (keyFieldType.equals("boolean"))
 				retResval = "new Boolean(";
-				else if (keyFiledType.equals("String"))
+				else if (keyFieldType.equals("String"))
 					isString = true;
 				else
 					throw new GenException("Invalid data type");
 				//TODO check the list of valid data types and test
 				if(isString)
-					uw.write("return "+keyFiledName+";" + Constants.LINE_SEPARATOR);
+					uw.write("return "+keyFieldName+";" + Constants.LINE_SEPARATOR);
 				else
-					uw.write("return "+retResval+keyFiledName+");" + Constants.LINE_SEPARATOR);
+					uw.write("return "+retResval+keyFieldName+");" + Constants.LINE_SEPARATOR);
 				uw.write("}" + Constants.LINE_SEPARATOR);
 			}
 
@@ -1047,7 +1071,7 @@ public class GeneratorImpl implements IGenerator {
 					if ("true".equals(e.getAttributeValue("key"))) {
 						final String type = e.getAttributeValue("type");
 						String t = GeneratorHelper.getObjectType(type);
-						w.write("public Comparable<" + t + "> getId() {" + Constants.LINE_SEPARATOR);
+						w.write("public " + t + " getId() {" + Constants.LINE_SEPARATOR);
 						w.write("return ");
 						String s =
 							GeneratorHelper.getObjectExpr(type, e.getAttributeValue("name"));

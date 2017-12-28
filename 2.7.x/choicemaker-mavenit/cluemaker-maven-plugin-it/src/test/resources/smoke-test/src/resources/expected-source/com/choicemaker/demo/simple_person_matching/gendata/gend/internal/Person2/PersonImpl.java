@@ -17,7 +17,7 @@ public void computeValidityAndDerived() {
 resetValidityAndDerived(__src);
 computeValidityAndDerived(__src);
 }
-public Comparable getId() {
+public Integer getId() {
 return new Integer(recordId);
 }
 public boolean __v_linkage_role;

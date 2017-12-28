@@ -24,10 +24,10 @@ public Descriptor getDescriptor() {
 return PersonImpl____descriptor.instance;
 }
 public String getSchemaFileName() {
-return "/Users/rphall/Documents/git/oscmt-cm/2.7.x/misc/cluemaker-maven-plugin-it/target/test-classes/smoke-test/src/main/cluemaker/Person2.schema";
+return "/Users/rphall/Documents/git.nosync/oscmt-cm/2.7.x/choicemaker-mavenit/cluemaker-maven-plugin-it/target/test-classes/smoke-test/src/main/cluemaker/Person2.schema";
 }
 public long getCreationDate() {
-return 1405016596234L;
+return 1514479272289L;
 }
 public int getNumRecordTypes() {
 return 0;

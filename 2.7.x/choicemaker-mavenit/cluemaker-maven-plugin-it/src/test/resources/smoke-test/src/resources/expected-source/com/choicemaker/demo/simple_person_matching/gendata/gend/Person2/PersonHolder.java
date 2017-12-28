@@ -9,7 +9,6 @@ import com.choicemaker.cm.validation.eclipse.impl.Validators;
 public class PersonHolder implements com.choicemaker.demo.simple_person_matching.gendata.gend.Person2.PersonBase, java.io.Serializable {
 /** Default constructor. Initializes all all arrays for nested record to zero length arrays and all other values to their defaults (0/null). */public PersonHolder() {
 }
-public void accept(com.choicemaker.cm.urm.base.IRecordVisitor ext){	ext.visit((com.choicemaker.cm.urm.base.IRecordHolder)this); }
 private boolean linkage_roleValid;
 protected String linkage_role;
 /**
