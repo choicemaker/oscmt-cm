@@ -16,12 +16,11 @@ package com.choicemaker.cm.urm.base;
  * @author emoussikaev
  * @see
  */
-public class RecordRef implements ISingleRecord {
+public class RecordRef<T extends Comparable<T>> implements ISingleRecord<T> {
 
-	/** As of 2010-11-12 */
-	static final long serialVersionUID = -4347784657257638692L;
+	private static final long serialVersionUID = -4347784657257638692L;
 
-	protected Comparable	id;
+	protected T id;
 	
 	/**
 	 * Constructs a <code>RecordRef</code> with unknown (null) identifier.
@@ -36,7 +35,7 @@ public class RecordRef implements ISingleRecord {
 	 * 
 	 * @param id
 	 */
-	public RecordRef(Comparable id) {
+	public RecordRef(T id) {
 		this.id = id;
 	}
 
@@ -46,7 +45,7 @@ public class RecordRef implements ISingleRecord {
 	 * 
 	 * @return
 	 */
-	public Comparable getId() {
+	public T getId() {
 		return id;
 	}
 
@@ -56,7 +55,7 @@ public class RecordRef implements ISingleRecord {
 	 * 
 	 * @param id
 	 */
-	public void setId(Comparable id) {
+	public void setId(T id) {
 		this.id = id;
 	}
 

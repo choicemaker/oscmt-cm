@@ -15,11 +15,11 @@ package com.choicemaker.cm.urm.base;
  * @author emoussikaev
  * @see
  */
-public abstract class CompositeRecord implements IRecord {
+public abstract class CompositeRecord<T extends Comparable<T>> implements IRecord<T> {
 
-	private static final long serialVersionUID = 2046401598800163936L;
-	private IRecord[]			records;
-	private Comparable		   id;
+	private static final long serialVersionUID = 7797105570521045520L;
+	private IRecord<T>[] records;
+	private T id;
 
 
 	/**
@@ -28,13 +28,13 @@ public abstract class CompositeRecord implements IRecord {
 	 *
 	 *
 	 */
-	public CompositeRecord(Comparable id, IRecord[]	records) {
+	public CompositeRecord(T id, IRecord<T>[] records) {
 		this.id  = id;
 		this.records = records;
 	}
 
 
-	public Comparable getId() {
+	public T getId() {
 		return id;
 	}
 
@@ -44,21 +44,21 @@ public abstract class CompositeRecord implements IRecord {
 	 *
 	 * @param comparable
 	 */
-	public void setId(Comparable comparable) {
+	public void setId(T comparable) {
 		id = comparable;
 	}
 
 	/**
 	 * @return
 	 */
-	public IRecord[] getRecords() {
+	public IRecord<T>[] getRecords() {
 		return records;
 	}
 
 	/**
 	 * @param records
 	 */
-	public void setRecords(IRecord[] records) {
+	public void setRecords(IRecord<T>[] records) {
 		this.records = records;
 	}
 

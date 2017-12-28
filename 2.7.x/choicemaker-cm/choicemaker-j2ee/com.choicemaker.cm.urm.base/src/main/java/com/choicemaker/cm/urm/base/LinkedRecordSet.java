@@ -17,23 +17,22 @@ package com.choicemaker.cm.urm.base;
  * @author emoussikaev
  * @see
  */
-public class LinkedRecordSet extends CompositeRecord {
+public class LinkedRecordSet<T extends Comparable<T>> extends CompositeRecord<T> {
 
-	/** As of 2010-11-12 */
-	static final long serialVersionUID = -8988092145857498700L;
+	private static final long serialVersionUID = -8988092145857498700L;
 
-	LinkCriteria 	   criteria;
-	
-	public LinkedRecordSet(Comparable id, IRecord[] r, LinkCriteria c) {
+	private LinkCriteria criteria;
+
+	public LinkedRecordSet(T id, IRecord<T>[] r, LinkCriteria c) {
 		super(id,r);
 		this.criteria = c;
 	}
-	
-	
+
+
 	public LinkCriteria getCriteria() {
 		return criteria;
 	}
-	
+
 	public void accept(IRecordVisitor ext){
 		ext.visit(this);
 	}

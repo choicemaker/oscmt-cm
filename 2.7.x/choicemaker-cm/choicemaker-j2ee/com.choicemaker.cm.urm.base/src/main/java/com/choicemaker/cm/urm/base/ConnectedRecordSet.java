@@ -17,27 +17,21 @@ package com.choicemaker.cm.urm.base;
  * @author emoussikaev
  * @see
  */
-public class ConnectedRecordSet extends CompositeRecord {
+public class ConnectedRecordSet<T extends Comparable<T>> extends CompositeRecord<T> {
 
-	/** As of 2010-11-12 */
 	private static final long serialVersionUID = 1604807022706941623L;
 
-	private IRecordConnection[]		connections;
+	private IRecordConnection[] connections;
 
-	public ConnectedRecordSet(Comparable id, IRecord[] r, IRecordConnection[] connections) {
+	public ConnectedRecordSet(T id, IRecord<T>[] r, IRecordConnection[] connections) {
 		super(id,r);
 		this.connections = connections;
 	}
-	/**
-	 * @return
-	 */
+
 	public IRecordConnection[] getConnections() {
 		return connections;
 	}
 
-	/**
-	 * @param links
-	 */
 	public void setConnections(RecordConnection[] links) {
 		this.connections = links;
 	}

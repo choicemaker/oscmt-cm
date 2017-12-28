@@ -15,6 +15,6 @@ package com.choicemaker.cm.urm.base;
  * @author emoussikaev
  * @see
  */
-public interface IRecordHolder  extends ISingleRecord {
+public interface IRecordHolder<T extends Comparable<T>> extends ISingleRecord<T> {
 	
 }

@@ -11,20 +11,21 @@ import java.io.Serializable;
 
 /**
  * A record
- * <p>  
+ * <p>
+ * See <code>com.choicemaker.cm.core.Record</code>
  *
  * @author emoussikaev
- * @see
  */
-public interface IRecord extends Serializable{
+public interface IRecord<T extends Comparable<T>> extends Serializable {
 	
 	/**
-	 * Returns record identifier
-	 * <p> 
-	 * 
-	 * @return record identifier
+	 * Returns a key that uniquely identifies an entity. If two records have
+	 * different identifiers, then they represent different entities (in the
+	 * absence of duplicates).
+	 * <p>
+	 * See <code>com.choicemaker.cm.core.Identifiable</code>
 	 */
-	public java.lang.Comparable getId();
+	public T getId();
 	
 	/**
 	 * Applies visitor to a record.

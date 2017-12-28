@@ -13,14 +13,15 @@ package com.choicemaker.cm.core;
  *
  * @author    Martin Buechi
  */
-public interface Record extends BaseRecord {
+public interface Record<T extends Comparable<T>> extends Identifiable<T>, BaseRecord {
 
-	/**
-	 * Returns a key that uniquely identifies an entity. If two records
-	 * have different identifiers, then they represent different entities
-	 * (in the absence of duplicates).
-	 */
-	Comparable getId();
+	// Moved to Identifiable
+//	/**
+//	 * Returns a key that uniquely identifies an entity. If two records
+//	 * have different identifiers, then they represent different entities
+//	 * (in the absence of duplicates).
+//	 */
+//	T getId();
 
 	/**
 	 * Computes non-persistent or cached fields and rows, and checks

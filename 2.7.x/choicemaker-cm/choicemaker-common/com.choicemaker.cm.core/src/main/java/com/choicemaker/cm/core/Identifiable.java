@@ -8,5 +8,12 @@
 package com.choicemaker.cm.core;
 
 public interface Identifiable<T extends Comparable<T>> {
-	Comparable<T> getId();
+
+	/**
+	 * Returns a key that uniquely identifies an entity. If two records have
+	 * different identifiers, then they represent different entities (in the
+	 * absence of duplicates).
+	 */
+	T getId();
+
 }
