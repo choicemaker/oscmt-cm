@@ -4,5 +4,5 @@ import java.util.List;
 
 public interface IGeneratorPluginFactory {
 	/** Look up generator plugins */
-	List lookupGeneratorPlugins() throws GenException;
+	List<GeneratorPlugin> lookupGeneratorPlugins() throws GenException;
 }

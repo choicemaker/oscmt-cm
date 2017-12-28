@@ -253,8 +253,8 @@ public class GeneratorImpl implements IGenerator {
 	public String getImports() {
 		if (imports == null) {
 			StringBuffer b = new StringBuffer();
-			List imp = getRootElement().getChildren("import");
-			Iterator i = imp.iterator();
+			List<Element> imp = getRootElement().getChildren("import");
+			Iterator<Element> i = imp.iterator();
 			while (i.hasNext()) {
 				b.append("import " + ((Element) i.next()).getText() + ";" + Constants.LINE_SEPARATOR);
 			}
@@ -366,8 +366,8 @@ public class GeneratorImpl implements IGenerator {
 		createAccessor();
 		IGeneratorPluginFactory factory = InstallableGeneratorPluginFactory
 				.getInstance();
-		List generatorPlugins = factory.lookupGeneratorPlugins();
-		for (Iterator i = generatorPlugins.iterator(); i.hasNext();) {
+		List<GeneratorPlugin> generatorPlugins = factory.lookupGeneratorPlugins();
+		for (Iterator<GeneratorPlugin> i = generatorPlugins.iterator(); i.hasNext();) {
 			GeneratorPlugin gp = (GeneratorPlugin) i.next();
 			logger.info("Generator: '" + gp.toString() + "'");
 			gp.generate(this);
@@ -415,13 +415,13 @@ public class GeneratorImpl implements IGenerator {
 		r.setAttribute(CoreTags.FQ_NAME, fqName);
 		cu.addClassType(className);
 		r.setAttribute(CoreTags.RECORD_NUMBER, String.valueOf(recordNumber++));
-		List nestedRecords = r.getChildren(CoreTags.NODE_TYPE);
+		List<Element> nestedRecords = r.getChildren(CoreTags.NODE_TYPE);
 		if (nestedRecords.isEmpty()) {
 			r.setAttribute("isLeafRecord", "true");
 		} else {
 			r.setAttribute("isLeafRecord", "false");
 		}
-		Iterator i = nestedRecords.iterator();
+		Iterator<Element> i = nestedRecords.iterator();
 		while (i.hasNext()) {
 			nameRecords((Element) i.next(), className, separator, level + 1, fqName + ".");
 		}
@@ -742,13 +742,13 @@ public class GeneratorImpl implements IGenerator {
 					+ " {"
 					+ Constants.LINE_SEPARATOR);
 
-			List embeddedRecords = r.getChildren(CoreTags.NODE_TYPE);
+			List<Element> embeddedRecords = r.getChildren(CoreTags.NODE_TYPE);
 			w.write(
 				"/** Default constructor. Initializes all all arrays for nested record to zero length arrays and all other values to their defaults (0/null). */");
 			w1.write("public " + className + "() {" + Constants.LINE_SEPARATOR);
 			if(outer == null && version.isDefined())
 				uw.write("public " + urmClassName + "() {" + Constants.LINE_SEPARATOR);
-			for (Iterator iEmbeddedRecords = embeddedRecords.iterator(); iEmbeddedRecords.hasNext();) {
+			for (Iterator<Element> iEmbeddedRecords = embeddedRecords.iterator(); iEmbeddedRecords.hasNext();) {
 				Element e = (Element) iEmbeddedRecords.next();
 				w.write(
 					e.getAttributeValue(CoreTags.NAME)
@@ -761,7 +761,7 @@ public class GeneratorImpl implements IGenerator {
 			if(version.isDefined()&& outer == null)
 				w.write("public void accept(com.choicemaker.cm.urm.base.IRecordVisitor ext){	ext.visit((com.choicemaker.cm.urm.base.IRecordHolder)this); }"+ Constants.LINE_SEPARATOR);
 
-			List fields = r.getChildren("field");
+			List<Element> fields = r.getChildren("field");
 			if (outer != null) {
 				w.write("/** Zero length array to be used by outer node class. */" + Constants.LINE_SEPARATOR);
 				w.write(
@@ -794,7 +794,7 @@ public class GeneratorImpl implements IGenerator {
 				biw.write("public void setOuter(" + iface + " outer);" + Constants.LINE_SEPARATOR);
 
 			}
-			Iterator i = fields.iterator();
+			Iterator<Element>i = fields.iterator();
 			DerivedSource beanSource = DerivedSource.valueOf("bean");
 			String keyFiledName=null;
 			String keyFiledType=null;
@@ -931,7 +931,7 @@ public class GeneratorImpl implements IGenerator {
 			w1.write("public " + className + "(" + baseInterfaceName + " __o) {" + Constants.LINE_SEPARATOR);
 			if(outer == null && version.isDefined())
 				uw.write("public " + urmClassName + "(" + baseInterfaceName + " __o) {" + Constants.LINE_SEPARATOR);
-			for (Iterator iFields = fields.iterator(); iFields.hasNext();) {
+			for (Iterator<Element> iFields = fields.iterator(); iFields.hasNext();) {
 				Element field = (Element) iFields.next();
 				String name = field.getAttributeValue(CoreTags.NAME);
 				String methodStem = Character.toUpperCase(name.charAt(0)) + name.substring(1);
@@ -940,7 +940,7 @@ public class GeneratorImpl implements IGenerator {
 					w.write(name + "Valid = __o.is" + methodStem + "Valid();" + Constants.LINE_SEPARATOR);
 				}
 			}
-			for (Iterator iEmbeddedRecords = embeddedRecords.iterator(); iEmbeddedRecords.hasNext();) {
+			for (Iterator<Element> iEmbeddedRecords = embeddedRecords.iterator(); iEmbeddedRecords.hasNext();) {
 				Element record = (Element) iEmbeddedRecords.next();
 				String name = record.getAttributeValue(CoreTags.NAME);
 				String iface = record.getAttributeValue(CoreTags.BASE_INTERFACE_NAME);
@@ -995,7 +995,7 @@ public class GeneratorImpl implements IGenerator {
 
 	private void createHolderClasses(Element r, Element outer) throws GenException {
 		try {
-			Set identifiers = new HashSet();
+			Set<String> identifiers = new HashSet<>();
 			SrcNames srcNames = new SrcNames();
 			String className = r.getAttributeValue("className");
 			String interfaceName = r.getAttributeValue(CoreTags.INTERFACE_NAME);
@@ -1028,7 +1028,7 @@ public class GeneratorImpl implements IGenerator {
 					+ className
 					+ ".class.getName());"
 					+ Constants.LINE_SEPARATOR);
-			List fields = r.getChildren("field");
+			List<Element> fields = r.getChildren("field");
 			if (outer == null) {
 				cu.setBaseType(className);
 				w.write("private com.choicemaker.cm.core.DerivedSource __src;" + Constants.LINE_SEPARATOR);
@@ -1076,7 +1076,7 @@ public class GeneratorImpl implements IGenerator {
 				w.write("this.outer = (" + ocn + ")outer;" + Constants.LINE_SEPARATOR);
 				w.write("}" + Constants.LINE_SEPARATOR);
 			}
-			Iterator i = fields.iterator();
+			Iterator<Element> i = fields.iterator();
 			while (i.hasNext()) {
 				Element field = (Element) i.next();
 				if (!GeneratorHelper.isNodeInitScope(field)) {
@@ -1108,7 +1108,7 @@ public class GeneratorImpl implements IGenerator {
 					w.write("}" + Constants.LINE_SEPARATOR);
 				}
 			}
-			List embeddedRecords = r.getChildren(CoreTags.NODE_TYPE);
+			List<Element> embeddedRecords = r.getChildren(CoreTags.NODE_TYPE);
 			i = embeddedRecords.iterator();
 			while (i.hasNext()) {
 				Element e = (Element) i.next();
@@ -1130,7 +1130,7 @@ public class GeneratorImpl implements IGenerator {
 			}
 
 			w.write("public " + className + "(" + baseInterfaceName + " __o) {" + Constants.LINE_SEPARATOR);
-			for (Iterator iFields = fields.iterator(); iFields.hasNext();) {
+			for (Iterator<Element> iFields = fields.iterator(); iFields.hasNext();) {
 				Element field = (Element) iFields.next();
 				if (!GeneratorHelper.isDerived(field, beanSource)) {
 					String name = field.getAttributeValue(CoreTags.NAME);
@@ -1138,7 +1138,7 @@ public class GeneratorImpl implements IGenerator {
 					w.write(name + " = " + "__o.get" + methodStem + "();" + Constants.LINE_SEPARATOR);
 				}
 			}
-			for (Iterator iEmbeddedRecords = embeddedRecords.iterator(); iEmbeddedRecords.hasNext();) {
+			for (Iterator<Element> iEmbeddedRecords = embeddedRecords.iterator(); iEmbeddedRecords.hasNext();) {
 				Element record = (Element) iEmbeddedRecords.next();
 				String name = record.getAttributeValue(CoreTags.NAME);
 				String ncn = record.getAttributeValue(CoreTags.CLASS_NAME);
@@ -1340,8 +1340,8 @@ public class GeneratorImpl implements IGenerator {
 			w.write("return tmpInstance;" + Constants.LINE_SEPARATOR);
 			w.write("}" + Constants.LINE_SEPARATOR);
 
-			List methodsTags = r.getChildren("method");
-			Iterator methIter = methodsTags.iterator();
+			List<Element> methodsTags = r.getChildren("method");
+			Iterator<Element> methIter = methodsTags.iterator();
 			while (methIter.hasNext()) {
 				Element e = (Element) methIter.next();
 				String methodCode = e.getText();
@@ -1400,7 +1400,7 @@ public class GeneratorImpl implements IGenerator {
 		return modifier + " " + typeName + "[] " + fieldName + ";" + Constants.LINE_SEPARATOR;
 	}
 
-	private boolean identifierCheck(String name, Set identifiers) {
+	private boolean identifierCheck(String name, Set<String> identifiers) {
 		if (name == null || name.length() == 0) {
 			error("No or empty name.");
 			return false;

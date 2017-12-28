@@ -29,7 +29,7 @@ import com.choicemaker.cm.core.DerivedSource;
  * @author    Martin Buechi
  */
 public class GeneratorHelper {
-	private static final List EMPTY_LIST = new ArrayList();
+	private static final List<Element> EMPTY_LIST = new ArrayList<>();
 
 	private GeneratorHelper() {
 	}
@@ -45,7 +45,7 @@ public class GeneratorHelper {
 	 * @param   fields  The list of fields to be filtered.
 	 * @param   src  The source for which the filtering is to be done.
 	 */
-	public static int filterFields(List fields, DerivedSource src, String field) {
+	public static int filterFields(List<Element> fields, DerivedSource src, String field) {
 		return filterFields(fields, src, field, "all");
 	}
 
@@ -64,12 +64,12 @@ public class GeneratorHelper {
 		return false;
 	}
 
-	public static int filterFields(List fields, DerivedSource src, String field, String confName) {
+	public static int filterFields(List<Element> fields, DerivedSource src, String field, String confName) {
 		DerivedSource conf = DerivedSource.valueOf(confName);
 		Element[] p = new Element[RANGE];
 		int lastPos = -1;
 		int maxPos = -1;
-		for (Iterator iFields = fields.iterator(); iFields.hasNext();) {
+		for (Iterator<Element> iFields = fields.iterator(); iFields.hasNext();) {
 			Element f = (Element) iFields.next();
 			Element d = f.getChild("derived");
 			if (d != null) {
@@ -113,12 +113,12 @@ public class GeneratorHelper {
 	 * @param field
 	 * @param confName
 	 */
-	public static int filterFields2(List fields, DerivedSource src, String field, String confName) {
+	public static int filterFields2(List<Element> fields, DerivedSource src, String field, String confName) {
 		DerivedSource conf = DerivedSource.valueOf(confName);
 		Element[] p = new Element[RANGE];
 		int lastPos = -1;
 		int maxPos = -1;
-		for (Iterator iFields = fields.iterator(); iFields.hasNext();) {
+		for (Iterator<Element> iFields = fields.iterator(); iFields.hasNext();) {
 			Element f = (Element) iFields.next();
 			Element d = f.getChild("derived");
 			if (d != null) {
@@ -132,7 +132,7 @@ public class GeneratorHelper {
 			//Element c = f.getChild(field);
 			
 			//gets the dbField children for this field
-			List list = f.getChildren(field);
+			List<Element> list = f.getChildren(field);
 			boolean found = false;
 			for (int i=0; i<list.size(); i++) {
 				Element c = (Element) list.get(i);
@@ -333,7 +333,7 @@ public class GeneratorHelper {
 	}
 
 	public static Element getPhysicalField(Element schemaField, String confName, String physicalTypeName) {
-		List list = schemaField.getChildren(physicalTypeName+"Field");
+		List<Element> list = schemaField.getChildren(physicalTypeName+"Field");
 		if (list == null)
 			return null;
 		Element	allConfElm = null;
@@ -359,7 +359,7 @@ public class GeneratorHelper {
 		if (e != null) {
 //			return e.getChild(name + "NodeType");
 			
-			List list = e.getChildren(name + "NodeType");
+			List<Element> list = e.getChildren(name + "NodeType");
 //			System.out.println ("list size: " + list.size());
 
 			if (list != null) {
@@ -391,7 +391,7 @@ public class GeneratorHelper {
 		return null;
 	}
 
-	public static List getGlobalExts(Element root, String name) {
+	public static List<Element> getGlobalExts(Element root, String name) {
 		Element e = root.getChild(CoreTags.GLOBAL);
 		if (e != null) {
 			e = e.getChild(CoreTags.GLOBAL_EXT);
@@ -403,8 +403,8 @@ public class GeneratorHelper {
 	}
 
 	public static Element getFld(DerivedSource conf, Element r, String name) {
-		List l = r.getChildren(name + "Field");
-		Iterator iL = l.iterator();
+		List<Element> l = r.getChildren(name + "Field");
+		Iterator<Element> iL = l.iterator();
 		while (iL.hasNext()) {
 			Element e = (Element) iL.next();
 			if (includesConf(e, conf))
@@ -427,8 +427,8 @@ public class GeneratorHelper {
 	public static Id getId(IGenerator g, Element r, String tpe) {
 		String fld = tpe + "Field";
 		Element keyField = null;
-		List fields = r.getChildren("field");
-		Iterator i = fields.iterator();
+		List<Element> fields = r.getChildren("field");
+		Iterator<Element> i = fields.iterator();
 		while (i.hasNext()) {
 			Element e = (Element) i.next();
 			Element o = e.getChild(fld);
@@ -450,22 +450,22 @@ public class GeneratorHelper {
 		}
 	}
 
-	public static void multiFileFieldDeclarations(IGenerator g, Writer w, Element r, String tpe, LinkedList ids)
+	public static void multiFileFieldDeclarations(IGenerator g, Writer w, Element r, String tpe, LinkedList<Id> ids)
 		throws IOException {
 		String className = r.getAttributeValue("className");
 		w.write("private " + className + " o__" + className + ";" + Constants.LINE_SEPARATOR);
 		if (!ids.isEmpty()) {
 			w.write("private LinkedList l__" + className + " = new LinkedList();" + Constants.LINE_SEPARATOR);
 		}
-		Iterator i = ids.iterator();
+		Iterator<Id> i = ids.iterator();
 		while (i.hasNext()) {
 			Id id = (Id) i.next();
 			w.write("private " + id.type + " " + className + "__" + id.name + ";" + Constants.LINE_SEPARATOR);
 		}
-		List records = r.getChildren(CoreTags.NODE_TYPE);
+		List<Element> records = r.getChildren(CoreTags.NODE_TYPE);
 		if (!records.isEmpty()) {
 			ids.add(GeneratorHelper.getId(g, r, tpe));
-			Iterator iR = records.iterator();
+			Iterator<Element> iR = records.iterator();
 			while (iR.hasNext()) {
 				multiFileFieldDeclarations(g, w, (Element) iR.next(), tpe, ids);
 			}
@@ -520,8 +520,8 @@ public class GeneratorHelper {
 	public static Element findNodeType(Element node, String fqNodeTypeName) {
 		int pos = fqNodeTypeName.indexOf('.');
 		String s = pos == -1 ? fqNodeTypeName : fqNodeTypeName.substring(0, pos);
-		List l = node.getChildren(CoreTags.NODE_TYPE);
-		for (Iterator iL = l.iterator(); iL.hasNext();) {
+		List<Element> l = node.getChildren(CoreTags.NODE_TYPE);
+		for (Iterator<Element> iL = l.iterator(); iL.hasNext();) {
 			Element e = (Element) iL.next();
 			if (e.getAttributeValue(CoreTags.NAME).equals(s)) {
 				if (pos == -1) {
@@ -535,8 +535,8 @@ public class GeneratorHelper {
 	}
 
 	public static Element findField(Element nodeType, String fieldName) {
-		List l = nodeType.getChildren(CoreTags.FIELD);
-		for (Iterator iL = l.iterator(); iL.hasNext();) {
+		List<Element> l = nodeType.getChildren(CoreTags.FIELD);
+		for (Iterator<Element> iL = l.iterator(); iL.hasNext();) {
 			Element field = (Element) iL.next();
 			if (field.getAttributeValue(CoreTags.NAME).equals(fieldName)) {
 				return field;
