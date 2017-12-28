@@ -206,6 +206,9 @@ public class GeneratorHelper {
 	 * @return  The Java source code expression of the object type
 	 */
 	public static String getObjectType(String type) {
+		if (type == null) {
+			return null;
+		}
 		type = type.intern();
 		if (type == "boolean") {
 			return "Boolean";
