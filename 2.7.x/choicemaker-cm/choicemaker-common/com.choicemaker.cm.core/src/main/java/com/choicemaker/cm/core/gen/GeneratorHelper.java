@@ -199,6 +199,35 @@ public class GeneratorHelper {
 		}
 	}
 
+	/**
+	 * Returns the object type of a primitive type.
+	 *
+	 * @param   type  The type of the variable.
+	 * @return  The Java source code expression of the object type
+	 */
+	public static String getObjectType(String type) {
+		type = type.intern();
+		if (type == "boolean") {
+			return "Boolean";
+		} else if (type == "byte") {
+			return "Byte";
+		} else if (type == "short") {
+			return "Short";
+		} else if (type == "char") {
+			return "Character";
+		} else if (type == "int") {
+			return "Integer";
+		} else if (type == "long") {
+			return "Long";
+		} else if (type == "float") {
+			return "Float";
+		} else if (type == "double") {
+			return "Double";
+		} else {
+			return type;
+		}
+	}
+
 	public static String getStringExpr(String type, String name) {
 		type = type.intern();
 		if (isPrimitiveType(type)) {

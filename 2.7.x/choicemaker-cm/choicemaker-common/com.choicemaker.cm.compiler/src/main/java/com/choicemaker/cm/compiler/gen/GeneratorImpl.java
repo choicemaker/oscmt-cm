@@ -1040,21 +1040,23 @@ public class GeneratorImpl implements IGenerator {
 				w.write("resetValidityAndDerived(__src);" + Constants.LINE_SEPARATOR);
 				w.write("computeValidityAndDerived(__src);" + Constants.LINE_SEPARATOR);
 				w.write("}" + Constants.LINE_SEPARATOR);
-				w.write("public Comparable getId() {" + Constants.LINE_SEPARATOR);
-				w.write("return ");
-				Iterator i = fields.iterator();
+				Iterator<Element> i = fields.iterator();
 				boolean keyDefd = false;
 				while (i.hasNext()) {
 					Element e = (Element) i.next();
 					if ("true".equals(e.getAttributeValue("key"))) {
+						final String type = e.getAttributeValue("type");
+						String t = GeneratorHelper.getObjectType(type);
+						w.write("public Comparable<" + t + "> getId() {" + Constants.LINE_SEPARATOR);
+						w.write("return ");
 						String s =
-							GeneratorHelper.getObjectExpr(e.getAttributeValue("type"), e.getAttributeValue("name"));
+							GeneratorHelper.getObjectExpr(type, e.getAttributeValue("name"));
 						w.write(s + ";" + Constants.LINE_SEPARATOR);
+						w.write("}" + Constants.LINE_SEPARATOR);
 						keyDefd = true;
 						break;
 					}
 				}
-				w.write("}" + Constants.LINE_SEPARATOR);
 				if (!keyDefd) {
 					error("Root record must define key field");
 				}
