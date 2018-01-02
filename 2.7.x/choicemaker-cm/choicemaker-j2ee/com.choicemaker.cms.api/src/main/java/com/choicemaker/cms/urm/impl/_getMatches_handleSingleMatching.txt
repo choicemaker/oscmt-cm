@@ -1,0 +1,43 @@
+	protected List<Match> getMatches_handleSingleMatching(final Record q,
+			final String databaseConfiguration, final AbaStatistics stats,
+			final ImmutableProbabilityModel model, final int limitPBS,
+			final int stbsgl, final int limitSBS, final float lowThreshold,
+			final float highThreshold, final DatabaseAccessor databaseAccessor,
+			final String blockingConfiguration, final int maxNumMatches,
+			final String externalId) throws IOException {
+
+		log.info("Finding matches of query record to master records...");
+		log.fine("DatabaseConfiguration: " + databaseConfiguration);
+
+		final long startTime = System.currentTimeMillis();
+		List<Match> retVal = null;
+		AutomatedBlocker rs = null;
+		try {
+			final RecordDecisionMaker dm = new RecordDecisionMaker();
+
+			rs = new Blocker2(databaseAccessor, model, q, limitPBS, stbsgl,
+					limitSBS, stats, databaseConfiguration,
+					blockingConfiguration);
+			log.fine(q.getId() + " " + rs + " " + model);
+
+			retVal = dm.getMatches(q, rs, model, lowThreshold, highThreshold);
+
+		} catch (UnderspecifiedQueryException ex) {
+			// This is a data issue, so report it, then throw it.
+			log.warning(ex.toString());
+			reportUnsuccessfulQuery(startTime, q, model, lowThreshold,
+					highThreshold, maxNumMatches, externalId, ex);
+			throw ex;
+
+		} catch (IOException ex) {
+			log.severe(ex.toString());
+			reportUnsuccessfulQuery(startTime, q, model, lowThreshold,
+					highThreshold, maxNumMatches, externalId, ex);
+			throw ex;
+		}
+
+		reportSuccessfulQuery(startTime, q, model, lowThreshold, highThreshold,
+				maxNumMatches, externalId, rs, retVal);
+
+		return retVal;
+	}

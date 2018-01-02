@@ -101,6 +101,9 @@
     <plugin.maven-wagon-ssh.version>2.9</plugin.maven-wagon-ssh.version>
 
     <plugin.sonatype-install4j.version>1.0.6</plugin.sonatype-install4j.version>
+
+    <version.ejb.plugin>2.3</version.ejb.plugin>
+
   </properties>
   <!-- <scm> <url>http://sourceforge.net/p/oscmt/cm/ci/master/tree/2.7.x/</url> 
     </scm> <issueManagement> <url>http://sourceforge.net/projects/oscmt/support</url> 
@@ -967,6 +970,12 @@
         <groupId>javax</groupId>
         <artifactId>javaee-api</artifactId>
         <version>7.0</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>javax.enterprise</groupId>
+        <artifactId>cdi-api</artifactId>
+        <version>1.2</version>
         <scope>provided</scope>
       </dependency>
       <dependency>

@@ -1,0 +1,70 @@
+	protected List<Match> getMatches(long startTime, final Record q,
+			final DataSource ds, final ImmutableProbabilityModel model,
+			final DatabaseAccessor databaseAccessor, final String whereRestriction,
+			final String dbConfigName, final String blockingConfigName, 
+			AbaSettings abaSettings, float differThreshold, float matchThreshold, int maxNumMatches,
+			String externalId) throws UrmUnderspecifiedQueryException, UrmIncompleteBlockingSetsException, IOException {
+
+		Precondition.assertNonNullArgument("null query record", q);
+		Precondition.assertNonNullArgument("null model", model);
+		Precondition.assertBoolean("invalid maxNumMatches", maxNumMatches >= -1);
+		Precondition.assertNonNullArgument("null master datasource", ds);
+		Precondition.assertNonEmptyString("null or blank database configuration name", dbConfigName);
+		Precondition.assertNonEmptyString("null or blank blocking configuration name", blockingConfigName);
+		Precondition.assertNonNullArgument("null ABA settings", abaSettings);
+
+		AutomatedBlocker recordSource = null;
+		List<Match> retVal = null;
+
+		try {
+			// validate input parameters
+			if (maxNumMatches == -1) {
+				maxNumMatches = Integer.MAX_VALUE;
+			}
+
+			RecordDecisionMaker dm = new RecordDecisionMaker();
+			// PC 3/27/07
+			if (StringUtils.nonEmptyString(whereRestriction)) {
+				String[] cs = new String[2];
+				cs[0] = " ";
+				cs[1] = whereRestriction;
+				databaseAccessor.setCondition(cs);
+			} else {
+				databaseAccessor.setCondition("");
+			}
+			databaseAccessor.setDataSource(ds);
+
+			String bcId =
+				BlockingConfigurationUtils.createBlockingConfigurationId(model,
+						blockingConfigName, dbConfigName);
+			AbaStatistics stats = abaStatsController.getStatistics(bcId);
+			recordSource = new Blocker2(databaseAccessor, model, q,
+					abaSettings.getLimitPerBlockingSet(),
+					abaSettings.getSingleTableBlockingSetGraceLimit(),
+					abaSettings.getLimitSingleBlockingSet(), stats, dbConfigName,
+					blockingConfigName);
+			retVal = dm.getMatches(q, recordSource, model, differThreshold,
+					matchThreshold);
+
+			reportSuccessfulQuery(startTime, q, model, differThreshold,
+					matchThreshold, maxNumMatches, externalId, recordSource,
+					retVal);
+
+		} catch (IncompleteBlockingSetsException ex) {
+			// This is a data issue, so report it, then re-throw it.
+			log.warning(ex.toString());
+			reportUnsuccessfulQuery(startTime, q, model, differThreshold,
+					matchThreshold, maxNumMatches, externalId, ex);
+			throw ex;
+
+		} catch (UnderspecifiedQueryException ex) {
+			log.warning(ex.toString());
+			// This is a data issue, so report it, then re-throw it.
+			reportUnsuccessfulQuery(startTime, q, model, differThreshold,
+					matchThreshold, maxNumMatches, externalId, ex);
+			throw ex;
+		}
+
+		assert retVal != null;
+		return retVal;
+	}
