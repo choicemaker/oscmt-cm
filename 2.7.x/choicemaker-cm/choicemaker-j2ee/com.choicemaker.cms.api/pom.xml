@@ -16,7 +16,15 @@
     <name>CM Server API</name>
 
     <dependencies>
-
+        <dependency>
+            <groupId>com.choicemaker.cm</groupId>
+            <artifactId>com.choicemaker.cm.args</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.choicemaker.cm</groupId>
+            <artifactId>com.choicemaker.cm.core</artifactId>
+        </dependency>
+<!--
         <dependency>
             <groupId>com.choicemaker.e2</groupId>
             <artifactId>com.choicemaker.e2.ejb</artifactId>
@@ -86,6 +94,7 @@
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
+-->
 
     </dependencies>
 
