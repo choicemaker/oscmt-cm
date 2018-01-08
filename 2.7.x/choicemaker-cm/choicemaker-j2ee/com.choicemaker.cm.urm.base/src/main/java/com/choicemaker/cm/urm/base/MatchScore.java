@@ -34,14 +34,17 @@ public class MatchScore implements IMatchScore{
 		this.note = note;
 	}
 
+	@Override
 	public Decision3 getDecision() {
 		return decision;
 	}
 
+	@Override
 	public String getNote() {
 		return note;
 	}
 
+	@Override
 	public float getProbability() {
 		return probability;
 	}
