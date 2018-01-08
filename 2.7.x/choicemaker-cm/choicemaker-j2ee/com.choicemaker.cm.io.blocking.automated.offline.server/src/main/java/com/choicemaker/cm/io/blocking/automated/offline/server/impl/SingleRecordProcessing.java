@@ -288,14 +288,13 @@ public class SingleRecordProcessing implements Serializable {
 						databaseConfiguration, blockingConfiguration);
 				getLogger().fine(q.getId() + " " + rs + " " + model);
 
-				Object data = null;
 				List<Match> s = null;
 				try {
 					s = dm.getMatches(q, rs, model,
 							oabaParams.getLowThreshold(),
 							oabaParams.getHighThreshold());
 				} catch (IOException x) {
-					logErrorMatchingRecord(data, q, x, batchJob);
+					logErrorMatchingRecord(q, x, batchJob);
 					logger.fine("Continuing iteration over staging records");
 					continue;
 				}
@@ -312,7 +311,7 @@ public class SingleRecordProcessing implements Serializable {
 					try {
 						currentSink.writeMatch(mr2);
 					} catch (BlockingException x) {
-						logErrorWritingMatchResult(data, mr2, x, batchJob);
+						logErrorWritingMatchResult(mr2, x, batchJob);
 						logger.fine("Continuing iteration over matches");
 						continue;
 					}
@@ -358,7 +357,7 @@ public class SingleRecordProcessing implements Serializable {
 		return currentSinkIndex;
 	}
 
-	private void logErrorMatchingRecord(Object data, Record q, IOException x,
+	private void logErrorMatchingRecord(Record q, IOException x,
 			BatchJob batchJob) {
 		Comparable id1 = q == null ? null : q.getId();
 		Comparable id2 = null;
@@ -367,7 +366,7 @@ public class SingleRecordProcessing implements Serializable {
 				FACILITY_BATCH_MATCH_SRM, msg, x, batchJob, id1, id2);
 	}
 
-	private void logErrorWritingMatchResult(Object data, MatchRecord2 mr,
+	private void logErrorWritingMatchResult(MatchRecord2 mr,
 			BlockingException x, BatchJob batchJob) {
 		final Comparable id1 = mr == null ? null : mr.getRecordID1();
 		final Comparable id2 = mr == null ? null : mr.getRecordID2();
