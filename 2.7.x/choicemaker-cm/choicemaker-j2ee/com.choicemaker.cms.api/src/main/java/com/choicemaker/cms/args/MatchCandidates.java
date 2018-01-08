@@ -1,18 +1,21 @@
 package com.choicemaker.cms.args;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.choicemaker.cm.core.Record;
 import com.choicemaker.util.Precondition;
 
-public final class MatchCandidates<T extends Comparable<T>> {
+public final class MatchCandidates<T extends Comparable<T> & Serializable>
+		implements Serializable {
 
-	private final Record<T> q;
+	private static final long serialVersionUID = 271L;
+
+	private final RemoteRecord<T> q;
 	private final List<EvaluatedPair<T>> pairs;
 
-	public MatchCandidates(Record<T> q, List<EvaluatedPair<T>> pairs) {
+	public MatchCandidates(RemoteRecord<T> q, List<EvaluatedPair<T>> pairs) {
 		Precondition.assertNonNullArgument("null query", q);
 		Precondition.assertNonNullArgument("null pairs", pairs);
 		this.q = q;
@@ -25,7 +28,7 @@ public final class MatchCandidates<T extends Comparable<T>> {
 		this.pairs = Collections.unmodifiableList(_ps);
 	}
 
-	Record<T> getQueryRecord() {
+	RemoteRecord<T> getQueryRecord() {
 		return q;
 	}
 

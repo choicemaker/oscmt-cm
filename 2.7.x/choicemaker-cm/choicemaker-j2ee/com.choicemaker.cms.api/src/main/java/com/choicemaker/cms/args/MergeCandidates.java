@@ -1,12 +1,12 @@
 package com.choicemaker.cms.args;
 
+import java.io.Serializable;
 import java.util.List;
 
 import com.choicemaker.cm.args.IGraphProperty;
-import com.choicemaker.cm.core.Record;
 
-public interface MergeCandidates<T extends Comparable<T>> {
+public interface MergeCandidates<T extends Comparable<T> & Serializable> {
 	IGraphProperty getGraphConnectivity();
-	List<Record<T>> getRecords();
+	List<RemoteRecord<T>> getRecords();
 	List<EvaluatedPair<T>> getPairs();
 }

@@ -1,15 +1,18 @@
 package com.choicemaker.cms.args;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
 import com.choicemaker.cm.core.Decision;
-import com.choicemaker.cm.core.Record;
 import com.choicemaker.util.Precondition;
 
-public final class EvaluatedPair<T extends Comparable<T>> {
+public final class EvaluatedPair<T extends Comparable<T> & Serializable>
+		implements Serializable {
 
-	private final Record<T> q;
-	private final Record<T> m;
+	private static final long serialVersionUID = 271L;
+
+	private final RemoteRecord<T> q;
+	private final RemoteRecord<T> m;
 	private final float p;
 	private final Decision d;
 	private final String[] notes;
@@ -20,12 +23,13 @@ public final class EvaluatedPair<T extends Comparable<T>> {
 		return retVal;
 	}
 
-	public EvaluatedPair(Record<T> q, Record<T> m, float p, Decision d) {
+	public EvaluatedPair(RemoteRecord<T> q, RemoteRecord<T> m, float p,
+			Decision d) {
 		this(q, m, p, d, null);
 	}
 
-	public EvaluatedPair(Record<T> q, Record<T> m, float p, Decision d,
-			String[] notes) {
+	public EvaluatedPair(RemoteRecord<T> q, RemoteRecord<T> m, float p,
+			Decision d, String[] notes) {
 		Precondition.assertNonNullArgument("null query", q);
 		Precondition.assertNonNullArgument("null candidate", m);
 		Precondition.assertBoolean("invalid probability: " + p,
@@ -43,11 +47,11 @@ public final class EvaluatedPair<T extends Comparable<T>> {
 		}
 	}
 
-	Record<T> getQueryRecord() {
+	RemoteRecord<T> getQueryRecord() {
 		return q;
 	}
 
-	Record<T> getMatchCandidate() {
+	RemoteRecord<T> getMatchCandidate() {
 		return m;
 	}
 

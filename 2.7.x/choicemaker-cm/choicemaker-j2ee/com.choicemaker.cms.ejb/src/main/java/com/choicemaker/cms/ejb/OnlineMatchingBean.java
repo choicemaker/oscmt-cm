@@ -1,26 +1,52 @@
 package com.choicemaker.cms.ejb;
 
 import java.io.IOException;
+import java.io.Serializable;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import javax.ejb.EJB;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
+import com.choicemaker.cm.args.IGraphProperty;
+import com.choicemaker.cm.core.Accessor;
+import com.choicemaker.cm.core.BlockingException;
+import com.choicemaker.cm.core.DatabaseException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.base.Match;
+import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.base.RecordDecisionMaker;
-import com.choicemaker.cm.core.util.MatchUtils;
 import com.choicemaker.cm.io.blocking.automated.AbaStatistics;
 import com.choicemaker.cm.io.blocking.automated.AutomatedBlocker;
 import com.choicemaker.cm.io.blocking.automated.DatabaseAccessor;
 import com.choicemaker.cm.io.blocking.automated.base.Blocker2;
-import com.choicemaker.cms.api.OnlineContext;
+import com.choicemaker.cm.io.blocking.automated.base.db.DbbCountsCreator;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.AbaStatisticsController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.AggregateDatabaseAbstractionManager;
+import com.choicemaker.cm.io.blocking.automated.util.BlockingConfigurationUtils;
+import com.choicemaker.cm.io.blocking.automated.util.DatabaseAccessorUtils;
+import com.choicemaker.cm.io.db.base.DatabaseAbstraction;
+import com.choicemaker.cm.io.db.base.DatabaseAbstractionManager;
+import com.choicemaker.cm.io.db.base.DbAccessor;
+import com.choicemaker.cm.io.db.base.DbReaderParallel;
 import com.choicemaker.cms.api.OnlineMatching;
+import com.choicemaker.cms.args.AbaParameters;
+import com.choicemaker.cms.args.AbaServerConfiguration;
+import com.choicemaker.cms.args.AbaSettings;
 import com.choicemaker.cms.args.EvaluatedPair;
 import com.choicemaker.cms.args.MatchCandidates;
+import com.choicemaker.cms.args.RemoteRecord;
+import com.choicemaker.cms.args.TransitiveCandidates;
 import com.choicemaker.util.Precondition;
+import com.choicemaker.util.StringUtils;
 
-public class OnlineMatchingBean<T extends Comparable<T>>
+public class OnlineMatchingBean<T extends Comparable<T> & Serializable>
 		implements OnlineMatching<T> {
 
 	private static final Logger logger =
@@ -37,41 +63,100 @@ public class OnlineMatchingBean<T extends Comparable<T>>
 	 *         matching.
 	 */
 	public static List<String> listIncompleteSpecifications(
-			OnlineContext configuration) {
-		throw new Error("not yet implemented");
-	}
-	
-	/** Creates a diagnostic suitable for logging or display to a user. */
-	public static String createIncompleteSpecificationMessage(OnlineContext configuration) {
+			AbaParameters parameters, AbaSettings settings,
+			AbaServerConfiguration configuration) {
 		throw new Error("not yet implemented");
 	}
 
+	/** Creates a diagnostic suitable for logging or display to a user. */
+	public static String createIncompleteSpecificationMessage(
+			AbaParameters parameters, AbaSettings settings,
+			AbaServerConfiguration configuration) {
+		throw new Error("not yet implemented");
+	}
+
+	@EJB
+	private AbaStatisticsController statsController;
+
+	boolean areCountsCached;
+
 	@Override
-	public MatchCandidates<T> getMatchCandidates(Record<T> query,
-			OnlineContext configuration) throws IOException {
+	public MatchCandidates<T> getMatchCandidates(final RemoteRecord<T> query,
+			final AbaParameters parameters, final AbaSettings settings,
+			final AbaServerConfiguration configuration)
+			throws IOException, BlockingException {
 
 		Precondition.assertNonNullArgument("null query", query);
 		Precondition.assertNonNullArgument("null configuration", configuration);
-		List<String> missingSpecs = listIncompleteSpecifications(configuration);
+		List<String> missingSpecs =
+			listIncompleteSpecifications(parameters, settings, configuration);
 		if (missingSpecs.size() > 0) {
-			String msg = createIncompleteSpecificationMessage(configuration);
+			String msg = createIncompleteSpecificationMessage(parameters,
+					settings, configuration);
 			logger.severe(msg);
 			throw new IllegalArgumentException(msg);
 		}
 
-		DatabaseAccessor databaseAccessor = null;
-		ImmutableProbabilityModel model = null;
-		Record<T> q = null;
-		int limitPBS = Integer.MIN_VALUE;
-		int stbsgl = Integer.MIN_VALUE;
-		int limitSBS = Integer.MIN_VALUE;
-		AbaStatistics stats = null;
-		String databaseConfiguration = null;
-		String blockingConfiguration = null;
+		String modelName = parameters.getModelConfigurationName();
+		ImmutableProbabilityModel model =
+			PMManager.getImmutableModelInstance(modelName);
+
+		String dbaName = parameters.getDatabaseAccessorName();
+		DatabaseAccessor databaseAccessor =
+			DatabaseAccessorUtils.getDatabaseAccessor(dbaName);
+
+		String dbrName = parameters.getDatabaseReaderName();
+		Accessor acc = model.getAccessor();
+		DbReaderParallel dbr =
+			((DbAccessor) acc).getDbReaderParallel(dbrName);
+
+		String masterId = dbr.getMasterId();
+		String referenceQuery = parameters.getReferenceQuery();
+		String condition = DatabaseAccessorUtils.parseSQL(referenceQuery, masterId);
+		logger.fine("Condition: " + condition);
+		if (condition != null && StringUtils.nonEmptyString(condition)) {
+			String[] cs = new String[2];
+			cs[0] = " ";
+			cs[1] = condition;
+			databaseAccessor.setCondition(cs);
+		} else {
+			databaseAccessor.setCondition("");
+		}
+		
+		int limitPBS = settings.getLimitPerBlockingSet();
+		int stbsgl = settings.getSingleTableBlockingSetGraceLimit();
+		int limitSBS = settings.getLimitSingleBlockingSet();
+		String databaseConfiguration =
+			parameters.getReferenceRsDatabaseConfiguration();
+		String blockingConfiguration =
+			parameters.getQueryToReferenceBlockingConfiguration();
 
 		RecordDecisionMaker dm = new RecordDecisionMaker();
-		float lowThreshold = -1.0f;
-		float highThreshold = -1.0f;
+		float lowThreshold = parameters.getLowThreshold();
+		float highThreshold = parameters.getHighThreshold();
+
+		String jndiName = parameters.getReferenceDatasource();
+		final DataSource masterDS = getDataSource(jndiName);
+
+		if (!areCountsCached) {
+			cacheAbaStatistics(masterDS);
+			areCountsCached = true;
+		}
+
+		final String bcId =
+			BlockingConfigurationUtils.createBlockingConfigurationId(model,
+					blockingConfiguration, databaseConfiguration);
+		final AbaStatistics stats = statsController.getStatistics(bcId);
+		if (stats == null) {
+			String msg =
+				"Abastatistics are not available for blocking configuration: "
+						+ bcId;
+			logger.severe(msg);
+			throw new IllegalStateException(msg);
+		}
+
+		@SuppressWarnings("unchecked")
+		final Record<T> q = model.getAccessor().toImpl(query);
 
 		AutomatedBlocker rs =
 			new Blocker2(databaseAccessor, model, q, limitPBS, stbsgl, limitSBS,
@@ -83,16 +168,66 @@ public class OnlineMatchingBean<T extends Comparable<T>>
 		assert matches != null;
 
 		List<EvaluatedPair<T>> pairs = new ArrayList<>(matches.size());
-		for (Match m : matches) {
-			String[] notes = m.ac.getNotes(model);
+		for (Match match : matches) {
+			String[] notes = match.ac.getNotes(model);
 			@SuppressWarnings("unchecked")
-			EvaluatedPair<T> p =
-				new EvaluatedPair<T>(q, m.m, m.probability, m.decision, notes);
+			RemoteRecord<T> m =
+				(RemoteRecord<T>) model.getAccessor().toRecordHolder(match.m);
+			EvaluatedPair<T> p = new EvaluatedPair<T>(query, m,
+					match.probability, match.decision, notes);
 			pairs.add(p);
 		}
 
-		MatchCandidates<T> retVal = new MatchCandidates<T>(q, pairs);
+		MatchCandidates<T> retVal = new MatchCandidates<T>(query, pairs);
 		return retVal;
+	}
+
+	@Override
+	public TransitiveCandidates<T> getTransitiveCandidates(
+			RemoteRecord<T> query, AbaParameters parameters,
+			AbaSettings settings, AbaServerConfiguration configuration,
+			IGraphProperty mergeConnectivity) throws IOException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public DataSource getDataSource(String jndiName) throws BlockingException {
+		if (jndiName == null || !jndiName.trim().equals(jndiName)
+				|| jndiName.isEmpty()) {
+			String msg = "Invalid JNDI name '" + jndiName + "'";
+			throw new IllegalArgumentException(msg);
+		}
+		DataSource retVal = null;
+		try {
+			Context ctx = new InitialContext();
+			retVal = (DataSource) ctx.lookup(jndiName);
+		} catch (NamingException ex) {
+			String msg =
+				"Unable to locate DataSource '" + jndiName + "': " + ex;
+			logger.severe(ex.toString());
+			throw new BlockingException(msg, ex);
+		}
+		assert retVal != null;
+
+		return retVal;
+	}
+
+	/** Cache ABA statistics for field-value counts from a reference source */
+	protected void cacheAbaStatistics(DataSource ds) throws BlockingException {
+		logger.info("Caching ABA statistics for reference records..");
+		try {
+			DatabaseAbstractionManager mgr =
+				new AggregateDatabaseAbstractionManager();
+			DatabaseAbstraction dba = mgr.lookupDatabaseAbstraction(ds);
+			DbbCountsCreator cc = new DbbCountsCreator();
+			cc.updateAbaStatisticsCache(ds, dba, statsController);
+		} catch (SQLException | DatabaseException e) {
+			String msg = "Unable to cache master ABA statistics: " + e;
+			logger.severe(msg);
+			throw new BlockingException(msg);
+		}
+		logger.info(
+				"... finished caching ABA statistics for reference records.");
 	}
 
 }

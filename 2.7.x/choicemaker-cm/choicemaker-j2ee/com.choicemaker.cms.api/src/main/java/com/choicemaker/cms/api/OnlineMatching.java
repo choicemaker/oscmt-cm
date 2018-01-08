@@ -11,31 +11,29 @@
 package com.choicemaker.cms.api;
 
 import java.io.IOException;
+import java.io.Serializable;
 
-import com.choicemaker.cm.core.Record;
+import com.choicemaker.cm.args.IGraphProperty;
+import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cms.args.AbaParameters;
 import com.choicemaker.cms.args.AbaServerConfiguration;
 import com.choicemaker.cms.args.AbaSettings;
 import com.choicemaker.cms.args.MatchCandidates;
+import com.choicemaker.cms.args.RemoteRecord;
+import com.choicemaker.cms.args.TransitiveCandidates;
 
 /**
+ * @author rphall
  */
-public interface OnlineMatching<T extends Comparable<T>> {
+public interface OnlineMatching<T extends Comparable<T> & Serializable> {
 
-	MatchCandidates<T> getMatchCandidates(Record<T> query,
+	MatchCandidates<T> getMatchCandidates(RemoteRecord<T> query,
 			AbaParameters parameters, AbaSettings settings,
-			AbaServerConfiguration configuration) throws IOException;
+			AbaServerConfiguration configuration) throws IOException, BlockingException;
 
-	// TransitiveCandidates<T> getTransitiveCandidates(Record<T> query,
-	// OnlineContext configuration);
-	//
-	// TransitiveCandidates<T> getTransitiveCandidates(Record<T> query,
-	// OnlineContext configuration, OnlineContext overrides);
-	//
-	// TransitiveCandidates<T> getTransitiveCandidates(Record<T> query,
-	// String configurationName);
-	//
-	// TransitiveCandidates<T> getTransitiveCandidates(Record<T> query,
-	// String configurationName, OnlineContext overrides);
+	TransitiveCandidates<T> getTransitiveCandidates(RemoteRecord<T> query,
+			AbaParameters parameters, AbaSettings settings,
+			AbaServerConfiguration configuration,
+			IGraphProperty mergeConnectivity) throws IOException;
 
 }
