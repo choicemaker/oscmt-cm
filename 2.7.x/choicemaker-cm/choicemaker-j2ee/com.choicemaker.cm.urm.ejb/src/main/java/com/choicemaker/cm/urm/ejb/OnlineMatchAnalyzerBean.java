@@ -94,7 +94,7 @@ public class OnlineMatchAnalyzerBean extends OnlineMatchBaseBean {
 		ArrayList  evalRecords = new ArrayList();					
 		
 		ImmutableProbabilityModel model = getProbabilityModel(modelName);
-		Record q = getInternalRecord(model,queryRecord);
+		Record q = InternalRecordBuilder.getInternalRecord(model,queryRecord);
 				
 		try {
 			long startTime = System.currentTimeMillis();

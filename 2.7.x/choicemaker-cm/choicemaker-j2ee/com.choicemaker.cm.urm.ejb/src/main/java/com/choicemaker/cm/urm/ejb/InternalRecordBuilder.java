@@ -10,18 +10,17 @@ package com.choicemaker.cm.urm.ejb;
 //import com.choicemaker.cm.core.Accessor;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
+import com.choicemaker.cm.urm.adaptor.tocmcore.UrmRecordBuilder;
 import com.choicemaker.cm.urm.base.ConnectedRecordSet;
 import com.choicemaker.cm.urm.base.GlobalRecordRef;
 import com.choicemaker.cm.urm.base.IRecordHolder;
 import com.choicemaker.cm.urm.base.IRecordVisitor;
+import com.choicemaker.cm.urm.base.ISingleRecord;
 import com.choicemaker.cm.urm.base.LinkedRecordSet;
 import com.choicemaker.cm.urm.base.RecordRef;
 
 /**
  * @author emoussikaev
- *
- * To change the template for this generated type comment go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
 public class InternalRecordBuilder implements IRecordVisitor {
 
@@ -91,6 +90,14 @@ public class InternalRecordBuilder implements IRecordVisitor {
 	 */
 	public Record getResultRecord() {
 		return resRec;
+	}
+	static Record getInternalRecord(
+		ImmutableProbabilityModel model,
+		ISingleRecord queryRecord) {
+		UrmRecordBuilder irb = new UrmRecordBuilder(model);
+		queryRecord.accept(irb);
+		Record retVal = irb.getResultRecord();
+		return retVal;
 	}
 
 }

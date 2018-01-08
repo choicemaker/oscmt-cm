@@ -11,14 +11,10 @@ import java.io.IOException;
 import java.rmi.RemoteException;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.SortedSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.ejb.CreateException;
-import javax.ejb.EJBException;
-import javax.ejb.SessionBean;
-import javax.ejb.SessionContext;
+import javax.ejb.Stateless;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -44,15 +40,14 @@ import com.choicemaker.cm.io.blocking.automated.UnderspecifiedQueryException;
 import com.choicemaker.cm.io.blocking.automated.base.Blocker2;
 import com.choicemaker.cm.io.blocking.automated.base.BlockingSetReporter;
 import com.choicemaker.cm.io.blocking.automated.base.db.DbbCountsCreator;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.AbaStatisticsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.AggregateDatabaseAbstractionManager;
 import com.choicemaker.cm.io.blocking.automated.util.BlockingConfigurationUtils;
+import com.choicemaker.cm.io.blocking.automated.util.DatabaseAccessorUtils;
 import com.choicemaker.cm.io.db.base.DatabaseAbstraction;
 import com.choicemaker.cm.io.db.base.DatabaseAbstractionManager;
 import com.choicemaker.cm.io.db.base.DbAccessor;
 import com.choicemaker.cm.io.db.base.DbReaderParallel;
 import com.choicemaker.cm.io.xml.base.XmlSingleRecordWriter;
-import com.choicemaker.cm.urm.adaptor.tocmcore.UrmRecordBuilder;
 import com.choicemaker.cm.urm.base.DbRecordCollection;
 import com.choicemaker.cm.urm.base.Decision3;
 import com.choicemaker.cm.urm.base.EvalRecordFormat;
@@ -73,90 +68,44 @@ import com.choicemaker.cm.urm.exceptions.UrmIncompleteBlockingSetsException;
 import com.choicemaker.cm.urm.exceptions.UrmUnderspecifiedQueryException;
 import com.choicemaker.e2.CMExtension;
 import com.choicemaker.e2.platform.CMPlatformUtils;
-import com.choicemaker.util.StringUtils;
 
 /**
  * @author emoussikaev
  * @see
  */
+@Stateless
 @SuppressWarnings({"rawtypes"})
-public class OnlineMatchBaseBean implements SessionBean {
+public class OnlineMatchBaseBean  {
 
-	private static final long serialVersionUID = 1L;
-	protected transient SessionContext sessionContext;
+	private static final long serialVersionUID = 271L;
 	protected static Logger log = Logger.getLogger(OnlineMatchBaseBean.class.getName());
 
-	// @EJB
-	AbaStatisticsController statsController;
+//	// @EJB
+//	AbaStatisticsController statsController;
+//
+//	/**
+//	 * Now a flag for whether counts have been cached in memory.
+//	 */
+//	protected static boolean isCountsUpdated = false;
 
-	/**
-	 * Now a flag for whether counts have been cached in memory.
-	 */
-	protected static boolean isCountsUpdated = false;
-
-	/**
-	 * Returns the modelId that has the specified name.
-	 * @exception IllegalArgumentException if the specified name is null
-	 * @exception ModelException if a modelId with the specified name
-	 * does not exist
-	 */
-	ImmutableProbabilityModel getProbabilityModel(String modelName)
-		throws ModelException {
-		if (modelName == null) {
-			throw new IllegalArgumentException("null modelId name");
-		}
-		ImmutableProbabilityModel retVal = PMManager.getModelInstance(modelName);
-		if (retVal == null) {
-			log.severe("Invalid probability accessProvider: " + modelName);
-			throw new ModelException(modelName);
-		}
-		return retVal;
-	}
-
-	Record getInternalRecord(
-		ImmutableProbabilityModel model,
-		ISingleRecord queryRecord) {
-		UrmRecordBuilder irb = new UrmRecordBuilder(model);
-		queryRecord.accept(irb);
-		Record retVal = irb.getResultRecord();
-		return retVal;
-	}
-
-	/**
-	 *
-	 */
-	public OnlineMatchBaseBean() {
-		super();
-	}
-
-	/* (non-Javadoc)
-	 * @see javax.ejb.SessionBean#ejbActivate()
-	 */
-	public void ejbActivate() throws EJBException, RemoteException {
-	}
-
-	/* (non-Javadoc)
-	 * @see javax.ejb.SessionBean#ejbPassivate()
-	 */
-	public void ejbPassivate() throws EJBException, RemoteException {
-	}
-
-	public void ejbCreate() throws CreateException, RemoteException {
-	} // ejbCreate()
-
-	/* (non-Javadoc)
-	 * @see javax.ejb.SessionBean#ejbRemove()
-	 */
-	public void ejbRemove() throws EJBException, RemoteException {
-	}
-
-	/* (non-Javadoc)
-	 * @see javax.ejb.SessionBean#setSessionContext(javax.ejb.SessionContext)
-	 */
-	public void setSessionContext(SessionContext sc)
-		throws EJBException, RemoteException {
-		this.sessionContext = sc;
-	}
+//	/**
+//	 * Returns the modelId that has the specified name.
+//	 * @exception IllegalArgumentException if the specified name is null
+//	 * @exception ModelException if a modelId with the specified name
+//	 * does not exist
+//	 */
+//	ImmutableProbabilityModel getProbabilityModel(String modelName)
+//		throws ModelException {
+//		if (modelName == null) {
+//			throw new IllegalArgumentException("null modelId name");
+//		}
+//		ImmutableProbabilityModel retVal = PMManager.getModelInstance(modelName);
+//		if (retVal == null) {
+//			log.severe("Invalid probability accessProvider: " + modelName);
+//			throw new ModelException(modelName);
+//		}
+//		return retVal;
+//	}
 
 	protected void writeDebugInfo(
 		ISingleRecord record,
@@ -185,7 +134,7 @@ public class OnlineMatchBaseBean implements SessionBean {
 		try {
 			ImmutableProbabilityModel _model =
 				PMManager.getModelInstance(probabilityModel);
-			Record _internalRecord = getInternalRecord(_model, record);
+			Record _internalRecord = InternalRecordBuilder.getInternalRecord(_model, record);
 			boolean _doXmlHeader = false;
 			String _details =
 				XmlSingleRecordWriter.writeRecord(
@@ -203,7 +152,7 @@ public class OnlineMatchBaseBean implements SessionBean {
 	}
 
 	@SuppressWarnings("null")
-	protected List getMatches(
+	protected List<Match> getMatches(
 		long startTime,
 		ISingleRecord queryRecord,
 		DbRecordCollection masterCollection,
@@ -264,7 +213,7 @@ public class OnlineMatchBaseBean implements SessionBean {
 			if (!modelDbrName.equals(masterCollection.getName()))
 				throw new RecordCollectionException("dbConfig should match accessProvider dbConfig attribute");
 
-			q = getInternalRecord(model, queryRecord);
+			q = InternalRecordBuilder.getInternalRecord(model, queryRecord);
 			RecordDecisionMaker dm = new RecordDecisionMaker();
 			DatabaseAccessor databaseAccessor;
 			try {
@@ -290,7 +239,7 @@ public class OnlineMatchBaseBean implements SessionBean {
 						((DbAccessor) acc).getDbReaderParallel(modelDbrName);
 
 					String masterId = dbr.getMasterId();
-					String condition = parseSQL(subset.getIdsQuery(), masterId);
+					String condition = DatabaseAccessorUtils.parseSQL(subset.getIdsQuery(), masterId);
 					log.fine("Condition: " + condition);
 					String[] cs = new String[2];
 					cs[0] = " ";
@@ -453,93 +402,10 @@ public class OnlineMatchBaseBean implements SessionBean {
 		}
 	}
 
-	/** This method takes the SQL string specified in
-	 * <code>SubsetDbRecordCollection</code> and converts that to the condition
-	 * string as expected by <code>DatabaseAccessor</code>, particularly by
-	 * <code>OraDatabaseAccessor</code>.
-	 * <p>
-	 * For example: SQL String =
-	 * "select mci_id from tb_patient where id_stat_cd = 'A' order by mci_id"
-	 * <p>
-	 * return =
-	 * "TB_PATIENT T WHERE B.MCI_ID = T.MCI_ID AND ID_STAT_CD = 'A'"
-	 * <p>
-	 * @author PC (3/27/2007)
-	 *
-	 * @param input
-	 * @param key
-	 * @return
-	 */
-	protected static String parseSQL(String input, String key)
-		throws CmRuntimeException {
-		StringBuffer ret = new StringBuffer();
-
-		// FIXME use ANTLR for more robust parsing
-
-		if (!StringUtils.nonEmptyString(input)) {
-			throw new IllegalArgumentException("null or blank SQL record id selection statement");
-		}
-		if (!StringUtils.nonEmptyString(key)) {
-			throw new IllegalArgumentException("null or blank SQL key");
-		}
-
-		//get "WHERE" and "FROM"
-		input = input.toUpperCase();
-		key = key.toUpperCase();
-		int w = input.indexOf("WHERE");
-		int o = input.indexOf("ORDER");
-
-		// Must be a FROM clause and exactly one TABLE
-		int t = input.indexOf("FROM");
-		if (t < 0) {
-			throw new CmRuntimeException(
-				"Missing FROM clause in SQL record id selection statement: '"
-					+ input
-					+ "'");
-		}
-		String str = null;
-		if (w < 0 && o < 0) {
-			str = input.substring(t + 5);
-		} else if (w > 0) {
-			str = input.substring(t + 5, w - 1);
-		} else if (o > 0) {
-			str = input.substring(t + 5, o - 1);
-		}
-		if (str.indexOf(',') != -1) {
-			throw new IllegalArgumentException("cannot have more than 1 table.");
-		}
-
-		// Append the (table) name which occurs after the FROM clause
-		int i = str.indexOf(' ');
-		if (i == -1) {
-			ret.append(str);
-		} else {
-			ret.append(str.substring(0, i));
-		}
-
-		ret.append(" T ");
-		ret.append("WHERE");
-		ret.append(" B.");
-		ret.append(key);
-		ret.append(" = T.");
-		ret.append(key);
-
-		if (w > 0) {
-			ret.append(" AND ");
-			if (o > 0) {
-				ret.append(input.substring(w + 6, o - 1));
-			} else {
-				ret.append(input.substring(w + 6));
-			}
-		}
-
-		return ret.toString();
-	}
-
 	/**
 	 * @throws IllegalArgumentException if modelId is null
 	 */
-	MatchScore getMatchScore(
+	static MatchScore getMatchScore(
 		ScoreType st,
 		Match match,
 		ImmutableProbabilityModel model) {
@@ -550,8 +416,13 @@ public class OnlineMatchBaseBean implements SessionBean {
 		String note = "";
 		if (st.equals(ScoreType.RULE_LIST_NOTE)) {
 			String[] notes = match.ac.getNotes(model);
-			for (int n = 0; n < notes.length; n++)
-				note = note + "\t" + notes[n];
+			for (int n = 0; n < notes.length; n++) {
+				if (n == 0) {
+					note = notes[n];
+				} else {
+					note = note + "\t" + notes[n];
+				}
+			}
 		}
 		ms =
 			new MatchScore(
@@ -564,7 +435,7 @@ public class OnlineMatchBaseBean implements SessionBean {
 	/**
 	 * @throws IllegalArgumentException if modelId is null
 	 */
-	ISingleRecord getSingleRecord(
+	static ISingleRecord getSingleRecord(
 		EvalRecordFormat resultFormat,
 		Match match,
 		ImmutableProbabilityModel model) {
@@ -586,7 +457,7 @@ public class OnlineMatchBaseBean implements SessionBean {
 	/**
 	 * @throws IllegalArgumentException if modelId is null
 	 */
-	EvaluatedRecord getEvaluatedRecord(
+	static EvaluatedRecord getEvaluatedRecord(
 		EvalRecordFormat resultFormat,
 		Match match,
 		ImmutableProbabilityModel model) {
