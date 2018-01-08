@@ -46,6 +46,7 @@ import com.choicemaker.cms.args.TransitiveCandidates;
 import com.choicemaker.util.Precondition;
 import com.choicemaker.util.StringUtils;
 
+@Stateless
 public class OnlineMatchingBean<T extends Comparable<T> & Serializable>
 		implements OnlineMatching<T> {
 
