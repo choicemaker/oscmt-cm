@@ -35,7 +35,6 @@ public class CompositeMatchScore implements IMatchScore {
 	}
 
 	public Decision3 getConservativeDecision() {
-		//TODO:impl
 		return null;
 	}
 
@@ -54,6 +53,11 @@ public class CompositeMatchScore implements IMatchScore {
 
 	public float getProbability() {
 		return getAverageProbability();
+	}
+
+	@Override
+	public String getNote() {
+		return new String().intern();
 	}
 
 }

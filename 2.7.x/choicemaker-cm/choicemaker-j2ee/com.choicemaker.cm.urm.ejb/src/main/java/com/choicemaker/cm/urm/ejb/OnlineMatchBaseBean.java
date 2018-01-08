@@ -40,6 +40,7 @@ import com.choicemaker.cm.io.blocking.automated.UnderspecifiedQueryException;
 import com.choicemaker.cm.io.blocking.automated.base.Blocker2;
 import com.choicemaker.cm.io.blocking.automated.base.BlockingSetReporter;
 import com.choicemaker.cm.io.blocking.automated.base.db.DbbCountsCreator;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.AbaStatisticsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.AggregateDatabaseAbstractionManager;
 import com.choicemaker.cm.io.blocking.automated.util.BlockingConfigurationUtils;
 import com.choicemaker.cm.io.blocking.automated.util.DatabaseAccessorUtils;
@@ -80,32 +81,32 @@ public class OnlineMatchBaseBean  {
 	private static final long serialVersionUID = 271L;
 	protected static Logger log = Logger.getLogger(OnlineMatchBaseBean.class.getName());
 
-//	// @EJB
-//	AbaStatisticsController statsController;
-//
-//	/**
-//	 * Now a flag for whether counts have been cached in memory.
-//	 */
-//	protected static boolean isCountsUpdated = false;
+	// @EJB
+	AbaStatisticsController statsController;
 
-//	/**
-//	 * Returns the modelId that has the specified name.
-//	 * @exception IllegalArgumentException if the specified name is null
-//	 * @exception ModelException if a modelId with the specified name
-//	 * does not exist
-//	 */
-//	ImmutableProbabilityModel getProbabilityModel(String modelName)
-//		throws ModelException {
-//		if (modelName == null) {
-//			throw new IllegalArgumentException("null modelId name");
-//		}
-//		ImmutableProbabilityModel retVal = PMManager.getModelInstance(modelName);
-//		if (retVal == null) {
-//			log.severe("Invalid probability accessProvider: " + modelName);
-//			throw new ModelException(modelName);
-//		}
-//		return retVal;
-//	}
+	/**
+	 * Now a flag for whether counts have been cached in memory.
+	 */
+	protected static boolean isCountsUpdated = false;
+
+	/**
+	 * Returns the modelId that has the specified name.
+	 * @exception IllegalArgumentException if the specified name is null
+	 * @exception ModelException if a modelId with the specified name
+	 * does not exist
+	 */
+	ImmutableProbabilityModel getProbabilityModel(String modelName)
+		throws ModelException {
+		if (modelName == null) {
+			throw new IllegalArgumentException("null modelId name");
+		}
+		ImmutableProbabilityModel retVal = PMManager.getModelInstance(modelName);
+		if (retVal == null) {
+			log.severe("Invalid probability accessProvider: " + modelName);
+			throw new ModelException(modelName);
+		}
+		return retVal;
+	}
 
 	protected void writeDebugInfo(
 		ISingleRecord record,
