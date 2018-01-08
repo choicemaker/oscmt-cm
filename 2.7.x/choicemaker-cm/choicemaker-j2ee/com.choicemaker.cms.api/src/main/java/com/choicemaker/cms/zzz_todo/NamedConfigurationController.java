@@ -1,8 +1,8 @@
-package com.choicemaker.cms.urm;
+package com.choicemaker.cms.zzz_todo;
 
 import java.util.List;
 
-import com.choicemaker.cms.urm.impl.NamedConfigurationEntity;
+//import com.choicemaker.cms.urm.impl.NamedConfigurationEntity;
 
 /**
  * In addition to managing NamedConfiguration entities, this interface also
@@ -20,7 +20,7 @@ public interface NamedConfigurationController {
 
 	List<NamedConfiguration> findAllNamedConfigurations();
 
-	NamedConfigurationEntity clone(NamedConfiguration nc);
+//	NamedConfigurationEntity clone(NamedConfiguration nc);
 
 	NamedConfiguration save(NamedConfiguration nc);
 

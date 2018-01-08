@@ -8,7 +8,7 @@
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
-package com.choicemaker.cms.api;
+package com.choicemaker.cms.args;
 
 import java.io.Serializable;
 
@@ -18,7 +18,7 @@ import com.choicemaker.cm.args.PersistentObject;
 /**
  * @author rphall
  */
-public interface BatchParameters extends OnlineParameters, PersistentObject, Serializable {
+public interface OabaParameters extends AbaParameters, PersistentObject, Serializable {
 
 	String DEFAULT_EJB_REF_NAME = "ejb/OabaParameters";
 	String DEFAULT_JNDI_COMP_NAME = "java:comp/env/" + DEFAULT_EJB_REF_NAME;

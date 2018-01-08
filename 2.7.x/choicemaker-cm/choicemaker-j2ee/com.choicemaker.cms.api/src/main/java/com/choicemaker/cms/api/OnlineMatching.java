@@ -10,34 +10,32 @@
  */
 package com.choicemaker.cms.api;
 
+import java.io.IOException;
+
 import com.choicemaker.cm.core.Record;
+import com.choicemaker.cms.args.AbaParameters;
+import com.choicemaker.cms.args.AbaServerConfiguration;
+import com.choicemaker.cms.args.AbaSettings;
+import com.choicemaker.cms.args.MatchCandidates;
 
 /**
  */
 public interface OnlineMatching<T extends Comparable<T>> {
 
-	MatchCandidateGroup<T> getMatchCandidateGroup(Record<T> query,
-			OnlineContext configuration);
+	MatchCandidates<T> getMatchCandidates(Record<T> query,
+			AbaParameters parameters, AbaSettings settings,
+			AbaServerConfiguration configuration) throws IOException;
 
-	MatchCandidateGroup<T> getMatchCandidateGroup(Record<T> query,
-			OnlineContext configuration, OnlineContext overrides);
-
-	MatchCandidateGroup<T> getMatchCandidateGroup(Record<T> query,
-			String configurationName);
-
-	MatchCandidateGroup<T> getMatchCandidateGroup(Record<T> query,
-			String configurationName, OnlineContext overrides);
-
-	TransitiveCandidateGroup<T> getTransitiveCandidateGroup(Record<T> query,
-			OnlineContext configuration);
-
-	TransitiveCandidateGroup<T> getTransitiveCandidateGroup(Record<T> query,
-			OnlineContext configuration, OnlineContext overrides);
-
-	TransitiveCandidateGroup<T> getTransitiveCandidateGroup(Record<T> query,
-			String configurationName);
-
-	TransitiveCandidateGroup<T> getTransitiveCandidateGroup(Record<T> query,
-			String configurationName, OnlineContext overrides);
+	// TransitiveCandidates<T> getTransitiveCandidates(Record<T> query,
+	// OnlineContext configuration);
+	//
+	// TransitiveCandidates<T> getTransitiveCandidates(Record<T> query,
+	// OnlineContext configuration, OnlineContext overrides);
+	//
+	// TransitiveCandidates<T> getTransitiveCandidates(Record<T> query,
+	// String configurationName);
+	//
+	// TransitiveCandidates<T> getTransitiveCandidates(Record<T> query,
+	// String configurationName, OnlineContext overrides);
 
 }

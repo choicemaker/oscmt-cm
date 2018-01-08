@@ -11,7 +11,7 @@
     </parent>
 
     <artifactId>com.choicemaker.cms.api</artifactId>
-    <packaging>ejb</packaging>
+    <packaging>jar</packaging>
 
     <name>CM Server API</name>
 

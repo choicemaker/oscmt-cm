@@ -15,7 +15,7 @@ import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 
 import com.choicemaker.cm.batch.impl.AbstractPersistentObject;
-import com.choicemaker.cms.urm.NamedConfiguration;
+import com.choicemaker.cms.zzz_todo.NamedConfiguration;
 
 @NamedQueries({
 		@NamedQuery(name = QN_NAMEDCONFIG_FIND_ALL,
@@ -58,8 +58,8 @@ public class NamedConfigurationEntity extends AbstractPersistentObject
 	@Column(name = CN_TASK)
 	protected String task = DEFAULT_TASK;
 
-	@Column(name = CN_RIGOR)
-	protected String rigor = DEFAULT_RIGOR;
+//	@Column(name = CN_RIGOR)
+//	protected String rigor = DEFAULT_RIGOR;
 
 	// -- Common record source parameters
 
@@ -231,7 +231,8 @@ public class NamedConfigurationEntity extends AbstractPersistentObject
 
 	@Override
 	public String getRigor() {
-		return rigor;
+//		return rigor;
+		return null;
 	}
 
 	@Override
@@ -387,7 +388,7 @@ public class NamedConfigurationEntity extends AbstractPersistentObject
 	}
 
 	public void setRigor(String rigor) {
-		this.rigor = rigor;
+//		this.rigor = rigor;
 	}
 
 	public void setDataSource(String dataSource) {
@@ -628,13 +629,13 @@ public class NamedConfigurationEntity extends AbstractPersistentObject
 		} else if (!referenceSelection.equals(nc.getReferenceSelection())) {
 			return false;
 		}
-		if (rigor == null) {
-			if (nc.getRigor() != null) {
-				return false;
-			}
-		} else if (!rigor.equals(nc.getRigor())) {
-			return false;
-		}
+//		if (rigor == null) {
+//			if (nc.getRigor() != null) {
+//				return false;
+//			}
+//		} else if (!rigor.equals(nc.getRigor())) {
+//			return false;
+//		}
 		if (serverFileURI == null) {
 			if (nc.getServerFileURI() != null) {
 				return false;

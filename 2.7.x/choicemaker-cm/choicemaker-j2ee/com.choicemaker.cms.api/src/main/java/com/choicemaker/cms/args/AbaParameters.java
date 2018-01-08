@@ -1,8 +1,8 @@
-package com.choicemaker.cms.api;
+package com.choicemaker.cms.args;
 
 import com.choicemaker.cm.args.OabaLinkageType;
 
-public interface OnlineParameters {
+public interface AbaParameters {
 
 	String getModelConfigurationName();
 

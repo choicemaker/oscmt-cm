@@ -15,8 +15,8 @@ import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
-import com.choicemaker.cms.urm.NamedConfiguration;
-import com.choicemaker.cms.urm.NamedConfigurationControllerLocal;
+import com.choicemaker.cms.api.local.NamedConfigurationControllerLocal;
+import com.choicemaker.cms.zzz_todo.NamedConfiguration;
 
 /**
  * In addition to managing NamedConfiguration entities, this bean also lists
@@ -111,7 +111,7 @@ public class NamedConfigurationControllerBean implements
 		return retVal;
 	}
 
-	@Override
+//	@Override
 	public NamedConfigurationEntity clone(NamedConfiguration sc) {
 		NamedConfigurationEntity retVal = new NamedConfigurationEntity(sc);
 		return retVal;
