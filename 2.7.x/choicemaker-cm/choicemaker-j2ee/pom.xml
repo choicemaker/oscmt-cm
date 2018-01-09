@@ -36,8 +36,8 @@
     <module>com.choicemaker.cm.urm.base</module>
     <module>com.choicemaker.cm.urm.config</module>
     <module>com.choicemaker.cm.urm.ejb</module>
-    <module>com.choicemaker.cm.cms.api</module>
-    <module>com.choicemaker.cm.cms.ejb</module>
+    <module>com.choicemaker.cms.api</module>
+    <module>com.choicemaker.cms.ejb</module>
   </modules>
 
   <build>

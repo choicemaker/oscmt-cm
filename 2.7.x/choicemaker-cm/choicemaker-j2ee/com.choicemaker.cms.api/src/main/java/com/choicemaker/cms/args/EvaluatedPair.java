@@ -47,19 +47,19 @@ public final class EvaluatedPair<T extends Comparable<T> & Serializable>
 		}
 	}
 
-	RemoteRecord<T> getQueryRecord() {
+	public RemoteRecord<T> getQueryRecord() {
 		return q;
 	}
 
-	RemoteRecord<T> getMatchCandidate() {
+	public RemoteRecord<T> getMatchCandidate() {
 		return m;
 	}
 
-	float getMatchProbability() {
+	public float getMatchProbability() {
 		return p;
 	}
 
-	Decision getMatchDecision() {
+	public Decision getMatchDecision() {
 		return d;
 	}
 

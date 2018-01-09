@@ -28,11 +28,11 @@ public final class MatchCandidates<T extends Comparable<T> & Serializable>
 		this.pairs = Collections.unmodifiableList(_ps);
 	}
 
-	RemoteRecord<T> getQueryRecord() {
+	public RemoteRecord<T> getQueryRecord() {
 		return q;
 	}
 
-	List<EvaluatedPair<T>> getEvaluatedPairs() {
+	public List<EvaluatedPair<T>> getEvaluatedPairs() {
 		return pairs;
 	}
 

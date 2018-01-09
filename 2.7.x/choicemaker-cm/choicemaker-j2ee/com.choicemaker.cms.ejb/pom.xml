@@ -54,11 +54,6 @@
         </dependency>
 
         <dependency>
-          <groupId>com.choicemaker.cm</groupId>
-          <artifactId>com.choicemaker.cm.args</artifactId>
-          <version>2.7.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
             <groupId>com.choicemaker.cm</groupId>
             <artifactId>com.choicemaker.cm.core</artifactId>
             <version>2.7.1-SNAPSHOT</version>
@@ -91,11 +86,6 @@
           <scope>provided</scope>
         </dependency>
         
-        <dependency>
-            <groupId>org.jboss.spec.javax.ejb</groupId>
-            <artifactId>jboss-ejb-api_3.2_spec</artifactId>
-            <scope>provided</scope>
-        </dependency>
         <dependency>
             <groupId>javax.enterprise</groupId>
             <artifactId>cdi-api</artifactId>
