@@ -12,6 +12,8 @@ package com.choicemaker.cm.args;
 
 import static com.choicemaker.cm.args.WellKnownGraphPropertyNames.GPN_SCM;
 
+import com.choicemaker.client.api.IGraphProperty;
+
 public interface TransitivityParameters extends OabaParameters {
 
 	String DEFAULT_EJB_REF_NAME = "ejb/transitivityParameters";
