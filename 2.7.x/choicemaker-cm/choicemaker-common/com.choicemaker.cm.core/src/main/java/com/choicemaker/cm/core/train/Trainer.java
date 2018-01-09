@@ -14,16 +14,16 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
 
+import com.choicemaker.client.api.Decision;
+import com.choicemaker.cm.core.ActiveClues;
+import com.choicemaker.cm.core.BooleanActiveClues;
 import com.choicemaker.cm.core.ClueDesc;
 import com.choicemaker.cm.core.ClueSet;
 import com.choicemaker.cm.core.ClueSetType;
-import com.choicemaker.cm.core.Decision;
+import com.choicemaker.cm.core.Evaluator;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.MutableMarkedRecordPair;
 import com.choicemaker.cm.core.OperationFailedException;
-import com.choicemaker.cm.core.base.ActiveClues;
-import com.choicemaker.cm.core.base.BooleanActiveClues;
-import com.choicemaker.cm.core.base.Evaluator;
-import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
 import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 
 /**

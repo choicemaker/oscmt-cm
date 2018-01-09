@@ -9,6 +9,8 @@ package com.choicemaker.cm.core;
 
 import java.io.ObjectStreamException;
 
+import com.choicemaker.client.api.Decision;
+
 /**
  * Typesafe enum for pseud-decisions on record pairs. Pseudo-decisions
  * are used for rules only.
@@ -110,7 +112,7 @@ public class ExtDecision extends Decision {
 	 * @return   A negative integer, zero, or a positive integer as this object is less than,
 	 *           equal to, or greater than the specified object.
 	 */
-	public int compareTo(Object o) {
+	public int compareTo(Decision o) {
 		int retVal;
 		if (this == o) {
 			retVal = 0;

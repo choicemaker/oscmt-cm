@@ -7,6 +7,8 @@
  *******************************************************************************/
 package com.choicemaker.cm.core;
 
+import com.choicemaker.client.api.Decision;
+
 /**
  * The result of evaluating whether a candidate record is a match to a reference
  * record.

@@ -11,7 +11,7 @@ import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.Date;
 
-import com.choicemaker.cm.core.base.Evaluator;
+import com.choicemaker.client.api.Decision;
 import com.choicemaker.cm.core.report.Report;
 
 /**

@@ -9,6 +9,8 @@ package com.choicemaker.cm.core;
 
 import java.util.Date;
 
+import com.choicemaker.client.api.Decision;
+
 /**
  * @author rphall
  */

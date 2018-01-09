@@ -7,6 +7,7 @@
  *******************************************************************************/
 package com.choicemaker.cm.core;
 
+import com.choicemaker.client.api.Decision;
 
 /**
  * Computes the probability that two records match each other,

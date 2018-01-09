@@ -17,14 +17,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.choicemaker.client.api.Decision;
 import com.choicemaker.cm.core.Accessor;
+import com.choicemaker.cm.core.ActiveClues;
+import com.choicemaker.cm.core.BooleanActiveClues;
 import com.choicemaker.cm.core.ClueDesc;
 import com.choicemaker.cm.core.Constants;
-import com.choicemaker.cm.core.Decision;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.base.ActiveClues;
-import com.choicemaker.cm.core.base.BooleanActiveClues;
-import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
+import com.choicemaker.cm.core.MutableMarkedRecordPair;
 
 /**
  * Exports a list of marked record pairs to an output stream.

@@ -14,6 +14,7 @@ import java.util.Collection;
 
 import com.choicemaker.cm.core.Accessor;
 import com.choicemaker.cm.core.ClueSet;
+import com.choicemaker.cm.core.Evaluator;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.MachineLearner;
 import com.choicemaker.cm.core.xmlconf.MlModelConf;

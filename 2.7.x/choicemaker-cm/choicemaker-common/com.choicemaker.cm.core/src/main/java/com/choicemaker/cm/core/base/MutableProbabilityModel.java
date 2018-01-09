@@ -21,13 +21,14 @@ import java.util.HashMap;
 
 import javax.swing.event.SwingPropertyChangeSupport;
 
+import com.choicemaker.client.api.Decision;
 import com.choicemaker.cm.core.Accessor;
 import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.choicemaker.cm.core.ClueDesc;
 import com.choicemaker.cm.core.ClueSet;
 import com.choicemaker.cm.core.Constants;
-import com.choicemaker.cm.core.Decision;
 import com.choicemaker.cm.core.Descriptor;
+import com.choicemaker.cm.core.Evaluator;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.MachineLearner;
 import com.choicemaker.cm.core.ModelConfigurationException;

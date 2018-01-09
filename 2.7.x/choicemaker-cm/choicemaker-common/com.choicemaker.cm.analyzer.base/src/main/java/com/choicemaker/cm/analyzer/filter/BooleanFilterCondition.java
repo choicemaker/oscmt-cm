@@ -10,8 +10,8 @@
  */
 package com.choicemaker.cm.analyzer.filter;
 
-import com.choicemaker.cm.core.base.ActiveClues;
-import com.choicemaker.cm.core.base.BooleanActiveClues;
+import com.choicemaker.cm.core.ActiveClues;
+import com.choicemaker.cm.core.BooleanActiveClues;
 
 /**
  * Description

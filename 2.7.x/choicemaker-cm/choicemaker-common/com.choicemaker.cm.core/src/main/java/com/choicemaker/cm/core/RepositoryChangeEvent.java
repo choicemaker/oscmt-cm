@@ -9,6 +9,8 @@ package com.choicemaker.cm.core;
 
 import java.util.EventObject;
 
+import com.choicemaker.client.api.Decision;
+
 
 /**
  *

@@ -7,7 +7,7 @@
  *******************************************************************************/
 package com.choicemaker.cm.core;
 
-
+import com.choicemaker.client.api.Decision;
 
 /**
  * An unsafe, historical definition of a matching record. Wherever

@@ -7,7 +7,7 @@
  *******************************************************************************/
 package com.choicemaker.cm.core;
 
-import com.choicemaker.cm.core.base.ActiveClues;
+import com.choicemaker.client.api.Decision;
 
 /**
  * @author rphall

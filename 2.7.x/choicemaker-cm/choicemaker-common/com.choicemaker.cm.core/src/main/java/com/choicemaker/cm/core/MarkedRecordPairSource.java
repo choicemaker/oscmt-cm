@@ -9,8 +9,6 @@ package com.choicemaker.cm.core;
 
 import java.io.IOException;
 
-import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
-
 /**
  * Source of marked record pairs.
  *

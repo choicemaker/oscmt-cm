@@ -10,10 +10,13 @@
  */
 package com.choicemaker.cm.core.base;
 
-import com.choicemaker.cm.core.Decision;
+import com.choicemaker.client.api.Decision;
+import com.choicemaker.cm.core.ActiveClues;
 import com.choicemaker.cm.core.IRecordPair;
 import com.choicemaker.cm.core.ImmutableRecordPair;
+import com.choicemaker.cm.core.MutableRecordPair;
 import com.choicemaker.cm.core.Record;
+import com.choicemaker.cm.core.RecordData;
 
 
 /**

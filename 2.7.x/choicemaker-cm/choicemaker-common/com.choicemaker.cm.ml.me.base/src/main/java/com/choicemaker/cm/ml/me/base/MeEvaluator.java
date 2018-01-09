@@ -7,11 +7,11 @@
  *******************************************************************************/
 package com.choicemaker.cm.ml.me.base;
 
-import com.choicemaker.cm.core.Decision;
+import com.choicemaker.client.api.Decision;
+import com.choicemaker.cm.core.ActiveClues;
+import com.choicemaker.cm.core.BooleanActiveClues;
+import com.choicemaker.cm.core.Evaluator;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.base.ActiveClues;
-import com.choicemaker.cm.core.base.BooleanActiveClues;
-import com.choicemaker.cm.core.base.Evaluator;
 import com.choicemaker.cm.core.util.Signature;
 
 /**

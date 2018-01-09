@@ -12,7 +12,7 @@ package com.choicemaker.cm.analyzer.filter;
 
 import java.io.Serializable;
 
-import com.choicemaker.cm.core.base.ActiveClues;
+import com.choicemaker.cm.core.ActiveClues;
 
 /**
  * Description
@@ -23,7 +23,7 @@ public interface FilterCondition extends Serializable {
 	public static final FilterCondition NULL_FILTER_CONDITION = new FilterCondition() {
 		private static final long serialVersionUID = 1L;
 		/**
-		 * @see com.choicemaker.cm.train.filter.FilterCondition#satisfy(com.choicemaker.cm.core.base.ActiveClues)
+		 * @see com.choicemaker.cm.train.filter.FilterCondition#satisfy(com.choicemaker.cm.core.ActiveClues)
 		 */
 		public boolean satisfy(ActiveClues clues) {
 			return true;

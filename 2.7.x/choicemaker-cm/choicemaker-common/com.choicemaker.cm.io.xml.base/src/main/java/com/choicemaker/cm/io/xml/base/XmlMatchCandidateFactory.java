@@ -8,9 +8,9 @@
 package com.choicemaker.cm.io.xml.base;
 
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.base.Match;
-import com.choicemaker.cm.core.base.MatchCandidate;
-import com.choicemaker.cm.core.base.MatchCandidateFactory;
+import com.choicemaker.cm.core.Match;
+import com.choicemaker.cm.core.MatchCandidate;
+import com.choicemaker.cm.core.MatchCandidateFactory;
 
 /**
  * Comment

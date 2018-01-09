@@ -18,13 +18,13 @@ import java.io.Writer;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 
+import com.choicemaker.cm.core.ActiveClues;
+import com.choicemaker.cm.core.BooleanActiveClues;
 import com.choicemaker.cm.core.Constants;
 import com.choicemaker.cm.core.ImmutableMarkedRecordPair;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.ImmutableRecordPair;
 import com.choicemaker.cm.core.MarkedRecordPairSink;
-import com.choicemaker.cm.core.base.ActiveClues;
-import com.choicemaker.cm.core.base.BooleanActiveClues;
 
 /**
  * @author ajwinkel

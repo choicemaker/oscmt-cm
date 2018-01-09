@@ -13,10 +13,10 @@ package com.choicemaker.cm.analyzer.filter;
 import java.util.Collection;
 import java.util.Iterator;
 
-import com.choicemaker.cm.core.Decision;
+import com.choicemaker.client.api.Decision;
+import com.choicemaker.cm.core.ActiveClues;
 import com.choicemaker.cm.core.IMarkedRecordPair;
-import com.choicemaker.cm.core.base.ActiveClues;
-import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
+import com.choicemaker.cm.core.MutableMarkedRecordPair;
 import com.choicemaker.util.ArrayHelper;
 import com.choicemaker.util.IntArrayList;
 

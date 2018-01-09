@@ -7,6 +7,7 @@
  *******************************************************************************/
 package com.choicemaker.cm.core;
 
+import com.choicemaker.client.api.Identifiable;
 
 /**
  * Base interface for information about an entity.

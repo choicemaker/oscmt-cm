@@ -11,7 +11,7 @@
  */
 package com.choicemaker.cm.io.db.sqlserver;
 
-import com.choicemaker.cm.core.Decision;
+import com.choicemaker.client.api.Decision;
 
 public class MarkedRecordPairSpec {
 	

@@ -11,6 +11,7 @@
 package com.choicemaker.cm.core.base;
 
 import com.choicemaker.cm.core.Record;
+import com.choicemaker.cm.core.RecordData;
 
 /**
  * Description

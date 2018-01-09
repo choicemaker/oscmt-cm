@@ -7,6 +7,8 @@
  *******************************************************************************/
 package com.choicemaker.cm.core;
 
+import com.choicemaker.client.api.Decision;
+
 /**
  * Describes a single clue.
  *

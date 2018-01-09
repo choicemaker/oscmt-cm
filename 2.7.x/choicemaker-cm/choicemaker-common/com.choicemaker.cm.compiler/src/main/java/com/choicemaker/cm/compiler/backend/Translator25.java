@@ -13,6 +13,7 @@ package com.choicemaker.cm.compiler.backend;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.choicemaker.client.api.Decision;
 import com.choicemaker.cm.compiler.ICompilationUnit;
 import com.choicemaker.cm.compiler.Location;
 import com.choicemaker.cm.compiler.Modifiers;
@@ -63,7 +64,6 @@ import com.choicemaker.cm.compiler.backend.TargetTree.Try;
 import com.choicemaker.cm.compiler.parser.TreeList;
 import com.choicemaker.cm.core.ClueDesc;
 import com.choicemaker.cm.core.ClueSetType;
-import com.choicemaker.cm.core.Decision;
 import com.choicemaker.cm.core.ExtDecision;
 import com.choicemaker.cm.core.compiler.CompilerException;
 import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;

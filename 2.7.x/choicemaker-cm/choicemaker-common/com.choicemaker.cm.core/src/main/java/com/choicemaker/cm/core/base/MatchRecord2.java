@@ -9,7 +9,7 @@ package com.choicemaker.cm.core.base;
 
 import java.io.Serializable;
 
-import com.choicemaker.cm.core.Decision;
+import com.choicemaker.client.api.Decision;
 import com.choicemaker.cm.core.util.MatchUtils;
 
 /**
