@@ -1,4 +1,4 @@
-package com.choicemaker.cms.urm.impl;
+package com.choicemaker.cms.urm_tmp.impl;
 
 import static com.choicemaker.cms.zzz_todo.NamedConfiguration.DEFAULT_ABALIMITPERBLOCKINGSET;
 import static com.choicemaker.cms.zzz_todo.NamedConfiguration.DEFAULT_ABALIMITSINGLEBLOCKINGSET;
@@ -23,7 +23,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import com.choicemaker.cms.urm.impl.NamedConfigurationEntity;
+import com.choicemaker.cms.urm_tmp.impl.NamedConfigurationEntity;
 
 public class NamedConfigurationEntityTest {
 

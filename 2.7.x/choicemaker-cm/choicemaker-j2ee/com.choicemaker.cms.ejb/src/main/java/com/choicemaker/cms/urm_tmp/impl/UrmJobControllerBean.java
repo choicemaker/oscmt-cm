@@ -1,4 +1,4 @@
-package com.choicemaker.cms.urm.impl;
+package com.choicemaker.cms.urm_tmp.impl;
 
 import static com.choicemaker.cm.batch.impl.BatchJobJPA.PN_BATCHJOB_FIND_BY_JOBID_P1;
 import static com.choicemaker.cm.batch.impl.BatchJobJPA.QN_BATCHJOB_FIND_BY_JOBID;
@@ -22,7 +22,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsC
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobJPA;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityParametersController;
-import com.choicemaker.cms.urm.UrmJobController;
+import com.choicemaker.cms.urm_tmp.UrmJobController;
 
 /**
  * A stateless EJB used to manage the persistence of UrmJobEntity instances.

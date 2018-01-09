@@ -8,13 +8,13 @@
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
-package com.choicemaker.cms.urm.impl;
+package com.choicemaker.cms.urm_tmp.impl;
 
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
 
-import com.choicemaker.cms.urm.WorkFlowManager;
+import com.choicemaker.cms.urm_tmp.WorkFlowManager;
 
 @MessageDriven(activationConfig = {
 		@ActivationConfigProperty(propertyName = "destinationLookup",

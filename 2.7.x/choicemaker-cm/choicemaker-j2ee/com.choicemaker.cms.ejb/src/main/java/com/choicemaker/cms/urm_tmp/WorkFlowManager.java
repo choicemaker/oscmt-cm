@@ -1,4 +1,4 @@
-package com.choicemaker.cms.urm;
+package com.choicemaker.cms.urm_tmp;
 
 import com.choicemaker.cm.batch.BatchProcessingNotification;
 

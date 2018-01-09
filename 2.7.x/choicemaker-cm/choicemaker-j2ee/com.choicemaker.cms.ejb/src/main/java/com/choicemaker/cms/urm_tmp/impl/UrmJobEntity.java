@@ -8,13 +8,13 @@
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
-package com.choicemaker.cms.urm.impl;
+package com.choicemaker.cms.urm_tmp.impl;
 
-import static com.choicemaker.cms.urm.impl.UrmJobJPA.DISCRIMINATOR_VALUE;
-import static com.choicemaker.cms.urm.impl.UrmJobJPA.JPQL_URM_FIND_ALL;
-import static com.choicemaker.cms.urm.impl.UrmJobJPA.JPQL_URM_FIND_ALL_BY_URM_ID;
-import static com.choicemaker.cms.urm.impl.UrmJobJPA.QN_URM_FIND_ALL;
-import static com.choicemaker.cms.urm.impl.UrmJobJPA.QN_URM_FIND_ALL_BY_URM_ID;
+import static com.choicemaker.cms.urm_tmp.impl.UrmJobJPA.DISCRIMINATOR_VALUE;
+import static com.choicemaker.cms.urm_tmp.impl.UrmJobJPA.JPQL_URM_FIND_ALL;
+import static com.choicemaker.cms.urm_tmp.impl.UrmJobJPA.JPQL_URM_FIND_ALL_BY_URM_ID;
+import static com.choicemaker.cms.urm_tmp.impl.UrmJobJPA.QN_URM_FIND_ALL;
+import static com.choicemaker.cms.urm_tmp.impl.UrmJobJPA.QN_URM_FIND_ALL_BY_URM_ID;
 
 import java.io.File;
 

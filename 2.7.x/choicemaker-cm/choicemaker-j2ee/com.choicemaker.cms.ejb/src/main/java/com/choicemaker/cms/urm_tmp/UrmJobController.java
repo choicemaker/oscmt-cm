@@ -1,4 +1,4 @@
-package com.choicemaker.cms.urm;
+package com.choicemaker.cms.urm_tmp;
 
 import java.util.List;
 

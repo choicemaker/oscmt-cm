@@ -8,7 +8,7 @@
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
-package com.choicemaker.cms.urm.impl;
+package com.choicemaker.cms.urm_tmp.impl;
 
 import static com.choicemaker.cm.args.BatchProcessingEvent.DONE;
 
@@ -46,9 +46,9 @@ import com.choicemaker.cm.transitivity.server.ejb.TransitivityJobController;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityParametersController;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityService;
 import com.choicemaker.cm.transitivity.server.impl.TransitivityNotification;
-import com.choicemaker.cms.urm.BatchMatchAnalyzer;
-import com.choicemaker.cms.urm.UrmJobController;
-import com.choicemaker.cms.urm.WorkFlowManager;
+import com.choicemaker.cms.urm_tmp.BatchMatchAnalyzer;
+import com.choicemaker.cms.urm_tmp.UrmJobController;
+import com.choicemaker.cms.urm_tmp.WorkFlowManager;
 
 @Singleton
 @SuppressWarnings("rawtypes")

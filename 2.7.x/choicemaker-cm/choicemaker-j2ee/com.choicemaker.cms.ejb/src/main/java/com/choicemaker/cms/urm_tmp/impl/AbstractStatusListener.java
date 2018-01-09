@@ -8,7 +8,7 @@
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
-package com.choicemaker.cms.urm.impl;
+package com.choicemaker.cms.urm_tmp.impl;
 
 import java.io.Serializable;
 import java.util.logging.Logger;
@@ -18,7 +18,7 @@ import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 
 import com.choicemaker.cm.batch.BatchProcessingNotification;
-import com.choicemaker.cms.urm.WorkFlowManager;
+import com.choicemaker.cms.urm_tmp.WorkFlowManager;
 
 /**
  * Base class for UrmOabaListenerMDB and UrmTransitivityListenerMDB

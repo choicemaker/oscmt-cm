@@ -8,7 +8,7 @@
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
-package com.choicemaker.cms.urm;
+package com.choicemaker.cms.urm_tmp;
 
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.AbaStatisticsController;

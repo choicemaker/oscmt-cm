@@ -1,6 +1,6 @@
-package com.choicemaker.cms.urm.impl;
+package com.choicemaker.cms.urm_tmp.impl;
 
-import static com.choicemaker.cms.urm.impl.NamedConfigurationJPA.*;
+import static com.choicemaker.cms.urm_tmp.impl.NamedConfigurationJPA.*;
 
 import java.io.Serializable;
 
