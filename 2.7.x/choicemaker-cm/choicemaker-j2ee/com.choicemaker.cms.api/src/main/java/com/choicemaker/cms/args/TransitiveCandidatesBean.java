@@ -5,15 +5,22 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.choicemaker.client.api.DataAccessObject;
+import com.choicemaker.client.api.EvaluatedPair;
+import com.choicemaker.client.api.MergeCandidates;
+import com.choicemaker.client.api.TransitiveCandidates;
 import com.choicemaker.util.Precondition;
 
-public final class TransitiveCandidates<T extends Comparable<T> & Serializable> {
+public class TransitiveCandidatesBean<T extends Comparable<T> & Serializable>
+		implements TransitiveCandidates<T> {
 
-	private final RemoteRecord<T> q;
+	private static final long serialVersionUID = 271L;
+	private final DataAccessObject<T> q;
 	private final List<EvaluatedPair<T>> pairs;
 	private final List<MergeCandidates<T>> mergeGroups;
 
-	public TransitiveCandidates(RemoteRecord<T> q, List<EvaluatedPair<T>> pairs,
+	public TransitiveCandidatesBean(DataAccessObject<T> q,
+			List<EvaluatedPair<T>> pairs,
 			List<MergeCandidates<T>> mergeGroups) {
 		Precondition.assertNonNullArgument("null query", q);
 		Precondition.assertNonNullArgument("null pairs", pairs);
@@ -36,15 +43,15 @@ public final class TransitiveCandidates<T extends Comparable<T> & Serializable> 
 		this.mergeGroups = Collections.unmodifiableList(_mgs);
 	}
 
-	RemoteRecord<T> getQueryRecord() {
+	public DataAccessObject<T> getQueryRecord() {
 		return q;
 	}
 
-	List<EvaluatedPair<T>> getEvaluatedPairs() {
+	public List<EvaluatedPair<T>> getEvaluatedPairs() {
 		return pairs;
 	}
 
-	List<MergeCandidates<T>> getMergeCandidates() {
+	public List<MergeCandidates<T>> getMergeCandidates() {
 		return mergeGroups;
 	}
 }

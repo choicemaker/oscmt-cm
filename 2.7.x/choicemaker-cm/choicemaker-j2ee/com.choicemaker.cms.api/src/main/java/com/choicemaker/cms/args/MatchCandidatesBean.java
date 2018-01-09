@@ -5,17 +5,20 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.choicemaker.client.api.DataAccessObject;
+import com.choicemaker.client.api.EvaluatedPair;
+import com.choicemaker.client.api.MatchCandidates;
 import com.choicemaker.util.Precondition;
 
-public final class MatchCandidates<T extends Comparable<T> & Serializable>
-		implements Serializable {
+public class MatchCandidatesBean<T extends Comparable<T> & Serializable>
+		implements Serializable, MatchCandidates<T> {
 
 	private static final long serialVersionUID = 271L;
 
-	private final RemoteRecord<T> q;
+	private final DataAccessObject<T> q;
 	private final List<EvaluatedPair<T>> pairs;
 
-	public MatchCandidates(RemoteRecord<T> q, List<EvaluatedPair<T>> pairs) {
+	public MatchCandidatesBean(DataAccessObject<T> q, List<EvaluatedPair<T>> pairs) {
 		Precondition.assertNonNullArgument("null query", q);
 		Precondition.assertNonNullArgument("null pairs", pairs);
 		this.q = q;
@@ -28,10 +31,18 @@ public final class MatchCandidates<T extends Comparable<T> & Serializable>
 		this.pairs = Collections.unmodifiableList(_ps);
 	}
 
-	public RemoteRecord<T> getQueryRecord() {
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cms.args.MatchCandidates#getQueryRecord()
+	 */
+	@Override
+	public DataAccessObject<T> getQueryRecord() {
 		return q;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cms.args.MatchCandidates#getEvaluatedPairs()
+	 */
+	@Override
 	public List<EvaluatedPair<T>> getEvaluatedPairs() {
 		return pairs;
 	}
@@ -54,7 +65,7 @@ public final class MatchCandidates<T extends Comparable<T> & Serializable>
 		if (getClass() != obj.getClass())
 			return false;
 		@SuppressWarnings("unchecked")
-		MatchCandidates<T> other = (MatchCandidates<T>) obj;
+		MatchCandidatesBean<T> other = (MatchCandidatesBean<T>) obj;
 		if (pairs == null) {
 			if (other.pairs != null)
 				return false;

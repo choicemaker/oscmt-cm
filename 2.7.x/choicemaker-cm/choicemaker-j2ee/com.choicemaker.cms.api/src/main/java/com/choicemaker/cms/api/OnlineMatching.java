@@ -13,25 +13,25 @@ package com.choicemaker.cms.api;
 import java.io.IOException;
 import java.io.Serializable;
 
-import com.choicemaker.cm.args.IGraphProperty;
+import com.choicemaker.client.api.DataAccessObject;
+import com.choicemaker.client.api.IGraphProperty;
+import com.choicemaker.client.api.MatchCandidates;
+import com.choicemaker.client.api.TransitiveCandidates;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cms.args.AbaParameters;
 import com.choicemaker.cms.args.AbaServerConfiguration;
 import com.choicemaker.cms.args.AbaSettings;
-import com.choicemaker.cms.args.MatchCandidates;
-import com.choicemaker.cms.args.RemoteRecord;
-import com.choicemaker.cms.args.TransitiveCandidates;
 
 /**
  * @author rphall
  */
 public interface OnlineMatching<T extends Comparable<T> & Serializable> {
 
-	MatchCandidates<T> getMatchCandidates(RemoteRecord<T> query,
+	MatchCandidates<T> getMatchCandidates(DataAccessObject<T> query,
 			AbaParameters parameters, AbaSettings settings,
 			AbaServerConfiguration configuration) throws IOException, BlockingException;
 
-	TransitiveCandidates<T> getTransitiveCandidates(RemoteRecord<T> query,
+	TransitiveCandidates<T> getTransitiveCandidates(DataAccessObject<T> query,
 			AbaParameters parameters, AbaSettings settings,
 			AbaServerConfiguration configuration,
 			IGraphProperty mergeConnectivity) throws IOException;

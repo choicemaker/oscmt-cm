@@ -14,13 +14,17 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-import com.choicemaker.cm.args.IGraphProperty;
+import com.choicemaker.client.api.DataAccessObject;
+import com.choicemaker.client.api.EvaluatedPair;
+import com.choicemaker.client.api.IGraphProperty;
+import com.choicemaker.client.api.MatchCandidates;
+import com.choicemaker.client.api.TransitiveCandidates;
 import com.choicemaker.cm.core.Accessor;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.DatabaseException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.Match;
 import com.choicemaker.cm.core.Record;
-import com.choicemaker.cm.core.base.Match;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.base.RecordDecisionMaker;
 import com.choicemaker.cm.io.blocking.automated.AbaStatistics;
@@ -40,10 +44,7 @@ import com.choicemaker.cms.api.OnlineMatching;
 import com.choicemaker.cms.args.AbaParameters;
 import com.choicemaker.cms.args.AbaServerConfiguration;
 import com.choicemaker.cms.args.AbaSettings;
-import com.choicemaker.cms.args.EvaluatedPair;
-import com.choicemaker.cms.args.MatchCandidates;
-import com.choicemaker.cms.args.RemoteRecord;
-import com.choicemaker.cms.args.TransitiveCandidates;
+import com.choicemaker.cms.args.MatchCandidatesBean;
 import com.choicemaker.util.Precondition;
 import com.choicemaker.util.StringUtils;
 
@@ -83,7 +84,7 @@ public class OnlineMatchingBean<T extends Comparable<T> & Serializable>
 	boolean areCountsCached;
 
 	@Override
-	public MatchCandidates<T> getMatchCandidates(final RemoteRecord<T> query,
+	public MatchCandidates<T> getMatchCandidates(final DataAccessObject<T> query,
 			final AbaParameters parameters, final AbaSettings settings,
 			final AbaServerConfiguration configuration)
 			throws IOException, BlockingException {
@@ -173,20 +174,20 @@ public class OnlineMatchingBean<T extends Comparable<T> & Serializable>
 		for (Match match : matches) {
 			String[] notes = match.ac.getNotes(model);
 			@SuppressWarnings("unchecked")
-			RemoteRecord<T> m =
-				(RemoteRecord<T>) model.getAccessor().toRecordHolder(match.m);
+			DataAccessObject<T> m =
+				(DataAccessObject<T>) model.getAccessor().toRecordHolder(match.m);
 			EvaluatedPair<T> p = new EvaluatedPair<T>(query, m,
 					match.probability, match.decision, notes);
 			pairs.add(p);
 		}
 
-		MatchCandidates<T> retVal = new MatchCandidates<T>(query, pairs);
+		MatchCandidates<T> retVal = new MatchCandidatesBean<T>(query, pairs);
 		return retVal;
 	}
 
 	@Override
 	public TransitiveCandidates<T> getTransitiveCandidates(
-			RemoteRecord<T> query, AbaParameters parameters,
+			DataAccessObject<T> query, AbaParameters parameters,
 			AbaSettings settings, AbaServerConfiguration configuration,
 			IGraphProperty mergeConnectivity) throws IOException {
 		// TODO Auto-generated method stub
