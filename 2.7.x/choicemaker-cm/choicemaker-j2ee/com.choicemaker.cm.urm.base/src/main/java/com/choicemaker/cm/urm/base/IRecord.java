@@ -9,6 +9,8 @@ package com.choicemaker.cm.urm.base;
 
 import java.io.Serializable;
 
+import com.choicemaker.client.api.DataAccessObject;
+
 /**
  * A record
  * <p>
@@ -16,7 +18,7 @@ import java.io.Serializable;
  *
  * @author emoussikaev
  */
-public interface IRecord<T extends Comparable<T>> extends Serializable {
+public interface IRecord<T extends Comparable<T> & Serializable> extends DataAccessObject<T> {
 	
 	/**
 	 * Returns a key that uniquely identifies an entity. If two records have

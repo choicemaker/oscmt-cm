@@ -7,6 +7,8 @@
  *******************************************************************************/
 package com.choicemaker.cm.urm.base;
 
+import java.io.Serializable;
+
 /**
  * A single record. A single record represents one record in a database, file, or memory. 
  * <p>  
@@ -14,7 +16,7 @@ package com.choicemaker.cm.urm.base;
  * @author emoussikaev
  * @see
  */
-public interface ISingleRecord<T extends Comparable<T>> extends IRecord<T> {
+public interface ISingleRecord<T extends Comparable<T> & Serializable> extends IRecord<T> {
 	
 
 }

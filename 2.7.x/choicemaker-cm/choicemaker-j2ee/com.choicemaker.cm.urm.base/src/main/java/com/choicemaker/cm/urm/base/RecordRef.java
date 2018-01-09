@@ -7,6 +7,7 @@
  *******************************************************************************/
 package com.choicemaker.cm.urm.base;
 
+import java.io.Serializable;
 
 /**
  * A record represented by an identifier. It is assumed that the real location
@@ -16,9 +17,9 @@ package com.choicemaker.cm.urm.base;
  * @author emoussikaev
  * @see
  */
-public class RecordRef<T extends Comparable<T>> implements ISingleRecord<T> {
+public class RecordRef<T extends Comparable<T> & Serializable> implements ISingleRecord<T> {
 
-	private static final long serialVersionUID = -4347784657257638692L;
+	private static final long serialVersionUID = 271;
 
 	protected T id;
 	

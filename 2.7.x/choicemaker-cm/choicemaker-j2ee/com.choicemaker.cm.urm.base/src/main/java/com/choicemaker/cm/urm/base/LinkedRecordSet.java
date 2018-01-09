@@ -7,8 +7,7 @@
  *******************************************************************************/
 package com.choicemaker.cm.urm.base;
 
-
-
+import java.io.Serializable;
 
 /**
  * A group of matching together and denoting the same physical entity. 
@@ -17,7 +16,7 @@ package com.choicemaker.cm.urm.base;
  * @author emoussikaev
  * @see
  */
-public class LinkedRecordSet<T extends Comparable<T>> extends CompositeRecord<T> {
+public class LinkedRecordSet<T extends Comparable<T> & Serializable> extends CompositeRecord<T> {
 
 	private static final long serialVersionUID = -8988092145857498700L;
 

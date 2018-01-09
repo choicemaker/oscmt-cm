@@ -7,6 +7,7 @@
  *******************************************************************************/
 package com.choicemaker.cm.urm.base;
 
+import java.io.Serializable;
 
 /**
  * A record object that contains the data at runtime. 
@@ -15,6 +16,6 @@ package com.choicemaker.cm.urm.base;
  * @author emoussikaev
  * @see
  */
-public interface IRecordHolder<T extends Comparable<T>> extends ISingleRecord<T> {
+public interface IRecordHolder<T extends Comparable<T> & Serializable> extends ISingleRecord<T> {
 	
 }

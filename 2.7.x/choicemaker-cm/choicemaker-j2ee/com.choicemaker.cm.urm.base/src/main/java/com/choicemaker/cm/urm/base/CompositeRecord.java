@@ -7,6 +7,8 @@
  *******************************************************************************/
 package com.choicemaker.cm.urm.base;
 
+import java.io.Serializable;
+
 /**
  * A group of records combined together by some property. Usually this property is a fact or an assumption
  * that the records represent the same physical entity. (e.g., person, company, etc.)
@@ -15,9 +17,9 @@ package com.choicemaker.cm.urm.base;
  * @author emoussikaev
  * @see
  */
-public abstract class CompositeRecord<T extends Comparable<T>> implements IRecord<T> {
+public abstract class CompositeRecord<T extends Comparable<T> & Serializable> implements IRecord<T> {
 
-	private static final long serialVersionUID = 7797105570521045520L;
+	private static final long serialVersionUID = 271;
 	private IRecord<T>[] records;
 	private T id;
 
