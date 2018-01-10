@@ -8,7 +8,7 @@
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
-package com.choicemaker.cms.args;
+package com.choicemaker.cms.api;
 
 import java.io.Serializable;
 
@@ -23,17 +23,21 @@ import java.io.Serializable;
  */
 public interface AbaSettings extends Serializable {
 
+	/** The default value for {@link #getLimitPerBlockingSet()} */
 	int DEFAULT_LIMIT_PER_BLOCKING_SET = 50;
+
+	/** The default values for {@link #getLimitSingleBlockingSet()} */
 	int DEFAULT_LIMIT_SINGLE_BLOCKING_SET = 100;
+
+	/** The default value for {@link #getSingleTableBlockingSetGraceLimit()} */
 	int DEFAULT_SINGLE_TABLE_GRACE_LIMIT = 200;
 
 	/** Default id value for non-persistent settings */
-	long NONPERSISTENT_ABA_SETTINGS_ID = 0;
+	long NONPERSISTENT_SETTINGS_ID = 0;
 
 	/**
 	 * The persistence identifier for an instance. If the value is
-	 * {@link #NONPERSISTENT_ABA_SETTINGS_ID}, then the settings are not
-	 * persistent.
+	 * {@link #NONPERSISTENT_SETTINGS_ID}, then the settings are not persistent.
 	 */
 	long getId();
 

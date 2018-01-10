@@ -1,4 +1,4 @@
-package com.choicemaker.cms.args;
+package com.choicemaker.cms.beans;
 
 import java.io.Serializable;
 import java.util.ArrayList;

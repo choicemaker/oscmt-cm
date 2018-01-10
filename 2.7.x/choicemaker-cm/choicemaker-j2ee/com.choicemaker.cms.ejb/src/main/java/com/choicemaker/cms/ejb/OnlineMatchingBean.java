@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -40,11 +41,11 @@ import com.choicemaker.cm.io.db.base.DatabaseAbstraction;
 import com.choicemaker.cm.io.db.base.DatabaseAbstractionManager;
 import com.choicemaker.cm.io.db.base.DbAccessor;
 import com.choicemaker.cm.io.db.base.DbReaderParallel;
+import com.choicemaker.cms.api.AbaParameters;
+import com.choicemaker.cms.api.AbaServerConfiguration;
+import com.choicemaker.cms.api.AbaSettings;
 import com.choicemaker.cms.api.OnlineMatching;
-import com.choicemaker.cms.args.AbaParameters;
-import com.choicemaker.cms.args.AbaServerConfiguration;
-import com.choicemaker.cms.args.AbaSettings;
-import com.choicemaker.cms.args.MatchCandidatesBean;
+import com.choicemaker.cms.beans.MatchCandidatesBean;
 import com.choicemaker.util.Precondition;
 import com.choicemaker.util.StringUtils;
 
@@ -68,14 +69,16 @@ public class OnlineMatchingBean<T extends Comparable<T> & Serializable>
 	public static List<String> listIncompleteSpecifications(
 			AbaParameters parameters, AbaSettings settings,
 			AbaServerConfiguration configuration) {
-		throw new Error("not yet implemented");
+		logger.warning("listIncompleteSpecifications is not implemented");
+		return Collections.emptyList();
 	}
 
 	/** Creates a diagnostic suitable for logging or display to a user. */
 	public static String createIncompleteSpecificationMessage(
 			AbaParameters parameters, AbaSettings settings,
 			AbaServerConfiguration configuration) {
-		throw new Error("not yet implemented");
+		logger.warning("createIncompleteSpecificationMessage is not implemented");
+		return "".intern();
 	}
 
 	@EJB
@@ -114,7 +117,7 @@ public class OnlineMatchingBean<T extends Comparable<T> & Serializable>
 			((DbAccessor) acc).getDbReaderParallel(dbrName);
 
 		String masterId = dbr.getMasterId();
-		String referenceQuery = parameters.getReferenceQuery();
+		String referenceQuery = parameters.getReferenceSelectionView();
 		String condition = DatabaseAccessorUtils.parseSQL(referenceQuery, masterId);
 		logger.fine("Condition: " + condition);
 		if (condition != null && StringUtils.nonEmptyString(condition)) {
@@ -130,7 +133,7 @@ public class OnlineMatchingBean<T extends Comparable<T> & Serializable>
 		int stbsgl = settings.getSingleTableBlockingSetGraceLimit();
 		int limitSBS = settings.getLimitSingleBlockingSet();
 		String databaseConfiguration =
-			parameters.getReferenceRsDatabaseConfiguration();
+			parameters.getReferenceDatabaseConfiguration();
 		String blockingConfiguration =
 			parameters.getQueryToReferenceBlockingConfiguration();
 

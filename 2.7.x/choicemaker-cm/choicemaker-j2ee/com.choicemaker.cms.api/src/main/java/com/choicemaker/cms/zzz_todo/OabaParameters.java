@@ -12,22 +12,25 @@ package com.choicemaker.cms.zzz_todo;
 
 import java.io.Serializable;
 
+import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.args.PersistentObject;
-import com.choicemaker.cms.args.AbaParameters;
+import com.choicemaker.cms.api.AbaParameters;
 
 /**
  * @author rphall
  */
 public interface OabaParameters extends AbaParameters, PersistentObject, Serializable {
 
-	String DEFAULT_EJB_REF_NAME = "ejb/OabaParameters";
-	String DEFAULT_JNDI_COMP_NAME = "java:comp/env/" + DEFAULT_EJB_REF_NAME;
+//	String DEFAULT_EJB_REF_NAME = "ejb/OabaParameters";
+//	String DEFAULT_JNDI_COMP_NAME = "java:comp/env/" + DEFAULT_EJB_REF_NAME;
 
 	long NONPERSISTENT_ID = 0;
 
 	boolean DEFAULT_QUERY_RS_IS_DEDUPLICATED = false;
 
 	long getId();
+
+	OabaLinkageType getOabaLinkageType();
 
 	/** The query record source (and its id) is never null */
 	long getQueryRsId();
@@ -44,5 +47,9 @@ public interface OabaParameters extends AbaParameters, PersistentObject, Seriali
 	String getQueryRsDatabaseConfiguration();
 	
 	String getQueryToQueryBlockingConfiguration();
+
+	Long getReferenceRsId();
+
+	String getReferenceRsType();
 
 }
