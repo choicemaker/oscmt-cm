@@ -191,7 +191,7 @@ public class Translator25 extends TreeGen implements TargetTags, Modifiers, ITra
 	}
     
 	protected Tree decision_ident(int pos) {
-		return qualid(pos, "com.choicemaker.cm.core.Decision");
+		return qualid(pos, "com.choicemaker.client.api.Decision");
 	}
     
 	protected Tree ext_decision_ident(int pos) {
@@ -211,15 +211,15 @@ public class Translator25 extends TreeGen implements TargetTags, Modifiers, ITra
 	}
     
 	protected Tree active_clues_ident(int pos) {
-		return qualid(pos, "com.choicemaker.cm.core.base.ActiveClues");
+		return qualid(pos, "com.choicemaker.cm.core.ActiveClues");
 	}
     
 	protected Tree boolean_active_clues_ident(int pos) {
-		return qualid(pos, "com.choicemaker.cm.core.base.BooleanActiveClues");
+		return qualid(pos, "com.choicemaker.cm.core.BooleanActiveClues");
 	}
     
 	protected Tree int_active_clues_ident(int pos) {
-		return qualid(pos, "com.choicemaker.cm.core.base.IntActiveClues");
+		return qualid(pos, "com.choicemaker.cm.core.IntActiveClues");
 	}
     
 	protected Tree record_ident(int pos) {
