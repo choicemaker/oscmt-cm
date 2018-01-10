@@ -12,12 +12,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
 
+import com.choicemaker.client.api.Decision;
 import com.choicemaker.cm.core.ClueSet;
-import com.choicemaker.cm.core.Decision;
+import com.choicemaker.cm.core.Evaluator;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.Match;
 import com.choicemaker.cm.core.Record;
-import com.choicemaker.cm.core.base.Evaluator;
-import com.choicemaker.cm.core.base.Match;
 import com.choicemaker.cm.core.base.MatchRecord2;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.base.RECORD_SOURCE_ROLE;

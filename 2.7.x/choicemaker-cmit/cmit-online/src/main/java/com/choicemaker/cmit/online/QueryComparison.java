@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.choicemaker.cm.core.base.Match;
+import com.choicemaker.cm.core.Match;
 import com.choicemaker.cm.io.xml.base.XmlSingleRecordWriter;
 
 /**

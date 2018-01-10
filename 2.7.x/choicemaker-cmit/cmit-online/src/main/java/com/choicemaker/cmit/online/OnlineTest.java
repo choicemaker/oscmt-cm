@@ -15,10 +15,10 @@ import java.security.Permission;
 import java.util.Date;
 
 import com.choicemaker.cm.compiler.impl.CompilerFactory;
+import com.choicemaker.cm.core.Match;
 import com.choicemaker.cm.core.ModelConfigurationException;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.XmlConfException;
-import com.choicemaker.cm.core.base.Match;
 import com.choicemaker.cm.core.compiler.ICompiler;
 import com.choicemaker.cm.core.util.CommandLineArguments;
 import com.choicemaker.cm.core.xmlconf.ProbabilityModelsXmlConf;

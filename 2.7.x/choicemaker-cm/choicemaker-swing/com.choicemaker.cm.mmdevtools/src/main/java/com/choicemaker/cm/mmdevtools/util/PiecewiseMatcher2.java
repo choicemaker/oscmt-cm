@@ -14,15 +14,15 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.logging.Logger;
 
+import com.choicemaker.cm.core.Evaluator;
 import com.choicemaker.cm.core.ImmutableMarkedRecordPair;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.ImmutableRecordPair;
 import com.choicemaker.cm.core.MarkedRecordPairSink;
+import com.choicemaker.cm.core.Match;
+import com.choicemaker.cm.core.MutableMarkedRecordPair;
 import com.choicemaker.cm.core.RecordPairSink;
 import com.choicemaker.cm.core.RecordSource;
-import com.choicemaker.cm.core.base.Evaluator;
-import com.choicemaker.cm.core.base.Match;
-import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
 import com.choicemaker.cm.core.blocking.InMemoryBlocker;
 import com.choicemaker.util.BoundedQueue;
 import com.choicemaker.util.StringUtils;

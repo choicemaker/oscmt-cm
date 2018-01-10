@@ -28,7 +28,7 @@ import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.batch.impl.BatchJobEntity;
-import com.choicemaker.cm.core.base.Thresholds;
+import com.choicemaker.cm.core.Thresholds;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntity;

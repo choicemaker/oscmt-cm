@@ -13,14 +13,14 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
 
+import com.choicemaker.client.api.Decision;
 import com.choicemaker.cm.core.ClueDesc;
-import com.choicemaker.cm.core.Decision;
+import com.choicemaker.cm.core.Evaluator;
 import com.choicemaker.cm.core.ExtDecision;
 import com.choicemaker.cm.core.ImmutableMarkedRecordPair;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.base.Evaluator;
-import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
-import com.choicemaker.cm.core.base.Thresholds;
+import com.choicemaker.cm.core.MutableMarkedRecordPair;
+import com.choicemaker.cm.core.Thresholds;
 
 /**
  * Not thread safe

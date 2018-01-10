@@ -23,7 +23,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 
-import com.choicemaker.cm.core.base.RecordData;
+import com.choicemaker.cm.core.RecordData;
 import com.choicemaker.cm.core.datamodel.ObservableDataEvent;
 import com.choicemaker.cm.core.datamodel.ObservableDataListener;
 

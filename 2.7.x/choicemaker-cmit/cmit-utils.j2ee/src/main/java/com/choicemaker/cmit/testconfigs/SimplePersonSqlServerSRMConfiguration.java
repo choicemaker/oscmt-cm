@@ -1,7 +1,7 @@
 package com.choicemaker.cmit.testconfigs;
 
 import com.choicemaker.cm.args.AnalysisResultFormat;
-import com.choicemaker.cm.core.base.ImmutableThresholds;
+import com.choicemaker.cm.core.ImmutableThresholds;
 
 /**
  * Same test as {@link SimplePersonSqlServerTestConfiguration}, but with a Xxx

@@ -23,7 +23,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.base.Thresholds;
+import com.choicemaker.cm.core.Thresholds;
 import com.choicemaker.cm.mmdevtools.util.CrossValidator;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 

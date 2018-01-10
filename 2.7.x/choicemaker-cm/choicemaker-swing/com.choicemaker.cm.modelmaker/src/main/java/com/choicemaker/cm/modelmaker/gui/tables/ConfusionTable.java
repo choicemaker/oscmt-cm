@@ -20,8 +20,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
 
+import com.choicemaker.client.api.Decision;
 import com.choicemaker.cm.core.ColumnDefinition;
-import com.choicemaker.cm.core.Decision;
 import com.choicemaker.cm.gui.utils.viewer.HeaderRenderer;
 import com.choicemaker.cm.modelmaker.filter.ListeningMarkedRecordPairFilter;
 import com.choicemaker.cm.modelmaker.gui.panels.TestingControlPanel;

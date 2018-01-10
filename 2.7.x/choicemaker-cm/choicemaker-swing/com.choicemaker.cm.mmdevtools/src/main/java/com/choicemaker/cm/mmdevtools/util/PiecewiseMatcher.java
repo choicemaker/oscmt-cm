@@ -15,15 +15,15 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
+import com.choicemaker.client.api.Decision;
+import com.choicemaker.cm.core.ActiveClues;
 import com.choicemaker.cm.core.ClueSet;
-import com.choicemaker.cm.core.Decision;
+import com.choicemaker.cm.core.Evaluator;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.MarkedRecordPairSink;
+import com.choicemaker.cm.core.MutableMarkedRecordPair;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.RecordSource;
-import com.choicemaker.cm.core.base.ActiveClues;
-import com.choicemaker.cm.core.base.Evaluator;
-import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
 import com.choicemaker.cm.core.blocking.InMemoryBlocker;
 import com.choicemaker.util.StringUtils;
 

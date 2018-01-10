@@ -10,9 +10,9 @@ package com.choicemaker.cm.modelmaker.gui.tables;
 import javax.swing.JLabel;
 import javax.swing.table.AbstractTableModel;
 
+import com.choicemaker.client.api.Decision;
 import com.choicemaker.cm.core.ClueSet;
 import com.choicemaker.cm.core.ColumnDefinition;
-import com.choicemaker.cm.core.Decision;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.train.Trainer;
 import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;

@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Stack;
 import java.util.logging.Logger;
 
-import com.choicemaker.cm.core.Decision;
+import com.choicemaker.client.api.Decision;
 import com.choicemaker.cm.core.base.MatchRecord2;
 
 

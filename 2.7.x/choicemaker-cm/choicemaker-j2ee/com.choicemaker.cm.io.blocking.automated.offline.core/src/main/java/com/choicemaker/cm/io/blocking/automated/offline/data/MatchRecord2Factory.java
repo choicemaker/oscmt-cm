@@ -7,10 +7,10 @@
  *******************************************************************************/
 package com.choicemaker.cm.io.blocking.automated.offline.data;
 
-import static com.choicemaker.cm.core.Decision.DIFFER;
+import static com.choicemaker.client.api.Decision.DIFFER;
 import static com.choicemaker.cm.core.base.RECORD_SOURCE_ROLE.STAGING;
 
-import com.choicemaker.cm.core.Decision;
+import com.choicemaker.client.api.Decision;
 import com.choicemaker.cm.core.base.MatchRecord2;
 import com.choicemaker.cm.core.base.RECORD_SOURCE_ROLE;
 

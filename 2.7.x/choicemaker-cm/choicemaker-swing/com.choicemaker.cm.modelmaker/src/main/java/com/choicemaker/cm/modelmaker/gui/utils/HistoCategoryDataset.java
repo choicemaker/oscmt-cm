@@ -14,7 +14,7 @@ import org.jfree.data.DefaultKeyedValues2D;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.general.AbstractDataset;
 
-import com.choicemaker.cm.core.Decision;
+import com.choicemaker.client.api.Decision;
 
 /**
  */

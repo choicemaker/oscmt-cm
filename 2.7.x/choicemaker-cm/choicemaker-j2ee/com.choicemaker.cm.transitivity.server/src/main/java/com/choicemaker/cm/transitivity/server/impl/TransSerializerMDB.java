@@ -31,8 +31,8 @@ import javax.jms.ObjectMessage;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import com.choicemaker.client.api.IGraphProperty;
 import com.choicemaker.cm.args.AnalysisResultFormat;
-import com.choicemaker.cm.args.IGraphProperty;
 import com.choicemaker.cm.args.ProcessingEvent;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.BatchJob;

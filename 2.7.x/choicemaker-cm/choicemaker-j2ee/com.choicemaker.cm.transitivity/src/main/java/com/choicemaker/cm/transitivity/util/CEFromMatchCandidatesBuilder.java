@@ -12,7 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
 
-import com.choicemaker.cm.core.Decision;
+import com.choicemaker.client.api.Decision;
 import com.choicemaker.cm.core.InvalidProfileException;
 import com.choicemaker.cm.core.Profile;
 import com.choicemaker.cm.core.Record;

@@ -18,8 +18,8 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.NamedQuery;
 
+import com.choicemaker.client.api.IGraphProperty;
 import com.choicemaker.cm.args.AnalysisResultFormat;
-import com.choicemaker.cm.args.IGraphProperty;
 import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.PersistableRecordSource;

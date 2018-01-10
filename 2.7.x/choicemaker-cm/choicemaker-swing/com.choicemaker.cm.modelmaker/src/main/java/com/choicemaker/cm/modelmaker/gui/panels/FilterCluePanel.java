@@ -24,8 +24,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
-import com.choicemaker.cm.core.Decision;
-import com.choicemaker.cm.core.base.ImmutableThresholds;
+import com.choicemaker.client.api.Decision;
+import com.choicemaker.cm.core.ImmutableThresholds;
 import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.core.util.LoggingObject;
 import com.choicemaker.cm.modelmaker.filter.ListeningMarkedRecordPairFilter;

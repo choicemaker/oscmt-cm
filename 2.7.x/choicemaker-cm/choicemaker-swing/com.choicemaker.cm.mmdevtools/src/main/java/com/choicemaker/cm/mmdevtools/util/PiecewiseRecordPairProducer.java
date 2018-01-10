@@ -13,10 +13,10 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.MutableRecordPair;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.RecordPairSink;
 import com.choicemaker.cm.core.RecordSource;
-import com.choicemaker.cm.core.base.MutableRecordPair;
 import com.choicemaker.cm.core.blocking.InMemoryBlocker;
 
 /**

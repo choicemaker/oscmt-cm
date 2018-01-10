@@ -27,7 +27,7 @@ import javax.swing.border.Border;
 import javax.swing.plaf.UIResource;
 
 import com.choicemaker.cm.core.Descriptor;
-import com.choicemaker.cm.core.base.RecordData;
+import com.choicemaker.cm.core.RecordData;
 import com.choicemaker.cm.gui.utils.viewer.event.RecordTableMouseListener;
 
 /**

@@ -44,8 +44,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 
+import com.choicemaker.client.api.Decision;
 import com.choicemaker.cm.args.PersistentObject;
-import com.choicemaker.cm.core.Decision;
 import com.choicemaker.cm.core.base.RECORD_SOURCE_ROLE;
 import com.choicemaker.cm.core.util.MatchUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;

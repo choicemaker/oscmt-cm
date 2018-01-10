@@ -14,7 +14,7 @@ import java.beans.PropertyChangeListener;
 
 import javax.swing.JInternalFrame;
 
-import com.choicemaker.cm.core.base.RecordData;
+import com.choicemaker.cm.core.RecordData;
 
 /**
  * .

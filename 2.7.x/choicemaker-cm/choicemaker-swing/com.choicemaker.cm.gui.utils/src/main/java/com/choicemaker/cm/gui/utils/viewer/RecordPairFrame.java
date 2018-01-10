@@ -16,7 +16,7 @@ import javax.swing.JSplitPane;
 import javax.swing.table.JTableHeader;
 
 import com.choicemaker.cm.core.Descriptor;
-import com.choicemaker.cm.core.base.RecordData;
+import com.choicemaker.cm.core.RecordData;
 import com.choicemaker.cm.gui.utils.viewer.event.ColumnDragListener;
 import com.choicemaker.cm.gui.utils.viewer.event.RecordPairFramePopupManager;
 

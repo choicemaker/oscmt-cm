@@ -32,7 +32,7 @@ import org.jfree.chart.event.ChartChangeEvent;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.ui.RectangleEdge;
 
-import com.choicemaker.cm.core.Decision;
+import com.choicemaker.client.api.Decision;
 import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.modelmaker.filter.ListeningMarkedRecordPairFilter;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;

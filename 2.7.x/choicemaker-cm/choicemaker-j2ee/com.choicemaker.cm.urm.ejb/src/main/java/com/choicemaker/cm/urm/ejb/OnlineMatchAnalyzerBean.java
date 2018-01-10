@@ -19,8 +19,8 @@ import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.DatabaseException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.Match;
 import com.choicemaker.cm.core.Record;
-import com.choicemaker.cm.core.base.Match;
 import com.choicemaker.cm.transitivity.core.CompositeEntity;
 import com.choicemaker.cm.transitivity.core.Entity;
 import com.choicemaker.cm.transitivity.core.INode;

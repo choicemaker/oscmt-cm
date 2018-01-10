@@ -27,8 +27,8 @@ import javax.swing.SwingConstants;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
 
+import com.choicemaker.cm.core.RecordData;
 import com.choicemaker.cm.core.base.DescriptorCollection;
-import com.choicemaker.cm.core.base.RecordData;
 import com.choicemaker.cm.core.datamodel.ObservableDataEvent;
 import com.choicemaker.cm.core.datamodel.ObservableDataListener;
 import com.choicemaker.cm.gui.utils.viewer.event.DesktopPaneMouseListener;
