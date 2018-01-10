@@ -356,11 +356,43 @@ public class GeneratorImpl implements IGenerator {
 		}
 	}
 
+	private static class KeyFieldInfo {
+		public final String keyFieldName;
+		public final String keyFieldType;
+		public final String keyFieldObjectType;
+		KeyFieldInfo(String n, String t, String o) {
+			keyFieldName = n;
+			keyFieldType = t;
+			keyFieldObjectType = o;
+		}
+	}
+
+	private static KeyFieldInfo getKeyFieldInfo(Element r) {
+		final List<Element> fields = r.getChildren("field");
+		Iterator<Element>i = fields.iterator();
+		String n=null;
+		String t=null;
+		while (i.hasNext()) {
+			Element e = (Element) i.next();
+			String typeName = e.getAttributeValue("type");
+			String fieldName = e.getAttributeValue("name");
+			if ("true".equals(e.getAttributeValue("key"))){
+				n =	fieldName;
+				t =	typeName;
+				break;
+			}
+		}
+		String o=GeneratorHelper.getObjectType(t);
+		KeyFieldInfo retVal = new KeyFieldInfo(n,t,o);
+		return retVal;
+	}
+
 	private void process() throws GenException {
 		precompute();
 		Element rootRecord = getRootRecord();
 		identifierCheck(rootRecord.getAttributeValue("name"), null);
-		createInterfaceClasses(rootRecord, null);
+		final KeyFieldInfo kfi = getKeyFieldInfo(rootRecord);
+		createInterfaceClasses(rootRecord, null, kfi);
 		createInterfacePackage();
 		createHolderClasses(rootRecord, null);
 		createAccessor();
@@ -611,7 +643,9 @@ public class GeneratorImpl implements IGenerator {
 				+ "*/"
 				+ Constants.LINE_SEPARATOR);
 	}
-	private void createInterfaceClasses(final Element r, final Element outer) throws GenException {
+
+	private void createInterfaceClasses(final Element r, final Element outer,
+			final KeyFieldInfo kfi) throws GenException {
 		try {
 			final String thisRecordName = r.getAttributeValue(CoreTags.NAME);
 			final String className = r.getAttributeValue(CoreTags.HOLDER_CLASS_NAME);
@@ -627,23 +661,9 @@ public class GeneratorImpl implements IGenerator {
 			final String urmBaseInterfaceFileName =
 							getExternalSourceCodePackageRoot() + File.separator + urmBaseInterfaceName + ".java";
 
-			final List<Element> fields = r.getChildren("field");
-			Iterator<Element>i = fields.iterator();
-			String _keyFieldName=null;
-			String _keyFieldType=null;
-			while (i.hasNext()) {
-				Element e = (Element) i.next();
-				String typeName = e.getAttributeValue("type");
-				String fieldName = e.getAttributeValue("name");
-				if ("true".equals(e.getAttributeValue("key"))){
-					_keyFieldName =	fieldName;
-					_keyFieldType =	typeName;
-					break;
-				}
-			}
-			final String keyFieldName=_keyFieldName;
-			final String keyFieldType=_keyFieldType;
-			final String keyFieldObjectType=GeneratorHelper.getObjectType(keyFieldType);
+			final String keyFieldName=kfi.keyFieldName;
+			final String keyFieldType=kfi.keyFieldType;
+			final String keyFieldObjectType=kfi.keyFieldObjectType;
 
 			addGeneratedFile(fileName);
 			addGeneratedFile(interfaceFileName);
@@ -717,10 +737,7 @@ public class GeneratorImpl implements IGenerator {
 					+ getExternalPackage()
 					+ "."
 					+ urmBaseInterfaceName
-					+ ", java.io.Serializable"
-					+ ", com.choicemaker.cm.core.Identifiable<"
-					+ keyFieldObjectType
-					+ "> {"
+					+ ", java.io.Serializable {"
 					+ Constants.LINE_SEPARATOR);
 
 			biw.write(
@@ -747,7 +764,14 @@ public class GeneratorImpl implements IGenerator {
 						+ Constants.LINE_SEPARATOR
 						+ " */"
 						+ Constants.LINE_SEPARATOR);
-				ubiw.write("public interface " + urmBaseInterfaceName+" extends com.choicemaker.cm.urm.base.IRecordHolder, "+baseInterfaceName+" {");
+				ubiw.write(
+					"public interface "
+						+ urmBaseInterfaceName
+						+ " extends com.choicemaker.cm.urm.base.IRecordHolder<"
+						+ keyFieldObjectType
+						+ ">, "
+						+ baseInterfaceName
+						+ " {");
 			}
 
 			iw.write(
@@ -771,8 +795,13 @@ public class GeneratorImpl implements IGenerator {
 			w.write(
 				"/** Default constructor. Initializes all all arrays for nested record to zero length arrays and all other values to their defaults (0/null). */");
 			w1.write("public " + className + "() {" + Constants.LINE_SEPARATOR);
-			if(outer == null && version.isDefined())
-				uw.write("public " + urmClassName + "() {" + Constants.LINE_SEPARATOR);
+			if(outer == null && version.isDefined()) {
+				uw.write(
+					"public "
+						+ urmClassName
+						+ "() {"
+						+ Constants.LINE_SEPARATOR);
+			}
 			for (Iterator<Element> iEmbeddedRecords = embeddedRecords.iterator(); iEmbeddedRecords.hasNext();) {
 				Element e = (Element) iEmbeddedRecords.next();
 				w.write(
@@ -824,7 +853,8 @@ public class GeneratorImpl implements IGenerator {
 
 			}
 
-			i = fields.iterator();
+			final List<Element> fields = r.getChildren("field");
+			Iterator<Element> i = fields.iterator();
 			DerivedSource beanSource = DerivedSource.valueOf("bean");
 			while (i.hasNext()) {
 				Element e = (Element) i.next();
@@ -952,9 +982,21 @@ public class GeneratorImpl implements IGenerator {
 					+ Constants.LINE_SEPARATOR
 					+ "*/"
 					+ Constants.LINE_SEPARATOR);
-			w1.write("public " + className + "(" + baseInterfaceName + " __o) {" + Constants.LINE_SEPARATOR);
-			if(outer == null && version.isDefined())
-				uw.write("public " + urmClassName + "(" + baseInterfaceName + " __o) {" + Constants.LINE_SEPARATOR);
+			w1.write(
+				"public "
+					+ className
+					+ "("
+					+ baseInterfaceName
+					+ " __o) {"
+					+ Constants.LINE_SEPARATOR);
+			if(outer == null && version.isDefined()) {
+				uw.write(
+					"public "
+						+ urmClassName
+						+ "("
+						+ baseInterfaceName
+						+ " __o) {" + Constants.LINE_SEPARATOR);
+			}
 			for (Iterator<Element> iFields = fields.iterator(); iFields.hasNext();) {
 				Element field = (Element) iFields.next();
 				String name = field.getAttributeValue(CoreTags.NAME);
@@ -1010,14 +1052,17 @@ public class GeneratorImpl implements IGenerator {
 			bifs.close();
 			i = embeddedRecords.iterator();
 			while (i.hasNext()) {
-				createInterfaceClasses((Element) i.next(), r);
+				final Element embedded = (Element) i.next();
+				final KeyFieldInfo embeddedKFI = getKeyFieldInfo(embedded);
+				createInterfaceClasses(embedded, r, embeddedKFI);
 			}
 		} catch (IOException ex) {
 			throw new GenException("Problem writing file.", ex);
 		}
 	}
 
-	private void createHolderClasses(Element r, Element outer) throws GenException {
+	private void createHolderClasses(final Element r, final Element outer)
+			throws GenException {
 		try {
 			Set<String> identifiers = new HashSet<>();
 			SrcNames srcNames = new SrcNames();
@@ -1031,6 +1076,7 @@ public class GeneratorImpl implements IGenerator {
 			DerivedSource beanSource = DerivedSource.valueOf("bean");
 			w.write("// Generated by ChoiceMaker. Do not edit." + Constants.LINE_SEPARATOR);
 			w.write("package " + getPackage() + ";" + Constants.LINE_SEPARATOR);
+			w.write("import com.choicemaker.client.api.*;" + Constants.LINE_SEPARATOR);
 			w.write("import com.choicemaker.cm.core.*;" + Constants.LINE_SEPARATOR);
 			w.write("import com.choicemaker.cm.core.base.*;" + Constants.LINE_SEPARATOR);
 			w.write("import java.util.logging.*;" + Constants.LINE_SEPARATOR);
@@ -1475,6 +1521,7 @@ public class GeneratorImpl implements IGenerator {
 			w.write("// Generated by ChoiceMaker. Do not edit." + Constants.LINE_SEPARATOR);
 			w.write("package " + getPackage() + ";" + Constants.LINE_SEPARATOR);
 			w.write("import java.io.Serializable;" + Constants.LINE_SEPARATOR);
+			w.write("import com.choicemaker.client.api.*;" + Constants.LINE_SEPARATOR);
 			w.write("import com.choicemaker.cm.core.*;" + Constants.LINE_SEPARATOR);
 			w.write("import com.choicemaker.cm.core.base.*;" + Constants.LINE_SEPARATOR);
 			w.write(accessorImports.toString());
