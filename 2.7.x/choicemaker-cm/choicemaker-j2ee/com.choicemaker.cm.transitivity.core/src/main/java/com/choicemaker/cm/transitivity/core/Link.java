@@ -20,7 +20,6 @@ import com.choicemaker.cm.core.base.MatchRecord2;
  *
  * ChoiceMaker Technologies Inc.
  */
-@SuppressWarnings({"rawtypes" })
 public class Link<T extends Comparable<T>> {
 
 	private INode<T> node1;
@@ -50,7 +49,7 @@ public class Link<T extends Comparable<T>> {
 	 * 
 	 * @return INode
 	 */
-	public INode getNode1 () {
+	public INode<T> getNode1 () {
 		return node1;
 	}
 	
@@ -59,7 +58,7 @@ public class Link<T extends Comparable<T>> {
 	 * 
 	 * @return INode
 	 */
-	public INode getNode2 () {
+	public INode<T> getNode2 () {
 		return node2;
 	}
 	
