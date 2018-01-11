@@ -26,11 +26,13 @@ public interface OnlineMatching<T extends Comparable<T> & Serializable> {
 
 	MatchCandidates<T> getMatchCandidates(DataAccessObject<T> query,
 			AbaParameters parameters, AbaSettings settings,
-			AbaServerConfiguration configuration) throws IOException, BlockingException;
+			AbaServerConfiguration configuration)
+			throws IOException, BlockingException;
 
 	TransitiveCandidates<T> getTransitiveCandidates(DataAccessObject<T> query,
 			AbaParameters parameters, AbaSettings settings,
 			AbaServerConfiguration configuration,
-			IGraphProperty mergeConnectivity) throws IOException;
+			IGraphProperty mergeConnectivity)
+			throws IOException, BlockingException;
 
 }
