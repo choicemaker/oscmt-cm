@@ -59,7 +59,7 @@ public class OnlineMatchingBean<T extends Comparable<T> & Serializable>
 	/**
 	 * Checks for any specifications required for a complete online matching
 	 * configuration.
-	 * 
+	 *
 	 * @param configuration
 	 *            a non-null online matching context
 	 * @return a non-null list of any missing specifications. The list will be
@@ -117,7 +117,7 @@ public class OnlineMatchingBean<T extends Comparable<T> & Serializable>
 			((DbAccessor) acc).getDbReaderParallel(dbrName);
 
 		String masterId = dbr.getMasterId();
-		String referenceQuery = parameters.getReferenceSelectionView();
+		String referenceQuery = parameters.getReferenceSelectionViewAsSQL();
 		String condition = DatabaseAccessorUtils.parseSQL(referenceQuery, masterId);
 		logger.fine("Condition: " + condition);
 		if (condition != null && StringUtils.nonEmptyString(condition)) {
@@ -128,7 +128,7 @@ public class OnlineMatchingBean<T extends Comparable<T> & Serializable>
 		} else {
 			databaseAccessor.setCondition("");
 		}
-		
+
 		int limitPBS = settings.getLimitPerBlockingSet();
 		int stbsgl = settings.getSingleTableBlockingSetGraceLimit();
 		int limitSBS = settings.getLimitSingleBlockingSet();
@@ -143,6 +143,7 @@ public class OnlineMatchingBean<T extends Comparable<T> & Serializable>
 
 		String jndiName = parameters.getReferenceDatasource();
 		final DataSource masterDS = getDataSource(jndiName);
+		databaseAccessor.setDataSource(masterDS);
 
 		if (!areCountsCached) {
 			cacheAbaStatistics(masterDS);

@@ -12,6 +12,16 @@ public class AbaSettingsBean implements AbaSettings {
 	private int singleTableBlockingSetGraceLimit =
 		DEFAULT_SINGLE_TABLE_GRACE_LIMIT;
 
+	public AbaSettingsBean() {
+	}
+
+	/** Treats a non-persistent copy of the specified template */
+	public AbaSettingsBean(AbaSettings template) {
+		this.limitPerBlockingSet = template.getLimitPerBlockingSet();
+		this.limitSingleBlockingSet = template.getLimitSingleBlockingSet();
+		this.singleTableBlockingSetGraceLimit = template.getSingleTableBlockingSetGraceLimit();
+	}
+
 	@Override
 	public long getId() {
 		return id;
@@ -39,6 +49,10 @@ public class AbaSettingsBean implements AbaSettings {
 
 	public void setLimitPerBlockingSet(int limitPerBlockingSet) {
 		this.limitPerBlockingSet = limitPerBlockingSet;
+	}
+
+	public void setLimitSingleBlockingSet(int limitSingleBlockingSet) {
+		this.limitSingleBlockingSet = limitSingleBlockingSet;
 	}
 
 	public void setSingleTableBlockingSetGraceLimit(

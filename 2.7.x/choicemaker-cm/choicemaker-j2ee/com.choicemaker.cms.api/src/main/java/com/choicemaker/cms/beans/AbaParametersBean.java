@@ -16,6 +16,7 @@ public class AbaParametersBean implements AbaParameters {
 	private String referenceDatabaseConfiguration;
 	private String referenceDatasource;
 	private String referenceSelectionView;
+	private String referenceSelectionViewAsSQL;
 
 	public AbaParametersBean() {
 	}
@@ -75,6 +76,17 @@ public class AbaParametersBean implements AbaParameters {
 		return queryToReferenceBlockingConfiguration;
 	}
 
+	public void setQueryToReferenceBlockingConfiguration(
+			String queryToReferenceBlockingConfiguration) {
+		this.queryToReferenceBlockingConfiguration =
+			queryToReferenceBlockingConfiguration;
+	}
+
+	public void setReferenceDatabaseConfiguration(
+			String referenceDatabaseConfiguration) {
+		this.referenceDatabaseConfiguration = referenceDatabaseConfiguration;
+	}
+
 	@Override
 	public String getReferenceDatabaseConfiguration() {
 		return referenceDatabaseConfiguration;
@@ -92,7 +104,7 @@ public class AbaParametersBean implements AbaParameters {
 
 	@Override
 	public String getReferenceSelectionViewAsSQL() {
-		return referenceSelectionView;
+		return referenceSelectionViewAsSQL;
 	}
 
 	public void setDatabaseAccessorName(String databaseAccessorName) {
@@ -121,6 +133,12 @@ public class AbaParametersBean implements AbaParameters {
 
 	public void setReferenceSelectionView(String referenceSelectionView) {
 		this.referenceSelectionView = referenceSelectionView;
+	}
+
+	@Deprecated
+	public void setReferenceSelectionViewAsSQL(String name, String sql) {
+		this.referenceSelectionView = name;
+		this.referenceSelectionViewAsSQL = sql;
 	}
 
 }

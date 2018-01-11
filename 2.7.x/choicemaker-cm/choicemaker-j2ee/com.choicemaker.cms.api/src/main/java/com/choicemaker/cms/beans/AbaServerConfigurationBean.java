@@ -10,6 +10,15 @@ public class AbaServerConfigurationBean implements AbaServerConfiguration {
 	private int abaMinThreadCount = DEFAULT_THREAD_COUNT;
 	private int abaMaxThreadCount = DEFAULT_THREAD_COUNT;
 
+	public AbaServerConfigurationBean() {
+	}
+
+	/** Treats a non-persistent copy of the specified template */
+	public AbaServerConfigurationBean(AbaServerConfiguration template) {
+		this.abaMinThreadCount = template.getAbaMinThreadCount();
+		this.abaMaxThreadCount = template.getAbaMaxThreadCount();
+	}
+
 	@Override
 	public long getId() {
 		return id;
