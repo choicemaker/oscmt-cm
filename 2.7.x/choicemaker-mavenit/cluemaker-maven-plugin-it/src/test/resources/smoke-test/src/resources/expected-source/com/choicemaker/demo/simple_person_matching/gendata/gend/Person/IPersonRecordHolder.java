@@ -5,4 +5,4 @@ import com.choicemaker.util.StringUtils;
 /**
  * Generated base interface for the node type person. See package documentation for details.
  */
-public interface IPersonRecordHolder extends com.choicemaker.cm.urm.base.IRecordHolder, PersonBase {}
+public interface IPersonRecordHolder extends com.choicemaker.cm.urm.base.IRecordHolder<Integer>, PersonBase {}

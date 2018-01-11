@@ -6,7 +6,7 @@ import com.choicemaker.cm.validation.eclipse.impl.Validators;
 /**
  * Generated holder class for the node type person. See package documentation for details.
  */
-public class PersonRecordHolder implements com.choicemaker.demo.simple_person_matching.gendata.gend.Person2.IPersonRecordHolder, java.io.Serializable, com.choicemaker.cm.core.Identifiable<Integer> {
+public class PersonRecordHolder implements com.choicemaker.demo.simple_person_matching.gendata.gend.Person2.IPersonRecordHolder, java.io.Serializable {
 /** Default constructor. Initializes all all arrays for nested record to zero length arrays and all other values to their defaults (0/null). */public PersonRecordHolder() {
 }
 public void accept(com.choicemaker.cm.urm.base.IRecordVisitor ext){	ext.visit((com.choicemaker.cm.urm.base.IRecordHolder)this); }
