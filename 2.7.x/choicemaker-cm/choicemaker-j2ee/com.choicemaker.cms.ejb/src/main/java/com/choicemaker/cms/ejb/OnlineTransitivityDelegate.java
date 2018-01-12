@@ -1,4 +1,4 @@
-package com.choicemaker.cms.exp;
+package com.choicemaker.cms.ejb;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -17,7 +17,6 @@ import com.choicemaker.client.api.IGraphProperty;
 import com.choicemaker.client.api.MergeCandidates;
 import com.choicemaker.client.api.TransitiveCandidates;
 import com.choicemaker.cm.core.BlockingException;
-//import com.choicemaker.cm.core.DatabaseException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Match;
 import com.choicemaker.cm.core.Record;
@@ -27,38 +26,16 @@ import com.choicemaker.cm.transitivity.core.INode;
 import com.choicemaker.cm.transitivity.core.TransitivityException;
 import com.choicemaker.cm.transitivity.server.util.ClusteringIteratorFactory;
 import com.choicemaker.cm.transitivity.util.CEFromMatchesBuilder;
-//import com.choicemaker.cm.urm.base.CompositeMatchScore;
-//import com.choicemaker.cm.urm.base.DbRecordCollection;
-//import com.choicemaker.cm.urm.base.Decision3;
-//import com.choicemaker.cm.urm.base.EvalRecordFormat;
-//import com.choicemaker.cm.urm.base.EvaluatedRecord;
-//import com.choicemaker.cm.urm.base.ISingleRecord;
-//import com.choicemaker.cm.urm.base.LinkCriteria;
-//import com.choicemaker.cm.urm.base.LinkedRecordSet;
-//import com.choicemaker.cm.urm.base.MatchScore;
-//import com.choicemaker.cm.urm.base.RecordRef;
-//import com.choicemaker.cm.urm.base.RecordType;
-//import com.choicemaker.cm.urm.ejb.InternalRecordBuilder;
-//import com.choicemaker.cm.urm.exceptions.ArgumentException;
-//import com.choicemaker.cm.urm.exceptions.CmRuntimeException;
-//import com.choicemaker.cm.urm.exceptions.ConfigException;
-//import com.choicemaker.cm.urm.exceptions.ModelException;
-//import com.choicemaker.cm.urm.exceptions.RecordCollectionException;
-//import com.choicemaker.cm.urm.exceptions.RecordException;
-//import com.choicemaker.cm.urm.exceptions.UrmIncompleteBlockingSetsException;
-//import com.choicemaker.cm.urm.exceptions.UrmUnderspecifiedQueryException;
 import com.choicemaker.cms.api.AbaParameters;
 import com.choicemaker.cms.api.AbaServerConfiguration;
 import com.choicemaker.cms.api.AbaSettings;
 import com.choicemaker.cms.beans.MergeCandidatesBean;
 import com.choicemaker.cms.beans.TransitiveCandidatesBean;
-import com.choicemaker.cms.ejb.OnlineMatchingBean;
-import com.choicemaker.cms.ejb.ParameterHelper;
 import com.choicemaker.util.Precondition;
 
-public class Exp<T extends Comparable<T> & Serializable> {
+public class OnlineTransitivityDelegate<T extends Comparable<T> & Serializable> {
 
-	private static final Logger logger = Logger.getLogger(Exp.class.getName());
+	private static final Logger logger = Logger.getLogger(OnlineTransitivityDelegate.class.getName());
 
 	public TransitiveCandidates<T> getTransitiveCandidates(
 			final OnlineMatchingBean<T> olm, final DataAccessObject<T> query,
