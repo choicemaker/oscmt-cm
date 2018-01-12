@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.logging.Logger;
 
 import com.choicemaker.client.api.DataAccessObject;
@@ -25,9 +27,6 @@ import com.choicemaker.cm.transitivity.core.INode;
 import com.choicemaker.cm.transitivity.core.TransitivityException;
 import com.choicemaker.cm.transitivity.server.util.ClusteringIteratorFactory;
 import com.choicemaker.cm.transitivity.util.CEFromMatchesBuilder;
-import com.choicemaker.cm.urm.base.Decision3;
-import com.choicemaker.cm.urm.base.ISingleRecord;
-import com.choicemaker.cm.urm.base.MatchScore;
 //import com.choicemaker.cm.urm.base.CompositeMatchScore;
 //import com.choicemaker.cm.urm.base.DbRecordCollection;
 //import com.choicemaker.cm.urm.base.Decision3;
@@ -119,8 +118,10 @@ public class Exp<T extends Comparable<T> & Serializable> {
 		Iterator compactedCeIter =
 			f.createClusteringIterator(mergeConnectivity.getName(), ceIter);
 
-		// Get the clusters (there should be at most one, with every record
-		// connected by a hold or a match to the query record).
+		/*
+		 * Get the clusters (there should be at most one, with every record
+		 * connected by a hold or a match to the query record).
+		 */
 		CompositeEntity<T> retVal = null;
 		if (compactedCeIter.hasNext()) {
 			@SuppressWarnings("unchecked")
@@ -188,20 +189,19 @@ public class Exp<T extends Comparable<T> & Serializable> {
 				 * If every evaluated record must be linked to the query record,
 				 * but the query record is not part of this group, then bust the
 				 * group into individual records matched against the query
-				 * record
+				 * record. Otherwise, add the group as a merge group.
 				 */
+				SortedSet<SafeIndex<T>> mIndices = getRecordIndicesFromPairs(groupPairs);
 				if (mustIncludeQuery && !containsQuery) {
-//					for (int n = 0; n < groupRecords.size(); n++) {
-//						ISingleRecord singleRecord =
-//							(ISingleRecord) groupRecords.get(n);
-//						MatchScore singleScore =
-//							(MatchScore) groupScores.get(n);
-//						EvaluatedRecord er =
-//							new EvaluatedRecord(singleRecord, singleScore);
-//						evalRecords.add(er);
-//					}
-					// Otherwise, add the group as a whole
+					for (SafeIndex<T> idx : mIndices) {
+						Match match = matchMap.get(idx);
+						addQueryMatchPairToList(query, match, model, pairs);
+					}
+
+					// Otherwise, add the group as a mergeCandidate
 				} else {
+					pairs.addAll(groupPairs);
+					mergeGroups.add(null);
 //					ISingleRecord[] arGroupRecords =
 //						(ISingleRecord[]) groupRecords
 //								.toArray(new ISingleRecord[0]);
@@ -228,6 +228,21 @@ public class Exp<T extends Comparable<T> & Serializable> {
 		}
 		TransitiveCandidatesBean<T> retVal =
 			new TransitiveCandidatesBean<T>(query, pairs, mergeGroups);
+		return retVal;
+	}
+
+	public SortedSet<SafeIndex<T>> getRecordIndicesFromPairs(
+			List<EvaluatedPair<T>> pairs) {
+		Precondition.assertNonNullArgument("null pairs", pairs);
+		SortedSet<SafeIndex<T>> retVal = getRecordIndicesFromPairs(pairs);
+		retVal = new TreeSet<>();
+		for (EvaluatedPair<T> gp : pairs) {
+			SafeIndex<T> idx1 = new SafeIndex<T>(gp.getQueryRecord().getId());
+			SafeIndex<T> idx2 =
+				new SafeIndex<T>(gp.getMatchCandidate().getId());
+			retVal.add(idx1);
+			retVal.add(idx2);
+		}
 		return retVal;
 	}
 
