@@ -50,6 +50,7 @@ import com.choicemaker.cm.transitivity.util.CEFromMatchesBuilder;
 import com.choicemaker.cms.api.AbaParameters;
 import com.choicemaker.cms.api.AbaServerConfiguration;
 import com.choicemaker.cms.api.AbaSettings;
+import com.choicemaker.cms.beans.MergeCandidatesBean;
 import com.choicemaker.cms.beans.TransitiveCandidatesBean;
 import com.choicemaker.cms.ejb.OnlineMatchingBean;
 import com.choicemaker.cms.ejb.ParameterHelper;
@@ -88,7 +89,7 @@ public class Exp<T extends Comparable<T> & Serializable> {
 
 			} else {
 				retVal = getTransitiveCandidates(query, matchMap, childEntities,
-						model, mustIncludeQuery);
+						model, mergeConnectivity, mustIncludeQuery);
 			}
 		}
 
@@ -143,6 +144,7 @@ public class Exp<T extends Comparable<T> & Serializable> {
 			final Map<SafeIndex<T>, Match> matchMap,
 			final List<INode<T>> childEntities,
 			final ImmutableProbabilityModel model,
+			final IGraphProperty mergeConnectivity,
 			final boolean mustIncludeQuery) throws Exception {
 
 		Precondition.assertNonNullArgument("null query", query);
@@ -191,8 +193,9 @@ public class Exp<T extends Comparable<T> & Serializable> {
 				 * group into individual records matched against the query
 				 * record. Otherwise, add the group as a merge group.
 				 */
-				SortedSet<SafeIndex<T>> mIndices = getRecordIndicesFromPairs(groupPairs);
 				if (mustIncludeQuery && !containsQuery) {
+					SortedSet<SafeIndex<T>> mIndices =
+						getRecordIndicesFromPairs(groupPairs);
 					for (SafeIndex<T> idx : mIndices) {
 						Match match = matchMap.get(idx);
 						addQueryMatchPairToList(query, match, model, pairs);
@@ -201,22 +204,12 @@ public class Exp<T extends Comparable<T> & Serializable> {
 					// Otherwise, add the group as a mergeCandidate
 				} else {
 					pairs.addAll(groupPairs);
-					mergeGroups.add(null);
-//					ISingleRecord[] arGroupRecords =
-//						(ISingleRecord[]) groupRecords
-//								.toArray(new ISingleRecord[0]);
-//					LinkCriteria criteria = new LinkCriteria(
-//							linkCriteria.getGraphPropType(), mustIncludeQuery);
-//					LinkedRecordSet lrs =
-//						new LinkedRecordSet(null, arGroupRecords, criteria);
-//					MatchScore[] scores =
-//						(MatchScore[]) groupScores.toArray(new MatchScore[0]);
-//					CompositeMatchScore compositeScore =
-//						new CompositeMatchScore(scores);
-//					// TODO - set an id for the record set
-//					EvaluatedRecord er =
-//						new EvaluatedRecord(lrs, compositeScore);
-//					evalRecords.add(er);
+					List<DataAccessObject<T>> records =
+						getRecordsFromPairs(groupPairs);
+					MergeCandidates<T> mergeCandidate =
+						new MergeCandidatesBean<T>(mergeConnectivity, records,
+								groupPairs);
+					mergeGroups.add(mergeCandidate);
 				}
 
 			} else {
@@ -231,11 +224,35 @@ public class Exp<T extends Comparable<T> & Serializable> {
 		return retVal;
 	}
 
+	private List<DataAccessObject<T>> getRecordsFromPairs(
+			List<EvaluatedPair<T>> pairs) {
+		Precondition.assertNonNullArgument("null pairs", pairs);
+		SortedSet<SafeIndex<T>> indices = getRecordIndicesFromPairs(pairs);
+		List<DataAccessObject<T>> retVal = new ArrayList<>();
+		for (EvaluatedPair<T> gp : pairs) {
+			DataAccessObject<T> r1 = gp.getQueryRecord();
+			DataAccessObject<T> r2 = gp.getMatchCandidate();
+			SafeIndex<T> idx1 = new SafeIndex<T>(r1.getId());
+			SafeIndex<T> idx2 = new SafeIndex<T>(r2.getId());
+			if (indices.contains(idx1)) {
+				retVal.add(r1);
+				indices.remove(idx1);
+			}
+			if (indices.contains(idx2)) {
+				retVal.add(r2);
+				indices.remove(idx2);
+			}
+			if (indices.isEmpty()) {
+				break;
+			}
+		}
+		return retVal;
+	}
+
 	public SortedSet<SafeIndex<T>> getRecordIndicesFromPairs(
 			List<EvaluatedPair<T>> pairs) {
 		Precondition.assertNonNullArgument("null pairs", pairs);
-		SortedSet<SafeIndex<T>> retVal = getRecordIndicesFromPairs(pairs);
-		retVal = new TreeSet<>();
+		SortedSet<SafeIndex<T>> retVal = new TreeSet<>();
 		for (EvaluatedPair<T> gp : pairs) {
 			SafeIndex<T> idx1 = new SafeIndex<T>(gp.getQueryRecord().getId());
 			SafeIndex<T> idx2 =

@@ -20,7 +20,7 @@ public class MergeCandidatesBean<T extends Comparable<T> & Serializable>
 	private final List<DataAccessObject<T>> records;
 	private final List<EvaluatedPair<T>> pairs;
 
-	MergeCandidatesBean(IGraphProperty mergeConnectivity,
+	public MergeCandidatesBean(IGraphProperty mergeConnectivity,
 			List<DataAccessObject<T>> records, List<EvaluatedPair<T>> pairs) {
 		Precondition.assertNonNullArgument("null merge connectivity", mergeConnectivity);
 		Precondition.assertNonNullArgument("null records", records);
