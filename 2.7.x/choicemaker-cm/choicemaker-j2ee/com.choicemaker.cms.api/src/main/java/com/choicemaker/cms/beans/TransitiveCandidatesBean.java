@@ -19,6 +19,27 @@ public class TransitiveCandidatesBean<T extends Comparable<T> & Serializable>
 	private final List<EvaluatedPair<T>> pairs;
 	private final List<MergeCandidates<T>> mergeGroups;
 
+	/**
+	 * Creates an empty TransitiveCandidates instance; that is, query record
+	 * that is not linked to any other record by match or hold relationships.
+	 */
+	public TransitiveCandidatesBean(DataAccessObject<T> q) {
+		this(q, Collections.emptyList(), Collections.emptyList());
+	}
+
+	/**
+	 * Creates a TransitiveCandidates instance with the specified pairs and
+	 * merge groups.
+	 * 
+	 * @param q
+	 *            a non-null record holder
+	 * @param pairs
+	 *            a non-null, but possibly empty, list of EvaluatedPair
+	 *            instances.
+	 * @param mergeGroups
+	 *            a non-null list of merge candidates. Every candidate must be a
+	 *            member of some pair in the <code>pairs</code> list
+	 */
 	public TransitiveCandidatesBean(DataAccessObject<T> q,
 			List<EvaluatedPair<T>> pairs,
 			List<MergeCandidates<T>> mergeGroups) {
@@ -41,6 +62,8 @@ public class TransitiveCandidatesBean<T extends Comparable<T> & Serializable>
 			_mgs.add(p);
 		}
 		this.mergeGroups = Collections.unmodifiableList(_mgs);
+
+		// FIXME check that every merge candidate is a member of some match pair
 	}
 
 	public DataAccessObject<T> getQueryRecord() {
