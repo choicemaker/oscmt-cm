@@ -11,10 +11,10 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.logging.Logger;
 
+import com.choicemaker.cm.args.TransitivityException;
 import com.choicemaker.cm.transitivity.core.CompositeEntity;
 import com.choicemaker.cm.transitivity.core.EdgeProperty;
 import com.choicemaker.cm.transitivity.core.SubGraphProperty;
-import com.choicemaker.cm.transitivity.core.TransitivityException;
 import com.choicemaker.cm.transitivity.util.GraphAnalyzer;
 import com.choicemaker.cm.transitivity.util.SimpleGraphCompactor;
 

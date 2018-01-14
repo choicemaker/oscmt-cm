@@ -5,7 +5,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *******************************************************************************/
-package com.choicemaker.cm.transitivity.core;
+package com.choicemaker.cm.args;
 
 /**
  * This is the exception thrown by the Transitivity Engine.

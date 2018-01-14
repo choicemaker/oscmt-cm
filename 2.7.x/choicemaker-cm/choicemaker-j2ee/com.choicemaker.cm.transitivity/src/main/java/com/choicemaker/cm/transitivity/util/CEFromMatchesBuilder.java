@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import com.choicemaker.client.api.Decision;
+import com.choicemaker.cm.args.TransitivityException;
 import com.choicemaker.cm.core.ClueSet;
 import com.choicemaker.cm.core.Evaluator;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
@@ -22,7 +23,6 @@ import com.choicemaker.cm.core.base.MatchRecord2;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.base.RECORD_SOURCE_ROLE;
 import com.choicemaker.cm.core.util.MatchUtils;
-import com.choicemaker.cm.transitivity.core.TransitivityException;
 
 /**
  * This object builds an iterator of CompositeEntity from a query record and an

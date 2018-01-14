@@ -7,6 +7,8 @@
  *******************************************************************************/
 package com.choicemaker.cm.transitivity.core;
 
+import com.choicemaker.cm.args.TransitivityException;
+
 /**
  * This interface defines a way to compact (or merge) related nodes on a graph
  * and to return the compacted graph.

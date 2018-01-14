@@ -12,13 +12,13 @@ import java.security.AccessControlException;
 
 import javax.ejb.Local;
 
+import com.choicemaker.cm.args.TransitivityException;
 import com.choicemaker.cm.core.DatabaseException;
 import com.choicemaker.cm.core.InvalidModelException;
 import com.choicemaker.cm.core.InvalidProfileException;
 import com.choicemaker.cm.core.Profile;
 import com.choicemaker.cm.core.UnderspecifiedProfileException;
 import com.choicemaker.cm.core.base.MatchCandidate;
-import com.choicemaker.cm.transitivity.core.TransitivityException;
 import com.choicemaker.cm.transitivity.core.TransitivityResult;
 
 /**

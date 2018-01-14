@@ -12,12 +12,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeSet;
 
+import com.choicemaker.cm.args.TransitivityException;
 import com.choicemaker.cm.core.base.MatchRecord2;
 import com.choicemaker.cm.transitivity.core.CompositeEntity;
 import com.choicemaker.cm.transitivity.core.GraphCompactor;
 import com.choicemaker.cm.transitivity.core.INode;
 import com.choicemaker.cm.transitivity.core.Link;
-import com.choicemaker.cm.transitivity.core.TransitivityException;
 
 /**
  * This simple graph compactor merges all nodes with the same marking into a

@@ -10,12 +10,12 @@ package com.choicemaker.cm.transitivity.util;
 import java.util.Iterator;
 import java.util.TreeMap;
 
+import com.choicemaker.cm.args.TransitivityException;
 import com.choicemaker.cm.transitivity.core.BiConnectedProperty;
 import com.choicemaker.cm.transitivity.core.CompositeEntity;
 import com.choicemaker.cm.transitivity.core.FullyConnectedProperty;
 import com.choicemaker.cm.transitivity.core.MatchEdgeProperty;
 import com.choicemaker.cm.transitivity.core.MatchHoldEdgeProperty;
-import com.choicemaker.cm.transitivity.core.TransitivityException;
 
 /** This object categorizes the CompositeEntities into different property categories.
  * 
