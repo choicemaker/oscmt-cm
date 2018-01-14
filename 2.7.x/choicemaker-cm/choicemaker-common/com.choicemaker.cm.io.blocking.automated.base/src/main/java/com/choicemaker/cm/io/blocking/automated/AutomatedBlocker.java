@@ -30,7 +30,7 @@ public interface AutomatedBlocker extends RecordSource {
 
 	AbaStatistics getCountSource();
 
-	Record getQueryRecord();
+	Record<?> getQueryRecord();
 
 	int getLimitPerBlockingSet();
 
