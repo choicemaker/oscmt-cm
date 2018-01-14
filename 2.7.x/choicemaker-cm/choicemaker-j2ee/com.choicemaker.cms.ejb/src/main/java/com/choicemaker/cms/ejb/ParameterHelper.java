@@ -49,28 +49,6 @@ public class ParameterHelper {
 		}
 	}
 
-	public static DataSource getDataSource(String jndiName)
-			throws BlockingException {
-		if (jndiName == null || !jndiName.trim().equals(jndiName)
-				|| jndiName.isEmpty()) {
-			String msg = "Invalid JNDI name '" + jndiName + "'";
-			throw new IllegalArgumentException(msg);
-		}
-		DataSource retVal = null;
-		try {
-			Context ctx = new InitialContext();
-			retVal = (DataSource) ctx.lookup(jndiName);
-		} catch (NamingException ex) {
-			String msg =
-				"Unable to locate DataSource '" + jndiName + "': " + ex;
-			logger.severe(ex.toString());
-			throw new BlockingException(msg, ex);
-		}
-		assert retVal != null;
-
-		return retVal;
-	}
-
 	/** Cache ABA statistics for field-value counts from a reference source */
 	public static void cacheAbaStatistics(
 			final AbaStatisticsController statsController, final DataSource ds)
@@ -96,6 +74,36 @@ public class ParameterHelper {
 				"... finished caching ABA statistics for reference records.");
 	}
 
+	public static DataSource getDataSource(String jndiName)
+			throws BlockingException {
+		if (jndiName == null || !jndiName.trim().equals(jndiName)
+				|| jndiName.isEmpty()) {
+			String msg = "Invalid JNDI name '" + jndiName + "'";
+			throw new IllegalArgumentException(msg);
+		}
+		DataSource retVal = null;
+		try {
+			Context ctx = new InitialContext();
+			retVal = (DataSource) ctx.lookup(jndiName);
+		} catch (NamingException ex) {
+			String msg =
+				"Unable to locate DataSource '" + jndiName + "': " + ex;
+			logger.severe(ex.toString());
+			throw new BlockingException(msg, ex);
+		}
+		assert retVal != null;
+
+		return retVal;
+	}
+
+	public static ImmutableProbabilityModel getModel(AbaParameters parameters) {
+		Precondition.assertNonNullArgument("null parameters", parameters);
+		String modelName = parameters.getModelConfigurationName();
+		ImmutableProbabilityModel model =
+			PMManager.getImmutableModelInstance(modelName);
+		return model;
+	}
+
 	private final AbaParameters parameters;
 
 	// Cached values
@@ -112,12 +120,57 @@ public class ParameterHelper {
 		this.parameters = parameters;
 	}
 
-	public ImmutableProbabilityModel getModel() {
-		if (model == null) {
-			String modelName = parameters.getModelConfigurationName();
-			model = PMManager.getImmutableModelInstance(modelName);
+	public AbaStatistics getAbaStatistics(AbaStatisticsController controller)
+			throws BlockingException {
+		Precondition.assertNonNullArgument("null controller", controller);
+		if (abaStatistics == null) {
+			cacheAbaStatics(controller, getDataSource());
+			final String bcId = this.getBlockingConfigurationId();
+			abaStatistics = controller.getStatistics(bcId);
+			if (abaStatistics == null) {
+				String msg =
+					"Abastatistics are not available for blocking configuration: "
+							+ bcId;
+				logger.severe(msg);
+				throw new BlockingException(msg);
+			}
 		}
-		return model;
+		return abaStatistics;
+	}
+
+	public <T extends Comparable<T> & Serializable> AutomatedBlocker getAutomatedBlocker(
+			final Record<T> q, AbaSettings settings,
+			AbaStatisticsController statsController) throws BlockingException {
+		Precondition.assertNonNullArgument("null record", q);
+		Precondition.assertNonNullArgument("null settings", settings);
+		Precondition.assertNonNullArgument("null controller", statsController);
+
+		final int limitPBS = settings.getLimitPerBlockingSet();
+		final int stbsgl = settings.getSingleTableBlockingSetGraceLimit();
+		final int limitSBS = settings.getLimitSingleBlockingSet();
+		final String databaseConfiguration =
+			parameters.getReferenceDatabaseConfiguration();
+		final String blockingConfiguration =
+			parameters.getQueryToReferenceBlockingConfiguration();
+
+		final AbaStatistics stats = this.getAbaStatistics(statsController);
+		AutomatedBlocker retVal = new Blocker2(getDatabaseAccessor(),
+				getModel(), q, limitPBS, stbsgl, limitSBS, stats,
+				databaseConfiguration, blockingConfiguration);
+		logger.fine(q.getId() + " " + retVal + " " + model);
+
+		return retVal;
+	}
+
+	public String getBlockingConfigurationId() {
+		if (blockingConfigurationId == null) {
+			ImmutableProbabilityModel m = getModel();
+			String bc = parameters.getQueryToReferenceBlockingConfiguration();
+			String dbc = parameters.getReferenceDatabaseConfiguration();
+			blockingConfigurationId = BlockingConfigurationUtils
+					.createBlockingConfigurationId(m, bc, dbc);
+		}
+		return blockingConfigurationId;
 	}
 
 	public DatabaseAccessor getDatabaseAccessor() throws BlockingException {
@@ -125,15 +178,16 @@ public class ParameterHelper {
 			// Get an accessor
 			String dbaName = parameters.getDatabaseAccessorName();
 			databaseAccessor =
-					DatabaseAccessorUtils.getDatabaseAccessor(dbaName);
-			
+				DatabaseAccessorUtils.getDatabaseAccessor(dbaName);
+
 			// Set the data source that the accessor will use
 			databaseAccessor.setDataSource(getDataSource());
-			
+
 			// Set the selection criteria that the accessor will use
 			final DbReaderParallel dbr = getDbReaderParallel();
 			final String masterId = dbr.getMasterId();
-			final String referenceQuery = parameters.getReferenceSelectionViewAsSQL();
+			final String referenceQuery =
+				parameters.getReferenceSelectionViewAsSQL();
 			final String condition =
 				DatabaseAccessorUtils.parseSQL(referenceQuery, masterId);
 			logger.fine("Condition: " + condition);
@@ -149,6 +203,14 @@ public class ParameterHelper {
 		return databaseAccessor;
 	}
 
+	public DataSource getDataSource() throws BlockingException {
+		if (dataSource == null) {
+			String jndiName = parameters.getReferenceDatasource();
+			dataSource = getDataSource(jndiName);
+		}
+		return dataSource;
+	}
+
 	public DbReaderParallel getDbReaderParallel() {
 		if (dbReaderParallel == null) {
 			String dbrName = parameters.getDatabaseReaderName();
@@ -158,64 +220,12 @@ public class ParameterHelper {
 		return dbReaderParallel;
 	}
 
-	public DataSource getDataSource() throws BlockingException {
-		if (dataSource == null) {
-			String jndiName = parameters.getReferenceDatasource();
-			dataSource = getDataSource(jndiName);
+	public ImmutableProbabilityModel getModel() {
+		if (model == null) {
+			String modelName = parameters.getModelConfigurationName();
+			model = PMManager.getImmutableModelInstance(modelName);
 		}
-		return dataSource;
-	}
-
-	public AbaStatistics getAbaStatistics(AbaStatisticsController controller)
-			throws BlockingException {
-		Precondition.assertNonNullArgument("null controller", controller);
-		if (abaStatistics == null) {
-			cacheAbaStatics(controller,getDataSource());
-			final String bcId = this.getBlockingConfigurationId();
-			abaStatistics = controller.getStatistics(bcId);
-			if (abaStatistics == null) {
-				String msg =
-					"Abastatistics are not available for blocking configuration: "
-							+ bcId;
-				logger.severe(msg);
-				throw new BlockingException(msg);
-			}
-		}
-		return abaStatistics;
-	}
-
-	public String getBlockingConfigurationId() {
-		if (blockingConfigurationId == null) {
-			ImmutableProbabilityModel m = getModel();
-			String bc = parameters.getQueryToReferenceBlockingConfiguration();
-			String dbc = parameters.getReferenceDatabaseConfiguration();
-			blockingConfigurationId =
-				BlockingConfigurationUtils.createBlockingConfigurationId(m,bc,dbc);
-		}
-		return blockingConfigurationId;
-	}
-
-	public <T extends Comparable<T> & Serializable> AutomatedBlocker getAutomatedBlocker(
-			final Record<T> q, AbaSettings settings, AbaStatisticsController statsController) throws BlockingException {
-		Precondition.assertNonNullArgument("null record", q);
-		Precondition.assertNonNullArgument("null settings", settings);
-		Precondition.assertNonNullArgument("null controller", statsController);
-
-		final int limitPBS = settings.getLimitPerBlockingSet();
-		final int stbsgl = settings.getSingleTableBlockingSetGraceLimit();
-		final int limitSBS = settings.getLimitSingleBlockingSet();
-		final String databaseConfiguration =
-				parameters.getReferenceDatabaseConfiguration();
-		final String blockingConfiguration =
-				parameters.getQueryToReferenceBlockingConfiguration();
-
-		final AbaStatistics stats = this.getAbaStatistics(statsController);
-		AutomatedBlocker retVal =
-			new Blocker2(getDatabaseAccessor(), getModel(), q, limitPBS, stbsgl, limitSBS,
-					stats, databaseConfiguration, blockingConfiguration);
-		logger.fine(q.getId() + " " + retVal + " " + model);
-
-		return retVal;
+		return model;
 	}
 
 }

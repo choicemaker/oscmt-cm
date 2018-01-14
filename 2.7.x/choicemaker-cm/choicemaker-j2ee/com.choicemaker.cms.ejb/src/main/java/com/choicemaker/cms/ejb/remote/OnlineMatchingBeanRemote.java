@@ -10,6 +10,6 @@ import com.choicemaker.cms.ejb.OnlineMatchingBean;
 
 @Stateless
 @Remote(OnlineMatchingRemote.class)
-public class OnlineMatchingBeanRemote<T extends Comparable<T> & Serializable> extends OnlineMatchingBean<T> 
-implements OnlineMatchingRemote<T>{
+public class OnlineMatchingBeanRemote<T extends Comparable<T> & Serializable>
+		extends OnlineMatchingBean<T> implements OnlineMatchingRemote<T> {
 }

@@ -17,6 +17,7 @@ import com.choicemaker.client.api.DataAccessObject;
 import com.choicemaker.client.api.IGraphProperty;
 import com.choicemaker.client.api.MatchCandidates;
 import com.choicemaker.client.api.TransitiveCandidates;
+import com.choicemaker.cm.args.TransitivityException;
 import com.choicemaker.cm.core.BlockingException;
 
 /**
@@ -32,7 +33,7 @@ public interface OnlineMatching<T extends Comparable<T> & Serializable> {
 	TransitiveCandidates<T> getTransitiveCandidates(DataAccessObject<T> query,
 			AbaParameters parameters, AbaSettings settings,
 			AbaServerConfiguration configuration,
-			IGraphProperty mergeConnectivity)
-			throws IOException, BlockingException;
+			IGraphProperty mergeConnectivity, boolean mustIncludeQuery)
+			throws IOException, BlockingException, TransitivityException;
 
 }
