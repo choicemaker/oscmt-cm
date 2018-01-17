@@ -10,6 +10,8 @@
  */
 package com.choicemaker.cm.core.base;
 
+import java.io.Serializable;
+
 import com.choicemaker.client.api.Decision;
 import com.choicemaker.cm.core.ActiveClues;
 import com.choicemaker.cm.core.IRecordPair;
@@ -28,21 +30,21 @@ import com.choicemaker.cm.core.RecordData;
  * @see IRecordPair
  * @see ImmutableRecordPair
  */
-public class RecordPair extends RecordData implements IRecordPair {
+public class RecordPair<T extends Comparable<T> & Serializable> extends RecordData implements IRecordPair<T> {
 
 	/**
 	 * One of the records, usually called the query record.
 	 * @deprecated use get/setQueryRecord() instead. This is field
 	 * is still used by generated code, but shouldn't used elsewhere.
 	 */
-	public Record q;
+	public Record<T> q;
 
 	/**
 	 * The other record, usually called the match record.
 	 * @deprecated use get/setMatchRecord() instead. This is field
 	 * is still used by generated code, but shouldn't used elsewhere.
 	 */
-	public Record m;
+	public Record<T> m;
 
 	/**
 	 * The probability assigned by ChoiceMaker.
@@ -74,7 +76,7 @@ public class RecordPair extends RecordData implements IRecordPair {
 	 * @param   q  One of the records.
 	 * @param   m  The other record.
 	 */
-	public RecordPair(Record q, Record m) {
+	public RecordPair(Record<T> q, Record<T> m) {
 		setQueryRecord(q);
 		setMatchRecord(m);
 	}
@@ -82,14 +84,14 @@ public class RecordPair extends RecordData implements IRecordPair {
 	/**
 	 * @see com.choicemaker.cm.core.base.RecordData#getFirstRecord()
 	 */
-	public Record getFirstRecord() {
+	public Record<T> getFirstRecord() {
 		return getQueryRecord();
 	}
 
 	/**
 	 * @see com.choicemaker.cm.core.base.RecordData#getSecondRecord()
 	 */
-	public Record getSecondRecord() {
+	public Record<T> getSecondRecord() {
 		return getMatchRecord();
 	}
 	
@@ -101,19 +103,19 @@ public class RecordPair extends RecordData implements IRecordPair {
 		this.af = af;	
 	}
 
-	public void setQueryRecord(Record q) {
+	public void setQueryRecord(Record<T> q) {
 		this.q = q;
 	}
 
-	public Record getQueryRecord() {
+	public Record<T> getQueryRecord() {
 		return q;
 	}
 
-	public void setMatchRecord(Record m) {
+	public void setMatchRecord(Record<T> m) {
 		this.m = m;
 	}
 
-	public Record getMatchRecord() {
+	public Record<T> getMatchRecord() {
 		return m;
 	}
 

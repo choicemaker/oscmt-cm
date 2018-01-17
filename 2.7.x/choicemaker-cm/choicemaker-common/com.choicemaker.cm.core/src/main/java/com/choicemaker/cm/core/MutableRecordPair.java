@@ -10,6 +10,8 @@
  */
 package com.choicemaker.cm.core;
 
+import java.io.Serializable;
+
 import com.choicemaker.client.api.Decision;
 
 /**
@@ -18,7 +20,8 @@ import com.choicemaker.client.api.Decision;
  * 
  * @author rphall
  */
-public class MutableRecordPair extends RecordData implements IRecordPair {
+public class MutableRecordPair<T extends Comparable<T> & Serializable>
+		extends RecordData implements IRecordPair<T> {
 
 	/** The clues that fired on a pair */
 	private ActiveClues af;
@@ -27,13 +30,13 @@ public class MutableRecordPair extends RecordData implements IRecordPair {
 	private Decision cmDecision;
 
 	/** The other record, usually called the match record */
-	private Record m;
+	private Record<T> m;
 
 	/** The probability assigned by ChoiceMaker */
 	private float probability;
 
 	/** One of the records, usually called the query record */
-	private Record q;
+	private Record<T> q;
 
 	public MutableRecordPair() {
 	}
@@ -46,7 +49,7 @@ public class MutableRecordPair extends RecordData implements IRecordPair {
 	 * @param m
 	 *            The other record.
 	 */
-	public MutableRecordPair(Record q, Record m) {
+	public MutableRecordPair(Record<T> q, Record<T> m) {
 		setQueryRecord(q);
 		setMatchRecord(m);
 	}
@@ -62,11 +65,11 @@ public class MutableRecordPair extends RecordData implements IRecordPair {
 	/**
 	 * @see com.choicemaker.cm.core.base.RecordData#getFirstRecord()
 	 */
-	public Record getFirstRecord() {
+	public Record<T> getFirstRecord() {
 		return getQueryRecord();
 	}
 
-	public Record getMatchRecord() {
+	public Record<T> getMatchRecord() {
 		return m;
 	}
 
@@ -74,14 +77,14 @@ public class MutableRecordPair extends RecordData implements IRecordPair {
 		return probability;
 	}
 
-	public Record getQueryRecord() {
+	public Record<T> getQueryRecord() {
 		return q;
 	}
 
 	/**
 	 * @see com.choicemaker.cm.core.base.RecordData#getSecondRecord()
 	 */
-	public Record getSecondRecord() {
+	public Record<T> getSecondRecord() {
 		return getMatchRecord();
 	}
 
@@ -93,7 +96,7 @@ public class MutableRecordPair extends RecordData implements IRecordPair {
 		this.cmDecision = cmDecision;
 	}
 
-	public void setMatchRecord(Record m) {
+	public void setMatchRecord(Record<T> m) {
 		this.m = m;
 	}
 
@@ -101,7 +104,7 @@ public class MutableRecordPair extends RecordData implements IRecordPair {
 		this.probability = probability;
 	}
 
-	public void setQueryRecord(Record q) {
+	public void setQueryRecord(Record<T> q) {
 		this.q = q;
 	}
 

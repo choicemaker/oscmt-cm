@@ -10,12 +10,15 @@
  */
 package com.choicemaker.cm.core.base;
 
+import java.io.Serializable;
+
 import com.choicemaker.client.api.Decision;
 import com.choicemaker.cm.core.MutableRecordPair;
 import com.choicemaker.cm.core.Record;
 
 /** Deprecated */
-public class MarkedRecordPairWithPseudoProbability extends MutableRecordPair {
+public class MarkedRecordPairWithPseudoProbability<T extends Comparable<T> & Serializable>
+		extends MutableRecordPair<T> {
 	/** The <code>Decision</code> whether this pair matches or not. */
 	public Decision decision;
 
@@ -35,8 +38,8 @@ public class MarkedRecordPairWithPseudoProbability extends MutableRecordPair {
 	 * @param   ruleDecision  The Rule Decision of the pair.
 	 */
 	public MarkedRecordPairWithPseudoProbability(
-		Record q,
-		Record m,
+		Record<T> q,
+		Record<T> m,
 		Decision decision,
 		float pseudoProbability,
 		String ruleDecision) {

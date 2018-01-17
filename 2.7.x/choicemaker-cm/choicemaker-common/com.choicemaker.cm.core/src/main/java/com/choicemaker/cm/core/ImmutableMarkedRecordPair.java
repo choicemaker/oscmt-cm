@@ -7,6 +7,7 @@
  *******************************************************************************/
 package com.choicemaker.cm.core;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import com.choicemaker.client.api.Decision;
@@ -14,7 +15,7 @@ import com.choicemaker.client.api.Decision;
 /**
  * @author rphall
  */
-public interface ImmutableMarkedRecordPair extends ImmutableRecordPair {
+public interface ImmutableMarkedRecordPair<T extends Comparable<T> & Serializable> extends ImmutableRecordPair<T> {
 
 	/** Get a comment. */
 	public abstract String getComment();

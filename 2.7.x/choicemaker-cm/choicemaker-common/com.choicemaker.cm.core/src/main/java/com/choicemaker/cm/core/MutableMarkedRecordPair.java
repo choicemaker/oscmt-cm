@@ -10,6 +10,7 @@
  */
 package com.choicemaker.cm.core;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import com.choicemaker.client.api.Decision;
@@ -20,9 +21,9 @@ import com.choicemaker.client.api.Decision;
  *
  * @author    Martin Buechi
  */
-public class MutableMarkedRecordPair
-	extends MutableRecordPair
-	implements IMarkedRecordPair {
+public class MutableMarkedRecordPair<T extends Comparable<T> & Serializable>
+	extends MutableRecordPair<T>
+	implements IMarkedRecordPair<T> {
 
 	/** A comment. */
 	private String comment;
@@ -50,8 +51,8 @@ public class MutableMarkedRecordPair
 	 * @param   comment  A comment.
 	 */
 	public MutableMarkedRecordPair(
-		Record q,
-		Record m,
+		Record<T> q,
+		Record<T> m,
 		Decision decision,
 		Date date,
 		String user,

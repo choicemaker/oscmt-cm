@@ -7,19 +7,21 @@
  *******************************************************************************/
 package com.choicemaker.cm.core;
 
+import java.io.Serializable;
+
 import com.choicemaker.client.api.Decision;
 
 /**
  * @author rphall
  */
-public interface IRecordPair extends ImmutableRecordPair {
+public interface IRecordPair<T extends Comparable<T> & Serializable> extends ImmutableRecordPair<T> {
 
 	public abstract ActiveClues getActiveClues();
 	public abstract void setActiveClues(ActiveClues af);
-	public abstract void setQueryRecord(Record q);
-	public abstract Record getQueryRecord();
-	public abstract void setMatchRecord(Record m);
-	public abstract Record getMatchRecord();
+	public abstract void setQueryRecord(Record<T> q);
+	public abstract Record<T> getQueryRecord();
+	public abstract void setMatchRecord(Record<T> m);
+	public abstract Record<T> getMatchRecord();
 	public abstract void setCmDecision(Decision cmDecision);
 	public abstract Decision getCmDecision();
 	public abstract void setProbability(float probability);

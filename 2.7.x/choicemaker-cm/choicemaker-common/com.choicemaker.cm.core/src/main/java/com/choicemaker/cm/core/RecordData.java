@@ -52,7 +52,7 @@ public abstract class RecordData {
 		}
 	}
 
-	public abstract Record getFirstRecord();
+	public abstract Record<?> getFirstRecord();
 
-	public abstract Record getSecondRecord();
+	public abstract Record<?> getSecondRecord();
 }
