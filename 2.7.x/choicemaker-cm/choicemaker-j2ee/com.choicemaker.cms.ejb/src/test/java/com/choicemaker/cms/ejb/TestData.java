@@ -1,7 +1,10 @@
 package com.choicemaker.cms.ejb;
 
-import static com.choicemaker.client.api.Decision.*;
-import static com.choicemaker.cms.ejb.WellKnownInstances.*;
+import static com.choicemaker.client.api.Decision.HOLD;
+import static com.choicemaker.client.api.WellKnownGraphProperties.GP_SCM;
+import static com.choicemaker.cms.ejb.WellKnownInstances.dbRecord01;
+import static com.choicemaker.cms.ejb.WellKnownInstances.parameters01;
+import static com.choicemaker.cms.ejb.WellKnownInstances.query01;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -16,7 +19,6 @@ import com.choicemaker.cm.core.ActiveClues;
 import com.choicemaker.cm.core.ClueSet;
 import com.choicemaker.cm.core.Match;
 import com.choicemaker.cm.core.Record;
-import com.choicemaker.cms.api.AbaParameters;
 
 public class TestData {
 
@@ -74,7 +76,7 @@ public class TestData {
 	public static <T extends Comparable<T> & Serializable> List<Match> matchListFromTestModel(
 			DataAccessObject<T> query, TestModel<T> model) {
 		List<EvaluatedPair<T>> ePairs = model.getKnownPairs();
-		List<Match> retVal = matchListFromEvaluatedPairs(query,ePairs,model);
+		List<Match> retVal = matchListFromEvaluatedPairs(query, ePairs, model);
 		return retVal;
 	}
 
@@ -99,11 +101,16 @@ public class TestData {
 	 * query01 and dbRecord01 and no merge candidates
 	 * </ul>
 	 */
-	public ExpectedResult<Integer> createResult01() {
+	public static ExpectedResult<Integer> createResult01() {
 		TestModel<Integer> model = new TestModel<>();
 		EvaluatedPair<Integer> ePair =
 			new EvaluatedPair<Integer>(query01, dbRecord01, 0.5f, HOLD);
 		model.addEvaluatedPair(ePair);
-		return null;
+		List<Match> matchList = matchListFromTestModel(query01, model);
+		final boolean mustContainQuery = false;
+		ExpectedResult<Integer> retVal = new ExpectedResult<Integer>(query01,
+				matchList, parameters01, GP_SCM, mustContainQuery);
+		return retVal;
 	}
+
 }

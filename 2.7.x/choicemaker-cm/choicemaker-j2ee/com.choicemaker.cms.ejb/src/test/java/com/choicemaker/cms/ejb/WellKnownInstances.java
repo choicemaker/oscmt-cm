@@ -1,7 +1,5 @@
 package com.choicemaker.cms.ejb;
 
-import com.choicemaker.client.api.Decision;
-import com.choicemaker.client.api.EvaluatedPair;
 import com.choicemaker.cms.api.AbaParameters;
 import com.choicemaker.cms.beans.AbaParametersBean;
 
