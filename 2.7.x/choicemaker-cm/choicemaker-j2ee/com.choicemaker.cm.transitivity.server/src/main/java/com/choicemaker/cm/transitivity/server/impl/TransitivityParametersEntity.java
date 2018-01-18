@@ -18,6 +18,7 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.NamedQuery;
 
+import com.choicemaker.client.api.GraphPropertyBean;
 import com.choicemaker.client.api.IGraphProperty;
 import com.choicemaker.cm.args.AnalysisResultFormat;
 import com.choicemaker.cm.args.OabaLinkageType;
@@ -267,21 +268,7 @@ public class TransitivityParametersEntity extends AbstractParametersEntity
 
 	@Override
 	public IGraphProperty getGraphProperty() {
-		return new IGraphProperty() {
-
-			private static final long serialVersionUID = 271L;
-
-			@Override
-			public String getName() {
-				return graph;
-			}
-
-			@Override
-			public String toString() {
-				return getName();
-			}
-
-		};
+		return new GraphPropertyBean(graph);
 	}
 
 	@Override

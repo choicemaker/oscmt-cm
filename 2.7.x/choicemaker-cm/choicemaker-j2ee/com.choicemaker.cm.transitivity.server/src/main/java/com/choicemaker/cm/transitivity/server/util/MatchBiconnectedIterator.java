@@ -7,7 +7,7 @@
  *******************************************************************************/
 package com.choicemaker.cm.transitivity.server.util;
 
-import static com.choicemaker.cm.args.WellKnownGraphPropertyNames.GPN_BCM;
+import static com.choicemaker.client.api.WellKnownGraphProperties.GPN_BCM;
 
 import java.util.Iterator;
 

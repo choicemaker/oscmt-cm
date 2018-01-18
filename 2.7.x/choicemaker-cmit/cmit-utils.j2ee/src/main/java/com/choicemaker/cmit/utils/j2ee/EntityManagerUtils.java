@@ -1,6 +1,6 @@
 package com.choicemaker.cmit.utils.j2ee;
 
-import static com.choicemaker.cm.args.WellKnownGraphPropertyNames.GPN_NAMES;
+import static com.choicemaker.client.api.WellKnownGraphProperties.GPN_NAMES;
 
 import java.util.Random;
 import java.util.UUID;
