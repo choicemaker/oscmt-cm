@@ -6,6 +6,8 @@ import java.util.List;
 import com.choicemaker.client.api.DataAccessObject;
 import com.choicemaker.client.api.EvaluatedPair;
 import com.choicemaker.client.api.IGraphProperty;
+import com.choicemaker.client.api.MatchCandidates;
+import com.choicemaker.client.api.TransitiveCandidates;
 import com.choicemaker.cm.core.Match;
 import com.choicemaker.cm.transitivity.core.CompositeEntity;
 import com.choicemaker.cms.api.AbaParameters;
@@ -26,32 +28,40 @@ public class ExpectedResult<T extends Comparable<T> & Serializable> {
 	private IGraphProperty mergeConnectivity;
 	boolean mergeGroupContainsQuery;
 	
-	public DataAccessObject<T> getQueryRecord() {
+	public DataAccessObject<T> getInputQueryRecord() {
 		// TODO Auto-generated method stub
 		return queryRecord;
 	}
 
-	public List<Match> getMatchList() {
+	public List<Match> getInputMatchList() {
 		// TODO Auto-generated method stub
 		return matchList;
 	}
 
-	public AbaParameters getAbaParameters() {
+	public AbaParameters getInputAbaParameters() {
 		// TODO Auto-generated method stub
 		return parameters;
 	}
 
-	public IGraphProperty getMergeConnectivity() {
+	public IGraphProperty getInputMergeConnectivity() {
 		// TODO Auto-generated method stub
 		return mergeConnectivity;
 	}
 	
-	public boolean mergeGroupContainsQuery() {
+	public boolean getInputMergeGroupContainsQuery() {
 		return mergeGroupContainsQuery;
 	}
 
-	public CompositeEntity<T> getCompositeEntity() {
+	public CompositeEntity<T> getExpectedCompositeEntity() {
 		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	public MatchCandidates<T> getExpectedMatchCandidates() {
+		return null;
+	}
+	
+	public TransitiveCandidates<T> getExpectedTransitiveCandidates() {
 		return null;
 	}
 

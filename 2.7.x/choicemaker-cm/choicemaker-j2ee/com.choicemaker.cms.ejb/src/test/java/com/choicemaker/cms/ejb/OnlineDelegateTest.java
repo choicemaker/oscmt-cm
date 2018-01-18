@@ -25,16 +25,16 @@ public class OnlineDelegateTest {
 	@Test
 	public void testComputeCompositeEntity() {
 		ExpectedResult testdata = new ExpectedResult();
-		final DataAccessObject<Integer> query = testdata.getQueryRecord();
-		final List<Match> matchList = testdata.getMatchList();
-		final AbaParameters parameters = testdata.getAbaParameters();
-		IGraphProperty mergeConnectivity = testdata.getMergeConnectivity();
+		final DataAccessObject<Integer> query = testdata.getInputQueryRecord();
+		final List<Match> matchList = testdata.getInputMatchList();
+		final AbaParameters parameters = testdata.getInputAbaParameters();
+		IGraphProperty mergeConnectivity = testdata.getInputMergeConnectivity();
 
 		OnlineDelegate<Integer> delegate = new OnlineDelegate<Integer>();
 		try {
 			final CompositeEntity<Integer> computed = delegate.computeCompositeEntity(query,
 					matchList, parameters, mergeConnectivity);
-			final CompositeEntity expected = testdata.getCompositeEntity();
+			final CompositeEntity expected = testdata.getExpectedCompositeEntity();
 		} catch (TransitivityException e) {
 			e.printStackTrace();
 			fail(e.toString());
