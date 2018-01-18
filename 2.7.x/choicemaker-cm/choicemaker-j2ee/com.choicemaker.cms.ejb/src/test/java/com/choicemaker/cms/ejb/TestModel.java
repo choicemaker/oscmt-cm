@@ -28,13 +28,17 @@ public class TestModel<T extends Comparable<T> & Serializable> implements Immuta
 	
 	public TestModel(List<EvaluatedPair<T>> evaluatedPairs) {
 		Precondition.assertNonNullArgument(evaluatedPairs);
-		List<EvaluatedPair<T>> eps = new ArrayList<>(evaluatedPairs.size());
-		eps.addAll(eps);
-		this.knownPairs = Collections.unmodifiableList(eps);
+		this.knownPairs = new ArrayList<>(evaluatedPairs.size());
+		this.knownPairs.addAll(evaluatedPairs);
 	}
 	
-	public final List<EvaluatedPair<T>> getKnownPairs() {
-		return knownPairs;
+	public void addEvaluatedPair(EvaluatedPair<T> pair) {
+		Precondition.assertNonNullArgument(pair);
+		this.knownPairs.add(pair);
+	}
+	
+	public List<EvaluatedPair<T>> getKnownPairs() {
+		return Collections.unmodifiableList(knownPairs);
 	}
 	
 	@Override

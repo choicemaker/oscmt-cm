@@ -28,6 +28,20 @@ public class ExpectedResult<T extends Comparable<T> & Serializable> {
 	private IGraphProperty mergeConnectivity;
 	boolean mergeGroupContainsQuery;
 	
+	public ExpectedResult(
+			DataAccessObject<T> qr,
+			List<Match> ml,
+			AbaParameters params,
+			IGraphProperty mc,
+			boolean containsQuery
+			) {
+		this.queryRecord = qr;
+		this.matchList = ml;
+		this.parameters = params;
+		this.mergeConnectivity = mc;
+		this.mergeGroupContainsQuery = containsQuery;
+	}
+	
 	public DataAccessObject<T> getInputQueryRecord() {
 		// TODO Auto-generated method stub
 		return queryRecord;

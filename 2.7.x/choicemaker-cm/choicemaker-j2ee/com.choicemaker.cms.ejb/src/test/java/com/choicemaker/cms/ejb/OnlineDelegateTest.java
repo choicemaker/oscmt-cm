@@ -24,7 +24,7 @@ public class OnlineDelegateTest {
 
 	@Test
 	public void testComputeCompositeEntity() {
-		ExpectedResult testdata = new ExpectedResult();
+		ExpectedResult testdata = null; // new ExpectedResult();
 		final DataAccessObject<Integer> query = testdata.getInputQueryRecord();
 		final List<Match> matchList = testdata.getInputMatchList();
 		final AbaParameters parameters = testdata.getInputAbaParameters();
@@ -32,9 +32,11 @@ public class OnlineDelegateTest {
 
 		OnlineDelegate<Integer> delegate = new OnlineDelegate<Integer>();
 		try {
-			final CompositeEntity<Integer> computed = delegate.computeCompositeEntity(query,
-					matchList, parameters, mergeConnectivity);
-			final CompositeEntity expected = testdata.getExpectedCompositeEntity();
+			final CompositeEntity<Integer> computed =
+				delegate.computeCompositeEntity(query, matchList, parameters,
+						mergeConnectivity);
+			// final CompositeEntity expected =
+			// testdata.getExpectedCompositeEntity();
 		} catch (TransitivityException e) {
 			e.printStackTrace();
 			fail(e.toString());
