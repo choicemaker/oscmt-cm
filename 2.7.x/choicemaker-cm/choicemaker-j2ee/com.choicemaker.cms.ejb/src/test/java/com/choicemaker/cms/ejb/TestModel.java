@@ -7,40 +7,51 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.logging.Logger;
 
 import com.choicemaker.client.api.Decision;
 import com.choicemaker.client.api.EvaluatedPair;
 import com.choicemaker.cm.core.Accessor;
 import com.choicemaker.cm.core.ClueSet;
 import com.choicemaker.cm.core.Evaluator;
-import com.choicemaker.cm.core.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.MachineLearner;
+import com.choicemaker.cm.core.ModelConfigurationException;
 import com.choicemaker.cm.core.report.Report;
 import com.choicemaker.util.Precondition;
 
-public class TestModel<T extends Comparable<T> & Serializable> implements ImmutableProbabilityModel {
-	
+public class TestModel<T extends Comparable<T> & Serializable>
+		implements IProbabilityModel {
+
+	private static final Logger logger =
+		Logger.getLogger(TestModel.class.getName());
+
+	public static final String MODEL_NAME = TestModel.class.getName();
+
 	private final List<EvaluatedPair<T>> knownPairs;
-	
+	private AtomicReference<TestEvaluator> evaluator = new AtomicReference<>();
+	private AtomicReference<TestClueSet<T>> clueset = new AtomicReference<>();
+
 	public TestModel() {
 		this(Collections.emptyList());
 	}
-	
+
 	public TestModel(List<EvaluatedPair<T>> evaluatedPairs) {
 		Precondition.assertNonNullArgument(evaluatedPairs);
 		this.knownPairs = new ArrayList<>(evaluatedPairs.size());
 		this.knownPairs.addAll(evaluatedPairs);
 	}
-	
+
 	public void addEvaluatedPair(EvaluatedPair<T> pair) {
 		Precondition.assertNonNullArgument(pair);
 		this.knownPairs.add(pair);
 	}
-	
+
 	public List<EvaluatedPair<T>> getKnownPairs() {
 		return Collections.unmodifiableList(knownPairs);
 	}
-	
+
 	@Override
 	public int activeSize() {
 		return 0;
@@ -71,7 +82,7 @@ public class TestModel<T extends Comparable<T> & Serializable> implements Immuta
 
 	@Override
 	public String getAccessorClassName() {
-		return TestAccessor.class.getName();
+		return MODEL_NAME;
 	}
 
 	@Override
@@ -86,7 +97,13 @@ public class TestModel<T extends Comparable<T> & Serializable> implements Immuta
 
 	@Override
 	public ClueSet getClueSet() {
-		throw new Error("not implemented");
+		ClueSet retVal;
+		if (clueset.compareAndSet(null, new TestClueSet<T>(this))) {
+			logger.info("ClueSet set to " + clueset.get());
+		}
+		retVal = clueset.get();
+		assert retVal != null;
+		return retVal;
 	}
 
 	@Override
@@ -101,7 +118,8 @@ public class TestModel<T extends Comparable<T> & Serializable> implements Immuta
 
 	@Override
 	public boolean[] getCluesToEvaluate() {
-		throw new Error("not implemented");
+		boolean[] retVal = TestClueSet.getCluesToEvaluate();
+		return retVal;
 	}
 
 	@Override
@@ -111,13 +129,18 @@ public class TestModel<T extends Comparable<T> & Serializable> implements Immuta
 
 	@Override
 	public int getDecisionDomainSize() {
-		throw new Error("not implemented");
+		return TestClueSet.DECISION_DOMAIN_SIZE;
 	}
 
 	@Override
 	public Evaluator getEvaluator() {
-		// TODO Auto-generated method stub
-		return null;
+		Evaluator retVal;
+		if (evaluator.compareAndSet(null, new TestEvaluator(this))) {
+			logger.info("Evaluator set to " + evaluator.get());
+		}
+		retVal = evaluator.get();
+		assert retVal != null;
+		return retVal;
 	}
 
 	@Override
@@ -152,8 +175,7 @@ public class TestModel<T extends Comparable<T> & Serializable> implements Immuta
 
 	@Override
 	public String getModelName() {
-		// TODO Auto-generated method stub
-		return null;
+		return TestModel.class.getName();
 	}
 
 	@Override
@@ -176,8 +198,8 @@ public class TestModel<T extends Comparable<T> & Serializable> implements Immuta
 
 	@Override
 	public boolean[] getTrainCluesToEvaluate() {
-		// TODO Auto-generated method stub
-		return null;
+		boolean[] retVal = TestClueSet.getCluesToEvaluate();
+		return retVal;
 	}
 
 	@Override
@@ -236,6 +258,92 @@ public class TestModel<T extends Comparable<T> & Serializable> implements Immuta
 
 	@Override
 	public void report(Report report) throws IOException {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void beginMultiPropertyChange() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void endMultiPropertyChange() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void setAccessor(Accessor newAcc)
+			throws ModelConfigurationException {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void setCluesToEvaluate(boolean[] cluesToEvaluate)
+			throws IllegalArgumentException {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void setEnableAllCluesBeforeTraining(boolean v) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void setEnableAllRulesBeforeTraining(boolean v) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void setModelFilePath(String filePath) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void setFiringThreshold(int v) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void setLastTrainingDate(Date v) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void setMachineLearner(MachineLearner ml) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void setClueFilePath(String fn) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void setTrainedWithHolds(boolean b) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void setTrainingSource(String v) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void setUserName(String v) {
 		// TODO Auto-generated method stub
 
 	}

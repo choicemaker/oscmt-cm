@@ -19,6 +19,7 @@ import com.choicemaker.cm.core.ActiveClues;
 import com.choicemaker.cm.core.ClueSet;
 import com.choicemaker.cm.core.Match;
 import com.choicemaker.cm.core.Record;
+import com.choicemaker.cm.core.base.PMManager;
 
 public class TestData {
 
@@ -34,7 +35,7 @@ public class TestData {
 		final Accessor accessor = model.getAccessor();
 		final Record<T> qRecord = accessor.toImpl(query);
 		final Record<T> mRecord;
-		if (!query.equals(dao1) || !query.equals(dao2)) {
+		if (!query.equals(dao1) && !query.equals(dao2)) {
 			match = null;
 		} else if (query.equals(dao1) && query.equals(dao2)) {
 			match = null;
@@ -103,6 +104,7 @@ public class TestData {
 	 */
 	public static ExpectedResult<Integer> createResult01() {
 		TestModel<Integer> model = new TestModel<>();
+		PMManager.addModel(model);
 		EvaluatedPair<Integer> ePair =
 			new EvaluatedPair<Integer>(query01, dbRecord01, 0.5f, HOLD);
 		model.addEvaluatedPair(ePair);

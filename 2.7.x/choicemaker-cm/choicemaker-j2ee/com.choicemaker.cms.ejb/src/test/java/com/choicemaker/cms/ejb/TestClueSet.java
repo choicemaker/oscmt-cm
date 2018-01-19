@@ -26,6 +26,7 @@ public class TestClueSet<T extends Comparable<T> & Serializable>
 	private static final boolean isRule = false;
 	private static int startLineNumber = 0;
 	private static int endLineNumber = 0;
+	public static int DECISION_DOMAIN_SIZE = 2;
 
 	private static final ClueDesc[] clueDescriptions = new ClueDesc[] {
 			new ClueDesc(IDX_DIFFER, NAME_DIFFER, Decision.DIFFER, isRule,

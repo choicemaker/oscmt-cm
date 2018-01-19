@@ -36,6 +36,7 @@ public class WellKnownInstances {
 	static {
 		parametersBean01.setLowThreshold(0.2f);
 		parametersBean01.setHighThreshold(0.8f);
+		parametersBean01.setModelConfigurationName(TestModel.MODEL_NAME);
 	}
 	public static final AbaParameters parameters01 = parametersBean01;
 
