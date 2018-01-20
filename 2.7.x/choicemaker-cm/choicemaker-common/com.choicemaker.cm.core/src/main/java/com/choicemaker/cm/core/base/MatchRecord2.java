@@ -21,6 +21,17 @@ import com.choicemaker.cm.core.util.MatchUtils;
 public class MatchRecord2<T extends Comparable<T>> implements
 		Comparable<MatchRecord2<T>>, Serializable {
 
+	/*
+	 * FIXME: This class is serializable only if <code>T</code>
+	 * is serializable. As a practical matter, <code>T</code> is
+	 * always a String, Integer or Long, so this class is serializable.
+	 * A better way to write this class would have been to declare
+	 * <code>T</code> to be serializable as well as comparable.
+	 * 
+	 * See client.api.EvaluatedPair, in which the type parameter is
+	 * declared serializable and comparable.
+	 */
+
 	private static final long serialVersionUID = 271;
 
 	public static final char MATCH = Decision.MATCH.toSingleChar();
