@@ -26,20 +26,23 @@ public class ExpectedResult<T extends Comparable<T> & Serializable> {
 	private List<Match> matchList;
 	private AbaParameters parameters;
 	private IGraphProperty mergeConnectivity;
-	boolean mergeGroupContainsQuery;
+	private boolean mergeGroupContainsQuery;
+	private CompositeEntity<T> expectedCompositeEntity;
 	
 	public ExpectedResult(
 			DataAccessObject<T> qr,
 			List<Match> ml,
 			AbaParameters params,
 			IGraphProperty mc,
-			boolean containsQuery
+			boolean mustContainQuery,
+			CompositeEntity<T> expected
 			) {
 		this.queryRecord = qr;
 		this.matchList = ml;
 		this.parameters = params;
 		this.mergeConnectivity = mc;
-		this.mergeGroupContainsQuery = containsQuery;
+		this.mergeGroupContainsQuery = mustContainQuery;
+		this.expectedCompositeEntity = expected;
 	}
 	
 	public DataAccessObject<T> getInputQueryRecord() {
@@ -67,8 +70,7 @@ public class ExpectedResult<T extends Comparable<T> & Serializable> {
 	}
 
 	public CompositeEntity<T> getExpectedCompositeEntity() {
-		// TODO Auto-generated method stub
-		return null;
+		return expectedCompositeEntity;
 	}
 	
 	public MatchCandidates<T> getExpectedMatchCandidates() {

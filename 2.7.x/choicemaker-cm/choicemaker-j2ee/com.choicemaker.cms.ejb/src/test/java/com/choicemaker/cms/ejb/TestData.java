@@ -19,7 +19,11 @@ import com.choicemaker.cm.core.ActiveClues;
 import com.choicemaker.cm.core.ClueSet;
 import com.choicemaker.cm.core.Match;
 import com.choicemaker.cm.core.Record;
+import com.choicemaker.cm.core.base.MatchRecord2;
 import com.choicemaker.cm.core.base.PMManager;
+import com.choicemaker.cm.core.base.RECORD_SOURCE_ROLE;
+import com.choicemaker.cm.transitivity.core.CompositeEntity;
+import com.choicemaker.util.UniqueSequence;
 
 public class TestData {
 
@@ -81,6 +85,20 @@ public class TestData {
 		return retVal;
 	}
 
+	public static <T extends Comparable<T> & Serializable> MatchRecord2<T> matchrecord2FromEvaluatedPair(
+			EvaluatedPair<T> pair) {
+		return matchrecord2FromEvaluatedPair(pair, RECORD_SOURCE_ROLE.MASTER);
+	}
+
+	public static <T extends Comparable<T> & Serializable> MatchRecord2<T> matchrecord2FromEvaluatedPair(
+			EvaluatedPair<T> pair, RECORD_SOURCE_ROLE role) {
+		MatchRecord2<T> retVal =
+			new MatchRecord2<>(pair.getQueryRecord().getId(),
+					pair.getMatchCandidate().getId(), role,
+					pair.getMatchProbability(), pair.getMatchDecision(), null);
+		return retVal;
+	}
+
 	public TestData() {
 	}
 
@@ -105,13 +123,20 @@ public class TestData {
 	public static ExpectedResult<Integer> createResult01() {
 		TestModel<Integer> model = new TestModel<>();
 		PMManager.addModel(model);
+
+		Integer ceID = UniqueSequence.getInstance().getNextInteger();
+		CompositeEntity<Integer> expectedCE = new CompositeEntity<>(ceID);
+		
 		EvaluatedPair<Integer> ePair =
 			new EvaluatedPair<Integer>(query01, dbRecord01, 0.5f, HOLD);
 		model.addEvaluatedPair(ePair);
+		MatchRecord2<Integer> mr = matchrecord2FromEvaluatedPair(ePair);
+		expectedCE.addMatchRecord(mr);
+
 		List<Match> matchList = matchListFromTestModel(query01, model);
 		final boolean mustContainQuery = false;
 		ExpectedResult<Integer> retVal = new ExpectedResult<Integer>(query01,
-				matchList, parameters01, GP_SCM, mustContainQuery);
+				matchList, parameters01, GP_SCM, mustContainQuery, expectedCE);
 		return retVal;
 	}
 

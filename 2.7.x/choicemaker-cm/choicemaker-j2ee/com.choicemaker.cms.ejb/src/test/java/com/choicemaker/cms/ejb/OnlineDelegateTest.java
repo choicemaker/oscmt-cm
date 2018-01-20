@@ -1,8 +1,11 @@
 package com.choicemaker.cms.ejb;
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.Test;
 
@@ -11,6 +14,8 @@ import com.choicemaker.client.api.IGraphProperty;
 import com.choicemaker.cm.args.TransitivityException;
 import com.choicemaker.cm.core.Match;
 import com.choicemaker.cm.transitivity.core.CompositeEntity;
+import com.choicemaker.cm.transitivity.core.INode;
+import com.choicemaker.cm.transitivity.core.Link;
 import com.choicemaker.cms.api.AbaParameters;
 
 /**
@@ -35,15 +40,50 @@ public class OnlineDelegateTest {
 			final CompositeEntity<Integer> computed =
 				delegate.computeCompositeEntity(query, matchList, parameters,
 						mergeConnectivity);
+			assertTrue(computed != null);
 			System.out.println(computed);
-			// final CompositeEntity expected =
-			// testdata.getExpectedCompositeEntity();
+			final CompositeEntity<Integer> expected =
+				testdata.getExpectedCompositeEntity();
+			assertTrue(expected != null);
+			assertTrue(equals(expected, computed));
+			assertTrue(computed.equalsIgnoreId(expected));
 		} catch (TransitivityException e) {
 			e.printStackTrace();
 			fail(e.toString());
 		}
 
 		fail("Not yet implemented");
+	}
+
+	public static <T extends Comparable<T>> boolean equals(
+			CompositeEntity<T> ce1, CompositeEntity<T> ce2) {
+		boolean retVal =
+			(ce1 == null && ce2 == null) || (ce1 != null && ce2 != null);
+		done: if (ce1 != null && ce2 != null) {
+			INode<T> firstNode1 = ce1.getFirstNode();
+			INode<T> firstNode2 = ce2.getFirstNode();
+			retVal = (firstNode1 == null && firstNode2 == null)
+					|| (firstNode1 != null && firstNode1.equals(firstNode2));
+			if (!retVal)
+				break done;
+
+			List<Link<T>> links1 = ce1.getAllLinks();
+			assert links1 != null;
+			List<Link<T>> links2 = ce2.getAllLinks();
+			assert links2 != null;
+			retVal = links1.equals(links2);
+			if (!retVal)
+				break done;
+			
+			Set<INode<T>> nodes1 = new HashSet<>();
+			CompositeEntity.getAllAccessibleNodes(ce1, nodes1, firstNode1);
+			Set<INode<T>> nodes2 = new HashSet<>();
+			CompositeEntity.getAllAccessibleNodes(ce2, nodes2, firstNode2);
+			retVal = nodes1.equals(nodes2);
+//			if (!retVal)
+//				break done;
+		}
+		return retVal;
 	}
 
 	@Test
