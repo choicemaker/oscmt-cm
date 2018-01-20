@@ -103,7 +103,6 @@ public class OnlineDelegate<T extends Comparable<T> & Serializable> {
 		final ImmutableProbabilityModel model =
 			ParameterHelper.getModel(parameters);
 
-		@SuppressWarnings("unchecked")
 		final Record<T> q = model.getAccessor().toImpl(query);
 
 		final String modelName = parameters.getModelConfigurationName();
@@ -244,7 +243,6 @@ public class OnlineDelegate<T extends Comparable<T> & Serializable> {
 		final ImmutableProbabilityModel model =
 			ParameterHelper.getModel(parameters);
 
-		@SuppressWarnings("unchecked")
 		final Record<T> q = model.getAccessor().toImpl(query);
 
 		final AutomatedBlocker rs =
