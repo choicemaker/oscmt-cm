@@ -1,7 +1,7 @@
 package com.choicemaker.cms.zzz_todo;
 
+import static com.choicemaker.client.api.WellKnownGraphProperties.GPN_SCM;
 import static com.choicemaker.cm.args.AnalysisResultFormat.SORT_BY_HOLD_GROUP;
-import static com.choicemaker.cm.args.WellKnownGraphPropertyNames.GPN_SCM;
 
 import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.args.PersistableSqlRecordSource;
