@@ -23,7 +23,7 @@ public interface INode<T extends Comparable<T>> extends Comparable<INode<T>> {
 	
 	public static final char STAGE_TYPE = RECORD_SOURCE_ROLE.STAGING.getCharSymbol(); //'S'
 	public static final char MASTER_TYPE = RECORD_SOURCE_ROLE.MASTER.getCharSymbol(); //'D'
-	public static final char COMPOSIT_TYPE = 'C';
+	public static final char COMPOSITE_TYPE = 'C';
 
 	/** This returns the id of this node */
 	public T getNodeId ();
