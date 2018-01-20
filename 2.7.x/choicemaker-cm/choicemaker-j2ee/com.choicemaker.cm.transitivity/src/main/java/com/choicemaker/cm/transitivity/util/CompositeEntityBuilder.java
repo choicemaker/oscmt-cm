@@ -19,6 +19,7 @@ import com.choicemaker.cm.core.base.RECORD_SOURCE_ROLE;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
 import com.choicemaker.cm.transitivity.core.CompositeEntity;
 import com.choicemaker.cm.transitivity.core.Link;
+import com.choicemaker.util.UniqueSequence;
 
 /**
  * This object takes a IMatchRecord2Source or a List of MatchRecord2

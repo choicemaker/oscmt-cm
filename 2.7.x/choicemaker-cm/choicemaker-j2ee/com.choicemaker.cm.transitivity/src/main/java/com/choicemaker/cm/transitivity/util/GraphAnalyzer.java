@@ -20,6 +20,7 @@ import com.choicemaker.cm.transitivity.core.Entity;
 import com.choicemaker.cm.transitivity.core.INode;
 import com.choicemaker.cm.transitivity.core.Link;
 import com.choicemaker.cm.transitivity.core.SubGraphProperty;
+import com.choicemaker.util.UniqueSequence;
 
 /**
  * This object marks the input graph, indicting which nodes should be compacted.

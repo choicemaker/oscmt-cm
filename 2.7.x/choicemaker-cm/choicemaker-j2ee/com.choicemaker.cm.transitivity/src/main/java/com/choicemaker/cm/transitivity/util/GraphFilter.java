@@ -13,6 +13,7 @@ import com.choicemaker.cm.core.base.MatchRecord2;
 import com.choicemaker.cm.transitivity.core.CompositeEntity;
 import com.choicemaker.cm.transitivity.core.EdgeProperty;
 import com.choicemaker.cm.transitivity.core.Link;
+import com.choicemaker.util.UniqueSequence;
 
 /**
  * This object takes in a graph (CompositeEntity) and an EdgeProperty and

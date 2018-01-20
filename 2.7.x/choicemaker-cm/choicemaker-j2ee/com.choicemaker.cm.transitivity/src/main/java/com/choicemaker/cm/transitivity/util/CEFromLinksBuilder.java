@@ -16,6 +16,7 @@ import com.choicemaker.cm.args.TransitivityException;
 import com.choicemaker.cm.transitivity.core.CompositeEntity;
 import com.choicemaker.cm.transitivity.core.INode;
 import com.choicemaker.cm.transitivity.core.Link;
+import com.choicemaker.util.UniqueSequence;
 
 /**
  * This object takes a List of Links
