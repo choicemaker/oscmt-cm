@@ -12,9 +12,11 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import com.choicemaker.cm.core.base.MatchRecord2;
+import com.choicemaker.util.Precondition;
 
 /**
  * This object represents a subgraph of records that are related to each other,
@@ -23,14 +25,37 @@ import com.choicemaker.cm.core.base.MatchRecord2;
  * 
  * @author pcheung
  */
-// @SuppressWarnings({
-// "rawtypes", "unchecked" })
 public class CompositeEntity<T extends Comparable<T>> implements INode<T> {
 
+	/**
+	 * This method recursively collects all nodes reachable from the given node.
+	 * The method checks that preconditions are satisfied.
+	 */
+	public static <T extends Comparable<T>> void getAllAccessibleNodes(
+			CompositeEntity<T> ce, Set<INode<T>> seenNodes,
+			INode<T> currentNode) {
+		Precondition.assertNonNullArgument(ce);
+		Precondition.assertNonNullArgument(seenNodes);
+		Precondition.assertNonNullArgument(currentNode);
+		getAllAccessibleNodesInternal(ce, seenNodes, currentNode);
+	}
+
+	/** No checks that preconditions are satisfied */
+	protected static <T extends Comparable<T>> void getAllAccessibleNodesInternal(
+			CompositeEntity<T> ce, Set<INode<T>> seenNodes,
+			INode<T> currentNode) {
+		if (!seenNodes.contains(currentNode)) {
+			seenNodes.add(currentNode);
+			List<INode<T>> al = ce.getAdjacency(currentNode);
+			for (int i = 0; i < al.size(); i++) {
+				INode<T> node = (INode<T>) al.get(i);
+				getAllAccessibleNodesInternal(ce, seenNodes, node);
+			}
+		}
+	}
+
 	private Integer marking;
-
 	private T id;
-
 	private TreeMap<INode<T>, INode<T>> nodes = new TreeMap<>();
 
 	// a list of edges in this graph
@@ -192,10 +217,6 @@ public class CompositeEntity<T extends Comparable<T>> implements INode<T> {
 		}
 	}
 
-	// public int hashCode() {
-	// return id.hashCode();
-	// }
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -209,18 +230,7 @@ public class CompositeEntity<T extends Comparable<T>> implements INode<T> {
 		return result;
 	}
 
-	// public boolean equals(Object o) {
-	// if (o instanceof CompositeEntity) {
-	// CompositeEntity<T> ce = (CompositeEntity<T>) o;
-	// return this.id.equals(ce.id);
-	// } else {
-	// return false;
-	// }
-	// }
-	//
-
-	@Override
-	public boolean equals(Object obj) {
+	public boolean equalsIgnoreId(Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
@@ -234,11 +244,11 @@ public class CompositeEntity<T extends Comparable<T>> implements INode<T> {
 				return false;
 		} else if (!adjacencyMap.equals(other.adjacencyMap))
 			return false;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
+		// if (id == null) {
+		// if (other.id != null)
+		// return false;
+		// } else if (!id.equals(other.id))
+		// return false;
 		if (links == null) {
 			if (other.links != null)
 				return false;
@@ -257,6 +267,28 @@ public class CompositeEntity<T extends Comparable<T>> implements INode<T> {
 		return true;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		boolean retVal = this.equalsIgnoreId(obj);
+		if (retVal) {
+			assert obj instanceof CompositeEntity<?>;
+			@SuppressWarnings("unchecked")
+			CompositeEntity<T> other = (CompositeEntity<T>) obj;
+			if (id == null) {
+				if (other.id != null) {
+					retVal = false;
+				} else {
+					assert id == null;
+					assert other.id == null;
+					assert retVal == true;
+				}
+			} else if (!id.equals(other.id)) {
+				retVal = false;
+			}
+		}
+		return retVal;
+	}
+
 	public void mark(Integer I) {
 		marking = I;
 	}
@@ -266,7 +298,12 @@ public class CompositeEntity<T extends Comparable<T>> implements INode<T> {
 	}
 
 	public char getType() {
-		return INode.COMPOSIT_TYPE;
+		return INode.COMPOSITE_TYPE;
+	}
+
+	@Override
+	public String toString() {
+		return "CompositeEntity[" + id + "]";
 	}
 
 }
