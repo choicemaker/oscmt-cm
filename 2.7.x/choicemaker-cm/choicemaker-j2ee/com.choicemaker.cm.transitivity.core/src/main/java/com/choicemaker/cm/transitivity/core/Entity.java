@@ -12,22 +12,22 @@ import java.util.List;
 
 /**
  * This represents a basic record entity in the transitivity graph.
- * 
+ *
  * @author pcheung
  *
  * ChoiceMaker Technologies Inc.
  */
 public class Entity<T extends Comparable<T>> implements INode<T> {
-	
+
 	private Integer marking;
 	private final T recordID;
 	private final char type;
-	
+
 	public Entity (T ID, char type) {
 		recordID = ID;
 		this.type = type;
 	}
-	
+
 
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.transitivity.core.INode#getNodeId()
@@ -59,7 +59,7 @@ public class Entity<T extends Comparable<T>> implements INode<T> {
 			if (type == e.type) {
 				return this.recordID.compareTo((T) e.recordID);
 			} else {
-				
+
 				if (type == STAGE_TYPE) return -1;
 				else return 1;
 			}
@@ -79,6 +79,26 @@ public class Entity<T extends Comparable<T>> implements INode<T> {
 		return result;
 	}
 
+	@Override
+	public boolean sameId(INode<T> other) {
+		if (this == other) {
+			return true;
+		}
+		if (other == null) {
+			return false;
+		}
+		if (!(other instanceof Entity)) {
+			return false;
+		}
+		if (getNodeId() == null) {
+			if (other.getNodeId() != null) {
+				return false;
+			}
+		} else if (!getNodeId().equals(other.getNodeId())) {
+			return false;
+		}
+		return true;
+	}
 
 	@Override
 	public boolean equals(Object obj) {

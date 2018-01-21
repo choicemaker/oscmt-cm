@@ -23,7 +23,7 @@ import com.choicemaker.util.UniqueSequence;
  * This object represents a subgraph of records that are related to each other,
  * typically through match or hold relationships that meet some connectivity
  * criteria such as simply connected, bi-connected or fully connected.
- * 
+ *
  * @author pcheung
  */
 public class CompositeEntity implements INode<Integer> {
@@ -130,7 +130,7 @@ public class CompositeEntity implements INode<Integer> {
 	/**
 	 * This method adds a node to the list of children. Adjacency list and Link
 	 * are not specified.
-	 * 
+	 *
 	 * @param node
 	 *            - a new node on this graph
 	 */
@@ -199,7 +199,7 @@ public class CompositeEntity implements INode<Integer> {
 
 	/**
 	 * This method returns all the links.
-	 * 
+	 *
 	 * @return List of Link
 	 */
 	public List<Link<?>> getAllLinks() {
@@ -208,7 +208,7 @@ public class CompositeEntity implements INode<Integer> {
 
 	/**
 	 * This method returns the adjacency list of the give node.
-	 * 
+	 *
 	 * @param node
 	 * @return List of INode.
 	 */
@@ -236,6 +236,27 @@ public class CompositeEntity implements INode<Integer> {
 		result = prime * result + ((marking == null) ? 0 : marking.hashCode());
 		result = prime * result + ((nodes == null) ? 0 : nodes.hashCode());
 		return result;
+	}
+
+	@Override
+	public boolean sameId(INode<Integer> other) {
+		if (this == other) {
+			return true;
+		}
+		if (other == null) {
+			return false;
+		}
+		if (!(other instanceof Entity)) {
+			return false;
+		}
+		if (getNodeId() == null) {
+			if (other.getNodeId() != null) {
+				return false;
+			}
+		} else if (!getNodeId().equals(other.getNodeId())) {
+			return false;
+		}
+		return true;
 	}
 
 	public boolean equalsIgnoreId(Object obj) {
@@ -274,22 +295,12 @@ public class CompositeEntity implements INode<Integer> {
 		return true;
 	}
 
-	public boolean equalsWithSameId(Object obj) {
+	public boolean equalsAndSameId(Object obj) {
 		boolean retVal = this.equalsIgnoreId(obj);
 		if (retVal) {
 			assert obj instanceof CompositeEntity;
 			CompositeEntity other = (CompositeEntity) obj;
-			if (id == null) {
-				if (other.id != null) {
-					retVal = false;
-				} else {
-					assert id == null;
-					assert other.id == null;
-					assert retVal == true;
-				}
-			} else if (!id.equals(other.id)) {
-				retVal = false;
-			}
+			retVal = sameId(other);
 		}
 		return retVal;
 	}
