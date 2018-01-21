@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.SortedSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -57,8 +56,6 @@ import com.choicemaker.cm.urm.exceptions.UrmUnderspecifiedQueryException;
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class OnlineMatchAnalyzerBean extends OnlineMatchBaseBean {
-
-	private static final long serialVersionUID = 1L;
 
 	static	{
 		log = Logger.getLogger(OnlineMatchAnalyzerBean.class.getName());
