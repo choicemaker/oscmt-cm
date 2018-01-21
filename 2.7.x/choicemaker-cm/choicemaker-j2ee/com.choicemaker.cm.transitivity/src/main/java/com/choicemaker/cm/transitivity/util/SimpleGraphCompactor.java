@@ -29,14 +29,14 @@ import com.choicemaker.cm.transitivity.core.Link;
  */
 @SuppressWarnings({
 	"rawtypes", "unchecked" })
-public class SimpleGraphCompactor<T extends Comparable<T>> implements
-		GraphCompactor<T> {
+public class SimpleGraphCompactor implements
+		GraphCompactor {
 
 	// this is a map of marking to compacted nodes
-	private HashMap<Integer, CompositeEntity<T>> compactedNodes;
+	private HashMap<Integer, CompositeEntity> compactedNodes;
 
 	// this is mapping between a pair of INodes and Link
-	private HashMap<CompositePair<T>, Link<T>> compactedLinks;
+	private HashMap<CompositePair<?>, Link<?>> compactedLinks;
 
 	/**
 	 * This compact method does the following:
@@ -49,9 +49,9 @@ public class SimpleGraphCompactor<T extends Comparable<T>> implements
 	 * link is between two compacted nodes.
 	 * 
 	 */
-	public CompositeEntity<T> compact(CompositeEntity<T> ce)
+	public CompositeEntity compact(CompositeEntity ce)
 			throws TransitivityException {
-		CompositeEntity<T> ret = new CompositeEntity<T>(ce.getNodeId());
+		CompositeEntity ret = new CompositeEntity(ce.getNodeId());
 
 		// this is a map of marking to compacted nodes
 		compactedNodes = new HashMap<>();
@@ -61,23 +61,23 @@ public class SimpleGraphCompactor<T extends Comparable<T>> implements
 		TreeSet<Integer> alreadyAdded = new TreeSet<>();
 
 		// walk through all the links.
-		List<Link<T>> links = ce.getAllLinks();
+		List<Link<?>> links = ce.getAllLinks();
 		for (int i = 0; i < links.size(); i++) {
-			Link<T> link = links.get(i);
+			Link<?> link = links.get(i);
 			INode node1 = link.getNode1();
 			INode node2 = link.getNode2();
 
-			Integer I1 = node1.getMarking();
-			Integer I2 = node2.getMarking();
+			Integer marking1 = node1.getMarking();
+			Integer marking2 = node2.getMarking();
 
-			if (I1 == null && I2 == null) {
+			if (marking1 == null && marking2 == null) {
 				// case A
 				ret.addLink(link);
-			} else if (I1 == null) {
+			} else if (marking1 == null) {
 				// case C
-				CompositeEntity compacted = getFromCompactedNodes(I2);
+				CompositeEntity compacted = getFromCompactedNodes(marking2);
 
-				CompositePair pair = new CompositePair(node1.getNodeId(), I2);
+				CompositePair pair = new CompositePair(node1.getNodeId(), marking2);
 				Link compLink = (Link) compactedLinks.get(pair);
 
 				Link newLink = null;
@@ -87,18 +87,18 @@ public class SimpleGraphCompactor<T extends Comparable<T>> implements
 					compactedLinks.put(pair, newLink);
 					ret.addLink(newLink);
 				} else {
-					List<MatchRecord2<T>> mrs = new LinkedList<>();
+					List<MatchRecord2<?>> mrs = new LinkedList<>();
 					mrs.addAll(compLink.getLinkDefinition());
 					mrs.addAll(link.getLinkDefinition());
 					newLink = new Link(node1, compacted, mrs);
 					compactedLinks.put(pair, newLink);
 				}
 
-			} else if (I2 == null) {
+			} else if (marking2 == null) {
 				// case C
-				CompositeEntity compacted = getFromCompactedNodes(I1);
+				CompositeEntity compacted = getFromCompactedNodes(marking1);
 
-				CompositePair pair = new CompositePair(node2.getNodeId(), I1);
+				CompositePair pair = new CompositePair(node2.getNodeId(), marking1);
 				Link compLink = (Link) compactedLinks.get(pair);
 
 				Link newLink = null;
@@ -108,34 +108,34 @@ public class SimpleGraphCompactor<T extends Comparable<T>> implements
 					compactedLinks.put(pair, newLink);
 					ret.addLink(newLink);
 				} else {
-					List<MatchRecord2<T>> mrs = new LinkedList<>();
+					List<MatchRecord2<?>> mrs = new LinkedList<>();
 					mrs.addAll(compLink.getLinkDefinition());
 					mrs.addAll(link.getLinkDefinition());
 					newLink = new Link(node2, compacted, mrs);
 					compactedLinks.put(pair, newLink);
 				}
 
-			} else if (I1.equals(I2)) {
+			} else if (marking1.equals(marking2)) {
 				// case B
-				CompositeEntity compacted = getFromCompactedNodes(I1);
+				CompositeEntity compacted = getFromCompactedNodes(marking1);
 
 				compacted.addLink(link);
 
-				if (!alreadyAdded.contains(I1)) {
+				if (!alreadyAdded.contains(marking1)) {
 					ret.addNode(compacted);
-					alreadyAdded.add(I1);
+					alreadyAdded.add(marking1);
 				}
 
 			} else {
 				// case D
-				CompositeEntity compacted1 = getFromCompactedNodes(I1);
-				CompositeEntity compacted2 = getFromCompactedNodes(I2);
+				CompositeEntity compacted1 = getFromCompactedNodes(marking1);
+				CompositeEntity compacted2 = getFromCompactedNodes(marking2);
 
 				CompositePair cp = null;
-				if (I1.compareTo(I2) < 0)
-					cp = new CompositePair(I1, I2);
+				if (marking1.compareTo(marking2) < 0)
+					cp = new CompositePair(marking1, marking2);
 				else
-					cp = new CompositePair(I2, I1);
+					cp = new CompositePair(marking2, marking1);
 				Link compLink = (Link) compactedLinks.get(cp);
 
 				Link newLink = null;
@@ -146,7 +146,7 @@ public class SimpleGraphCompactor<T extends Comparable<T>> implements
 					compactedLinks.put(cp, newLink);
 					ret.addLink(newLink);
 				} else {
-					List<MatchRecord2<T>> mrs = new LinkedList<>();
+					List<MatchRecord2<?>> mrs = new LinkedList<>();
 					mrs.addAll(compLink.getLinkDefinition());
 					mrs.addAll(link.getLinkDefinition());
 					newLink = new Link(compacted1, compacted2, mrs);

@@ -28,12 +28,12 @@ import com.choicemaker.cm.transitivity.core.CompositeEntity;
 @SuppressWarnings({
 		"rawtypes", "unchecked" })
 public class CompositeEntitySource<T extends Comparable<T>> implements
-		ISource<CompositeEntity<T>> {
+		ISource<CompositeEntity> {
 
 	private IMatchRecord2Source<T> source;
 	private MatchRecord2<T> separator = null;
 
-	private CompositeEntity<T> nextCE = null;
+	private CompositeEntity nextCE = null;
 
 	private int count;
 
@@ -71,11 +71,11 @@ public class CompositeEntitySource<T extends Comparable<T>> implements
 	}
 
 	@Override
-	public CompositeEntity<T> next() throws BlockingException {
+	public CompositeEntity next() throws BlockingException {
 		return getNext();
 	}
 
-	public CompositeEntity<T> getNext() throws BlockingException {
+	public CompositeEntity getNext() throws BlockingException {
 		if (this.nextCE == null) {
 			this.nextCE = readNext();
 		}

@@ -45,10 +45,10 @@ public class GraphFilter {
 	 *            - property which the edges need to satisfy
 	 * @return CompositeEnity - new graph.
 	 */
-	public <T extends Comparable<T>> CompositeEntity<T> filter(
-			CompositeEntity<T> ce, EdgeProperty ep) {
+	public CompositeEntity filter(
+			CompositeEntity ce, EdgeProperty ep) {
 		UniqueSequence seq = UniqueSequence.getInstance();
-		CompositeEntity<T> ret = new CompositeEntity(seq.getNextInteger());
+		CompositeEntity ret = new CompositeEntity(seq.getNextInteger());
 
 		// get all the links
 		List links = ce.getAllLinks();

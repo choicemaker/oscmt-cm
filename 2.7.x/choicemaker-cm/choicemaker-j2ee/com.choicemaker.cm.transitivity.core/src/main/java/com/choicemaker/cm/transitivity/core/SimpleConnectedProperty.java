@@ -19,15 +19,15 @@ import java.util.Set;
  *
  * ChoiceMaker Technologies, Inc.
  */
-public class SimpleConnectedProperty<T extends Comparable<T>> implements SubGraphProperty<T> {
+public class SimpleConnectedProperty implements SubGraphProperty {
 
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.transitivity.core.SubGraphProperty#hasProperty(com.choicemaker.cm.transitivity.core.CompositeEntity)
 	 */
-	public boolean hasProperty(CompositeEntity<T> ce) {
+	public boolean hasProperty(CompositeEntity ce) {
 		int numChildren = ce.getChildren().size();
-		INode<T> fNode = ce.getFirstNode();
-		Set<INode<T>> seenNodes = new HashSet<>();
+		INode<?> fNode = ce.getFirstNode();
+		Set<INode<?>> seenNodes = new HashSet<>();
 
 		CompositeEntity.getAllAccessibleNodes (ce, seenNodes, fNode);
 		
