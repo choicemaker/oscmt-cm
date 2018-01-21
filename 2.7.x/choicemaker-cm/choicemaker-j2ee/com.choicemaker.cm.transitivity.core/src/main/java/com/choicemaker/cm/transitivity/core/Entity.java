@@ -46,7 +46,7 @@ public class Entity<T extends Comparable<T>> implements INode<T> {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.transitivity.core.INode#getChildren()
 	 */
-	public List<INode<T>> getChildren() {
+	public List<INode<?>> getChildren() {
 		return Collections.emptyList();
 	}
 

@@ -59,6 +59,12 @@ public interface INode<T extends Comparable<T>> extends Comparable<INode<T>> {
 	
 	/** This returns a list of children of this node or a list of 0 elements.
 	 */
-	public List<INode<T>> getChildren ();
+	public List<INode<?>> getChildren ();
 	
+	/** Implementations should override equals(..) */
+	boolean equals(Object o);
+
+	/** Implementations should override hashCode() */
+	int hashCode();
+
 }
