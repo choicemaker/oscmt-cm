@@ -18,7 +18,7 @@ public class ExpectedResult<T extends Comparable<T> & Serializable> {
 
 	public static 
 	<T extends Comparable<T> & Serializable>
-	CompositeEntity<T> createCompositeEntity(DataAccessObject<T> queryRecord, List<EvaluatedPair<T>> pairs) {
+	CompositeEntity createCompositeEntity(DataAccessObject<T> queryRecord, List<EvaluatedPair<T>> pairs) {
 		return null;
 	}
 
@@ -27,7 +27,7 @@ public class ExpectedResult<T extends Comparable<T> & Serializable> {
 	private AbaParameters parameters;
 	private IGraphProperty mergeConnectivity;
 	private boolean mergeGroupContainsQuery;
-	private CompositeEntity<T> expectedCompositeEntity;
+	private CompositeEntity expectedCompositeEntity;
 	
 	public ExpectedResult(
 			DataAccessObject<T> qr,
@@ -35,7 +35,7 @@ public class ExpectedResult<T extends Comparable<T> & Serializable> {
 			AbaParameters params,
 			IGraphProperty mc,
 			boolean mustContainQuery,
-			CompositeEntity<T> expected
+			CompositeEntity expected
 			) {
 		this.queryRecord = qr;
 		this.matchList = ml;
@@ -69,7 +69,7 @@ public class ExpectedResult<T extends Comparable<T> & Serializable> {
 		return mergeGroupContainsQuery;
 	}
 
-	public CompositeEntity<T> getExpectedCompositeEntity() {
+	public CompositeEntity getExpectedCompositeEntity() {
 		return expectedCompositeEntity;
 	}
 	

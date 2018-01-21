@@ -125,7 +125,7 @@ public class TestData {
 		PMManager.addModel(model);
 
 		Integer ceID = UniqueSequence.getInstance().getNextInteger();
-		CompositeEntity<Integer> expectedCE = new CompositeEntity<>(ceID);
+		CompositeEntity expectedCE = new CompositeEntity(ceID);
 		
 		EvaluatedPair<Integer> ePair =
 			new EvaluatedPair<Integer>(query01, dbRecord01, 0.5f, HOLD);

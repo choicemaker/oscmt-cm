@@ -37,12 +37,12 @@ public class OnlineDelegateTest {
 
 		OnlineDelegate<Integer> delegate = new OnlineDelegate<Integer>();
 		try {
-			final CompositeEntity<Integer> computed =
+			final CompositeEntity computed =
 				delegate.computeCompositeEntity(query, matchList, parameters,
 						mergeConnectivity);
 			assertTrue(computed != null);
 			System.out.println(computed);
-			final CompositeEntity<Integer> expected =
+			final CompositeEntity expected =
 				testdata.getExpectedCompositeEntity();
 			assertTrue(expected != null);
 			assertTrue(equals(expected, computed));
@@ -55,29 +55,29 @@ public class OnlineDelegateTest {
 		fail("Not yet implemented");
 	}
 
-	public static <T extends Comparable<T>> boolean equals(
-			CompositeEntity<T> ce1, CompositeEntity<T> ce2) {
+	public static boolean equals(
+			CompositeEntity ce1, CompositeEntity ce2) {
 		boolean retVal =
 			(ce1 == null && ce2 == null) || (ce1 != null && ce2 != null);
 		done: if (ce1 != null && ce2 != null) {
-			INode<T> firstNode1 = ce1.getFirstNode();
-			INode<T> firstNode2 = ce2.getFirstNode();
+			INode<?> firstNode1 = ce1.getFirstNode();
+			INode<?> firstNode2 = ce2.getFirstNode();
 			retVal = (firstNode1 == null && firstNode2 == null)
 					|| (firstNode1 != null && firstNode1.equals(firstNode2));
 			if (!retVal)
 				break done;
 
-			List<Link<T>> links1 = ce1.getAllLinks();
+			List<Link<?>> links1 = ce1.getAllLinks();
 			assert links1 != null;
-			List<Link<T>> links2 = ce2.getAllLinks();
+			List<Link<?>> links2 = ce2.getAllLinks();
 			assert links2 != null;
 			retVal = links1.equals(links2);
 			if (!retVal)
 				break done;
 			
-			Set<INode<T>> nodes1 = new HashSet<>();
+			Set<INode<?>> nodes1 = new HashSet<>();
 			CompositeEntity.getAllAccessibleNodes(ce1, nodes1, firstNode1);
-			Set<INode<T>> nodes2 = new HashSet<>();
+			Set<INode<?>> nodes2 = new HashSet<>();
 			CompositeEntity.getAllAccessibleNodes(ce2, nodes2, firstNode2);
 			retVal = nodes1.equals(nodes2);
 //			if (!retVal)

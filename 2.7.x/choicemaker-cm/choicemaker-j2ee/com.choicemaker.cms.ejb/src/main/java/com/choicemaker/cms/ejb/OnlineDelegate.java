@@ -96,7 +96,7 @@ public class OnlineDelegate<T extends Comparable<T> & Serializable> {
 				statsController);
 	}
 
-	public CompositeEntity<T> computeCompositeEntity(DataAccessObject<T> query,
+	public CompositeEntity computeCompositeEntity(DataAccessObject<T> query,
 			List<Match> matchList, AbaParameters parameters,
 			IGraphProperty mergeConnectivity) throws TransitivityException {
 
@@ -126,11 +126,10 @@ public class OnlineDelegate<T extends Comparable<T> & Serializable> {
 		 * Get the clusters (there should be at most one, with every record
 		 * connected by a hold or a match to the query record).
 		 */
-		CompositeEntity<T> retVal = null;
+		CompositeEntity retVal = null;
 		if (compactedCeIter.hasNext()) {
-			@SuppressWarnings("unchecked")
-			CompositeEntity<T> _hack =
-				(CompositeEntity<T>) compactedCeIter.next();
+			CompositeEntity _hack =
+				(CompositeEntity) compactedCeIter.next();
 			retVal = _hack;
 		}
 		if (compactedCeIter.hasNext()) {
@@ -312,7 +311,7 @@ public class OnlineDelegate<T extends Comparable<T> & Serializable> {
 
 		final Map<SafeIndex<T>, Match> matchMap = createMatchMap(matchList);
 
-		final CompositeEntity<T> compositeEntity = computeCompositeEntity(query,
+		final CompositeEntity compositeEntity = computeCompositeEntity(query,
 				matchList, parameters, mergeConnectivity);
 
 		TransitiveCandidates<T> retVal;
@@ -321,7 +320,7 @@ public class OnlineDelegate<T extends Comparable<T> & Serializable> {
 			retVal = new TransitiveCandidatesBean<>(query);
 
 		} else {
-			List<INode<T>> childEntities = compositeEntity.getChildren();
+			List<INode<?>> childEntities = compositeEntity.getChildren();
 			if (childEntities == null) {
 				logger.info("empty composite entity");
 				retVal = new TransitiveCandidatesBean<>(query);
@@ -340,7 +339,7 @@ public class OnlineDelegate<T extends Comparable<T> & Serializable> {
 	public TransitiveCandidates<T> getTransitiveCandidates(
 			final DataAccessObject<T> query,
 			final Map<SafeIndex<T>, Match> matchMap,
-			final List<INode<T>> childEntities,
+			final List<INode<?>> childEntities,
 			final ImmutableProbabilityModel model,
 			final IGraphProperty mergeConnectivity,
 			final boolean mustIncludeQuery) throws TransitivityException {
@@ -353,11 +352,13 @@ public class OnlineDelegate<T extends Comparable<T> & Serializable> {
 		final SafeIndex<T> queryId = new SafeIndex<T>(query.getId());
 		final List<EvaluatedPair<T>> pairs = new ArrayList<>();
 		final List<MergeCandidates<T>> mergeGroups = new ArrayList<>();
-		for (INode<T> childNode : childEntities) {
+		for (INode<?> childNode : childEntities) {
 
 			// Handle an isolated record
 			if (childNode instanceof Entity) {
-				SafeIndex<T> nodeId = new SafeIndex<T>(childNode.getNodeId());
+				@SuppressWarnings({
+						"unchecked", "rawtypes" })
+				SafeIndex<?> nodeId = new SafeIndex(childNode.getNodeId());
 				if (!nodeId.equals(queryId)) {
 					Match m = (Match) matchMap.get(nodeId);
 					EvaluatedPair<T> pair = getEvaluatedPair(query, m, model);
@@ -366,14 +367,16 @@ public class OnlineDelegate<T extends Comparable<T> & Serializable> {
 
 				// Handle a group of records
 			} else if (childNode instanceof CompositeEntity) {
-				CompositeEntity<T> group = (CompositeEntity<T>) childNode;
+				CompositeEntity group = (CompositeEntity) childNode;
 				List<EvaluatedPair<T>> groupPairs = new ArrayList<>();
 				boolean containsQuery = false;
 
 				// Add evaluated pairs from the group
-				for (INode<T> child : group.getChildren()) {
-					final SafeIndex<T> childId =
-						new SafeIndex<T>(child.getNodeId());
+				for (INode<?> child : group.getChildren()) {
+					@SuppressWarnings({
+							"rawtypes", "unchecked" })
+					final SafeIndex<?> childId =
+						new SafeIndex(child.getNodeId());
 					if (queryId.equals(childId)) {
 						containsQuery = true;
 						if (mustIncludeQuery) {
