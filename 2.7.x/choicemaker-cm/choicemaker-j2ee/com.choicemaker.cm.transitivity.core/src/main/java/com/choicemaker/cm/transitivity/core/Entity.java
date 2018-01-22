@@ -50,6 +50,29 @@ public class Entity<T extends Comparable<T>> implements INode<T> {
 		return Collections.emptyList();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.transitivity.core.INode#mark(java.lang.Integer)
+	 */
+	public void mark(Integer I) {
+		marking = I;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.transitivity.core.INode#getMarking()
+	 */
+	public Integer getMarking() {
+		return marking;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.transitivity.core.INode#getType()
+	 */
+	public char getType() {
+		return type;
+	}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public int compareTo(INode<T> o) {
@@ -134,27 +157,10 @@ public class Entity<T extends Comparable<T>> implements INode<T> {
 	}
 
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.transitivity.core.INode#mark(java.lang.Integer)
-	 */
-	public void mark(Integer I) {
-		marking = I;
-	}
-
-
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.transitivity.core.INode#getMarking()
-	 */
-	public Integer getMarking() {
-		return marking;
-	}
-
-
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.transitivity.core.INode#getType()
-	 */
-	public char getType() {
-		return type;
+	@Override
+	public String toString() {
+		return "Entity [recordID=" + recordID + ", marking="  + marking
+				+ ", type=" + type + "]";
 	}
 
 }
