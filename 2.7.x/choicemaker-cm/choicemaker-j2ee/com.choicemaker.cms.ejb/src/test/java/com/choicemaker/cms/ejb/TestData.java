@@ -8,6 +8,7 @@ import static com.choicemaker.cms.ejb.WellKnownInstances.query01;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -23,6 +24,7 @@ import com.choicemaker.cm.core.base.MatchRecord2;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.base.RECORD_SOURCE_ROLE;
 import com.choicemaker.cm.transitivity.core.CompositeEntity;
+import com.choicemaker.cms.beans.TransitiveCandidatesBean;
 import com.choicemaker.util.UniqueSequence;
 
 public class TestData {
@@ -126,7 +128,7 @@ public class TestData {
 
 		Integer ceID = UniqueSequence.getInstance().getNextInteger();
 		CompositeEntity expectedCE = new CompositeEntity(ceID);
-		
+
 		EvaluatedPair<Integer> ePair =
 			new EvaluatedPair<Integer>(query01, dbRecord01, 0.5f, HOLD);
 		model.addEvaluatedPair(ePair);
@@ -135,8 +137,16 @@ public class TestData {
 
 		List<Match> matchList = matchListFromTestModel(query01, model);
 		final boolean mustContainQuery = false;
-		ExpectedResult<Integer> retVal = new ExpectedResult<Integer>(query01,
-				matchList, parameters01, GP_SCM, mustContainQuery, expectedCE);
+
+		List<EvaluatedPair<Integer>> ePairs = new ArrayList<>();
+		ePairs.add(ePair);
+		TransitiveCandidatesBean<Integer> expectedTC =
+			new TransitiveCandidatesBean<Integer>(query01, ePairs,
+					Collections.emptyList());
+
+		ExpectedResult<Integer> retVal =
+			new ExpectedResult<Integer>(query01, matchList, parameters01,
+					GP_SCM, mustContainQuery, expectedCE, expectedTC);
 		return retVal;
 	}
 

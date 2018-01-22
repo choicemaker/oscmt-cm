@@ -79,6 +79,45 @@ public class TransitiveCandidatesBean<T extends Comparable<T> & Serializable>
 	}
 
 	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((mergeGroups == null) ? 0 : mergeGroups.hashCode());
+		result = prime * result + ((pairs == null) ? 0 : pairs.hashCode());
+		result = prime * result + ((q == null) ? 0 : q.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		@SuppressWarnings("rawtypes")
+		TransitiveCandidatesBean other = (TransitiveCandidatesBean) obj;
+		if (mergeGroups == null) {
+			if (other.mergeGroups != null)
+				return false;
+		} else if (!mergeGroups.equals(other.mergeGroups))
+			return false;
+		if (pairs == null) {
+			if (other.pairs != null)
+				return false;
+		} else if (!pairs.equals(other.pairs))
+			return false;
+		if (q == null) {
+			if (other.q != null)
+				return false;
+		} else if (!q.equals(other.q))
+			return false;
+		return true;
+	}
+
+	@Override
 	public String toString() {
 		return "TransitiveCandidatesBean [q=" + q + ", pairs:" + pairs.size()
 				+ ", merges:" + mergeGroups.size() + "]";
