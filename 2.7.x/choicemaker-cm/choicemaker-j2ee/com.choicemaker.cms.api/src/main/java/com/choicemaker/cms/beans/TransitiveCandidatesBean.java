@@ -77,4 +77,12 @@ public class TransitiveCandidatesBean<T extends Comparable<T> & Serializable>
 	public List<MergeCandidates<T>> getMergeCandidates() {
 		return mergeGroups;
 	}
+
+	@Override
+	public String toString() {
+		return "TransitiveCandidatesBean [q=" + q + ", pairs:" + pairs.size()
+				+ ", merges:" + mergeGroups.size() + "]";
+	}
+
+
 }
