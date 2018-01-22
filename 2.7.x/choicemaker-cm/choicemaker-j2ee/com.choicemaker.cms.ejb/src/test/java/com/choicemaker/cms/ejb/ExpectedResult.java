@@ -12,59 +12,54 @@ import com.choicemaker.cm.core.Match;
 import com.choicemaker.cm.transitivity.core.CompositeEntity;
 import com.choicemaker.cms.api.AbaParameters;
 
-/** Hard-coded examples of composite entities and the match and transitivity candidates that they should produce */
+/**
+ * Hard-coded examples of composite entities and the match and transitivity
+ * candidates that they should produce
+ */
 
 public class ExpectedResult<T extends Comparable<T> & Serializable> {
 
-	public static 
-	<T extends Comparable<T> & Serializable>
-	CompositeEntity createCompositeEntity(DataAccessObject<T> queryRecord, List<EvaluatedPair<T>> pairs) {
+	public static <T extends Comparable<T> & Serializable> CompositeEntity createCompositeEntity(
+			DataAccessObject<T> queryRecord, List<EvaluatedPair<T>> pairs) {
 		return null;
 	}
 
-	private DataAccessObject<T> queryRecord;
-	private List<Match> matchList;
-	private AbaParameters parameters;
-	private IGraphProperty mergeConnectivity;
-	private boolean mergeGroupContainsQuery;
-	private CompositeEntity expectedCompositeEntity;
-	
-	public ExpectedResult(
-			DataAccessObject<T> qr,
-			List<Match> ml,
-			AbaParameters params,
-			IGraphProperty mc,
-			boolean mustContainQuery,
-			CompositeEntity expected
-			) {
+	private final DataAccessObject<T> queryRecord;
+	private final List<Match> matchList;
+	private final AbaParameters parameters;
+	private final IGraphProperty mergeConnectivity;
+	private final boolean mergeGroupContainsQuery;
+	private final CompositeEntity expectedCompositeEntity;
+	private final TransitiveCandidates<T> expectedTransitiveCandidates;
+
+	public ExpectedResult(DataAccessObject<T> qr, List<Match> ml,
+			AbaParameters params, IGraphProperty mc, boolean mustContainQuery,
+			CompositeEntity expectedCE, TransitiveCandidates<T> expectedTC) {
 		this.queryRecord = qr;
 		this.matchList = ml;
 		this.parameters = params;
 		this.mergeConnectivity = mc;
 		this.mergeGroupContainsQuery = mustContainQuery;
-		this.expectedCompositeEntity = expected;
+		this.expectedCompositeEntity = expectedCE;
+		this.expectedTransitiveCandidates = expectedTC;
 	}
-	
+
 	public DataAccessObject<T> getInputQueryRecord() {
-		// TODO Auto-generated method stub
 		return queryRecord;
 	}
 
 	public List<Match> getInputMatchList() {
-		// TODO Auto-generated method stub
 		return matchList;
 	}
 
 	public AbaParameters getInputAbaParameters() {
-		// TODO Auto-generated method stub
 		return parameters;
 	}
 
 	public IGraphProperty getInputMergeConnectivity() {
-		// TODO Auto-generated method stub
 		return mergeConnectivity;
 	}
-	
+
 	public boolean getInputMergeGroupContainsQuery() {
 		return mergeGroupContainsQuery;
 	}
@@ -72,13 +67,13 @@ public class ExpectedResult<T extends Comparable<T> & Serializable> {
 	public CompositeEntity getExpectedCompositeEntity() {
 		return expectedCompositeEntity;
 	}
-	
+
 	public MatchCandidates<T> getExpectedMatchCandidates() {
-		return null;
+		throw new Error("not yet implemented");
 	}
-	
+
 	public TransitiveCandidates<T> getExpectedTransitiveCandidates() {
-		return null;
+		return expectedTransitiveCandidates;
 	}
 
 }

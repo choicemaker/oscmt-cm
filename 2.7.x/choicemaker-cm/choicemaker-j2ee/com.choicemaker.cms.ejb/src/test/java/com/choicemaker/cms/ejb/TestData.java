@@ -87,7 +87,7 @@ public class TestData {
 
 	public static <T extends Comparable<T> & Serializable> MatchRecord2<T> matchrecord2FromEvaluatedPair(
 			EvaluatedPair<T> pair) {
-		return matchrecord2FromEvaluatedPair(pair, RECORD_SOURCE_ROLE.MASTER);
+		return matchrecord2FromEvaluatedPair(pair, RECORD_SOURCE_ROLE.STAGING);
 	}
 
 	public static <T extends Comparable<T> & Serializable> MatchRecord2<T> matchrecord2FromEvaluatedPair(
