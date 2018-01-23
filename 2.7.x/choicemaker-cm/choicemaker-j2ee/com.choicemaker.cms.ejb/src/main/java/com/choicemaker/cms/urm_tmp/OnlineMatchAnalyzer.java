@@ -10,23 +10,18 @@
  */
 package com.choicemaker.cms.urm_tmp;
 
-import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.AbaStatisticsController;
-import com.choicemaker.cm.urm.base.DbRecordCollection;
-import com.choicemaker.cm.urm.base.EvalRecordFormat;
-import com.choicemaker.cm.urm.base.EvaluatedRecord;
-import com.choicemaker.cm.urm.base.LinkCriteria;
 
 /**
  */
 public interface OnlineMatchAnalyzer extends AbaStatisticsController {
 
-	EvaluatedRecord[] getCompositeMatchCandidates(
-			Record patientHolder,
-			DbRecordCollection subsetDbRecordCollection,
-			String probabilityModel, float mediumProbability,
-			float highProbability, int maxNumMatches, LinkCriteria linkCriteria,
-			EvalRecordFormat evalRecordFormat, String trackingId);
+//	EvaluatedRecord[] getCompositeMatchCandidates(
+//			Record patientHolder,
+//			DbRecordCollection subsetDbRecordCollection,
+//			String probabilityModel, float mediumProbability,
+//			float highProbability, int maxNumMatches, LinkCriteria linkCriteria,
+//			EvalRecordFormat evalRecordFormat, String trackingId);
 
 //	/**
 //	 * @param queryRecord
