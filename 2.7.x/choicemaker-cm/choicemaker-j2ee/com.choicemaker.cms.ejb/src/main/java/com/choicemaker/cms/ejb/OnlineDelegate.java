@@ -149,7 +149,7 @@ public class OnlineDelegate<T extends Comparable<T> & Serializable> {
 		Precondition.assertNonNullArgument("null model", model);
 		Precondition.assertNonNullArgument("null matches", matches);
 
-		List<EvaluatedPair<T>> pairs = new ArrayList<>(matches.size());
+		List<EvaluatedPair<T>> retVal = new ArrayList<>(matches.size());
 		for (Match match : matches) {
 			String[] notes = match.ac.getNotes(model);
 			@SuppressWarnings("unchecked")
@@ -157,9 +157,9 @@ public class OnlineDelegate<T extends Comparable<T> & Serializable> {
 					.toRecordHolder(match.m);
 			EvaluatedPair<T> p = new EvaluatedPair<T>(query, m,
 					match.probability, match.decision, notes);
-			pairs.add(p);
+			retVal.add(p);
 		}
-		return null;
+		return retVal;
 	}
 
 	/** Creates a diagnostic suitable for logging or display to a user. */
