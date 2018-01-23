@@ -12,7 +12,7 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
 import org.junit.runner.RunWith;
 
-import com.choicemaker.cm.batch.BatchJob;
+import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cmit.oaba.AbstractOabaMdbTest;
 import com.choicemaker.cmit.oaba.util.OabaDeploymentUtils;
 import com.choicemaker.cmit.testconfigs.SimplePersonSqlServerSRMConfiguration;

@@ -23,9 +23,9 @@ import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.PersistentObject;
 import com.choicemaker.cm.args.ServerConfiguration;
-import com.choicemaker.cm.batch.BatchJob;
-import com.choicemaker.cm.batch.BatchJobRigor;
-import com.choicemaker.cm.batch.impl.BatchJobEntity;
+import com.choicemaker.cm.batch.api.BatchJob;
+import com.choicemaker.cm.batch.api.BatchJobRigor;
+import com.choicemaker.cm.batch.ejb.BatchJobEntity;
 import com.choicemaker.cm.core.IControl;
 
 /**

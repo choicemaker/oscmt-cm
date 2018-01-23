@@ -53,7 +53,7 @@ import javax.persistence.TableGenerator;
 
 import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.args.PersistentObject;
-import com.choicemaker.cm.batch.impl.AbstractPersistentObject;
+import com.choicemaker.cm.batch.ejb.AbstractPersistentObject;
 import com.choicemaker.cm.core.ImmutableThresholds;
 
 @NamedQueries({

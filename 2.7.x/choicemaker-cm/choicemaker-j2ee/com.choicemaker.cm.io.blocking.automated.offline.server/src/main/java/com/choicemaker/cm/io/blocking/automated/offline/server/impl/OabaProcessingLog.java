@@ -13,9 +13,9 @@ import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 
 import com.choicemaker.cm.args.ProcessingEvent;
-import com.choicemaker.cm.batch.BatchJob;
-import com.choicemaker.cm.batch.BatchJobProcessingEvent;
-import com.choicemaker.cm.batch.ProcessingEventLog;
+import com.choicemaker.cm.batch.api.BatchJob;
+import com.choicemaker.cm.batch.api.BatchJobProcessingEvent;
+import com.choicemaker.cm.batch.api.ProcessingEventLog;
 
 /**
  * OabaProcessingLog restricts a logging context to a specific OABA job by

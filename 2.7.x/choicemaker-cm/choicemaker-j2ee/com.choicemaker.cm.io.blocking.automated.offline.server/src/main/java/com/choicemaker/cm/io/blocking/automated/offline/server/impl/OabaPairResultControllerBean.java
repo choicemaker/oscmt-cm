@@ -22,7 +22,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import com.choicemaker.cm.batch.BatchJob;
+import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.base.MatchRecord2;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;

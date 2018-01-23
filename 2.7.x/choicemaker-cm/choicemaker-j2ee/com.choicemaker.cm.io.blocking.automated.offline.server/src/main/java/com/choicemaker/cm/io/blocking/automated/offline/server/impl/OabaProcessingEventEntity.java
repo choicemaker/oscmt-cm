@@ -21,8 +21,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
 import com.choicemaker.cm.args.ProcessingEvent;
-import com.choicemaker.cm.batch.BatchJob;
-import com.choicemaker.cm.batch.impl.BatchProcessingEventEntity;
+import com.choicemaker.cm.batch.api.BatchJob;
+import com.choicemaker.cm.batch.ejb.BatchProcessingEventEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessingEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaBatchProcessingEvent;
 

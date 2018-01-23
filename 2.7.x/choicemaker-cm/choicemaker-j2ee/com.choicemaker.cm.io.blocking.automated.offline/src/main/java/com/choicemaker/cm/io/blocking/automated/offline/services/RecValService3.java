@@ -13,7 +13,7 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.logging.Logger;
 
-import com.choicemaker.cm.batch.ProcessingEventLog;
+import com.choicemaker.cm.batch.api.ProcessingEventLog;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.IControl;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;

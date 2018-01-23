@@ -7,7 +7,7 @@
  *******************************************************************************/
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
-import com.choicemaker.cm.batch.impl.BatchJobJPA;
+import com.choicemaker.cm.batch.ejb.BatchJobJPA;
 
 
 /**

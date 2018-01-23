@@ -66,7 +66,7 @@
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.batch</artifactId>
+      <artifactId>com.choicemaker.cm.batch.api</artifactId>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.e2</groupId>

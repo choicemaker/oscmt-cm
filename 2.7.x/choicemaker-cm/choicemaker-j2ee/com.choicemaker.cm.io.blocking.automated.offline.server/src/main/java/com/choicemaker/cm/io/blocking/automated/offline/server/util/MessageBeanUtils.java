@@ -19,10 +19,10 @@ import javax.jms.Queue;
 import javax.jms.Topic;
 
 import com.choicemaker.cm.args.BatchProcessingEvent;
-import com.choicemaker.cm.batch.BatchJob;
-import com.choicemaker.cm.batch.OperationalPropertyController;
-import com.choicemaker.cm.batch.ProcessingEventLog;
-import com.choicemaker.cm.batch.impl.BatchJobFileUtils;
+import com.choicemaker.cm.batch.api.BatchJob;
+import com.choicemaker.cm.batch.api.OperationalPropertyController;
+import com.choicemaker.cm.batch.api.ProcessingEventLog;
+import com.choicemaker.cm.batch.ejb.BatchJobFileUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.MatchWriterMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 

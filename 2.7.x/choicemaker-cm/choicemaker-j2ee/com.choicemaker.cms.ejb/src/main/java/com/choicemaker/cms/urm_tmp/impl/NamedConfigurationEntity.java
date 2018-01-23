@@ -1,6 +1,47 @@
 package com.choicemaker.cms.urm_tmp.impl;
 
-import static com.choicemaker.cms.urm_tmp.impl.NamedConfigurationJPA.*;
+import static com.choicemaker.cms.urm_tmp.impl.NamedConfigurationJPA.CN_BKCONF;
+import static com.choicemaker.cms.urm_tmp.impl.NamedConfigurationJPA.CN_CM_IO_CLASS;
+import static com.choicemaker.cms.urm_tmp.impl.NamedConfigurationJPA.CN_CONF_NAME;
+import static com.choicemaker.cms.urm_tmp.impl.NamedConfigurationJPA.CN_DATASOURCE;
+import static com.choicemaker.cms.urm_tmp.impl.NamedConfigurationJPA.CN_FILE;
+import static com.choicemaker.cms.urm_tmp.impl.NamedConfigurationJPA.CN_FORMAT;
+import static com.choicemaker.cms.urm_tmp.impl.NamedConfigurationJPA.CN_GRAPH;
+import static com.choicemaker.cms.urm_tmp.impl.NamedConfigurationJPA.CN_HIGH_THRESHOLD;
+import static com.choicemaker.cms.urm_tmp.impl.NamedConfigurationJPA.CN_ID;
+import static com.choicemaker.cms.urm_tmp.impl.NamedConfigurationJPA.CN_INTERVAL;
+import static com.choicemaker.cms.urm_tmp.impl.NamedConfigurationJPA.CN_LIMIT_BLOCKSET;
+import static com.choicemaker.cms.urm_tmp.impl.NamedConfigurationJPA.CN_LIMIT_SINGLESET;
+import static com.choicemaker.cms.urm_tmp.impl.NamedConfigurationJPA.CN_LIMIT_SINGLETABLE;
+import static com.choicemaker.cms.urm_tmp.impl.NamedConfigurationJPA.CN_LOW_THRESHOLD;
+import static com.choicemaker.cms.urm_tmp.impl.NamedConfigurationJPA.CN_MAXCHUNKCOUNT;
+import static com.choicemaker.cms.urm_tmp.impl.NamedConfigurationJPA.CN_MAXCHUNKSIZE;
+import static com.choicemaker.cms.urm_tmp.impl.NamedConfigurationJPA.CN_MAXTHREADS;
+import static com.choicemaker.cms.urm_tmp.impl.NamedConfigurationJPA.CN_MAX_BLOCKSIZE;
+import static com.choicemaker.cms.urm_tmp.impl.NamedConfigurationJPA.CN_MAX_CHUNKSIZE;
+import static com.choicemaker.cms.urm_tmp.impl.NamedConfigurationJPA.CN_MAX_MATCHES;
+import static com.choicemaker.cms.urm_tmp.impl.NamedConfigurationJPA.CN_MAX_OVERSIZE;
+import static com.choicemaker.cms.urm_tmp.impl.NamedConfigurationJPA.CN_MAX_SINGLE;
+import static com.choicemaker.cms.urm_tmp.impl.NamedConfigurationJPA.CN_MIN_FIELDS;
+import static com.choicemaker.cms.urm_tmp.impl.NamedConfigurationJPA.CN_MODEL;
+import static com.choicemaker.cms.urm_tmp.impl.NamedConfigurationJPA.CN_QUERY_DBCONF;
+import static com.choicemaker.cms.urm_tmp.impl.NamedConfigurationJPA.CN_QUERY_IS_DEDUPED;
+import static com.choicemaker.cms.urm_tmp.impl.NamedConfigurationJPA.CN_QUERY_SQL;
+import static com.choicemaker.cms.urm_tmp.impl.NamedConfigurationJPA.CN_REF_DBACCESSOR;
+import static com.choicemaker.cms.urm_tmp.impl.NamedConfigurationJPA.CN_REF_DBCONF;
+import static com.choicemaker.cms.urm_tmp.impl.NamedConfigurationJPA.CN_REF_SQL;
+import static com.choicemaker.cms.urm_tmp.impl.NamedConfigurationJPA.CN_RS_TYPE;
+import static com.choicemaker.cms.urm_tmp.impl.NamedConfigurationJPA.CN_TASK;
+import static com.choicemaker.cms.urm_tmp.impl.NamedConfigurationJPA.ID_GENERATOR_NAME;
+import static com.choicemaker.cms.urm_tmp.impl.NamedConfigurationJPA.ID_GENERATOR_PK_COLUMN_NAME;
+import static com.choicemaker.cms.urm_tmp.impl.NamedConfigurationJPA.ID_GENERATOR_PK_COLUMN_VALUE;
+import static com.choicemaker.cms.urm_tmp.impl.NamedConfigurationJPA.ID_GENERATOR_TABLE;
+import static com.choicemaker.cms.urm_tmp.impl.NamedConfigurationJPA.ID_GENERATOR_VALUE_COLUMN_NAME;
+import static com.choicemaker.cms.urm_tmp.impl.NamedConfigurationJPA.JPQL_NAMEDCONFIG_FIND_ALL;
+import static com.choicemaker.cms.urm_tmp.impl.NamedConfigurationJPA.JPQL_NAMEDCONFIG_FIND_BY_NAME;
+import static com.choicemaker.cms.urm_tmp.impl.NamedConfigurationJPA.QN_NAMEDCONFIG_FIND_ALL;
+import static com.choicemaker.cms.urm_tmp.impl.NamedConfigurationJPA.QN_NAMEDCONFIG_FIND_BY_NAME;
+import static com.choicemaker.cms.urm_tmp.impl.NamedConfigurationJPA.TABLE_NAME;
 
 import java.io.Serializable;
 
@@ -14,7 +55,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 
-import com.choicemaker.cm.batch.impl.AbstractPersistentObject;
+import com.choicemaker.cm.batch.ejb.AbstractPersistentObject;
 import com.choicemaker.cms.zzz_todo.NamedConfiguration;
 
 @NamedQueries({

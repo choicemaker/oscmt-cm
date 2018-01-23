@@ -1,6 +1,6 @@
 package com.choicemaker.cms.urm_tmp;
 
-import com.choicemaker.cm.batch.BatchProcessingNotification;
+import com.choicemaker.cm.batch.api.BatchProcessingNotification;
 
 public interface WorkFlowManager {
 

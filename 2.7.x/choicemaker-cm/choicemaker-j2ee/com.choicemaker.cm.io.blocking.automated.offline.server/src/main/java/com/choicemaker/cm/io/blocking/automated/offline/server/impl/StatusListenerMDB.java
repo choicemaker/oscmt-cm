@@ -18,7 +18,7 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 
-import com.choicemaker.cm.batch.BatchProcessingNotification;
+import com.choicemaker.cm.batch.api.BatchProcessingNotification;
 
 @MessageDriven(activationConfig = {
 		@ActivationConfigProperty(propertyName = "destinationLookup",

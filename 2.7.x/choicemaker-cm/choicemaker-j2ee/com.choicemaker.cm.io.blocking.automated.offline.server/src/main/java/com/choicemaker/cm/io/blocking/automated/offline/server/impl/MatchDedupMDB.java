@@ -34,11 +34,11 @@ import javax.naming.NamingException;
 
 import com.choicemaker.cm.args.BatchProcessingEvent;
 import com.choicemaker.cm.args.OabaParameters;
-import com.choicemaker.cm.batch.BatchJob;
-import com.choicemaker.cm.batch.BatchJobStatus;
-import com.choicemaker.cm.batch.OperationalPropertyController;
-import com.choicemaker.cm.batch.ProcessingController;
-import com.choicemaker.cm.batch.ProcessingEventLog;
+import com.choicemaker.cm.batch.api.BatchJob;
+import com.choicemaker.cm.batch.api.BatchJobStatus;
+import com.choicemaker.cm.batch.api.OperationalPropertyController;
+import com.choicemaker.cm.batch.api.ProcessingController;
+import com.choicemaker.cm.batch.api.ProcessingEventLog;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.MatchRecord2;

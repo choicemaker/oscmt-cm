@@ -11,7 +11,7 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
 import org.junit.runner.RunWith;
 
-import com.choicemaker.cm.batch.BatchJob;
+import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.transitivity.server.impl.TransMatchSchedulerMDB;
 import com.choicemaker.cm.transitivity.server.impl.TransMatchSchedulerSingleton;
 import com.choicemaker.cmit.testconfigs.SimplePersonSqlServerTestConfiguration;

@@ -21,9 +21,9 @@ import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.sql.DataSource;
 
-import com.choicemaker.cm.batch.BatchJob;
-import com.choicemaker.cm.batch.BatchJobStatus;
-import com.choicemaker.cm.batch.OperationalPropertyController;
+import com.choicemaker.cm.batch.api.BatchJob;
+import com.choicemaker.cm.batch.api.BatchJobStatus;
+import com.choicemaker.cm.batch.api.OperationalPropertyController;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.MatchRecord2CompositeSource;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;

@@ -10,8 +10,8 @@ package com.choicemaker.cm.transitivity.server.impl;
 import java.util.Date;
 
 import com.choicemaker.cm.args.ProcessingEvent;
-import com.choicemaker.cm.batch.BatchJob;
-import com.choicemaker.cm.batch.BatchProcessingNotification;
+import com.choicemaker.cm.batch.api.BatchJob;
+import com.choicemaker.cm.batch.api.BatchProcessingNotification;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityBatchProcessingEvent;
 
 /**

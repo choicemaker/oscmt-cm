@@ -7,8 +7,8 @@
  *******************************************************************************/
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
-import static com.choicemaker.cm.batch.impl.BatchJobJPA.PN_BATCHJOB_FIND_BY_JOBID_P1;
-import static com.choicemaker.cm.batch.impl.BatchJobJPA.QN_BATCHJOB_FIND_BY_JOBID;
+import static com.choicemaker.cm.batch.ejb.BatchJobJPA.PN_BATCHJOB_FIND_BY_JOBID_P1;
+import static com.choicemaker.cm.batch.ejb.BatchJobJPA.QN_BATCHJOB_FIND_BY_JOBID;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -33,10 +33,10 @@ import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ProcessingEvent;
 import com.choicemaker.cm.args.ServerConfiguration;
-import com.choicemaker.cm.batch.BatchJob;
-import com.choicemaker.cm.batch.BatchJobProcessingEvent;
-import com.choicemaker.cm.batch.ProcessingController;
-import com.choicemaker.cm.batch.impl.BatchJobFileUtils;
+import com.choicemaker.cm.batch.api.BatchJob;
+import com.choicemaker.cm.batch.api.BatchJobProcessingEvent;
+import com.choicemaker.cm.batch.api.ProcessingController;
+import com.choicemaker.cm.batch.ejb.BatchJobFileUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;

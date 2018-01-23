@@ -11,7 +11,7 @@ import java.util.List;
 
 import javax.ejb.Local;
 
-import com.choicemaker.cm.batch.BatchJob;
+import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSinkSourceFactory;

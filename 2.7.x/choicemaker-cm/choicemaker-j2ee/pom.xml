@@ -24,7 +24,8 @@
 
   <modules>
     <module>com.choicemaker.cm.io.db.jboss</module>
-    <module>com.choicemaker.cm.batch</module>
+    <module>com.choicemaker.cm.batch.api</module>
+    <module>com.choicemaker.cm.batch.ejb</module>
     <module>com.choicemaker.cm.io.blocking.automated.offline</module>
     <module>com.choicemaker.cm.io.blocking.automated.offline.core</module>
     <module>com.choicemaker.cm.io.blocking.automated.offline.server</module>

@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.logging.Logger;
 
-import com.choicemaker.cm.batch.BatchJob;
+import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSinkSourceFactory;

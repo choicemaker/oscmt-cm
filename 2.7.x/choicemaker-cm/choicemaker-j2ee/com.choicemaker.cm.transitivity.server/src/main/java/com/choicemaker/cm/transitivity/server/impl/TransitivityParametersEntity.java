@@ -25,7 +25,7 @@ import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.args.TransitivityParameters;
-import com.choicemaker.cm.batch.BatchJob;
+import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
 

@@ -11,7 +11,7 @@ import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.args.PersistableSqlRecordSource;
 import com.choicemaker.cm.args.PersistentObject;
-import com.choicemaker.cm.batch.impl.AbstractPersistentObject;
+import com.choicemaker.cm.batch.ejb.AbstractPersistentObject;
 import com.choicemaker.cm.core.IProbabilityModelManager;
 import com.choicemaker.cm.core.ISerializableDbRecordSource;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;

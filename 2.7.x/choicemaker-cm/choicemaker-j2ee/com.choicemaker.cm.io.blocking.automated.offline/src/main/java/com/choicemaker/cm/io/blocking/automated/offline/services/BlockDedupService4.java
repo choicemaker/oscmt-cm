@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import com.choicemaker.cm.batch.ProcessingEventLog;
+import com.choicemaker.cm.batch.api.ProcessingEventLog;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.IControl;
 import com.choicemaker.cm.io.blocking.automated.offline.core.BlockSet;

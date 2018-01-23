@@ -22,10 +22,10 @@ import org.junit.runner.RunWith;
 
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
-import com.choicemaker.cm.batch.BatchJob;
-import com.choicemaker.cm.batch.BatchJobStatus;
-import com.choicemaker.cm.batch.OperationalPropertyController;
-import com.choicemaker.cm.batch.ProcessingController;
+import com.choicemaker.cm.batch.api.BatchJob;
+import com.choicemaker.cm.batch.api.BatchJobStatus;
+import com.choicemaker.cm.batch.api.OperationalPropertyController;
+import com.choicemaker.cm.batch.api.ProcessingController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;

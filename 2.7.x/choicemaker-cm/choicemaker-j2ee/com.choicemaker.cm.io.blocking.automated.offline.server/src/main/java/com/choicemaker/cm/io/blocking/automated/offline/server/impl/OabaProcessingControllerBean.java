@@ -32,11 +32,11 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import com.choicemaker.cm.args.ProcessingEvent;
-import com.choicemaker.cm.batch.BatchJob;
-import com.choicemaker.cm.batch.BatchJobProcessingEvent;
-import com.choicemaker.cm.batch.ProcessingController;
-import com.choicemaker.cm.batch.ProcessingEventLog;
-import com.choicemaker.cm.batch.impl.BatchProcessingEventEntity;
+import com.choicemaker.cm.batch.api.BatchJob;
+import com.choicemaker.cm.batch.api.BatchJobProcessingEvent;
+import com.choicemaker.cm.batch.api.ProcessingController;
+import com.choicemaker.cm.batch.api.ProcessingEventLog;
+import com.choicemaker.cm.batch.ejb.BatchProcessingEventEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaNotification;
 import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 

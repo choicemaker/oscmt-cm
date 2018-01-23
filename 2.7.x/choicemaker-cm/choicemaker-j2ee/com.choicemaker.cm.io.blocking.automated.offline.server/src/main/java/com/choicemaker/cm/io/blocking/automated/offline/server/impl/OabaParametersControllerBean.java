@@ -8,8 +8,8 @@
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
 import static com.choicemaker.cm.args.PersistableSqlRecordSource.TYPE;
-import static com.choicemaker.cm.batch.impl.BatchJobJPA.PN_BATCHJOB_FIND_BY_JOBID_P1;
-import static com.choicemaker.cm.batch.impl.BatchJobJPA.QN_BATCHJOB_FIND_BY_JOBID;
+import static com.choicemaker.cm.batch.ejb.BatchJobJPA.PN_BATCHJOB_FIND_BY_JOBID_P1;
+import static com.choicemaker.cm.batch.ejb.BatchJobJPA.QN_BATCHJOB_FIND_BY_JOBID;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.PN_PARAMETERS_FIND_BY_ID_P1;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.QN_OABAPARAMETERS_FIND_ALL;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.QN_PARAMETERS_FIND_ALL;
@@ -27,8 +27,8 @@ import javax.persistence.Query;
 
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.PersistableSqlRecordSource;
-import com.choicemaker.cm.batch.BatchJob;
-import com.choicemaker.cm.batch.impl.AbstractPersistentObject;
+import com.choicemaker.cm.batch.api.BatchJob;
+import com.choicemaker.cm.batch.ejb.AbstractPersistentObject;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SqlRecordSourceController;

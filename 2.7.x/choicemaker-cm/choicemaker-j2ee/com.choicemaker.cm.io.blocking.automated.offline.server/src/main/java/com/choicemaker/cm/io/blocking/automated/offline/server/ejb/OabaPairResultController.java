@@ -9,7 +9,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.server.ejb;
 
 import javax.ejb.Local;
 
-import com.choicemaker.cm.batch.BatchJob;
+import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;

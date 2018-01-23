@@ -3,7 +3,7 @@ package com.choicemaker.cmit.utils.j2ee;
 import java.util.UUID;
 
 import com.choicemaker.cm.args.PersistableRecordSource;
-import com.choicemaker.cm.batch.impl.AbstractPersistentObject;
+import com.choicemaker.cm.batch.ejb.AbstractPersistentObject;
 
 public class FakePersistableRecordSource extends AbstractPersistentObject
 		implements PersistableRecordSource {

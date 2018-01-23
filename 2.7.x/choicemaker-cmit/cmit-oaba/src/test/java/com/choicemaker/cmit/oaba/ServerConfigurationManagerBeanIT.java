@@ -25,8 +25,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.choicemaker.cm.args.ServerConfiguration;
-import com.choicemaker.cm.batch.OperationalPropertyController;
-import com.choicemaker.cm.batch.ProcessingController;
+import com.choicemaker.cm.batch.api.OperationalPropertyController;
+import com.choicemaker.cm.batch.api.ProcessingController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.DefaultServerConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.MutableServerConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;

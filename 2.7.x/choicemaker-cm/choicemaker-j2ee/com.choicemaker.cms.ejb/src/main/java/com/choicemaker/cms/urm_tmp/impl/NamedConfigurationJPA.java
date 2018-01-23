@@ -1,7 +1,7 @@
 package com.choicemaker.cms.urm_tmp.impl;
 
-import com.choicemaker.cm.batch.impl.AbstractPersistentObjectJPA;
-import com.choicemaker.cm.batch.impl.BatchJobJPA;
+import com.choicemaker.cm.batch.ejb.AbstractPersistentObjectJPA;
+import com.choicemaker.cm.batch.ejb.BatchJobJPA;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbaSettingsJPA;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultSettingsJPA;

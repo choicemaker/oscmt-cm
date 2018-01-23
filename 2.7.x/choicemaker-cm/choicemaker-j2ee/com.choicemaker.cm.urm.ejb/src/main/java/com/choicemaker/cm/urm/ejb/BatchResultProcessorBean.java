@@ -20,7 +20,7 @@ import javax.ejb.SessionContext;
 import javax.jms.Queue;
 import javax.persistence.EntityManager;
 
-import com.choicemaker.cm.batch.BatchJob;
+import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntity;
 import com.choicemaker.cm.urm.base.JobStatus;
 import com.choicemaker.cm.urm.exceptions.ArgumentException;

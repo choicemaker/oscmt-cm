@@ -12,7 +12,7 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
 import org.junit.runner.RunWith;
 
-import com.choicemaker.cm.batch.BatchJob;
+import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BlockingMDB;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.SingleRecordMatchMDB;
 import com.choicemaker.cmit.oaba.util.OabaDeploymentUtils;

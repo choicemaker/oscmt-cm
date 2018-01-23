@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 
 import javax.jms.Queue;
 
-import com.choicemaker.cm.batch.BatchJob;
+import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cmit.testconfigs.SimplePersonSqlServerTestConfiguration;
 import com.choicemaker.cmit.utils.j2ee.BatchProcessingPhase;
 

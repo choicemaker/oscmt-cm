@@ -5,9 +5,9 @@ import static com.choicemaker.cm.args.OperationalPropertyNames.PN_RECORD_MATCHIN
 
 import java.util.logging.Logger;
 
-import com.choicemaker.cm.batch.BatchJob;
-import com.choicemaker.cm.batch.OperationalProperty;
-import com.choicemaker.cm.batch.OperationalPropertyController;
+import com.choicemaker.cm.batch.api.BatchJob;
+import com.choicemaker.cm.batch.api.OperationalProperty;
+import com.choicemaker.cm.batch.api.OperationalPropertyController;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RecordMatchingMode;
 
 public class BatchJobUtils {

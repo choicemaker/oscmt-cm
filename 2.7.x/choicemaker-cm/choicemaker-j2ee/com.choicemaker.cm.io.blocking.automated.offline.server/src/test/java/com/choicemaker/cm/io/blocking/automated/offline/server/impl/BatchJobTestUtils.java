@@ -8,9 +8,9 @@ import java.nio.file.Files;
 import java.util.Date;
 import java.util.UUID;
 
-import com.choicemaker.cm.batch.BatchJob;
-import com.choicemaker.cm.batch.BatchJobRigor;
-import com.choicemaker.cm.batch.BatchJobStatus;
+import com.choicemaker.cm.batch.api.BatchJob;
+import com.choicemaker.cm.batch.api.BatchJobRigor;
+import com.choicemaker.cm.batch.api.BatchJobStatus;
 
 public class BatchJobTestUtils {
 

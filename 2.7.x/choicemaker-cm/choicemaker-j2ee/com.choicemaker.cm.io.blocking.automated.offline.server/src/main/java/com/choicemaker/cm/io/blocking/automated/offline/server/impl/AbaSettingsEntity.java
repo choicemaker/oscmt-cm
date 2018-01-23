@@ -36,7 +36,7 @@ import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 
 import com.choicemaker.cm.args.AbaSettings;
-import com.choicemaker.cm.batch.impl.AbstractPersistentObject;
+import com.choicemaker.cm.batch.ejb.AbstractPersistentObject;
 
 /**
  * Persistent ABA settings.

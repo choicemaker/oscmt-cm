@@ -30,7 +30,7 @@ import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 
 import com.choicemaker.cm.args.PersistableRecordSource;
-import com.choicemaker.cm.batch.impl.AbstractPersistentObject;
+import com.choicemaker.cm.batch.ejb.AbstractPersistentObject;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)

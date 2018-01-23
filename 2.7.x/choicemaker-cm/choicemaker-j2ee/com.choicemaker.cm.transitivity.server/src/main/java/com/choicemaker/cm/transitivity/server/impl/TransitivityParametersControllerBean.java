@@ -18,7 +18,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import com.choicemaker.cm.args.TransitivityParameters;
-import com.choicemaker.cm.batch.BatchJob;
+import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJobController;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityParametersController;
 

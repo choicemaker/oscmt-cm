@@ -10,8 +10,8 @@ import javax.persistence.EntityManager;
 import javax.transaction.UserTransaction;
 
 import com.choicemaker.cm.args.OabaLinkageType;
-import com.choicemaker.cm.batch.OperationalPropertyController;
-import com.choicemaker.cm.batch.ProcessingController;
+import com.choicemaker.cm.batch.api.OperationalPropertyController;
+import com.choicemaker.cm.batch.api.ProcessingController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;

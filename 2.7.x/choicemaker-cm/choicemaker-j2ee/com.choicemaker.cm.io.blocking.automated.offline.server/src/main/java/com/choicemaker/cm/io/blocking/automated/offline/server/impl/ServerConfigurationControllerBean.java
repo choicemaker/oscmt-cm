@@ -23,7 +23,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import com.choicemaker.cm.args.ServerConfiguration;
-import com.choicemaker.cm.batch.BatchJob;
+import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.DefaultServerConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.MutableServerConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;

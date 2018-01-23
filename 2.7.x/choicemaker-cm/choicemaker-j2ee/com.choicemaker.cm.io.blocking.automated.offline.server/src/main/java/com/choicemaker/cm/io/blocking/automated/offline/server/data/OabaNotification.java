@@ -9,9 +9,9 @@ package com.choicemaker.cm.io.blocking.automated.offline.server.data;
 
 import java.util.Date;
 
-import com.choicemaker.cm.batch.BatchJob;
-import com.choicemaker.cm.batch.BatchJobProcessingEvent;
-import com.choicemaker.cm.batch.BatchProcessingNotification;
+import com.choicemaker.cm.batch.api.BatchJob;
+import com.choicemaker.cm.batch.api.BatchJobProcessingEvent;
+import com.choicemaker.cm.batch.api.BatchProcessingNotification;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessingEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobJPA;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingEventJPA;

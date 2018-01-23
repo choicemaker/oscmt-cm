@@ -7,7 +7,7 @@
  *******************************************************************************/
 package com.choicemaker.cm.transitivity.server.ejb;
 
-import com.choicemaker.cm.batch.BatchJobProcessingEvent;
+import com.choicemaker.cm.batch.api.BatchJobProcessingEvent;
 import com.choicemaker.cm.transitivity.core.TransitivityProcessing;
 
 public interface TransitivityBatchProcessingEvent extends BatchJobProcessingEvent,

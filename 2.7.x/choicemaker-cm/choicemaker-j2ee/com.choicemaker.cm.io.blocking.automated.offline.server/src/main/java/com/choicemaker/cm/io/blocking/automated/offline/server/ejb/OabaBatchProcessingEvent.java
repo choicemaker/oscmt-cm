@@ -7,7 +7,7 @@
  *******************************************************************************/
 package com.choicemaker.cm.io.blocking.automated.offline.server.ejb;
 
-import com.choicemaker.cm.batch.BatchJobProcessingEvent;
+import com.choicemaker.cm.batch.api.BatchJobProcessingEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 
 public interface OabaBatchProcessingEvent extends BatchJobProcessingEvent,

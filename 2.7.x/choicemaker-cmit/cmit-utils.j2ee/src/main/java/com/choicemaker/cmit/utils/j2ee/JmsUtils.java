@@ -10,8 +10,8 @@ import javax.jms.JMSContext;
 import javax.jms.Queue;
 import javax.jms.Topic;
 
-import com.choicemaker.cm.batch.BatchJob;
-import com.choicemaker.cm.batch.BatchProcessingNotification;
+import com.choicemaker.cm.batch.api.BatchJob;
+import com.choicemaker.cm.batch.api.BatchProcessingNotification;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 

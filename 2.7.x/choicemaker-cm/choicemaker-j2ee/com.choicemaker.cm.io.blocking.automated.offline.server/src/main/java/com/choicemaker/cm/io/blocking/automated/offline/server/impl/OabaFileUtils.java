@@ -7,14 +7,14 @@
  *******************************************************************************/
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
-import static com.choicemaker.cm.batch.impl.BatchJobFileUtils.BINARY_SUFFIX;
-import static com.choicemaker.cm.batch.impl.BatchJobFileUtils.FILE_SEPARATOR;
-import static com.choicemaker.cm.batch.impl.BatchJobFileUtils.MAX_FILE_SIZE;
-import static com.choicemaker.cm.batch.impl.BatchJobFileUtils.TEXT_SUFFIX;
-import static com.choicemaker.cm.batch.impl.BatchJobFileUtils.formatJobId;
+import static com.choicemaker.cm.batch.ejb.BatchJobFileUtils.BINARY_SUFFIX;
+import static com.choicemaker.cm.batch.ejb.BatchJobFileUtils.FILE_SEPARATOR;
+import static com.choicemaker.cm.batch.ejb.BatchJobFileUtils.MAX_FILE_SIZE;
+import static com.choicemaker.cm.batch.ejb.BatchJobFileUtils.TEXT_SUFFIX;
+import static com.choicemaker.cm.batch.ejb.BatchJobFileUtils.formatJobId;
 
-import com.choicemaker.cm.batch.BatchJob;
-import com.choicemaker.cm.batch.impl.BatchJobFileUtils;
+import com.choicemaker.cm.batch.api.BatchJob;
+import com.choicemaker.cm.batch.ejb.BatchJobFileUtils;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;

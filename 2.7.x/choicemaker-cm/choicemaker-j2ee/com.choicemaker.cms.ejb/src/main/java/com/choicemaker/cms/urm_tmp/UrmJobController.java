@@ -4,8 +4,8 @@ import java.util.List;
 
 import javax.ejb.Local;
 
-import com.choicemaker.cm.batch.BatchJob;
-import com.choicemaker.cm.batch.BatchJobController;
+import com.choicemaker.cm.batch.api.BatchJob;
+import com.choicemaker.cm.batch.api.BatchJobController;
 
 @Local
 public interface UrmJobController extends BatchJobController {

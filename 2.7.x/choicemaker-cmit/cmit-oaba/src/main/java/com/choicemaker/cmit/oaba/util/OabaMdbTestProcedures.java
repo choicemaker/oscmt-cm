@@ -14,10 +14,10 @@ import javax.jms.Queue;
 
 import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.args.OabaParameters;
-import com.choicemaker.cm.batch.BatchJob;
-import com.choicemaker.cm.batch.BatchProcessingNotification;
-import com.choicemaker.cm.batch.ProcessingController;
-import com.choicemaker.cm.batch.ProcessingEventLog;
+import com.choicemaker.cm.batch.api.BatchJob;
+import com.choicemaker.cm.batch.api.BatchProcessingNotification;
+import com.choicemaker.cm.batch.api.ProcessingController;
+import com.choicemaker.cm.batch.api.ProcessingEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;

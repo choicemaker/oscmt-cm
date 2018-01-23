@@ -18,7 +18,7 @@ import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
-import com.choicemaker.cm.batch.BatchJob;
+import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.core.base.RECORD_SOURCE_ROLE;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
 
