@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plugin>
+<plugin
+   id="com.choicemaker.cm.batch.ejb"
+   name="Batch Persistence Plug-in"
+   version="2.7.0"
+   provider-name="CHOICEMAKER"
+   class="">
+
+   <runtime>
+      <library name="batchejb.jar">
+         <export name="*"/>
+      </library>
+   </runtime>
+   <requires>
+      <import plugin="com.choicemaker.cm.args"/>
+      <import plugin="com.choicemaker.cm.core"/>
+      <import plugin="com.choicemaker.cm.batch.api"/>
+   </requires>
+
+
+</plugin>
