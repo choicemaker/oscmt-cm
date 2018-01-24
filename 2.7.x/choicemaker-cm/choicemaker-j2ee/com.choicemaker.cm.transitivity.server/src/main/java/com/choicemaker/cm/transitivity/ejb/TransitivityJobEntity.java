@@ -5,13 +5,13 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *******************************************************************************/
-package com.choicemaker.cm.transitivity.server.impl;
+package com.choicemaker.cm.transitivity.ejb;
 
-import static com.choicemaker.cm.transitivity.server.impl.TransitivityJobJPA.DISCRIMINATOR_VALUE;
-import static com.choicemaker.cm.transitivity.server.impl.TransitivityJobJPA.JPQL_TRANSITIVITY_FIND_ALL;
-import static com.choicemaker.cm.transitivity.server.impl.TransitivityJobJPA.JPQL_TRANSITIVITY_FIND_ALL_BY_PARENT_ID;
-import static com.choicemaker.cm.transitivity.server.impl.TransitivityJobJPA.QN_TRANSITIVITY_FIND_ALL;
-import static com.choicemaker.cm.transitivity.server.impl.TransitivityJobJPA.QN_TRANSITIVITY_FIND_ALL_BY_PARENT_ID;
+import static com.choicemaker.cm.transitivity.ejb.TransitivityJobJPA.DISCRIMINATOR_VALUE;
+import static com.choicemaker.cm.transitivity.ejb.TransitivityJobJPA.JPQL_TRANSITIVITY_FIND_ALL;
+import static com.choicemaker.cm.transitivity.ejb.TransitivityJobJPA.JPQL_TRANSITIVITY_FIND_ALL_BY_PARENT_ID;
+import static com.choicemaker.cm.transitivity.ejb.TransitivityJobJPA.QN_TRANSITIVITY_FIND_ALL;
+import static com.choicemaker.cm.transitivity.ejb.TransitivityJobJPA.QN_TRANSITIVITY_FIND_ALL_BY_PARENT_ID;
 
 import java.io.File;
 

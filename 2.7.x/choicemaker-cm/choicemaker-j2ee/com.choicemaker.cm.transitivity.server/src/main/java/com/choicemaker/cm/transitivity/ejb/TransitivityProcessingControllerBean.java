@@ -5,13 +5,13 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *******************************************************************************/
-package com.choicemaker.cm.transitivity.server.impl;
+package com.choicemaker.cm.transitivity.ejb;
 
-import static com.choicemaker.cm.transitivity.server.impl.TransitivityProcessingEventJPA.PN_TRANSPROCESSING_DELETE_BY_JOBID_JOBID;
-import static com.choicemaker.cm.transitivity.server.impl.TransitivityProcessingEventJPA.PN_TRANSPROCESSING_FIND_BY_JOBID_JOBID;
-import static com.choicemaker.cm.transitivity.server.impl.TransitivityProcessingEventJPA.QN_TRANSPROCESSING_DELETE_BY_JOBID;
-import static com.choicemaker.cm.transitivity.server.impl.TransitivityProcessingEventJPA.QN_TRANSPROCESSING_FIND_ALL;
-import static com.choicemaker.cm.transitivity.server.impl.TransitivityProcessingEventJPA.QN_TRANSPROCESSING_FIND_BY_JOBID;
+import static com.choicemaker.cm.transitivity.ejb.TransitivityProcessingEventJPA.PN_TRANSPROCESSING_DELETE_BY_JOBID_JOBID;
+import static com.choicemaker.cm.transitivity.ejb.TransitivityProcessingEventJPA.PN_TRANSPROCESSING_FIND_BY_JOBID_JOBID;
+import static com.choicemaker.cm.transitivity.ejb.TransitivityProcessingEventJPA.QN_TRANSPROCESSING_DELETE_BY_JOBID;
+import static com.choicemaker.cm.transitivity.ejb.TransitivityProcessingEventJPA.QN_TRANSPROCESSING_FIND_ALL;
+import static com.choicemaker.cm.transitivity.ejb.TransitivityProcessingEventJPA.QN_TRANSPROCESSING_FIND_BY_JOBID;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -36,7 +36,7 @@ import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.BatchJobProcessingEvent;
 import com.choicemaker.cm.batch.api.ProcessingController;
 import com.choicemaker.cm.oaba.ejb.util.MessageBeanUtils;
-import com.choicemaker.cm.transitivity.server.ejb.TransitivityBatchProcessingEvent;
+import com.choicemaker.cm.transitivity.api.TransitivityBatchProcessingEvent;
 
 
 /**

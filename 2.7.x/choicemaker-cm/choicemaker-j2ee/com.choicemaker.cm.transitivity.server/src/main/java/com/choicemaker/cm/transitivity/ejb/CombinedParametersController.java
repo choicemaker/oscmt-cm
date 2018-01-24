@@ -5,7 +5,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *******************************************************************************/
-package com.choicemaker.cm.transitivity.server.impl;
+package com.choicemaker.cm.transitivity.ejb;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.oaba.api.AbstractParameters;
 import com.choicemaker.cm.oaba.api.OabaParametersController;
-import com.choicemaker.cm.transitivity.server.ejb.TransitivityParametersController;
+import com.choicemaker.cm.transitivity.api.TransitivityParametersController;
 
 public class CombinedParametersController implements
 		OabaParametersController {

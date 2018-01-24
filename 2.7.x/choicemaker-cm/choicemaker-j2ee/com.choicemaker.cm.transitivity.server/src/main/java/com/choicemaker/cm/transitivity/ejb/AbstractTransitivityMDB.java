@@ -5,7 +5,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *******************************************************************************/
-package com.choicemaker.cm.transitivity.server.impl;
+package com.choicemaker.cm.transitivity.ejb;
 
 import java.io.PrintWriter;
 import java.io.Serializable;
@@ -41,11 +41,11 @@ import com.choicemaker.cm.oaba.core.RecordMatchingMode;
 import com.choicemaker.cm.oaba.ejb.BatchJobUtils;
 import com.choicemaker.cm.oaba.ejb.data.OabaJobMessage;
 import com.choicemaker.cm.oaba.ejb.util.MessageBeanUtils;
-import com.choicemaker.cm.transitivity.server.ejb.TransitivityConfigurationController;
-import com.choicemaker.cm.transitivity.server.ejb.TransitivityJobController;
-import com.choicemaker.cm.transitivity.server.ejb.TransitivityParametersController;
-import com.choicemaker.cm.transitivity.server.ejb.TransitivitySettingsController;
-import com.choicemaker.cm.transitivity.server.util.LoggingUtils;
+import com.choicemaker.cm.transitivity.api.TransitivityConfigurationController;
+import com.choicemaker.cm.transitivity.api.TransitivityJobController;
+import com.choicemaker.cm.transitivity.api.TransitivityParametersController;
+import com.choicemaker.cm.transitivity.api.TransitivitySettingsController;
+import com.choicemaker.cm.transitivity.ejb.util.LoggingUtils;
 
 /**
  * Common functionality of message driven beans that perform OABA processing

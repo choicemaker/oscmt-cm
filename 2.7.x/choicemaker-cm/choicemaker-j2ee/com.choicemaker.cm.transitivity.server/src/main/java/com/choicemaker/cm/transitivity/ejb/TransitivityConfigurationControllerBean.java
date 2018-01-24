@@ -5,7 +5,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *******************************************************************************/
-package com.choicemaker.cm.transitivity.server.impl;
+package com.choicemaker.cm.transitivity.ejb;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -15,8 +15,8 @@ import javax.persistence.PersistenceContext;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.oaba.ejb.ServerConfigurationControllerBean;
-import com.choicemaker.cm.transitivity.server.ejb.TransitivityConfigurationController;
-import com.choicemaker.cm.transitivity.server.ejb.TransitivityJobController;
+import com.choicemaker.cm.transitivity.api.TransitivityConfigurationController;
+import com.choicemaker.cm.transitivity.api.TransitivityJobController;
 
 @Stateless
 public class TransitivityConfigurationControllerBean

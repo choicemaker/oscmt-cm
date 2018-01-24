@@ -5,7 +5,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *******************************************************************************/
-package com.choicemaker.cm.transitivity.server.impl;
+package com.choicemaker.cm.transitivity.ejb;
 
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_TRANSITIVITY_CACHED_PAIRS_FILE;
 import static com.choicemaker.cm.transitivity.core.TransitivityProcessingEvent.DONE_TRANSITIVITY_PAIRWISE;
@@ -42,8 +42,8 @@ import com.choicemaker.cm.oaba.ejb.BatchJobUtils;
 import com.choicemaker.cm.oaba.ejb.OabaFileUtils;
 import com.choicemaker.cm.oaba.ejb.data.OabaJobMessage;
 import com.choicemaker.cm.oaba.ejb.util.MessageBeanUtils;
-import com.choicemaker.cm.transitivity.server.ejb.TransitivityJobController;
-import com.choicemaker.cm.transitivity.server.ejb.TransitivityParametersController;
+import com.choicemaker.cm.transitivity.api.TransitivityJobController;
+import com.choicemaker.cm.transitivity.api.TransitivityParametersController;
 
 /**
  * This match dedup bean is used by the Transitivity Engine. It dedups the

@@ -5,15 +5,15 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *******************************************************************************/
-package com.choicemaker.cm.transitivity.server.impl;
+package com.choicemaker.cm.transitivity.ejb;
 
-import static com.choicemaker.cm.transitivity.server.impl.TransitivityProcessingEventJPA.DISCRIMINATOR_VALUE;
-import static com.choicemaker.cm.transitivity.server.impl.TransitivityProcessingEventJPA.JPQL_TRANSPROCESSING_DELETE_BY_JOBID;
-import static com.choicemaker.cm.transitivity.server.impl.TransitivityProcessingEventJPA.JPQL_TRANSPROCESSING_FIND_ALL;
-import static com.choicemaker.cm.transitivity.server.impl.TransitivityProcessingEventJPA.JPQL_TRANSPROCESSING_FIND_BY_JOBID;
-import static com.choicemaker.cm.transitivity.server.impl.TransitivityProcessingEventJPA.QN_TRANSPROCESSING_DELETE_BY_JOBID;
-import static com.choicemaker.cm.transitivity.server.impl.TransitivityProcessingEventJPA.QN_TRANSPROCESSING_FIND_ALL;
-import static com.choicemaker.cm.transitivity.server.impl.TransitivityProcessingEventJPA.QN_TRANSPROCESSING_FIND_BY_JOBID;
+import static com.choicemaker.cm.transitivity.ejb.TransitivityProcessingEventJPA.DISCRIMINATOR_VALUE;
+import static com.choicemaker.cm.transitivity.ejb.TransitivityProcessingEventJPA.JPQL_TRANSPROCESSING_DELETE_BY_JOBID;
+import static com.choicemaker.cm.transitivity.ejb.TransitivityProcessingEventJPA.JPQL_TRANSPROCESSING_FIND_ALL;
+import static com.choicemaker.cm.transitivity.ejb.TransitivityProcessingEventJPA.JPQL_TRANSPROCESSING_FIND_BY_JOBID;
+import static com.choicemaker.cm.transitivity.ejb.TransitivityProcessingEventJPA.QN_TRANSPROCESSING_DELETE_BY_JOBID;
+import static com.choicemaker.cm.transitivity.ejb.TransitivityProcessingEventJPA.QN_TRANSPROCESSING_FIND_ALL;
+import static com.choicemaker.cm.transitivity.ejb.TransitivityProcessingEventJPA.QN_TRANSPROCESSING_FIND_BY_JOBID;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -23,8 +23,8 @@ import javax.persistence.NamedQuery;
 import com.choicemaker.cm.args.ProcessingEvent;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.ejb.BatchProcessingEventEntity;
+import com.choicemaker.cm.transitivity.api.TransitivityBatchProcessingEvent;
 import com.choicemaker.cm.transitivity.core.TransitivityProcessingEvent;
-import com.choicemaker.cm.transitivity.server.ejb.TransitivityBatchProcessingEvent;
 
 /**
  * This is the EJB implementation of the Transitivity BatchProcessingEventEntity

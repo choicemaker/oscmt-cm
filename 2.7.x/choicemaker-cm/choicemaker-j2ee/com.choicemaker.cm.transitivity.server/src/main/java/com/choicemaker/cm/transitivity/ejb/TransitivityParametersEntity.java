@@ -5,11 +5,11 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *******************************************************************************/
-package com.choicemaker.cm.transitivity.server.impl;
+package com.choicemaker.cm.transitivity.ejb;
 
-import static com.choicemaker.cm.transitivity.server.impl.TransitivityParametersJPA.DV_TRANS;
-import static com.choicemaker.cm.transitivity.server.impl.TransitivityParametersJPA.JPQL_TRANSPARAMETERS_FIND_ALL;
-import static com.choicemaker.cm.transitivity.server.impl.TransitivityParametersJPA.QN_TRANSPARAMETERS_FIND_ALL;
+import static com.choicemaker.cm.transitivity.ejb.TransitivityParametersJPA.DV_TRANS;
+import static com.choicemaker.cm.transitivity.ejb.TransitivityParametersJPA.JPQL_TRANSPARAMETERS_FIND_ALL;
+import static com.choicemaker.cm.transitivity.ejb.TransitivityParametersJPA.QN_TRANSPARAMETERS_FIND_ALL;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;

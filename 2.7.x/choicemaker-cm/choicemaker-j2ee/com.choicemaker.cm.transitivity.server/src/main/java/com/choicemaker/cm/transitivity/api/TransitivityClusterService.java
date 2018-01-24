@@ -5,7 +5,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *******************************************************************************/
-package com.choicemaker.cm.transitivity.server.ejb;
+package com.choicemaker.cm.transitivity.api;
 
 import java.rmi.RemoteException;
 import java.security.AccessControlException;

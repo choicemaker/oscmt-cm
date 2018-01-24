@@ -5,7 +5,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *******************************************************************************/
-package com.choicemaker.cm.transitivity.server.impl;
+package com.choicemaker.cm.transitivity.ejb;
 
 import static com.choicemaker.cm.args.BatchProcessingEvent.DONE;
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_TRANSITIVITY_CACHED_GROUPS_FILE;
@@ -44,12 +44,12 @@ import com.choicemaker.cm.oaba.api.OabaSettingsController;
 import com.choicemaker.cm.oaba.api.ServerConfigurationController;
 import com.choicemaker.cm.oaba.ejb.data.OabaJobMessage;
 import com.choicemaker.cm.oaba.impl.MatchRecord2CompositeSource;
+import com.choicemaker.cm.transitivity.api.TransitivityJobController;
+import com.choicemaker.cm.transitivity.api.TransitivityParametersController;
 import com.choicemaker.cm.transitivity.core.TransitivityResult;
 import com.choicemaker.cm.transitivity.core.TransitivityResultCompositeSerializer;
 import com.choicemaker.cm.transitivity.core.TransitivitySortType;
-import com.choicemaker.cm.transitivity.server.ejb.TransitivityJobController;
-import com.choicemaker.cm.transitivity.server.ejb.TransitivityParametersController;
-import com.choicemaker.cm.transitivity.server.util.ClusteringIteratorFactory;
+import com.choicemaker.cm.transitivity.ejb.util.ClusteringIteratorFactory;
 import com.choicemaker.cm.transitivity.util.CompositeEntityIterator;
 import com.choicemaker.cm.transitivity.util.CompositeEntitySource;
 import com.choicemaker.cm.transitivity.util.CompositeTextSerializer;

@@ -5,7 +5,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *******************************************************************************/
-package com.choicemaker.cm.transitivity.server.impl;
+package com.choicemaker.cm.transitivity.ejb;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -37,7 +37,7 @@ import com.choicemaker.cm.oaba.ejb.data.MatchWriterMessage;
 import com.choicemaker.cm.oaba.ejb.data.OabaJobMessage;
 import com.choicemaker.cm.oaba.ejb.util.MessageBeanUtils;
 import com.choicemaker.cm.oaba.impl.ComparableMRSink;
-import com.choicemaker.cm.transitivity.server.ejb.TransitivityParametersController;
+import com.choicemaker.cm.transitivity.api.TransitivityParametersController;
 
 /**
  * This is the Matcher for the Transitivity Engine. It is called by

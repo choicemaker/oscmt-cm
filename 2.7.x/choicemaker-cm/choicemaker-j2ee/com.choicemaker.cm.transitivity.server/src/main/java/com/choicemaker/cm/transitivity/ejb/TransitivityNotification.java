@@ -5,14 +5,14 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *******************************************************************************/
-package com.choicemaker.cm.transitivity.server.impl;
+package com.choicemaker.cm.transitivity.ejb;
 
 import java.util.Date;
 
 import com.choicemaker.cm.args.ProcessingEvent;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.BatchProcessingNotification;
-import com.choicemaker.cm.transitivity.server.ejb.TransitivityBatchProcessingEvent;
+import com.choicemaker.cm.transitivity.api.TransitivityBatchProcessingEvent;
 
 /**
  * This is the data object that gets passed to the UpdateStatusMDB message bean.
