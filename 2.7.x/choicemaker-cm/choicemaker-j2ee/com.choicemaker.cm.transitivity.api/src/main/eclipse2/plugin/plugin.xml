@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plugin>
 <plugin
-   id="com.choicemaker.cm.transitivity.server"
-   name="com.choicemaker.cm.transitivity.server"
+   id="com.choicemaker.cm.transitivity.api"
+   name="com.choicemaker.cm.transitivity.api"
    version="2.5.0">
 
    <runtime>
-      <library name="transitivity-server.jar">
+      <library name="transitivity-api.jar">
          <export name="*"/>
       </library>
    </runtime>

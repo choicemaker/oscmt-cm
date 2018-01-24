@@ -12,13 +12,13 @@
     <relativePath>../pom.xml</relativePath>
   </parent>
 
-  <artifactId>com.choicemaker.cm.transitivity.server</artifactId>
+  <artifactId>com.choicemaker.cm.transitivity.ejb</artifactId>
   <packaging>jar</packaging>
-  <name>ChoiceMaker Offline Matching (Transitivity Server)</name>
+  <name>ChoiceMaker Offline Matching (Transitivity EJB)</name>
 
   <properties>
-    <eclipse.plugin.runtime.library.name>transitivity-server.jar</eclipse.plugin.runtime.library.name>
-    <eclipse.plugin.src.zip.name>transitivity-serversrc.zip</eclipse.plugin.src.zip.name>
+    <eclipse.plugin.runtime.library.name>transitivity-ejb.jar</eclipse.plugin.runtime.library.name>
+    <eclipse.plugin.src.zip.name>transitivity-ejbsrc.zip</eclipse.plugin.src.zip.name>
   </properties>
 
   <build>

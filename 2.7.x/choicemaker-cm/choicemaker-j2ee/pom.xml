@@ -32,7 +32,8 @@
     <module>com.choicemaker.cm.oaba.ejb</module>
     <module>com.choicemaker.cm.transitivity</module>
     <module>com.choicemaker.cm.transitivity.core</module>
-    <module>com.choicemaker.cm.transitivity.server</module>
+    <module>com.choicemaker.cm.transitivity.api</module>
+    <module>com.choicemaker.cm.transitivity.ejb</module>
     <module>com.choicemaker.cm.urm</module>
     <module>com.choicemaker.cm.urm.adaptor</module>
     <module>com.choicemaker.cm.urm.base</module>
