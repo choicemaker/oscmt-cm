@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plugin>
+<plugin
+   id="com.choicemaker.cm.oaba.core"
+   name="com.choicemaker.cm.oaba.core"
+   version="2.5.0">
+
+   <runtime>
+      <library name="oaba-core.jar">
+      	<export name="*"/>
+      </library>
+   </runtime>
+   <requires>
+      <import plugin="com.choicemaker.cm.args"/>
+      <import plugin="com.choicemaker.cm.core"/>
+   </requires>
+
+
+</plugin>
