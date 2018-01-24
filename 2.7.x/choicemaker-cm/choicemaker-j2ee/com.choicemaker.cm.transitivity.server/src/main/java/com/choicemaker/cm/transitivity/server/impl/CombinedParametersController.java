@@ -11,8 +11,8 @@ import java.util.List;
 
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.TransitivityParameters;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersEntity;
+import com.choicemaker.cm.oaba.server.ejb.OabaParametersController;
+import com.choicemaker.cm.oaba.server.impl.AbstractParametersEntity;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityParametersController;
 
 public class CombinedParametersController implements

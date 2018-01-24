@@ -26,7 +26,7 @@ import com.choicemaker.cm.core.util.ModelUtils;
 import com.choicemaker.cm.core.util.ObjectMaker;
 import com.choicemaker.cm.core.xmlconf.ProbabilityModelsXmlConf;
 import com.choicemaker.cm.core.xmlconf.XmlConfigurator;
-import com.choicemaker.cm.io.blocking.automated.BlockingAccessor;
+import com.choicemaker.cm.aba.BlockingAccessor;
 import com.choicemaker.cm.io.db.base.DbAccessor;
 import com.choicemaker.cm.io.db.base.DbField;
 import com.choicemaker.cm.io.db.base.DbReaderParallel;

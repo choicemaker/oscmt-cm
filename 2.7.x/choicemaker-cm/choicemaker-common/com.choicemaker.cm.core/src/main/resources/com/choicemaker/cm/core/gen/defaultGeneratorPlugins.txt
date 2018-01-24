@@ -1,7 +1,7 @@
 # The default list of generator plugin classes
-#com.choicemaker.cm.io.blocking.automated.gen.BlockingConfigurationsGenerator
+#com.choicemaker.cm.aba.gen.BlockingConfigurationsGenerator
 #com.choicemaker.cm.io.blocking.exact.base.gen.BlockingConfigurationsGenerator
-com.choicemaker.cm.io.blocking.automated.gen.BlockingGenerator
+com.choicemaker.cm.aba.gen.BlockingGenerator
 com.choicemaker.cm.io.blocking.exact.base.gen.BlockingGenerator
 com.choicemaker.cm.io.db.base.gen.DbGenerator
 #com.choicemaker.cm.io.db.base.gen.DbReaderConfigurationsGenerator

@@ -32,7 +32,7 @@ public class HoldEdgeProperty implements EdgeProperty {
 	
 
 	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.transitivity.core.EdgeProperty#hasProperty(com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2)
+	 * @see com.choicemaker.cm.transitivity.core.EdgeProperty#hasProperty(com.choicemaker.cm.oaba.data.MatchRecord2)
 	 */
 	public boolean hasProperty(MatchRecord2 mr) {
 		if (mr.getMatchType() == Decision.HOLD) return true;

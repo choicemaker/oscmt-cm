@@ -7,7 +7,7 @@
  *******************************************************************************/
 package com.choicemaker.cm.transitivity.core;
 
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
+import com.choicemaker.cm.oaba.core.OabaProcessing;
 
 /**
  * This interface defines event ids and completion estimates used in transitivity

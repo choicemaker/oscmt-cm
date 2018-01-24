@@ -4,7 +4,7 @@ import java.io.Serializable;
 import com.choicemaker.client.api.*;
 import com.choicemaker.cm.core.*;
 import com.choicemaker.cm.core.base.*;
-import com.choicemaker.cm.io.blocking.automated.base.*;
+import com.choicemaker.cm.aba.base.*;
 import com.choicemaker.demo.simple_person_matching.gendata.gend.internal.Person.blocking.*;
 import com.choicemaker.cm.core.blocking.*;
 import com.choicemaker.cm.io.blocking.exact.base.*;

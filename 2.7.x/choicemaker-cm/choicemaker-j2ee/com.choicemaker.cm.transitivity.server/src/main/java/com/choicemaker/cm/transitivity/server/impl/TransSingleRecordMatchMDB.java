@@ -23,11 +23,11 @@ import com.choicemaker.cm.batch.api.ProcessingEventLog;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.AbaStatisticsController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.SingleRecordProcessing;
-import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
+import com.choicemaker.cm.oaba.server.data.OabaJobMessage;
+import com.choicemaker.cm.oaba.server.ejb.AbaStatisticsController;
+import com.choicemaker.cm.oaba.server.ejb.OabaParametersController;
+import com.choicemaker.cm.oaba.server.impl.SingleRecordProcessing;
+import com.choicemaker.cm.oaba.server.util.MessageBeanUtils;
 import com.choicemaker.cm.transitivity.core.TransitivityProcessingEvent;
 
 // import com.choicemaker.cm.core.base.Accessor;

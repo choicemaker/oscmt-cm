@@ -59,33 +59,10 @@
         </dependency>
 
         <dependency>
-            <groupId>com.choicemaker.cm</groupId>
-            <artifactId>com.choicemaker.cm.core</artifactId>
-        </dependency>
-<!--
-        <dependency>
-          <groupId>com.choicemaker.cm</groupId>
-          <artifactId>simple-person-plugin</artifactId>
-        </dependency>
-        <dependency>
-          <groupId>com.choicemaker.cm</groupId>
-          <artifactId>com.choicemaker.cm.io.db.jboss</artifactId>
-        </dependency>
-        <dependency>
-          <groupId>com.choicemaker.cm</groupId>
-          <artifactId>com.choicemaker.cm.io.db.oracle</artifactId>
-        </dependency>
-        <dependency>
-          <groupId>com.choicemaker.cm</groupId>
-          <artifactId>com.choicemaker.cm.io.db.sqlserver</artifactId>
-        </dependency>
--->
-        <dependency>
           <groupId>javax</groupId>
           <artifactId>javaee-api</artifactId>
           <scope>provided</scope>
         </dependency>
-        
         <dependency>
             <groupId>javax.enterprise</groupId>
             <artifactId>cdi-api</artifactId>

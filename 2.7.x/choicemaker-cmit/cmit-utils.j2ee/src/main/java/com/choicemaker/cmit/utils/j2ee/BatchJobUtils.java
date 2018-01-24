@@ -29,12 +29,12 @@ import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.ejb.BatchJobEntity;
 import com.choicemaker.cm.core.Thresholds;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntity;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsEntity;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationControllerBean;
+import com.choicemaker.cm.oaba.server.ejb.OabaParametersController;
+import com.choicemaker.cm.oaba.server.ejb.ServerConfigurationController;
+import com.choicemaker.cm.oaba.server.impl.OabaJobEntity;
+import com.choicemaker.cm.oaba.server.impl.OabaParametersEntity;
+import com.choicemaker.cm.oaba.server.impl.OabaSettingsEntity;
+import com.choicemaker.cm.oaba.server.impl.ServerConfigurationControllerBean;
 import com.choicemaker.cm.transitivity.server.impl.TransitivityJobEntity;
 import com.choicemaker.cm.transitivity.server.impl.TransitivityParametersEntity;
 

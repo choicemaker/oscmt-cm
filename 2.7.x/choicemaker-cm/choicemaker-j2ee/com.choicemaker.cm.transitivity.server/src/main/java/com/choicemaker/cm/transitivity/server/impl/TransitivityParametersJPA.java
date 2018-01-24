@@ -7,7 +7,7 @@
  *******************************************************************************/
 package com.choicemaker.cm.transitivity.server.impl;
 
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA;
+import com.choicemaker.cm.oaba.server.impl.AbstractParametersJPA;
 
 public interface TransitivityParametersJPA extends AbstractParametersJPA {
 

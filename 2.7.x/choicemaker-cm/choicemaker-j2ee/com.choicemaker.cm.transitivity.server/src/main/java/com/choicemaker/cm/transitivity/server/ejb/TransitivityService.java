@@ -13,8 +13,8 @@ import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.api.BatchJob;
-import com.choicemaker.cm.io.blocking.automated.offline.core.RecordMatchingMode;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
+import com.choicemaker.cm.oaba.core.RecordMatchingMode;
+import com.choicemaker.cm.oaba.server.ejb.ServerConfigurationException;
 
 /**
  * This session bean allows the user to start, query, and get result from the

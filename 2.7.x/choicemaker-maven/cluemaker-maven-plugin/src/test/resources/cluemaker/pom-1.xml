@@ -29,7 +29,7 @@
 							com.choicemaker.cm.compiler.gen.GuiDescriptorGenerator
 						</generator>
 						<generator>
-							com.choicemaker.cm.io.blocking.automated.gen.BlockingGenerator
+							com.choicemaker.cm.aba.gen.BlockingGenerator
 						</generator>
 						<generator>
 							com.choicemaker.cm.io.blocking.exact.base.gen.BlockingGenerator
@@ -67,7 +67,7 @@
 					</dependency>
 					<dependency>
 						<groupId>com.choicemaker.cm</groupId>
-						<artifactId>com.choicemaker.cm.io.blocking.automated.base</artifactId>
+						<artifactId>com.choicemaker.cm.aba.base</artifactId>
 						<version>2.7.1-SNAPSHOT</version>
 					</dependency>
 					<dependency>

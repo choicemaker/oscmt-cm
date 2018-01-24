@@ -18,16 +18,16 @@ import java.util.logging.Logger;
 
 import javax.sql.DataSource;
 
+import com.choicemaker.cm.aba.AutomatedBlocker;
+import com.choicemaker.cm.aba.DatabaseAccessor;
+import com.choicemaker.cm.aba.IBlockingField;
+import com.choicemaker.cm.aba.IBlockingSet;
+import com.choicemaker.cm.aba.IBlockingValue;
+import com.choicemaker.cm.aba.IDbField;
+import com.choicemaker.cm.aba.IGroupTable;
 import com.choicemaker.cm.core.Accessor;
 import com.choicemaker.cm.core.Constants;
 import com.choicemaker.cm.core.Record;
-import com.choicemaker.cm.io.blocking.automated.AutomatedBlocker;
-import com.choicemaker.cm.io.blocking.automated.DatabaseAccessor;
-import com.choicemaker.cm.io.blocking.automated.IBlockingField;
-import com.choicemaker.cm.io.blocking.automated.IBlockingSet;
-import com.choicemaker.cm.io.blocking.automated.IBlockingValue;
-import com.choicemaker.cm.io.blocking.automated.IDbField;
-import com.choicemaker.cm.io.blocking.automated.IGroupTable;
 import com.choicemaker.cm.io.db.base.DbAccessor;
 import com.choicemaker.cm.io.db.base.DbReaderSequential;
 import com.choicemaker.cm.io.db.sqlserver.dbom.SqlDbObjectMaker;

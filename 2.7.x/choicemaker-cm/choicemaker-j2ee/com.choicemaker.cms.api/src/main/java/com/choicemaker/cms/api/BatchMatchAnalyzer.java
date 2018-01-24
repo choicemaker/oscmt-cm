@@ -13,8 +13,8 @@ package com.choicemaker.cms.api;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
-// FIXME import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
-// FIXME import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
+// FIXME import com.choicemaker.cm.oaba.server.ejb.OabaService;
+// FIXME import com.choicemaker.cm.oaba.server.ejb.ServerConfigurationException;
 // FIXME import com.choicemaker.cm.transitivity.server.ejb.TransitivityService;
 
 /**

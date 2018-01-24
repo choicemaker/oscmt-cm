@@ -13,8 +13,8 @@ package com.choicemaker.cms.urm_tmp;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
+import com.choicemaker.cm.oaba.server.ejb.OabaService;
+import com.choicemaker.cm.oaba.server.ejb.ServerConfigurationException;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityService;
 
 /**

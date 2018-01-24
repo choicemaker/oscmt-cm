@@ -5,7 +5,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *******************************************************************************/
-package com.choicemaker.cm.io.blocking.automated.inmemory.gui;
+package com.choicemaker.cm.aba.inmemory.gui;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -18,10 +18,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import com.choicemaker.cm.aba.BlockingAccessor;
+import com.choicemaker.cm.aba.inmemory.InMemoryAutomatedBlocker;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.blocking.InMemoryBlocker;
-import com.choicemaker.cm.io.blocking.automated.BlockingAccessor;
-import com.choicemaker.cm.io.blocking.automated.inmemory.InMemoryAutomatedBlocker;
 //import com.choicemaker.cm.io.blocking.automated.inmemory.InMemoryDataSource;
 import com.choicemaker.cm.io.db.base.DbAccessor;
 import com.choicemaker.cm.modelmaker.gui.matcher.MatchDialogBlockerPlugin;

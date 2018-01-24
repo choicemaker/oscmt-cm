@@ -1,4 +1,4 @@
-package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
+package com.choicemaker.cm.oaba.server.impl;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -29,20 +29,23 @@ import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.OperationalPropertyController;
 import com.choicemaker.cm.batch.api.ProcessingController;
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSink;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSinkSourceFactory;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSource;
-import com.choicemaker.cm.io.blocking.automated.offline.core.ImmutableRecordIdTranslator;
-import com.choicemaker.cm.io.blocking.automated.offline.core.MutableRecordIdTranslator;
-import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordIdController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
+import com.choicemaker.cm.oaba.core.IRecordIdSink;
+import com.choicemaker.cm.oaba.core.IRecordIdSinkSourceFactory;
+import com.choicemaker.cm.oaba.core.IRecordIdSource;
+import com.choicemaker.cm.oaba.core.ImmutableRecordIdTranslator;
+import com.choicemaker.cm.oaba.core.MutableRecordIdTranslator;
+import com.choicemaker.cm.oaba.core.RECORD_ID_TYPE;
+import com.choicemaker.cm.oaba.server.ejb.OabaJobController;
+import com.choicemaker.cm.oaba.server.ejb.OabaParametersController;
+import com.choicemaker.cm.oaba.server.ejb.OabaService;
+import com.choicemaker.cm.oaba.server.ejb.OabaSettingsController;
+import com.choicemaker.cm.oaba.server.ejb.RecordIdController;
+import com.choicemaker.cm.oaba.server.ejb.RecordSourceController;
+import com.choicemaker.cm.oaba.server.ejb.ServerConfigurationController;
+import com.choicemaker.cm.oaba.server.ejb.ServerConfigurationException;
+import com.choicemaker.cm.oaba.server.impl.MutableRecordIdTranslatorImpl;
+import com.choicemaker.cm.oaba.server.impl.RecordIdSink;
+import com.choicemaker.cm.oaba.server.impl.RecordIdSource;
 import com.choicemaker.cmit.oaba.util.OabaDeploymentUtils;
 import com.choicemaker.cmit.oaba.util.OabaMdbTestProcedures;
 import com.choicemaker.cmit.testconfigs.SimplePersonSqlServerTestConfiguration;
@@ -55,7 +58,7 @@ import com.choicemaker.e2.ejb.EjbPlatform;
 /**
  * Similar to {@link com.choicemaker.cmit.oaba.RecordIdControllerBeanIT
  * RecordIdControllerBeanIT} but in the
- * <code>com.choicemaker.cm.io.blocking.automated.offline.server.impl</code>
+ * <code>com.choicemaker.cm.oaba.server.impl</code>
  * package so that MutableRecordIdTranslatorImpl instances can be constructed
  * directly.
  */

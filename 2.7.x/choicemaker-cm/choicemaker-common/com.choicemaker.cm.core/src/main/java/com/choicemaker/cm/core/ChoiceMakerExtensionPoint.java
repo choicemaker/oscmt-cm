@@ -46,7 +46,7 @@ public interface ChoiceMakerExtensionPoint {
 	public static final String CM_IO_DB_BASE_DATABASEABSTRACTION =
 		"com.choicemaker.cm.io.db.base.databaseAbstraction";
 	public static final String CM_IO_BLOCKING_AUTOMATED_BASE_DATABASEACCESSOR =
-		"com.choicemaker.cm.io.blocking.automated.base.databaseAccessor";
+		"com.choicemaker.cm.aba.base.databaseAccessor";
 
 	public static final String CM_MATCHING_ADHOC_NAMEPARSER =
 		"com.choicemaker.cm.matching.en.us.adhocNameParser";

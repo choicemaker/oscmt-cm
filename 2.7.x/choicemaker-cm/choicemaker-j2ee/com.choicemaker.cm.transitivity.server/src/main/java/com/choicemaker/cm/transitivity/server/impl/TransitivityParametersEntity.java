@@ -26,8 +26,8 @@ import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.api.BatchJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersEntity;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
+import com.choicemaker.cm.oaba.server.impl.AbstractParametersEntity;
+import com.choicemaker.cm.oaba.server.impl.OabaParametersEntity;
 
 @NamedQuery(name = QN_TRANSPARAMETERS_FIND_ALL,
 		query = JPQL_TRANSPARAMETERS_FIND_ALL)

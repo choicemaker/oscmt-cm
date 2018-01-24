@@ -28,10 +28,10 @@ import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.core.IControl;
 import com.choicemaker.cm.core.ISerializableRecordSource;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.io.blocking.automated.offline.filter.DefaultMatchRecord2Filter;
-import com.choicemaker.cm.io.blocking.automated.offline.filter.IMatchRecord2Filter;
-import com.choicemaker.cm.io.blocking.automated.offline.result.MRPSCreator;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceController;
+import com.choicemaker.cm.oaba.filter.DefaultMatchRecord2Filter;
+import com.choicemaker.cm.oaba.filter.IMatchRecord2Filter;
+import com.choicemaker.cm.oaba.result.MRPSCreator;
+import com.choicemaker.cm.oaba.server.ejb.RecordSourceController;
 
 /**
  * A long-running backend process that computes Marked Record Pairs.

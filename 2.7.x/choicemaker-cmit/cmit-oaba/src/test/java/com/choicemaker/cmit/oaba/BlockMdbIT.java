@@ -1,7 +1,7 @@
 package com.choicemaker.cmit.oaba;
 
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.EVT_DONE_OVERSIZED_TRIMMING;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_DONE_OVERSIZED_TRIMMING;
+import static com.choicemaker.cm.oaba.core.OabaProcessing.EVT_DONE_OVERSIZED_TRIMMING;
+import static com.choicemaker.cm.oaba.core.OabaProcessing.PCT_DONE_OVERSIZED_TRIMMING;
 
 import java.util.logging.Logger;
 
@@ -13,7 +13,7 @@ import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
 import org.junit.runner.RunWith;
 
 import com.choicemaker.cm.batch.api.BatchJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.DedupMDB;
+import com.choicemaker.cm.oaba.server.impl.DedupMDB;
 import com.choicemaker.cmit.oaba.util.OabaDeploymentUtils;
 import com.choicemaker.cmit.testconfigs.SimplePersonSqlServerTestConfiguration;
 import com.choicemaker.cmit.utils.j2ee.BatchProcessingPhase;

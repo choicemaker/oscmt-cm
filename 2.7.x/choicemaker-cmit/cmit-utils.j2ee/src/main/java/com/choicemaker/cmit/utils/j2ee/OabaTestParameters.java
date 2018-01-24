@@ -12,13 +12,13 @@ import javax.transaction.UserTransaction;
 import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.batch.api.OperationalPropertyController;
 import com.choicemaker.cm.batch.api.ProcessingController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordIdController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
+import com.choicemaker.cm.oaba.server.ejb.OabaJobController;
+import com.choicemaker.cm.oaba.server.ejb.OabaParametersController;
+import com.choicemaker.cm.oaba.server.ejb.OabaService;
+import com.choicemaker.cm.oaba.server.ejb.OabaSettingsController;
+import com.choicemaker.cm.oaba.server.ejb.RecordIdController;
+import com.choicemaker.cm.oaba.server.ejb.RecordSourceController;
+import com.choicemaker.cm.oaba.server.ejb.ServerConfigurationController;
 import com.choicemaker.e2.ejb.EjbPlatform;
 
 public interface OabaTestParameters {

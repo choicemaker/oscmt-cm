@@ -14,11 +14,11 @@ import static com.choicemaker.cm.batch.ejb.BatchJobFileUtils.formatJobId;
 import static com.choicemaker.cm.batch.ejb.BatchJobFileUtils.getWorkingDir;
 
 import com.choicemaker.cm.batch.api.BatchJob;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
-import com.choicemaker.cm.io.blocking.automated.offline.impl.BlockSinkSourceFactory;
-import com.choicemaker.cm.io.blocking.automated.offline.impl.MatchRecord2CompositeSink;
-import com.choicemaker.cm.io.blocking.automated.offline.impl.MatchRecord2CompositeSource;
+import com.choicemaker.cm.oaba.core.IMatchRecord2Sink;
+import com.choicemaker.cm.oaba.core.IMatchRecord2Source;
+import com.choicemaker.cm.oaba.impl.BlockSinkSourceFactory;
+import com.choicemaker.cm.oaba.impl.MatchRecord2CompositeSink;
+import com.choicemaker.cm.oaba.impl.MatchRecord2CompositeSource;
 
 /**
  * This object configures factory objects for Batch jobs.

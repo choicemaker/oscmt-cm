@@ -14,7 +14,7 @@ import com.choicemaker.cm.args.PersistentObject;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
+import com.choicemaker.cm.oaba.server.ejb.ServerConfigurationController;
 import com.choicemaker.cms.api.local.NamedConfigurationControllerLocal;
 import com.choicemaker.cms.zzz_todo.NamedConfiguration;
 

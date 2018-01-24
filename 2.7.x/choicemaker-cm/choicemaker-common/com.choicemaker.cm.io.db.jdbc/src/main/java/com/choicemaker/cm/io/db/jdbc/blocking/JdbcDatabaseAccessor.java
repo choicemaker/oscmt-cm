@@ -17,11 +17,11 @@ import org.apache.log4j.Logger;
 import com.choicemaker.cm.core.Accessor;
 import com.choicemaker.cm.core.Constants;
 import com.choicemaker.cm.core.Record;
-import com.choicemaker.cm.io.blocking.automated.base.AutomatedBlocker;
-import com.choicemaker.cm.io.blocking.automated.base.BlockingField;
-import com.choicemaker.cm.io.blocking.automated.base.BlockingSet;
-import com.choicemaker.cm.io.blocking.automated.base.BlockingValue;
-import com.choicemaker.cm.io.blocking.automated.base.DatabaseAccessor;
+import com.choicemaker.cm.aba.base.AutomatedBlocker;
+import com.choicemaker.cm.aba.base.BlockingField;
+import com.choicemaker.cm.aba.base.BlockingSet;
+import com.choicemaker.cm.aba.base.BlockingValue;
+import com.choicemaker.cm.aba.base.DatabaseAccessor;
 import com.choicemaker.cm.io.db.base.DbAccessor;
 import com.choicemaker.cm.io.db.base.DbReaderSequential;
 import com.choicemaker.cm.io.db.jdbc.dbom.JdbcDbObjectMaker;
@@ -149,7 +149,7 @@ public class JdbcDatabaseAccessor implements DatabaseAccessor {
 				}
 				BlockingValue bv = bs.getBlockingValue(j);
 				BlockingField bf = bv.blockingField;
-				com.choicemaker.cm.io.blocking.automated.base.DbField dbf = bf.dbField;
+				com.choicemaker.cm.aba.base.DbField dbf = bf.dbField;
 				b.append("v").append(bs.getGroupTable(bf).number).append(".").append(dbf.name).append("=");
 				if (mustQuote(bf.dbField.type)) {
 					b.append("'" + escape(bv.value) + "'");
@@ -221,7 +221,7 @@ public class JdbcDatabaseAccessor implements DatabaseAccessor {
 
 
 	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.base.DatabaseAccessor#close()
+	 * @see com.choicemaker.cm.aba.base.DatabaseAccessor#close()
 	 */
 	public void close() throws IOException {
 		Exception ex = null;

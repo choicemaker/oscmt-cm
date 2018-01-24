@@ -10,7 +10,7 @@ package com.choicemaker.cm.transitivity.server.ejb;
 import javax.ejb.Local;
 
 import com.choicemaker.cm.args.OabaSettings;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
+import com.choicemaker.cm.oaba.server.ejb.OabaSettingsController;
 
 /**
  * Manages a database of ABA and OABA settings.

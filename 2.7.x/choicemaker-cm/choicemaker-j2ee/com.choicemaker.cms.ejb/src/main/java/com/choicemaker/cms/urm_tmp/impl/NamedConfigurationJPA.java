@@ -2,12 +2,12 @@ package com.choicemaker.cms.urm_tmp.impl;
 
 import com.choicemaker.cm.batch.ejb.AbstractPersistentObjectJPA;
 import com.choicemaker.cm.batch.ejb.BatchJobJPA;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbaSettingsJPA;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultSettingsJPA;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsJPA;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationJPA;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.SqlRecordSourceJPA;
+import com.choicemaker.cm.oaba.server.impl.AbaSettingsJPA;
+import com.choicemaker.cm.oaba.server.impl.AbstractParametersJPA;
+import com.choicemaker.cm.oaba.server.impl.DefaultSettingsJPA;
+import com.choicemaker.cm.oaba.server.impl.OabaSettingsJPA;
+import com.choicemaker.cm.oaba.server.impl.ServerConfigurationJPA;
+import com.choicemaker.cm.oaba.server.impl.SqlRecordSourceJPA;
 
 public interface NamedConfigurationJPA {
 
