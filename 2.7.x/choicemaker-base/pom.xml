@@ -501,32 +501,32 @@
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
-        <artifactId>com.choicemaker.cm.io.blocking.automated.base</artifactId>
+        <artifactId>com.choicemaker.cm.aba.base</artifactId>
         <version>${choicemaker.patch.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
-        <artifactId>com.choicemaker.cm.io.blocking.automated.inmemory</artifactId>
+        <artifactId>com.choicemaker.cm.aba.inmemory</artifactId>
         <version>${choicemaker.release.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
-        <artifactId>com.choicemaker.cm.io.blocking.automated.inmemory.gui</artifactId>
+        <artifactId>com.choicemaker.cm.aba.inmemory.gui</artifactId>
         <version>${choicemaker.release.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
-        <artifactId>com.choicemaker.cm.io.blocking.automated.offline</artifactId>
+        <artifactId>com.choicemaker.cm.oaba</artifactId>
         <version>${choicemaker.release.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
-        <artifactId>com.choicemaker.cm.io.blocking.automated.offline.core</artifactId>
+        <artifactId>com.choicemaker.cm.oaba.core</artifactId>
         <version>${choicemaker.release.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
-        <artifactId>com.choicemaker.cm.io.blocking.automated.offline.server</artifactId>
+        <artifactId>com.choicemaker.cm.oaba.server</artifactId>
         <version>${choicemaker.release.version}</version>
       </dependency>
       <dependency>

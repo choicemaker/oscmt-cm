@@ -27,8 +27,8 @@
     <module>com.choicemaker.cm.args</module>
     <module>com.choicemaker.cm.core</module>
     <module>com.choicemaker.cm.analyzer.base</module>
-    <module>com.choicemaker.cm.io.blocking.automated.base</module>
-    <module>com.choicemaker.cm.io.blocking.automated.inmemory</module>
+    <module>com.choicemaker.cm.aba.base</module>
+    <module>com.choicemaker.cm.aba.inmemory</module>
     <module>com.choicemaker.cm.io.blocking.base</module>
     <module>com.choicemaker.cm.io.blocking.exact.base</module>
     <module>com.choicemaker.cm.io.composite.base</module>

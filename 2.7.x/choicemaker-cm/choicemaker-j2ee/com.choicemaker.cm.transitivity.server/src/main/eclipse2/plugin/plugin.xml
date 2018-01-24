@@ -17,7 +17,7 @@
       <import plugin="com.choicemaker.cm.oaba"/>
       <import plugin="com.choicemaker.cm.transitivity.core"/>
       <import plugin="com.choicemaker.cm.transitivity"/>
-      <import plugin="com.choicemaker.cm.io.blocking.automated.base"/>
+      <import plugin="com.choicemaker.cm.aba.base"/>
    </requires>
 
 

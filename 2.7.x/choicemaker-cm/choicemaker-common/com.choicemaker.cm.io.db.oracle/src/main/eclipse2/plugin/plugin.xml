@@ -14,7 +14,7 @@
    <requires>
       <import plugin="com.choicemaker.cm.core"/>
       <import plugin="com.choicemaker.cm.io.db.base"/>
-      <import plugin="com.choicemaker.cm.io.blocking.automated.base"/>
+      <import plugin="com.choicemaker.cm.aba.base"/>
    </requires>
 
 
@@ -37,7 +37,7 @@
    <extension
          id="oracleDatabaseAccessor"
          name="oracleDatabaseAccessor"
-         point="com.choicemaker.cm.io.blocking.automated.base.databaseAccessor">
+         point="com.choicemaker.cm.aba.base.databaseAccessor">
       <databaseAccessor
             class="com.choicemaker.cm.io.db.oracle.blocking.OraDatabaseAccessor">
       </databaseAccessor>
