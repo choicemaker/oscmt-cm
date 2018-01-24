@@ -14,7 +14,7 @@
 
   <artifactId>com.choicemaker.cm.oaba.api</artifactId>
   <packaging>jar</packaging>
-  <name>ChoiceMaker Offline Matching (OABA Server)</name>
+  <name>ChoiceMaker Offline Matching (OABA API)</name>
 
   <properties>
 	<!-- Plugin versions -->

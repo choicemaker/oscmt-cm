@@ -21,11 +21,9 @@ import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.EJB;
-import javax.ejb.FinderException;
 import javax.ejb.MessageDriven;
 import javax.inject.Inject;
 import javax.jms.JMSContext;
-import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
@@ -229,8 +227,8 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 	 * files.
 	 */
 	private void handleDedupEach(final OabaJobMessage data,
-			final BatchJob batchJob) throws RemoteException, FinderException,
-			BlockingException, NamingException, JMSException {
+			final BatchJob batchJob) throws RemoteException, 
+			BlockingException, NamingException {
 
 		final long jobId = batchJob.getId();
 		final OabaParameters params =

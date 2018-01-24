@@ -28,7 +28,8 @@
     <module>com.choicemaker.cm.batch.ejb</module>
     <module>com.choicemaker.cm.oaba</module>
     <module>com.choicemaker.cm.oaba.core</module>
-    <module>com.choicemaker.cm.oaba.server</module>
+    <module>com.choicemaker.cm.oaba.api</module>
+    <module>com.choicemaker.cm.oaba.ejb</module>
     <module>com.choicemaker.cm.transitivity</module>
     <module>com.choicemaker.cm.transitivity.core</module>
     <module>com.choicemaker.cm.transitivity.server</module>

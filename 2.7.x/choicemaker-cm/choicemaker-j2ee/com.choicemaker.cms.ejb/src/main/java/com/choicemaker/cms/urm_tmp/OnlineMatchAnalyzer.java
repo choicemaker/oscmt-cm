@@ -10,7 +10,7 @@
  */
 package com.choicemaker.cms.urm_tmp;
 
-import com.choicemaker.cm.oaba.server.ejb.AbaStatisticsController;
+import com.choicemaker.cm.oaba.api.AbaStatisticsController;
 
 /**
  */

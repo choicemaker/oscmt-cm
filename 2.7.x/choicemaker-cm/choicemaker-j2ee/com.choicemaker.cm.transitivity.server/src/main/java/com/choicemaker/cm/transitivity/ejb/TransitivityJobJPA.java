@@ -7,7 +7,7 @@
  *******************************************************************************/
 package com.choicemaker.cm.transitivity.server.impl;
 
-import com.choicemaker.cm.oaba.server.impl.OabaJobJPA;
+import com.choicemaker.cm.oaba.ejb.OabaJobJPA;
 
 /**
  * Java Persistence API (JPA) for TransitivityJob beans.<br/>

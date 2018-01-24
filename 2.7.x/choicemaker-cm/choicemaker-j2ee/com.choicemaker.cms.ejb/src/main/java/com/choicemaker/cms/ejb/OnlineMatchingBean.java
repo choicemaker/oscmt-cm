@@ -16,7 +16,7 @@ import com.choicemaker.cm.args.TransitivityException;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Match;
-import com.choicemaker.cm.oaba.server.ejb.AbaStatisticsController;
+import com.choicemaker.cm.oaba.api.AbaStatisticsController;
 import com.choicemaker.cms.api.AbaParameters;
 import com.choicemaker.cms.api.AbaServerConfiguration;
 import com.choicemaker.cms.api.AbaSettings;

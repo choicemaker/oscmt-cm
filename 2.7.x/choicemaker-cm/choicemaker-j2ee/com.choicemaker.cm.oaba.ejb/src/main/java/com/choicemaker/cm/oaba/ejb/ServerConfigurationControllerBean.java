@@ -295,7 +295,7 @@ public class ServerConfigurationControllerBean implements
 
 		ServerConfiguration retVal = null;
 		DefaultServerConfiguration old =
-			em.find(DefaultServerConfigurationBean.class, host);
+			em.find(DefaultServerConfigurationEntity.class, host);
 		if (old != null) {
 			long id = old.getServerConfigurationId();
 			retVal = em.find(ServerConfigurationEntity.class, id);
@@ -310,7 +310,7 @@ public class ServerConfigurationControllerBean implements
 						.getId());
 			}
 			DefaultServerConfiguration dsc =
-				new DefaultServerConfigurationBean(host, retVal.getId());
+				new DefaultServerConfigurationEntity(host, retVal.getId());
 			em.persist(dsc);
 		}
 		assert retVal != null;
@@ -326,7 +326,7 @@ public class ServerConfigurationControllerBean implements
 			hostName = hostName.trim();
 			if (!hostName.isEmpty()) {
 				retVal =
-					em.find(DefaultServerConfigurationBean.class, hostName);
+					em.find(DefaultServerConfigurationEntity.class, hostName);
 			}
 		}
 		return retVal;
@@ -378,7 +378,7 @@ public class ServerConfigurationControllerBean implements
 
 		ServerConfiguration retVal = null;
 		DefaultServerConfiguration dscb =
-			em.find(DefaultServerConfigurationBean.class, host);
+			em.find(DefaultServerConfigurationEntity.class, host);
 		if (dscb != null) {
 			long id = dscb.getServerConfigurationId();
 			retVal = em.find(ServerConfigurationEntity.class, id);

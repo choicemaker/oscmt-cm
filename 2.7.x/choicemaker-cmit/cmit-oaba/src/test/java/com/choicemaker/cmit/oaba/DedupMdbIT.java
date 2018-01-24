@@ -13,7 +13,7 @@ import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
 import org.junit.runner.RunWith;
 
 import com.choicemaker.cm.batch.api.BatchJob;
-import com.choicemaker.cm.oaba.server.impl.Chunk2MDB;
+import com.choicemaker.cm.oaba.ejb.Chunk2MDB;
 import com.choicemaker.cmit.oaba.util.OabaDeploymentUtils;
 import com.choicemaker.cmit.testconfigs.SimplePersonSqlServerTestConfiguration;
 import com.choicemaker.cmit.utils.j2ee.BatchProcessingPhase;

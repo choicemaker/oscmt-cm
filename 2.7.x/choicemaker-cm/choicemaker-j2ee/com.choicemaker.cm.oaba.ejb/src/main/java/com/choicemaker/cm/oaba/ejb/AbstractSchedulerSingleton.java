@@ -20,9 +20,7 @@ import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.ejb.FinderException;
 import javax.jms.JMSContext;
-import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.ObjectMessage;
 import javax.naming.NamingException;
@@ -267,7 +265,6 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 	 * @param mwd
 	 *            - the message data from the chunk that just finished.
 	 * @throws RemoteException
-	 * @throws FinderException
 	 * @throws XmlConfException
 	 * @throws BlockingException
 	 * @throws NamingException
@@ -415,8 +412,8 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 	 * This method sends the different chunks to different beans.
 	 */
 	protected final void startMatch(final OabaJobMessage sd)
-			throws RemoteException, FinderException, BlockingException,
-			NamingException, JMSException, XmlConfException {
+			throws RemoteException, BlockingException,
+			NamingException, XmlConfException {
 
 		// init values
 		final long jobId = sd.jobID;
@@ -496,8 +493,7 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 	 *
 	 */
 	protected final void noChunk(final OabaJobMessage sd)
-			throws XmlConfException, BlockingException, NamingException,
-			JMSException {
+			throws XmlConfException, BlockingException, NamingException {
 		final long jobId = sd.jobID;
 		BatchJob batchJob = getJobController().findBatchJob(jobId);
 

@@ -25,7 +25,7 @@ import com.choicemaker.cm.oaba.api.DefaultServerConfiguration;
 @NamedQuery(name = QN_DSC_FIND_ALL, query = JPQL_DSC_FIND_ALL)
 @Entity
 @Table(/* schema = "CHOICEMAKER", */name = TABLE_NAME)
-public class DefaultServerConfigurationBean implements
+public class DefaultServerConfigurationEntity implements
 		DefaultServerConfiguration {
 
 	@Id
@@ -35,12 +35,12 @@ public class DefaultServerConfigurationBean implements
 	@Column(name = CN_SERVERCONFIG)
 	private long serverConfigurationId;
 
-	protected DefaultServerConfigurationBean() {
+	protected DefaultServerConfigurationEntity() {
 		this.hostName = null;
 		this.serverConfigurationId = -1;
 	}
 
-	public DefaultServerConfigurationBean(String hostName, long serverConfigId) {
+	public DefaultServerConfigurationEntity(String hostName, long serverConfigId) {
 		if (hostName == null || hostName.trim().isEmpty()) {
 			throw new IllegalArgumentException("null or blank host name");
 		}
@@ -51,7 +51,7 @@ public class DefaultServerConfigurationBean implements
 		this.serverConfigurationId = serverConfigId;
 	}
 
-	public DefaultServerConfigurationBean(ServerConfiguration sc) {
+	public DefaultServerConfigurationEntity(ServerConfiguration sc) {
 		this(sc.getHostName(), sc.getId());
 	}
 

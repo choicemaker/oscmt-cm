@@ -12,17 +12,14 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import com.choicemaker.cm.args.ServerConfiguration;
+import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.batch.api.BatchJob;
-import com.choicemaker.cm.oaba.server.impl.ServerConfigurationControllerBean;
-import com.choicemaker.cm.transitivity.server.ejb.TransitivityConfigurationController;
+import com.choicemaker.cm.oaba.ejb.OabaSettingsControllerBean;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJobController;
+import com.choicemaker.cm.transitivity.server.ejb.TransitivitySettingsController;
 
 @Stateless
-public class TransitivityConfigurationControllerBean
-	extends ServerConfigurationControllerBean
-	implements
-	TransitivityConfigurationController {
+public class TransitivitySettingsControllerBean extends OabaSettingsControllerBean implements TransitivitySettingsController {
 
 	@PersistenceContext(unitName = "oaba")
 	private EntityManager em;
@@ -31,13 +28,12 @@ public class TransitivityConfigurationControllerBean
 	private TransitivityJobController jobController;
 
 	@Override
-	public ServerConfiguration findConfigurationByTransitivityJobId(
-			long jobId) {
-		ServerConfiguration retVal = null;
+	public OabaSettings findSettingsByTransitivityJobId(long jobId) {
+		OabaSettings retVal = null;
 		BatchJob batchJob = jobController.findTransitivityJob(jobId);
 		if (batchJob != null) {
-			long serverId = batchJob.getServerId();
-			retVal = findServerConfiguration(serverId);
+			long settingsId = batchJob.getSettingsId();
+			retVal = findOabaSettings(settingsId);
 		}
 		return retVal;
 	}

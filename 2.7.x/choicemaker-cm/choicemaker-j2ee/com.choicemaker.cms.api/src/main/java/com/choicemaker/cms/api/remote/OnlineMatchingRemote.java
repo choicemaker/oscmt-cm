@@ -12,14 +12,12 @@ package com.choicemaker.cms.api.remote;
 
 import java.io.Serializable;
 
-import javax.ejb.Remote;
-
 import com.choicemaker.cms.api.OnlineMatching;
 
 /**
  * @author rphall
  */
-@Remote
+//@Remote
 public interface OnlineMatchingRemote<T extends Comparable<T> & Serializable>
 		extends OnlineMatching<T> {
 

@@ -16,7 +16,7 @@ import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.BatchJobController;
-import com.choicemaker.cm.oaba.server.ejb.ServerConfigurationException;
+import com.choicemaker.cm.oaba.api.ServerConfigurationException;
 
 @Local
 public interface TransitivityJobController extends BatchJobController {

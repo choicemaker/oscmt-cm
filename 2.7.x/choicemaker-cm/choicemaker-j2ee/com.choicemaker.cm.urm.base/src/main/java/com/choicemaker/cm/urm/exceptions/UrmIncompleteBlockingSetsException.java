@@ -43,7 +43,7 @@ package com.choicemaker.cm.urm.exceptions;
  * <p>
  * This exception helps decouple the URM from the classes used
  * to implement the URM.
- * @see com.choicemaker.cm.io.blocking.automated.base.IncompleteBlockingSetsException
+ * @see com.choicemaker.cm.oaba.base.IncompleteBlockingSetsException
  */
 public class UrmIncompleteBlockingSetsException extends Exception {
 

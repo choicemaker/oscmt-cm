@@ -18,13 +18,10 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import javax.ejb.CreateException;
 import javax.ejb.EJB;
-import javax.ejb.FinderException;
 import javax.ejb.Lock;
 import javax.ejb.LockType;
 import javax.ejb.Singleton;
-import javax.jms.JMSException;
 import javax.naming.NamingException;
 
 import com.choicemaker.cm.args.OabaParameters;
@@ -34,14 +31,14 @@ import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.BatchProcessingNotification;
+import com.choicemaker.cm.oaba.api.OabaJobController;
+import com.choicemaker.cm.oaba.api.OabaService;
+import com.choicemaker.cm.oaba.api.OabaSettingsController;
+import com.choicemaker.cm.oaba.api.ServerConfigurationController;
+import com.choicemaker.cm.oaba.api.ServerConfigurationException;
 import com.choicemaker.cm.oaba.core.IMatchRecord2Source;
 import com.choicemaker.cm.oaba.core.RecordMatchingMode;
-import com.choicemaker.cm.oaba.server.data.OabaNotification;
-import com.choicemaker.cm.oaba.server.ejb.OabaJobController;
-import com.choicemaker.cm.oaba.server.ejb.OabaService;
-import com.choicemaker.cm.oaba.server.ejb.OabaSettingsController;
-import com.choicemaker.cm.oaba.server.ejb.ServerConfigurationController;
-import com.choicemaker.cm.oaba.server.ejb.ServerConfigurationException;
+import com.choicemaker.cm.oaba.ejb.data.OabaNotification;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJobController;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityParametersController;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityService;
@@ -375,15 +372,14 @@ public class BatchMatchAnalyzerBean implements BatchMatchAnalyzer,
 	}
 
 	@Override
-	public Object getMatchList(long jobID) throws RemoteException,
-			CreateException, NamingException, JMSException, FinderException {
+	public Object getMatchList(long jobID)
+			throws RemoteException, NamingException {
 		return oabaService.getMatchList(jobID);
 	}
 
 	@Override
 	public IMatchRecord2Source getMatchRecordSource(long jobID)
-			throws RemoteException, CreateException, NamingException,
-			JMSException, FinderException {
+			throws RemoteException, NamingException {
 		return oabaService.getMatchRecordSource(jobID);
 	}
 

@@ -14,7 +14,7 @@ package com.choicemaker.cms.zzz_todo;
 //import com.choicemaker.cm.args.TransitivityParameters;
 //import com.choicemaker.cm.batch.BatchJob;
 //import com.choicemaker.cm.oaba.core.RecordMatchingMode;
-//import com.choicemaker.cm.oaba.server.ejb.ServerConfigurationException;
+//import com.choicemaker.cm.oaba.api.ServerConfigurationException;
 
 /**
  * This session bean allows the user to start, query, and get result from the

@@ -9,18 +9,18 @@ package com.choicemaker.cm.transitivity.server.ejb;
 
 import javax.ejb.Local;
 
-import com.choicemaker.cm.args.OabaSettings;
-import com.choicemaker.cm.oaba.server.ejb.OabaSettingsController;
+import com.choicemaker.cm.args.ServerConfiguration;
+import com.choicemaker.cm.oaba.api.ServerConfigurationController;
 
 /**
- * Manages a database of ABA and OABA settings.
+ * Manages a database of server configurations.
  * 
  * @author rphall
  *
  */
 @Local
-public interface TransitivitySettingsController extends OabaSettingsController {
+public interface TransitivityConfigurationController extends ServerConfigurationController {
 
-	OabaSettings findSettingsByTransitivityJobId(long jobId);
+	ServerConfiguration findConfigurationByTransitivityJobId(long jobId);
 
 }

@@ -31,7 +31,7 @@ import com.choicemaker.cm.oaba.core.RECORD_ID_TYPE;
 /**
  * A cached collection of translated record identifiers. (Persistent
  * translations are maintained by
- * {@link com.choicemaker.cm.oaba.server.ejb.OabaRecordIdController
+ * {@link com.choicemaker.cm.oaba.ejb.OabaRecordIdController
  * OabaRecordIdController}).
  * 
  * @author rphall
