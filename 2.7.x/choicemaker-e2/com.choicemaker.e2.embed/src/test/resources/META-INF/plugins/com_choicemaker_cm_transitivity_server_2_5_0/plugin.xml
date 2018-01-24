@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plugin>
 <plugin
-   id="com.choicemaker.cm.transitivity.server"
-   name="com.choicemaker.cm.transitivity.server"
+   id="com.choicemaker.cm.transitivity.api"
+   name="com.choicemaker.cm.transitivity.api"
    version="2.5.0">
 
    <runtime>
-      <library name="transitivity-server.jar">
+      <library name="transitivity-api.jar">
          <export name="*"/>
       </library>
    </runtime>
    <requires>
-      <import plugin="com.choicemaker.cm.oaba.server"/>
+      <import plugin="com.choicemaker.cm.oaba.api"/>
       <import plugin="com.choicemaker.cm.core"/>
       <import plugin="com.choicemaker.cm.oaba.core"/>
       <import plugin="com.choicemaker.cm.oaba"/>

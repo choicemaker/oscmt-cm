@@ -22,7 +22,7 @@
       <import plugin="com.choicemaker.cm.io.xml.base"/>
       <import plugin="com.choicemaker.cm.transitivity"/>
       <import plugin="com.choicemaker.cm.transitivity.core"/>
-      <import plugin="com.choicemaker.cm.transitivity.server"/>
+      <import plugin="com.choicemaker.cm.transitivity.api"/>
       <import plugin="com.choicemaker.cm.urm"/>
       <import plugin="com.choicemaker.cm.urm.adaptor"/>
       <import plugin="com.choicemaker.cm.urm.base"/>
