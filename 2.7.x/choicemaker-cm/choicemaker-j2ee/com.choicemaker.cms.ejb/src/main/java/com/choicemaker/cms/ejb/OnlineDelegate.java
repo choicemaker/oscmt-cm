@@ -28,7 +28,7 @@ import com.choicemaker.cm.oaba.api.AbaStatisticsController;
 import com.choicemaker.cm.transitivity.core.CompositeEntity;
 import com.choicemaker.cm.transitivity.core.Entity;
 import com.choicemaker.cm.transitivity.core.INode;
-import com.choicemaker.cm.transitivity.server.util.ClusteringIteratorFactory;
+import com.choicemaker.cm.transitivity.ejb.util.ClusteringIteratorFactory;
 import com.choicemaker.cm.transitivity.util.CEFromMatchesBuilder;
 import com.choicemaker.cms.api.AbaParameters;
 import com.choicemaker.cms.api.AbaServerConfiguration;

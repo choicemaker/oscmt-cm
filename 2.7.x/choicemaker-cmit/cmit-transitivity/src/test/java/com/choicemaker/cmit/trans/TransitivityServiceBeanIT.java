@@ -13,7 +13,7 @@ import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
 import org.junit.runner.RunWith;
 
 import com.choicemaker.cm.batch.api.BatchJob;
-import com.choicemaker.cm.transitivity.server.impl.StartTransitivityMDB;
+import com.choicemaker.cm.transitivity.ejb.StartTransitivityMDB;
 import com.choicemaker.cmit.testconfigs.SimplePersonSqlServerTestConfiguration;
 import com.choicemaker.cmit.trans.util.TransitivityDeploymentUtils;
 import com.choicemaker.cmit.utils.j2ee.BatchProcessingPhase;

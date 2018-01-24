@@ -24,7 +24,7 @@ import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.transitivity.core.CompositeEntity;
 import com.choicemaker.cm.transitivity.core.Entity;
 import com.choicemaker.cm.transitivity.core.INode;
-import com.choicemaker.cm.transitivity.server.util.ClusteringIteratorFactory;
+import com.choicemaker.cm.transitivity.ejb.util.ClusteringIteratorFactory;
 import com.choicemaker.cm.transitivity.util.CEFromMatchesBuilder;
 import com.choicemaker.cm.urm.base.CompositeMatchScore;
 import com.choicemaker.cm.urm.base.DbRecordCollection;

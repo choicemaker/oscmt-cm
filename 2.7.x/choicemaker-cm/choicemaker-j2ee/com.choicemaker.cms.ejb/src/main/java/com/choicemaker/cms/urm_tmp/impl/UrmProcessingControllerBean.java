@@ -28,7 +28,7 @@ import com.choicemaker.cm.args.ProcessingEvent;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.BatchJobProcessingEvent;
 import com.choicemaker.cm.batch.api.ProcessingController;
-import com.choicemaker.cm.transitivity.server.ejb.TransitivityBatchProcessingEvent;
+import com.choicemaker.cm.transitivity.api.TransitivityBatchProcessingEvent;
 
 /**
  * This stateless EJB provides OABA, job-specific processing logs and a

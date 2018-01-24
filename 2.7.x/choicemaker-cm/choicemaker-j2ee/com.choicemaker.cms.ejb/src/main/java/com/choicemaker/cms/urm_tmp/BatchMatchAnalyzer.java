@@ -15,7 +15,7 @@ import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.oaba.api.OabaService;
 import com.choicemaker.cm.oaba.api.ServerConfigurationException;
-import com.choicemaker.cm.transitivity.server.ejb.TransitivityService;
+import com.choicemaker.cm.transitivity.api.TransitivityService;
 
 /**
  * Allows a client application to match record collections and perform

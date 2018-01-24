@@ -1,6 +1,6 @@
 package com.choicemaker.cms.urm_tmp.impl;
 
-import com.choicemaker.cm.transitivity.server.impl.TransitivityJobJPA;
+import com.choicemaker.cm.transitivity.ejb.TransitivityJobJPA;
 
 /**
  * Java Persistence API (JPA) for TransitivityJob beans.<br/>

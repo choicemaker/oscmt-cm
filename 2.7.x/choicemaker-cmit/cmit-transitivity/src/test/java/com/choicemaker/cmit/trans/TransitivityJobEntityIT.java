@@ -33,7 +33,7 @@ import com.choicemaker.cm.oaba.api.OabaSettingsController;
 import com.choicemaker.cm.oaba.api.RecordIdController;
 import com.choicemaker.cm.oaba.api.RecordSourceController;
 import com.choicemaker.cm.oaba.api.ServerConfigurationController;
-import com.choicemaker.cm.transitivity.server.ejb.TransitivityJobController;
+import com.choicemaker.cm.transitivity.api.TransitivityJobController;
 import com.choicemaker.cmit.trans.util.TransitivityDeploymentUtils;
 import com.choicemaker.cmit.utils.j2ee.BatchJobUtils;
 import com.choicemaker.cmit.utils.j2ee.TestEntityCounts;

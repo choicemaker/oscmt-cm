@@ -38,7 +38,7 @@ import com.choicemaker.cm.batch.api.BatchJobController;
 import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.choicemaker.cm.oaba.ejb.OabaJobEntity;
 import com.choicemaker.cm.oaba.ejb.OabaParametersEntity;
-import com.choicemaker.cm.transitivity.server.ejb.TransitivityService;
+import com.choicemaker.cm.transitivity.api.TransitivityService;
 import com.choicemaker.cm.urm.exceptions.CmRuntimeException;
 import com.choicemaker.cm.urm.exceptions.ConfigException;
 

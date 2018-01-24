@@ -39,8 +39,8 @@ import com.choicemaker.cm.oaba.ejb.AbaSettingsJPA;
 import com.choicemaker.cm.oaba.ejb.DefaultSettingsEntity;
 import com.choicemaker.cm.oaba.ejb.OabaSettingsEntity;
 import com.choicemaker.cm.oaba.ejb.OabaSettingsJPA;
-import com.choicemaker.cm.transitivity.server.ejb.TransitivityJobController;
-import com.choicemaker.cm.transitivity.server.ejb.TransitivityParametersController;
+import com.choicemaker.cm.transitivity.api.TransitivityJobController;
+import com.choicemaker.cm.transitivity.api.TransitivityParametersController;
 
 /**
  * Lists of objects created during a test. Provides a convenient way of cleaning

@@ -35,8 +35,8 @@ import com.choicemaker.cm.oaba.ejb.OabaJobEntity;
 import com.choicemaker.cm.oaba.ejb.OabaParametersEntity;
 import com.choicemaker.cm.oaba.ejb.OabaSettingsEntity;
 import com.choicemaker.cm.oaba.ejb.ServerConfigurationControllerBean;
-import com.choicemaker.cm.transitivity.server.impl.TransitivityJobEntity;
-import com.choicemaker.cm.transitivity.server.impl.TransitivityParametersEntity;
+import com.choicemaker.cm.transitivity.ejb.TransitivityJobEntity;
+import com.choicemaker.cm.transitivity.ejb.TransitivityParametersEntity;
 
 /** Utility methods used in tests of OabaJobEntity and TransitivityJobEntity */
 public class BatchJobUtils {

@@ -12,8 +12,8 @@ import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
 import org.junit.runner.RunWith;
 
 import com.choicemaker.cm.batch.api.BatchJob;
-import com.choicemaker.cm.transitivity.server.impl.TransMatchSchedulerMDB;
-import com.choicemaker.cm.transitivity.server.impl.TransMatchSchedulerSingleton;
+import com.choicemaker.cm.transitivity.ejb.TransMatchSchedulerMDB;
+import com.choicemaker.cm.transitivity.ejb.TransMatchSchedulerSingleton;
 import com.choicemaker.cmit.testconfigs.SimplePersonSqlServerTestConfiguration;
 import com.choicemaker.cmit.trans.util.TransitivityDeploymentUtils;
 import com.choicemaker.cmit.utils.j2ee.BatchProcessingPhase;
