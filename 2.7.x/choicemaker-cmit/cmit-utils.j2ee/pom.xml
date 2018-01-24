@@ -78,7 +78,15 @@
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.oaba.ejb</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.transitivity.api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.transitivity.ejb</artifactId>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
