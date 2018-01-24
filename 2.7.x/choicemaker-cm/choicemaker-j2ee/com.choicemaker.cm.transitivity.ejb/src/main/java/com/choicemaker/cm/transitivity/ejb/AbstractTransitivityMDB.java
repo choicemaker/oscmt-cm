@@ -38,13 +38,13 @@ import com.choicemaker.cm.oaba.api.RecordIdController;
 import com.choicemaker.cm.oaba.api.RecordSourceController;
 import com.choicemaker.cm.oaba.api.SqlRecordSourceController;
 import com.choicemaker.cm.oaba.core.RecordMatchingMode;
-import com.choicemaker.cm.oaba.ejb.BatchJobUtils;
-import com.choicemaker.cm.oaba.ejb.data.OabaJobMessage;
-import com.choicemaker.cm.oaba.ejb.util.MessageBeanUtils;
 import com.choicemaker.cm.transitivity.api.TransitivityConfigurationController;
 import com.choicemaker.cm.transitivity.api.TransitivityJobController;
 import com.choicemaker.cm.transitivity.api.TransitivityParametersController;
 import com.choicemaker.cm.transitivity.api.TransitivitySettingsController;
+import com.choicemaker.cm.oaba.ejb.BatchJobUtils;
+import com.choicemaker.cm.oaba.ejb.data.OabaJobMessage;
+import com.choicemaker.cm.oaba.ejb.util.MessageBeanUtils;
 import com.choicemaker.cm.transitivity.ejb.util.LoggingUtils;
 
 /**

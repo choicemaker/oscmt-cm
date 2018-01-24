@@ -39,6 +39,7 @@ import com.choicemaker.cm.oaba.api.RecordIdController;
 import com.choicemaker.cm.oaba.api.RecordSourceController;
 import com.choicemaker.cm.oaba.api.ServerConfigurationController;
 import com.choicemaker.cm.oaba.api.ServerConfigurationException;
+import com.choicemaker.cm.oaba.api.ImmutableRecordIdTranslatorLocal;
 import com.choicemaker.cm.oaba.core.IRecordIdSink;
 import com.choicemaker.cm.oaba.core.IRecordIdSource;
 import com.choicemaker.cm.oaba.core.ImmutableRecordIdTranslator;
