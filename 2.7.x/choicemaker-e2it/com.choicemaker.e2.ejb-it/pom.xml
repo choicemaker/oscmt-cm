@@ -171,12 +171,12 @@
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>
-      com.choicemaker.cm.io.blocking.automated.base</artifactId>
+      com.choicemaker.cm.aba.base</artifactId>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>
-      com.choicemaker.cm.io.blocking.automated.inmemory</artifactId>
+      com.choicemaker.cm.aba.inmemory</artifactId>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>

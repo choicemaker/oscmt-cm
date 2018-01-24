@@ -74,7 +74,7 @@
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.io.blocking.automated.offline.server</artifactId>
+      <artifactId>com.choicemaker.cm.oaba.server</artifactId>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
