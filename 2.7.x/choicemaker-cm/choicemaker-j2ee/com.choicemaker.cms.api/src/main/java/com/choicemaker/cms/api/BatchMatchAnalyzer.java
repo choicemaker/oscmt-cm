@@ -13,9 +13,8 @@ package com.choicemaker.cms.api;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
-// FIXME import com.choicemaker.cm.oaba.server.ejb.OabaService;
-// FIXME import com.choicemaker.cm.oaba.server.ejb.ServerConfigurationException;
-// FIXME import com.choicemaker.cm.transitivity.server.ejb.TransitivityService;
+import com.choicemaker.cm.oaba.api.OabaService;
+import com.choicemaker.cm.oaba.api.ServerConfigurationException;
 
 /**
  * Allows a client application to match record collections and perform
@@ -24,16 +23,16 @@ import com.choicemaker.cm.args.TransitivityParameters;
  * @author emoussikaev (original URM)
  * @author rphall (URM2)
  */
-public interface BatchMatchAnalyzer /* FIXME extends OabaService, TransitivityService */ {
+public interface BatchMatchAnalyzer extends OabaService/* FIXME , TransitivityService */ {
 
 	public long startDeduplicationAndAnalysis(String externalID,
 			TransitivityParameters tp, OabaSettings oabaSettings,
 			ServerConfiguration serverConfiguration)
-			throws /* FIXME ServerConfiguration */Exception;
+			throws ServerConfigurationException;
 
 	public long startLinkageAndAnalysis(String externalID,
 			TransitivityParameters tp, OabaSettings oabaSettings,
 			ServerConfiguration serverConfiguration)
-			throws /* FIXME ServerConfiguration */Exception;
+			throws ServerConfigurationException;
 
 }

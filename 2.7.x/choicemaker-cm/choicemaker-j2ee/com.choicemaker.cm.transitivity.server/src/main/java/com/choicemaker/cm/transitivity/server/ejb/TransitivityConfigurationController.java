@@ -10,7 +10,7 @@ package com.choicemaker.cm.transitivity.server.ejb;
 import javax.ejb.Local;
 
 import com.choicemaker.cm.args.ServerConfiguration;
-import com.choicemaker.cm.oaba.server.ejb.ServerConfigurationController;
+import com.choicemaker.cm.oaba.api.ServerConfigurationController;
 
 /**
  * Manages a database of server configurations.

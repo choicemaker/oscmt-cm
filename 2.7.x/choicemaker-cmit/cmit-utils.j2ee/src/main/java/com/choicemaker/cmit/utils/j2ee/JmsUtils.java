@@ -12,8 +12,8 @@ import javax.jms.Topic;
 
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.BatchProcessingNotification;
-import com.choicemaker.cm.oaba.server.data.OabaJobMessage;
-import com.choicemaker.cm.oaba.server.util.MessageBeanUtils;
+import com.choicemaker.cm.oaba.ejb.data.OabaJobMessage;
+import com.choicemaker.cm.oaba.ejb.util.MessageBeanUtils;
 
 public class JmsUtils {
 

@@ -35,9 +35,9 @@ import com.choicemaker.cm.batch.api.BatchJobProcessingEvent;
 import com.choicemaker.cm.batch.api.BatchJobStatus;
 import com.choicemaker.cm.batch.api.ProcessingController;
 import com.choicemaker.cm.batch.ejb.BatchJobFileUtils;
-import com.choicemaker.cm.oaba.server.ejb.OabaSettingsController;
-import com.choicemaker.cm.oaba.server.ejb.ServerConfigurationController;
-import com.choicemaker.cm.oaba.server.ejb.ServerConfigurationException;
+import com.choicemaker.cm.oaba.api.OabaSettingsController;
+import com.choicemaker.cm.oaba.api.ServerConfigurationController;
+import com.choicemaker.cm.oaba.api.ServerConfigurationException;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJobController;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityParametersController;
 

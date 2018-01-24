@@ -19,13 +19,10 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import javax.annotation.Resource;
-import javax.ejb.CreateException;
 import javax.ejb.EJB;
-import javax.ejb.FinderException;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.jms.JMSContext;
-import javax.jms.JMSException;
 import javax.jms.Queue;
 import javax.naming.NamingException;
 
@@ -275,7 +272,7 @@ public class OabaServiceBean implements OabaService {
 	}
 
 	public boolean removeWorkingDirectory(long jobID) throws RemoteException,
-			CreateException, NamingException, JMSException, FinderException {
+			NamingException {
 		BatchJob job = jobController.findBatchJob(jobID);
 		return BatchJobFileUtils.removeTempDir(job);
 	}
@@ -320,23 +317,19 @@ public class OabaServiceBean implements OabaService {
 	 * @return MatchListSource - return a source from which to read MatchList
 	 *         objects.
 	 * @throws RemoteException
-	 * @throws CreateException
 	 * @throws NamingException
-	 * @throws JMSException
-	 * @throws FinderException
 	 * @see {@link #getMatchRecordSource(long)}
 	 */
 	@Override
 	@Deprecated
 	public Object getMatchList(long jobID) throws RemoteException,
-			CreateException, NamingException, JMSException, FinderException {
+			NamingException {
 		throw new Error("no longer implemented");
 	}
 
 	@Override
 	public IMatchRecord2Source getMatchRecordSource(long jobID)
-			throws RemoteException, CreateException, NamingException,
-			JMSException, FinderException {
+			throws RemoteException, NamingException {
 
 		MatchRecord2Source mrs = null;
 

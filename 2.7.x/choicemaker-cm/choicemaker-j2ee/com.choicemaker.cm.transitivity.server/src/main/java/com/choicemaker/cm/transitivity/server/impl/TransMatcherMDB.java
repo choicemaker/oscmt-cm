@@ -24,19 +24,19 @@ import com.choicemaker.cm.batch.api.OperationalPropertyController;
 import com.choicemaker.cm.batch.api.ProcessingController;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.base.MatchRecord2;
+import com.choicemaker.cm.oaba.api.OabaJobController;
+import com.choicemaker.cm.oaba.api.OabaParametersController;
+import com.choicemaker.cm.oaba.api.OabaSettingsController;
+import com.choicemaker.cm.oaba.api.ServerConfigurationController;
 import com.choicemaker.cm.oaba.core.IComparableSink;
 import com.choicemaker.cm.oaba.core.IMatchRecord2Sink;
 import com.choicemaker.cm.oaba.data.MatchRecord2Factory;
+import com.choicemaker.cm.oaba.ejb.AbstractMatcher;
+import com.choicemaker.cm.oaba.ejb.OabaFileUtils;
+import com.choicemaker.cm.oaba.ejb.data.MatchWriterMessage;
+import com.choicemaker.cm.oaba.ejb.data.OabaJobMessage;
+import com.choicemaker.cm.oaba.ejb.util.MessageBeanUtils;
 import com.choicemaker.cm.oaba.impl.ComparableMRSink;
-import com.choicemaker.cm.oaba.server.data.MatchWriterMessage;
-import com.choicemaker.cm.oaba.server.data.OabaJobMessage;
-import com.choicemaker.cm.oaba.server.ejb.OabaJobController;
-import com.choicemaker.cm.oaba.server.ejb.OabaParametersController;
-import com.choicemaker.cm.oaba.server.ejb.OabaSettingsController;
-import com.choicemaker.cm.oaba.server.ejb.ServerConfigurationController;
-import com.choicemaker.cm.oaba.server.impl.AbstractMatcher;
-import com.choicemaker.cm.oaba.server.impl.OabaFileUtils;
-import com.choicemaker.cm.oaba.server.util.MessageBeanUtils;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityParametersController;
 
 /**

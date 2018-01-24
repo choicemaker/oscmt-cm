@@ -37,7 +37,6 @@
         <dependency>
             <groupId>com.choicemaker.cm</groupId>
             <artifactId>com.choicemaker.cm.batch.api</artifactId>
-            <version>2.7.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.choicemaker.cm</groupId>
@@ -47,7 +46,12 @@
         </dependency>
         <dependency>
             <groupId>com.choicemaker.cm</groupId>
-            <artifactId>com.choicemaker.cm.oaba.server</artifactId>
+            <artifactId>com.choicemaker.cm.oaba.api</artifactId>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>com.choicemaker.cm</groupId>
+            <artifactId>com.choicemaker.cm.oaba.ejb</artifactId>
             <version>2.7.1-SNAPSHOT</version>
             <type>ejb</type>
         </dependency>

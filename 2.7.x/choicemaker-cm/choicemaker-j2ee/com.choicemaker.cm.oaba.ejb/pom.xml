@@ -14,7 +14,7 @@
 
   <artifactId>com.choicemaker.cm.oaba.ejb</artifactId>
   <packaging>jar</packaging>
-  <name>ChoiceMaker Offline Matching (OABA Server)</name>
+  <name>ChoiceMaker Offline Matching (OABA EJB)</name>
 
   <properties>
 		<!-- JBoss dependency versions -->

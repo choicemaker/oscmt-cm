@@ -104,9 +104,13 @@
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.oaba.server</artifactId>
+      <artifactId>com.choicemaker.cm.oaba.api</artifactId>
     </dependency>
-    <dependency>
+<!--     <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.oaba.ejb</artifactId>
+    </dependency>
+ -->    <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.io.db.base</artifactId>
     </dependency>

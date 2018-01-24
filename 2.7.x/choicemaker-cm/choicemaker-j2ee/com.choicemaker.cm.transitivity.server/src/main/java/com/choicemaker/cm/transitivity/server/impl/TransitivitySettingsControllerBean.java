@@ -14,7 +14,7 @@ import javax.persistence.PersistenceContext;
 
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.batch.api.BatchJob;
-import com.choicemaker.cm.oaba.server.impl.OabaSettingsControllerBean;
+import com.choicemaker.cm.oaba.ejb.OabaSettingsControllerBean;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJobController;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivitySettingsController;
 

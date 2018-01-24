@@ -11,8 +11,8 @@ import java.util.List;
 
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.TransitivityParameters;
-import com.choicemaker.cm.oaba.server.ejb.OabaParametersController;
-import com.choicemaker.cm.oaba.server.impl.AbstractParametersEntity;
+import com.choicemaker.cm.oaba.api.AbstractParameters;
+import com.choicemaker.cm.oaba.api.OabaParametersController;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityParametersController;
 
 public class CombinedParametersController implements
@@ -91,12 +91,12 @@ public class CombinedParametersController implements
 	}
 
 	@Override
-	public List<AbstractParametersEntity> findAllParameters() {
+	public List<AbstractParameters> findAllParameters() {
 		return o.findAllParameters();
 	}
 
 	@Override
-	public AbstractParametersEntity findParameters(long id) {
+	public AbstractParameters findParameters(long id) {
 		return o.findParameters(id);
 	}
 

@@ -17,7 +17,7 @@ import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 
 import com.choicemaker.cm.batch.api.BatchJob;
-import com.choicemaker.cm.oaba.server.impl.OabaJobEntity;
+import com.choicemaker.cm.oaba.ejb.OabaJobEntity;
 import com.choicemaker.cm.urm.exceptions.ArgumentException;
 import com.choicemaker.cm.urm.exceptions.CmRuntimeException;
 import com.choicemaker.cm.urm.exceptions.ConfigException;

@@ -35,7 +35,7 @@ import com.choicemaker.cm.args.ProcessingEvent;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.BatchJobProcessingEvent;
 import com.choicemaker.cm.batch.api.ProcessingController;
-import com.choicemaker.cm.oaba.server.util.MessageBeanUtils;
+import com.choicemaker.cm.oaba.ejb.util.MessageBeanUtils;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityBatchProcessingEvent;
 
 
