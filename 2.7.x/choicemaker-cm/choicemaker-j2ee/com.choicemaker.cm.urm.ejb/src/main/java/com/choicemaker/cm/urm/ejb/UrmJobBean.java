@@ -16,6 +16,8 @@ import javax.ejb.EntityBean;
 import javax.ejb.EntityContext;
 
 import com.choicemaker.cm.args.PersistableRecordSource;
+import com.choicemaker.cm.urm.api.UrmJob;
+import com.choicemaker.cm.urm.api.UrmStepJob;
 import com.choicemaker.cm.urm.base.JobStatus;
 import com.choicemaker.cm.urm.exceptions.CmRuntimeException;
 import com.choicemaker.cm.urm.exceptions.ConfigException;

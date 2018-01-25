@@ -18,6 +18,9 @@ import javax.persistence.EntityManager;
 
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.oaba.ejb.OabaJobEntity;
+import com.choicemaker.cm.urm.api.JobAlreadyAbortedException;
+import com.choicemaker.cm.urm.api.TransSerializer;
+import com.choicemaker.cm.urm.api.UrmJob;
 import com.choicemaker.cm.urm.exceptions.ArgumentException;
 import com.choicemaker.cm.urm.exceptions.CmRuntimeException;
 import com.choicemaker.cm.urm.exceptions.ConfigException;

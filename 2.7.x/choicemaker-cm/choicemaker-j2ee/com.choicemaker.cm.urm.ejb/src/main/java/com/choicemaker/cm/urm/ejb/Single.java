@@ -39,6 +39,14 @@ import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.choicemaker.cm.oaba.ejb.OabaJobEntity;
 import com.choicemaker.cm.oaba.ejb.OabaParametersEntity;
 import com.choicemaker.cm.transitivity.api.TransitivityService;
+import com.choicemaker.cm.urm.api.CmsJob;
+import com.choicemaker.cm.urm.api.CmsJobHome;
+import com.choicemaker.cm.urm.api.TransSerializer;
+import com.choicemaker.cm.urm.api.TransSerializerHome;
+import com.choicemaker.cm.urm.api.UrmJob;
+import com.choicemaker.cm.urm.api.UrmJobHome;
+import com.choicemaker.cm.urm.api.UrmStepJob;
+import com.choicemaker.cm.urm.api.UrmStepJobHome;
 import com.choicemaker.cm.urm.exceptions.CmRuntimeException;
 import com.choicemaker.cm.urm.exceptions.ConfigException;
 

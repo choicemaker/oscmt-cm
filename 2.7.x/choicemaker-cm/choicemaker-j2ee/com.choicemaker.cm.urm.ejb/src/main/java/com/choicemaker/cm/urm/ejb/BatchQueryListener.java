@@ -15,6 +15,8 @@ import javax.ejb.CreateException;
 import javax.jms.JMSException;
 import javax.naming.NamingException;
 
+import com.choicemaker.cm.urm.api.JobAlreadyAbortedException;
+import com.choicemaker.cm.urm.api.UrmJob;
 import com.choicemaker.cm.urm.exceptions.ArgumentException;
 import com.choicemaker.cm.urm.exceptions.CmRuntimeException;
 import com.choicemaker.cm.urm.exceptions.ConfigException;

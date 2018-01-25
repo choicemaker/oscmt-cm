@@ -16,6 +16,7 @@ import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
 import javax.jms.Queue;
 
+import com.choicemaker.cm.urm.api.CmsJob;
 import com.choicemaker.cm.urm.exceptions.ArgumentException;
 import com.choicemaker.cm.urm.exceptions.CmRuntimeException;
 import com.choicemaker.cm.urm.exceptions.ConfigException;

@@ -32,6 +32,7 @@ import com.choicemaker.cm.transitivity.core.TransitivityResultCompositeSerialize
 import com.choicemaker.cm.transitivity.core.TransitivitySortType;
 import com.choicemaker.cm.transitivity.util.CompositeTextSerializer;
 import com.choicemaker.cm.transitivity.util.CompositeXMLSerializer;
+import com.choicemaker.cm.urm.api.CmsJob;
 import com.choicemaker.cm.urm.config.AnalysisResultFormat;
 import com.choicemaker.cm.urm.exceptions.ConfigException;
 

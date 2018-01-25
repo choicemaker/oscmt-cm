@@ -5,7 +5,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *******************************************************************************/
-package com.choicemaker.cm.urm.ejb;
+package com.choicemaker.cm.urm.api;
 
 import java.io.Serializable;
 import java.rmi.RemoteException;
@@ -18,6 +18,7 @@ import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.MarkedRecordPairSink;
 import com.choicemaker.cm.oaba.api.RecordSourceController;
 import com.choicemaker.cm.oaba.core.IMatchRecord2Source;
+import com.choicemaker.cm.urm.ejb.MrpsBackend;
 import com.choicemaker.cm.urm.exceptions.CmRuntimeException;
 import com.choicemaker.cm.urm.exceptions.ConfigException;
 
@@ -28,7 +29,7 @@ import com.choicemaker.cm.urm.exceptions.ConfigException;
  * @see MrpsBackend
  */
 @SuppressWarnings({ "rawtypes" })
-interface IMrpsRequest extends Serializable, Cloneable {
+public interface IMrpsRequest extends Serializable, Cloneable {
 
 	MarkedRecordPairSink getMarkedRecordPairSink(EntityManager em)
 			throws CmRuntimeException, ConfigException, RemoteException;

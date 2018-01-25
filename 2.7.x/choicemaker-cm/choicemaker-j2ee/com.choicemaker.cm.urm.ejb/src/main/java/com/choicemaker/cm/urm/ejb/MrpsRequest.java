@@ -20,6 +20,7 @@ import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.xml.base.XmlMarkedRecordPairSink;
 import com.choicemaker.cm.oaba.api.RecordSourceController;
 import com.choicemaker.cm.oaba.core.IMatchRecord2Source;
+import com.choicemaker.cm.urm.api.IMrpsRequest;
 import com.choicemaker.cm.urm.exceptions.CmRuntimeException;
 import com.choicemaker.cm.urm.exceptions.ConfigException;
 import com.choicemaker.util.StringUtils;

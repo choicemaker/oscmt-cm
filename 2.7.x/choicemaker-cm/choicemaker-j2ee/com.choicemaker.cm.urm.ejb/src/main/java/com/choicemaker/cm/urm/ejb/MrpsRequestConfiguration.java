@@ -18,6 +18,8 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.choicemaker.cm.urm.api.IMrpsRequestConfiguration;
+
 /**
  * Defines allowed property names and default values for an MrpsRequest. This
  * implementation goes to some lengths to define names and values in one

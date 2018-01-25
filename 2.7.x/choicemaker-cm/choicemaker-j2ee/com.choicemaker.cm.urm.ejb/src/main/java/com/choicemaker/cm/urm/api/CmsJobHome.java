@@ -5,7 +5,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *******************************************************************************/
-package com.choicemaker.cm.urm.ejb;
+package com.choicemaker.cm.urm.api;
 
 import java.rmi.RemoteException;
 import java.util.Collection;
@@ -14,17 +14,20 @@ import javax.ejb.CreateException;
 import javax.ejb.EJBHome;
 import javax.ejb.FinderException;
 
+/**
+ * Represents a ChoiceMaker serialization job
+ */
 @SuppressWarnings({"rawtypes"})
-public interface UrmJobHome extends EJBHome {
-	String DEFAULT_EJB_REF_NAME = "ejb/UrmJob";
+public interface CmsJobHome extends EJBHome {
+	String DEFAULT_EJB_REF_NAME = "ejb/UrmSerializationJob";
 	String DEFAULT_JNDI_COMP_NAME = "java:comp/env/" + DEFAULT_EJB_REF_NAME;
 
-	String AUTONUMBER_IDENTIFIER = "UrmJobID";
+	String AUTONUMBER_IDENTIFIER = "UrmSerializationID";
 
-	UrmJob create(String externalId)
-		throws RemoteException, CreateException; //NamingException, JMSException,
+	CmsJob create(String externalId, long transId)
+		throws RemoteException, CreateException;
 
 	Collection findAll() throws RemoteException, FinderException;
 
-	UrmJob findByPrimaryKey(Long id) throws RemoteException, FinderException;
+	CmsJob findByPrimaryKey(Long id) throws RemoteException, FinderException;
 }

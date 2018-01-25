@@ -28,7 +28,6 @@
       <import plugin="com.choicemaker.cm.urm.base"/>
    </requires>
 
-
    <extension
          id="DoNothing"
          name="Do-Nothing Derived-Fields Updator"

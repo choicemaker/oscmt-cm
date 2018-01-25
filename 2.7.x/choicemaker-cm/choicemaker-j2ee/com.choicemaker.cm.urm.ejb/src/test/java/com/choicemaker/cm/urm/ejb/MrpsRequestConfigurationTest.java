@@ -10,6 +10,8 @@ package com.choicemaker.cm.urm.ejb;
 import java.util.Properties;
 import java.util.Set;
 
+import com.choicemaker.cm.urm.api.IMrpsRequestConfiguration;
+
 import junit.framework.TestCase;
 
 @SuppressWarnings({"rawtypes"})

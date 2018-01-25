@@ -15,6 +15,9 @@ import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 
 import com.choicemaker.cm.oaba.api.ServerConfigurationException;
+import com.choicemaker.cm.urm.api.TransSerializer;
+import com.choicemaker.cm.urm.api.UrmJob;
+import com.choicemaker.cm.urm.api.UrmStepJob;
 import com.choicemaker.cm.urm.base.IRecordCollection;
 import com.choicemaker.cm.urm.base.JobStatus;
 import com.choicemaker.cm.urm.base.LinkCriteria;

@@ -20,6 +20,8 @@ import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.naming.NamingException;
 
+import com.choicemaker.cm.urm.api.JobAlreadyAbortedException;
+import com.choicemaker.cm.urm.api.UrmJob;
 import com.choicemaker.cm.urm.base.JobStatus;
 import com.choicemaker.cm.urm.exceptions.ArgumentException;
 import com.choicemaker.cm.urm.exceptions.CmRuntimeException;

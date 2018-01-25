@@ -32,6 +32,9 @@ import com.choicemaker.cm.oaba.api.RecordSourceController;
 import com.choicemaker.cm.oaba.filter.DefaultMatchRecord2Filter;
 import com.choicemaker.cm.oaba.filter.IMatchRecord2Filter;
 import com.choicemaker.cm.oaba.result.MRPSCreator;
+import com.choicemaker.cm.urm.api.CmsJob;
+import com.choicemaker.cm.urm.api.IMrpsRequest;
+import com.choicemaker.cm.urm.api.IMrpsRequestConfiguration;
 
 /**
  * A long-running backend process that computes Marked Record Pairs.
