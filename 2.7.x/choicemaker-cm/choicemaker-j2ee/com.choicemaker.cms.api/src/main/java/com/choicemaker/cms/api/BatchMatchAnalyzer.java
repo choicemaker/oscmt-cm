@@ -15,6 +15,7 @@ import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.oaba.api.OabaService;
 import com.choicemaker.cm.oaba.api.ServerConfigurationException;
+import com.choicemaker.cm.transitivity.api.TransitivityService;
 
 /**
  * Allows a client application to match record collections and perform
@@ -23,7 +24,7 @@ import com.choicemaker.cm.oaba.api.ServerConfigurationException;
  * @author emoussikaev (original URM)
  * @author rphall (URM2)
  */
-public interface BatchMatchAnalyzer extends OabaService/* FIXME , TransitivityService */ {
+public interface BatchMatchAnalyzer extends OabaService, TransitivityService {
 
 	public long startDeduplicationAndAnalysis(String externalID,
 			TransitivityParameters tp, OabaSettings oabaSettings,
