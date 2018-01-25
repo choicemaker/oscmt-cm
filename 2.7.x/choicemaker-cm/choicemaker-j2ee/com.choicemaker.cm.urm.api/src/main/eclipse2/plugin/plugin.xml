@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plugin>
 <plugin
-   id="com.choicemaker.cm.urm.ejb"
-   name="com.choicemaker.cm.urm.ejb"
+   id="com.choicemaker.cm.urm.api"
+   name="com.choicemaker.cm.urm.api"
    version="1.0.0">
 
    <runtime>
-      <library name="urm-ejb.jar">
+      <library name="urm-api.jar">
          <export name="*"/>
       </library>
    </runtime>
@@ -24,18 +24,8 @@
       <import plugin="com.choicemaker.cm.transitivity.core"/>
       <import plugin="com.choicemaker.cm.transitivity.api"/>
       <import plugin="com.choicemaker.cm.urm"/>
-      <import plugin="com.choicemaker.cm.urm.api"/>
       <import plugin="com.choicemaker.cm.urm.adaptor"/>
       <import plugin="com.choicemaker.cm.urm.base"/>
    </requires>
-
-   <extension
-         id="DoNothing"
-         name="Do-Nothing Derived-Fields Updator"
-         point="com.choicemaker.cm.urm.updateDerivedFields">
-      <configurable
-            class="com.choicemaker.cm.urm.ejb.DoNothingUpdateDerivedFields">
-      </configurable>
-   </extension>
 
 </plugin>

@@ -35,6 +35,7 @@
     <module>com.choicemaker.cm.transitivity.api</module>
     <module>com.choicemaker.cm.transitivity.ejb</module>
     <module>com.choicemaker.cm.urm</module>
+    <module>com.choicemaker.cm.urm.api</module>
     <module>com.choicemaker.cm.urm.adaptor</module>
     <module>com.choicemaker.cm.urm.base</module>
     <module>com.choicemaker.cm.urm.config</module>

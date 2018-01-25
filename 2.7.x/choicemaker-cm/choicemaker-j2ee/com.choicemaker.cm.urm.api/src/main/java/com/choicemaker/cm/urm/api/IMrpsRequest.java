@@ -18,15 +18,12 @@ import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.MarkedRecordPairSink;
 import com.choicemaker.cm.oaba.api.RecordSourceController;
 import com.choicemaker.cm.oaba.core.IMatchRecord2Source;
-import com.choicemaker.cm.urm.ejb.MrpsBackend;
 import com.choicemaker.cm.urm.exceptions.CmRuntimeException;
 import com.choicemaker.cm.urm.exceptions.ConfigException;
 
 /**
  * An MrpsRequest contains the information necessary to start the back-end
  * processing of an MRPS job.
- * 
- * @see MrpsBackend
  */
 @SuppressWarnings({ "rawtypes" })
 public interface IMrpsRequest extends Serializable, Cloneable {
