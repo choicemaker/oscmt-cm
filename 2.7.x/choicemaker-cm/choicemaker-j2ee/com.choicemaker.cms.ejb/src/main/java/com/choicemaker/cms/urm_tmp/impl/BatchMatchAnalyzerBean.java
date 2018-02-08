@@ -45,7 +45,7 @@ import com.choicemaker.cm.transitivity.api.TransitivityService;
 import com.choicemaker.cm.transitivity.ejb.TransitivityNotification;
 import com.choicemaker.cms.urm_tmp.BatchMatchAnalyzer;
 import com.choicemaker.cms.urm_tmp.UrmJobController;
-import com.choicemaker.cms.urm_tmp.WorkFlowManager;
+import com.choicemaker.cms.api.WorkFlowManager;
 
 @Singleton
 @SuppressWarnings("rawtypes")

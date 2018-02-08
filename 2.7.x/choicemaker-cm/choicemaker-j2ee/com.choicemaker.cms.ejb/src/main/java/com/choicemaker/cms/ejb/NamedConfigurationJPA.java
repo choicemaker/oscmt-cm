@@ -1,4 +1,4 @@
-package com.choicemaker.cms.urm_tmp.impl;
+package com.choicemaker.cms.ejb;
 
 import com.choicemaker.cm.batch.ejb.AbstractPersistentObjectJPA;
 import com.choicemaker.cm.batch.ejb.BatchJobJPA;

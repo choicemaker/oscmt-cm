@@ -1,18 +1,18 @@
-package com.choicemaker.cms.urm_tmp.impl;
+package com.choicemaker.cms.ejb;
 
-import static com.choicemaker.cms.zzz_todo.NamedConfiguration.DEFAULT_ABALIMITPERBLOCKINGSET;
-import static com.choicemaker.cms.zzz_todo.NamedConfiguration.DEFAULT_ABALIMITSINGLEBLOCKINGSET;
-import static com.choicemaker.cms.zzz_todo.NamedConfiguration.DEFAULT_ABASINGLETABLEBLOCKINGSETGRACELIMIT;
-import static com.choicemaker.cms.zzz_todo.NamedConfiguration.DEFAULT_OABAINTERVAL;
-import static com.choicemaker.cms.zzz_todo.NamedConfiguration.DEFAULT_OABAMAXBLOCKSIZE;
-import static com.choicemaker.cms.zzz_todo.NamedConfiguration.DEFAULT_OABAMAXCHUNKSIZE;
-import static com.choicemaker.cms.zzz_todo.NamedConfiguration.DEFAULT_OABAMAXMATCHES;
-import static com.choicemaker.cms.zzz_todo.NamedConfiguration.DEFAULT_OABAMAXOVERSIZED;
-import static com.choicemaker.cms.zzz_todo.NamedConfiguration.DEFAULT_OABAMAXSINGLE;
-import static com.choicemaker.cms.zzz_todo.NamedConfiguration.DEFAULT_OABAMINFIELDS;
-import static com.choicemaker.cms.zzz_todo.NamedConfiguration.DEFAULT_SERVERMAXCHUNKCOUNT;
-import static com.choicemaker.cms.zzz_todo.NamedConfiguration.DEFAULT_SERVERMAXCHUNKSIZE;
-import static com.choicemaker.cms.zzz_todo.NamedConfiguration.DEFAULT_SERVERMAXTHREADS;
+import static com.choicemaker.cms.api.NamedConfiguration.DEFAULT_ABALIMITPERBLOCKINGSET;
+import static com.choicemaker.cms.api.NamedConfiguration.DEFAULT_ABALIMITSINGLEBLOCKINGSET;
+import static com.choicemaker.cms.api.NamedConfiguration.DEFAULT_ABASINGLETABLEBLOCKINGSETGRACELIMIT;
+import static com.choicemaker.cms.api.NamedConfiguration.DEFAULT_OABAINTERVAL;
+import static com.choicemaker.cms.api.NamedConfiguration.DEFAULT_OABAMAXBLOCKSIZE;
+import static com.choicemaker.cms.api.NamedConfiguration.DEFAULT_OABAMAXCHUNKSIZE;
+import static com.choicemaker.cms.api.NamedConfiguration.DEFAULT_OABAMAXMATCHES;
+import static com.choicemaker.cms.api.NamedConfiguration.DEFAULT_OABAMAXOVERSIZED;
+import static com.choicemaker.cms.api.NamedConfiguration.DEFAULT_OABAMAXSINGLE;
+import static com.choicemaker.cms.api.NamedConfiguration.DEFAULT_OABAMINFIELDS;
+import static com.choicemaker.cms.api.NamedConfiguration.DEFAULT_SERVERMAXCHUNKCOUNT;
+import static com.choicemaker.cms.api.NamedConfiguration.DEFAULT_SERVERMAXCHUNKSIZE;
+import static com.choicemaker.cms.api.NamedConfiguration.DEFAULT_SERVERMAXTHREADS;
 import static com.choicemaker.util.ReflectionUtils.randomBoolean;
 import static com.choicemaker.util.ReflectionUtils.randomFloat;
 import static com.choicemaker.util.ReflectionUtils.randomInt;
@@ -23,7 +23,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import com.choicemaker.cms.urm_tmp.impl.NamedConfigurationEntity;
+import com.choicemaker.cms.ejb.NamedConfigurationEntity;
 
 public class NamedConfigurationEntityTest {
 

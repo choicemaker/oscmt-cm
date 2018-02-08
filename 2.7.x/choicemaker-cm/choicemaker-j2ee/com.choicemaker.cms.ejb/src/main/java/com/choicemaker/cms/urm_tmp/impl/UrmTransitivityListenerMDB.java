@@ -14,7 +14,7 @@ import javax.ejb.ActivationConfigProperty;
 import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
 
-import com.choicemaker.cms.urm_tmp.WorkFlowManager;
+import com.choicemaker.cms.api.WorkFlowManager;
 
 @MessageDriven(activationConfig = {
 		@ActivationConfigProperty(propertyName = "destinationLookup",

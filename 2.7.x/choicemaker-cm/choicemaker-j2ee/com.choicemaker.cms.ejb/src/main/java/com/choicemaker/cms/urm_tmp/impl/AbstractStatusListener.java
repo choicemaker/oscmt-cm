@@ -18,7 +18,7 @@ import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 
 import com.choicemaker.cm.batch.api.BatchProcessingNotification;
-import com.choicemaker.cms.urm_tmp.WorkFlowManager;
+import com.choicemaker.cms.api.WorkFlowManager;
 
 /**
  * Base class for UrmOabaListenerMDB and UrmTransitivityListenerMDB

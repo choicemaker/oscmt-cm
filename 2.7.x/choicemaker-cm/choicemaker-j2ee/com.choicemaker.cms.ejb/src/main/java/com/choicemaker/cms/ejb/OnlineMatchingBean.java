@@ -5,6 +5,8 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.ejb.EJB;
+import javax.ejb.Local;
+import javax.ejb.Remote;
 import javax.ejb.Stateless;
 
 import com.choicemaker.client.api.DataAccessObject;
@@ -21,9 +23,12 @@ import com.choicemaker.cms.api.AbaParameters;
 import com.choicemaker.cms.api.AbaServerConfiguration;
 import com.choicemaker.cms.api.AbaSettings;
 import com.choicemaker.cms.api.OnlineMatching;
+import com.choicemaker.cms.api.remote.OnlineMatchingRemote;
 import com.choicemaker.cms.beans.MatchCandidatesBean;
 
 @Stateless
+@Local(OnlineMatching.class)
+@Remote(OnlineMatchingRemote.class)
 public class OnlineMatchingBean<T extends Comparable<T> & Serializable>
 		implements OnlineMatching<T> {
 

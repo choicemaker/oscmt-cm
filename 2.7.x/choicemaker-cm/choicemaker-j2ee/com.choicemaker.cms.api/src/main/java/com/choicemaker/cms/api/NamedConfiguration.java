@@ -1,4 +1,4 @@
-package com.choicemaker.cms.zzz_todo;
+package com.choicemaker.cms.api;
 
 import static com.choicemaker.client.api.WellKnownGraphProperties.GPN_SCM;
 import static com.choicemaker.cm.args.AnalysisResultFormat.SORT_BY_HOLD_GROUP;
@@ -6,6 +6,7 @@ import static com.choicemaker.cm.args.AnalysisResultFormat.SORT_BY_HOLD_GROUP;
 import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.args.PersistableSqlRecordSource;
 import com.choicemaker.cm.args.PersistentObject;
+import com.choicemaker.cm.batch.api.BatchJobRigor;
 
 public interface NamedConfiguration {
 
@@ -17,7 +18,7 @@ public interface NamedConfiguration {
 	public static final float DEFAULT_HIGHTHRESHOLD = 0.80f;
 	public static final String DEFAULT_TASK =
 		OabaLinkageType.STAGING_TO_MASTER_LINKAGE.name();
-//	public static final String DEFAULT_RIGOR = BatchJobRigor.COMPUTED.name();
+	public static final String DEFAULT_RIGOR = BatchJobRigor.COMPUTED.name();
 	public static final String DEFAULT_RS_TYPE =
 		PersistableSqlRecordSource.TYPE;
 	public static final String DEFAULT_DATASOURCE =

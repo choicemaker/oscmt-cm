@@ -1,10 +1,12 @@
-package com.choicemaker.cms.urm_tmp.impl;
+package com.choicemaker.cms.ejb;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
 import javax.ejb.EJB;
+import javax.ejb.Local;
+import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -15,8 +17,9 @@ import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.oaba.api.ServerConfigurationController;
-import com.choicemaker.cms.api.local.NamedConfigurationControllerLocal;
-import com.choicemaker.cms.zzz_todo.NamedConfiguration;
+import com.choicemaker.cms.api.NamedConfiguration;
+import com.choicemaker.cms.api.NamedConfigurationController;
+import com.choicemaker.cms.api.remote.NamedConfigurationControllerRemote;
 
 /**
  * In addition to managing NamedConfiguration entities, this bean also lists
@@ -26,8 +29,10 @@ import com.choicemaker.cms.zzz_todo.NamedConfiguration;
  *
  */
 @Stateless
+@Local(NamedConfigurationController.class)
+@Remote(NamedConfigurationControllerRemote.class)
 public class NamedConfigurationControllerBean implements
-		NamedConfigurationControllerLocal {
+		NamedConfigurationController {
 
 	private static final Logger logger = Logger
 			.getLogger(NamedConfigurationControllerBean.class.getName());
@@ -111,8 +116,8 @@ public class NamedConfigurationControllerBean implements
 		return retVal;
 	}
 
-//	@Override
-	public NamedConfigurationEntity clone(NamedConfiguration sc) {
+	@Override
+	public NamedConfiguration clone(NamedConfiguration sc) {
 		NamedConfigurationEntity retVal = new NamedConfigurationEntity(sc);
 		return retVal;
 	}

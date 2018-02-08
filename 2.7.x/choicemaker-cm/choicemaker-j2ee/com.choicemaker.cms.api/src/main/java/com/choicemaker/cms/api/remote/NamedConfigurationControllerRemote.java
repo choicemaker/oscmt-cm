@@ -1,6 +1,6 @@
 package com.choicemaker.cms.api.remote;
 
-import com.choicemaker.cms.zzz_todo.NamedConfigurationController;
+import com.choicemaker.cms.api.NamedConfigurationController;
 
 //@Remote
 public interface NamedConfigurationControllerRemote extends
