@@ -1,4 +1,4 @@
-package com.choicemaker.cms.urm_tmp.impl;
+package com.choicemaker.cms.ejb;
 
 import com.choicemaker.cm.transitivity.ejb.TransitivityJobJPA;
 

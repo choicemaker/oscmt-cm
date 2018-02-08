@@ -1,4 +1,7 @@
-package com.choicemaker.cms.urm_tmp.impl;
+package com.choicemaker.cms.ejb;
+
+import static com.choicemaker.cm.batch.ejb.BatchJobJPA.PN_BATCHJOB_FIND_BY_JOBID_P1;
+import static com.choicemaker.cm.batch.ejb.BatchJobJPA.QN_BATCHJOB_FIND_BY_JOBID;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +22,7 @@ import com.choicemaker.cm.oaba.api.OabaSettingsController;
 import com.choicemaker.cm.oaba.api.ServerConfigurationController;
 import com.choicemaker.cm.oaba.ejb.OabaJobJPA;
 import com.choicemaker.cm.transitivity.api.TransitivityParametersController;
-import com.choicemaker.cms.urm_tmp.UrmJobController;
+import com.choicemaker.cms.api.UrmJobController;
 
 /**
  * A stateless EJB used to manage the persistence of UrmJobEntity instances.
@@ -177,11 +180,10 @@ public class UrmJobControllerBean implements UrmJobController {
 		em.detach(job);
 	}
 
-	@SuppressWarnings("null")
 	@Override
 	public BatchJob findBatchJob(long id) {
-		Query query = null ; // FIXME em.createNamedQuery(QN_BATCHJOB_FIND_BY_JOBID);
-		query.setParameter(/* FIXME PN_BATCHJOB_FIND_BY_JOBID_P1 */(javax.persistence.Parameter<Long>)null, id);
+		Query query = em.createNamedQuery(QN_BATCHJOB_FIND_BY_JOBID);
+		query.setParameter(PN_BATCHJOB_FIND_BY_JOBID_P1, id);
 		@SuppressWarnings("unchecked")
 		List<BatchJob> entries = query.getResultList();
 		if (entries != null && entries.size() > 1) {

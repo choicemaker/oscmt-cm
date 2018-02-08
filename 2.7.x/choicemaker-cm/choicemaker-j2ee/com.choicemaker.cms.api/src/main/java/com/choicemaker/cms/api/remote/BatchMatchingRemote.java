@@ -10,13 +10,10 @@
  */
 package com.choicemaker.cms.api.remote;
 
-import java.io.Serializable;
-
-import com.choicemaker.cms.api.OnlineMatching;
+import com.choicemaker.cms.api.BatchMatching;
 
 /**
  * @author rphall
  */
-public interface OnlineMatchingRemote<T extends Comparable<T> & Serializable>
-		extends OnlineMatching<T> {
+public interface BatchMatchingRemote extends BatchMatching {
 }

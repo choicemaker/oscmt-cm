@@ -33,6 +33,7 @@
         <module>cmit-aba</module>
         <module>cmit-oaba</module>
         <module>cmit-transitivity</module>
+        <module>cmit-cms</module>
   </modules>
     </profile>
     <profile>
@@ -49,6 +50,7 @@
         <module>cmit-aba</module>
         <module>cmit-oaba</module>
         <module>cmit-transitivity</module>
+        <module>cmit-cms</module>
       </modules>
     </profile>
   </profiles>

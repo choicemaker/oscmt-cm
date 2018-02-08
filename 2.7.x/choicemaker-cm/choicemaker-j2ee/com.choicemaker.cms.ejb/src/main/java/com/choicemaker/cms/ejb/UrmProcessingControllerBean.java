@@ -8,7 +8,7 @@
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
-package com.choicemaker.cms.urm_tmp.impl;
+package com.choicemaker.cms.ejb;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
