@@ -57,12 +57,12 @@ public interface BatchMatching {
 	 * @param jobID
 	 *            - This is the unique job id created by the Choicemaker Batch
 	 *            system.
-	 * @return 0 means attempt to abort was successful. -1 means cannot abort
+	 * @return true means attempt to abort was successful; false means cannot abort
 	 *         either because the job is already done, already aborted, or
 	 *         another error.
 	 * 
 	 */
-	public int abortJob(long jobID);
+	public boolean abortJob(long jobID);
 
 	/**
 	 * This method attempts to suspend a job. Suspended jobs are recoverable
@@ -70,12 +70,12 @@ public interface BatchMatching {
 	 * @param jobID
 	 *            - This is the unique job id created by the Choicemaker Batch
 	 *            system.
-	 * @return 0 means attempt to abort was successful. -1 means cannot abort
-	 *         either because the job is already done, already aborted, or
+	 * @return true means attempt to suspend was successful; false means cannot suspend
+	 *         either because the job is already done, already suspended, or
 	 *         another error.
 	 * 
 	 */
-	public int suspendJob(long jobID);
+	public boolean suspendJob(long jobID);
 
 	/**
 	 * This method queries the status of a given job.
@@ -151,9 +151,9 @@ public interface BatchMatching {
 	 * 
 	 * @param jobID
 	 *            - job id of the job you want to resume
-	 * @return int = 1 if OK, or -1 if failed
+	 * @return true if OK, or false if failed
 	 */
-	public int resumeJob(long jobID);
+	public boolean resumeJob(long jobID);
 
 	public long startDeduplicationAndAnalysis(String externalID,
 			TransitivityParameters tp, OabaSettings oabaSettings,
@@ -164,5 +164,7 @@ public interface BatchMatching {
 			TransitivityParameters tp, OabaSettings oabaSettings,
 			ServerConfiguration serverConfiguration)
 			throws ServerConfigurationException;
+
+	boolean cleanJob(long jobID);
 
 }

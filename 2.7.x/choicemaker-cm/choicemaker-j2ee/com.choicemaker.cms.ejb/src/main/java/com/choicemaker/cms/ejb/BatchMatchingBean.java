@@ -19,8 +19,10 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 import javax.ejb.EJB;
+import javax.ejb.Local;
 import javax.ejb.Lock;
 import javax.ejb.LockType;
+import javax.ejb.Remote;
 import javax.ejb.Singleton;
 import javax.naming.NamingException;
 
@@ -43,22 +45,24 @@ import com.choicemaker.cm.transitivity.api.TransitivityJobController;
 import com.choicemaker.cm.transitivity.api.TransitivityParametersController;
 import com.choicemaker.cm.transitivity.api.TransitivityService;
 import com.choicemaker.cm.transitivity.ejb.TransitivityNotification;
-import com.choicemaker.cms.api.BatchMatchAnalyzer;
+import com.choicemaker.cms.api.BatchMatching;
 import com.choicemaker.cms.api.UrmJobController;
 import com.choicemaker.cms.api.WorkFlowManager;
+import com.choicemaker.cms.api.remote.BatchMatchingRemote;
 
 @Singleton
+@Local(BatchMatching.class)
+@Remote(BatchMatchingRemote.class)
 @SuppressWarnings("rawtypes")
-public class BatchMatchAnalyzerBean implements BatchMatchAnalyzer,
-		WorkFlowManager {
+public class BatchMatchingBean implements BatchMatching, WorkFlowManager {
 
 	// private static final long serialVersionUID = 271L;
 
-	private static final String SOURCE_CLASS = BatchMatchAnalyzerBean.class
-			.getSimpleName();
+	private static final String SOURCE_CLASS =
+		BatchMatchingBean.class.getSimpleName();
 
-	private static final Logger logger = Logger
-			.getLogger(BatchMatchAnalyzerBean.class.getName());
+	private static final Logger logger =
+		Logger.getLogger(BatchMatchingBean.class.getName());
 
 	// Instance data is OK because EJB is a singleton
 	private Set<Long> transtivityAnalysisPending = new HashSet<>();
@@ -137,7 +141,8 @@ public class BatchMatchAnalyzerBean implements BatchMatchAnalyzer,
 			logger.info("Non-persistent OabaSettings have been saved: "
 					+ oabaSettings.getId());
 		}
-		if (serverConfiguration != null && !serverConfiguration.isPersistent()) {
+		if (serverConfiguration != null
+				&& !serverConfiguration.isPersistent()) {
 			serverConfiguration = serverManager.save(serverConfiguration);
 			logger.info("Non-persistent ServerConfiguration has been saved: "
 					+ serverConfiguration.getId());
@@ -147,9 +152,8 @@ public class BatchMatchAnalyzerBean implements BatchMatchAnalyzer,
 		urmJob.markAsQueued();
 		urmJob.markAsStarted();
 
-		long oabaId =
-			oabaService.startDeduplication(externalID, tp, oabaSettings,
-					serverConfiguration, urmJob);
+		long oabaId = oabaService.startDeduplication(externalID, tp,
+				oabaSettings, serverConfiguration, urmJob);
 		logger.info("Started OABA (job id: " + oabaId + ")");
 		this.setTransitivityAnalysisPending(oabaId, true);
 
@@ -170,8 +174,8 @@ public class BatchMatchAnalyzerBean implements BatchMatchAnalyzer,
 		BatchJob urmJob = urmJobController.createPersistentUrmJob(externalID);
 		final long retVal = urmJob.getId();
 		assert urmJob.isPersistent();
-		logger.info("Offline batch linkage and analysis (job id: " + retVal
-				+ ")");
+		logger.info(
+				"Offline batch linkage and analysis (job id: " + retVal + ")");
 		if (tp != null && !tp.isPersistent()) {
 			tp = paramsController.save(tp);
 			logger.info("Non-persistent OabaParameters have been saved: "
@@ -182,7 +186,8 @@ public class BatchMatchAnalyzerBean implements BatchMatchAnalyzer,
 			logger.info("Non-persistent OabaSettings have been saved: "
 					+ oabaSettings.getId());
 		}
-		if (serverConfiguration != null && !serverConfiguration.isPersistent()) {
+		if (serverConfiguration != null
+				&& !serverConfiguration.isPersistent()) {
 			serverConfiguration = serverManager.save(serverConfiguration);
 			logger.info("Non-persistent ServerConfiguration has been saved: "
 					+ serverConfiguration.getId());
@@ -192,9 +197,8 @@ public class BatchMatchAnalyzerBean implements BatchMatchAnalyzer,
 		urmJob.markAsQueued();
 		urmJob.markAsStarted();
 
-		long oabaId =
-			oabaService.startLinkage(externalID, tp, oabaSettings,
-					serverConfiguration, urmJob);
+		long oabaId = oabaService.startLinkage(externalID, tp, oabaSettings,
+				serverConfiguration, urmJob);
 		logger.info("Started OABA (job id: " + oabaId + ")");
 		this.setTransitivityAnalysisPending(oabaId, true);
 
@@ -318,9 +322,8 @@ public class BatchMatchAnalyzerBean implements BatchMatchAnalyzer,
 			throw new IllegalStateException(msg);
 		}
 
-		long transId =
-			startTransitivity(externalId, params, oabaJob, oabaSettings,
-					serverConfig, urmJob);
+		long transId = startTransitivity(externalId, params, oabaJob,
+				oabaSettings, serverConfig, urmJob);
 		this.setTransitivityAnalysisPending(transId, true);
 	}
 
@@ -329,8 +332,8 @@ public class BatchMatchAnalyzerBean implements BatchMatchAnalyzer,
 			TransitivityParameters batchParams, BatchJob batchJob,
 			OabaSettings settings, ServerConfiguration serverConfiguration,
 			BatchJob urmJob) throws ServerConfigurationException {
-		return transService.startTransitivity(externalID, batchParams,
-				batchJob, settings, serverConfiguration, urmJob);
+		return transService.startTransitivity(externalID, batchParams, batchJob,
+				settings, serverConfiguration, urmJob);
 	}
 
 	@Override
@@ -339,8 +342,8 @@ public class BatchMatchAnalyzerBean implements BatchMatchAnalyzer,
 			OabaSettings settings, ServerConfiguration serverConfiguration,
 			BatchJob urmJob, RecordMatchingMode mode)
 			throws ServerConfigurationException {
-		return transService.startTransitivity(externalID, batchParams,
-				batchJob, settings, serverConfiguration, urmJob, mode);
+		return transService.startTransitivity(externalID, batchParams, batchJob,
+				settings, serverConfiguration, urmJob, mode);
 	}
 
 	@Override
@@ -386,12 +389,12 @@ public class BatchMatchAnalyzerBean implements BatchMatchAnalyzer,
 	// -- General services
 
 	@Override
-	public int abortJob(long jobID) {
+	public boolean abortJob(long jobID) {
 		throw new Error("not yet implemented");
 	}
 
 	@Override
-	public int suspendJob(long jobID) {
+	public boolean suspendJob(long jobID) {
 		throw new Error("not yet implemented");
 	}
 
@@ -401,7 +404,12 @@ public class BatchMatchAnalyzerBean implements BatchMatchAnalyzer,
 	}
 
 	@Override
-	public int resumeJob(long jobID) {
+	public boolean resumeJob(long jobID) {
+		throw new Error("not yet implemented");
+	}
+
+	@Override
+	public boolean cleanJob(long jobID) {
 		throw new Error("not yet implemented");
 	}
 

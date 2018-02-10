@@ -22,7 +22,7 @@ import com.choicemaker.cm.urm.exceptions.ConfigException;
  * 
  * @author emoussikaev
  */
-public interface BatchBase {
+interface BatchBase {
 
 	/**
 	 * Aborts the job with the given job ID.

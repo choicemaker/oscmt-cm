@@ -7,6 +7,10 @@
  *******************************************************************************/
 package com.choicemaker.cm.urm.ejb;
 
+import static com.choicemaker.cm.urm.ejb.BatchResultProcessorBean.BATCH_MATCH_STEP_INDEX;
+import static com.choicemaker.cm.urm.ejb.BatchResultProcessorBean.TRANS_OABA_STEP_INDEX;
+import static com.choicemaker.cm.urm.ejb.BatchResultProcessorBean.TRANS_SERIAL_STEP_INDEX;
+
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.Collection;
@@ -60,7 +64,7 @@ public class Single implements Serializable {
 
 	/* As of 2010-03-10 */
 	static final long serialVersionUID = 3897669963105467617L;
-
+	
 	// -- Enterprise Naming Context
 
 	// ENC Session Bean names
@@ -423,7 +427,7 @@ public class Single implements Serializable {
 			}
 			try {
 				switch (si) {
-					case BatchMatchAnalyzerBean.BATCH_MATCH_STEP_INDEX :
+					case BATCH_MATCH_STEP_INDEX :
 						{
 							// FIXME TODO not yet re-implemented
 							throw new Error("not yet implemented");
@@ -433,7 +437,7 @@ public class Single implements Serializable {
 //							}
 						}
 //						break;
-					case BatchMatchAnalyzerBean.TRANS_OABA_STEP_INDEX :
+					case TRANS_OABA_STEP_INDEX :
 						{
 							// FIXME TODO not yet re-implemented
 							throw new Error("not yet implemented");
@@ -444,7 +448,7 @@ public class Single implements Serializable {
 //							}
 						}
 //						break;
-					case BatchMatchAnalyzerBean.TRANS_SERIAL_STEP_INDEX :
+					case TRANS_SERIAL_STEP_INDEX :
 						{
 					CmsJobBean cj =
 						(CmsJobBean) em.find(CmsJobBean.class,

@@ -42,7 +42,12 @@ import com.choicemaker.cm.urm.exceptions.RecordCollectionException;
 public class BatchResultProcessorBean implements SessionBean {
 
 	private static final long serialVersionUID = 1L;
-
+	
+	// Stubs
+	static final int BATCH_MATCH_STEP_INDEX = 0;
+	static final int TRANS_OABA_STEP_INDEX = 1;
+	static final int TRANS_SERIAL_STEP_INDEX = 2;
+	
 	protected static Logger log = Logger.getLogger(BatchResultProcessorBean.class.getName());
 	
 	public final static String JMS_MRPS_PROCESSOR_QUEUE = "java:comp/env/jms/mrpsProcessorQueue";
@@ -125,7 +130,7 @@ public class BatchResultProcessorBean implements SessionBean {
 		batchJobId = bj.getId();
 		
 		if(batchJobId == -1){		
-			UrmStepJob batchStep = Single.getInst().findStepJobByUrmAndIndex(jobId,BatchMatchAnalyzerBean.BATCH_MATCH_STEP_INDEX);					
+			UrmStepJob batchStep = Single.getInst().findStepJobByUrmAndIndex(jobId,BATCH_MATCH_STEP_INDEX);					
 			batchJobId  = batchStep.getStepJobId().longValue();		
 			log.fine("batch job jd = "+batchJobId);		
 			bj  = Single.getInst().findBatchJobById(em, OabaJobEntity.class, batchJobId);
