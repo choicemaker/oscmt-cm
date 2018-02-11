@@ -21,7 +21,7 @@ import com.choicemaker.cm.urm.exceptions.ModelException;
  * @author emoussikaev
  * @see
  */
-public interface TransSerializer extends EJBObject {
+public interface TransSerializer {
 
 	/**
 	 * Works the same way as <code>startMatchAndAnalysis</code> n exception. The

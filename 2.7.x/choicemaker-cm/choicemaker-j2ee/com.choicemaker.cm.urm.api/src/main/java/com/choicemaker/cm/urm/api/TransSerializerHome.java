@@ -17,7 +17,7 @@ import javax.ejb.EJBHome;
 /**
  * @author emoussikaev
  */
-public interface TransSerializerHome extends EJBHome {
+public interface TransSerializerHome {
   String DEFAULT_EJB_REF_NAME = "ejb/TransSerializer";
   String DEFAULT_JNDI_COMP_NAME = "java:comp/env/" + DEFAULT_EJB_REF_NAME ;
 	TransSerializer create() throws CreateException, RemoteException;

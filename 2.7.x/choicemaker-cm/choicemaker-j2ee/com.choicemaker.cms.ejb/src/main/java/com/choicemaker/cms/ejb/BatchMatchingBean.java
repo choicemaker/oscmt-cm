@@ -51,7 +51,8 @@ import com.choicemaker.cms.api.WorkFlowManager;
 import com.choicemaker.cms.api.remote.BatchMatchingRemote;
 
 @Singleton
-@Local(BatchMatching.class)
+@Local({
+		BatchMatching.class, WorkFlowManager.class })
 @Remote(BatchMatchingRemote.class)
 @SuppressWarnings("rawtypes")
 public class BatchMatchingBean implements BatchMatching, WorkFlowManager {
@@ -381,7 +382,7 @@ public class BatchMatchingBean implements BatchMatching, WorkFlowManager {
 	}
 
 	@Override
-	public IMatchRecord2Source getMatchRecordSource(long jobID)
+	public IMatchRecord2Source<?> getMatchRecordSource(long jobID)
 			throws RemoteException, NamingException {
 		return oabaService.getMatchRecordSource(jobID);
 	}

@@ -11,7 +11,7 @@ import java.rmi.RemoteException;
 
 import javax.ejb.EJBObject;
 
-public interface UrmStepJob extends EJBObject {
+public interface UrmStepJob {
 
 	// CMP fields
 	void setId(Long id) throws RemoteException;

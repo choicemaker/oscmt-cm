@@ -9,7 +9,7 @@ package com.choicemaker.cm.urm.ejb;
 
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_OABA_CACHED_RESULTS_FILE;
 
-import java.io.IOException;
+import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.Collection;
 import java.util.Iterator;
@@ -46,15 +46,14 @@ import com.choicemaker.cm.urm.exceptions.RecordCollectionException;
  * @see
  */
 @SuppressWarnings({"rawtypes"})
-public class BatchRecordMatcherBean extends BatchMatchBaseBean {
+public class BatchRecordMatcherBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	static {
-		log = Logger.getLogger(BatchRecordMatcherBean.class.getName());
-	}
-	
-//	@PersistenceContext (unitName = "oaba")
+	private static final Logger log =
+		Logger.getLogger(BatchRecordMatcherBean.class.getName());
+
+	//	@PersistenceContext (unitName = "oaba")
 	private EntityManager em;
 
 //	@EJB
@@ -169,14 +168,25 @@ public class BatchRecordMatcherBean extends BatchMatchBaseBean {
 							"unknown record collection class");
 			}
 
-		} catch (NamingException | IOException e) {
+		} catch (NamingException e) {
 			log.severe(e.toString());
 			throw new ConfigException(e.toString());
 		}
 	}
 	
+	private void copyResultFromFile(String dirName, String fileName, String ext,
+			TextRefRecordCollection resRc) {
+		// FIXME
+		throw new Error("not implemented");
+	}
+
 	public boolean abortJob(long jobId) {
 		return abortBatchJob(jobId);
+	}
+
+	private boolean abortBatchJob(long jobId) {
+		// FIXME
+		throw new Error("not implemented");
 	}
 
 	public boolean suspendJob(long jobId) {

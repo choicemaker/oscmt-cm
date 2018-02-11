@@ -471,13 +471,13 @@ public class Single implements Serializable {
 		try {
 			while (it.hasNext()) {
 				usj = (UrmStepJob) it.next();
-				usj.remove();
+				// FIXME usj.remove();
 			}
 		} catch (Exception e) {
 			log.severe(e.toString());
 		}
 		try {
-			uj.remove();
+			// FIXME uj.remove();
 		} catch (Exception e) {
 			log.severe(e.toString());
 		}

@@ -10,14 +10,12 @@ package com.choicemaker.cm.urm.api;
 import java.rmi.RemoteException;
 import java.util.Date;
 
-import javax.ejb.EJBObject;
-
 import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.urm.base.JobStatus;
 import com.choicemaker.cm.urm.exceptions.CmRuntimeException;
 import com.choicemaker.cm.urm.exceptions.ConfigException;
 
-public interface UrmJob extends EJBObject {//CmsJob {
+public interface UrmJob {//CmsJob {
 
 	static String URMSTEP_MATCHING = "MATCHING STEP";
 	static String URMSTEP_TRANSOABA = "MATCH ANALYSIS STEP";

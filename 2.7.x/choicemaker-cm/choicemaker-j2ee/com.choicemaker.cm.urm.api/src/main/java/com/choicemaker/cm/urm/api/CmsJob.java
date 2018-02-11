@@ -15,7 +15,7 @@ import javax.ejb.EJBObject;
 /**
  * Represents a ChoiceMaker serialization job?
  */
-public interface CmsJob extends EJBObject {
+public interface CmsJob {
 
 	// CMP fields
 	/** For CMP only */
