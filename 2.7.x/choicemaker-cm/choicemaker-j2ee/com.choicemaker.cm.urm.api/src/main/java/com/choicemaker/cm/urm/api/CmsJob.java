@@ -21,12 +21,15 @@ public interface CmsJob {
 	/** For CMP only */
 	void setId(Long id) throws RemoteException;
 	Long getId() throws RemoteException;
+
 	/** For CMP only */
 	void setTransactionId(Long transactionId) throws RemoteException;
 	Long getTransactionId() throws RemoteException;	
+
 	/** For CMP only */
 	void setExternalId(String externalId) throws RemoteException;
 	String getExternalId() throws RemoteException;
+
 	/** For CMP only; */
 	void setStatus(String status) throws RemoteException;
 	String getStatus() throws RemoteException;
