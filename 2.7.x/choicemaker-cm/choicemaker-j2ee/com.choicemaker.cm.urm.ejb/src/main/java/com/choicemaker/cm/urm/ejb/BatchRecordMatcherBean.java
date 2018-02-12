@@ -7,284 +7,260 @@
  *******************************************************************************/
 package com.choicemaker.cm.urm.ejb;
 
-import static com.choicemaker.cm.args.OperationalPropertyNames.PN_OABA_CACHED_RESULTS_FILE;
-
-import java.io.Serializable;
+import java.net.URISyntaxException;
 import java.rmi.RemoteException;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.logging.Logger;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
+import javax.ejb.EJB;
+import javax.ejb.Remote;
 import javax.naming.NamingException;
-import javax.persistence.EntityManager;
-import javax.sql.DataSource;
 
-import com.choicemaker.cm.batch.api.BatchJob;
-import com.choicemaker.cm.batch.api.BatchJobStatus;
-import com.choicemaker.cm.batch.api.OperationalPropertyController;
-import com.choicemaker.cm.oaba.api.OabaService;
-import com.choicemaker.cm.oaba.core.IMatchRecord2Source;
-import com.choicemaker.cm.oaba.impl.MatchRecord2CompositeSource;
+import com.choicemaker.cm.args.OabaLinkageType;
+import com.choicemaker.cm.args.OabaParameters;
+import com.choicemaker.cm.args.OabaSettings;
+import com.choicemaker.cm.args.ServerConfiguration;
+import com.choicemaker.cm.core.DatabaseException;
+import com.choicemaker.cm.oaba.api.ServerConfigurationException;
+import com.choicemaker.cm.urm.BatchRecordMatcher;
+import com.choicemaker.cm.urm.api.UrmConfigurationAdapter;
 import com.choicemaker.cm.urm.base.DbRecordCollection;
 import com.choicemaker.cm.urm.base.IRecordCollection;
 import com.choicemaker.cm.urm.base.JobStatus;
 import com.choicemaker.cm.urm.base.RefRecordCollection;
-import com.choicemaker.cm.urm.base.TextRefRecordCollection;
+import com.choicemaker.cm.urm.base.SubsetDbRecordCollection;
 import com.choicemaker.cm.urm.exceptions.ArgumentException;
 import com.choicemaker.cm.urm.exceptions.CmRuntimeException;
 import com.choicemaker.cm.urm.exceptions.ConfigException;
 import com.choicemaker.cm.urm.exceptions.ModelException;
 import com.choicemaker.cm.urm.exceptions.RecordCollectionException;
+import com.choicemaker.cms.api.BatchMatching;
+import com.choicemaker.cms.api.NamedConfiguration;
+import com.choicemaker.cms.api.NamedConfigurationController;
+import com.choicemaker.cms.ejb.NamedConfigConversion;
+import com.choicemaker.cms.ejb.NamedConfigurationEntity;
+import com.choicemaker.util.Precondition;
+import com.choicemaker.util.StringUtils;
 
+@Remote
+public class BatchRecordMatcherBean implements BatchRecordMatcher {
 
-/**
- * BatchRecordMatcherBean is an implementation of BatchRecordMatcher interface
- * 
- * @author emoussikaev
- * @see
- */
-@SuppressWarnings({"rawtypes"})
-public class BatchRecordMatcherBean implements Serializable {
+	private static final String VERSION = "2.7.1";
+	private static final long serialVersionUID = 271L;
 
-	private static final long serialVersionUID = 1L;
-
-	private static final Logger log =
+	private static final Logger logger =
 		Logger.getLogger(BatchRecordMatcherBean.class.getName());
 
-	//	@PersistenceContext (unitName = "oaba")
-	private EntityManager em;
+	@EJB(lookup = "java:app/BatchMatchingBean/com.choicemaker.cms.api.BatchMatching")
+	private BatchMatching delegate;
 
-//	@EJB
-	private OabaService batchQuery;
+	@EJB(lookup = "java:app/NamedConfigurationControllerBean/com.choicemaker.cms.api.NamedConfigurationController")
+	private UrmConfigurationAdapter adapter;
 
-//	@EJB
-	private OperationalPropertyController propController;
+	@EJB(lookup = "java:app/UrmConfigurationSingleton")
+	private NamedConfigurationController ncController;
 
-	public BatchRecordMatcherBean() {
-		super();
-	}
-
-	public long 	startMatching(
-									IRecordCollection qRs, 
-									RefRecordCollection mRs,
-									String modelName, 
-									float differThreshold, 
-									float matchThreshold,
-									int	  maxSingle,
-									String externalId) 
-								throws
-										ModelException, 	
-										RecordCollectionException,
-										ConfigException,
-										ArgumentException,
-										CmRuntimeException, 
-										RemoteException
-	{
-		log.fine("<< startMatching...");
-//		TODO: check input parameters
+	@Override
+	public boolean abortJob(long jobId) {
 		throw new Error("not yet implemented");
-//		long id = startBatchQueryService(
-//					qRs,
-//					mRs,
-//					modelName,
-//					differThreshold,
-//					matchThreshold,
-//					maxSingle,
-//					externalId,
-//					null);	
-//		log.fine (">> startMatching");
-//		return id;
 	}
-	
+
+	@Override
+	public boolean cleanJob(long jobID) throws CmRuntimeException {
+		throw new Error("not yet implemented");
+	}
+
+	@Override
+	public long[] getJobList() throws ArgumentException, ConfigException,
+			CmRuntimeException, RemoteException {
+		throw new Error("not yet implemented");
+	}
+
+	@Override
 	public JobStatus getJobStatus(long jobID) throws ArgumentException,
 			ConfigException, CmRuntimeException, RemoteException {
-
-		BatchJob batchJob = batchQuery.getOabaJob(jobID);
-		JobStatus js =
-			new JobStatus(batchJob.getId(), batchJob.getStatus().name(),
-					batchJob.getTimeStamp(batchJob.getStatus()));
-		js.setAbortRequestDate(null);
-		js.setErrorDescription("");// TODO
-		js.setStepId(-1);// TODO
-		js.setFractionComplete(10);// TODO
-		js.setStepDescription("");
-		js.setStepStartDate(null);// TODO
-		js.setTrackingId("");
-
-		return js;
+		throw new Error("not yet implemented");
 	}
 
-	public void copyResult(long jobID, RefRecordCollection resRc)
-			throws ModelException, RecordCollectionException, ConfigException,
-			ArgumentException, CmRuntimeException, RemoteException {
-		try {
-			BatchJob job = batchQuery.getOabaJob(jobID);
-			if (!job.getStatus().equals(BatchJobStatus.COMPLETED)) {
-				throw new ArgumentException("The job has not completed.");
-			} else {
-				final String cachedResultsFileName =
-					propController.getJobProperty(job,
-							PN_OABA_CACHED_RESULTS_FILE);
-				log.info("Cached OABA results file: " + cachedResultsFileName);
-
-				int extBegin = cachedResultsFileName.lastIndexOf(".");
-				String fileName = cachedResultsFileName.substring(0, extBegin);
-				String ext = cachedResultsFileName.substring(extBegin + 1);
-
-				if (resRc instanceof DbRecordCollection) {
-					String urlString = resRc.getUrl();
-					DbRecordCollection dbRc = (DbRecordCollection) resRc;
-					Context ctx = new InitialContext();
-					DataSource ds = (DataSource) ctx.lookup(urlString);
-
-					IMatchRecord2Source mr2s =
-						new MatchRecord2CompositeSource(fileName, ext);
-
-					MatchDBWriter dbw =
-						new MatchDBWriter(mr2s, ds, dbRc.getName(), jobID);
-					dbw.writeToDB();
-				} else if (resRc instanceof TextRefRecordCollection) {
-
-					// FIXME HACK use System file separator instead
-					String dirName;
-					int slashInd = fileName.lastIndexOf("\\");
-					if (slashInd == -1)
-						slashInd = fileName.lastIndexOf("/");
-					if (slashInd == -1) {
-						dirName = ".";
-					} else {
-						dirName = fileName.substring(0, slashInd + 1);
-						fileName = fileName.substring(slashInd + 1);
-					}
-					log.fine("(" + dirName + ")(" + fileName + ")(" + ext + ")");
-					// END FIXME HACK
-
-					copyResultFromFile(dirName, fileName, ext,
-							(TextRefRecordCollection) resRc);
-				} else
-					throw new RecordCollectionException(
-							"unknown record collection class");
-			}
-
-		} catch (NamingException e) {
-			log.severe(e.toString());
-			throw new ConfigException(e.toString());
-		}
-	}
-	
-	private void copyResultFromFile(String dirName, String fileName, String ext,
-			TextRefRecordCollection resRc) {
-		// FIXME
-		throw new Error("not implemented");
+	@Override
+	public Iterator<?> getResultIter(long jobId)
+			throws RecordCollectionException, ArgumentException,
+			CmRuntimeException, RemoteException {
+		throw new Error("never implemented");
 	}
 
-	public boolean abortJob(long jobId) {
-		return abortBatchJob(jobId);
+	@Override
+	public Iterator<?> getResultIter(RefRecordCollection rc)
+			throws RecordCollectionException, ArgumentException,
+			CmRuntimeException, RemoteException {
+		throw new Error("never implemented");
 	}
 
-	private boolean abortBatchJob(long jobId) {
-		// FIXME
-		throw new Error("not implemented");
+	@Override
+	public String getVersion(Object context) throws RemoteException {
+		return VERSION;
 	}
 
-	public boolean suspendJob(long jobId) {
-		return batchQuery.suspendJob(jobId) == 0;
-	}
-
+	@Override
 	public boolean resumeJob(long jobId) throws ArgumentException,
 			ConfigException, CmRuntimeException, RemoteException {
-		// try {
-		// TODO talk with Put regarding modelname parameter
-		return (batchQuery.resumeJob(jobId) == 1);
-		// } catch (NamingException e) {
-		// log.severe(e.toString());
-		// throw new ConfigException(e.toString());
-		// } catch (CreateException e) {
-		// log.severe(e.toString());
-		// throw new ConfigException(e.toString());
-		// } catch (JMSException e) {
-		// log.severe(e.toString());
-		// throw new ConfigException(e.toString());
-		// } catch (FinderException e) {
-		// log.severe(e.toString());
-		// throw new CmRuntimeException(e.toString());
-		// }
+		throw new Error("not yet implemented");
 	}
 
-	public long[] 		getJobList()
-						throws	ArgumentException,
-								ConfigException,
-								CmRuntimeException, 
-								RemoteException
+	@Override
+	public long startMatching(IRecordCollection qRc, RefRecordCollection mRc,
+			String modelName, float differThreshold, float matchThreshold,
+			int maxSingle, String trackingId)
+			throws ModelException, RecordCollectionException, ConfigException,
+			ArgumentException, CmRuntimeException, RemoteException {
 
-	{
-		long[] res;
-		log.fine("<<getJobList");
-		Collection jobColl = Single.getInst().getBatchJobList(em);
-		res = new long[jobColl.size()];
-		Iterator jobIter = jobColl.iterator();
-		int ind = 0;
-		BatchJob oabaJob;
-		while (jobIter.hasNext()) {
-			oabaJob = (BatchJob) jobIter.next();
-			res[ind++] = oabaJob.getId(); 
-		}
-		log.fine(">>getJobList");
-		return res;
-	}
+		Precondition.assertNonNullArgument("null queries", qRc);
+		// Precondition.assertNonNullArgument("null references", mRc);
+		Precondition.assertNonEmptyString("null or empty model", modelName);
+		Precondition.assertBoolean("invalid differ threshold",
+				differThreshold >= 0f && differThreshold <= 1f);
+		Precondition.assertBoolean("invalid match threshold",
+				matchThreshold >= 0f && matchThreshold <= 1f);
+		Precondition.assertBoolean("invalid thresholds (differ > match)",
+				differThreshold <= matchThreshold);
 
-	/**
-	 * Cleans serialized data and database entries related to the process with
-	 * the give job ID (including the file with matching results)
-	 * 
-	 * @param jobID
-	 *            Job ID.
-	 * @return true if the serialized data was removed successfully (the job
-	 * itself is removed regardless)
-	 * @throws RemoteException
-	 */
-	public boolean cleanJob(long jobID) throws CmRuntimeException {
+		NamedConfiguration cmConf = customizeNamedConfiguration(qRc, mRc,
+				modelName, differThreshold, matchThreshold, maxSingle);
+		OabaLinkageType task = computeMatchingTask(qRc, mRc, cmConf);
+		boolean isLinkage = OabaLinkageType.isLinkage(task);
+
+		long retVal = Integer.MIN_VALUE;
+		OabaParameters batchParams = null;
+		OabaSettings oabaSettings = null;
+		ServerConfiguration serverConfig = null;
 		try {
-			// FIXME
-			// boolean ret = batchQuery.removeDir(jobID);
-			// BatchJob bj = Single.getInst().findBatchJobById(em,
-			// OabaJobEntity.class, jobID);
-			// Single.getInst().deleteBatchJob(em, bj);
-			// return ret;
-			return false;
-		} catch (Exception e) {
-			log.severe(e.toString());
-			throw new CmRuntimeException(e.toString());
+			batchParams =
+				NamedConfigConversion.createOabaParameters(cmConf, isLinkage);
+			assert batchParams != null;
+
+			oabaSettings = NamedConfigConversion.createOabaSettings(cmConf);
+			assert oabaSettings != null;
+
+			serverConfig =
+				NamedConfigConversion.createServerConfiguration(cmConf);
+			assert serverConfig != null;
+
+			if (isLinkage) {
+				retVal = delegate.startLinkage(trackingId, batchParams,
+						oabaSettings, serverConfig, null);
+			} else {
+				retVal = delegate.startDeduplication(trackingId, batchParams,
+						oabaSettings, serverConfig, null);
+			}
+		} catch (NamingException | ServerConfigurationException
+				| URISyntaxException e) {
+			String msg = e.toString();
+			logger.severe(msg);
+			throw new ConfigException(msg);
 		}
+		assert retVal != Integer.MIN_VALUE;
+
+		return retVal;
 	}
 
-	public Iterator	getResultIter(RefRecordCollection rc)
-					throws
-						RecordCollectionException,
-						ArgumentException,
-						CmRuntimeException, 
-						RemoteException{
-							
-		return null; //TODO:implement					
+	protected OabaLinkageType computeMatchingTask(IRecordCollection qRc,
+			RefRecordCollection mRc, NamedConfiguration cmConf) {
+
+		assert qRc != null;
+		assert cmConf != null;
+
+		OabaLinkageType retVal;
+		if (mRc == null || !StringUtils.nonEmptyString(mRc.getUrl())) {
+			retVal = OabaLinkageType.STAGING_DEDUPLICATION;
+		} else {
+			retVal = OabaLinkageType.valueOf(cmConf.getTask());
+		}
+
+		return retVal;
 	}
-	
-	public Iterator	getResultIter(long jobId)
-					throws
-						RecordCollectionException,
-						ArgumentException,
-						CmRuntimeException, 
-						RemoteException {
-		return null;//TODO:implement					
+
+	protected NamedConfiguration customizeNamedConfiguration(
+			IRecordCollection qRc, RefRecordCollection mRc, String modelName,
+			float differThreshold, float matchThreshold, int maxSingle)
+			throws ConfigException {
+
+		assert qRc != null;
+		assert StringUtils.nonEmptyString(modelName);
+		assert differThreshold >= 0f && differThreshold <= 1f;
+		assert matchThreshold >= 0f && matchThreshold <= 1f;
+		assert differThreshold <= matchThreshold;
+
+		String ncName;
+		try {
+			ncName = adapter.getCmsConfigurationName(modelName);
+		} catch (DatabaseException e) {
+			String msg = e.toString();
+			logger.severe(msg);
+			throw new ConfigException(msg);
+		}
+		logger.fine("namedConfiguration: " + ncName);
+		if (StringUtils.nonEmptyString(ncName)) {
+			String msg = "Missing named configuration for model configuration '"
+					+ modelName + "'";
+			logger.severe(msg);
+			throw new ConfigException(msg);
+		}
+
+		NamedConfiguration nc =
+			ncController.findNamedConfigurationByName(ncName);
+		if (nc == null) {
+			String msg = "Missing named configuration for '" + ncName + "'";
+			logger.severe(msg);
+			throw new ConfigException(msg);
+		}
+		NamedConfigurationEntity retVal = new NamedConfigurationEntity(nc);
+		retVal.setLowThreshold(differThreshold);
+		retVal.setHighThreshold(matchThreshold);
+		retVal.setOabaMaxSingle(maxSingle);
+
+		String jndiQuerySource = null;
+		if (qRc instanceof DbRecordCollection) {
+			jndiQuerySource = ((DbRecordCollection) qRc).getUrl();
+		}
+		String jndiReferenceSource = mRc == null ? null : mRc.getUrl();
+		// Prefer the reference data source over the query data source
+		if (StringUtils.nonEmptyString(jndiReferenceSource)) {
+			retVal.setDataSource(jndiReferenceSource);
+			String msg = "Using data source from reference record collection: "
+					+ retVal.getDataSource();
+			logger.fine(msg);
+		} else if (StringUtils.nonEmptyString(jndiQuerySource)) {
+			retVal.setDataSource(jndiQuerySource);
+			String msg = "Using data source from query record collection: "
+					+ retVal.getDataSource();
+			logger.fine(msg);
+		} else if (StringUtils.nonEmptyString(retVal.getDataSource())) {
+			String msg = "Using data source from named configuration: "
+					+ retVal.getDataSource();
+			logger.fine(msg);
+		} else {
+			String msg = "No data source configured";
+			logger.severe(msg);
+			throw new ConfigException(msg);
+		}
+
+		if (qRc instanceof SubsetDbRecordCollection) {
+			String querySelection =
+				((SubsetDbRecordCollection) qRc).getIdsQuery();
+			retVal.setQuerySelection(querySelection);
+		}
+		if (mRc instanceof SubsetDbRecordCollection) {
+			String referenceSelection =
+				((SubsetDbRecordCollection) mRc).getIdsQuery();
+			retVal.setReferenceSelection(referenceSelection);
+		}
+
+		return retVal;
 	}
-						
-	public String getVersion(Object context)
-						throws  RemoteException {
-		return Single.getInst().getVersion();					
-	}											
-						
+
+	@Override
+	public boolean suspendJob(long jobId) {
+		throw new Error("not implemented");
+	}
+
 }
-
-
-
