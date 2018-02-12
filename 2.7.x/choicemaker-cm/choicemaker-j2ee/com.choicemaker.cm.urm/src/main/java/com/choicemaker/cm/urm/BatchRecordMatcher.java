@@ -12,7 +12,6 @@ import java.util.Iterator;
 
 import com.choicemaker.cm.urm.base.IRecordCollection;
 import com.choicemaker.cm.urm.base.RefRecordCollection;
-import com.choicemaker.cm.urm.config.UrmSettings2;
 import com.choicemaker.cm.urm.exceptions.ArgumentException;
 import com.choicemaker.cm.urm.exceptions.CmRuntimeException;
 import com.choicemaker.cm.urm.exceptions.ConfigException;
@@ -110,16 +109,6 @@ public interface BatchRecordMatcher extends BatchBase {
 			RecordCollectionException, ConfigException, ArgumentException,
 			CmRuntimeException, RemoteException;
 
-	long startMatching(IRecordCollection qRc, RefRecordCollection mRc,
-			String confName, String trackingId) throws ModelException,
-			RecordCollectionException, ConfigException, ArgumentException,
-			CmRuntimeException, RemoteException;
-
-	long startMatching(IRecordCollection qRc, RefRecordCollection mRc,
-			String confName, UrmSettings2 overrideProps, String trackingId)
-			throws ModelException, RecordCollectionException, ConfigException,
-			ArgumentException, CmRuntimeException, RemoteException;
-
 	long[] getJobList() throws ArgumentException, ConfigException,
 			CmRuntimeException, RemoteException;
 
@@ -144,8 +133,7 @@ public interface BatchRecordMatcher extends BatchBase {
 	 * @throws RemoteException
 	 */
 	// FIXME remove this method
-	@SuppressWarnings("rawtypes")
-	public Iterator getResultIter(RefRecordCollection rc)
+	public Iterator<?> getResultIter(RefRecordCollection rc)
 			throws RecordCollectionException, ArgumentException,
 			CmRuntimeException, RemoteException;
 
@@ -169,8 +157,7 @@ public interface BatchRecordMatcher extends BatchBase {
 	 * @throws RemoteException
 	 */
 	// FIXME remove this method
-	@SuppressWarnings("rawtypes")
-	public Iterator getResultIter(long jobId) throws RecordCollectionException,
+	public Iterator<?> getResultIter(long jobId) throws RecordCollectionException,
 			ArgumentException, CmRuntimeException, RemoteException;
 
 	/**
