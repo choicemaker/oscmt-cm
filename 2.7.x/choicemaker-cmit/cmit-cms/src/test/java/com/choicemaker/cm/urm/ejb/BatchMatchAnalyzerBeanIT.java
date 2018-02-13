@@ -1,4 +1,4 @@
-package com.choicemaker.cms.ejb;
+package com.choicemaker.cm.urm.ejb;
 
 import static com.choicemaker.cm.args.BatchProcessing.EVT_DONE;
 import static com.choicemaker.cm.args.BatchProcessing.PCT_DONE;
@@ -37,8 +37,9 @@ import com.choicemaker.cmit.utils.j2ee.EntityManagerUtils;
 import com.choicemaker.cmit.utils.j2ee.OabaTestUtils;
 import com.choicemaker.cmit.utils.j2ee.TransitivityTestParameters;
 import com.choicemaker.cmit.utils.j2ee.WellKnownTestConfiguration;
-import com.choicemaker.cms.api.BatchMatchAnalyzer;
+import com.choicemaker.cm.urm.BatchMatchAnalyzer;
 import com.choicemaker.cms.api.UrmJobController;
+import com.choicemaker.cms.ejb.UrmDeploymentUtils;
 
 @RunWith(Arquillian.class)
 public class BatchMatchAnalyzerBeanIT extends
@@ -215,10 +216,14 @@ public class BatchMatchAnalyzerBeanIT extends
 		final String LOG_SOURCE = ttp.getSourceName();
 		logger.entering(LOG_SOURCE, tag);
 
+		@SuppressWarnings("unused")
 		final String extId = EntityManagerUtils.createExternalId(tag);
+		@SuppressWarnings("unused")
 		final TransitivityParameters tp =
 			createTransitivityParameters(ttp, task);
+		@SuppressWarnings("unused")
 		final OabaSettings updatedSettings = createOabaSettings(ttp, task);
+		@SuppressWarnings("unused")
 		final ServerConfiguration serverConfiguration =
 			createServerConfiguration(ttp);
 
@@ -226,18 +231,22 @@ public class BatchMatchAnalyzerBeanIT extends
 		switch (task) {
 
 		case STAGING_DEDUPLICATION:
-		case TA_STAGING_DEDUPLICATION:
-			urmId =
-				bma.startDeduplicationAndAnalysis(extId, tp, updatedSettings,
-						serverConfiguration);
+		case TA_STAGING_DEDUPLICATION: {
+			fail("not implemented for URM");
+			urmId = 0; // FIXME
+//				bma.startDeduplicationAndAnalysis(extId, tp, updatedSettings,
+//						serverConfiguration);
 			break;
+		}
 
 		case STAGING_TO_MASTER_LINKAGE:
-		case TA_STAGING_TO_MASTER_LINKAGE:
-			urmId =
-				bma.startLinkageAndAnalysis(extId, tp, updatedSettings,
-						serverConfiguration);
+		case TA_STAGING_TO_MASTER_LINKAGE: {
+			fail("not implemented for URM");
+			urmId = 0; // FIXME
+//				bma.startLinkageAndAnalysis(extId, tp, updatedSettings,
+//						serverConfiguration);
 			break;
+		}
 
 		case MASTER_TO_MASTER_LINKAGE:
 		case TA_MASTER_TO_MASTER_LINKAGE:

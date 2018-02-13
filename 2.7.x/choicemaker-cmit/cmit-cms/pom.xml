@@ -78,7 +78,6 @@
         <dependency>
             <groupId>com.choicemaker.cm</groupId>
             <artifactId>com.choicemaker.cm.oaba.api</artifactId>
-            <version>2.7.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.choicemaker.cm</groupId>
@@ -89,7 +88,6 @@
         <dependency>
             <groupId>com.choicemaker.cm</groupId>
             <artifactId>com.choicemaker.cm.transitivity.api</artifactId>
-            <version>2.7.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.choicemaker.cm</groupId>
@@ -99,8 +97,17 @@
         </dependency>
         <dependency>
             <groupId>com.choicemaker.cm</groupId>
-            <artifactId>com.choicemaker.cms.api</artifactId>
+            <artifactId>com.choicemaker.cm.urm.api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.choicemaker.cm</groupId>
+            <artifactId>com.choicemaker.cm.urm.ejb</artifactId>
             <version>2.7.1-SNAPSHOT</version>
+            <type>ejb</type>
+        </dependency>
+        <dependency>
+            <groupId>com.choicemaker.cm</groupId>
+            <artifactId>com.choicemaker.cms.api</artifactId>
         </dependency>
         <dependency>
             <groupId>com.choicemaker.cm</groupId>
@@ -112,32 +119,26 @@
         <dependency>
           <groupId>com.choicemaker.cm</groupId>
           <artifactId>com.choicemaker.cm.args</artifactId>
-          <version>2.7.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.choicemaker.cm</groupId>
             <artifactId>com.choicemaker.cm.core</artifactId>
-            <version>2.7.1-SNAPSHOT</version>
         </dependency>
         <dependency>
           <groupId>com.choicemaker.cm</groupId>
           <artifactId>simple-person-plugin</artifactId>
-          <version>2.7.1-SNAPSHOT</version>
         </dependency>
         <dependency>
           <groupId>com.choicemaker.cm</groupId>
           <artifactId>com.choicemaker.cm.io.db.jboss</artifactId>
-          <version>2.7.1-SNAPSHOT</version>
         </dependency>
         <dependency>
           <groupId>com.choicemaker.cm</groupId>
           <artifactId>com.choicemaker.cm.io.db.oracle</artifactId>
-          <version>2.7.1-SNAPSHOT</version>
         </dependency>
         <dependency>
           <groupId>com.choicemaker.cm</groupId>
           <artifactId>com.choicemaker.cm.io.db.sqlserver</artifactId>
-          <version>2.7.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>
@@ -170,22 +171,18 @@
     <dependency>
       <groupId>com.choicemaker.cmit</groupId>
       <artifactId>cmit-utils</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cmit</groupId>
       <artifactId>cmit-utils.j2ee</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cmit</groupId>
       <artifactId>cmit-oaba</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cmit</groupId>
       <artifactId>cmit-transitivity</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
     </dependency>
 
     <dependency>
