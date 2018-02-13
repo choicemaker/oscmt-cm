@@ -24,22 +24,22 @@ import java.util.List;
 // of these plugins. (But keep this class and its package decoupled
 // from the transitivity package.)
 /**
- * A type of the graph topology that can be used for identifing set of records 
+ * A type of the graph topology that can be used for identifing set of records
  * connected by match or hold as linked record set.
- * <p>  
+ * <p>
  *
  * @author emoussikaev
  * @see
  */
 public class GraphProperty implements Serializable {
-	
+
 	/* As of 2009-08-29 */
 	static final long serialVersionUID = 5328204197234009120L;
 
 	private String name;
-	
+
 	// BUG 2009-08-24 rphall
-	// This public constructor  is incompatbile with the serialization method.
+	// This public constructor is incompatbile with the serialization method.
 	// It allows a user to define an object that can't be deserialized.
 	public GraphProperty(String value) {
 		if (value == null || value.trim().length() == 0) {
@@ -49,53 +49,57 @@ public class GraphProperty implements Serializable {
 	}
 
 	// BUG 2009-08-24 rphall
-	// Define some extensible method for enumerating registered GraphProperty types at runtime
+	// Define some extensible method for enumerating registered GraphProperty
+	// types at runtime
 	// (.e.g. based on plugin iterators of CompositeEntities.).
 	public static final GraphProperty BCM_FCMH = new GraphProperty("BCM_FCMH");
 	public static final GraphProperty BCM = new GraphProperty("BCM");
 	public static final GraphProperty FCM = new GraphProperty("FCM");
 	public static final GraphProperty CM = new GraphProperty("CM");
-	
+
 	public String getName() {
 		return name;
 	}
 
-   public String toString() {
-	   return getName();
-   }
+	public String toString() {
+		return getName();
+	}
 
-   public static GraphProperty valueOf(String name) {
-	   name = name.intern();
-	   if (BCM_FCMH.toString().intern() == name) {
-		   return BCM_FCMH;
-	   } else if (BCM.toString().intern() == name) {
-		   return BCM;
-	   } else if (FCM.toString().intern() == name) {
-		   return FCM;
-	   } else if (CM.toString().intern() == name) {
-		   return CM;
-	   } else {
-		   throw new IllegalArgumentException(name + " is not a valid GraphProperty.");
-	   }
-   }
+	public static GraphProperty valueOf(String name) {
+		name = name.intern();
+		if (BCM_FCMH.toString().intern() == name) {
+			return BCM_FCMH;
+		} else if (BCM.toString().intern() == name) {
+			return BCM;
+		} else if (FCM.toString().intern() == name) {
+			return FCM;
+		} else if (CM.toString().intern() == name) {
+			return CM;
+		} else {
+			throw new IllegalArgumentException(
+					name + " is not a valid GraphProperty.");
+		}
+	}
 
-   private static int 	nextOrdinal = 0;
-   private final int 	ordinal = nextOrdinal++;
-   private static final GraphProperty[] gpVALUES = {BCM_FCMH,BCM,FCM,CM};
+	private static int nextOrdinal = 0;
+	private final int ordinal = nextOrdinal++;
+	private static final GraphProperty[] gpVALUES = {
+			BCM_FCMH, BCM, FCM, CM };
 
-   public static List getValues() {
+	public static List<GraphProperty> getValues() {
 		// BUG 2009-08-24 rphall
-		// Define some extensible method for enumerating registered GraphProperty types at runtime
-		// (.e.g. based on plugins.)	
-		List retVal = Collections.unmodifiableList(Arrays.asList(gpVALUES));
+		// Define some extensible method for enumerating registered
+		// GraphProperty types at runtime (e.g. based on plugins.)
+		List<GraphProperty> retVal =
+			Collections.unmodifiableList(Arrays.asList(gpVALUES));
 		return retVal;
-   }
-	
-   // BUG 2009-08-24 rphall
-   // This serialization method.is incompatible with the public constructor.
-   // It can't deserialize user-defined GraphProperty instances.
-   Object readResolve() throws ObjectStreamException {
-	   return gpVALUES[ordinal];
-   } 
+	}
+
+	// BUG 2009-08-24 rphall
+	// This serialization method.is incompatible with the public constructor.
+	// It can't deserialize user-defined GraphProperty instances.
+	Object readResolve() throws ObjectStreamException {
+		return gpVALUES[ordinal];
+	}
 
 }

@@ -15,7 +15,6 @@ import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Remote;
 
-import com.choicemaker.client.api.DataAccessObject;
 import com.choicemaker.client.api.IGraphProperty;
 import com.choicemaker.client.api.MatchCandidates;
 import com.choicemaker.client.api.TransitiveCandidates;
@@ -156,9 +155,9 @@ public class OnlineUrmBean<T extends Comparable<T> & Serializable>
 			abaParams = NamedConfigConversion.createAbaParameters(cmConf);
 			assert abaParams != null;
 
-			AbaSettings oabaSettings = null;
-			oabaSettings = NamedConfigConversion.createAbaSettings(cmConf);
-			assert oabaSettings != null;
+			AbaSettings abaSettings = null;
+			abaSettings = NamedConfigConversion.createAbaSettings(cmConf);
+			assert abaSettings != null;
 
 			AbaServerConfiguration serverConfig = null;
 			serverConfig =
@@ -167,10 +166,10 @@ public class OnlineUrmBean<T extends Comparable<T> & Serializable>
 			
 			IGraphProperty mergeConnectivity = assist.computeGraphProperty(linkCriteria);
 
-			boolean mustIncludeQuery = assist.computeQueryInclusion(linkCriteria);
+			boolean mustIncludeQuery = linkCriteria.isMustIncludeQuery();
 
 			transitiveCandidates =
-				delegate.getTransitiveCandidates(queryRecord, abaParams, oabaSettings,
+				delegate.getTransitiveCandidates(queryRecord, abaParams, abaSettings,
 						serverConfig, mergeConnectivity, mustIncludeQuery);
 		} catch (BlockingException | IOException | TransitivityException e) {
 			String msg = e.toString();
