@@ -20,12 +20,6 @@ interface BatchBase extends Serializable {
 	public boolean abortJob(long jobID) throws ArgumentException,
 			ConfigException, CmRuntimeException, RemoteException;
 
-	public boolean suspendJob(long jobID) throws ArgumentException,
-			ConfigException, CmRuntimeException, RemoteException;
-
-	public boolean resumeJob(long jobID) throws ArgumentException,
-			ConfigException, CmRuntimeException, RemoteException;
-
 	public boolean cleanJob(long jobID) throws ArgumentException,
 			ConfigException, CmRuntimeException, RemoteException;
 
@@ -33,5 +27,11 @@ interface BatchBase extends Serializable {
 			ConfigException, CmRuntimeException, RemoteException;
 
 	public String getVersion(Object context) throws RemoteException;
+
+	public boolean resumeJob(long jobID) throws ArgumentException,
+			ConfigException, CmRuntimeException, RemoteException;
+
+	public boolean suspendJob(long jobID) throws ArgumentException,
+			ConfigException, CmRuntimeException, RemoteException;
 
 }

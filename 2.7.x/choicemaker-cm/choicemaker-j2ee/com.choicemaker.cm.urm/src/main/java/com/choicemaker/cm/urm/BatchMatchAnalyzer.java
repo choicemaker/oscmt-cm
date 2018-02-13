@@ -22,6 +22,22 @@ import com.choicemaker.cm.urm.exceptions.RecordCollectionException;
 
 public interface BatchMatchAnalyzer extends BatchBase {
 
+	public Iterator<?> getResultIterator(long jobId, AnalysisResultFormat s)
+			throws RecordCollectionException, ArgumentException,
+			CmRuntimeException, RemoteException;
+
+	public Iterator<?> getResultIterator(RefRecordCollection rc,
+			AnalysisResultFormat s) throws RecordCollectionException,
+			ArgumentException, CmRuntimeException, RemoteException;
+
+	@Override
+	public String getVersion(Object context) throws RemoteException;
+
+	public long startAnalysis(long jobId, LinkCriteria c,
+			AnalysisResultFormat serializationFormat, String trackingId)
+			throws ModelException, ConfigException, ArgumentException,
+			CmRuntimeException, RemoteException;
+
 	public long startMatchAndAnalysis(IRecordCollection qRc,
 			RefRecordCollection mRc, String modelName, float differThreshold,
 			float matchThreshold, int maxSingle, LinkCriteria c,
@@ -29,22 +45,5 @@ public interface BatchMatchAnalyzer extends BatchBase {
 			throws RecordCollectionException, ArgumentException,
 			ConfigException, ModelException, CmRuntimeException,
 			RemoteException;
-
-	public long startAnalysis(long jobId, LinkCriteria c,
-			AnalysisResultFormat serializationFormat, String trackingId)
-			throws ModelException, ConfigException, ArgumentException,
-			CmRuntimeException, RemoteException;
-
-	@SuppressWarnings("rawtypes")
-	public Iterator getResultIterator(RefRecordCollection rc,
-			AnalysisResultFormat s) throws RecordCollectionException,
-			ArgumentException, CmRuntimeException, RemoteException;
-
-	@SuppressWarnings("rawtypes")
-	public Iterator getResultIterator(long jobId, AnalysisResultFormat s)
-			throws RecordCollectionException, ArgumentException,
-			CmRuntimeException, RemoteException;
-
-	public String getVersion(Object context) throws RemoteException;
 
 }
