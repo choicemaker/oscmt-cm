@@ -33,9 +33,8 @@ import com.choicemaker.cms.api.NamedConfigurationController;
  * Delegates to CMS BatchMatching bean.
  */
 public class BatchMatchAnalyzerBean implements BatchMatchAnalyzer {
-	
+
 	private static final String VERSION = "2.7.1";
-	private static final long serialVersionUID = 271L;
 
 	private static final Logger logger =
 		Logger.getLogger(BatchMatchAnalyzerBean.class.getName());

@@ -7,7 +7,6 @@
  *******************************************************************************/
 package com.choicemaker.cm.urm;
 
-import java.io.Serializable;
 import java.rmi.RemoteException;
 
 import com.choicemaker.cm.urm.base.JobStatus;
@@ -15,7 +14,7 @@ import com.choicemaker.cm.urm.exceptions.ArgumentException;
 import com.choicemaker.cm.urm.exceptions.CmRuntimeException;
 import com.choicemaker.cm.urm.exceptions.ConfigException;
 
-interface BatchBase extends Serializable {
+interface BatchBase {
 
 	public boolean abortJob(long jobID) throws ArgumentException,
 			ConfigException, CmRuntimeException, RemoteException;
