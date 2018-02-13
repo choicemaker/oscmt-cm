@@ -9,8 +9,8 @@ package com.choicemaker.cm.urm;
 
 import java.rmi.RemoteException;
 
+import com.choicemaker.cm.args.IFilterConfiguration;
 import com.choicemaker.cm.urm.base.RefRecordCollection;
-import com.choicemaker.cm.urm.config.IFilterConfiguration;
 import com.choicemaker.cm.urm.exceptions.ArgumentException;
 import com.choicemaker.cm.urm.exceptions.CmRuntimeException;
 import com.choicemaker.cm.urm.exceptions.ConfigException;

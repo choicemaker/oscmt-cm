@@ -24,7 +24,7 @@ import com.choicemaker.cm.core.DatabaseException;
 import com.choicemaker.cm.urm.api.UrmConfigurationAdapter;
 import com.choicemaker.cm.urm.base.DbRecordCollection;
 import com.choicemaker.cm.urm.base.EvaluatedRecord;
-import com.choicemaker.cm.urm.base.GraphProperty;
+//import com.choicemaker.cm.urm.base.GraphProperty;
 import com.choicemaker.cm.urm.base.IMatchScore;
 import com.choicemaker.cm.urm.base.IRecord;
 import com.choicemaker.cm.urm.base.IRecordCollection;
@@ -208,8 +208,8 @@ class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 		List<EvaluatedRecord> records = new ArrayList<>();
 		List<EvaluatedPair<T>> pairs = matchCandidates.getEvaluatedPairs();
 		for (EvaluatedPair<T> pair : pairs) {
-			IRecord<T> q = pair.getQueryRecord();
-			IRecord<T> m = pair.getMatchCandidate();
+			IRecord<T> q = (IRecord<T>) pair.getQueryRecord();
+			IRecord<T> m = (IRecord<T>) pair.getMatchCandidate();
 			IMatchScore score = null;
 			EvaluatedRecord record = new EvaluatedRecord(m, score);
 			records.add(record);
@@ -223,12 +223,6 @@ class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 			TransitiveCandidates<T> transitiveCandidates) {
 		// TODO Auto-generated method stub
 		throw new Error("not yet implemented");
-	}
-
-	public IGraphProperty computeGraphProperty(LinkCriteria linkCriteria) {
-		GraphProperty gp = linkCriteria.getGraphPropType();
-		GraphPropertyBean bean = new GraphPropertyBean(gp.getName());
-		return bean;
 	}
 
 }

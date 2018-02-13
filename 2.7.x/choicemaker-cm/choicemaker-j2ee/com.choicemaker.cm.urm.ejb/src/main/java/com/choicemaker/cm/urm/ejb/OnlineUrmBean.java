@@ -164,8 +164,7 @@ public class OnlineUrmBean<T extends Comparable<T> & Serializable>
 				NamedConfigConversion.createAbaServerConfiguration(cmConf);
 			assert serverConfig != null;
 			
-			IGraphProperty mergeConnectivity = assist.computeGraphProperty(linkCriteria);
-
+			IGraphProperty mergeConnectivity = linkCriteria.getGraphPropType();
 			boolean mustIncludeQuery = linkCriteria.isMustIncludeQuery();
 
 			transitiveCandidates =

@@ -10,10 +10,10 @@ package com.choicemaker.cm.urm;
 import java.rmi.RemoteException;
 import java.util.Iterator;
 
+import com.choicemaker.cm.args.AnalysisResultFormat;
 import com.choicemaker.cm.urm.base.IRecordCollection;
 import com.choicemaker.cm.urm.base.LinkCriteria;
 import com.choicemaker.cm.urm.base.RefRecordCollection;
-import com.choicemaker.cm.urm.config.AnalysisResultFormat;
 import com.choicemaker.cm.urm.exceptions.ArgumentException;
 import com.choicemaker.cm.urm.exceptions.CmRuntimeException;
 import com.choicemaker.cm.urm.exceptions.ConfigException;

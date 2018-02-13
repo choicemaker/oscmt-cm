@@ -9,6 +9,9 @@ package com.choicemaker.cm.urm.base;
 
 import java.io.Serializable;
 
+import com.choicemaker.client.api.IGraphProperty;
+import com.choicemaker.util.Precondition;
+
 
 /**
  * Criteria for identifying a set of records as linked together and denoting the same physical entity.
@@ -23,11 +26,12 @@ public class LinkCriteria implements Serializable {
 	/* As of 2010-03-10 */
 	static final long serialVersionUID = 4915885639786038386L;
 
-	protected GraphProperty graphPropType;
+	protected IGraphProperty graphPropType;
 	protected boolean mustIncludeQuery;
 		
-	public LinkCriteria(GraphProperty t, boolean mic) {
+	public LinkCriteria(IGraphProperty t, boolean mic) {
 		super();
+		Precondition.assertNonNullArgument("null graph property", t);
 		this.graphPropType = t;
 		this.mustIncludeQuery = mic;
 	}
@@ -41,11 +45,11 @@ public class LinkCriteria implements Serializable {
 		mustIncludeQuery = b;
 	}
 
-	public GraphProperty getGraphPropType() {
+	public IGraphProperty getGraphPropType() {
 		return graphPropType;
 	}
 
-	public void setGraphPropType(GraphProperty type) {
+	public void setGraphPropType(IGraphProperty type) {
 		graphPropType = type;
 	}
 
