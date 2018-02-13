@@ -8,11 +8,14 @@
 package com.choicemaker.cm.urm.ejb;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.ejb.EJB;
 
-import com.choicemaker.client.api.DataAccessObject;
+import com.choicemaker.client.api.EvaluatedPair;
+import com.choicemaker.client.api.GraphPropertyBean;
 import com.choicemaker.client.api.IGraphProperty;
 import com.choicemaker.client.api.MatchCandidates;
 import com.choicemaker.client.api.TransitiveCandidates;
@@ -21,8 +24,10 @@ import com.choicemaker.cm.core.DatabaseException;
 import com.choicemaker.cm.urm.api.UrmConfigurationAdapter;
 import com.choicemaker.cm.urm.base.DbRecordCollection;
 import com.choicemaker.cm.urm.base.EvaluatedRecord;
+import com.choicemaker.cm.urm.base.GraphProperty;
+import com.choicemaker.cm.urm.base.IMatchScore;
+import com.choicemaker.cm.urm.base.IRecord;
 import com.choicemaker.cm.urm.base.IRecordCollection;
-import com.choicemaker.cm.urm.base.ISingleRecord;
 import com.choicemaker.cm.urm.base.LinkCriteria;
 import com.choicemaker.cm.urm.base.RefRecordCollection;
 import com.choicemaker.cm.urm.base.SubsetDbRecordCollection;
@@ -30,6 +35,7 @@ import com.choicemaker.cm.urm.exceptions.ConfigException;
 import com.choicemaker.cms.api.NamedConfiguration;
 import com.choicemaker.cms.api.NamedConfigurationController;
 import com.choicemaker.cms.ejb.NamedConfigurationEntity;
+import com.choicemaker.util.Precondition;
 import com.choicemaker.util.StringUtils;
 
 class UrmEjbAssist<T extends Comparable<T> & Serializable> {
@@ -138,9 +144,9 @@ class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 	}
 
 	public NamedConfiguration createCustomizedConfiguration(
-			DbRecordCollection mRc, String modelName,
-			float differThreshold, float matchThreshold, int maxNumMatches) throws ConfigException {
-		
+			DbRecordCollection mRc, String modelName, float differThreshold,
+			float matchThreshold, int maxNumMatches) throws ConfigException {
+
 		assert mRc != null;
 		assert StringUtils.nonEmptyString(modelName);
 		assert differThreshold >= 0f && differThreshold <= 1f;
@@ -197,24 +203,32 @@ class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 
 	public EvaluatedRecord[] computeEvaluatedRecords(
 			MatchCandidates<T> matchCandidates) {
-		// TODO Auto-generated method stub
-		return null;
+		Precondition.assertNonNullArgument("null match candidates",
+				matchCandidates);
+		List<EvaluatedRecord> records = new ArrayList<>();
+		List<EvaluatedPair<T>> pairs = matchCandidates.getEvaluatedPairs();
+		for (EvaluatedPair<T> pair : pairs) {
+			IRecord<T> q = pair.getQueryRecord();
+			IRecord<T> m = pair.getMatchCandidate();
+			IMatchScore score = null;
+			EvaluatedRecord record = new EvaluatedRecord(m, score);
+			records.add(record);
+		}
+		EvaluatedRecord[] retVal =
+			records.toArray(new EvaluatedRecord[records.size()]);
+		return retVal;
 	}
 
 	public EvaluatedRecord[] computeEvaluatedRecords(
 			TransitiveCandidates<T> transitiveCandidates) {
 		// TODO Auto-generated method stub
-		return null;
+		throw new Error("not yet implemented");
 	}
 
 	public IGraphProperty computeGraphProperty(LinkCriteria linkCriteria) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public boolean computeQueryInclusion(LinkCriteria linkCriteria) {
-		// TODO Auto-generated method stub
-		return false;
+		GraphProperty gp = linkCriteria.getGraphPropType();
+		GraphPropertyBean bean = new GraphPropertyBean(gp.getName());
+		return bean;
 	}
 
 }
