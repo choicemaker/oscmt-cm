@@ -15,13 +15,13 @@ import com.choicemaker.cm.urm.api.UrmConfigurationAdapter;
 @Singleton
 public class UrmConfigurationSingleton implements UrmConfigurationAdapter {
 
-//	private static final Logger log =
-//		Logger.getLogger(UrmConfigurationSingleton.class.getName());
+	// private static final Logger log =
+	// Logger.getLogger(UrmConfigurationSingleton.class.getName());
 
 	// -- Injected data
 
-//	@EJB
-//	private SqlRecordSourceController sqlRSController;
+	// @EJB
+	// private SqlRecordSourceController sqlRSController;
 
 	// -- Accessors
 

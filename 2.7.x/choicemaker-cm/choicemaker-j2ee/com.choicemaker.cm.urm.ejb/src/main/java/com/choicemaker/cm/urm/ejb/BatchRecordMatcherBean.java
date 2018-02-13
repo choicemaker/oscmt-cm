@@ -46,7 +46,6 @@ import com.choicemaker.util.StringUtils;
 public class BatchRecordMatcherBean implements BatchRecordMatcher {
 
 	private static final String VERSION = "2.7.1";
-	private static final long serialVersionUID = 271L;
 
 	private static final Logger logger =
 		Logger.getLogger(BatchRecordMatcherBean.class.getName());
@@ -70,99 +69,6 @@ public class BatchRecordMatcherBean implements BatchRecordMatcher {
 		throw new Error("not yet implemented");
 	}
 
-	@Override
-	public long[] getJobList() throws ArgumentException, ConfigException,
-			CmRuntimeException, RemoteException {
-		throw new Error("not yet implemented");
-	}
-
-	@Override
-	public JobStatus getJobStatus(long jobID) throws ArgumentException,
-			ConfigException, CmRuntimeException, RemoteException {
-		throw new Error("not yet implemented");
-	}
-
-	@Override
-	public Iterator<?> getResultIter(long jobId)
-			throws RecordCollectionException, ArgumentException,
-			CmRuntimeException, RemoteException {
-		throw new Error("never implemented");
-	}
-
-	@Override
-	public Iterator<?> getResultIter(RefRecordCollection rc)
-			throws RecordCollectionException, ArgumentException,
-			CmRuntimeException, RemoteException {
-		throw new Error("never implemented");
-	}
-
-	@Override
-	public String getVersion(Object context) throws RemoteException {
-		return VERSION;
-	}
-
-	@Override
-	public boolean resumeJob(long jobId) throws ArgumentException,
-			ConfigException, CmRuntimeException, RemoteException {
-		throw new Error("not yet implemented");
-	}
-
-	@Override
-	public long startMatching(IRecordCollection qRc, RefRecordCollection mRc,
-			String modelName, float differThreshold, float matchThreshold,
-			int maxSingle, String trackingId)
-			throws ModelException, RecordCollectionException, ConfigException,
-			ArgumentException, CmRuntimeException, RemoteException {
-
-		Precondition.assertNonNullArgument("null queries", qRc);
-		// Precondition.assertNonNullArgument("null references", mRc);
-		Precondition.assertNonEmptyString("null or empty model", modelName);
-		Precondition.assertBoolean("invalid differ threshold",
-				differThreshold >= 0f && differThreshold <= 1f);
-		Precondition.assertBoolean("invalid match threshold",
-				matchThreshold >= 0f && matchThreshold <= 1f);
-		Precondition.assertBoolean("invalid thresholds (differ > match)",
-				differThreshold <= matchThreshold);
-
-		NamedConfiguration cmConf = customizeNamedConfiguration(qRc, mRc,
-				modelName, differThreshold, matchThreshold, maxSingle);
-		OabaLinkageType task = computeMatchingTask(qRc, mRc, cmConf);
-		boolean isLinkage = OabaLinkageType.isLinkage(task);
-
-		long retVal = Integer.MIN_VALUE;
-		OabaParameters batchParams = null;
-		OabaSettings oabaSettings = null;
-		ServerConfiguration serverConfig = null;
-		try {
-			batchParams =
-				NamedConfigConversion.createOabaParameters(cmConf, isLinkage);
-			assert batchParams != null;
-
-			oabaSettings = NamedConfigConversion.createOabaSettings(cmConf);
-			assert oabaSettings != null;
-
-			serverConfig =
-				NamedConfigConversion.createServerConfiguration(cmConf);
-			assert serverConfig != null;
-
-			if (isLinkage) {
-				retVal = delegate.startLinkage(trackingId, batchParams,
-						oabaSettings, serverConfig, null);
-			} else {
-				retVal = delegate.startDeduplication(trackingId, batchParams,
-						oabaSettings, serverConfig, null);
-			}
-		} catch (NamingException | ServerConfigurationException
-				| URISyntaxException e) {
-			String msg = e.toString();
-			logger.severe(msg);
-			throw new ConfigException(msg);
-		}
-		assert retVal != Integer.MIN_VALUE;
-
-		return retVal;
-	}
-
 	protected OabaLinkageType computeMatchingTask(IRecordCollection qRc,
 			RefRecordCollection mRc, NamedConfiguration cmConf) {
 
@@ -179,7 +85,7 @@ public class BatchRecordMatcherBean implements BatchRecordMatcher {
 		return retVal;
 	}
 
-	protected NamedConfiguration customizeNamedConfiguration(
+	protected NamedConfiguration createCustomizedConfiguration(
 			IRecordCollection qRc, RefRecordCollection mRc, String modelName,
 			float differThreshold, float matchThreshold, int maxSingle)
 			throws ConfigException {
@@ -254,6 +160,99 @@ public class BatchRecordMatcherBean implements BatchRecordMatcher {
 				((SubsetDbRecordCollection) mRc).getIdsQuery();
 			retVal.setReferenceSelection(referenceSelection);
 		}
+
+		return retVal;
+	}
+
+	@Override
+	public long[] getJobList() throws ArgumentException, ConfigException,
+			CmRuntimeException, RemoteException {
+		throw new Error("not yet implemented");
+	}
+
+	@Override
+	public JobStatus getJobStatus(long jobID) throws ArgumentException,
+			ConfigException, CmRuntimeException, RemoteException {
+		throw new Error("not yet implemented");
+	}
+
+	@Override
+	public Iterator<?> getResultIter(long jobId)
+			throws RecordCollectionException, ArgumentException,
+			CmRuntimeException, RemoteException {
+		throw new Error("never implemented");
+	}
+
+	@Override
+	public Iterator<?> getResultIter(RefRecordCollection rc)
+			throws RecordCollectionException, ArgumentException,
+			CmRuntimeException, RemoteException {
+		throw new Error("never implemented");
+	}
+
+	@Override
+	public String getVersion(Object context) throws RemoteException {
+		return VERSION;
+	}
+
+	@Override
+	public boolean resumeJob(long jobId) throws ArgumentException,
+			ConfigException, CmRuntimeException, RemoteException {
+		throw new Error("not yet implemented");
+	}
+
+	@Override
+	public long startMatching(IRecordCollection qRc, RefRecordCollection mRc,
+			String modelName, float differThreshold, float matchThreshold,
+			int maxSingle, String trackingId)
+			throws ModelException, RecordCollectionException, ConfigException,
+			ArgumentException, CmRuntimeException, RemoteException {
+
+		Precondition.assertNonNullArgument("null queries", qRc);
+		// Precondition.assertNonNullArgument("null references", mRc);
+		Precondition.assertNonEmptyString("null or empty model", modelName);
+		Precondition.assertBoolean("invalid differ threshold",
+				differThreshold >= 0f && differThreshold <= 1f);
+		Precondition.assertBoolean("invalid match threshold",
+				matchThreshold >= 0f && matchThreshold <= 1f);
+		Precondition.assertBoolean("invalid thresholds (differ > match)",
+				differThreshold <= matchThreshold);
+
+		NamedConfiguration cmConf = createCustomizedConfiguration(qRc, mRc,
+				modelName, differThreshold, matchThreshold, maxSingle);
+		OabaLinkageType task = computeMatchingTask(qRc, mRc, cmConf);
+		boolean isLinkage = OabaLinkageType.isLinkage(task);
+
+		long retVal = Integer.MIN_VALUE;
+		OabaParameters batchParams = null;
+		OabaSettings oabaSettings = null;
+		ServerConfiguration serverConfig = null;
+		try {
+			batchParams =
+				NamedConfigConversion.createOabaParameters(cmConf, isLinkage);
+			assert batchParams != null;
+
+			oabaSettings = NamedConfigConversion.createOabaSettings(cmConf);
+			assert oabaSettings != null;
+
+			serverConfig =
+				NamedConfigConversion.createServerConfiguration(cmConf);
+			assert serverConfig != null;
+
+			if (isLinkage) {
+				retVal = delegate.startLinkage(trackingId, batchParams,
+						oabaSettings, serverConfig, null);
+			} else {
+				retVal = delegate.startDeduplication(trackingId, batchParams,
+						oabaSettings, serverConfig, null);
+			}
+		} catch (NamingException | ServerConfigurationException
+				| URISyntaxException e) {
+			String msg = e.toString();
+			logger.severe(msg);
+			throw new ConfigException(msg);
+		}
+		assert retVal != Integer.MIN_VALUE;
 
 		return retVal;
 	}
