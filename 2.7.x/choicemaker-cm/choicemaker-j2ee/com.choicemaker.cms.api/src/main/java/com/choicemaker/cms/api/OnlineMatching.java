@@ -17,6 +17,7 @@ import com.choicemaker.client.api.DataAccessObject;
 import com.choicemaker.client.api.IGraphProperty;
 import com.choicemaker.client.api.MatchCandidates;
 import com.choicemaker.client.api.TransitiveCandidates;
+import com.choicemaker.cm.args.AbaSettings;
 import com.choicemaker.cm.args.TransitivityException;
 import com.choicemaker.cm.core.BlockingException;
 

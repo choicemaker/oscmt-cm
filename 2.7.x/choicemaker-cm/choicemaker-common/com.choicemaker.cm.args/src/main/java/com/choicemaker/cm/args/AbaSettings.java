@@ -23,8 +23,13 @@ import java.io.Serializable;
  */
 public interface AbaSettings extends Serializable {
 
+	/** The default value for {@link #getLimitPerBlockingSet()} */
 	int DEFAULT_LIMIT_PER_BLOCKING_SET = 50;
+
+	/** The default values for {@link #getLimitSingleBlockingSet()} */
 	int DEFAULT_LIMIT_SINGLE_BLOCKING_SET = 100;
+
+	/** The default value for {@link #getSingleTableBlockingSetGraceLimit()} */
 	int DEFAULT_SINGLE_TABLE_GRACE_LIMIT = 200;
 
 	/** Default id value for non-persistent settings */

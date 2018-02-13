@@ -17,6 +17,7 @@ import com.choicemaker.cm.aba.base.Blocker2;
 import com.choicemaker.cm.aba.base.db.DbbCountsCreator;
 import com.choicemaker.cm.aba.util.BlockingConfigurationUtils;
 import com.choicemaker.cm.aba.util.DatabaseAccessorUtils;
+import com.choicemaker.cm.args.AbaSettings;
 import com.choicemaker.cm.core.Accessor;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.DatabaseException;
@@ -30,7 +31,6 @@ import com.choicemaker.cm.io.db.base.DbReaderParallel;
 import com.choicemaker.cm.oaba.api.AbaStatisticsController;
 import com.choicemaker.cm.oaba.ejb.AggregateDatabaseAbstractionManager;
 import com.choicemaker.cms.api.AbaParameters;
-import com.choicemaker.cms.api.AbaSettings;
 import com.choicemaker.util.Precondition;
 import com.choicemaker.util.StringUtils;
 

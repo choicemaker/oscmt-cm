@@ -53,11 +53,7 @@ public class BatchRecordMatcherBean implements BatchRecordMatcher {
 	@EJB(lookup = "java:app/BatchMatchingBean/com.choicemaker.cms.api.BatchMatching")
 	private BatchMatching delegate;
 
-	@EJB(lookup = "java:app/NamedConfigurationControllerBean/com.choicemaker.cms.api.NamedConfigurationController")
-	private UrmConfigurationAdapter adapter;
-
-	@EJB(lookup = "java:app/UrmConfigurationSingleton")
-	private NamedConfigurationController ncController;
+	private UrmEjbAssist assist = new UrmEjbAssist();
 
 	@Override
 	public boolean abortJob(long jobId) {
@@ -67,101 +63,6 @@ public class BatchRecordMatcherBean implements BatchRecordMatcher {
 	@Override
 	public boolean cleanJob(long jobID) throws CmRuntimeException {
 		throw new Error("not yet implemented");
-	}
-
-	protected OabaLinkageType computeMatchingTask(IRecordCollection qRc,
-			RefRecordCollection mRc, NamedConfiguration cmConf) {
-
-		assert qRc != null;
-		assert cmConf != null;
-
-		OabaLinkageType retVal;
-		if (mRc == null || !StringUtils.nonEmptyString(mRc.getUrl())) {
-			retVal = OabaLinkageType.STAGING_DEDUPLICATION;
-		} else {
-			retVal = OabaLinkageType.valueOf(cmConf.getTask());
-		}
-
-		return retVal;
-	}
-
-	protected NamedConfiguration createCustomizedConfiguration(
-			IRecordCollection qRc, RefRecordCollection mRc, String modelName,
-			float differThreshold, float matchThreshold, int maxSingle)
-			throws ConfigException {
-
-		assert qRc != null;
-		assert StringUtils.nonEmptyString(modelName);
-		assert differThreshold >= 0f && differThreshold <= 1f;
-		assert matchThreshold >= 0f && matchThreshold <= 1f;
-		assert differThreshold <= matchThreshold;
-
-		String ncName;
-		try {
-			ncName = adapter.getCmsConfigurationName(modelName);
-		} catch (DatabaseException e) {
-			String msg = e.toString();
-			logger.severe(msg);
-			throw new ConfigException(msg);
-		}
-		logger.fine("namedConfiguration: " + ncName);
-		if (StringUtils.nonEmptyString(ncName)) {
-			String msg = "Missing named configuration for model configuration '"
-					+ modelName + "'";
-			logger.severe(msg);
-			throw new ConfigException(msg);
-		}
-
-		NamedConfiguration nc =
-			ncController.findNamedConfigurationByName(ncName);
-		if (nc == null) {
-			String msg = "Missing named configuration for '" + ncName + "'";
-			logger.severe(msg);
-			throw new ConfigException(msg);
-		}
-		NamedConfigurationEntity retVal = new NamedConfigurationEntity(nc);
-		retVal.setLowThreshold(differThreshold);
-		retVal.setHighThreshold(matchThreshold);
-		retVal.setOabaMaxSingle(maxSingle);
-
-		String jndiQuerySource = null;
-		if (qRc instanceof DbRecordCollection) {
-			jndiQuerySource = ((DbRecordCollection) qRc).getUrl();
-		}
-		String jndiReferenceSource = mRc == null ? null : mRc.getUrl();
-		// Prefer the reference data source over the query data source
-		if (StringUtils.nonEmptyString(jndiReferenceSource)) {
-			retVal.setDataSource(jndiReferenceSource);
-			String msg = "Using data source from reference record collection: "
-					+ retVal.getDataSource();
-			logger.fine(msg);
-		} else if (StringUtils.nonEmptyString(jndiQuerySource)) {
-			retVal.setDataSource(jndiQuerySource);
-			String msg = "Using data source from query record collection: "
-					+ retVal.getDataSource();
-			logger.fine(msg);
-		} else if (StringUtils.nonEmptyString(retVal.getDataSource())) {
-			String msg = "Using data source from named configuration: "
-					+ retVal.getDataSource();
-			logger.fine(msg);
-		} else {
-			String msg = "No data source configured";
-			logger.severe(msg);
-			throw new ConfigException(msg);
-		}
-
-		if (qRc instanceof SubsetDbRecordCollection) {
-			String querySelection =
-				((SubsetDbRecordCollection) qRc).getIdsQuery();
-			retVal.setQuerySelection(querySelection);
-		}
-		if (mRc instanceof SubsetDbRecordCollection) {
-			String referenceSelection =
-				((SubsetDbRecordCollection) mRc).getIdsQuery();
-			retVal.setReferenceSelection(referenceSelection);
-		}
-
-		return retVal;
 	}
 
 	@Override
@@ -218,23 +119,23 @@ public class BatchRecordMatcherBean implements BatchRecordMatcher {
 		Precondition.assertBoolean("invalid thresholds (differ > match)",
 				differThreshold <= matchThreshold);
 
-		NamedConfiguration cmConf = createCustomizedConfiguration(qRc, mRc,
+		NamedConfiguration cmConf = assist.createCustomizedConfiguration(qRc, mRc,
 				modelName, differThreshold, matchThreshold, maxSingle);
-		OabaLinkageType task = computeMatchingTask(qRc, mRc, cmConf);
+		OabaLinkageType task = assist.computeMatchingTask(qRc, mRc, cmConf);
 		boolean isLinkage = OabaLinkageType.isLinkage(task);
 
 		long retVal = Integer.MIN_VALUE;
-		OabaParameters batchParams = null;
-		OabaSettings oabaSettings = null;
-		ServerConfiguration serverConfig = null;
 		try {
+			OabaParameters batchParams = null;
 			batchParams =
 				NamedConfigConversion.createOabaParameters(cmConf, isLinkage);
 			assert batchParams != null;
 
+			OabaSettings oabaSettings = null;
 			oabaSettings = NamedConfigConversion.createOabaSettings(cmConf);
 			assert oabaSettings != null;
 
+			ServerConfiguration serverConfig = null;
 			serverConfig =
 				NamedConfigConversion.createServerConfiguration(cmConf);
 			assert serverConfig != null;

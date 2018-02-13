@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import com.choicemaker.cm.args.AbaSettings;
 import com.choicemaker.cm.args.AnalysisResultFormat;
 import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.args.OabaParameters;
@@ -28,6 +29,8 @@ import com.choicemaker.cm.oaba.ejb.ServerConfigurationEntity;
 import com.choicemaker.cm.oaba.ejb.SqlRecordSourceEntity;
 import com.choicemaker.cm.transitivity.api.TransitivityParametersController;
 import com.choicemaker.cm.transitivity.ejb.TransitivityParametersEntity;
+import com.choicemaker.cms.api.AbaParameters;
+import com.choicemaker.cms.api.AbaServerConfiguration;
 import com.choicemaker.cms.api.NamedConfiguration;
 
 public class NamedConfigConversion {
@@ -281,6 +284,22 @@ public class NamedConfigConversion {
 	}
 
 	private NamedConfigConversion() {
+	}
+
+	public static AbaParameters createAbaParameters(NamedConfiguration cmConf) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static AbaSettings createAbaSettings(NamedConfiguration cmConf) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static AbaServerConfiguration createAbaServerConfiguration(
+			NamedConfiguration cmConf) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

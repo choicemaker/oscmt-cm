@@ -33,11 +33,12 @@ public interface AbaSettings extends Serializable {
 	int DEFAULT_SINGLE_TABLE_GRACE_LIMIT = 200;
 
 	/** Default id value for non-persistent settings */
-	long NONPERSISTENT_SETTINGS_ID = 0;
+	long NONPERSISTENT_ABA_SETTINGS_ID = 0;
 
 	/**
 	 * The persistence identifier for an instance. If the value is
-	 * {@link #NONPERSISTENT_SETTINGS_ID}, then the settings are not persistent.
+	 * {@link #NONPERSISTENT_ABA_SETTINGS_ID}, then the settings are not
+	 * persistent.
 	 */
 	long getId();
 

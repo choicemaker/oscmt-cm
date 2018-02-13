@@ -7,6 +7,7 @@
  *******************************************************************************/
 package com.choicemaker.cm.urm;
 
+import java.io.Serializable;
 import java.rmi.RemoteException;
 
 import com.choicemaker.cm.urm.base.DbRecordCollection;
@@ -24,16 +25,16 @@ import com.choicemaker.cm.urm.exceptions.RecordException;
 import com.choicemaker.cm.urm.exceptions.UrmIncompleteBlockingSetsException;
 import com.choicemaker.cm.urm.exceptions.UrmUnderspecifiedQueryException;
 
-public interface OnlineRecordMatcher {
+public interface OnlineRecordMatcher<T extends Comparable<T> & Serializable> {
 
-	MatchScore evaluatePair(ISingleRecord<?> queryRecord,
-			ISingleRecord<?> masterRecord, String modelName,
+	MatchScore evaluatePair(ISingleRecord<T> queryRecord,
+			ISingleRecord<T> masterRecord, String modelName,
 			float differThreshold, float matchThreshold, ScoreType resultFormat,
 			String externalId)
 			throws ModelException, ArgumentException, RecordException,
 			ConfigException, CmRuntimeException, RemoteException;
 
-	EvaluatedRecord[] getMatchCandidates(ISingleRecord<?> queryRecord,
+	EvaluatedRecord[] getMatchCandidates(ISingleRecord<T> queryRecord,
 			DbRecordCollection mRc, String modelName, float differThreshold,
 			float matchThreshold, int maxNumMatches,
 			EvalRecordFormat resultFormat, String externalId)

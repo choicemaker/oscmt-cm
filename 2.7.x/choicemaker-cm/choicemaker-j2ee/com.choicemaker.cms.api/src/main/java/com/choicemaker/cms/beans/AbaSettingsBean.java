@@ -1,12 +1,12 @@
 package com.choicemaker.cms.beans;
 
-import com.choicemaker.cms.api.AbaSettings;
+import com.choicemaker.cm.args.AbaSettings;
 
 public class AbaSettingsBean implements AbaSettings {
 
 	private static final long serialVersionUID = 1L;
 
-	private long id = NONPERSISTENT_SETTINGS_ID;
+	private long id = NONPERSISTENT_ABA_SETTINGS_ID;
 	private int limitPerBlockingSet = DEFAULT_LIMIT_PER_BLOCKING_SET;
 	private int limitSingleBlockingSet = DEFAULT_LIMIT_SINGLE_BLOCKING_SET;
 	private int singleTableBlockingSetGraceLimit =
@@ -44,7 +44,7 @@ public class AbaSettingsBean implements AbaSettings {
 
 	@Override
 	public boolean isPersistent() {
-		return id != NONPERSISTENT_SETTINGS_ID;
+		return id != NONPERSISTENT_ABA_SETTINGS_ID;
 	}
 
 	public void setLimitPerBlockingSet(int limitPerBlockingSet) {
