@@ -112,7 +112,7 @@ END REMOVE -->
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.io.blocking.automated.base</artifactId>
+      <artifactId>com.choicemaker.cm.aba.base</artifactId>
     </dependency>
     -->
     <dependency>

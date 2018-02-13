@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 
 import javax.sql.DataSource;
 
-import com.choicemaker.cm.urm.exceptions.UrmIncompleteSpecificationException;
+import com.choicemaker.cm.core.IncompleteSpecificationException;
 
 /**
  * A default implementation of IUpdateDerivedFields.
@@ -88,7 +88,7 @@ public class DoNothingUpdateDerivedFields extends AbstractUpdateDerivedFields {
 	 * @see com.choicemaker.cm.urm.ejb.AbstractUpdateDerivedFields#checkProperties(java.util.Properties)
 	 */
 	protected void checkProperties(Properties p)
-		throws UrmIncompleteSpecificationException {
+		throws IncompleteSpecificationException {
 		log.fine("properties: " + p.toString());
 	}
 

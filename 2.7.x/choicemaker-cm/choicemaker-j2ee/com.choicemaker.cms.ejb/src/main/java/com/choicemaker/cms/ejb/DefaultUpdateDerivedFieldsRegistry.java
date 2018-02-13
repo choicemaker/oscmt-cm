@@ -9,16 +9,16 @@ package com.choicemaker.cms.ejb;
 
 import com.choicemaker.cm.core.configure.eclipse.EclipseRegistries;
 import com.choicemaker.cm.core.configure.eclipse.EclipseRegistry;
-import com.choicemaker.cm.urm.IUpdateDerivedFieldsRegistration;
+import com.choicemaker.cms.api.UpdateDerivedFieldsRegistration;
 
 /**
  * This class defines an instance of an eclipse-based registry
- * for derived-field updators.
+ * for derived-field update agents.
  * @author rphall
  */
 public class DefaultUpdateDerivedFieldsRegistry
 	extends EclipseRegistry
-	implements IUpdateDerivedFieldsRegistration {
+	implements UpdateDerivedFieldsRegistration {
 
 	public static EclipseRegistry getInstance() {
 		return EclipseRegistries.getInstance(

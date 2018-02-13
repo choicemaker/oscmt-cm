@@ -54,7 +54,6 @@ import com.choicemaker.cms.api.remote.BatchMatchingRemote;
 @Local({
 		BatchMatching.class, WorkFlowManager.class })
 @Remote(BatchMatchingRemote.class)
-@SuppressWarnings("rawtypes")
 public class BatchMatchingBean implements BatchMatching, WorkFlowManager {
 
 	// private static final long serialVersionUID = 271L;

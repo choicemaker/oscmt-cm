@@ -1,4 +1,4 @@
-package com.choicemaker.cm.io.blocking.automated.base.db;
+package com.choicemaker.cm.aba.base.db;
 
 import java.io.IOException;
 import java.net.URL;

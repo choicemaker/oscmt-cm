@@ -1,7 +1,7 @@
-package com.choicemaker.cm.io.blocking.automated.base.db;
+package com.choicemaker.cm.aba.base.db;
 
-import static com.choicemaker.cm.io.blocking.automated.base.db.ConfigurationUtils.SQLSERVER_CONFIG_FILE;
-import static com.choicemaker.cm.io.blocking.automated.base.db.ConfigurationUtils.TARGET_NAME;
+import static com.choicemaker.cm.aba.base.db.ConfigurationUtils.SQLSERVER_CONFIG_FILE;
+import static com.choicemaker.cm.aba.base.db.ConfigurationUtils.TARGET_NAME;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 

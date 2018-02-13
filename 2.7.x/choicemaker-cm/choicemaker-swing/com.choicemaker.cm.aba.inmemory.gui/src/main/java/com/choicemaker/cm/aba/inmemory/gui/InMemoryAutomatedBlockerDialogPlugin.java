@@ -22,7 +22,6 @@ import com.choicemaker.cm.aba.BlockingAccessor;
 import com.choicemaker.cm.aba.inmemory.InMemoryAutomatedBlocker;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.blocking.InMemoryBlocker;
-//import com.choicemaker.cm.io.blocking.automated.inmemory.InMemoryDataSource;
 import com.choicemaker.cm.io.db.base.DbAccessor;
 import com.choicemaker.cm.modelmaker.gui.matcher.MatchDialogBlockerPlugin;
 

@@ -11,25 +11,25 @@ import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.configure.xml.AbstractXmlSpecification;
 import com.choicemaker.cm.core.configure.xml.XmlConfigurable;
-import com.choicemaker.cm.urm.IUpdateDerivedFields;
+import com.choicemaker.cms.api.UpdateDerivedFields;
 
 /**
  * Provides standardized methods for
- * {@link IUpdateDerivedFields.toXML toXML()},
- * {@link IUpdateDerivedFields.getProperties() getProperties()} and
- * {@link IUpdateDerivedFields.setProperties(Properties) setProperties(..)}
+ * {@link UpdateDerivedFields.toXML toXML()},
+ * {@link UpdateDerivedFields.getProperties() getProperties()} and
+ * {@link UpdateDerivedFields.setProperties(Properties) setProperties(..)}
  * operations.
  * @author rphall
  */
 public abstract class AbstractUpdateDerivedFields
 	extends AbstractXmlSpecification
-	implements IUpdateDerivedFields {
+	implements UpdateDerivedFields {
 		
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(AbstractUpdateDerivedFields.class.getName());
 		
 	/**
-	 * Most implementations of IUpdateDerivedFields will not need
+	 * Most implementations of UpdateDerivedFields will not need
 	 * XmlConfigurable delegates, so this default implementation
 	 * does nothing beside logging the ignored argument.
 	 * see #getChildren()
@@ -41,7 +41,7 @@ public abstract class AbstractUpdateDerivedFields
 	}
 
 	/**
-	 * Most implementations of IUpdateDerivedFields will not need
+	 * Most implementations of UpdateDerivedFields will not need
 	 * XmlConfigurable delegates, so this default implementation
 	 * does nothing beside logging the ignored argument.
 	 * @see #add(XmlConfigurable)
@@ -51,7 +51,7 @@ public abstract class AbstractUpdateDerivedFields
 	}
 
 	/**
-	 * Most implementations of IUpdateDerivedFields will not <em>require</em>
+	 * Most implementations of UpdateDerivedFields will not <em>require</em>
 	 * any configuration properties, so this method returns an
 	 * empty (but non-null) array.
 	 */
@@ -60,7 +60,7 @@ public abstract class AbstractUpdateDerivedFields
 	}
 
 	/**
-	 * Some implementations of IUpdateDerivedFields <em>might</em> use
+	 * Some implementations of UpdateDerivedFields <em>might</em> use
 	 * optional configuration properties, so this method returns an
 	 * empty (but non-null) array, which indicates all property names
 	 * are allowed.
@@ -70,7 +70,7 @@ public abstract class AbstractUpdateDerivedFields
 	}
 
 	/**
-	 * Some implementations of IUpdateDerivedFields <em>might</em> use
+	 * Some implementations of UpdateDerivedFields <em>might</em> use
 	 * optional configuration properties, so this default method always
 	 * returns for any non-blank property name and any non-null property
 	 * value. (Subclasses may be more fastidious about checking
