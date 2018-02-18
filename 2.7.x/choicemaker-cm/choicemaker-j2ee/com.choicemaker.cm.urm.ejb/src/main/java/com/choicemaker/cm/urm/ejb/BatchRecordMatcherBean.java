@@ -20,15 +20,12 @@ import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
-import com.choicemaker.cm.core.DatabaseException;
 import com.choicemaker.cm.oaba.api.ServerConfigurationException;
 import com.choicemaker.cm.urm.BatchRecordMatcher;
 import com.choicemaker.cm.urm.api.UrmConfigurationAdapter;
-import com.choicemaker.cm.urm.base.DbRecordCollection;
 import com.choicemaker.cm.urm.base.IRecordCollection;
 import com.choicemaker.cm.urm.base.JobStatus;
 import com.choicemaker.cm.urm.base.RefRecordCollection;
-import com.choicemaker.cm.urm.base.SubsetDbRecordCollection;
 import com.choicemaker.cm.urm.exceptions.ArgumentException;
 import com.choicemaker.cm.urm.exceptions.CmRuntimeException;
 import com.choicemaker.cm.urm.exceptions.ConfigException;
@@ -38,9 +35,7 @@ import com.choicemaker.cms.api.BatchMatching;
 import com.choicemaker.cms.api.NamedConfiguration;
 import com.choicemaker.cms.api.NamedConfigurationController;
 import com.choicemaker.cms.ejb.NamedConfigConversion;
-import com.choicemaker.cms.ejb.NamedConfigurationEntity;
 import com.choicemaker.util.Precondition;
-import com.choicemaker.util.StringUtils;
 
 @Remote
 public class BatchRecordMatcherBean implements BatchRecordMatcher {
@@ -53,7 +48,13 @@ public class BatchRecordMatcherBean implements BatchRecordMatcher {
 	@EJB(lookup = "java:app/BatchMatchingBean/com.choicemaker.cms.api.BatchMatching")
 	private BatchMatching delegate;
 
-	private UrmEjbAssist assist = new UrmEjbAssist();
+	@EJB(lookup = "java:module/UrmConfigurationSingleton")
+	private UrmConfigurationAdapter adapter;
+
+	@EJB(lookup = "java:app/com.choicemaker.cms.ejb/NamedConfigurationControllerBean!com.choicemaker.cms.api.NamedConfigurationController")
+	private NamedConfigurationController ncController;
+
+	private UrmEjbAssist<?> assist = new UrmEjbAssist<>();
 
 	@Override
 	public boolean abortJob(long jobId) {
@@ -119,8 +120,9 @@ public class BatchRecordMatcherBean implements BatchRecordMatcher {
 		Precondition.assertBoolean("invalid thresholds (differ > match)",
 				differThreshold <= matchThreshold);
 
-		NamedConfiguration cmConf = assist.createCustomizedConfiguration(qRc, mRc,
-				modelName, differThreshold, matchThreshold, maxSingle);
+		NamedConfiguration cmConf =
+			assist.createCustomizedConfiguration(adapter, ncController, qRc,
+					mRc, modelName, differThreshold, matchThreshold, maxSingle);
 		OabaLinkageType task = assist.computeMatchingTask(qRc, mRc, cmConf);
 		boolean isLinkage = OabaLinkageType.isLinkage(task);
 

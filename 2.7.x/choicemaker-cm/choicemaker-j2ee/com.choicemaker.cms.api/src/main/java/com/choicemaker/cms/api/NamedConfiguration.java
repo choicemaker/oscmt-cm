@@ -38,6 +38,8 @@ public interface NamedConfiguration {
 		"defaultReference";
 	public static final String DEFAULT_REFERENCEDATABASEACCESSOR =
 			"defaultAccessor";
+	public static final String DEFAULT_REFERENCEDATABASEREADER =
+			"defaultReader";
 	public static final String DEFAULT_TRANSITIVITYFORMAT = SORT_BY_HOLD_GROUP
 			.name();
 	public static final String DEFAULT_TRANSITIVITYGRAPH = GPN_SCM;
@@ -89,6 +91,8 @@ public interface NamedConfiguration {
 	String getReferenceDatabaseConfiguration();
 
 	String getReferenceDatabaseAccessor();
+
+	String getReferenceDatabaseReader();
 
 	String getTransitivityFormat();
 

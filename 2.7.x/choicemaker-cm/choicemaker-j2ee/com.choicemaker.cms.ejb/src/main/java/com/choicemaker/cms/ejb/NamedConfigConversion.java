@@ -32,8 +32,23 @@ import com.choicemaker.cm.transitivity.ejb.TransitivityParametersEntity;
 import com.choicemaker.cms.api.AbaParameters;
 import com.choicemaker.cms.api.AbaServerConfiguration;
 import com.choicemaker.cms.api.NamedConfiguration;
+import com.choicemaker.cms.beans.AbaParametersBean;
+import com.choicemaker.cms.beans.AbaServerConfigurationBean;
+import com.choicemaker.cms.beans.AbaSettingsBean;
+import com.choicemaker.util.Precondition;
 
 public class NamedConfigConversion {
+	
+	// Implementation note: Persistent NamedConfiguration entities are
+	// currently immutable; the API does not provide a way to change the
+	// any field of an NamedConfiguration once it has been persisted to
+	// the database. (There are workarounds, but these are corner cases.)
+	// Therefore the results of the various "create" operations below could
+	// be cached.
+	//
+	// FIXME: Caching of "create" operations is not implemented for persistent
+	// NamedConfiguration entities. (Caches should be keyed by id, for i>0,
+	// rather than name?)
 
 	private static final Logger logger =
 		Logger.getLogger(NamedConfigConversion.class.getName());
@@ -52,6 +67,45 @@ public class NamedConfigConversion {
 
 	public static final String JNDI_SETTINGS_CTL =
 		"java:app/com.choicemaker.cm.oaba.ejb/OabaSettingsControllerBean";
+
+	public static AbaParameters createAbaParameters(NamedConfiguration nc) {
+		Precondition.assertNonNullArgument("null named configuration", nc);
+		AbaParametersBean retVal = new AbaParametersBean();
+		retVal.setDatabaseAccessorName(nc.getReferenceDatabaseAccessor());
+		retVal.setDatabaseReaderName(nc.getReferenceDatabaseReader());
+		retVal.setHighThreshold(nc.getHighThreshold());
+		retVal.setLowThreshold(nc.getLowThreshold());
+		retVal.setModelConfigurationName(nc.getModelName());
+		retVal.setQueryToReferenceBlockingConfiguration(
+				nc.getBlockingConfiguration());
+		retVal.setReferenceDatabaseConfiguration(
+				nc.getReferenceDatabaseConfiguration());
+		retVal.setReferenceDatasource(nc.getDataSource());
+		retVal.setReferenceSelectionView(nc.getReferenceSelection());
+		final String HACK2 = "FIXME: FAKE VIEW NAME";
+		retVal.setReferenceSelectionViewAsSQL(HACK2,
+				nc.getReferenceSelection());
+		return retVal;
+	}
+
+	public static AbaServerConfiguration createAbaServerConfiguration(
+			NamedConfiguration nc) {
+		Precondition.assertNonNullArgument("null named configuration", nc);
+		AbaServerConfigurationBean retVal = new AbaServerConfigurationBean();
+		retVal.setAbaMaxThreadCount(nc.getServerMaxThreads());
+		retVal.setAbaMinThreadCount(1);
+		return retVal;
+	}
+
+	public static AbaSettings createAbaSettings(NamedConfiguration nc) {
+		Precondition.assertNonNullArgument("null named configuration", nc);
+		AbaSettingsBean retVal = new AbaSettingsBean();
+		retVal.setLimitPerBlockingSet(nc.getAbaLimitPerBlockingSet());
+		retVal.setLimitSingleBlockingSet(nc.getAbaLimitSingleBlockingSet());
+		retVal.setSingleTableBlockingSetGraceLimit(
+				nc.getAbaSingleTableBlockingSetGraceLimit());
+		return retVal;
+	}
 
 	public static OabaParameters createOabaParameters(NamedConfiguration nc,
 			boolean isLinkage) throws NamingException {
@@ -147,56 +201,6 @@ public class NamedConfigConversion {
 		return retVal;
 	}
 
-	public static TransitivityParameters createTransitivityParameters(
-			NamedConfiguration nc, boolean isLinkage) throws Exception {
-		boolean makePersistent = true;
-		return createTransitivityParameters(nc, isLinkage, makePersistent);
-	}
-
-	public static TransitivityParameters createTransitivityParameters(
-			NamedConfiguration nc, boolean isLinkage, boolean makePersistent)
-			throws Exception {
-
-		// HACK Create a temporary, persistent instance of OabaParameters
-		final boolean makePersistent0 = true;
-		OabaParameters op =
-			createOabaParameters(nc, isLinkage, makePersistent0);
-
-		// Determine the transitivity parameters
-		final String name = nc.getTransitivityFormat();
-		final AnalysisResultFormat format = AnalysisResultFormat.valueOf(name);
-		final String graph = nc.getTransitivityGraph();
-
-		// Create the transtivity parameters and conditionally save them
-		TransitivityParameters retVal =
-			new TransitivityParametersEntity(op, format, graph);
-
-		if (makePersistent) {
-			InitialContext initialContext = new InitialContext();
-
-			Object o = initialContext.lookup(JNDI_TRANS_PARAMS_CTL);
-			final TransitivityParametersController tpController =
-				(TransitivityParametersController) o;
-			logger.fine("tpController = '" + tpController + "'");
-
-			retVal = tpController.save(retVal);
-		}
-
-		// HACK Remove the temporary OABA parameters
-		{
-			InitialContext initialContext = new InitialContext();
-
-			Object o = initialContext.lookup(JNDI_OABA_PARAMS_CTL);
-			final OabaParametersController opController =
-				(OabaParametersController) o;
-			logger.fine("opController = '" + opController + "'");
-
-			opController.delete(op);
-		}
-
-		return retVal;
-	}
-
 	public static OabaSettings createOabaSettings(NamedConfiguration nc)
 			throws NamingException {
 		boolean makePersistent = true;
@@ -283,23 +287,57 @@ public class NamedConfigConversion {
 		return retVal;
 	}
 
+	public static TransitivityParameters createTransitivityParameters(
+			NamedConfiguration nc, boolean isLinkage) throws Exception {
+		boolean makePersistent = true;
+		return createTransitivityParameters(nc, isLinkage, makePersistent);
+	}
+
+	public static TransitivityParameters createTransitivityParameters(
+			NamedConfiguration nc, boolean isLinkage, boolean makePersistent)
+			throws Exception {
+
+		// HACK Create a temporary, persistent instance of OabaParameters
+		final boolean makePersistent0 = true;
+		OabaParameters op =
+			createOabaParameters(nc, isLinkage, makePersistent0);
+
+		// Determine the transitivity parameters
+		final String name = nc.getTransitivityFormat();
+		final AnalysisResultFormat format = AnalysisResultFormat.valueOf(name);
+		final String graph = nc.getTransitivityGraph();
+
+		// Create the transtivity parameters and conditionally save them
+		TransitivityParameters retVal =
+			new TransitivityParametersEntity(op, format, graph);
+
+		if (makePersistent) {
+			InitialContext initialContext = new InitialContext();
+
+			Object o = initialContext.lookup(JNDI_TRANS_PARAMS_CTL);
+			final TransitivityParametersController tpController =
+				(TransitivityParametersController) o;
+			logger.fine("tpController = '" + tpController + "'");
+
+			retVal = tpController.save(retVal);
+		}
+
+		// HACK Remove the temporary OABA parameters
+		{
+			InitialContext initialContext = new InitialContext();
+
+			Object o = initialContext.lookup(JNDI_OABA_PARAMS_CTL);
+			final OabaParametersController opController =
+				(OabaParametersController) o;
+			logger.fine("opController = '" + opController + "'");
+
+			opController.delete(op);
+		}
+
+		return retVal;
+	}
+
 	private NamedConfigConversion() {
-	}
-
-	public static AbaParameters createAbaParameters(NamedConfiguration cmConf) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public static AbaSettings createAbaSettings(NamedConfiguration cmConf) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public static AbaServerConfiguration createAbaServerConfiguration(
-			NamedConfiguration cmConf) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

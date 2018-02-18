@@ -12,11 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import javax.ejb.EJB;
-
 import com.choicemaker.client.api.EvaluatedPair;
-import com.choicemaker.client.api.GraphPropertyBean;
-import com.choicemaker.client.api.IGraphProperty;
 import com.choicemaker.client.api.MatchCandidates;
 import com.choicemaker.client.api.TransitiveCandidates;
 import com.choicemaker.cm.args.OabaLinkageType;
@@ -28,7 +24,6 @@ import com.choicemaker.cm.urm.base.EvaluatedRecord;
 import com.choicemaker.cm.urm.base.IMatchScore;
 import com.choicemaker.cm.urm.base.IRecord;
 import com.choicemaker.cm.urm.base.IRecordCollection;
-import com.choicemaker.cm.urm.base.LinkCriteria;
 import com.choicemaker.cm.urm.base.RefRecordCollection;
 import com.choicemaker.cm.urm.base.SubsetDbRecordCollection;
 import com.choicemaker.cm.urm.exceptions.ConfigException;
@@ -38,16 +33,16 @@ import com.choicemaker.cms.ejb.NamedConfigurationEntity;
 import com.choicemaker.util.Precondition;
 import com.choicemaker.util.StringUtils;
 
+/**
+ * A fly-weight helper class.
+ *
+ * @param <T>
+ *            the field type for record id values
+ */
 class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 
 	private static final Logger logger =
 		Logger.getLogger(UrmEjbAssist.class.getName());
-
-	@EJB(lookup = "java:app/NamedConfigurationControllerBean/com.choicemaker.cms.api.NamedConfigurationController")
-	private UrmConfigurationAdapter adapter;
-
-	@EJB(lookup = "java:app/UrmConfigurationSingleton")
-	private NamedConfigurationController ncController;
 
 	OabaLinkageType computeMatchingTask(IRecordCollection qRc,
 			RefRecordCollection mRc, NamedConfiguration cmConf) {
@@ -65,26 +60,31 @@ class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 		return retVal;
 	}
 
-	NamedConfiguration createCustomizedConfiguration(IRecordCollection qRc,
+	NamedConfiguration createCustomizedConfiguration(
+			UrmConfigurationAdapter adapter,
+			NamedConfigurationController ncController, IRecordCollection qRc,
 			RefRecordCollection mRc, String modelName, float differThreshold,
 			float matchThreshold, int maxSingle) throws ConfigException {
 
+		assert adapter != null;
+		assert ncController != null;
 		assert qRc != null;
 		assert StringUtils.nonEmptyString(modelName);
 		assert differThreshold >= 0f && differThreshold <= 1f;
 		assert matchThreshold >= 0f && matchThreshold <= 1f;
 		assert differThreshold <= matchThreshold;
-
+		
 		String ncName;
 		try {
+			logger.fine("Model name: '" + modelName + "'");
 			ncName = adapter.getCmsConfigurationName(modelName);
+			logger.fine("Named configuration: '" + ncName + "'");
 		} catch (DatabaseException e) {
 			String msg = e.toString();
 			logger.severe(msg);
 			throw new ConfigException(msg);
 		}
-		logger.fine("namedConfiguration: " + ncName);
-		if (StringUtils.nonEmptyString(ncName)) {
+		if (!StringUtils.nonEmptyString(ncName)) {
 			String msg = "Missing named configuration for model configuration '"
 					+ modelName + "'";
 			logger.severe(msg);
@@ -144,9 +144,13 @@ class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 	}
 
 	public NamedConfiguration createCustomizedConfiguration(
-			DbRecordCollection mRc, String modelName, float differThreshold,
-			float matchThreshold, int maxNumMatches) throws ConfigException {
+			UrmConfigurationAdapter adapter,
+			NamedConfigurationController ncController, DbRecordCollection mRc,
+			String modelName, float differThreshold, float matchThreshold,
+			int maxNumMatches) throws ConfigException {
 
+		assert adapter != null;
+		assert ncController != null;
 		assert mRc != null;
 		assert StringUtils.nonEmptyString(modelName);
 		assert differThreshold >= 0f && differThreshold <= 1f;
@@ -162,7 +166,7 @@ class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 			throw new ConfigException(msg);
 		}
 		logger.fine("namedConfiguration: " + ncName);
-		if (StringUtils.nonEmptyString(ncName)) {
+		if (!StringUtils.nonEmptyString(ncName)) {
 			String msg = "Missing named configuration for model configuration '"
 					+ modelName + "'";
 			logger.severe(msg);
@@ -184,6 +188,10 @@ class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 		if (StringUtils.nonEmptyString(jndiReferenceSource)) {
 			retVal.setDataSource(jndiReferenceSource);
 			String msg = "Using data source from reference record collection: "
+					+ retVal.getDataSource();
+			logger.fine(msg);
+		} else if (StringUtils.nonEmptyString(retVal.getDataSource())) {
+			String msg = "Using data source from named configuration: "
 					+ retVal.getDataSource();
 			logger.fine(msg);
 		} else {
@@ -208,7 +216,7 @@ class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 		List<EvaluatedRecord> records = new ArrayList<>();
 		List<EvaluatedPair<T>> pairs = matchCandidates.getEvaluatedPairs();
 		for (EvaluatedPair<T> pair : pairs) {
-			IRecord<T> q = (IRecord<T>) pair.getQueryRecord();
+			// IRecord<T> q = (IRecord<T>) pair.getQueryRecord();
 			IRecord<T> m = (IRecord<T>) pair.getMatchCandidate();
 			IMatchScore score = null;
 			EvaluatedRecord record = new EvaluatedRecord(m, score);

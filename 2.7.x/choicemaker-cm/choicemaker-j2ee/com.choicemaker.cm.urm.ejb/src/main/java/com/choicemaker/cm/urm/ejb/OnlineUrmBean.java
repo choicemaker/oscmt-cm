@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 
 import javax.ejb.EJB;
 import javax.ejb.Remote;
+import javax.ejb.Stateless;
 
 import com.choicemaker.client.api.IGraphProperty;
 import com.choicemaker.client.api.MatchCandidates;
@@ -23,6 +24,7 @@ import com.choicemaker.cm.args.TransitivityException;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.urm.OnlineMatchAnalyzer;
 import com.choicemaker.cm.urm.OnlineRecordMatcher;
+import com.choicemaker.cm.urm.api.UrmConfigurationAdapter;
 import com.choicemaker.cm.urm.base.DbRecordCollection;
 import com.choicemaker.cm.urm.base.EvalRecordFormat;
 import com.choicemaker.cm.urm.base.EvaluatedRecord;
@@ -41,11 +43,14 @@ import com.choicemaker.cm.urm.exceptions.UrmUnderspecifiedQueryException;
 import com.choicemaker.cms.api.AbaParameters;
 import com.choicemaker.cms.api.AbaServerConfiguration;
 import com.choicemaker.cms.api.NamedConfiguration;
+import com.choicemaker.cms.api.NamedConfigurationController;
 import com.choicemaker.cms.api.OnlineMatching;
 import com.choicemaker.cms.ejb.NamedConfigConversion;
 import com.choicemaker.util.Precondition;
 
-@Remote
+@Stateless
+@Remote({
+		OnlineRecordMatcher.class, OnlineMatchAnalyzer.class })
 public class OnlineUrmBean<T extends Comparable<T> & Serializable>
 		implements OnlineRecordMatcher<T>, OnlineMatchAnalyzer<T> {
 
@@ -54,8 +59,14 @@ public class OnlineUrmBean<T extends Comparable<T> & Serializable>
 	private static final Logger logger =
 		Logger.getLogger(OnlineUrmBean.class.getName());
 
-	@EJB(lookup = "java:app/OnlineMatchingBean/com.choicemaker.cms.api.OnlineMatching")
+	@EJB(lookup = "java:app/com.choicemaker.cms.ejb/OnlineMatchingBean!com.choicemaker.cms.api.OnlineMatching")
 	private OnlineMatching<T> delegate;
+
+	@EJB(lookup = "java:module/UrmConfigurationSingleton")
+	private UrmConfigurationAdapter adapter;
+
+	@EJB(lookup = "java:app/com.choicemaker.cms.ejb/NamedConfigurationControllerBean!com.choicemaker.cms.api.NamedConfigurationController")
+	private NamedConfigurationController ncController;
 
 	private UrmEjbAssist<T> assist = new UrmEjbAssist<>();
 
@@ -89,9 +100,9 @@ public class OnlineUrmBean<T extends Comparable<T> & Serializable>
 		Precondition.assertBoolean("invalid thresholds (differ > match)",
 				differThreshold <= matchThreshold);
 
-		NamedConfiguration cmConf =
-			assist.createCustomizedConfiguration(masterCollection, modelName,
-					differThreshold, matchThreshold, maxNumMatches);
+		NamedConfiguration cmConf = assist.createCustomizedConfiguration(
+				adapter, ncController, masterCollection, modelName,
+				differThreshold, matchThreshold, maxNumMatches);
 
 		MatchCandidates<T> matchCandidates = null;
 		try {
@@ -108,8 +119,8 @@ public class OnlineUrmBean<T extends Comparable<T> & Serializable>
 				NamedConfigConversion.createAbaServerConfiguration(cmConf);
 			assert serverConfig != null;
 
-			matchCandidates = delegate.getMatchCandidates(queryRecord, abaParams,
-					oabaSettings, serverConfig);
+			matchCandidates = delegate.getMatchCandidates(queryRecord,
+					abaParams, oabaSettings, serverConfig);
 		} catch (BlockingException | IOException e) {
 			String msg = e.toString();
 			logger.severe(msg);
@@ -145,9 +156,9 @@ public class OnlineUrmBean<T extends Comparable<T> & Serializable>
 		Precondition.assertBoolean("invalid thresholds (differ > match)",
 				differThreshold <= matchThreshold);
 
-		NamedConfiguration cmConf =
-			assist.createCustomizedConfiguration(masterCollection, modelName,
-					differThreshold, matchThreshold, maxNumMatches);
+		NamedConfiguration cmConf = assist.createCustomizedConfiguration(
+				adapter, ncController, masterCollection, modelName,
+				differThreshold, matchThreshold, maxNumMatches);
 
 		TransitiveCandidates<T> transitiveCandidates = null;
 		try {
@@ -163,13 +174,13 @@ public class OnlineUrmBean<T extends Comparable<T> & Serializable>
 			serverConfig =
 				NamedConfigConversion.createAbaServerConfiguration(cmConf);
 			assert serverConfig != null;
-			
+
 			IGraphProperty mergeConnectivity = linkCriteria.getGraphPropType();
 			boolean mustIncludeQuery = linkCriteria.isMustIncludeQuery();
 
-			transitiveCandidates =
-				delegate.getTransitiveCandidates(queryRecord, abaParams, abaSettings,
-						serverConfig, mergeConnectivity, mustIncludeQuery);
+			transitiveCandidates = delegate.getTransitiveCandidates(queryRecord,
+					abaParams, abaSettings, serverConfig, mergeConnectivity,
+					mustIncludeQuery);
 		} catch (BlockingException | IOException | TransitivityException e) {
 			String msg = e.toString();
 			logger.severe(msg);

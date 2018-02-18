@@ -43,6 +43,7 @@ public interface NamedConfigurationJPA {
 	String CN_REF_SQL = "REF_SQL";
 	String CN_REF_DBCONF = "REF_DBCONF";
 	String CN_REF_DBACCESSOR = "REF_DBACC";
+	String CN_REF_DBREADER = "REF_DBREAD";
 
 	// Transitivity parameters
 	String CN_FORMAT = AbstractParametersJPA.CN_FORMAT;

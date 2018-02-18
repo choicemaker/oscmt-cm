@@ -28,6 +28,7 @@ import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_QUERY_DBCONF;
 import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_QUERY_IS_DEDUPED;
 import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_QUERY_SQL;
 import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_REF_DBACCESSOR;
+import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_REF_DBREADER;
 import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_REF_DBCONF;
 import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_REF_SQL;
 import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_RS_TYPE;
@@ -140,6 +141,10 @@ public class NamedConfigurationEntity extends AbstractPersistentObject
 	@Column(name = CN_REF_DBACCESSOR)
 	protected String referenceDatabaseAccessor =
 		DEFAULT_REFERENCEDATABASEACCESSOR;
+
+	@Column(name = CN_REF_DBREADER)
+	protected String referenceDatabaseReader =
+		DEFAULT_REFERENCEDATABASEREADER;
 
 	// -- Transitivity analysis parameters
 
@@ -327,6 +332,11 @@ public class NamedConfigurationEntity extends AbstractPersistentObject
 	}
 
 	@Override
+	public String getReferenceDatabaseReader() {
+		return referenceDatabaseReader;
+	}
+
+	@Override
 	public String getTransitivityFormat() {
 		return transitivityFormat;
 	}
@@ -468,6 +478,11 @@ public class NamedConfigurationEntity extends AbstractPersistentObject
 	public void setReferenceDatabaseAccessor(
 			String rdba) {
 		this.referenceDatabaseAccessor = rdba;
+	}
+
+	public void setReferenceDatabaseReader(
+			String rdbr) {
+		this.referenceDatabaseReader = rdbr;
 	}
 
 	public void setTransitivityFormat(String transitivityFormat) {
