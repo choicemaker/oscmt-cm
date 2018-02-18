@@ -59,7 +59,7 @@ public class XmlParserFactory {
 	}
 
 	public static final String CHOICEMAKER_XSD_URL =
-		"http://oscmt.sourceforge.net/xml_schemas/2.6/ChoiceMakerAll.xsd";
+		"https://www.choicemaker.com/xml_schemas/2.6/ChoiceMakerAll.xsd";
 
 	public static boolean connected() {
 		try {
