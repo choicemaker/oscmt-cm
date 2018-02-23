@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import com.choicemaker.client.api.Decision;
 import com.choicemaker.client.api.EvaluatedPair;
 import com.choicemaker.client.api.MatchCandidates;
 import com.choicemaker.client.api.TransitiveCandidates;
@@ -19,11 +20,13 @@ import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.core.DatabaseException;
 import com.choicemaker.cm.urm.api.UrmConfigurationAdapter;
 import com.choicemaker.cm.urm.base.DbRecordCollection;
+import com.choicemaker.cm.urm.base.Decision3;
 import com.choicemaker.cm.urm.base.EvaluatedRecord;
 //import com.choicemaker.cm.urm.base.GraphProperty;
 import com.choicemaker.cm.urm.base.IMatchScore;
 import com.choicemaker.cm.urm.base.IRecord;
 import com.choicemaker.cm.urm.base.IRecordCollection;
+import com.choicemaker.cm.urm.base.MatchScore;
 import com.choicemaker.cm.urm.base.RefRecordCollection;
 import com.choicemaker.cm.urm.base.SubsetDbRecordCollection;
 import com.choicemaker.cm.urm.exceptions.ConfigException;
@@ -218,7 +221,13 @@ class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 		for (EvaluatedPair<T> pair : pairs) {
 			// IRecord<T> q = (IRecord<T>) pair.getQueryRecord();
 			IRecord<T> m = (IRecord<T>) pair.getMatchCandidate();
-			IMatchScore score = null;
+			Decision d = pair.getMatchDecision();
+			String decisionName = d.getName();
+			Decision3 d3 = Decision3.valueOf(decisionName);
+			float p = pair.getMatchProbability();
+			// FIXME stubbed note
+			String note = "FIXME placeholder note";
+			IMatchScore score = new MatchScore(p,d3,note);
 			EvaluatedRecord record = new EvaluatedRecord(m, score);
 			records.add(record);
 		}
