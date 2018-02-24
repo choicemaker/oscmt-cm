@@ -18,7 +18,8 @@ import java.io.Serializable;
  * @author emoussikaev
  * @see
  */
-public class ConnectedRecordSet<T extends Comparable<T> & Serializable> extends CompositeRecord<T> {
+public class ConnectedRecordSet<T extends Comparable<T> & Serializable>
+		extends CompositeRecord<T> {
 
 	private static final long serialVersionUID = 1604807022706941623L;
 
