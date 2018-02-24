@@ -10,8 +10,9 @@ package com.choicemaker.cm.urm.base;
 import java.io.Serializable;
 
 /**
- * A set of records connected by the match or hold relationship. Field <code>connections</code> provides
- * evaluation of the matching between those records.
+ * A set of records connected by the match or hold relationship. Field
+ * <code>connections</code> provides evaluation of the matching between those
+ * records.
  * <p>
  *
  * @author emoussikaev
