@@ -59,6 +59,7 @@ public class OnlineUrmBean<T extends Comparable<T> & Serializable>
 	private static final Logger logger =
 		Logger.getLogger(OnlineUrmBean.class.getName());
 
+	// This implementation depends on a local interface
 	@EJB(lookup = "java:app/com.choicemaker.cms.ejb/OnlineMatchingBean!com.choicemaker.cms.api.OnlineMatching")
 	private OnlineMatching<T> delegate;
 
@@ -189,7 +190,7 @@ public class OnlineUrmBean<T extends Comparable<T> & Serializable>
 		assert transitiveCandidates != null;
 
 		EvaluatedRecord[] retVal =
-			assist.computeEvaluatedRecords(transitiveCandidates);
+			assist.computeEvaluatedRecords(transitiveCandidates, linkCriteria);
 		assert retVal != null;
 
 		return retVal;

@@ -7,6 +7,27 @@ import com.choicemaker.util.Precondition;
 public final class GraphPropertyBean implements IGraphProperty, Serializable {
 
 	private static final long serialVersionUID = 271L;
+	
+	public static final boolean equalOrNull(IGraphProperty igp1, IGraphProperty igp2) {
+		boolean retVal;
+		if (igp1 == null) {
+			retVal = igp2 == null;
+		} else if (igp2 == null) {
+			assert igp1 != null;
+			retVal = false;
+		} else {
+			assert igp1 != null;
+			assert igp2 != null;
+			final String name1 = igp1.getName();
+			final String name2 = igp2.getName();
+			if (name1 == null) {
+				retVal = name2 == null;
+			} else {
+				retVal = name1.equals(name2);
+			}
+		}
+		return retVal;
+	}
 
 	private final String name;
 
@@ -34,15 +55,10 @@ public final class GraphPropertyBean implements IGraphProperty, Serializable {
 			return true;
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
+		if (!(obj instanceof IGraphProperty))
 			return false;
-		GraphPropertyBean other = (GraphPropertyBean) obj;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		return true;
+		IGraphProperty other = (IGraphProperty) obj;
+		return equalOrNull(this,other);
 	}
 
 	@Override

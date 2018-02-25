@@ -128,15 +128,13 @@ public class OnlineDelegate<T extends Comparable<T> & Serializable> {
 		 */
 		CompositeEntity retVal = null;
 		if (compactedCeIter.hasNext()) {
-			CompositeEntity _hack =
-				(CompositeEntity) compactedCeIter.next();
-			retVal = _hack;
-		}
-		if (compactedCeIter.hasNext()) {
-			String msg =
-				"algorithm error: too many matching composite entities";
-			logger.severe(msg);
-			throw new Error(msg);
+			retVal = (CompositeEntity) compactedCeIter.next();
+			if (compactedCeIter.hasNext()) {
+				String msg =
+					"algorithm error: too many matching composite entities";
+				logger.severe(msg);
+				throw new Error(msg);
+			}
 		}
 		return retVal;
 	}
@@ -328,7 +326,7 @@ public class OnlineDelegate<T extends Comparable<T> & Serializable> {
 			} else {
 				ImmutableProbabilityModel model =
 					ParameterHelper.getModel(parameters);
-				retVal = getTransitiveCandidates(query, matchMap, childEntities,
+				retVal = getTransitiveCandidates(query, childEntities,
 						model, mergeConnectivity, mustIncludeQuery);
 			}
 		}
@@ -338,14 +336,14 @@ public class OnlineDelegate<T extends Comparable<T> & Serializable> {
 
 	public TransitiveCandidates<T> getTransitiveCandidates(
 			final DataAccessObject<T> query,
-			final Map<SafeIndex<T>, Match> matchMap,
+//			final Map<SafeIndex<T>, Match> matchMap,
 			final List<INode<?>> childEntities,
 			final ImmutableProbabilityModel model,
 			final IGraphProperty mergeConnectivity,
 			final boolean mustIncludeQuery) throws TransitivityException {
 
 		Precondition.assertNonNullArgument("null query", query);
-		Precondition.assertNonNullArgument("null map", matchMap);
+//		Precondition.assertNonNullArgument("null map", matchMap);
 		Precondition.assertNonNullArgument("null entities", childEntities);
 		Precondition.assertNonNullArgument("null model", model);
 

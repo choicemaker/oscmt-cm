@@ -64,14 +64,14 @@ public class CompositeEntity implements INode<Integer> {
 	private Map<INode<?>, List<INode<?>>> adjacencyMap = new HashMap<>();
 
 	/**
-	 * This constructor takes in an id.
+	 * This constructor creates a default id.
 	 */
 	public CompositeEntity() {
 		this(UniqueSequence.getInstance().getNextInteger());
 	}
 
 	/**
-	 * This constructor takes in an id.
+	 * This constructor specifies an id.
 	 */
 	public CompositeEntity(Integer id) {
 		this.id = id;
@@ -80,7 +80,8 @@ public class CompositeEntity implements INode<Integer> {
 	/**
 	 * This method adds a MatchRecord2 to this graph.
 	 */
-	public <T extends Comparable<T>> void addMatchRecord(MatchRecord2<T> mr) {
+	public <T extends Comparable<T>> void addMatchRecord(
+			final MatchRecord2<T> mr) {
 		// first, add the ids to the nodes set
 		final T c1 = mr.getRecordID1();
 		Entity<T> ent = new Entity<T>(c1, INode.STAGE_TYPE);

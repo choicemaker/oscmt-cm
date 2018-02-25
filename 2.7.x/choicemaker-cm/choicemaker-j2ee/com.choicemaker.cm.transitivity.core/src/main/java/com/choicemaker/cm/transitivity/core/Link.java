@@ -25,8 +25,8 @@ public class Link<T extends Comparable<T>> {
 	private INode<T> node1;
 	private INode<T> node2;
 	
-	/* This list contains all the MatchRecord2 objects that make up this Link.
-	 * 
+	/**
+	 * This list contains all the MatchRecord2 objects that make up this Link. 
 	 */
 	private List<MatchRecord2<T>> matchRecords;
 

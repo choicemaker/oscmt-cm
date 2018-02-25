@@ -9,16 +9,23 @@ package com.choicemaker.cm.urm.ejb;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
+import com.choicemaker.client.api.DataAccessObject;
 import com.choicemaker.client.api.Decision;
 import com.choicemaker.client.api.EvaluatedPair;
+import com.choicemaker.client.api.GraphPropertyBean;
+import com.choicemaker.client.api.IGraphProperty;
 import com.choicemaker.client.api.MatchCandidates;
+import com.choicemaker.client.api.MergeCandidates;
 import com.choicemaker.client.api.TransitiveCandidates;
 import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.core.DatabaseException;
 import com.choicemaker.cm.urm.api.UrmConfigurationAdapter;
+import com.choicemaker.cm.urm.base.CompositeMatchScore;
 import com.choicemaker.cm.urm.base.DbRecordCollection;
 import com.choicemaker.cm.urm.base.Decision3;
 import com.choicemaker.cm.urm.base.EvaluatedRecord;
@@ -26,6 +33,8 @@ import com.choicemaker.cm.urm.base.EvaluatedRecord;
 import com.choicemaker.cm.urm.base.IMatchScore;
 import com.choicemaker.cm.urm.base.IRecord;
 import com.choicemaker.cm.urm.base.IRecordCollection;
+import com.choicemaker.cm.urm.base.LinkCriteria;
+import com.choicemaker.cm.urm.base.LinkedRecordSet;
 import com.choicemaker.cm.urm.base.MatchScore;
 import com.choicemaker.cm.urm.base.RefRecordCollection;
 import com.choicemaker.cm.urm.base.SubsetDbRecordCollection;
@@ -76,7 +85,7 @@ class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 		assert differThreshold >= 0f && differThreshold <= 1f;
 		assert matchThreshold >= 0f && matchThreshold <= 1f;
 		assert differThreshold <= matchThreshold;
-		
+
 		String ncName;
 		try {
 			logger.fine("Model name: '" + modelName + "'");
@@ -146,11 +155,12 @@ class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 		return retVal;
 	}
 
-	public NamedConfiguration createCustomizedConfiguration(
-			UrmConfigurationAdapter adapter,
-			NamedConfigurationController ncController, DbRecordCollection mRc,
-			String modelName, float differThreshold, float matchThreshold,
-			int maxNumMatches) throws ConfigException {
+			/* public */ NamedConfiguration createCustomizedConfiguration(
+					UrmConfigurationAdapter adapter,
+					NamedConfigurationController ncController,
+					DbRecordCollection mRc, String modelName,
+					float differThreshold, float matchThreshold,
+					int maxNumMatches) throws ConfigException {
 
 		assert adapter != null;
 		assert ncController != null;
@@ -212,8 +222,8 @@ class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 		return retVal;
 	}
 
-	public EvaluatedRecord[] computeEvaluatedRecords(
-			MatchCandidates<T> matchCandidates) {
+			/* public */ EvaluatedRecord[] computeEvaluatedRecords(
+					MatchCandidates<T> matchCandidates) {
 		Precondition.assertNonNullArgument("null match candidates",
 				matchCandidates);
 		List<EvaluatedRecord> records = new ArrayList<>();
@@ -227,7 +237,7 @@ class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 			float p = pair.getMatchProbability();
 			// FIXME stubbed note
 			String note = "FIXME placeholder note";
-			IMatchScore score = new MatchScore(p,d3,note);
+			IMatchScore score = new MatchScore(p, d3, note);
 			EvaluatedRecord record = new EvaluatedRecord(m, score);
 			records.add(record);
 		}
@@ -236,8 +246,36 @@ class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 		return retVal;
 	}
 
-	public EvaluatedRecord[] computeEvaluatedRecords(
-			TransitiveCandidates<T> transitiveCandidates) {
+			/* public */ EvaluatedRecord[] computeEvaluatedRecords(
+					TransitiveCandidates<T> tcs, LinkCriteria linkCriteria) {
+
+		Precondition.assertNonNullArgument("null transitiveCandidates", tcs);
+		Precondition.assertNonNullArgument("null link criteria", linkCriteria);
+
+		DataAccessObject<T> queryRecord = tcs.getQueryRecord();
+		List<MergeCandidates<T>> mergeCandidates = tcs.getMergeCandidates();
+		List<EvaluatedPair<T>> evaluatedPairs = tcs.getEvaluatedPairs();
+
+		Map<QMKey<T>, EvaluatedPair<T>> mappedPairs = new HashMap<>();
+		for (EvaluatedPair<T> evaluatedPair : evaluatedPairs) {
+			IRecord<T> q = (IRecord<T>) evaluatedPair.getQueryRecord();
+			IRecord<T> m = (IRecord<T>) evaluatedPair.getMatchCandidate();
+			QMKey<T> key = new QMKey<>(q, m);
+			mappedPairs.put(key, evaluatedPair);
+		}
+
+		List<EvaluatedRecord> evaluatedRecords = new ArrayList<>();
+		for (MergeCandidates<T> mc : mergeCandidates) {
+			assert GraphPropertyBean.equalOrNull(mc.getGraphConnectivity(),
+					linkCriteria.getGraphPropType());
+			CompositeMatchScore cms = new CompositeMatchScore();
+			List<IRecord<T>> records = new ArrayList<>();
+			EvaluatedPair<T> mergedPairs = mc.getPairs();
+			for ()
+			LinkedRecordSet<T> lrs =
+				new LinkedRecordSet<>(null, records, linkCriteria);
+		}
+
 		// TODO Auto-generated method stub
 		throw new Error("not yet implemented");
 	}

@@ -8,6 +8,7 @@
 package com.choicemaker.cm.urm.base;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * A group of matching together and denoting the same physical entity.
@@ -24,16 +25,20 @@ public class LinkedRecordSet<T extends Comparable<T> & Serializable>
 	private LinkCriteria criteria;
 
 	public LinkedRecordSet(T id, IRecord<T>[] r, LinkCriteria c) {
-		super(id,r);
+		super(id, r);
 		this.criteria = c;
 	}
 
+	public LinkedRecordSet(T id, List<IRecord<T>> r, LinkCriteria c) {
+		super(id, r);
+		this.criteria = c;
+	}
 
 	public LinkCriteria getCriteria() {
 		return criteria;
 	}
 
-	public void accept(IRecordVisitor ext){
+	public void accept(IRecordVisitor ext) {
 		ext.visit(this);
 	}
 
