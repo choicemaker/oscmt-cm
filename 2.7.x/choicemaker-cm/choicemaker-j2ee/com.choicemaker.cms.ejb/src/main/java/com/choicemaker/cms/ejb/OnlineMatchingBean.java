@@ -12,8 +12,8 @@ import javax.ejb.Stateless;
 import com.choicemaker.client.api.DataAccessObject;
 import com.choicemaker.client.api.EvaluatedPair;
 import com.choicemaker.client.api.IGraphProperty;
-import com.choicemaker.client.api.MatchCandidates;
-import com.choicemaker.client.api.TransitiveCandidates;
+import com.choicemaker.client.api.MatchGroup;
+import com.choicemaker.client.api.TransitiveGroup;
 import com.choicemaker.cm.args.AbaSettings;
 import com.choicemaker.cm.args.TransitivityException;
 import com.choicemaker.cm.core.BlockingException;
@@ -24,7 +24,7 @@ import com.choicemaker.cms.api.AbaParameters;
 import com.choicemaker.cms.api.AbaServerConfiguration;
 import com.choicemaker.cms.api.OnlineMatching;
 import com.choicemaker.cms.api.remote.OnlineMatchingRemote;
-import com.choicemaker.cms.beans.MatchCandidatesBean;
+import com.choicemaker.cms.beans.MatchGroupBean;
 
 @Stateless
 @Local(OnlineMatching.class)
@@ -36,7 +36,7 @@ public class OnlineMatchingBean<T extends Comparable<T> & Serializable>
 	private AbaStatisticsController statsController;
 
 	@Override
-	public MatchCandidates<T> getMatchCandidates(
+	public MatchGroup<T> getMatchCandidates(
 			final DataAccessObject<T> query, final AbaParameters parameters,
 			final AbaSettings settings,
 			final AbaServerConfiguration configuration)
@@ -53,13 +53,13 @@ public class OnlineMatchingBean<T extends Comparable<T> & Serializable>
 		List<EvaluatedPair<T>> pairs =
 			delegate.createEvaluatedPairs(query, model, matches);
 
-		MatchCandidates<T> retVal = new MatchCandidatesBean<T>(query, pairs);
+		MatchGroup<T> retVal = new MatchGroupBean<T>(query, pairs);
 
 		return retVal;
 	}
 
 	@Override
-	public TransitiveCandidates<T> getTransitiveCandidates(
+	public TransitiveGroup<T> getTransitiveCandidates(
 			DataAccessObject<T> query, AbaParameters parameters,
 			AbaSettings settings, AbaServerConfiguration configuration,
 			IGraphProperty mergeConnectivity, boolean mustIncludeQuery)
@@ -71,7 +71,7 @@ public class OnlineMatchingBean<T extends Comparable<T> & Serializable>
 		List<Match> matches = delegate.getMatchList(query, parameters, settings,
 				configuration, statsController);
 
-		TransitiveCandidates<T> retVal = delegate.getTransitiveCandidates(query,
+		TransitiveGroup<T> retVal = delegate.getTransitiveCandidates(query,
 				matches, parameters, mergeConnectivity, mustIncludeQuery);
 
 		return retVal;

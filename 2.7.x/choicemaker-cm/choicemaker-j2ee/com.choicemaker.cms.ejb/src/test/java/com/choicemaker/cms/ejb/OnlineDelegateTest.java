@@ -9,7 +9,7 @@ import org.junit.Test;
 
 import com.choicemaker.client.api.DataAccessObject;
 import com.choicemaker.client.api.IGraphProperty;
-import com.choicemaker.client.api.TransitiveCandidates;
+import com.choicemaker.client.api.TransitiveGroup;
 import com.choicemaker.cm.args.TransitivityException;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.Match;
@@ -62,12 +62,12 @@ public class OnlineDelegateTest {
 
 		OnlineDelegate<Integer> delegate = new OnlineDelegate<Integer>();
 		try {
-			final TransitiveCandidates<Integer> computed =
+			final TransitiveGroup<Integer> computed =
 				delegate.getTransitiveCandidates(query, matchList, parameters,
 						mergeConnectivity, mustIncludeQuery);
 			assertTrue(computed != null);
 			System.out.println(computed);
-			final TransitiveCandidates<Integer> expected =
+			final TransitiveGroup<Integer> expected =
 				testdata.getExpectedTransitiveCandidates();
 			assertTrue(expected != null);
 			// assertTrue(equals(expected, computed));

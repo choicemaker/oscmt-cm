@@ -15,8 +15,8 @@ import com.choicemaker.client.api.DataAccessObject;
 import com.choicemaker.client.api.Decision;
 import com.choicemaker.client.api.EvaluatedPair;
 import com.choicemaker.client.api.IGraphProperty;
-import com.choicemaker.client.api.MergeCandidates;
-import com.choicemaker.client.api.TransitiveCandidates;
+import com.choicemaker.client.api.MergeGroup;
+import com.choicemaker.client.api.TransitiveGroup;
 import com.choicemaker.cm.aba.AutomatedBlocker;
 import com.choicemaker.cm.args.AbaSettings;
 import com.choicemaker.cm.args.TransitivityException;
@@ -33,8 +33,8 @@ import com.choicemaker.cm.transitivity.ejb.util.ClusteringIteratorFactory;
 import com.choicemaker.cm.transitivity.util.CEFromMatchesBuilder;
 import com.choicemaker.cms.api.AbaParameters;
 import com.choicemaker.cms.api.AbaServerConfiguration;
-import com.choicemaker.cms.beans.MergeCandidatesBean;
-import com.choicemaker.cms.beans.TransitiveCandidatesBean;
+import com.choicemaker.cms.beans.MergeGroupBean;
+import com.choicemaker.cms.beans.TransitiveGroupBean;
 import com.choicemaker.util.Precondition;
 
 /**
@@ -294,7 +294,7 @@ public class OnlineDelegate<T extends Comparable<T> & Serializable> {
 		return retVal;
 	}
 
-	public TransitiveCandidates<T> getTransitiveCandidates(
+	public TransitiveGroup<T> getTransitiveCandidates(
 			final DataAccessObject<T> query, final List<Match> matchList,
 			final AbaParameters parameters,
 			final IGraphProperty mergeConnectivity,
@@ -312,16 +312,16 @@ public class OnlineDelegate<T extends Comparable<T> & Serializable> {
 		final CompositeEntity compositeEntity = computeCompositeEntity(query,
 				matchList, parameters, mergeConnectivity);
 
-		TransitiveCandidates<T> retVal;
+		TransitiveGroup<T> retVal;
 		if (compositeEntity == null) {
 			logger.info("no matching composite entity");
-			retVal = new TransitiveCandidatesBean<>(query);
+			retVal = new TransitiveGroupBean<>(query);
 
 		} else {
 			List<INode<?>> childEntities = compositeEntity.getChildren();
 			if (childEntities == null) {
 				logger.info("empty composite entity");
-				retVal = new TransitiveCandidatesBean<>(query);
+				retVal = new TransitiveGroupBean<>(query);
 
 			} else {
 				ImmutableProbabilityModel model =
@@ -334,7 +334,7 @@ public class OnlineDelegate<T extends Comparable<T> & Serializable> {
 		return retVal;
 	}
 
-	public TransitiveCandidates<T> getTransitiveCandidates(
+	public TransitiveGroup<T> getTransitiveCandidates(
 			final DataAccessObject<T> query,
 //			final Map<SafeIndex<T>, Match> matchMap,
 			final List<INode<?>> childEntities,
@@ -349,7 +349,7 @@ public class OnlineDelegate<T extends Comparable<T> & Serializable> {
 
 		final SafeIndex<T> queryId = new SafeIndex<T>(query.getId());
 		final List<EvaluatedPair<T>> pairs = new ArrayList<>();
-		final List<MergeCandidates<T>> mergeGroups = new ArrayList<>();
+		final List<MergeGroup<T>> mergeGroups = new ArrayList<>();
 		for (INode<?> childNode : childEntities) {
 
 			// Handle an isolated record
@@ -405,8 +405,8 @@ public class OnlineDelegate<T extends Comparable<T> & Serializable> {
 					pairs.addAll(groupPairs);
 					List<DataAccessObject<T>> records =
 						getRecordsFromPairs(groupPairs);
-					MergeCandidates<T> mergeCandidate =
-						new MergeCandidatesBean<T>(mergeConnectivity, records,
+					MergeGroup<T> mergeCandidate =
+						new MergeGroupBean<T>(mergeConnectivity, records,
 								groupPairs);
 					mergeGroups.add(mergeCandidate);
 				}
@@ -418,8 +418,8 @@ public class OnlineDelegate<T extends Comparable<T> & Serializable> {
 			}
 
 		}
-		TransitiveCandidatesBean<T> retVal =
-			new TransitiveCandidatesBean<T>(query, pairs, mergeGroups);
+		TransitiveGroupBean<T> retVal =
+			new TransitiveGroupBean<T>(query, pairs, mergeGroups);
 		return retVal;
 	}
 

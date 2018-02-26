@@ -7,18 +7,18 @@ import java.util.List;
 
 import com.choicemaker.client.api.DataAccessObject;
 import com.choicemaker.client.api.EvaluatedPair;
-import com.choicemaker.client.api.MatchCandidates;
+import com.choicemaker.client.api.MatchGroup;
 import com.choicemaker.util.Precondition;
 
-public class MatchCandidatesBean<T extends Comparable<T> & Serializable>
-		implements Serializable, MatchCandidates<T> {
+public class MatchGroupBean<T extends Comparable<T> & Serializable>
+		implements Serializable, MatchGroup<T> {
 
 	private static final long serialVersionUID = 271L;
 
 	private final DataAccessObject<T> q;
 	private final List<EvaluatedPair<T>> pairs;
 
-	public MatchCandidatesBean(DataAccessObject<T> q, List<EvaluatedPair<T>> pairs) {
+	public MatchGroupBean(DataAccessObject<T> q, List<EvaluatedPair<T>> pairs) {
 		Precondition.assertNonNullArgument("null query", q);
 		Precondition.assertNonNullArgument("null pairs", pairs);
 		this.q = q;
@@ -65,7 +65,7 @@ public class MatchCandidatesBean<T extends Comparable<T> & Serializable>
 		if (getClass() != obj.getClass())
 			return false;
 		@SuppressWarnings("unchecked")
-		MatchCandidatesBean<T> other = (MatchCandidatesBean<T>) obj;
+		MatchGroupBean<T> other = (MatchGroupBean<T>) obj;
 		if (pairs == null) {
 			if (other.pairs != null)
 				return false;

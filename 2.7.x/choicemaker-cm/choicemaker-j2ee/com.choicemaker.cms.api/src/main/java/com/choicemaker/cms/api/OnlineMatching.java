@@ -15,8 +15,8 @@ import java.io.Serializable;
 
 import com.choicemaker.client.api.DataAccessObject;
 import com.choicemaker.client.api.IGraphProperty;
-import com.choicemaker.client.api.MatchCandidates;
-import com.choicemaker.client.api.TransitiveCandidates;
+import com.choicemaker.client.api.MatchGroup;
+import com.choicemaker.client.api.TransitiveGroup;
 import com.choicemaker.cm.args.AbaSettings;
 import com.choicemaker.cm.args.TransitivityException;
 import com.choicemaker.cm.core.BlockingException;
@@ -26,12 +26,12 @@ import com.choicemaker.cm.core.BlockingException;
  */
 public interface OnlineMatching<T extends Comparable<T> & Serializable> {
 
-	MatchCandidates<T> getMatchCandidates(DataAccessObject<T> query,
+	MatchGroup<T> getMatchCandidates(DataAccessObject<T> query,
 			AbaParameters parameters, AbaSettings settings,
 			AbaServerConfiguration configuration)
 			throws IOException, BlockingException;
 
-	TransitiveCandidates<T> getTransitiveCandidates(DataAccessObject<T> query,
+	TransitiveGroup<T> getTransitiveCandidates(DataAccessObject<T> query,
 			AbaParameters parameters, AbaSettings settings,
 			AbaServerConfiguration configuration,
 			IGraphProperty mergeConnectivity, boolean mustIncludeQuery)

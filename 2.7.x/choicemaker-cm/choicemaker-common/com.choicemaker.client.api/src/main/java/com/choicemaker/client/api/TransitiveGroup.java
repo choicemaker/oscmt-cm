@@ -3,7 +3,7 @@ package com.choicemaker.client.api;
 import java.io.Serializable;
 import java.util.List;
 
-public interface TransitiveCandidates<T extends Comparable<T> & Serializable> extends Serializable {
+public interface TransitiveGroup<T extends Comparable<T> & Serializable> extends Serializable {
 
 	/**
 	 * Returns the query record against which the candidate records are
@@ -36,7 +36,7 @@ public interface TransitiveCandidates<T extends Comparable<T> & Serializable> ex
 	 * the specified record is not the query record or a candidate record, a
 	 * null merge candidate is returned.
 	 */
-	MergeGroup<T> getMergeCandidate(DataAccessObject<T> record);
+//	MergeGroup<T> getMergeCandidate(DataAccessObject<T> record);
 	
 }
 

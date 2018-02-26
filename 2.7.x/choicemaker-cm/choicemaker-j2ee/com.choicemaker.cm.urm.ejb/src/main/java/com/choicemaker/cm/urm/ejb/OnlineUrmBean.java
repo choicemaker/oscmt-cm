@@ -17,8 +17,8 @@ import javax.ejb.Remote;
 import javax.ejb.Stateless;
 
 import com.choicemaker.client.api.IGraphProperty;
-import com.choicemaker.client.api.MatchCandidates;
-import com.choicemaker.client.api.TransitiveCandidates;
+import com.choicemaker.client.api.MatchGroup;
+import com.choicemaker.client.api.TransitiveGroup;
 import com.choicemaker.cm.args.AbaSettings;
 import com.choicemaker.cm.args.TransitivityException;
 import com.choicemaker.cm.core.BlockingException;
@@ -105,7 +105,7 @@ public class OnlineUrmBean<T extends Comparable<T> & Serializable>
 				adapter, ncController, masterCollection, modelName,
 				differThreshold, matchThreshold, maxNumMatches);
 
-		MatchCandidates<T> matchCandidates = null;
+		MatchGroup<T> matchCandidates = null;
 		try {
 			AbaParameters abaParams = null;
 			abaParams = NamedConfigConversion.createAbaParameters(cmConf);
@@ -161,7 +161,7 @@ public class OnlineUrmBean<T extends Comparable<T> & Serializable>
 				adapter, ncController, masterCollection, modelName,
 				differThreshold, matchThreshold, maxNumMatches);
 
-		TransitiveCandidates<T> transitiveCandidates = null;
+		TransitiveGroup<T> transitiveCandidates = null;
 		try {
 			AbaParameters abaParams = null;
 			abaParams = NamedConfigConversion.createAbaParameters(cmConf);

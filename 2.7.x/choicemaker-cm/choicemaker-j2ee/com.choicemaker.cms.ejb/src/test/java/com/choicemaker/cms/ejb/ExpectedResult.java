@@ -6,8 +6,8 @@ import java.util.List;
 import com.choicemaker.client.api.DataAccessObject;
 import com.choicemaker.client.api.EvaluatedPair;
 import com.choicemaker.client.api.IGraphProperty;
-import com.choicemaker.client.api.MatchCandidates;
-import com.choicemaker.client.api.TransitiveCandidates;
+import com.choicemaker.client.api.MatchGroup;
+import com.choicemaker.client.api.TransitiveGroup;
 import com.choicemaker.cm.core.Match;
 import com.choicemaker.cm.transitivity.core.CompositeEntity;
 import com.choicemaker.cms.api.AbaParameters;
@@ -30,11 +30,11 @@ public class ExpectedResult<T extends Comparable<T> & Serializable> {
 	private final IGraphProperty mergeConnectivity;
 	private final boolean mergeGroupContainsQuery;
 	private final CompositeEntity expectedCompositeEntity;
-	private final TransitiveCandidates<T> expectedTransitiveCandidates;
+	private final TransitiveGroup<T> expectedTransitiveCandidates;
 
 	public ExpectedResult(DataAccessObject<T> qr, List<Match> ml,
 			AbaParameters params, IGraphProperty mc, boolean mustContainQuery,
-			CompositeEntity expectedCE, TransitiveCandidates<T> expectedTC) {
+			CompositeEntity expectedCE, TransitiveGroup<T> expectedTC) {
 		this.queryRecord = qr;
 		this.matchList = ml;
 		this.parameters = params;
@@ -68,11 +68,11 @@ public class ExpectedResult<T extends Comparable<T> & Serializable> {
 		return expectedCompositeEntity;
 	}
 
-	public MatchCandidates<T> getExpectedMatchCandidates() {
+	public MatchGroup<T> getExpectedMatchCandidates() {
 		throw new Error("not yet implemented");
 	}
 
-	public TransitiveCandidates<T> getExpectedTransitiveCandidates() {
+	public TransitiveGroup<T> getExpectedTransitiveCandidates() {
 		return expectedTransitiveCandidates;
 	}
 

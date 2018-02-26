@@ -8,11 +8,11 @@ import java.util.List;
 import com.choicemaker.client.api.DataAccessObject;
 import com.choicemaker.client.api.EvaluatedPair;
 import com.choicemaker.client.api.MergeGroup;
-import com.choicemaker.client.api.TransitiveCandidates;
+import com.choicemaker.client.api.TransitiveGroup;
 import com.choicemaker.util.Precondition;
 
-public class TransitiveCandidatesBean<T extends Comparable<T> & Serializable>
-		implements TransitiveCandidates<T> {
+public class TransitiveGroupBean<T extends Comparable<T> & Serializable>
+		implements TransitiveGroup<T> {
 
 	private static final long serialVersionUID = 271L;
 	private final DataAccessObject<T> q;
@@ -23,7 +23,7 @@ public class TransitiveCandidatesBean<T extends Comparable<T> & Serializable>
 	 * Creates an empty TransitiveCandidates instance; that is, query record
 	 * that is not linked to any other record by match or hold relationships.
 	 */
-	public TransitiveCandidatesBean(DataAccessObject<T> q) {
+	public TransitiveGroupBean(DataAccessObject<T> q) {
 		this(q, Collections.emptyList(), Collections.emptyList());
 	}
 
@@ -40,7 +40,7 @@ public class TransitiveCandidatesBean<T extends Comparable<T> & Serializable>
 	 *            a non-null list of merge candidates. Every candidate must be a
 	 *            member of some pair in the <code>pairs</code> list
 	 */
-	public TransitiveCandidatesBean(DataAccessObject<T> q,
+	public TransitiveGroupBean(DataAccessObject<T> q,
 			List<EvaluatedPair<T>> pairs,
 			List<MergeGroup<T>> mergeGroups) {
 		Precondition.assertNonNullArgument("null query", q);
@@ -98,7 +98,7 @@ public class TransitiveCandidatesBean<T extends Comparable<T> & Serializable>
 		if (getClass() != obj.getClass())
 			return false;
 		@SuppressWarnings("rawtypes")
-		TransitiveCandidatesBean other = (TransitiveCandidatesBean) obj;
+		TransitiveGroupBean other = (TransitiveGroupBean) obj;
 		if (mergeGroups == null) {
 			if (other.mergeGroups != null)
 				return false;

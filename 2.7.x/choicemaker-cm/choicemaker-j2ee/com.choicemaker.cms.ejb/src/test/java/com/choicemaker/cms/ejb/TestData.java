@@ -24,7 +24,7 @@ import com.choicemaker.cm.core.base.MatchRecord2;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.base.RECORD_SOURCE_ROLE;
 import com.choicemaker.cm.transitivity.core.CompositeEntity;
-import com.choicemaker.cms.beans.TransitiveCandidatesBean;
+import com.choicemaker.cms.beans.TransitiveGroupBean;
 import com.choicemaker.util.UniqueSequence;
 
 public class TestData {
@@ -140,8 +140,8 @@ public class TestData {
 
 		List<EvaluatedPair<Integer>> ePairs = new ArrayList<>();
 		ePairs.add(ePair);
-		TransitiveCandidatesBean<Integer> expectedTC =
-			new TransitiveCandidatesBean<Integer>(query01, ePairs,
+		TransitiveGroupBean<Integer> expectedTC =
+			new TransitiveGroupBean<Integer>(query01, ePairs,
 					Collections.emptyList());
 
 		ExpectedResult<Integer> retVal =
