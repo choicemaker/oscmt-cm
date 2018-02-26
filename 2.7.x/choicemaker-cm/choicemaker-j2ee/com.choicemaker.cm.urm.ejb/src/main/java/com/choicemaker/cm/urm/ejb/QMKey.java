@@ -3,7 +3,6 @@ package com.choicemaker.cm.urm.ejb;
 import java.io.Serializable;
 
 import com.choicemaker.cm.urm.base.IRecord;
-import com.choicemaker.cm.urm.ejb.UrmEjbAssist.QMKey;
 import com.choicemaker.util.Precondition;
 
 public class QMKey<T extends Comparable<T> & Serializable> {
@@ -31,7 +30,8 @@ public class QMKey<T extends Comparable<T> & Serializable> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		UrmEjbAssist.QMKey other = (UrmEjbAssist.QMKey) obj;
+		@SuppressWarnings("unchecked")
+		QMKey<T> other = (QMKey<T>) obj;
 		if (m == null) {
 			if (other.m != null)
 				return false;
