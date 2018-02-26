@@ -8,11 +8,11 @@ import java.util.List;
 import com.choicemaker.client.api.DataAccessObject;
 import com.choicemaker.client.api.EvaluatedPair;
 import com.choicemaker.client.api.IGraphProperty;
-import com.choicemaker.client.api.MergeCandidates;
+import com.choicemaker.client.api.MergeGroup;
 import com.choicemaker.util.Precondition;
 
-public class MergeCandidatesBean<T extends Comparable<T> & Serializable>
-		implements MergeCandidates<T> {
+public class MergeGroupBean<T extends Comparable<T> & Serializable>
+		implements MergeGroup<T> {
 
 	private static final long serialVersionUID = 271L;
 
@@ -20,7 +20,7 @@ public class MergeCandidatesBean<T extends Comparable<T> & Serializable>
 	private final List<DataAccessObject<T>> records;
 	private final List<EvaluatedPair<T>> pairs;
 
-	public MergeCandidatesBean(IGraphProperty mergeConnectivity,
+	public MergeGroupBean(IGraphProperty mergeConnectivity,
 			List<DataAccessObject<T>> records, List<EvaluatedPair<T>> pairs) {
 		Precondition.assertNonNullArgument("null merge connectivity", mergeConnectivity);
 		Precondition.assertNonNullArgument("null records", records);
@@ -68,7 +68,7 @@ public class MergeCandidatesBean<T extends Comparable<T> & Serializable>
 		if (getClass() != obj.getClass())
 			return false;
 		@SuppressWarnings("rawtypes")
-		MergeCandidatesBean other = (MergeCandidatesBean) obj;
+		MergeGroupBean other = (MergeGroupBean) obj;
 		if (mergeConnectivity == null) {
 			if (other.mergeConnectivity != null)
 				return false;
