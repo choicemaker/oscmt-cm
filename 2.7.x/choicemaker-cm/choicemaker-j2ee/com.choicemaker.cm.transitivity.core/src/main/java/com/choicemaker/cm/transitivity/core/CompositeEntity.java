@@ -47,7 +47,7 @@ public class CompositeEntity implements INode<Integer> {
 			seenNodes.add(currentNode);
 			List<INode<?>> al = ce.getAdjacency(currentNode);
 			for (int i = 0; i < al.size(); i++) {
-				INode<?> node = (INode<?>) al.get(i);
+				INode<?> node = al.get(i);
 				getAllAccessibleNodesInternal(ce, seenNodes, node);
 			}
 		}
@@ -186,14 +186,17 @@ public class CompositeEntity implements INode<Integer> {
 
 	}
 
+	@Override
 	public Integer getNodeId() {
 		return id;
 	}
 
+	@Override
 	public boolean hasChildren() {
 		return true;
 	}
 
+	@Override
 	public List<INode<?>> getChildren() {
 		return new ArrayList<INode<?>>(nodes.values());
 	}
@@ -217,6 +220,7 @@ public class CompositeEntity implements INode<Integer> {
 		return adjacencyMap.get(node);
 	}
 
+	@Override
 	public int compareTo(INode<Integer> o) {
 		if (o instanceof CompositeEntity) {
 			CompositeEntity ce = (CompositeEntity) o;
@@ -313,14 +317,17 @@ public class CompositeEntity implements INode<Integer> {
 		return retVal;
 	}
 
+	@Override
 	public void mark(Integer I) {
 		marking = I;
 	}
 
+	@Override
 	public Integer getMarking() {
 		return marking;
 	}
 
+	@Override
 	public char getType() {
 		return INode.COMPOSITE_TYPE;
 	}
