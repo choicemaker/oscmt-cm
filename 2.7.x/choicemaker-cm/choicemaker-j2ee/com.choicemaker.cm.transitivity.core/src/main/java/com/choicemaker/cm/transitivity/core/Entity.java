@@ -81,11 +81,12 @@ public class Entity<T extends Comparable<T>> implements INode<T> {
 			Entity e = (Entity) o;
 			if (type == e.type) {
 				return this.recordID.compareTo((T) e.recordID);
-			} else {
 
+			} else {
 				if (type == STAGE_TYPE) return -1;
 				else return 1;
 			}
+
 		} else {
 			return 1;
 		}
