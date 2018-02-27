@@ -10,17 +10,12 @@ import com.choicemaker.client.api.EvaluatedPair;
 import com.choicemaker.client.api.MergeGroup;
 import com.choicemaker.client.api.TransitiveGroup;
 import com.choicemaker.cms.util.EvaluatedPairAssist;
-import com.choicemaker.util.Precondition;
 
 public class TransitiveGroupBean<T extends Comparable<T> & Serializable>
-		implements TransitiveGroup<T> {
+		extends MatchGroupBean<T> implements TransitiveGroup<T> {
 
 	private static final long serialVersionUID = 271L;
-	private final DataAccessObject<T> q;
-	
-	// Unmodifiable; see constructor
-	private final List<EvaluatedPair<T>> pairs;
-	
+
 	// Unmodifiable; see constructor
 	private final List<MergeGroup<T>> mergeGroups;
 
@@ -47,25 +42,19 @@ public class TransitiveGroupBean<T extends Comparable<T> & Serializable>
 	 */
 	public TransitiveGroupBean(DataAccessObject<T> q,
 			List<EvaluatedPair<T>> pairs, List<MergeGroup<T>> mergeGroups) {
-		Precondition.assertNonNullArgument("null query", q);
-		Precondition.assertNonNullArgument("null pairs", pairs);
-		this.q = q;
+		super(q, pairs);
 
-		List<EvaluatedPair<T>> list0 = new ArrayList<>();
-		list0.addAll(pairs);
-		this.pairs = Collections.unmodifiableList(list0);
+		List<MergeGroup<T>> list1;
+		if (mergeGroups != null) {
+			list1 = new ArrayList<>();
+			list1.addAll(mergeGroups);
+		} else {
+			list1 = Collections.emptyList();
+		}
+		this.mergeGroups = Collections.unmodifiableList(list1);
 
 		boolean assertionsEnabled = false;
 		assert assertionsEnabled = true;
-		if (assertionsEnabled) {
-			for (EvaluatedPair<T> pair : this.pairs) {
-				assert pair != null;
-			}
-		}
-
-		List<MergeGroup<T>> list1 = new ArrayList<>();
-		list1.addAll(mergeGroups);
-		this.mergeGroups = Collections.unmodifiableList(list1);
 
 		if (assertionsEnabled) {
 			for (MergeGroup<T> mergeGroup : this.mergeGroups) {
@@ -82,33 +71,22 @@ public class TransitiveGroupBean<T extends Comparable<T> & Serializable>
 				list2.addAll(mergeRecords);
 			}
 			List<DataAccessObject<T>> list3 =
-				EvaluatedPairAssist.extractRecordsFromPairs(this.pairs);
+				EvaluatedPairAssist.extractRecordsFromPairs(pairs);
 			assert list3.containsAll(list2);
 		}
 	}
 
-	public DataAccessObject<T> getQueryRecord() {
-		return q;
-	}
-
-	public List<EvaluatedPair<T>> getEvaluatedPairs() {
-		return pairs;
-	}
-
+	@Override
 	public List<MergeGroup<T>> getMergeGroups() {
 		return mergeGroups;
 	}
 
 	@Override
 	public String toString() {
-		return "TransitiveCandidatesBean [q=" + q + ", pairs:" + pairs.size()
-				+ ", merges:" + mergeGroups.size() + "]";
-	}
-
-	@Override
-	public EvaluatedPair<T> getEvaluatedPair(DataAccessObject<T> candidate) {
-		// TODO stub
-		throw new Error("not yet implemented");
+		return "TransitiveCandidatesBean [groupId=" + getGroupId() + ", q="
+				+ getQueryRecord() + ", pairs:"
+				+ getQueryCandidatePairs().size() + ", merges:"
+				+ mergeGroups.size() + "]";
 	}
 
 	@Override
@@ -123,43 +101,43 @@ public class TransitiveGroupBean<T extends Comparable<T> & Serializable>
 		throw new Error("not yet implemented");
 	}
 
-//	@Override
-//	public int hashCode() {
-//		final int prime = 31;
-//		int result = 1;
-//		result = prime * result
-//				+ ((mergeGroups == null) ? 0 : mergeGroups.hashCode());
-//		result = prime * result + ((pairs == null) ? 0 : pairs.hashCode());
-//		result = prime * result + ((q == null) ? 0 : q.hashCode());
-//		return result;
-//	}
-//
-//	@Override
-//	public boolean equals(Object obj) {
-//		if (this == obj)
-//			return true;
-//		if (obj == null)
-//			return false;
-//		if (getClass() != obj.getClass())
-//			return false;
-//		@SuppressWarnings("rawtypes")
-//		TransitiveGroupBean other = (TransitiveGroupBean) obj;
-//		if (mergeGroups == null) {
-//			if (other.mergeGroups != null)
-//				return false;
-//		} else if (!mergeGroups.equals(other.mergeGroups))
-//			return false;
-//		if (pairs == null) {
-//			if (other.pairs != null)
-//				return false;
-//		} else if (!pairs.equals(other.pairs))
-//			return false;
-//		if (q == null) {
-//			if (other.q != null)
-//				return false;
-//		} else if (!q.equals(other.q))
-//			return false;
-//		return true;
-//	}
+	// @Override
+	// public int hashCode() {
+	// final int prime = 31;
+	// int result = 1;
+	// result = prime * result
+	// + ((mergeGroups == null) ? 0 : mergeGroups.hashCode());
+	// result = prime * result + ((pairs == null) ? 0 : pairs.hashCode());
+	// result = prime * result + ((q == null) ? 0 : q.hashCode());
+	// return result;
+	// }
+	//
+	// @Override
+	// public boolean equals(Object obj) {
+	// if (this == obj)
+	// return true;
+	// if (obj == null)
+	// return false;
+	// if (getClass() != obj.getClass())
+	// return false;
+	// @SuppressWarnings("rawtypes")
+	// TransitiveGroupBean other = (TransitiveGroupBean) obj;
+	// if (mergeGroups == null) {
+	// if (other.mergeGroups != null)
+	// return false;
+	// } else if (!mergeGroups.equals(other.mergeGroups))
+	// return false;
+	// if (pairs == null) {
+	// if (other.pairs != null)
+	// return false;
+	// } else if (!pairs.equals(other.pairs))
+	// return false;
+	// if (q == null) {
+	// if (other.q != null)
+	// return false;
+	// } else if (!q.equals(other.q))
+	// return false;
+	// return true;
+	// }
 
 }
