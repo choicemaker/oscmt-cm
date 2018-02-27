@@ -24,11 +24,13 @@ import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Match;
 import com.choicemaker.cm.core.Record;
+import com.choicemaker.cm.core.base.MatchRecord2;
 import com.choicemaker.cm.core.base.RecordDecisionMaker;
 import com.choicemaker.cm.oaba.api.AbaStatisticsController;
 import com.choicemaker.cm.transitivity.core.CompositeEntity;
 import com.choicemaker.cm.transitivity.core.Entity;
 import com.choicemaker.cm.transitivity.core.INode;
+import com.choicemaker.cm.transitivity.core.Link;
 import com.choicemaker.cm.transitivity.ejb.util.ClusteringIteratorFactory;
 import com.choicemaker.cm.transitivity.util.CEFromMatchesBuilder;
 import com.choicemaker.cms.api.AbaParameters;
@@ -57,9 +59,8 @@ public class OnlineDelegate<T extends Comparable<T> & Serializable> {
 		Precondition.assertNonNullArgument("null match", match);
 		Precondition.assertNonNullArgument("null model", model);
 		Precondition.assertNonNullArgument("null list", list);
-		EvaluatedPair<T> gp;
-		gp = getEvaluatedPair(query, match, model);
-		list.add(gp);
+		EvaluatedPair<T> ep = getEvaluatedPair(query, match, model);
+		list.add(ep);
 	}
 
 	public void addQueryPairToList(DataAccessObject<T> query,
@@ -68,9 +69,8 @@ public class OnlineDelegate<T extends Comparable<T> & Serializable> {
 		Precondition.assertNonNullArgument("null list", list);
 		float p = 1.0f;
 		Decision d = Decision.MATCH;
-		EvaluatedPair<T> gp;
-		gp = new EvaluatedPair<T>(query, query, p, d);
-		list.add(gp);
+		EvaluatedPair<T> ep = new EvaluatedPair<T>(query, query, p, d);
+		list.add(ep);
 	}
 
 	public void assertValidArguments(DataAccessObject<?> query,
@@ -168,39 +168,19 @@ public class OnlineDelegate<T extends Comparable<T> & Serializable> {
 		return "".intern();
 	}
 
-	public Map<SafeIndex<T>, Match> createMatchMap(List<Match> matchList)
+	protected Map<T, Match> createMatchMap(List<Match> matches)
 			throws BlockingException {
 		/*
-		 * At most one null index is expected, for the query. Other records
-		 * should be coming from a database, and therefore should have non-null
-		 * indices. This method can't handle more than one null index, because
-		 * the matchMap will overwrite multiple matches with null indices. (Of
-		 * course, overwriting will occur with multiple matches with the same
-		 * non-null index, but this is expected for database records.
+		 * No null indices are expected, because Match instances record ids from
+		 * the database.
 		 */
-		int countListElements = 0;
-		int countNullIndices = 0;
-		Map<SafeIndex<T>, Match> retVal = new HashMap<>();
-		for (Match match : matchList) {
-			++countListElements;
+		Map<T, Match> retVal = new HashMap<>();
+		for (Match match : matches) {
 			@SuppressWarnings("unchecked")
-			T _hackId = (T) match.id;
-			if (_hackId == null) {
-				++countNullIndices;
-			}
-			retVal.put(new SafeIndex<T>(_hackId), match);
+			T id = (T) match.id;
+			assert id != null;
+			retVal.put(id, match);
 		}
-		final int duplicateIndices = countListElements - retVal.size();
-		if (countNullIndices > 1) {
-			String msg = "Too many null indices: " + countNullIndices;
-			logger.severe(msg);
-			throw new BlockingException(msg);
-		}
-		if (duplicateIndices > 0) {
-			String msg = "Duplicate indices! (count: " + duplicateIndices + ")";
-			logger.warning(msg);
-		}
-
 		return retVal;
 	}
 
@@ -255,46 +235,20 @@ public class OnlineDelegate<T extends Comparable<T> & Serializable> {
 		return retVal;
 	}
 
-	public SortedSet<SafeIndex<T>> getRecordIndicesFromPairs(
+	public SortedSet<T> getCandidateIndicesFromPairs(
 			List<EvaluatedPair<T>> pairs) {
 		Precondition.assertNonNullArgument("null pairs", pairs);
-		SortedSet<SafeIndex<T>> retVal = new TreeSet<>();
-		for (EvaluatedPair<T> gp : pairs) {
-			SafeIndex<T> idx1 = new SafeIndex<T>(gp.getQueryRecord().getId());
-			SafeIndex<T> idx2 =
-				new SafeIndex<T>(gp.getMatchCandidate().getId());
-			retVal.add(idx1);
+		SortedSet<T> retVal = new TreeSet<>();
+		for (EvaluatedPair<T> ep : pairs) {
+			// T idx1 = ep.getQueryRecord().getId();
+			T idx2 = ep.getMatchCandidate().getId();
+			// retVal.add(idx1);
 			retVal.add(idx2);
 		}
 		return retVal;
 	}
 
-	private List<DataAccessObject<T>> getRecordsFromPairs(
-			List<EvaluatedPair<T>> pairs) {
-		Precondition.assertNonNullArgument("null pairs", pairs);
-		SortedSet<SafeIndex<T>> indices = getRecordIndicesFromPairs(pairs);
-		List<DataAccessObject<T>> retVal = new ArrayList<>();
-		for (EvaluatedPair<T> gp : pairs) {
-			DataAccessObject<T> r1 = gp.getQueryRecord();
-			DataAccessObject<T> r2 = gp.getMatchCandidate();
-			SafeIndex<T> idx1 = new SafeIndex<T>(r1.getId());
-			SafeIndex<T> idx2 = new SafeIndex<T>(r2.getId());
-			if (indices.contains(idx1)) {
-				retVal.add(r1);
-				indices.remove(idx1);
-			}
-			if (indices.contains(idx2)) {
-				retVal.add(r2);
-				indices.remove(idx2);
-			}
-			if (indices.isEmpty()) {
-				break;
-			}
-		}
-		return retVal;
-	}
-
-	public TransitiveGroup<T> getTransitiveCandidates(
+	public TransitiveGroup<T> getTransitiveGroup(
 			final DataAccessObject<T> query, final List<Match> matchList,
 			final AbaParameters parameters,
 			final IGraphProperty mergeConnectivity,
@@ -307,7 +261,7 @@ public class OnlineDelegate<T extends Comparable<T> & Serializable> {
 		Precondition.assertNonNullArgument("null merge connectivity",
 				mergeConnectivity);
 
-		final Map<SafeIndex<T>, Match> matchMap = createMatchMap(matchList);
+		final Map<T, Match> matchMap = createMatchMap(matchList);
 
 		final CompositeEntity compositeEntity = computeCompositeEntity(query,
 				matchList, parameters, mergeConnectivity);
@@ -326,7 +280,7 @@ public class OnlineDelegate<T extends Comparable<T> & Serializable> {
 			} else {
 				ImmutableProbabilityModel model =
 					ParameterHelper.getModel(parameters);
-				retVal = getTransitiveCandidates(query, childEntities,
+				retVal = getTransitiveGroup(query, matchMap, childEntities,
 						model, mergeConnectivity, mustIncludeQuery);
 			}
 		}
@@ -334,81 +288,118 @@ public class OnlineDelegate<T extends Comparable<T> & Serializable> {
 		return retVal;
 	}
 
-	public TransitiveGroup<T> getTransitiveCandidates(
-			final DataAccessObject<T> query,
-//			final Map<SafeIndex<T>, Match> matchMap,
+	public TransitiveGroup<T> getTransitiveGroup(
+			final DataAccessObject<T> query, final Map<T, Match> matchMap,
 			final List<INode<?>> childEntities,
 			final ImmutableProbabilityModel model,
 			final IGraphProperty mergeConnectivity,
 			final boolean mustIncludeQuery) throws TransitivityException {
 
 		Precondition.assertNonNullArgument("null query", query);
-//		Precondition.assertNonNullArgument("null map", matchMap);
+		Precondition.assertNonNullArgument("null map", matchMap);
 		Precondition.assertNonNullArgument("null entities", childEntities);
 		Precondition.assertNonNullArgument("null model", model);
 
-		final SafeIndex<T> queryId = new SafeIndex<T>(query.getId());
+		final Map<T, DataAccessObject<T>> candidateMap = new HashMap<>();
+		for (Map.Entry<T, Match> me : matchMap.entrySet()) {
+			T key = me.getKey();
+			DataAccessObject<T> candidate = getMatchDao(me.getValue(), model);
+			candidateMap.put(key, candidate);
+		}
+
+		/*
+		 * Note query.getId() may be null
+		 */
+		T queryId = query.getId();
+
 		final List<EvaluatedPair<T>> pairs = new ArrayList<>();
 		final List<MergeGroup<T>> mergeGroups = new ArrayList<>();
 		for (INode<?> childNode : childEntities) {
 
 			// Handle an isolated record
 			if (childNode instanceof Entity) {
-				@SuppressWarnings({
-						"unchecked", "rawtypes" })
-				SafeIndex<?> nodeId = new SafeIndex(childNode.getNodeId());
-				if (!nodeId.equals(queryId)) {
-					Match m = (Match) matchMap.get(nodeId);
+				@SuppressWarnings("unchecked")
+				T childId = (T) childNode.getNodeId();
+				assert childId != null;
+				if (!childId.equals(queryId)) {
+					Match m = (Match) matchMap.get(childId);
+					assert m != null;
 					EvaluatedPair<T> pair = getEvaluatedPair(query, m, model);
 					pairs.add(pair);
 				}
 
 				// Handle a group of records
 			} else if (childNode instanceof CompositeEntity) {
-				CompositeEntity group = (CompositeEntity) childNode;
-				List<EvaluatedPair<T>> groupPairs = new ArrayList<>();
+				CompositeEntity compositeEntity = (CompositeEntity) childNode;
+				List<EvaluatedPair<T>> queryCandidatePairs = new ArrayList<>();
+				List<EvaluatedPair<T>> mergGroupPairs = new ArrayList<>();
 				boolean containsQuery = false;
 
 				// Add evaluated pairs from the group
-				for (INode<?> child : group.getChildren()) {
-					@SuppressWarnings({
-							"rawtypes", "unchecked" })
-					final SafeIndex<?> childId =
-						new SafeIndex(child.getNodeId());
-					if (queryId.equals(childId)) {
+				for (INode<?> child : compositeEntity.getChildren()) {
+					assert child instanceof Entity;
+					@SuppressWarnings("unchecked")
+					final T childId = (T) child.getNodeId();
+					if ((queryId == null && childId == null)
+							|| childId.equals(queryId)) {
 						containsQuery = true;
-						if (mustIncludeQuery) {
-							addQueryPairToList(query, groupPairs);
-						}
 					} else {
 						Match m = (Match) matchMap.get(child);
-						addQueryMatchPairToList(query, m, model, groupPairs);
+						addQueryMatchPairToList(query, m, model,
+								queryCandidatePairs);
 					}
+
+					/*
+					 * Merge group pairs are pairs between candidate records
+					 * that are formed by transitivity analysis. The pairs are
+					 * not represented by matches in the matchMap. Instead, they
+					 * are pairs among the compositeEntity.getLinkDefinition()
+					 * in which both records are candidates.
+					 */
+					List<Link<?>> links = compositeEntity.getAllLinks();
+					for (Link<?> link : links) {
+						@SuppressWarnings("unchecked")
+						List<MatchRecord2<T>> mrs =
+							((Link<T>) link).getLinkDefinition();
+						for (MatchRecord2<T> mr : mrs) {
+							T id1 = mr.getRecordID1();
+							T id2 = mr.getRecordID2();
+							DataAccessObject<T> c1 = candidateMap.get(id1);
+							DataAccessObject<T> c2 = candidateMap.get(id2);
+							if (c1 != null && c2 != null) {
+								EvaluatedPair<T> ep = new EvaluatedPair<>(c1,
+										c2, mr.getProbability(),
+										mr.getMatchType(), mr.getNotes());
+								mergGroupPairs.add(ep);
+							}
+						}
+					}
+
 				}
 
 				/*
-				 * If every evaluated record must be linked to the query record,
-				 * but the query record is not part of this group, then bust the
+				 * If every evaluated pair must include the query record, but
+				 * the query record is not part of this group, then bust the
 				 * group into individual records matched against the query
 				 * record. Otherwise, add the group as a merge group.
 				 */
 				if (mustIncludeQuery && !containsQuery) {
-					SortedSet<SafeIndex<T>> mIndices =
-						getRecordIndicesFromPairs(groupPairs);
-					for (SafeIndex<T> idx : mIndices) {
+					SortedSet<T> mIndices =
+						getCandidateIndicesFromPairs(queryCandidatePairs);
+					for (T idx : mIndices) {
 						Match match = matchMap.get(idx);
 						addQueryMatchPairToList(query, match, model, pairs);
 					}
 
-					// Otherwise, add the group as a mergeCandidate
+					// Otherwise, add the group as a mergeGroup
 				} else {
-					pairs.addAll(groupPairs);
-					List<DataAccessObject<T>> records =
-						getRecordsFromPairs(groupPairs);
-					MergeGroup<T> mergeCandidate =
-						new MergeGroupBean<T>(mergeConnectivity, records,
-								groupPairs);
-					mergeGroups.add(mergeCandidate);
+					pairs.addAll(queryCandidatePairs);
+					if (containsQuery) {
+						mergGroupPairs.addAll(queryCandidatePairs);
+					}
+					MergeGroup<T> mergeGroup = new MergeGroupBean<T>(
+							mergeConnectivity, mergGroupPairs);
+					mergeGroups.add(mergeGroup);
 				}
 
 			} else {

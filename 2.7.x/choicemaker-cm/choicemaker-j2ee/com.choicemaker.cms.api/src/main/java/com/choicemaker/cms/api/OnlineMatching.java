@@ -26,12 +26,12 @@ import com.choicemaker.cm.core.BlockingException;
  */
 public interface OnlineMatching<T extends Comparable<T> & Serializable> {
 
-	MatchGroup<T> getMatchCandidates(DataAccessObject<T> query,
+	MatchGroup<T> getMatchGroup(DataAccessObject<T> query,
 			AbaParameters parameters, AbaSettings settings,
 			AbaServerConfiguration configuration)
 			throws IOException, BlockingException;
 
-	TransitiveGroup<T> getTransitiveCandidates(DataAccessObject<T> query,
+	TransitiveGroup<T> getTransitiveGroup(DataAccessObject<T> query,
 			AbaParameters parameters, AbaSettings settings,
 			AbaServerConfiguration configuration,
 			IGraphProperty mergeConnectivity, boolean mustIncludeQuery)

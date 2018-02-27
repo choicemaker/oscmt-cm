@@ -9,19 +9,15 @@ package com.choicemaker.cm.urm.ejb;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
 
 import com.choicemaker.client.api.DataAccessObject;
 import com.choicemaker.client.api.Decision;
 import com.choicemaker.client.api.EvaluatedPair;
-import com.choicemaker.client.api.GraphPropertyBean;
-import com.choicemaker.client.api.IGraphProperty;
-import com.choicemaker.client.api.MatchCandidates;
-import com.choicemaker.client.api.MergeCandidates;
-import com.choicemaker.client.api.TransitiveCandidates;
+import com.choicemaker.client.api.MatchGroup;
+import com.choicemaker.client.api.MergeGroup;
+import com.choicemaker.client.api.TransitiveGroup;
 import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.core.DatabaseException;
 import com.choicemaker.cm.urm.api.UrmConfigurationAdapter;
@@ -33,6 +29,7 @@ import com.choicemaker.cm.urm.base.EvaluatedRecord;
 import com.choicemaker.cm.urm.base.IMatchScore;
 import com.choicemaker.cm.urm.base.IRecord;
 import com.choicemaker.cm.urm.base.IRecordCollection;
+import com.choicemaker.cm.urm.base.IRecordHolder;
 import com.choicemaker.cm.urm.base.LinkCriteria;
 import com.choicemaker.cm.urm.base.LinkedRecordSet;
 import com.choicemaker.cm.urm.base.MatchScore;
@@ -155,12 +152,12 @@ class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 		return retVal;
 	}
 
-			/* public */ NamedConfiguration createCustomizedConfiguration(
-					UrmConfigurationAdapter adapter,
-					NamedConfigurationController ncController,
-					DbRecordCollection mRc, String modelName,
-					float differThreshold, float matchThreshold,
-					int maxNumMatches) throws ConfigException {
+	/* public */
+	NamedConfiguration createCustomizedConfiguration(
+			UrmConfigurationAdapter adapter,
+			NamedConfigurationController ncController, DbRecordCollection mRc,
+			String modelName, float differThreshold, float matchThreshold,
+			int maxNumMatches) throws ConfigException {
 
 		assert adapter != null;
 		assert ncController != null;
@@ -222,12 +219,10 @@ class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 		return retVal;
 	}
 
-			/* public */ EvaluatedRecord[] computeEvaluatedRecords(
-					MatchCandidates<T> matchCandidates) {
-		Precondition.assertNonNullArgument("null match candidates",
-				matchCandidates);
+	public EvaluatedRecord[] computeEvaluatedRecords(MatchGroup<T> matchGroup) {
+		Precondition.assertNonNullArgument("null match candidates", matchGroup);
 		List<EvaluatedRecord> records = new ArrayList<>();
-		List<EvaluatedPair<T>> pairs = matchCandidates.getEvaluatedPairs();
+		List<EvaluatedPair<T>> pairs = matchGroup.getEvaluatedPairs();
 		for (EvaluatedPair<T> pair : pairs) {
 			// IRecord<T> q = (IRecord<T>) pair.getQueryRecord();
 			IRecord<T> m = (IRecord<T>) pair.getMatchCandidate();
@@ -246,38 +241,100 @@ class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 		return retVal;
 	}
 
-			/* public */ EvaluatedRecord[] computeEvaluatedRecords(
-					TransitiveCandidates<T> tcs, LinkCriteria linkCriteria) {
+	/**
+	 * The EvaluatedRecord instances in an array returned by this method are
+	 * either single records implicitly matched to a query record, or composite
+	 * records matched among themselves. In addition, if the query record must
+	 * be included in the returned array (
+	 * <code>LinkCriteria.isMustIncludeQuery()</code>), it is represented as
+	 * EvaulatedRecord with a MATCH decision and a probability score of 1.0f.
+	 * <p>
+	 * The array returned by this method is a weird and incomplete
+	 * representation of a transitivity group. If the results must include the
+	 * query record, then match relationships between records in a merge group
+	 * are missing. Conversely, if the results do not include the query record,
+	 * then match relationships may be missing between the query record and
+	 * candidate records within merge groups.
+	 */
+	public EvaluatedRecord[] computeEvaluatedRecords(TransitiveGroup<T> tcs,
+			LinkCriteria linkCriteria) {
 
 		Precondition.assertNonNullArgument("null transitiveCandidates", tcs);
 		Precondition.assertNonNullArgument("null link criteria", linkCriteria);
 
 		DataAccessObject<T> queryRecord = tcs.getQueryRecord();
-		List<MergeCandidates<T>> mergeCandidates = tcs.getMergeCandidates();
+		List<MergeGroup<T>> mergeGroups = tcs.getMergeGroups();
 		List<EvaluatedPair<T>> evaluatedPairs = tcs.getEvaluatedPairs();
 
-		Map<QMKey<T>, EvaluatedPair<T>> mappedPairs = new HashMap<>();
-		for (EvaluatedPair<T> evaluatedPair : evaluatedPairs) {
-			IRecord<T> q = (IRecord<T>) evaluatedPair.getQueryRecord();
-			IRecord<T> m = (IRecord<T>) evaluatedPair.getMatchCandidate();
-			QMKey<T> key = new QMKey<>(q, m);
-			mappedPairs.put(key, evaluatedPair);
-		}
-
 		List<EvaluatedRecord> evaluatedRecords = new ArrayList<>();
-		for (MergeCandidates<T> mc : mergeCandidates) {
-			assert GraphPropertyBean.equalOrNull(mc.getGraphConnectivity(),
-					linkCriteria.getGraphPropType());
-			CompositeMatchScore cms = new CompositeMatchScore();
-			List<IRecord<T>> records = new ArrayList<>();
-			EvaluatedPair<T> mergedPairs = mc.getPairs();
-			for ()
-			LinkedRecordSet<T> lrs =
-				new LinkedRecordSet<>(null, records, linkCriteria);
+		if (linkCriteria.isMustIncludeQuery()) {
+			// Create a match relationship between the query record and itself
+			IRecordHolder<T> q = (IRecordHolder<T>) queryRecord;
+			IMatchScore matchScore = new MatchScore(1.0f, Decision3.MATCH, "");
+			EvaluatedRecord er = new EvaluatedRecord(q, matchScore);
+			evaluatedRecords.add(er);
+
+			for (MergeGroup<T> mergeGroup : mergeGroups) {
+				if (mergeGroup.containsRecord(queryRecord)) {
+					/*
+					 * If a merge group contains the query record, convert it to
+					 * a LinkedRecordSet
+					 */
+					LinkedRecordSet<T> lrs =
+						createLinkedRecordSetFromMergeGroup(mergeGroup);
+					CompositeMatchScore cms = null; // FIXME
+					er = new EvaluatedRecord(lrs, cms);
+					evaluatedRecords.add(er);
+					
+				} else {
+					/*
+					 * Break up a merge groups that does not include the query
+					 * record
+					 */
+					
+				}
+				
+
+			}
+
+		} else {
+
+			// Form LinkedRecordSet instances from every MergeGroup
+
+			// Exclude query-to-candidate match relationships for candidates
+			// that are part of merge groups
+
 		}
 
-		// TODO Auto-generated method stub
+		// Map<QMKey<T>, EvaluatedPair<T>> mappedPairs = new HashMap<>();
+		// for (EvaluatedPair<T> evaluatedPair : evaluatedPairs) {
+		// IRecord<T> q = (IRecord<T>) evaluatedPair.getQueryRecord();
+		// IRecord<T> m = (IRecord<T>) evaluatedPair.getMatchCandidate();
+		// QMKey<T> key = new QMKey<>(q, m);
+		// mappedPairs.put(key, evaluatedPair);
+		// }
+		//
+		// for (MergeGroup<T> mc : mergeGroups) {
+		// assert GraphPropertyBean.equalOrNull(mc.getGraphConnectivity(),
+		// linkCriteria.getGraphPropType());
+		// CompositeMatchScore cms = new CompositeMatchScore();
+		// List<IRecord<T>> records = new ArrayList<>();
+		// List<EvaluatedPair<T>> mcPairs = mc.getEvaluatedPairs();
+		// for (EvaluatedPair<T> mcPair : mcPairs) {
+		// // records.add(mcPair.);//FIXME
+		// }
+		// LinkedRecordSet<T> lrs =
+		// new LinkedRecordSet<>(null, records, linkCriteria);
+		// }
+
+		// TODO stub
 		throw new Error("not yet implemented");
+	}
+
+	private LinkedRecordSet<T> createLinkedRecordSetFromMergeGroup(
+			MergeGroup<T> mergeGroup) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

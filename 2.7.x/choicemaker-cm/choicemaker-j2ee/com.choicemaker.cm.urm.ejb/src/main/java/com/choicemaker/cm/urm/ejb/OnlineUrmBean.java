@@ -120,7 +120,7 @@ public class OnlineUrmBean<T extends Comparable<T> & Serializable>
 				NamedConfigConversion.createAbaServerConfiguration(cmConf);
 			assert serverConfig != null;
 
-			matchCandidates = delegate.getMatchCandidates(queryRecord,
+			matchCandidates = delegate.getMatchGroup(queryRecord,
 					abaParams, oabaSettings, serverConfig);
 		} catch (BlockingException | IOException e) {
 			String msg = e.toString();
@@ -179,7 +179,7 @@ public class OnlineUrmBean<T extends Comparable<T> & Serializable>
 			IGraphProperty mergeConnectivity = linkCriteria.getGraphPropType();
 			boolean mustIncludeQuery = linkCriteria.isMustIncludeQuery();
 
-			transitiveCandidates = delegate.getTransitiveCandidates(queryRecord,
+			transitiveCandidates = delegate.getTransitiveGroup(queryRecord,
 					abaParams, abaSettings, serverConfig, mergeConnectivity,
 					mustIncludeQuery);
 		} catch (BlockingException | IOException | TransitivityException e) {

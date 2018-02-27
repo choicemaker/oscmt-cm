@@ -36,7 +36,7 @@ public class OnlineMatchingBean<T extends Comparable<T> & Serializable>
 	private AbaStatisticsController statsController;
 
 	@Override
-	public MatchGroup<T> getMatchCandidates(
+	public MatchGroup<T> getMatchGroup(
 			final DataAccessObject<T> query, final AbaParameters parameters,
 			final AbaSettings settings,
 			final AbaServerConfiguration configuration)
@@ -59,7 +59,7 @@ public class OnlineMatchingBean<T extends Comparable<T> & Serializable>
 	}
 
 	@Override
-	public TransitiveGroup<T> getTransitiveCandidates(
+	public TransitiveGroup<T> getTransitiveGroup(
 			DataAccessObject<T> query, AbaParameters parameters,
 			AbaSettings settings, AbaServerConfiguration configuration,
 			IGraphProperty mergeConnectivity, boolean mustIncludeQuery)
@@ -71,7 +71,7 @@ public class OnlineMatchingBean<T extends Comparable<T> & Serializable>
 		List<Match> matches = delegate.getMatchList(query, parameters, settings,
 				configuration, statsController);
 
-		TransitiveGroup<T> retVal = delegate.getTransitiveCandidates(query,
+		TransitiveGroup<T> retVal = delegate.getTransitiveGroup(query,
 				matches, parameters, mergeConnectivity, mustIncludeQuery);
 
 		return retVal;

@@ -15,6 +15,7 @@ import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.Match;
 import com.choicemaker.cm.transitivity.core.CompositeEntity;
 import com.choicemaker.cms.api.AbaParameters;
+import com.choicemaker.cms.ejb.OnlineDelegate;
 
 /**
  * Tests of the transitivity methods of OnlineDelegate. Non-transitivity methods
@@ -63,7 +64,7 @@ public class OnlineDelegateTest {
 		OnlineDelegate<Integer> delegate = new OnlineDelegate<Integer>();
 		try {
 			final TransitiveGroup<Integer> computed =
-				delegate.getTransitiveCandidates(query, matchList, parameters,
+				delegate.getTransitiveGroup(query, matchList, parameters,
 						mergeConnectivity, mustIncludeQuery);
 			assertTrue(computed != null);
 			System.out.println(computed);
