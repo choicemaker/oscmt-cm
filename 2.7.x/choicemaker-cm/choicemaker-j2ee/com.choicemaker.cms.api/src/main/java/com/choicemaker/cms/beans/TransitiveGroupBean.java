@@ -67,7 +67,7 @@ public class TransitiveGroupBean<T extends Comparable<T> & Serializable>
 			List<DataAccessObject<T>> list2 = new ArrayList<>();
 			for (MergeGroup<T> mergeGroup : this.mergeGroups) {
 				List<DataAccessObject<T>> mergeRecords =
-					mergeGroup.getRecords();
+					mergeGroup.getGroupRecords();
 				list2.addAll(mergeRecords);
 			}
 			List<DataAccessObject<T>> list3 =

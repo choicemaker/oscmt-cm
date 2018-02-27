@@ -16,15 +16,13 @@ public interface MergeGroup<T extends Comparable<T> & Serializable>
 	boolean containsRecord(DataAccessObject<T> record);
 
 	/** Returns the records in the merge group */
-	List<DataAccessObject<T>> getRecords();
+	List<DataAccessObject<T>> getGroupRecords();
 
 	/**
 	 * Returns the evaluated match and hold relationships between records in the
 	 * group.
 	 */
 	List<EvaluatedPair<T>> getGroupPairs();
-
-	List<DataAccessObject<T>> getGroupRecords();
 
 	/**
 	 * Returns the match or hold relationship between two records in the group.

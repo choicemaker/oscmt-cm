@@ -29,7 +29,7 @@ public class LinkedRecordSet<T extends Comparable<T> & Serializable>
 		this.criteria = c;
 	}
 
-	public LinkedRecordSet(T id, List<IRecord<T>> r, LinkCriteria c) {
+	public LinkedRecordSet(T id, List<? extends IRecord<T>> r, LinkCriteria c) {
 		super(id, r);
 		this.criteria = c;
 	}

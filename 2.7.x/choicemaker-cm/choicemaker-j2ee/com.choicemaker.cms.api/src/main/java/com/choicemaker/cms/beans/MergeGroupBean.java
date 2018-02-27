@@ -71,7 +71,7 @@ public class MergeGroupBean<T extends Comparable<T> & Serializable>
 	}
 
 	@Override
-	public List<DataAccessObject<T>> getRecords() {
+	public List<DataAccessObject<T>> getGroupRecords() {
 		List<DataAccessObject<T>> retVal =
 			EvaluatedPairAssist.extractRecordsFromWrappedRecords(this.wrappers);
 		return retVal;
@@ -87,13 +87,6 @@ public class MergeGroupBean<T extends Comparable<T> & Serializable>
 		return "MergeGroupBean [mergeGroupId=" + groupId
 				+ ", mergeConnectivity=" + mergeConnectivity + ", pairs:"
 				+ pairs.size() + "]";
-	}
-
-	@Override
-	public List<DataAccessObject<T>> getGroupRecords() {
-		List<DataAccessObject<T>> retVal =
-			EvaluatedPairAssist.extractRecordsFromPairs(pairs);
-		return retVal;
 	}
 
 	@Override

@@ -30,7 +30,7 @@ public abstract class CompositeRecord<T extends Comparable<T> & Serializable>
 	}
 
 	@SuppressWarnings("unchecked")
-	public CompositeRecord(T id, List<IRecord<T>> recordList) {
+	public CompositeRecord(T id, List<? extends IRecord<T>> recordList) {
 		this.id = id;
 		this.records = (IRecord<T>[]) (recordList == null ? new IRecord<?>[0]
 				: recordList.toArray(new IRecord<?>[recordList.size()]));

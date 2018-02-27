@@ -9,6 +9,8 @@ package com.choicemaker.cm.urm.base;
 
 import java.io.Serializable;
 
+import com.choicemaker.util.Precondition;
+
 /**
  * Match, hold (potential match), or differ decision.
  * <p>  
@@ -48,14 +50,17 @@ public class Decision3 implements Serializable {
 
 	/**
 	 * Returns <code>Decision3</code> corresponding to the <code>name</code>.
-	 * <p> 
 	 * 
-	 * @param	name A string represntation of a code>Decision3</code>  
-	 * @return	The corresponding <code>Decision3</code>.
-	 * @throws	IllegalArgumentException if <code>name</code> doesn't represent a valid decision.
+	 * @param name
+	 *            A string representation of a code>Decision3</code>, case
+	 *            insensitive
+	 * @return The corresponding <code>Decision3</code>.
+	 * @throws IllegalArgumentException
+	 *             if <code>name</code> doesn't represent a valid decision.
 	 */
 	public static Decision3 valueOf(String name) {
-		name = name.intern();
+		Precondition.assertNonEmptyString("null or blank name", name);
+		name = name.toLowerCase().trim().intern();
 		if (DIFFER.toString().intern() == name) {
 			return DIFFER;
 		} else if (HOLD.toString().intern() == name) {
@@ -63,10 +68,10 @@ public class Decision3 implements Serializable {
 		} else if (MATCH.toString().intern() == name) {
 			return MATCH;
 		} else {
-			throw new IllegalArgumentException(name + " is not a valid Decision3.");
+			throw new IllegalArgumentException(
+					name + " is not a valid Decision3.");
 		}
-	}
-	
+	}	
 	
 	public int hashCode() {
 		final int prime = 31;
