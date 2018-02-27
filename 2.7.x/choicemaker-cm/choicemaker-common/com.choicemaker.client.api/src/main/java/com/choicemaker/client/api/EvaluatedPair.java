@@ -65,7 +65,7 @@ public final class EvaluatedPair<T extends Comparable<T> & Serializable>
 		return d;
 	}
 
-	String[] getNotes() {
+	public String[] getNotes() {
 		String[] retVal = new String[notes.length];
 		System.arraycopy(this.notes, 0, retVal, 0, this.notes.length);
 		return retVal;
