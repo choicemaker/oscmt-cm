@@ -222,7 +222,7 @@ class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 	public EvaluatedRecord[] computeEvaluatedRecords(MatchGroup<T> matchGroup) {
 		Precondition.assertNonNullArgument("null match candidates", matchGroup);
 		List<EvaluatedRecord> records = new ArrayList<>();
-		List<EvaluatedPair<T>> pairs = matchGroup.getEvaluatedPairs();
+		List<EvaluatedPair<T>> pairs = matchGroup.getQueryCandidatePairs();
 		for (EvaluatedPair<T> pair : pairs) {
 			// IRecord<T> q = (IRecord<T>) pair.getQueryRecord();
 			IRecord<T> m = (IRecord<T>) pair.getMatchCandidate();
@@ -264,71 +264,54 @@ class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 
 		DataAccessObject<T> queryRecord = tcs.getQueryRecord();
 		List<MergeGroup<T>> mergeGroups = tcs.getMergeGroups();
-		List<EvaluatedPair<T>> evaluatedPairs = tcs.getEvaluatedPairs();
+		List<EvaluatedPair<T>> evaluatedPairs = tcs.getQueryCandidatePairs();
 
+		boolean containsQuery = false;
 		List<EvaluatedRecord> evaluatedRecords = new ArrayList<>();
-		if (linkCriteria.isMustIncludeQuery()) {
+		for (MergeGroup<T> mergeGroup : mergeGroups) {
+
+			if (mergeGroup.containsRecord(queryRecord)) {
+				assert !containsQuery;
+				containsQuery = true;
+				LinkedRecordSet<T> lrs =
+					createLinkedRecordSetFromMergeGroup(mergeGroup);
+				CompositeMatchScore cms = null; // FIXME
+				EvaluatedRecord er = new EvaluatedRecord(lrs, cms);
+				evaluatedRecords.add(er);
+
+			} else if (!mergeGroup.containsRecord(queryRecord)
+					&& linkCriteria.isMustIncludeQuery()) {
+				/*
+				 * Break up a merge groups that does not include the query
+				 * record
+				 */
+				// TODO stub
+				throw new Error("not yet implemented");
+
+			} else {
+				assert !linkCriteria.isMustIncludeQuery();
+				assert !mergeGroup.containsRecord(queryRecord);
+				LinkedRecordSet<T> lrs =
+					createLinkedRecordSetFromMergeGroup(mergeGroup);
+				CompositeMatchScore cms = null; // FIXME
+				EvaluatedRecord er = new EvaluatedRecord(lrs, cms);
+				evaluatedRecords.add(er);
+			}
+		}
+
+		if (!containsQuery && linkCriteria.isMustIncludeQuery()) {
 			// Create a match relationship between the query record and itself
 			IRecordHolder<T> q = (IRecordHolder<T>) queryRecord;
 			IMatchScore matchScore = new MatchScore(1.0f, Decision3.MATCH, "");
 			EvaluatedRecord er = new EvaluatedRecord(q, matchScore);
 			evaluatedRecords.add(er);
-
-			for (MergeGroup<T> mergeGroup : mergeGroups) {
-				if (mergeGroup.containsRecord(queryRecord)) {
-					/*
-					 * If a merge group contains the query record, convert it to
-					 * a LinkedRecordSet
-					 */
-					LinkedRecordSet<T> lrs =
-						createLinkedRecordSetFromMergeGroup(mergeGroup);
-					CompositeMatchScore cms = null; // FIXME
-					er = new EvaluatedRecord(lrs, cms);
-					evaluatedRecords.add(er);
-					
-				} else {
-					/*
-					 * Break up a merge groups that does not include the query
-					 * record
-					 */
-					
-				}
-				
-
-			}
-
-		} else {
-
-			// Form LinkedRecordSet instances from every MergeGroup
-
-			// Exclude query-to-candidate match relationships for candidates
-			// that are part of merge groups
-
 		}
 
-		// Map<QMKey<T>, EvaluatedPair<T>> mappedPairs = new HashMap<>();
-		// for (EvaluatedPair<T> evaluatedPair : evaluatedPairs) {
-		// IRecord<T> q = (IRecord<T>) evaluatedPair.getQueryRecord();
-		// IRecord<T> m = (IRecord<T>) evaluatedPair.getMatchCandidate();
-		// QMKey<T> key = new QMKey<>(q, m);
-		// mappedPairs.put(key, evaluatedPair);
-		// }
-		//
-		// for (MergeGroup<T> mc : mergeGroups) {
-		// assert GraphPropertyBean.equalOrNull(mc.getGraphConnectivity(),
-		// linkCriteria.getGraphPropType());
-		// CompositeMatchScore cms = new CompositeMatchScore();
-		// List<IRecord<T>> records = new ArrayList<>();
-		// List<EvaluatedPair<T>> mcPairs = mc.getEvaluatedPairs();
-		// for (EvaluatedPair<T> mcPair : mcPairs) {
-		// // records.add(mcPair.);//FIXME
-		// }
-		// LinkedRecordSet<T> lrs =
-		// new LinkedRecordSet<>(null, records, linkCriteria);
-		// }
-
+		// Exclude query-to-candidate match relationships for candidates
+		// that are part of merge groups
 		// TODO stub
 		throw new Error("not yet implemented");
+
 	}
 
 	private LinkedRecordSet<T> createLinkedRecordSetFromMergeGroup(
