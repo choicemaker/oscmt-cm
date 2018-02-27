@@ -9,6 +9,8 @@ public class EvaluatedPair<T extends Comparable<T> & Serializable>
 
 	private static final long serialVersionUID = 271L;
 
+	public static char DEFAULT_DELIMITER = ' ';
+
 	/** Valid probabilities are in the range 0.0f to 1.0f, inclusive */
 	public static boolean isValidProbability(float p) {
 		boolean retVal = (p >= 0.0f) && (p <= 1.0f);
@@ -72,11 +74,35 @@ public class EvaluatedPair<T extends Comparable<T> & Serializable>
 		return retVal;
 	}
 
+	public String getNotesAsDelimitedString() {
+		return getNotesAsDelimitedString(DEFAULT_DELIMITER);
+	}
+
+	public String getNotesAsDelimitedString(char delimiter) {
+		String retVal = "";
+		if (getNotes() != null) {
+			StringBuilder sb = new StringBuilder();
+			String[] notes = getNotes();
+			for (int i = 0; i < notes.length; i++) {
+				String note = notes[i];
+				if (note != null) {
+					note = note.trim();
+					if (note.length() > 0) {
+						sb.append(note);
+						sb.append(delimiter);
+					}
+				}
+			}
+			retVal = sb.toString().trim();
+		}
+		return retVal;
+	}
+
 	@Override
 	public String toString() {
 		return "EvaluatedPair [q=" + (q == null ? null : q.getId()) + ", m="
 				+ (m == null ? null : m.getId()) + ", p=" + p + ", d=" + d
-				+ "]";
+				+ ", notes='" + getNotesAsDelimitedString() + "']";
 	}
 
 }

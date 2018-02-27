@@ -43,7 +43,7 @@ public final class QueryCandidatePair<T extends Comparable<T> & Serializable>
 				+ (getMatchCandidate() == null ? null
 						: getMatchCandidate().getId())
 				+ ", p=" + getMatchProbability() + ", d=" + getMatchDecision()
-				+ "]";
+				+ ", notes='" + getNotesAsDelimitedString() + "']";
 	}
 
 }

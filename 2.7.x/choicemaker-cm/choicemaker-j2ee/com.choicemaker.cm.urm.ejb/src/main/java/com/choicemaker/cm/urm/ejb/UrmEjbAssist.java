@@ -230,8 +230,7 @@ class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 			String decisionName = d.getName();
 			Decision3 d3 = Decision3.valueOf(decisionName);
 			float p = pair.getMatchProbability();
-			// FIXME stubbed note
-			String note = "FIXME placeholder note";
+			String note = pair.getNotesAsDelimitedString();
 			IMatchScore score = new MatchScore(p, d3, note);
 			EvaluatedRecord record = new EvaluatedRecord(m, score);
 			records.add(record);
