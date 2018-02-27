@@ -10,7 +10,7 @@ import javax.ejb.Remote;
 import javax.ejb.Stateless;
 
 import com.choicemaker.client.api.DataAccessObject;
-import com.choicemaker.client.api.EvaluatedPair;
+import com.choicemaker.client.api.QueryCandidatePair;
 import com.choicemaker.client.api.IGraphProperty;
 import com.choicemaker.client.api.MatchGroup;
 import com.choicemaker.client.api.TransitiveGroup;
@@ -50,7 +50,7 @@ public class OnlineMatchingBean<T extends Comparable<T> & Serializable>
 
 		final ImmutableProbabilityModel model =
 			ParameterHelper.getModel(parameters);
-		List<EvaluatedPair<T>> pairs =
+		List<QueryCandidatePair<T>> pairs =
 			delegate.createEvaluatedPairs(query, model, matches);
 
 		MatchGroup<T> retVal = new MatchGroupBean<T>(query, pairs);

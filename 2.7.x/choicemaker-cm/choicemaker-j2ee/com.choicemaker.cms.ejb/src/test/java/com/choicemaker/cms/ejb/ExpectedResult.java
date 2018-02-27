@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import com.choicemaker.client.api.DataAccessObject;
-import com.choicemaker.client.api.EvaluatedPair;
+import com.choicemaker.client.api.QueryCandidatePair;
 import com.choicemaker.client.api.IGraphProperty;
 import com.choicemaker.client.api.MatchGroup;
 import com.choicemaker.client.api.TransitiveGroup;
@@ -20,7 +20,7 @@ import com.choicemaker.cms.api.AbaParameters;
 public class ExpectedResult<T extends Comparable<T> & Serializable> {
 
 	public static <T extends Comparable<T> & Serializable> CompositeEntity createCompositeEntity(
-			DataAccessObject<T> queryRecord, List<EvaluatedPair<T>> pairs) {
+			DataAccessObject<T> queryRecord, List<QueryCandidatePair<T>> pairs) {
 		return null;
 	}
 

@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Logger;
 
 import com.choicemaker.client.api.Decision;
-import com.choicemaker.client.api.EvaluatedPair;
+import com.choicemaker.client.api.QueryCandidatePair;
 import com.choicemaker.cm.core.Accessor;
 import com.choicemaker.cm.core.ClueSet;
 import com.choicemaker.cm.core.Evaluator;
@@ -29,7 +29,7 @@ public class TestModel<T extends Comparable<T> & Serializable>
 
 	public static final String MODEL_NAME = TestModel.class.getName();
 
-	private final List<EvaluatedPair<T>> knownPairs;
+	private final List<QueryCandidatePair<T>> knownPairs;
 	private AtomicReference<TestEvaluator> evaluator = new AtomicReference<>();
 	private AtomicReference<TestClueSet<T>> clueset = new AtomicReference<>();
 
@@ -37,18 +37,18 @@ public class TestModel<T extends Comparable<T> & Serializable>
 		this(Collections.emptyList());
 	}
 
-	public TestModel(List<EvaluatedPair<T>> evaluatedPairs) {
+	public TestModel(List<QueryCandidatePair<T>> evaluatedPairs) {
 		Precondition.assertNonNullArgument(evaluatedPairs);
 		this.knownPairs = new ArrayList<>(evaluatedPairs.size());
 		this.knownPairs.addAll(evaluatedPairs);
 	}
 
-	public void addEvaluatedPair(EvaluatedPair<T> pair) {
+	public void addEvaluatedPair(QueryCandidatePair<T> pair) {
 		Precondition.assertNonNullArgument(pair);
 		this.knownPairs.add(pair);
 	}
 
-	public List<EvaluatedPair<T>> getKnownPairs() {
+	public List<QueryCandidatePair<T>> getKnownPairs() {
 		return Collections.unmodifiableList(knownPairs);
 	}
 

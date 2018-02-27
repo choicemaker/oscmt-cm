@@ -16,6 +16,7 @@ import com.choicemaker.client.api.Decision;
 import com.choicemaker.client.api.EvaluatedPair;
 import com.choicemaker.client.api.IGraphProperty;
 import com.choicemaker.client.api.MergeGroup;
+import com.choicemaker.client.api.QueryCandidatePair;
 import com.choicemaker.client.api.TransitiveGroup;
 import com.choicemaker.cm.aba.AutomatedBlocker;
 import com.choicemaker.cm.args.AbaSettings;
@@ -54,22 +55,22 @@ public class OnlineDelegate<T extends Comparable<T> & Serializable> {
 		Logger.getLogger(OnlineDelegate.class.getName());
 
 	public void addQueryMatchPairToList(DataAccessObject<T> query, Match match,
-			ImmutableProbabilityModel model, List<EvaluatedPair<T>> list) {
+			ImmutableProbabilityModel model, List<QueryCandidatePair<T>> list) {
 		Precondition.assertNonNullArgument("null query", query);
 		Precondition.assertNonNullArgument("null match", match);
 		Precondition.assertNonNullArgument("null model", model);
 		Precondition.assertNonNullArgument("null list", list);
-		EvaluatedPair<T> ep = getEvaluatedPair(query, match, model);
+		QueryCandidatePair<T> ep = getEvaluatedPair(query, match, model);
 		list.add(ep);
 	}
 
 	public void addQueryPairToList(DataAccessObject<T> query,
-			List<EvaluatedPair<T>> list) {
+			List<QueryCandidatePair<T>> list) {
 		Precondition.assertNonNullArgument("null query", query);
 		Precondition.assertNonNullArgument("null list", list);
 		float p = 1.0f;
 		Decision d = Decision.MATCH;
-		EvaluatedPair<T> ep = new EvaluatedPair<T>(query, query, p, d);
+		QueryCandidatePair<T> ep = new QueryCandidatePair<T>(query, query, p, d);
 		list.add(ep);
 	}
 
@@ -139,7 +140,7 @@ public class OnlineDelegate<T extends Comparable<T> & Serializable> {
 		return retVal;
 	}
 
-	public List<EvaluatedPair<T>> createEvaluatedPairs(
+	public List<QueryCandidatePair<T>> createEvaluatedPairs(
 			DataAccessObject<T> query, ImmutableProbabilityModel model,
 			List<Match> matches) {
 
@@ -147,13 +148,13 @@ public class OnlineDelegate<T extends Comparable<T> & Serializable> {
 		Precondition.assertNonNullArgument("null model", model);
 		Precondition.assertNonNullArgument("null matches", matches);
 
-		List<EvaluatedPair<T>> retVal = new ArrayList<>(matches.size());
+		List<QueryCandidatePair<T>> retVal = new ArrayList<>(matches.size());
 		for (Match match : matches) {
 			String[] notes = match.ac.getNotes(model);
 			@SuppressWarnings("unchecked")
 			DataAccessObject<T> m = (DataAccessObject<T>) model.getAccessor()
 					.toRecordHolder(match.m);
-			EvaluatedPair<T> p = new EvaluatedPair<T>(query, m,
+			QueryCandidatePair<T> p = new QueryCandidatePair<T>(query, m,
 					match.probability, match.decision, notes);
 			retVal.add(p);
 		}
@@ -184,13 +185,13 @@ public class OnlineDelegate<T extends Comparable<T> & Serializable> {
 		return retVal;
 	}
 
-	public EvaluatedPair<T> getEvaluatedPair(DataAccessObject<T> query,
+	public QueryCandidatePair<T> getEvaluatedPair(DataAccessObject<T> query,
 			Match match, ImmutableProbabilityModel model) {
 		Precondition.assertNonNullArgument("null query", query);
 		Precondition.assertNonNullArgument("null match", match);
 		Precondition.assertNonNullArgument("null model", model);
 		DataAccessObject<T> mDAO = getMatchDao(match, model);
-		EvaluatedPair<T> retVal = new EvaluatedPair<T>(query, mDAO,
+		QueryCandidatePair<T> retVal = new QueryCandidatePair<T>(query, mDAO,
 				match.probability, match.decision);
 		return retVal;
 	}
@@ -236,10 +237,10 @@ public class OnlineDelegate<T extends Comparable<T> & Serializable> {
 	}
 
 	public SortedSet<T> getCandidateIndicesFromPairs(
-			List<EvaluatedPair<T>> pairs) {
+			List<QueryCandidatePair<T>> pairs) {
 		Precondition.assertNonNullArgument("null pairs", pairs);
 		SortedSet<T> retVal = new TreeSet<>();
-		for (EvaluatedPair<T> ep : pairs) {
+		for (QueryCandidatePair<T> ep : pairs) {
 			// T idx1 = ep.getQueryRecord().getId();
 			T idx2 = ep.getMatchCandidate().getId();
 			// retVal.add(idx1);
@@ -312,7 +313,7 @@ public class OnlineDelegate<T extends Comparable<T> & Serializable> {
 		 */
 		T queryId = query.getId();
 
-		final List<EvaluatedPair<T>> pairs = new ArrayList<>();
+		final List<QueryCandidatePair<T>> pairs = new ArrayList<>();
 		final List<MergeGroup<T>> mergeGroups = new ArrayList<>();
 		for (INode<?> childNode : childEntities) {
 
@@ -324,14 +325,14 @@ public class OnlineDelegate<T extends Comparable<T> & Serializable> {
 				if (!childId.equals(queryId)) {
 					Match m = (Match) matchMap.get(childId);
 					assert m != null;
-					EvaluatedPair<T> pair = getEvaluatedPair(query, m, model);
+					QueryCandidatePair<T> pair = getEvaluatedPair(query, m, model);
 					pairs.add(pair);
 				}
 
 				// Handle a group of records
 			} else if (childNode instanceof CompositeEntity) {
 				CompositeEntity compositeEntity = (CompositeEntity) childNode;
-				List<EvaluatedPair<T>> queryCandidatePairs = new ArrayList<>();
+				List<QueryCandidatePair<T>> queryCandidatePairs = new ArrayList<>();
 				List<EvaluatedPair<T>> mergGroupPairs = new ArrayList<>();
 				boolean containsQuery = false;
 
@@ -367,7 +368,7 @@ public class OnlineDelegate<T extends Comparable<T> & Serializable> {
 							DataAccessObject<T> c1 = candidateMap.get(id1);
 							DataAccessObject<T> c2 = candidateMap.get(id2);
 							if (c1 != null && c2 != null) {
-								EvaluatedPair<T> ep = new EvaluatedPair<>(c1,
+								QueryCandidatePair<T> ep = new QueryCandidatePair<>(c1,
 										c2, mr.getProbability(),
 										mr.getMatchType(), mr.getNotes());
 								mergGroupPairs.add(ep);

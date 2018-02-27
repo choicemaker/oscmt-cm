@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 
 import com.choicemaker.client.api.DataAccessObject;
 import com.choicemaker.client.api.Decision;
-import com.choicemaker.client.api.EvaluatedPair;
+import com.choicemaker.client.api.QueryCandidatePair;
 import com.choicemaker.cm.core.Accessor;
 import com.choicemaker.cm.core.ActiveClues;
 import com.choicemaker.cm.core.ClueSet;
@@ -33,7 +33,7 @@ public class TestData {
 		Logger.getLogger(TestData.class.getName());
 
 	public static <T extends Comparable<T> & Serializable> Match matchFromEvaluatedPair(
-			DataAccessObject<T> query, EvaluatedPair<T> pair,
+			DataAccessObject<T> query, QueryCandidatePair<T> pair,
 			TestModel<T> model) {
 		Match match;
 		final DataAccessObject<T> dao1 = pair.getQueryRecord();
@@ -66,10 +66,10 @@ public class TestData {
 	}
 
 	public static <T extends Comparable<T> & Serializable> List<Match> matchListFromEvaluatedPairs(
-			DataAccessObject<T> query, List<EvaluatedPair<T>> ePairs,
+			DataAccessObject<T> query, List<QueryCandidatePair<T>> ePairs,
 			TestModel<T> model) {
 		List<Match> retVal = new ArrayList<>();
-		for (EvaluatedPair<T> pair : ePairs) {
+		for (QueryCandidatePair<T> pair : ePairs) {
 			Match match = matchFromEvaluatedPair(query, pair, model);
 			if (match != null) {
 				retVal.add(match);
@@ -82,18 +82,18 @@ public class TestData {
 
 	public static <T extends Comparable<T> & Serializable> List<Match> matchListFromTestModel(
 			DataAccessObject<T> query, TestModel<T> model) {
-		List<EvaluatedPair<T>> ePairs = model.getKnownPairs();
+		List<QueryCandidatePair<T>> ePairs = model.getKnownPairs();
 		List<Match> retVal = matchListFromEvaluatedPairs(query, ePairs, model);
 		return retVal;
 	}
 
 	public static <T extends Comparable<T> & Serializable> MatchRecord2<T> matchrecord2FromEvaluatedPair(
-			EvaluatedPair<T> pair) {
+			QueryCandidatePair<T> pair) {
 		return matchrecord2FromEvaluatedPair(pair, RECORD_SOURCE_ROLE.STAGING);
 	}
 
 	public static <T extends Comparable<T> & Serializable> MatchRecord2<T> matchrecord2FromEvaluatedPair(
-			EvaluatedPair<T> pair, RECORD_SOURCE_ROLE role) {
+			QueryCandidatePair<T> pair, RECORD_SOURCE_ROLE role) {
 		MatchRecord2<T> retVal =
 			new MatchRecord2<>(pair.getQueryRecord().getId(),
 					pair.getMatchCandidate().getId(), role,
@@ -129,8 +129,8 @@ public class TestData {
 		Integer ceID = UniqueSequence.getInstance().getNextInteger();
 		CompositeEntity expectedCE = new CompositeEntity(ceID);
 
-		EvaluatedPair<Integer> ePair =
-			new EvaluatedPair<Integer>(query01, dbRecord01, 0.5f, HOLD);
+		QueryCandidatePair<Integer> ePair =
+			new QueryCandidatePair<Integer>(query01, dbRecord01, 0.5f, HOLD);
 		model.addEvaluatedPair(ePair);
 		MatchRecord2<Integer> mr = matchrecord2FromEvaluatedPair(ePair);
 		expectedCE.addMatchRecord(mr);
@@ -138,7 +138,7 @@ public class TestData {
 		List<Match> matchList = matchListFromTestModel(query01, model);
 		final boolean mustContainQuery = false;
 
-		List<EvaluatedPair<Integer>> ePairs = new ArrayList<>();
+		List<QueryCandidatePair<Integer>> ePairs = new ArrayList<>();
 		ePairs.add(ePair);
 		TransitiveGroupBean<Integer> expectedTC =
 			new TransitiveGroupBean<Integer>(query01, ePairs,

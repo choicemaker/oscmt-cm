@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 import com.choicemaker.client.api.DataAccessObject;
-import com.choicemaker.client.api.EvaluatedPair;
+import com.choicemaker.client.api.QueryCandidatePair;
 import com.choicemaker.client.api.MergeGroup;
 import com.choicemaker.client.api.TransitiveGroup;
 import com.choicemaker.cms.util.EvaluatedPairAssist;
@@ -41,7 +41,7 @@ public class TransitiveGroupBean<T extends Comparable<T> & Serializable>
 	 *            be a member of some pair in the <code>pairs</code> list
 	 */
 	public TransitiveGroupBean(DataAccessObject<T> q,
-			List<EvaluatedPair<T>> pairs, List<MergeGroup<T>> mergeGroups) {
+			List<QueryCandidatePair<T>> pairs, List<MergeGroup<T>> mergeGroups) {
 		super(q, pairs);
 
 		List<MergeGroup<T>> list1;

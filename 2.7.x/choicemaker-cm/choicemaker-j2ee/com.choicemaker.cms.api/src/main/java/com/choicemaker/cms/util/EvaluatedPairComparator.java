@@ -13,7 +13,6 @@ public class EvaluatedPairComparator<T extends Comparable<T> & Serializable>
 
 	private static final long serialVersionUID = 271L;
 
-//	private final boolean assertionsEnabled;
 	private final IdentifiableComparator<T> idComparator;
 
 	public EvaluatedPairComparator() {
@@ -23,7 +22,6 @@ public class EvaluatedPairComparator<T extends Comparable<T> & Serializable>
 	public EvaluatedPairComparator(boolean enableAssertions) {
 		boolean b = false;
 		assert b = enableAssertions;
-//		this.assertionsEnabled = b;
 		this.idComparator = new IdentifiableComparator<T>(b);
 	}
 
@@ -32,13 +30,13 @@ public class EvaluatedPairComparator<T extends Comparable<T> & Serializable>
 
 		NonNullComparison:
 		if (retVal == false && p1 != null && p2 != null) {
-			DataAccessObject<T> q1 = p1.getQueryRecord();
-			DataAccessObject<T> q2 = p2.getQueryRecord();
+			DataAccessObject<T> q1 = p1.getRecord1();
+			DataAccessObject<T> q2 = p2.getRecord1();
 			retVal = (this.idComparator.equals(q1, q2));
 			if (!retVal) break NonNullComparison;
 			
-			DataAccessObject<T> c1 = p1.getMatchCandidate();
-			DataAccessObject<T> c2 = p2.getMatchCandidate();
+			DataAccessObject<T> c1 = p1.getRecord2();
+			DataAccessObject<T> c2 = p2.getRecord2();
 			retVal = (this.idComparator.equals(c1, c2));
 			if (!retVal) break NonNullComparison;
 

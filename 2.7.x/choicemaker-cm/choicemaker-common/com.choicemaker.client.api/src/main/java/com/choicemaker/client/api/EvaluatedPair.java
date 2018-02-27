@@ -2,28 +2,24 @@ package com.choicemaker.client.api;
 
 import java.io.Serializable;
 
-//import com.choicemaker.cms.beans.IdentifiableComparator;
 import com.choicemaker.util.Precondition;
 
-public final class EvaluatedPair<T extends Comparable<T> & Serializable>
+public class EvaluatedPair<T extends Comparable<T> & Serializable>
 		implements Serializable {
 
 	private static final long serialVersionUID = 271L;
-
-//	private final IdentifiableComparator<T> comparator =
-//		new IdentifiableComparator<>(false);
-
-	private final DataAccessObject<T> q;
-	private final DataAccessObject<T> m;
-	private final float p;
-	private final Decision d;
-	private final String[] notes;
 
 	/** Valid probabilities are in the range 0.0f to 1.0f, inclusive */
 	public static boolean isValidProbability(float p) {
 		boolean retVal = (p >= 0.0f) && (p <= 1.0f);
 		return retVal;
 	}
+
+	private final DataAccessObject<T> q;
+	private final DataAccessObject<T> m;
+	private final float p;
+	private final Decision d;
+	private final String[] notes;
 
 	public EvaluatedPair(DataAccessObject<T> q, DataAccessObject<T> m, float p,
 			Decision d) {
@@ -49,11 +45,16 @@ public final class EvaluatedPair<T extends Comparable<T> & Serializable>
 		}
 	}
 
-	public DataAccessObject<T> getQueryRecord() {
+	public EvaluatedPair(EvaluatedPair<T> p) {
+		this(p.getRecord1(), p.getRecord2(), p.getMatchProbability(),
+				p.getMatchDecision(), p.getNotes());
+	}
+
+	public DataAccessObject<T> getRecord1() {
 		return q;
 	}
 
-	public DataAccessObject<T> getMatchCandidate() {
+	public DataAccessObject<T> getRecord2() {
 		return m;
 	}
 
@@ -77,51 +78,5 @@ public final class EvaluatedPair<T extends Comparable<T> & Serializable>
 				+ (m == null ? null : m.getId()) + ", p=" + p + ", d=" + d
 				+ "]";
 	}
-
-//	@Override
-//	public int hashCode() {
-//		final int prime = 31;
-//		int result = 1;
-//		result = prime * result + ((d == null) ? 0 : d.hashCode());
-//		result = prime * result + Arrays.hashCode(notes);
-//		result = prime * result + Float.floatToIntBits(p);
-//		result = prime * result + ((m == null) ? 0
-//				: m.getId() == null ? 0 : m.getId().hashCode());
-//		result = prime * result + ((q == null) ? 0
-//				: q.getId() == null ? 0 : q.getId().hashCode());
-//		return result;
-//	}
-//
-//	@Override
-//	public boolean equals(Object obj) {
-//		if (this == obj)
-//			return true;
-//		if (obj == null)
-//			return false;
-//		if (getClass() != obj.getClass())
-//			return false;
-//		@SuppressWarnings("unchecked")
-//		EvaluatedPair<T> other = (EvaluatedPair<T>) obj;
-//		if (d == null) {
-//			if (other.d != null)
-//				return false;
-//		} else if (!d.equals(other.d))
-//			return false;
-//		if (!Arrays.equals(notes, other.notes))
-//			return false;
-//		if (Float.floatToIntBits(p) != Float.floatToIntBits(other.p))
-//			return false;
-//		if (m == null) {
-//			if (other.m != null)
-//				return false;
-//		} else if (!comparator.equals(m, other.m))
-//			return false;
-//		if (q == null) {
-//			if (other.q != null)
-//				return false;
-//		} else if (!comparator.equals(q, other.q))
-//			return false;
-//		return true;
-//	}
 
 }

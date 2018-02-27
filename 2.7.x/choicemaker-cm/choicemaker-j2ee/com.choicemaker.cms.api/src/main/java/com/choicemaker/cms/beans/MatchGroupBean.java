@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.UUID;
 
 import com.choicemaker.client.api.DataAccessObject;
-import com.choicemaker.client.api.EvaluatedPair;
+import com.choicemaker.client.api.QueryCandidatePair;
 import com.choicemaker.client.api.MatchGroup;
 import com.choicemaker.cms.util.EvaluatedPairAssist;
 import com.choicemaker.util.Precondition;
@@ -21,22 +21,22 @@ public class MatchGroupBean<T extends Comparable<T> & Serializable>
 	private final DataAccessObject<T> q;
 
 	// Unmodifiable; see constructor
-	private final List<EvaluatedPair<T>> pairs;
+	private final List<QueryCandidatePair<T>> pairs;
 
-	public MatchGroupBean(DataAccessObject<T> q, List<EvaluatedPair<T>> pairs) {
+	public MatchGroupBean(DataAccessObject<T> q, List<QueryCandidatePair<T>> pairs) {
 		Precondition.assertNonNullArgument("null query", q);
 		Precondition.assertNonNullArgument("null pairs", pairs);
 
 		this.groupId = UUID.randomUUID().toString();
 		this.q = q;
-		List<EvaluatedPair<T>> list = new ArrayList<>();
+		List<QueryCandidatePair<T>> list = new ArrayList<>();
 		list.addAll(pairs);
 		this.pairs = Collections.unmodifiableList(list);
 
 		boolean assertionsEnabled = false;
 		assert assertionsEnabled = true;
 		if (assertionsEnabled) {
-			for (EvaluatedPair<T> pair : this.pairs) {
+			for (QueryCandidatePair<T> pair : this.pairs) {
 				assert pair != null;
 			}
 		}
@@ -60,7 +60,7 @@ public class MatchGroupBean<T extends Comparable<T> & Serializable>
 	}
 
 	@Override
-	public List<EvaluatedPair<T>> getQueryCandidatePairs() {
+	public List<QueryCandidatePair<T>> getQueryCandidatePairs() {
 		return pairs;
 	}
 
@@ -72,7 +72,7 @@ public class MatchGroupBean<T extends Comparable<T> & Serializable>
 	}
 
 	@Override
-	public EvaluatedPair<T> getQueryCandidatePair(
+	public QueryCandidatePair<T> getQueryCandidatePair(
 			DataAccessObject<T> candidate) {
 		// TODO stub
 		throw new Error("not yet implemented");

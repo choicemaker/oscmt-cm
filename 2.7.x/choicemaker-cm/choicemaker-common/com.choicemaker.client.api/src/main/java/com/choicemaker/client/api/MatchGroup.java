@@ -20,11 +20,11 @@ public interface MatchGroup<T extends Comparable<T> & Serializable> extends Seri
 	 * Returns a list of all EvaluatedPairs between the query record and
 	 * the candidate records.
 	 */
-	List<EvaluatedPair<T>> getQueryCandidatePairs();
+	List<QueryCandidatePair<T>> getQueryCandidatePairs();
 
 	/**
 	 * Returns the EvaluatedPair between the query record and the specified
 	 * candidate record.
 	 */
-	EvaluatedPair<T> getQueryCandidatePair(DataAccessObject<T> candidate);
+	QueryCandidatePair<T> getQueryCandidatePair(DataAccessObject<T> candidate);
 }

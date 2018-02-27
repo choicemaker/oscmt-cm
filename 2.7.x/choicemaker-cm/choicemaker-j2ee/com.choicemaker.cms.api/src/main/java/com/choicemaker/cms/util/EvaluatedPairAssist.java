@@ -14,13 +14,13 @@ public class EvaluatedPairAssist {
 
 	public static <T extends Comparable<T> & Serializable>
 	List<DataAccessObject<T>> extractRecordsFromPairs(
-			List<EvaluatedPair<T>> pairs) {
+			List<? extends EvaluatedPair<T>> pairs) {
 		return extractRecordsFromPairs(pairs,null);
 	}
 	
 	public static <T extends Comparable<T> & Serializable>
 	List<DataAccessObject<T>> extractRecordsFromPairs(
-					List<EvaluatedPair<T>> pairs,
+					List<? extends EvaluatedPair<T>> pairs,
 					DataAccessObject<T> excluded) {
 		Precondition.assertNonNullArgument("null pairs", pairs);
 
@@ -49,16 +49,16 @@ public class EvaluatedPairAssist {
 
 	public static <T extends Comparable<T> & Serializable>
 	SortedSet<IdentifiableWrapper<T>> extractWrappedRecordsFromPairs(
-					List<EvaluatedPair<T>> pairs,
+					List<? extends EvaluatedPair<T>> pairs,
 					DataAccessObject<T> excluded) {
 		Precondition.assertNonNullArgument("null pairs", pairs);
 
 		SortedSet<IdentifiableWrapper<T>> wrappers = new TreeSet<>();
 		for (EvaluatedPair<T> pair : pairs) {
 			IdentifiableWrapper<T> wrapper;
-			wrapper = new IdentifiableWrapper<>(pair.getQueryRecord());
+			wrapper = new IdentifiableWrapper<>(pair.getRecord1());
 			wrappers.add(wrapper);
-			wrapper = new IdentifiableWrapper<>(pair.getMatchCandidate());
+			wrapper = new IdentifiableWrapper<>(pair.getRecord2());
 			wrappers.add(wrapper);
 		}
 		if (excluded != null) {

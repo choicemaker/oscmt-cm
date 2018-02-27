@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 
 import com.choicemaker.client.api.DataAccessObject;
 import com.choicemaker.client.api.Decision;
-import com.choicemaker.client.api.EvaluatedPair;
+import com.choicemaker.client.api.QueryCandidatePair;
 import com.choicemaker.client.api.MatchGroup;
 import com.choicemaker.client.api.MergeGroup;
 import com.choicemaker.client.api.TransitiveGroup;
@@ -222,8 +222,8 @@ class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 	public EvaluatedRecord[] computeEvaluatedRecords(MatchGroup<T> matchGroup) {
 		Precondition.assertNonNullArgument("null match candidates", matchGroup);
 		List<EvaluatedRecord> records = new ArrayList<>();
-		List<EvaluatedPair<T>> pairs = matchGroup.getQueryCandidatePairs();
-		for (EvaluatedPair<T> pair : pairs) {
+		List<QueryCandidatePair<T>> pairs = matchGroup.getQueryCandidatePairs();
+		for (QueryCandidatePair<T> pair : pairs) {
 			// IRecord<T> q = (IRecord<T>) pair.getQueryRecord();
 			IRecord<T> m = (IRecord<T>) pair.getMatchCandidate();
 			Decision d = pair.getMatchDecision();
@@ -264,7 +264,7 @@ class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 
 		DataAccessObject<T> queryRecord = tcs.getQueryRecord();
 		List<MergeGroup<T>> mergeGroups = tcs.getMergeGroups();
-		List<EvaluatedPair<T>> evaluatedPairs = tcs.getQueryCandidatePairs();
+		List<QueryCandidatePair<T>> evaluatedPairs = tcs.getQueryCandidatePairs();
 
 		boolean containsQuery = false;
 		List<EvaluatedRecord> evaluatedRecords = new ArrayList<>();

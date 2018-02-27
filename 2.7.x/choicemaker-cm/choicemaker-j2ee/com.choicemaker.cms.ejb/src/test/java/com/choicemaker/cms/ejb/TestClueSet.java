@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.choicemaker.client.api.Decision;
-import com.choicemaker.client.api.EvaluatedPair;
+import com.choicemaker.client.api.QueryCandidatePair;
 import com.choicemaker.cm.core.ActiveClues;
 import com.choicemaker.cm.core.BooleanActiveClues;
 import com.choicemaker.cm.core.ClueDesc;
@@ -41,22 +41,22 @@ public class TestClueSet<T extends Comparable<T> & Serializable>
 		return cluesToEvaluate.clone();
 	}
 
-	private final Map<SafeIndexPair<T>, EvaluatedPair<T>> map;
+	private final Map<SafeIndexPair<T>, QueryCandidatePair<T>> map;
 
 	public TestClueSet(TestModel<T> m) {
 		Precondition.assertNonNullArgument(m);
-		Map<SafeIndexPair<T>, EvaluatedPair<T>> _map = new HashMap<>();
-		List<EvaluatedPair<T>> pairs = m.getKnownPairs();
+		Map<SafeIndexPair<T>, QueryCandidatePair<T>> _map = new HashMap<>();
+		List<QueryCandidatePair<T>> pairs = m.getKnownPairs();
 		assert pairs != null;
 		for (int i = 0; i < pairs.size(); i++) {
-			EvaluatedPair<T> p = pairs.get(i);
+			QueryCandidatePair<T> p = pairs.get(i);
 			Precondition.assertNonNullArgument("null pairs at index " + i, p);
 			assert p.getQueryRecord() != null;
 			SafeIndex<T> qId = new SafeIndex<T>(p.getQueryRecord().getId());
 			assert p.getMatchCandidate() != null;
 			SafeIndex<T> mId = new SafeIndex<T>(p.getMatchCandidate().getId());
 			SafeIndexPair<T> key = new SafeIndexPair<T>(qId, mId);
-			EvaluatedPair<T> previous = _map.put(key, p);
+			QueryCandidatePair<T> previous = _map.put(key, p);
 			Precondition.assertBoolean("Duplicate pair at index " + i,
 					previous == null);
 		}
@@ -105,7 +105,7 @@ public class TestClueSet<T extends Comparable<T> & Serializable>
 		@SuppressWarnings("unchecked")
 		SafeIndex<T> id2 = new SafeIndex<T>((T) m.getId());
 		SafeIndexPair<T> key = new SafeIndexPair<T>(id1,id2);
-		EvaluatedPair<T> ep = map.get(key);
+		QueryCandidatePair<T> ep = map.get(key);
 		
 		BooleanActiveClues retVal = new BooleanActiveClues();
 		if (Decision.MATCH.equals(ep.getMatchDecision())) {
