@@ -1,14 +1,14 @@
-package com.choicemaker.cm.urm.ejb;
+package com.choicemaker.cms.util;
 
 import java.io.Serializable;
 
-import com.choicemaker.cm.urm.base.IRecord;
+import com.choicemaker.client.api.Identifiable;
 import com.choicemaker.util.Precondition;
 
-public class QMKey<T extends Comparable<T> & Serializable> {
-	public final IRecord<T> q;
-	public final IRecord<T> m;
-	public QMKey(IRecord<T> _q, IRecord<T> _m) {
+public class IdentifiablePairKey<T extends Comparable<T> & Serializable> {
+	public final Identifiable<T> q;
+	public final Identifiable<T> m;
+	public IdentifiablePairKey(Identifiable<T> _q, Identifiable<T> _m) {
 		Precondition.assertNonNullArgument("null query", _q);
 		Precondition.assertNonNullArgument("null match candidate", _m);
 		this.q = _q;
@@ -31,7 +31,7 @@ public class QMKey<T extends Comparable<T> & Serializable> {
 		if (getClass() != obj.getClass())
 			return false;
 		@SuppressWarnings("unchecked")
-		QMKey<T> other = (QMKey<T>) obj;
+		IdentifiablePairKey<T> other = (IdentifiablePairKey<T>) obj;
 		if (m == null) {
 			if (other.m != null)
 				return false;
