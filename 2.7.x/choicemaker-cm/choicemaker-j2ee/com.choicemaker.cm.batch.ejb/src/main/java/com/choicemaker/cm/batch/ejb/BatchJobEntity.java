@@ -163,7 +163,7 @@ public abstract class BatchJobEntity extends AbstractPersistentObject implements
 
 	/**
 	 * {@link com.choicemaker.cm.args.PersistentObject#NONPERSISTENT_ID} or the
-	 * id of some UrmJobBean
+	 * id of some batch job
 	 */
 	@Column(name = BatchJobJPA.CN_URM_ID)
 	protected final long urmId;
