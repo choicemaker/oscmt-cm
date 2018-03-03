@@ -5,7 +5,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *******************************************************************************/
-package com.choicemaker.cm.urm;
+package com.choicemaker.cm.urm.api;
 
 import java.rmi.RemoteException;
 import java.util.Iterator;

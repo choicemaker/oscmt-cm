@@ -13,9 +13,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.ejb.EJB;
+import javax.ejb.Remote;
+import javax.ejb.Stateless;
 
 import com.choicemaker.cm.args.AnalysisResultFormat;
-import com.choicemaker.cm.urm.BatchMatchAnalyzer;
+import com.choicemaker.cm.urm.api.BatchMatchAnalyzer;
+import com.choicemaker.cm.urm.api.OnlineMatchAnalyzer;
+import com.choicemaker.cm.urm.api.OnlineRecordMatcher;
 import com.choicemaker.cm.urm.api.UrmConfigurationAdapter;
 import com.choicemaker.cm.urm.base.IRecordCollection;
 import com.choicemaker.cm.urm.base.JobStatus;
@@ -32,6 +36,8 @@ import com.choicemaker.cms.api.NamedConfigurationController;
 /**
  * Delegates to CMS BatchMatching bean.
  */
+@Stateless
+@Remote(BatchMatchAnalyzer.class )
 public class BatchMatchAnalyzerBean implements BatchMatchAnalyzer {
 
 	private static final String VERSION = "2.7.1";

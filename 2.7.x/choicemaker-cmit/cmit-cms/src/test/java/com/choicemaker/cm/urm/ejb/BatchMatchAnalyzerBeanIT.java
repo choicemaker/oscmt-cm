@@ -30,6 +30,7 @@ import com.choicemaker.cm.oaba.ejb.OabaSettingsEntity;
 import com.choicemaker.cm.oaba.ejb.ServerConfigurationControllerBean;
 import com.choicemaker.cm.oaba.ejb.ServerConfigurationEntity;
 import com.choicemaker.cm.transitivity.ejb.TransitivityParametersEntity;
+import com.choicemaker.cm.urm.api.BatchMatchAnalyzer;
 import com.choicemaker.cmit.testconfigs.SimplePersonSqlServerTestConfiguration;
 import com.choicemaker.cmit.trans.AbstractTransitivityMdbTest;
 import com.choicemaker.cmit.utils.j2ee.BatchProcessingPhase;
@@ -37,7 +38,6 @@ import com.choicemaker.cmit.utils.j2ee.EntityManagerUtils;
 import com.choicemaker.cmit.utils.j2ee.OabaTestUtils;
 import com.choicemaker.cmit.utils.j2ee.TransitivityTestParameters;
 import com.choicemaker.cmit.utils.j2ee.WellKnownTestConfiguration;
-import com.choicemaker.cm.urm.BatchMatchAnalyzer;
 import com.choicemaker.cms.api.UrmJobController;
 import com.choicemaker.cms.ejb.UrmDeploymentUtils;
 

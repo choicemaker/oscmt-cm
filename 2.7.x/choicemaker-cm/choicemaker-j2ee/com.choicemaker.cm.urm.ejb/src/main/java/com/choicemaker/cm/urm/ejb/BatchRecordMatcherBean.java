@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 
 import javax.ejb.EJB;
 import javax.ejb.Remote;
+import javax.ejb.Stateless;
 import javax.naming.NamingException;
 
 import com.choicemaker.cm.args.OabaLinkageType;
@@ -21,7 +22,8 @@ import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.oaba.api.ServerConfigurationException;
-import com.choicemaker.cm.urm.BatchRecordMatcher;
+import com.choicemaker.cm.urm.api.BatchMatchAnalyzer;
+import com.choicemaker.cm.urm.api.BatchRecordMatcher;
 import com.choicemaker.cm.urm.api.UrmConfigurationAdapter;
 import com.choicemaker.cm.urm.base.IRecordCollection;
 import com.choicemaker.cm.urm.base.JobStatus;
@@ -37,7 +39,8 @@ import com.choicemaker.cms.api.NamedConfigurationController;
 import com.choicemaker.cms.ejb.NamedConfigConversion;
 import com.choicemaker.util.Precondition;
 
-@Remote
+@Stateless
+@Remote(BatchRecordMatcher.class )
 public class BatchRecordMatcherBean implements BatchRecordMatcher {
 
 	private static final String VERSION = "2.7.1";

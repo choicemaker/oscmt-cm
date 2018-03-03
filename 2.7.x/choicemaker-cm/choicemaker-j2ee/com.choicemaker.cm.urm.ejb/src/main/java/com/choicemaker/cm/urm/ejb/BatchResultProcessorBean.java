@@ -11,7 +11,7 @@ import java.rmi.RemoteException;
 import java.util.logging.Logger;
 
 import com.choicemaker.cm.args.IFilterConfiguration;
-import com.choicemaker.cm.urm.BatchResultProcessor;
+import com.choicemaker.cm.urm.api.BatchResultProcessor;
 import com.choicemaker.cm.urm.base.JobStatus;
 import com.choicemaker.cm.urm.base.RefRecordCollection;
 import com.choicemaker.cm.urm.exceptions.ArgumentException;
