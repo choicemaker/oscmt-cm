@@ -288,14 +288,14 @@ public class NamedConfigConversion {
 	}
 
 	public static TransitivityParameters createTransitivityParameters(
-			NamedConfiguration nc, boolean isLinkage) throws Exception {
+			NamedConfiguration nc, boolean isLinkage) throws NamingException {
 		boolean makePersistent = true;
 		return createTransitivityParameters(nc, isLinkage, makePersistent);
 	}
 
 	public static TransitivityParameters createTransitivityParameters(
 			NamedConfiguration nc, boolean isLinkage, boolean makePersistent)
-			throws Exception {
+			throws NamingException {
 
 		// HACK Create a temporary, persistent instance of OabaParameters
 		final boolean makePersistent0 = true;
