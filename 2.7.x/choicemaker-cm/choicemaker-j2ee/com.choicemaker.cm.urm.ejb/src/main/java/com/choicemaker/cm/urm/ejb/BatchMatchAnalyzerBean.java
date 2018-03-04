@@ -7,6 +7,7 @@
  *******************************************************************************/
 package com.choicemaker.cm.urm.ejb;
 
+import java.net.URISyntaxException;
 import java.rmi.RemoteException;
 import java.util.Iterator;
 import java.util.logging.Level;
@@ -15,8 +16,14 @@ import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
+import javax.naming.NamingException;
 
 import com.choicemaker.cm.args.AnalysisResultFormat;
+import com.choicemaker.cm.args.OabaLinkageType;
+import com.choicemaker.cm.args.OabaSettings;
+import com.choicemaker.cm.args.ServerConfiguration;
+import com.choicemaker.cm.args.TransitivityParameters;
+import com.choicemaker.cm.oaba.api.ServerConfigurationException;
 import com.choicemaker.cm.urm.api.BatchMatchAnalyzer;
 import com.choicemaker.cm.urm.api.UrmConfigurationAdapter;
 import com.choicemaker.cm.urm.base.IRecordCollection;
@@ -29,7 +36,10 @@ import com.choicemaker.cm.urm.exceptions.ConfigException;
 import com.choicemaker.cm.urm.exceptions.ModelException;
 import com.choicemaker.cm.urm.exceptions.RecordCollectionException;
 import com.choicemaker.cms.api.BatchMatching;
+import com.choicemaker.cms.api.NamedConfiguration;
 import com.choicemaker.cms.api.NamedConfigurationController;
+import com.choicemaker.cms.ejb.NamedConfigConversion;
+import com.choicemaker.util.Precondition;
 
 /**
  * Delegates to CMS BatchMatching bean.
@@ -51,6 +61,8 @@ public class BatchMatchAnalyzerBean implements BatchMatchAnalyzer {
 
 	@EJB(lookup = "java:app/com.choicemaker.cms.ejb/NamedConfigurationControllerBean!com.choicemaker.cms.api.NamedConfigurationController")
 	private NamedConfigurationController ncController;
+
+	private UrmEjbAssist<?> assist = new UrmEjbAssist<>();
 
 	@Override
 	public boolean abortJob(long jobID) throws ArgumentException,
@@ -126,8 +138,57 @@ public class BatchMatchAnalyzerBean implements BatchMatchAnalyzer {
 			throws RecordCollectionException, ArgumentException,
 			ConfigException, ModelException, CmRuntimeException,
 			RemoteException {
-		// TODO Auto-generated method stub
-		return 0;
+		Precondition.assertNonNullArgument("null queries", qRc);
+		// Precondition.assertNonNullArgument("null references", mRc);
+		Precondition.assertNonEmptyString("null or empty model", modelName);
+		Precondition.assertBoolean("invalid differ threshold",
+				differThreshold >= 0f && differThreshold <= 1f);
+		Precondition.assertBoolean("invalid match threshold",
+				matchThreshold >= 0f && matchThreshold <= 1f);
+		Precondition.assertBoolean("invalid thresholds (differ > match)",
+				differThreshold <= matchThreshold);
+		Precondition.assertNonNullArgument("null link criteria", c);
+		Precondition.assertNonNullArgument("null result format",
+				serializationFormat);
+
+		NamedConfiguration cmConf =
+			assist.createCustomizedConfiguration(adapter, ncController, qRc,
+					mRc, modelName, differThreshold, matchThreshold, maxSingle);
+		OabaLinkageType task = assist.computeMatchingTask(qRc, mRc, cmConf);
+		boolean isLinkage = OabaLinkageType.isLinkage(task);
+
+		long retVal = Integer.MIN_VALUE;
+		try {
+			TransitivityParameters tp = null;
+			tp = NamedConfigConversion.createTransitivityParameters(cmConf,
+					isLinkage);
+			assert tp != null;
+
+			OabaSettings oabaSettings = null;
+			oabaSettings = NamedConfigConversion.createOabaSettings(cmConf);
+			assert oabaSettings != null;
+
+			ServerConfiguration serverConfig = null;
+			serverConfig =
+				NamedConfigConversion.createServerConfiguration(cmConf);
+			assert serverConfig != null;
+
+			if (isLinkage) {
+				retVal = delegate.startLinkageAndAnalysis(trackingId, tp,
+						oabaSettings, serverConfig);
+			} else {
+				retVal = delegate.startDeduplicationAndAnalysis(trackingId,
+						null, oabaSettings, serverConfig);
+			}
+		} catch (NamingException | ServerConfigurationException
+				| URISyntaxException e) {
+			String msg = e.toString();
+			logger.severe(msg);
+			throw new ConfigException(msg);
+		}
+		assert retVal != Integer.MIN_VALUE;
+
+		return retVal;
 	}
 
 	@Override
