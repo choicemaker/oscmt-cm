@@ -24,7 +24,7 @@ import com.choicemaker.cm.urm.api.UrmConfigurationAdapter;
 public class UrmConfigurationSingleton implements UrmConfigurationAdapter {
 
 	private static final Logger logger =
-		Logger.getLogger(UrmConfigurationControllerBean.class.getName());
+		Logger.getLogger(UrmConfigurationSingleton.class.getName());
 
 	@PersistenceContext(unitName = "oaba")
 	private EntityManager em;
