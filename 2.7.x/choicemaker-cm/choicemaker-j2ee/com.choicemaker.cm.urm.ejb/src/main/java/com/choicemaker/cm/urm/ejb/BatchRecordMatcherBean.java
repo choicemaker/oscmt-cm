@@ -48,7 +48,7 @@ public class BatchRecordMatcherBean implements BatchRecordMatcher {
 	private static final Logger logger =
 		Logger.getLogger(BatchRecordMatcherBean.class.getName());
 
-	@EJB(lookup = "java:app/BatchMatchingBean/com.choicemaker.cms.api.BatchMatching")
+	@EJB(lookup = "java:app/com.choicemaker.cms.ejb/BatchMatchingBean!com.choicemaker.cms.api.BatchMatching")
 	private BatchMatching delegate;
 
 	@EJB(lookup = "java:module/UrmConfigurationSingleton")

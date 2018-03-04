@@ -18,8 +18,6 @@ import javax.ejb.Stateless;
 
 import com.choicemaker.cm.args.AnalysisResultFormat;
 import com.choicemaker.cm.urm.api.BatchMatchAnalyzer;
-import com.choicemaker.cm.urm.api.OnlineMatchAnalyzer;
-import com.choicemaker.cm.urm.api.OnlineRecordMatcher;
 import com.choicemaker.cm.urm.api.UrmConfigurationAdapter;
 import com.choicemaker.cm.urm.base.IRecordCollection;
 import com.choicemaker.cm.urm.base.JobStatus;
@@ -45,13 +43,13 @@ public class BatchMatchAnalyzerBean implements BatchMatchAnalyzer {
 	private static final Logger logger =
 		Logger.getLogger(BatchMatchAnalyzerBean.class.getName());
 
-	@EJB(lookup = "java:app/BatchMatchingBean/com.choicemaker.cms.api.BatchMatching")
+	@EJB(lookup = "java:app/com.choicemaker.cms.ejb/BatchMatchingBean!com.choicemaker.cms.api.BatchMatching")
 	private BatchMatching delegate;
 
-	@EJB(lookup = "java:app/NamedConfigurationControllerBean/com.choicemaker.cms.api.NamedConfigurationController")
+	@EJB(lookup = "java:module/UrmConfigurationSingleton")
 	private UrmConfigurationAdapter adapter;
 
-	@EJB(lookup = "java:app/UrmConfigurationSingleton")
+	@EJB(lookup = "java:app/com.choicemaker.cms.ejb/NamedConfigurationControllerBean!com.choicemaker.cms.api.NamedConfigurationController")
 	private NamedConfigurationController ncController;
 
 	@Override
