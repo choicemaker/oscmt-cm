@@ -57,6 +57,9 @@ public class UrmConfigurationEntity extends AbstractPersistentObject
 	@Column(name = CN_CMS_CONF_NAME, nullable = false)
 	protected String namedConfigurationName = DEFAULT_CMSCONFIGURATIONNAME;
 
+	public UrmConfigurationEntity() {
+	}
+
 	public UrmConfigurationEntity(UrmConfiguration nc) {
 		this.setUrmConfigurationName(nc.getUrmConfigurationName());
 		this.setNamedConfigurationName(nc.getCmsConfigurationName());

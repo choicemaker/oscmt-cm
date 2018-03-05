@@ -16,7 +16,7 @@ public interface UrmConfigurationJPA {
 	String CN_URM_CONF_NAME = "URM_NAME";
 
 	/** NamedConfiguration name */
-	String CN_CMS_CONF_NAME = "URM_NAME";
+	String CN_CMS_CONF_NAME = "CMS_NAME";
 
 	// JPA ID generation
 	String ID_GENERATOR_NAME = "URM_CONFIG";
