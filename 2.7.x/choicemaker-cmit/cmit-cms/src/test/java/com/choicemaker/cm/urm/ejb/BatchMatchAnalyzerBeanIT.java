@@ -1,7 +1,7 @@
 package com.choicemaker.cm.urm.ejb;
 
-import static com.choicemaker.cm.args.BatchProcessing.EVT_DONE;
-import static com.choicemaker.cm.args.BatchProcessing.PCT_DONE;
+import static com.choicemaker.cm.args.BatchProcessingConstants.EVT_DONE;
+import static com.choicemaker.cm.args.BatchProcessingConstants.PCT_DONE;
 import static com.choicemaker.cm.args.PersistentObject.NONPERSISTENT_ID;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;

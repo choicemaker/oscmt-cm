@@ -7,7 +7,7 @@
  *******************************************************************************/
 package com.choicemaker.cm.oaba.core;
 
-import com.choicemaker.cm.args.BatchProcessing;
+import com.choicemaker.cm.args.BatchProcessingConstants;
 
 /**
  * This interface defines event ids and completion estimates used in Offline
@@ -16,7 +16,7 @@ import com.choicemaker.cm.args.BatchProcessing;
  * @author pcheung (implemented as IStatus)
  * @author rphall (refactored from IStatus to BatchProcessing)
  */
-public interface OabaProcessing extends BatchProcessing {
+public interface OabaProcessing extends BatchProcessingConstants {
 
 	// -- Ordered event ids used by OABA processing
 

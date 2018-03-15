@@ -60,7 +60,7 @@ import static com.choicemaker.cm.oaba.core.OabaProcessing.PCT_MERGE_DEDUP_MATCHE
 import static com.choicemaker.cm.oaba.core.OabaProcessing.PCT_OUTPUT_DEDUP_MATCHES;
 import static com.choicemaker.cm.oaba.core.OabaProcessing.PCT_OVERSIZED_TRIMMING;
 
-import com.choicemaker.cm.args.BatchProcessing;
+import com.choicemaker.cm.args.BatchProcessingConstants;
 
 enum OabaEvent {
 
@@ -144,8 +144,8 @@ enum OabaEvent {
 	private final float percentComplete;
 
 	OabaEvent(int evtId, float pct) {
-		if (pct < BatchProcessing.MINIMUM_FRACTION_COMPLETE
-				|| pct > BatchProcessing.MAXIMUM_FRACTION_COMPLETE) {
+		if (pct < BatchProcessingConstants.MINIMUM_FRACTION_COMPLETE
+				|| pct > BatchProcessingConstants.MAXIMUM_FRACTION_COMPLETE) {
 			throw new IllegalArgumentException("invalid percentage: " + pct);
 		}
 		this.eventId = evtId;

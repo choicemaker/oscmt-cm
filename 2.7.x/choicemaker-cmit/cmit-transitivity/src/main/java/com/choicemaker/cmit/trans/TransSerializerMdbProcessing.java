@@ -1,7 +1,7 @@
 package com.choicemaker.cmit.trans;
 
-import static com.choicemaker.cm.args.BatchProcessing.EVT_DONE;
-import static com.choicemaker.cm.args.BatchProcessing.PCT_DONE;
+import static com.choicemaker.cm.args.BatchProcessingConstants.EVT_DONE;
+import static com.choicemaker.cm.args.BatchProcessingConstants.PCT_DONE;
 
 import java.util.logging.Logger;
 

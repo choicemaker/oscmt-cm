@@ -1,7 +1,7 @@
 package com.choicemaker.cmit.trans.util;
 
-import static com.choicemaker.cm.args.BatchProcessing.EVT_DONE;
-import static com.choicemaker.cm.args.BatchProcessing.PCT_DONE;
+import static com.choicemaker.cm.args.BatchProcessingConstants.EVT_DONE;
+import static com.choicemaker.cm.args.BatchProcessingConstants.PCT_DONE;
 import static com.choicemaker.cm.args.PersistentObject.NONPERSISTENT_ID;
 import static com.choicemaker.cmit.utils.j2ee.JmsUtils.LONG_TIMEOUT_MILLIS;
 import static com.choicemaker.cmit.utils.j2ee.JmsUtils.SHORT_TIMEOUT_MILLIS;

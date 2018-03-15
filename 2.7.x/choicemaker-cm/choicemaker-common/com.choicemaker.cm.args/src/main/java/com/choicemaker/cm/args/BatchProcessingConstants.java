@@ -17,9 +17,9 @@ import java.io.Serializable;
  * processing.
  * 
  * @author pcheung (implemented as IStatus)
- * @author rphall (refactored from IStatus to BatchProcessing)
+ * @author rphall (refactored from IStatus to BatchProcessingConstants)
  */
-public interface BatchProcessing extends Serializable {
+public interface BatchProcessingConstants extends Serializable {
 	
 	// -- Event names
 	

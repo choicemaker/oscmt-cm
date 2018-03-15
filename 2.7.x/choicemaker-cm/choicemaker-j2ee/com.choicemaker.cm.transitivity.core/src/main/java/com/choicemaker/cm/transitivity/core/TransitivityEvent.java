@@ -7,8 +7,8 @@
  *******************************************************************************/
 package com.choicemaker.cm.transitivity.core;
 
-import static com.choicemaker.cm.args.BatchProcessing.EVT_INIT;
-import static com.choicemaker.cm.args.BatchProcessing.PCT_INIT;
+import static com.choicemaker.cm.args.BatchProcessingConstants.EVT_INIT;
+import static com.choicemaker.cm.args.BatchProcessingConstants.PCT_INIT;
 import static com.choicemaker.cm.oaba.core.OabaProcessing.EVT_ALLOCATE_CHUNKS;
 import static com.choicemaker.cm.oaba.core.OabaProcessing.EVT_BLOCK_BY_ONE_COLUMN;
 import static com.choicemaker.cm.oaba.core.OabaProcessing.EVT_CREATE_CHUNK_IDS;
@@ -58,7 +58,7 @@ import static com.choicemaker.cm.oaba.core.OabaProcessing.PCT_MERGE_DEDUP_MATCHE
 import static com.choicemaker.cm.oaba.core.OabaProcessing.PCT_OUTPUT_DEDUP_MATCHES;
 import static com.choicemaker.cm.oaba.core.OabaProcessing.PCT_OVERSIZED_TRIMMING;
 
-import com.choicemaker.cm.args.BatchProcessing;
+import com.choicemaker.cm.args.BatchProcessingConstants;
 
 /**
  * Enumeration of transitivity events and completion estimates
@@ -115,8 +115,8 @@ enum TransitivityEvent {
 	private final float percentComplete;
 
 	TransitivityEvent(int evtId, float pct) {
-		if (pct < BatchProcessing.MINIMUM_FRACTION_COMPLETE
-				|| pct > BatchProcessing.MAXIMUM_FRACTION_COMPLETE) {
+		if (pct < BatchProcessingConstants.MINIMUM_FRACTION_COMPLETE
+				|| pct > BatchProcessingConstants.MAXIMUM_FRACTION_COMPLETE) {
 			throw new IllegalArgumentException("invalid percentage: " + pct);
 		}
 		this.eventId = evtId;

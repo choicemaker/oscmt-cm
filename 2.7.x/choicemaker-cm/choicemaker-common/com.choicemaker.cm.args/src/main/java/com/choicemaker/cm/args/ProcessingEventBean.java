@@ -1,6 +1,6 @@
 package com.choicemaker.cm.args;
 
-public class ProcessingEventBean implements ProcessingEvent, BatchProcessing {
+public class ProcessingEventBean implements ProcessingEvent, BatchProcessingConstants {
 
 	protected static final long serialVersionUID = 271L;
 

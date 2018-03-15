@@ -1,6 +1,6 @@
 package com.choicemaker.cmit.utils.j2ee;
 
-import static com.choicemaker.cm.args.BatchProcessing.*;
+import static com.choicemaker.cm.args.BatchProcessingConstants.*;
 import static org.junit.Assert.fail;
 
 import java.util.logging.Logger;
