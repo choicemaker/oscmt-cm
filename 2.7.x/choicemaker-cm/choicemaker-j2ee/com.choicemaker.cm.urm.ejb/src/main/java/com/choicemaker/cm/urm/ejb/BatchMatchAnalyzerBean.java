@@ -126,8 +126,7 @@ public class BatchMatchAnalyzerBean implements BatchMatchAnalyzer {
 			AnalysisResultFormat serializationFormat, String trackingId)
 			throws ModelException, ConfigException, ArgumentException,
 			CmRuntimeException, RemoteException {
-		// TODO Auto-generated method stub
-		return 0;
+		throw new Error("never implemented");
 	}
 
 	@Override
