@@ -24,7 +24,7 @@ import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.oaba.core.IBlockSink;
 import com.choicemaker.cm.oaba.core.IBlockSinkSourceFactory;
 import com.choicemaker.cm.oaba.core.IBlockSource;
-import com.choicemaker.cm.oaba.core.OabaProcessingEvent;
+import com.choicemaker.cm.oaba.core.OabaEventBean;
 import com.choicemaker.cm.oaba.ejb.data.OabaJobMessage;
 import com.choicemaker.cm.oaba.ejb.util.MessageBeanUtils;
 import com.choicemaker.cm.oaba.impl.BlockGroup;
@@ -109,8 +109,8 @@ public class DedupMDB extends AbstractOabaMDB {
 	}
 
 	@Override
-	protected OabaProcessingEvent getCompletionEvent() {
-		return OabaProcessingEvent.DONE_DEDUP_OVERSIZED;
+	protected OabaEventBean getCompletionEvent() {
+		return OabaEventBean.DONE_DEDUP_OVERSIZED;
 	}
 
 	@Override

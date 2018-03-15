@@ -27,8 +27,8 @@ import com.choicemaker.cm.oaba.core.IComparableSink;
 import com.choicemaker.cm.oaba.core.IMatchRecord2Sink;
 import com.choicemaker.cm.oaba.core.IMatchRecord2SinkSourceFactory;
 import com.choicemaker.cm.oaba.core.IMatchRecord2Source;
-import com.choicemaker.cm.oaba.core.OabaProcessing;
-import com.choicemaker.cm.oaba.core.OabaProcessingEvent;
+import com.choicemaker.cm.oaba.core.OabaProcessingConstants;
+import com.choicemaker.cm.oaba.core.OabaEventBean;
 import com.choicemaker.cm.oaba.ejb.data.MatchWriterMessage;
 import com.choicemaker.cm.oaba.ejb.data.OabaJobMessage;
 import com.choicemaker.cm.oaba.ejb.util.MessageBeanUtils;
@@ -72,7 +72,7 @@ public class MatchDedupEachMDB extends AbstractOabaMDB {
 			ProcessingEventLog processingLog, ServerConfiguration serverConfig,
 			ImmutableProbabilityModel model) throws BlockingException {
 
-		if (processingLog.getCurrentProcessingEventId() != OabaProcessing.EVT_MERGE_DEDUP_MATCHES) {
+		if (processingLog.getCurrentProcessingEventId() != OabaProcessingConstants.EVT_MERGE_DEDUP_MATCHES) {
 			int maxMatches = oabaSettings.getMaxMatches();
 			dedupEach(data.processingIndex, maxMatches, batchJob);
 		}
@@ -137,7 +137,7 @@ public class MatchDedupEachMDB extends AbstractOabaMDB {
 	}
 
 	@Override
-	protected OabaProcessingEvent getCompletionEvent() {
+	protected OabaEventBean getCompletionEvent() {
 		// Used only during invocation of sendToUpdateStatus(..),
 		// which does nothing in this class
 		return null;

@@ -22,7 +22,7 @@ import com.choicemaker.cm.batch.api.ProcessingEventLog;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.oaba.core.OabaProcessingEvent;
+import com.choicemaker.cm.oaba.core.OabaEventBean;
 import com.choicemaker.cm.oaba.ejb.data.OabaJobMessage;
 import com.choicemaker.cm.oaba.ejb.util.MessageBeanUtils;
 
@@ -93,8 +93,8 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 	}
 
 	@Override
-	protected OabaProcessingEvent getCompletionEvent() {
-		return OabaProcessingEvent.DONE_MATCHING_DATA;
+	protected OabaEventBean getCompletionEvent() {
+		return OabaEventBean.DONE_MATCHING_DATA;
 	}
 
 	protected Queue getMatchDedupQueue() {

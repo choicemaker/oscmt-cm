@@ -29,8 +29,8 @@ import com.choicemaker.cm.oaba.core.IRecValSinkSourceFactory;
 import com.choicemaker.cm.oaba.core.IRecordIdFactory;
 import com.choicemaker.cm.oaba.core.ImmutableRecordIdTranslator;
 import com.choicemaker.cm.oaba.core.MutableRecordIdTranslator;
-import com.choicemaker.cm.oaba.core.OabaProcessing;
-import com.choicemaker.cm.oaba.core.OabaProcessingEvent;
+import com.choicemaker.cm.oaba.core.OabaProcessingConstants;
+import com.choicemaker.cm.oaba.core.OabaEventBean;
 import com.choicemaker.cm.oaba.core.RECORD_ID_TYPE;
 import com.choicemaker.cm.oaba.core.RecordMatchingMode;
 import com.choicemaker.cm.oaba.utils.ControlChecker;
@@ -236,20 +236,20 @@ public class RecValService3 {
 	public void runService() throws BlockingException {
 		time = System.currentTimeMillis();
 
-		if (status.getCurrentProcessingEventId() >= OabaProcessing.EVT_DONE_REC_VAL) {
+		if (status.getCurrentProcessingEventId() >= OabaProcessingConstants.EVT_DONE_REC_VAL) {
 			// need to initialize
 			log.info("recover rec,val files and mutableTranslator");
 			recover();
 
-		} else if (status.getCurrentProcessingEventId() < OabaProcessing.EVT_DONE_REC_VAL) {
+		} else if (status.getCurrentProcessingEventId() < OabaProcessingConstants.EVT_DONE_REC_VAL) {
 			// create the rec_id, val_id files
 			log.info("Creating new rec,val files");
-			status.setCurrentProcessingEvent(OabaProcessingEvent.CREATE_REC_VAL);
+			status.setCurrentProcessingEvent(OabaEventBean.CREATE_REC_VAL);
 			createFiles();
 
 			boolean stop = this.control.shouldStop();
 			if (!stop) {
-				status.setCurrentProcessingEvent(OabaProcessingEvent.DONE_REC_VAL);
+				status.setCurrentProcessingEvent(OabaEventBean.DONE_REC_VAL);
 			}
 
 		} else {

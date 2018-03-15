@@ -45,8 +45,8 @@ import com.choicemaker.cm.oaba.api.OabaSettingsController;
 import com.choicemaker.cm.oaba.api.ServerConfigurationController;
 import com.choicemaker.cm.oaba.core.IChunkDataSinkSourceFactory;
 import com.choicemaker.cm.oaba.core.IMatchRecord2Sink;
-import com.choicemaker.cm.oaba.core.OabaProcessing;
-import com.choicemaker.cm.oaba.core.OabaProcessingEvent;
+import com.choicemaker.cm.oaba.core.OabaProcessingConstants;
+import com.choicemaker.cm.oaba.core.OabaEventBean;
 import com.choicemaker.cm.oaba.core.RecordMatchingMode;
 import com.choicemaker.cm.oaba.ejb.data.ChunkDataStore;
 import com.choicemaker.cm.oaba.ejb.data.MatchWriterMessage;
@@ -202,7 +202,7 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 
 					ProcessingEventLog processingLog =
 						getProcessingController().getProcessingLog(batchJob);
-					if (processingLog.getCurrentProcessingEventId() >= OabaProcessing.EVT_DONE_MATCHING_DATA) {
+					if (processingLog.getCurrentProcessingEventId() >= OabaProcessingConstants.EVT_DONE_MATCHING_DATA) {
 						// matching is already done, so go on to the next step.
 						nextSteps(batchJob, sd);
 					} else {
@@ -331,7 +331,7 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 							+ Integer.toString(numRegularChunks) + DELIM
 							+ Integer.toString(currentChunk);
 				status.setCurrentProcessingEvent(
-						OabaProcessingEvent.MATCHING_DATA, temp);
+						OabaEventBean.MATCHING_DATA, temp);
 
 				getLogger().info("Chunk " + latestChunkProcessed + " is done.");
 
@@ -341,7 +341,7 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 					startChunk(sd, currentChunk);
 				} else {
 					// all the chunks are done
-					status.setCurrentProcessingEvent(OabaProcessingEvent.DONE_MATCHING_DATA);
+					status.setCurrentProcessingEvent(OabaEventBean.DONE_MATCHING_DATA);
 
 					getLogger().info(
 							"total comparisons: " + numCompares
@@ -388,7 +388,7 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 			throws BlockingException {
 
 		// Update the processing status and remove intermediate files
-		sendToUpdateStatus(job, OabaProcessingEvent.DONE_MATCHING_CHUNKS,
+		sendToUpdateStatus(job, OabaEventBean.DONE_MATCHING_CHUNKS,
 				new Date(), null);
 		cleanUp(job, sd);
 
@@ -399,7 +399,7 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 			sendToSingleRecordMatching(job, sd);
 			break;
 		case BRM:
-			sendToUpdateStatus(job, OabaProcessingEvent.DONE_MATCHING_DATA,
+			sendToUpdateStatus(job, OabaEventBean.DONE_MATCHING_DATA,
 					new Date(), null);
 			sendToMatchDebup(job, sd);
 			break;
@@ -427,7 +427,7 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 
 		} else {
 			currentChunk = 0;
-			if (processingLog.getCurrentProcessingEventId() == OabaProcessing.EVT_MATCHING_DATA) {
+			if (processingLog.getCurrentProcessingEventId() == OabaProcessingConstants.EVT_MATCHING_DATA) {
 				currentChunk = recover(batchJob, sd, processingLog) + 1;
 				getLogger().info("recovering from " + currentChunk);
 			}

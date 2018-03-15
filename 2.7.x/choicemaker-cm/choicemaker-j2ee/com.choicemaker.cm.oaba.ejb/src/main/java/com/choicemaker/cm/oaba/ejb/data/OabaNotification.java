@@ -12,7 +12,7 @@ import java.util.Date;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.BatchJobProcessingEvent;
 import com.choicemaker.cm.batch.api.BatchProcessingNotification;
-import com.choicemaker.cm.oaba.core.OabaProcessingEvent;
+import com.choicemaker.cm.oaba.core.OabaEventBean;
 import com.choicemaker.cm.oaba.ejb.OabaJobJPA;
 import com.choicemaker.cm.oaba.ejb.OabaProcessingEventJPA;
 
@@ -27,11 +27,11 @@ public class OabaNotification extends BatchProcessingNotification {
 
 	static final long serialVersionUID = 271;
 
-	public OabaNotification(BatchJob job, OabaProcessingEvent event, Date timestamp) {
+	public OabaNotification(BatchJob job, OabaEventBean event, Date timestamp) {
 		this(job, event, timestamp, null);
 	}
 
-	public OabaNotification(BatchJob job, OabaProcessingEvent event, Date timestamp,
+	public OabaNotification(BatchJob job, OabaEventBean event, Date timestamp,
 			String info) {
 		super(job.getId(), OabaJobJPA.DISCRIMINATOR_VALUE,
 				event.getPercentComplete(), event.getEventId(),

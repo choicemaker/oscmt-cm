@@ -24,7 +24,7 @@ import com.choicemaker.cm.args.ProcessingEvent;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.ejb.BatchProcessingEventEntity;
 import com.choicemaker.cm.transitivity.api.TransitivityBatchProcessingEvent;
-import com.choicemaker.cm.transitivity.core.TransitivityProcessingEvent;
+import com.choicemaker.cm.transitivity.core.TransitivityEventBean;
 
 /**
  * This is the EJB implementation of the Transitivity BatchProcessingEventEntity
@@ -65,7 +65,7 @@ public class TransitivityProcessingEventEntity extends
 	@Override
 	public ProcessingEvent getProcessingEvent() {
 		ProcessingEvent retVal =
-			new TransitivityProcessingEvent(getEventName(),
+			new TransitivityEventBean(getEventName(),
 					getEventSequenceNumber(), getFractionComplete());
 		return retVal;
 	}

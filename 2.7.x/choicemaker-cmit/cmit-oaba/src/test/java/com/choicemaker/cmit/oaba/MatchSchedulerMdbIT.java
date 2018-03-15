@@ -1,7 +1,7 @@
 package com.choicemaker.cmit.oaba;
 
-import static com.choicemaker.cm.oaba.core.OabaProcessing.EVT_DONE_MATCHING_DATA;
-import static com.choicemaker.cm.oaba.core.OabaProcessing.PCT_DONE_MATCHING_DATA;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.EVT_DONE_MATCHING_DATA;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.PCT_DONE_MATCHING_DATA;
 
 import java.util.logging.Logger;
 

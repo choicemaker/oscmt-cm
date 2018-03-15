@@ -8,7 +8,7 @@
 package com.choicemaker.cm.transitivity.ejb;
 
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_TRANSITIVITY_CACHED_PAIRS_FILE;
-import static com.choicemaker.cm.transitivity.core.TransitivityProcessingEvent.DONE_TRANSITIVITY_PAIRWISE;
+import static com.choicemaker.cm.transitivity.core.TransitivityEventBean.DONE_TRANSITIVITY_PAIRWISE;
 
 import java.util.ArrayList;
 import java.util.Date;

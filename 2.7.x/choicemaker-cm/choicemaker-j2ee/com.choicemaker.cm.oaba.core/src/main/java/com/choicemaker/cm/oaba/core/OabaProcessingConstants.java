@@ -16,7 +16,7 @@ import com.choicemaker.cm.args.BatchProcessingConstants;
  * @author pcheung (implemented as IStatus)
  * @author rphall (refactored from IStatus to BatchProcessing)
  */
-public interface OabaProcessing extends BatchProcessingConstants {
+public interface OabaProcessingConstants extends BatchProcessingConstants {
 
 	// -- Ordered event ids used by OABA processing
 

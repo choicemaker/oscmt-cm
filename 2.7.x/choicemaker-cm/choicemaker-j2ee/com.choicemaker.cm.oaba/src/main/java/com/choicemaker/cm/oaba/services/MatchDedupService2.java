@@ -18,8 +18,8 @@ import com.choicemaker.cm.core.base.MatchRecord2;
 import com.choicemaker.cm.oaba.core.IMatchRecord2Sink;
 import com.choicemaker.cm.oaba.core.IMatchRecord2SinkSourceFactory;
 import com.choicemaker.cm.oaba.core.IMatchRecord2Source;
-import com.choicemaker.cm.oaba.core.OabaProcessing;
-import com.choicemaker.cm.oaba.core.OabaProcessingEvent;
+import com.choicemaker.cm.oaba.core.OabaProcessingConstants;
+import com.choicemaker.cm.oaba.core.OabaEventBean;
 import com.choicemaker.cm.oaba.utils.MemoryEstimator;
 
 /**
@@ -73,20 +73,20 @@ public class MatchDedupService2 {
 	public void runService() throws BlockingException {
 		time = System.currentTimeMillis();
 
-		if (status.getCurrentProcessingEventId() >= OabaProcessing.EVT_DONE_DEDUP_MATCHES) {
+		if (status.getCurrentProcessingEventId() >= OabaProcessingConstants.EVT_DONE_DEDUP_MATCHES) {
 			// do nothing
 
-		} else if (status.getCurrentProcessingEventId() == OabaProcessing.EVT_DONE_MATCHING_DATA) {
+		} else if (status.getCurrentProcessingEventId() == OabaProcessingConstants.EVT_DONE_MATCHING_DATA) {
 
 			// start writing out dedup
 			log.info("start writing to temp match files");
 			writeToFiles(0);
 			mergeFiles();
 
-		} else if (status.getCurrentProcessingEventId() == OabaProcessing.EVT_OUTPUT_DEDUP_MATCHES) {
+		} else if (status.getCurrentProcessingEventId() == OabaProcessingConstants.EVT_OUTPUT_DEDUP_MATCHES) {
 			// recover writing out dedup matches
 			String temp = status.getCurrentProcessingEventInfo();
-			int ind = temp.indexOf(OabaProcessing.DELIMIT);
+			int ind = temp.indexOf(OabaProcessingConstants.DELIMIT);
 			int size = Integer.parseInt(temp.substring(0, ind));
 			int skip = Integer.parseInt(temp.substring(ind + 1));
 
@@ -96,7 +96,7 @@ public class MatchDedupService2 {
 			writeToFiles(skip);
 			mergeFiles();
 
-		} else if (status.getCurrentProcessingEventId() == OabaProcessing.EVT_MERGE_DEDUP_MATCHES) {
+		} else if (status.getCurrentProcessingEventId() == OabaProcessingConstants.EVT_MERGE_DEDUP_MATCHES) {
 
 			// merge the files into 1
 			int size = Integer.parseInt(status.getCurrentProcessingEventInfo());
@@ -193,10 +193,10 @@ public class MatchDedupService2 {
 
 						String temp =
 							Integer.toString(tempSinks.size())
-									+ OabaProcessing.DELIMIT
+									+ OabaProcessingConstants.DELIMIT
 									+ Integer.toString(numBefore);
 						status.setCurrentProcessingEvent(
-								OabaProcessingEvent.OUTPUT_DEDUP_MATCHES, temp);
+								OabaEventBean.OUTPUT_DEDUP_MATCHES, temp);
 
 						tempSink = mFactory.getNextSink();
 						tempSink.open();
@@ -211,14 +211,14 @@ public class MatchDedupService2 {
 				log.info("writing out " + matches.size());
 				tempSink.writeMatches(matches.iterator());
 				String temp =
-					Integer.toString(tempSinks.size()) + OabaProcessing.DELIMIT
+					Integer.toString(tempSinks.size()) + OabaProcessingConstants.DELIMIT
 							+ Integer.toString(numBefore);
 				status.setCurrentProcessingEvent(
-						OabaProcessingEvent.OUTPUT_DEDUP_MATCHES, temp);
+						OabaEventBean.OUTPUT_DEDUP_MATCHES, temp);
 			}
 
 			status.setCurrentProcessingEvent(
-					OabaProcessingEvent.MERGE_DEDUP_MATCHES,
+					OabaEventBean.MERGE_DEDUP_MATCHES,
 					Integer.toString(tempSinks.size()));
 
 			log.info("total matches read " + numBefore);
@@ -254,7 +254,7 @@ public class MatchDedupService2 {
 
 			IMatchRecord2Sink snk = (IMatchRecord2Sink) tempSinks.get(0);
 			mFactory.move(snk, mSink);
-			status.setCurrentProcessingEvent(OabaProcessingEvent.DONE_DEDUP_MATCHES);
+			status.setCurrentProcessingEvent(OabaEventBean.DONE_DEDUP_MATCHES);
 
 			// clean up none dedup file
 			mSource.delete();
@@ -316,7 +316,7 @@ public class MatchDedupService2 {
 		mSink.close();
 		log.info("total matches written " + numAfter);
 
-		status.setCurrentProcessingEvent(OabaProcessingEvent.DONE_DEDUP_MATCHES);
+		status.setCurrentProcessingEvent(OabaEventBean.DONE_DEDUP_MATCHES);
 
 		// close all files
 		for (int i = 0; i < numFiles; i++) {

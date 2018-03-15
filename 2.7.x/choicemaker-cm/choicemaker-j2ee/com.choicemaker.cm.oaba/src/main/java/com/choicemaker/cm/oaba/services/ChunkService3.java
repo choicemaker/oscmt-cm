@@ -33,8 +33,8 @@ import com.choicemaker.cm.oaba.core.IIDSet;
 import com.choicemaker.cm.oaba.core.IIDSetSource;
 import com.choicemaker.cm.oaba.core.ITransformer;
 import com.choicemaker.cm.oaba.core.ImmutableRecordIdTranslator;
-import com.choicemaker.cm.oaba.core.OabaProcessing;
-import com.choicemaker.cm.oaba.core.OabaProcessingEvent;
+import com.choicemaker.cm.oaba.core.OabaProcessingConstants;
+import com.choicemaker.cm.oaba.core.OabaEventBean;
 import com.choicemaker.cm.oaba.core.RecordMatchingMode;
 import com.choicemaker.cm.oaba.utils.ControlChecker;
 import com.choicemaker.util.LongArrayList;
@@ -249,7 +249,7 @@ public class ChunkService3 {
 		log.entering(SOURCE, METHOD);
 		time = System.currentTimeMillis();
 
-		if (status.getCurrentProcessingEventId() == OabaProcessing.EVT_DONE_CREATE_CHUNK_DATA) {
+		if (status.getCurrentProcessingEventId() == OabaProcessingConstants.EVT_DONE_CREATE_CHUNK_DATA) {
 			// just need to recover numChunks for the matching step
 			StringTokenizer temp =
 				new StringTokenizer(status.getCurrentProcessingEventInfo(),
@@ -259,7 +259,7 @@ public class ChunkService3 {
 			log.info("Recovery, numChunks " + numChunks + " numRegularChunks "
 					+ numRegularChunks);
 
-		} else if (status.getCurrentProcessingEventId() == OabaProcessing.EVT_DONE_DEDUP_OVERSIZED) {
+		} else if (status.getCurrentProcessingEventId() == OabaProcessingConstants.EVT_DONE_DEDUP_OVERSIZED) {
 			// create ids
 			log.info("Creating ids for block source " + bSource.getInfo());
 			createIDs(bSource, false, 0, transformer);
@@ -283,8 +283,8 @@ public class ChunkService3 {
 				|| status.getCurrentProcessingEventId() == OabaProcessing.EVT_CREATE_CHUNK_OVERSIZED_IDS) {
 
 		*/
-		} else if (status.getCurrentProcessingEventId() == OabaProcessing.EVT_DONE_CREATE_CHUNK_IDS
-				|| status.getCurrentProcessingEventId() == OabaProcessing.EVT_CREATE_CHUNK_OVERSIZED_IDS) {
+		} else if (status.getCurrentProcessingEventId() == OabaProcessingConstants.EVT_DONE_CREATE_CHUNK_IDS
+				|| status.getCurrentProcessingEventId() == OabaProcessingConstants.EVT_CREATE_CHUNK_OVERSIZED_IDS) {
 
 			// create the chunk data files
 			StringTokenizer temp =
@@ -299,7 +299,7 @@ public class ChunkService3 {
 
 			createDataFiles();
 
-		} else if (status.getCurrentProcessingEventId() == OabaProcessing.EVT_CREATE_CHUNK_IDS) {
+		} else if (status.getCurrentProcessingEventId() == OabaProcessingConstants.EVT_CREATE_CHUNK_IDS) {
 			// time to create Oversized ID files
 			if (osSource != null && osSource.exists()) {
 				log.info("Creating ids for oversized block source "
@@ -400,7 +400,7 @@ public class ChunkService3 {
 					Integer.toString(numChunks) + DELIM
 							+ Integer.toString(numRegularChunks);
 				status.setCurrentProcessingEvent(
-						OabaProcessingEvent.DONE_CREATE_CHUNK_DATA, temp);
+						OabaEventBean.DONE_CREATE_CHUNK_DATA, temp);
 
 				if (!keepFiles) {
 					// remove all the chunk record id files
@@ -714,15 +714,15 @@ public class ChunkService3 {
 				// write status
 				numChunks++;
 				String temp =
-					Integer.toString(numChunks) + OabaProcessing.DELIMIT
+					Integer.toString(numChunks) + OabaProcessingConstants.DELIMIT
 							+ Integer.toString(skip + countAll);
 				if (isOS)
 					status.setCurrentProcessingEvent(
-							OabaProcessingEvent.CREATE_CHUNK_OVERSIZED_IDS,
+							OabaEventBean.CREATE_CHUNK_OVERSIZED_IDS,
 							temp);
 				else
 					status.setCurrentProcessingEvent(
-							OabaProcessingEvent.CREATE_CHUNK_IDS, temp);
+							OabaEventBean.CREATE_CHUNK_IDS, temp);
 
 				// use the next sink
 				transformer.useNextSink();
@@ -753,11 +753,11 @@ public class ChunkService3 {
 					Integer.toString(numChunks) + DELIM
 							+ Integer.toString(numRegularChunks);
 				status.setCurrentProcessingEvent(
-						OabaProcessingEvent.CREATE_CHUNK_OVERSIZED_IDS, temp);
+						OabaEventBean.CREATE_CHUNK_OVERSIZED_IDS, temp);
 			} else {
 				String temp = Integer.toString(numChunks);
 				status.setCurrentProcessingEvent(
-						OabaProcessingEvent.CREATE_CHUNK_IDS, temp);
+						OabaEventBean.CREATE_CHUNK_IDS, temp);
 			}
 		}
 

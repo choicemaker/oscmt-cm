@@ -7,7 +7,7 @@
  *******************************************************************************/
 package com.choicemaker.cm.oaba.core;
 
-import static com.choicemaker.cm.oaba.core.OabaProcessing.*;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.*;
 
 import com.choicemaker.cm.args.BatchProcessingConstants;
 

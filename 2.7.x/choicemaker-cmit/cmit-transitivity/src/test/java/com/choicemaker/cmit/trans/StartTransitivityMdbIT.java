@@ -1,6 +1,6 @@
 package com.choicemaker.cmit.trans;
 
-import static com.choicemaker.cm.transitivity.core.TransitivityProcessing.*;
+import static com.choicemaker.cm.transitivity.core.TransitivityProcessingConstants.*;
 
 import java.util.logging.Logger;
 

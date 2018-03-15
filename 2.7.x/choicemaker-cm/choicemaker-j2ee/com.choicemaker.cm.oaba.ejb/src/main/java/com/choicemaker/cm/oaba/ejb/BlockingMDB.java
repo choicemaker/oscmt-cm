@@ -25,7 +25,7 @@ import com.choicemaker.cm.batch.api.ProcessingEventLog;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.oaba.core.IBlockSink;
-import com.choicemaker.cm.oaba.core.OabaProcessingEvent;
+import com.choicemaker.cm.oaba.core.OabaEventBean;
 import com.choicemaker.cm.oaba.ejb.data.OabaJobMessage;
 import com.choicemaker.cm.oaba.ejb.util.MessageBeanUtils;
 import com.choicemaker.cm.oaba.impl.BlockGroup;
@@ -127,8 +127,8 @@ public class BlockingMDB extends AbstractOabaMDB {
 	}
 
 	@Override
-	protected OabaProcessingEvent getCompletionEvent() {
-		return OabaProcessingEvent.DONE_OVERSIZED_TRIMMING;
+	protected OabaEventBean getCompletionEvent() {
+		return OabaEventBean.DONE_OVERSIZED_TRIMMING;
 	}
 
 }

@@ -7,13 +7,14 @@
  *******************************************************************************/
 package com.choicemaker.cm.transitivity.core;
 
-import com.choicemaker.cm.oaba.core.OabaProcessing;
+import com.choicemaker.cm.oaba.core.OabaProcessingConstants;
 
 /**
- * This interface defines event ids and completion estimates used in transitivity
- * processing.
+ * This interface defines event ids and completion estimates used in
+ * transitivity processing.
  */
-public interface TransitivityProcessing extends OabaProcessing {
+public interface TransitivityProcessingConstants
+		extends OabaProcessingConstants {
 
 	// -- Ordered events
 

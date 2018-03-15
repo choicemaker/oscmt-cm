@@ -37,7 +37,7 @@ import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.oaba.api.RecordIdController;
 import com.choicemaker.cm.oaba.core.ImmutableRecordIdTranslator;
 import com.choicemaker.cm.oaba.core.MutableRecordIdTranslator;
-import com.choicemaker.cm.oaba.core.OabaProcessingEvent;
+import com.choicemaker.cm.oaba.core.OabaEventBean;
 import com.choicemaker.cm.oaba.core.RECORD_ID_TYPE;
 import com.choicemaker.cm.oaba.core.RecordMatchingMode;
 import com.choicemaker.cm.oaba.ejb.data.OabaJobMessage;
@@ -218,7 +218,7 @@ public class StartOabaMDB extends AbstractOabaMDB {
 				data.validator = validator;
 
 				updateOabaProcessingStatus(batchJob,
-						OabaProcessingEvent.DONE_REC_VAL, new Date(), null);
+						OabaEventBean.DONE_REC_VAL, new Date(), null);
 				sendToBlocking(data);
 
 			} else {
@@ -342,8 +342,8 @@ public class StartOabaMDB extends AbstractOabaMDB {
 	}
 
 	@Override
-	protected OabaProcessingEvent getCompletionEvent() {
-		return OabaProcessingEvent.DONE_REC_VAL;
+	protected OabaEventBean getCompletionEvent() {
+		return OabaEventBean.DONE_REC_VAL;
 	}
 
 	@Override

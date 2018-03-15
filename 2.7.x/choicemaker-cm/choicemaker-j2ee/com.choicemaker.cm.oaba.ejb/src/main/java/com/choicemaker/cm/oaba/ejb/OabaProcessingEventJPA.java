@@ -51,7 +51,7 @@ public interface OabaProcessingEventJPA {
 
 	/**
 	 * A value defined by
-	 * {@link com.choicemaker.cm.oaba.core.OabaProcessing
+	 * {@link com.choicemaker.cm.oaba.core.OabaProcessingConstants
 	 * OabaProcessing}
 	 */
 	String CN_EVENT_ID = "EVENT_ID";

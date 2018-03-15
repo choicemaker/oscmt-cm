@@ -20,8 +20,8 @@ import com.choicemaker.cm.oaba.core.IBlockSink;
 import com.choicemaker.cm.oaba.core.IBlockSinkSourceFactory;
 import com.choicemaker.cm.oaba.core.IBlockSource;
 import com.choicemaker.cm.oaba.core.ISuffixTreeSink;
-import com.choicemaker.cm.oaba.core.OabaProcessing;
-import com.choicemaker.cm.oaba.core.OabaProcessingEvent;
+import com.choicemaker.cm.oaba.core.OabaProcessingConstants;
+import com.choicemaker.cm.oaba.core.OabaEventBean;
 import com.choicemaker.cm.oaba.core.SuffixTreeNode;
 import com.choicemaker.cm.oaba.data.BlockGroupWalker;
 import com.choicemaker.cm.oaba.impl.BlockGroup;
@@ -144,10 +144,10 @@ public class BlockDedupService4 {
 
 		time = System.currentTimeMillis();
 
-		if (status.getCurrentProcessingEventId() >= OabaProcessing.EVT_DONE_DEDUP_BLOCKS) {
+		if (status.getCurrentProcessingEventId() >= OabaProcessingConstants.EVT_DONE_DEDUP_BLOCKS) {
 			// do nothing here
 
-		} else if (status.getCurrentProcessingEventId() == OabaProcessing.EVT_DONE_OVERSIZED_TRIMMING) {
+		} else if (status.getCurrentProcessingEventId() == OabaProcessingConstants.EVT_DONE_OVERSIZED_TRIMMING) {
 			// start deduping the blocks
 			log.info("starting to dedup blocks");
 
@@ -156,7 +156,7 @@ public class BlockDedupService4 {
 			startDedup2(0);
 			sSink.close();
 
-		} else if (status.getCurrentProcessingEventId() == OabaProcessing.EVT_DEDUP_BLOCKS) {
+		} else if (status.getCurrentProcessingEventId() == OabaProcessingConstants.EVT_DEDUP_BLOCKS) {
 			// the +1 is needed because we need to start with the next file
 			int startPoint = Integer.parseInt(status.getCurrentProcessingEventInfo());
 
@@ -328,7 +328,7 @@ public class BlockDedupService4 {
 
 			pair = bgw.getNextPair();
 
-			status.setCurrentProcessingEvent(OabaProcessingEvent.DEDUP_BLOCKS,
+			status.setCurrentProcessingEvent(OabaEventBean.DEDUP_BLOCKS,
 					Integer.toString(count));
 			count++;
 
@@ -340,7 +340,7 @@ public class BlockDedupService4 {
 		}// end while pair
 
 		if (!stop) {
-			status.setCurrentProcessingEvent(OabaProcessingEvent.DONE_DEDUP_BLOCKS);
+			status.setCurrentProcessingEvent(OabaEventBean.DONE_DEDUP_BLOCKS);
 			log.info("Number of reset " + numReset);
 
 			bGroup.remove();

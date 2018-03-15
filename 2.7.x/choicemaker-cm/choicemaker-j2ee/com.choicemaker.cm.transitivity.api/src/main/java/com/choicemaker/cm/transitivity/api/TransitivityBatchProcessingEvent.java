@@ -8,10 +8,10 @@
 package com.choicemaker.cm.transitivity.api;
 
 import com.choicemaker.cm.batch.api.BatchJobProcessingEvent;
-import com.choicemaker.cm.transitivity.core.TransitivityProcessing;
+import com.choicemaker.cm.transitivity.core.TransitivityProcessingConstants;
 
 public interface TransitivityBatchProcessingEvent extends BatchJobProcessingEvent,
-		TransitivityProcessing {
+		TransitivityProcessingConstants {
 
 	String DEFAULT_EJB_REF_NAME = "ejb/TransitivityBatchProcessingEvent";
 	String DEFAULT_JNDI_COMP_NAME = "java:comp/env/" + DEFAULT_EJB_REF_NAME;

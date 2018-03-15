@@ -11,8 +11,8 @@ import static com.choicemaker.cm.args.OperationalPropertyNames.PN_CHUNK_FILE_COU
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_REGULAR_CHUNK_FILE_COUNT;
 import static com.choicemaker.cm.oaba.core.RecordMatchingMode.BRM;
 import static com.choicemaker.cm.oaba.core.RecordMatchingMode.SRM;
-import static com.choicemaker.cm.transitivity.core.TransitivityProcessingEvent.DONE_CREATE_CHUNK_DATA;
-import static com.choicemaker.cm.transitivity.core.TransitivityProcessingEvent.DONE_TRANS_DEDUP_OVERSIZED;
+import static com.choicemaker.cm.transitivity.core.TransitivityEventBean.DONE_CREATE_CHUNK_DATA;
+import static com.choicemaker.cm.transitivity.core.TransitivityEventBean.DONE_TRANS_DEDUP_OVERSIZED;
 
 import java.util.logging.Logger;
 
@@ -47,7 +47,7 @@ import com.choicemaker.cm.oaba.result.MatchToBlockTransformer2;
 import com.choicemaker.cm.oaba.result.Size2MatchProducer;
 import com.choicemaker.cm.oaba.services.ChunkService3;
 import com.choicemaker.cm.oaba.utils.Transformer;
-import com.choicemaker.cm.transitivity.core.TransitivityProcessingEvent;
+import com.choicemaker.cm.transitivity.core.TransitivityEventBean;
 
 /**
  * This message bean starts the Transitivity Engine.
@@ -363,7 +363,7 @@ public class StartTransitivityMDB extends AbstractTransitivityMDB {
 	}
 
 	@Override
-	protected TransitivityProcessingEvent getCompletionEvent() {
+	protected TransitivityEventBean getCompletionEvent() {
 		return DONE_CREATE_CHUNK_DATA;
 	}
 

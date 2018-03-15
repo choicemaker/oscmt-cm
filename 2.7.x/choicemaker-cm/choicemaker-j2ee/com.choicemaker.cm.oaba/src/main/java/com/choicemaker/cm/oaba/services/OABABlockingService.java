@@ -25,8 +25,8 @@ import com.choicemaker.cm.oaba.core.IOversizedGroup;
 import com.choicemaker.cm.oaba.core.IRecValSink;
 import com.choicemaker.cm.oaba.core.IRecValSource;
 import com.choicemaker.cm.oaba.core.IValidatorBase;
-import com.choicemaker.cm.oaba.core.OabaProcessing;
-import com.choicemaker.cm.oaba.core.OabaProcessingEvent;
+import com.choicemaker.cm.oaba.core.OabaProcessingConstants;
+import com.choicemaker.cm.oaba.core.OabaEventBean;
 import com.choicemaker.cm.oaba.impl.OversizedGroup;
 import com.choicemaker.cm.oaba.impl.RecValSinkSourceFactory;
 import com.choicemaker.cm.oaba.utils.ControlChecker;
@@ -190,10 +190,10 @@ public class OABABlockingService {
 	public void runService() throws BlockingException {
 		time = System.currentTimeMillis();
 
-		if (status.getCurrentProcessingEventId() >= OabaProcessing.EVT_DONE_OVERSIZED_TRIMMING) {
+		if (status.getCurrentProcessingEventId() >= OabaProcessingConstants.EVT_DONE_OVERSIZED_TRIMMING) {
 			// do nothing here
 
-		} else if (status.getCurrentProcessingEventId() < OabaProcessing.EVT_BLOCK_BY_ONE_COLUMN) {
+		} else if (status.getCurrentProcessingEventId() < OabaProcessingConstants.EVT_BLOCK_BY_ONE_COLUMN) {
 			log.info("Blocking By 1 column ");
 
 			init();
@@ -203,7 +203,7 @@ public class OABABlockingService {
 			if (!stop)
 				trimOversized();
 
-		} else if (status.getCurrentProcessingEventId() == OabaProcessing.EVT_BLOCK_BY_ONE_COLUMN) {
+		} else if (status.getCurrentProcessingEventId() == OabaProcessingConstants.EVT_BLOCK_BY_ONE_COLUMN) {
 			log.info("Trying to recover blocking by one column");
 			init();
 
@@ -213,13 +213,13 @@ public class OABABlockingService {
 			if (!stop)
 				trimOversized();
 
-		} else if (status.getCurrentProcessingEventId() == OabaProcessing.EVT_DONE_BLOCK_BY_ONE_COLUMN) {
+		} else if (status.getCurrentProcessingEventId() == OabaProcessingConstants.EVT_DONE_BLOCK_BY_ONE_COLUMN) {
 			log.info("Starting from trimOversized");
 			init();
 
 			trimOversized();
 
-		} else if (status.getCurrentProcessingEventId() == OabaProcessing.EVT_OVERSIZED_TRIMMING) {
+		} else if (status.getCurrentProcessingEventId() == OabaProcessingConstants.EVT_OVERSIZED_TRIMMING) {
 			log.info("Trying to recover oversized trimming");
 			init();
 
@@ -262,7 +262,7 @@ public class OABABlockingService {
 			numBlocks += blockByField(i, rvSource, bSink, osGroup);
 
 			if (!stop)
-				status.setCurrentProcessingEvent(OabaProcessingEvent.BLOCK_BY_ONE_COLUMN,
+				status.setCurrentProcessingEvent(OabaEventBean.BLOCK_BY_ONE_COLUMN,
 						Integer.toString(i) + "|" + Integer.toString(numBlocks));
 		}
 
@@ -272,7 +272,7 @@ public class OABABlockingService {
 			osDump.close();
 
 		if (!stop)
-			status.setCurrentProcessingEvent(OabaProcessingEvent.DONE_BLOCK_BY_ONE_COLUMN);
+			status.setCurrentProcessingEvent(OabaEventBean.DONE_BLOCK_BY_ONE_COLUMN);
 	}
 
 	/**
@@ -312,7 +312,7 @@ public class OABABlockingService {
 			numBlocks += blockByField(i, rvSource, bSink, osGroup);
 
 			if (!stop)
-				status.setCurrentProcessingEvent(OabaProcessingEvent.BLOCK_BY_ONE_COLUMN,
+				status.setCurrentProcessingEvent(OabaEventBean.BLOCK_BY_ONE_COLUMN,
 						Integer.toString(i) + "|" + Integer.toString(numBlocks));
 		}
 
@@ -322,7 +322,7 @@ public class OABABlockingService {
 			osDump.close();
 
 		if (!stop)
-			status.setCurrentProcessingEvent(OabaProcessingEvent.DONE_BLOCK_BY_ONE_COLUMN);
+			status.setCurrentProcessingEvent(OabaEventBean.DONE_BLOCK_BY_ONE_COLUMN);
 
 	}
 
@@ -372,7 +372,7 @@ public class OABABlockingService {
 				osGroupNew.openAllSinks();
 
 				String info = Integer.toString(numFields);
-				status.setCurrentProcessingEvent(OabaProcessingEvent.OVERSIZED_TRIMMING, info);
+				status.setCurrentProcessingEvent(OabaEventBean.OVERSIZED_TRIMMING, info);
 			}
 
 			numFields++;
@@ -392,7 +392,7 @@ public class OABABlockingService {
 			// clean up rec,val files
 			cleanUp();
 
-			status.setCurrentProcessingEvent(OabaProcessingEvent.DONE_OVERSIZED_TRIMMING);
+			status.setCurrentProcessingEvent(OabaEventBean.DONE_OVERSIZED_TRIMMING);
 		}
 
 		t1 = System.currentTimeMillis() - t1;
@@ -442,7 +442,7 @@ public class OABABlockingService {
 
 		while (totalOversized > 0) {
 			String info = Integer.toString(numFields);
-			status.setCurrentProcessingEvent(OabaProcessingEvent.OVERSIZED_TRIMMING, info);
+			status.setCurrentProcessingEvent(OabaEventBean.OVERSIZED_TRIMMING, info);
 
 			log.info(totalOversized + " Oversized blocks, blocking with "
 					+ numFields + " field");
@@ -462,7 +462,7 @@ public class OABABlockingService {
 			numFields++;
 
 			info = Integer.toString(numFields);
-			status.setCurrentProcessingEvent(OabaProcessingEvent.OVERSIZED_TRIMMING, info);
+			status.setCurrentProcessingEvent(OabaEventBean.OVERSIZED_TRIMMING, info);
 
 		}
 
@@ -480,7 +480,7 @@ public class OABABlockingService {
 			// clean up rec,val files
 			cleanUp();
 
-			status.setCurrentProcessingEvent(OabaProcessingEvent.DONE_OVERSIZED_TRIMMING);
+			status.setCurrentProcessingEvent(OabaEventBean.DONE_OVERSIZED_TRIMMING);
 		}
 
 		t1 = System.currentTimeMillis() - t1;

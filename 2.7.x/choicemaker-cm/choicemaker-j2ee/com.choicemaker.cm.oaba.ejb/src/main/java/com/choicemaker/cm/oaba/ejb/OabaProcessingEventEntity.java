@@ -24,7 +24,7 @@ import com.choicemaker.cm.args.ProcessingEvent;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.ejb.BatchProcessingEventEntity;
 import com.choicemaker.cm.oaba.api.OabaBatchProcessingEvent;
-import com.choicemaker.cm.oaba.core.OabaProcessingEvent;
+import com.choicemaker.cm.oaba.core.OabaEventBean;
 
 /**
  * This is the EJB implementation of the OABA BatchProcessingEventEntity
@@ -64,7 +64,7 @@ public class OabaProcessingEventEntity extends BatchProcessingEventEntity
 	@Override
 	public ProcessingEvent getProcessingEvent() {
 		ProcessingEvent retVal =
-			new OabaProcessingEvent(getEventName(), getEventSequenceNumber(),
+			new OabaEventBean(getEventName(), getEventSequenceNumber(),
 					getFractionComplete());
 		return retVal;
 	}

@@ -49,7 +49,7 @@ import com.choicemaker.cm.oaba.core.IComparableSink;
 import com.choicemaker.cm.oaba.core.IComparableSinkSourceFactory;
 import com.choicemaker.cm.oaba.core.IMatchRecord2Sink;
 import com.choicemaker.cm.oaba.core.IMatchRecord2SinkSourceFactory;
-import com.choicemaker.cm.oaba.core.OabaProcessingEvent;
+import com.choicemaker.cm.oaba.core.OabaEventBean;
 import com.choicemaker.cm.oaba.ejb.data.MatchWriterMessage;
 import com.choicemaker.cm.oaba.ejb.data.OabaJobMessage;
 import com.choicemaker.cm.oaba.ejb.util.MessageBeanUtils;
@@ -209,7 +209,7 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 
 		} else {
 			processingEntry
-					.setCurrentProcessingEvent(OabaProcessingEvent.MERGE_DEDUP_MATCHES);
+					.setCurrentProcessingEvent(OabaEventBean.MERGE_DEDUP_MATCHES);
 			mergeMatches(numTempResults, jobId, batchJob);
 
 			// mark as done

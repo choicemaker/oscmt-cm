@@ -21,8 +21,8 @@ import com.choicemaker.cm.oaba.core.IChunkDataSinkSourceFactory;
 import com.choicemaker.cm.oaba.core.IComparisonArraySinkSourceFactory;
 import com.choicemaker.cm.oaba.core.IComparisonArraySource;
 import com.choicemaker.cm.oaba.core.IMatchRecord2Sink;
-import com.choicemaker.cm.oaba.core.OabaProcessing;
-import com.choicemaker.cm.oaba.core.OabaProcessingEvent;
+import com.choicemaker.cm.oaba.core.OabaProcessingConstants;
+import com.choicemaker.cm.oaba.core.OabaEventBean;
 import com.choicemaker.cm.oaba.utils.MemoryEstimator;
 
 /**
@@ -125,11 +125,11 @@ public class MatchingService2 {
 	public void runService() throws BlockingException, XmlConfException {
 		time = System.currentTimeMillis();
 
-		if (status.getCurrentProcessingEventId() >= OabaProcessing.EVT_DONE_MATCHING_DATA) {
+		if (status.getCurrentProcessingEventId() >= OabaProcessingConstants.EVT_DONE_MATCHING_DATA) {
 			// do nothing
 
-		} else if (status.getCurrentProcessingEventId() >= OabaProcessing.EVT_DONE_CREATE_CHUNK_DATA
-				&& status.getCurrentProcessingEventId() <= OabaProcessing.EVT_DONE_ALLOCATE_CHUNKS) {
+		} else if (status.getCurrentProcessingEventId() >= OabaProcessingConstants.EVT_DONE_CREATE_CHUNK_DATA
+				&& status.getCurrentProcessingEventId() <= OabaProcessingConstants.EVT_DONE_ALLOCATE_CHUNKS) {
 
 			numChunks = Integer.parseInt(status.getCurrentProcessingEventInfo());
 
@@ -140,10 +140,10 @@ public class MatchingService2 {
 
 			startMatching(0);
 
-		} else if (status.getCurrentProcessingEventId() == OabaProcessing.EVT_MATCHING_DATA) {
+		} else if (status.getCurrentProcessingEventId() == OabaProcessingConstants.EVT_MATCHING_DATA) {
 			// recovery mode
 			String temp = status.getCurrentProcessingEventInfo();
-			int ind = temp.indexOf(OabaProcessing.DELIMIT);
+			int ind = temp.indexOf(OabaProcessingConstants.DELIMIT);
 			numChunks = Integer.parseInt(temp.substring(0, ind));
 			int startPoint = Integer.parseInt(temp.substring(ind + 1)) + 1;
 
@@ -236,9 +236,9 @@ public class MatchingService2 {
 
 			// log the status
 			String temp =
-				Integer.toString(numChunks) + OabaProcessing.DELIMIT
+				Integer.toString(numChunks) + OabaProcessingConstants.DELIMIT
 						+ Integer.toString(i);
-			status.setCurrentProcessingEvent(OabaProcessingEvent.MATCHING_DATA, temp);
+			status.setCurrentProcessingEvent(OabaEventBean.MATCHING_DATA, temp);
 
 			// clean up
 			stage = null;
@@ -256,7 +256,7 @@ public class MatchingService2 {
 			1000.0 * numCompares / (inReadHM + inHandleBlocks + inWriteMatches);
 		log.info("comparisons per second " + cps);
 
-		status.setCurrentProcessingEvent(OabaProcessingEvent.DONE_MATCHING_DATA);
+		status.setCurrentProcessingEvent(OabaEventBean.DONE_MATCHING_DATA);
 
 		// cleanup
 		stageFactory.removeAllSinks();

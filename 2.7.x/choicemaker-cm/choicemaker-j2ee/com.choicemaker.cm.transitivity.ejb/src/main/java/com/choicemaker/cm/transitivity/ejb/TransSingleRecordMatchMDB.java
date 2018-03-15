@@ -28,7 +28,7 @@ import com.choicemaker.cm.oaba.api.OabaParametersController;
 import com.choicemaker.cm.oaba.ejb.SingleRecordProcessing;
 import com.choicemaker.cm.oaba.ejb.data.OabaJobMessage;
 import com.choicemaker.cm.oaba.ejb.util.MessageBeanUtils;
-import com.choicemaker.cm.transitivity.core.TransitivityProcessingEvent;
+import com.choicemaker.cm.transitivity.core.TransitivityEventBean;
 
 // import com.choicemaker.cm.core.base.Accessor;
 
@@ -116,8 +116,8 @@ public class TransSingleRecordMatchMDB extends AbstractTransitivityMDB {
 	}
 
 	@Override
-	protected TransitivityProcessingEvent getCompletionEvent() {
-		return TransitivityProcessingEvent.DONE_TRANSITIVITY_PAIRWISE;
+	protected TransitivityEventBean getCompletionEvent() {
+		return TransitivityEventBean.DONE_TRANSITIVITY_PAIRWISE;
 	}
 
 }

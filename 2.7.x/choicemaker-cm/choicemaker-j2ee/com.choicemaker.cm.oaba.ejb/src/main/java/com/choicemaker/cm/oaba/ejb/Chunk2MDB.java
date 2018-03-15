@@ -28,7 +28,7 @@ import com.choicemaker.cm.core.ISerializableRecordSource;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.oaba.core.IBlockSinkSourceFactory;
 import com.choicemaker.cm.oaba.core.ImmutableRecordIdTranslator;
-import com.choicemaker.cm.oaba.core.OabaProcessingEvent;
+import com.choicemaker.cm.oaba.core.OabaEventBean;
 import com.choicemaker.cm.oaba.core.RECORD_ID_TYPE;
 import com.choicemaker.cm.oaba.core.RecordMatchingMode;
 import com.choicemaker.cm.oaba.ejb.data.OabaJobMessage;
@@ -157,8 +157,8 @@ public class Chunk2MDB extends AbstractOabaMDB {
 	}
 
 	@Override
-	protected OabaProcessingEvent getCompletionEvent() {
-		return OabaProcessingEvent.DONE_CREATE_CHUNK_DATA;
+	protected OabaEventBean getCompletionEvent() {
+		return OabaEventBean.DONE_CREATE_CHUNK_DATA;
 	}
 
 	@Override
