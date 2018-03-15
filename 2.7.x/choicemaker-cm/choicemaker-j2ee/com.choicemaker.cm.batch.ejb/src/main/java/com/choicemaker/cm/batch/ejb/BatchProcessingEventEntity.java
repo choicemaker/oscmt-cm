@@ -34,7 +34,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.choicemaker.cm.args.BatchProcessing;
-import com.choicemaker.cm.args.BatchProcessingEvent;
+import com.choicemaker.cm.args.ProcessingEventBean;
 import com.choicemaker.cm.args.PersistentObject;
 import com.choicemaker.cm.args.ProcessingEvent;
 import com.choicemaker.cm.batch.api.BatchJobProcessingEvent;
@@ -192,7 +192,7 @@ public class BatchProcessingEventEntity extends AbstractPersistentObject
 	@Override
 	public ProcessingEvent getProcessingEvent() {
 		ProcessingEvent retVal =
-			new BatchProcessingEvent(getEventName(), getEventSequenceNumber(),
+			new ProcessingEventBean(getEventName(), getEventSequenceNumber(),
 					getFractionComplete());
 		return retVal;
 	}

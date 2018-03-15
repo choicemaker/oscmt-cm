@@ -1,15 +1,15 @@
 package com.choicemaker.cm.args;
 
-public class BatchProcessingEvent implements ProcessingEvent, BatchProcessing {
+public class ProcessingEventBean implements ProcessingEvent, BatchProcessing {
 
 	protected static final long serialVersionUID = 271L;
 
 	// -- Well-known instances
 
-	public static final BatchProcessingEvent INIT = new BatchProcessingEvent(
+	public static final ProcessingEventBean INIT = new ProcessingEventBean(
 			NAME_INIT, EVT_INIT, PCT_INIT);
 
-	public static final BatchProcessingEvent DONE = new BatchProcessingEvent(
+	public static final ProcessingEventBean DONE = new ProcessingEventBean(
 			NAME_DONE, EVT_DONE, PCT_DONE);
 	
 	// -- Instance data
@@ -20,7 +20,7 @@ public class BatchProcessingEvent implements ProcessingEvent, BatchProcessing {
 
 	// -- Constructor
 
-	public BatchProcessingEvent(String name, int id, float estimate) {
+	public ProcessingEventBean(String name, int id, float estimate) {
 		if (name == null || !name.equals(name.trim()) || name.isEmpty()) {
 			throw new IllegalArgumentException("invalid name: '" + name + "'");
 		}
@@ -74,10 +74,10 @@ public class BatchProcessingEvent implements ProcessingEvent, BatchProcessing {
 		if (obj == null) {
 			return false;
 		}
-		if (!(obj instanceof BatchProcessingEvent)) {
+		if (!(obj instanceof ProcessingEventBean)) {
 			return false;
 		}
-		BatchProcessingEvent other = (BatchProcessingEvent) obj;
+		ProcessingEventBean other = (ProcessingEventBean) obj;
 		if (eventId != other.eventId) {
 			return false;
 		}

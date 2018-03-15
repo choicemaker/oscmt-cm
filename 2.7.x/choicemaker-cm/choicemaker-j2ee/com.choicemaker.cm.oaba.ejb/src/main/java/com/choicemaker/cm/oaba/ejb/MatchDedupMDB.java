@@ -30,7 +30,7 @@ import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.naming.NamingException;
 
-import com.choicemaker.cm.args.BatchProcessingEvent;
+import com.choicemaker.cm.args.ProcessingEventBean;
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.BatchJobStatus;
@@ -214,10 +214,10 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 
 			// mark as done
 			batchJob.markAsCompleted();
-			sendToUpdateStatus(batchJob, BatchProcessingEvent.DONE, new Date(),
+			sendToUpdateStatus(batchJob, ProcessingEventBean.DONE, new Date(),
 					null);
 			processingEntry
-					.setCurrentProcessingEvent(BatchProcessingEvent.DONE);
+					.setCurrentProcessingEvent(ProcessingEventBean.DONE);
 			// publishStatus(d.jobID);
 		}
 	}
@@ -308,7 +308,7 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 				job);
 	}
 
-	private void sendToUpdateStatus(BatchJob job, BatchProcessingEvent event,
+	private void sendToUpdateStatus(BatchJob job, ProcessingEventBean event,
 			Date timestamp, String info) {
 		processingController.updateStatusWithNotification(job, event,
 				timestamp, info);

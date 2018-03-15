@@ -15,7 +15,7 @@ import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
 import javax.jms.Queue;
 
-import com.choicemaker.cm.args.BatchProcessingEvent;
+import com.choicemaker.cm.args.ProcessingEventBean;
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
@@ -144,7 +144,7 @@ public class MatchDedupEachMDB extends AbstractOabaMDB {
 	}
 
 	@Override
-	protected void updateOabaProcessingStatus(BatchJob job, BatchProcessingEvent event,
+	protected void updateOabaProcessingStatus(BatchJob job, ProcessingEventBean event,
 			Date timestamp, String info) {
 		assert event == null;
 	}

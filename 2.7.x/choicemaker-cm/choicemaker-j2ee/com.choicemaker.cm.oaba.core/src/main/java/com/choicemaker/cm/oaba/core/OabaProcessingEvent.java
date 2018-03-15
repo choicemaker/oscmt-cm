@@ -7,10 +7,10 @@
  *******************************************************************************/
 package com.choicemaker.cm.oaba.core;
 
-import com.choicemaker.cm.args.BatchProcessingEvent;
+import com.choicemaker.cm.args.ProcessingEventBean;
 import com.choicemaker.cm.args.ProcessingEvent;
 
-public class OabaProcessingEvent extends BatchProcessingEvent implements
+public class OabaProcessingEvent extends ProcessingEventBean implements
 		ProcessingEvent, OabaProcessing {
 
 	private static final long serialVersionUID = 271L;

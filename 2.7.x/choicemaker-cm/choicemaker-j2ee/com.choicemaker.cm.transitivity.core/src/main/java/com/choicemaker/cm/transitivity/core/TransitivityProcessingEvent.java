@@ -7,10 +7,10 @@
  *******************************************************************************/
 package com.choicemaker.cm.transitivity.core;
 
-import com.choicemaker.cm.args.BatchProcessingEvent;
+import com.choicemaker.cm.args.ProcessingEventBean;
 import com.choicemaker.cm.args.ProcessingEvent;
 
-public class TransitivityProcessingEvent extends BatchProcessingEvent implements
+public class TransitivityProcessingEvent extends ProcessingEventBean implements
 		ProcessingEvent, TransitivityProcessing {
 
 	private static final long serialVersionUID = 271L;

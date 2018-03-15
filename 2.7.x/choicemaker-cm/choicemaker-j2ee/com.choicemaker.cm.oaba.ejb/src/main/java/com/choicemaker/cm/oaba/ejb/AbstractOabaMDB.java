@@ -20,7 +20,7 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 
-import com.choicemaker.cm.args.BatchProcessingEvent;
+import com.choicemaker.cm.args.ProcessingEventBean;
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
@@ -228,7 +228,7 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 	}
 
 	protected void updateOabaProcessingStatus(BatchJob job,
-			BatchProcessingEvent event, Date timestamp, String info) {
+			ProcessingEventBean event, Date timestamp, String info) {
 		getProcessingController().updateStatusWithNotification(job, event,
 				timestamp, info);
 	}
@@ -256,7 +256,7 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 			ServerConfiguration serverConfig, ImmutableProbabilityModel model)
 			throws BlockingException;
 
-	protected abstract BatchProcessingEvent getCompletionEvent();
+	protected abstract ProcessingEventBean getCompletionEvent();
 
 	protected abstract void notifyProcessingCompleted(OabaJobMessage data);
 

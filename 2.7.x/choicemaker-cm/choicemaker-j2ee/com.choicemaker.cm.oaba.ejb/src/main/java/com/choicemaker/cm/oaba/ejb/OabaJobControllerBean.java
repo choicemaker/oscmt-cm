@@ -28,7 +28,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import com.choicemaker.cm.args.BatchProcessingEvent;
+import com.choicemaker.cm.args.ProcessingEventBean;
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ProcessingEvent;
@@ -139,15 +139,15 @@ public class OabaJobControllerBean implements OabaJobController {
 
 		// Create a new entry in the processing log and check it
 		OabaProcessingControllerBean.updateStatusWithNotification(em,
-				jmsContext, oabaStatusTopic, retVal, BatchProcessingEvent.INIT,
+				jmsContext, oabaStatusTopic, retVal, ProcessingEventBean.INIT,
 				new Date(), null);
 		BatchJobProcessingEvent ope =
 			OabaProcessingControllerBean.getCurrentBatchProcessingEvent(em,
 					retVal);
 		ProcessingEvent currentProcessingEvent = ope.getProcessingEvent();
-		assert currentProcessingEvent.getEventId() == BatchProcessingEvent.INIT
+		assert currentProcessingEvent.getEventId() == ProcessingEventBean.INIT
 				.getEventId();
-		assert currentProcessingEvent.getPercentComplete() == BatchProcessingEvent.INIT
+		assert currentProcessingEvent.getPercentComplete() == ProcessingEventBean.INIT
 				.getPercentComplete();
 
 		// Create the working directory

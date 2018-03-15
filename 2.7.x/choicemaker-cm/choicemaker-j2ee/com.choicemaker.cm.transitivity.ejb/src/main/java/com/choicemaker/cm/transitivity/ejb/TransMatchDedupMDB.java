@@ -20,7 +20,7 @@ import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
 import javax.jms.Queue;
 
-import com.choicemaker.cm.args.BatchProcessingEvent;
+import com.choicemaker.cm.args.ProcessingEventBean;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ProcessingEvent;
 import com.choicemaker.cm.args.ServerConfiguration;
@@ -232,7 +232,7 @@ public class TransMatchDedupMDB extends AbstractTransitivityMDB {
 	}
 
 	@Override
-	protected BatchProcessingEvent getCompletionEvent() {
+	protected ProcessingEventBean getCompletionEvent() {
 		return DONE_TRANSITIVITY_PAIRWISE;
 	}
 

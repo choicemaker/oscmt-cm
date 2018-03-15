@@ -18,7 +18,7 @@ import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.jms.Topic;
 
-import com.choicemaker.cm.args.BatchProcessingEvent;
+import com.choicemaker.cm.args.ProcessingEventBean;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.OperationalPropertyController;
 import com.choicemaker.cm.batch.api.ProcessingEventLog;
@@ -57,7 +57,7 @@ public class MessageBeanUtils {
 
 		if (clearResources) {
 			log0.info("Clearing resources for job " + batchJob.getId());
-			status.setCurrentProcessingEvent(BatchProcessingEvent.DONE);
+			status.setCurrentProcessingEvent(ProcessingEventBean.DONE);
 			log0.info("Removing Temporary directory.");
 			BatchJobFileUtils.removeTempDir(batchJob);
 		} else {

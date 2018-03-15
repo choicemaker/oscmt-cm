@@ -10,7 +10,7 @@
  */
 package com.choicemaker.cms.ejb;
 
-import static com.choicemaker.cm.args.BatchProcessingEvent.DONE;
+import static com.choicemaker.cm.args.ProcessingEventBean.DONE;
 
 import java.rmi.RemoteException;
 import java.util.Date;
