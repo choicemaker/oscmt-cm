@@ -30,13 +30,13 @@ import com.choicemaker.cm.args.PersistableSqlRecordSource;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.ejb.AbstractPersistentObject;
 import com.choicemaker.cm.oaba.api.AbstractParameters;
-import com.choicemaker.cm.oaba.api.OabaJobController;
+import com.choicemaker.cm.oaba.api.OabaJobManager;
 import com.choicemaker.cm.oaba.api.OabaParametersController;
 import com.choicemaker.cm.oaba.api.SqlRecordSourceController;
 
 /**
  * An EJB used to test BatchParameter beans within container-defined
- * transactions; see {@link OabaJobControllerBean} as an example of a similar
+ * transactions; see {@link OabaJobManagerBean} as an example of a similar
  * controller.
  *
  * @author rphall
@@ -51,12 +51,12 @@ public class OabaParametersControllerBean implements OabaParametersController {
 	private EntityManager em;
 
 	@EJB
-	private OabaJobController jobController;
+	private OabaJobManager jobController;
 
 	@EJB
 	private SqlRecordSourceController sqlController;
 
-	protected OabaJobController getOabaJobController() {
+	protected OabaJobManager getOabaJobController() {
 		return jobController;
 	}
 

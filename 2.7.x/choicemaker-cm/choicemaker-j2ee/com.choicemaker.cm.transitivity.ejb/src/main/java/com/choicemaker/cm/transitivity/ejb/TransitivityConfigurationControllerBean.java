@@ -16,7 +16,7 @@ import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.oaba.ejb.ServerConfigurationControllerBean;
 import com.choicemaker.cm.transitivity.api.TransitivityConfigurationController;
-import com.choicemaker.cm.transitivity.api.TransitivityJobController;
+import com.choicemaker.cm.transitivity.api.TransitivityJobManager;
 
 @Stateless
 public class TransitivityConfigurationControllerBean
@@ -28,7 +28,7 @@ public class TransitivityConfigurationControllerBean
 	private EntityManager em;
 
 	@EJB
-	private TransitivityJobController jobController;
+	private TransitivityJobManager jobController;
 
 	@Override
 	public ServerConfiguration findConfigurationByTransitivityJobId(

@@ -12,7 +12,7 @@ import javax.transaction.UserTransaction;
 import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.batch.api.OperationalPropertyController;
 import com.choicemaker.cm.batch.api.EventPersistenceManager;
-import com.choicemaker.cm.oaba.api.OabaJobController;
+import com.choicemaker.cm.oaba.api.OabaJobManager;
 import com.choicemaker.cm.oaba.api.OabaParametersController;
 import com.choicemaker.cm.oaba.api.OabaService;
 import com.choicemaker.cm.oaba.api.OabaSettingsController;
@@ -43,7 +43,7 @@ public interface OabaTestParameters {
 
 	Queue getMatchSchedulerQueue();
 
-	OabaJobController getOabaJobController();
+	OabaJobManager getOabaJobController();
 
 	OabaParametersController getOabaParamsController();
 

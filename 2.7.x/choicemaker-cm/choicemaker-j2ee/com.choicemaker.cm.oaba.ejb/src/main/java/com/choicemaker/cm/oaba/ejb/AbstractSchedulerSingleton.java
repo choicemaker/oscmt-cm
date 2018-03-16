@@ -30,7 +30,7 @@ import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ProcessingEvent;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.api.BatchJob;
-import com.choicemaker.cm.batch.api.BatchJobController;
+import com.choicemaker.cm.batch.api.BatchJobManager;
 import com.choicemaker.cm.batch.api.BatchJobStatus;
 import com.choicemaker.cm.batch.api.OperationalPropertyController;
 import com.choicemaker.cm.batch.api.EventPersistenceManager;
@@ -110,7 +110,7 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 
 	// -- Callbacks
 
-	protected abstract BatchJobController getJobController();
+	protected abstract BatchJobManager getJobController();
 
 	protected abstract OabaParametersController getOabaParametersController();
 

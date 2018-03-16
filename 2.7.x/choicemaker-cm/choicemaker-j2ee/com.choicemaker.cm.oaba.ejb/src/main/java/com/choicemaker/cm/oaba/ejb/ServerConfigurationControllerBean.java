@@ -26,7 +26,7 @@ import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.oaba.api.DefaultServerConfiguration;
 import com.choicemaker.cm.oaba.api.MutableServerConfiguration;
-import com.choicemaker.cm.oaba.api.OabaJobController;
+import com.choicemaker.cm.oaba.api.OabaJobManager;
 import com.choicemaker.cm.oaba.api.ServerConfigurationController;
 import com.choicemaker.cm.oaba.api.ServerConfigurationException;
 import com.choicemaker.util.SystemPropertyUtils;
@@ -97,7 +97,7 @@ public class ServerConfigurationControllerBean implements
 	private EntityManager em;
 
 	@EJB
-	private OabaJobController jobController;
+	private OabaJobManager jobController;
 
 	@Override
 	public ServerConfiguration findServerConfiguration(long id) {

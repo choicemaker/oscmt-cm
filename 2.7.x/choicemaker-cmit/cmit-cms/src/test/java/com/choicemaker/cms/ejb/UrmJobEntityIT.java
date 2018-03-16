@@ -17,7 +17,7 @@ import org.junit.runner.RunWith;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.BatchJobStatus;
 import com.choicemaker.cmit.utils.j2ee.EntityManagerUtils;
-import com.choicemaker.cms.api.UrmJobController;
+import com.choicemaker.cms.api.UrmJobManager;
 import com.choicemaker.cms.ejb.UrmJobEntity;
 
 @RunWith(Arquillian.class)
@@ -38,7 +38,7 @@ public class UrmJobEntityIT {
 	public static final int MAX_TEST_ITERATIONS = 10;
 
 	@EJB
-	protected UrmJobController urmJobController;
+	protected UrmJobManager urmJobController;
 
 	@Test
 	public void testPrerequisites() {

@@ -35,7 +35,7 @@ import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.BatchJobStatus;
 import com.choicemaker.cm.batch.api.OperationalPropertyController;
 import com.choicemaker.cm.batch.ejb.BatchJobFileUtils;
-import com.choicemaker.cm.oaba.api.OabaJobController;
+import com.choicemaker.cm.oaba.api.OabaJobManager;
 import com.choicemaker.cm.oaba.api.OabaService;
 import com.choicemaker.cm.oaba.api.ServerConfigurationException;
 import com.choicemaker.cm.oaba.core.EXTERNAL_DATA_FORMAT;
@@ -61,7 +61,7 @@ public class OabaServiceBean implements OabaService {
 			.getName());
 
 	@EJB
-	private OabaJobController jobController;
+	private OabaJobManager jobController;
 
 	@EJB
 	private OperationalPropertyController propController;

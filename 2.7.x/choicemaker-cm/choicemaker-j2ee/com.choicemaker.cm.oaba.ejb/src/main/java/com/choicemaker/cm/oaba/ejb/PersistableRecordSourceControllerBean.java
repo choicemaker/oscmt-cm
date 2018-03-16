@@ -22,7 +22,7 @@ import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.args.PersistableSqlRecordSource;
 import com.choicemaker.cm.args.PersistableXmlRecordSource;
 import com.choicemaker.cm.core.ISerializableRecordSource;
-import com.choicemaker.cm.oaba.api.OabaJobController;
+import com.choicemaker.cm.oaba.api.OabaJobManager;
 import com.choicemaker.cm.oaba.api.OabaParametersController;
 import com.choicemaker.cm.oaba.api.RecordSourceController;
 import com.choicemaker.cm.oaba.api.SqlRecordSourceController;
@@ -38,7 +38,7 @@ public class PersistableRecordSourceControllerBean implements
 	private EntityManager em;
 
 	@EJB(beanName = "OabaJobControllerBean")
-	private OabaJobController jobController;
+	private OabaJobManager jobController;
 
 	@EJB
 	private OabaParametersController paramsController;

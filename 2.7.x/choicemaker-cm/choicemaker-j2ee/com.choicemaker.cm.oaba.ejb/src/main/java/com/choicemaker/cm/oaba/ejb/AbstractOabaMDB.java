@@ -33,7 +33,7 @@ import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.oaba.api.AbaStatisticsController;
-import com.choicemaker.cm.oaba.api.OabaJobController;
+import com.choicemaker.cm.oaba.api.OabaJobManager;
 import com.choicemaker.cm.oaba.api.OabaParametersController;
 import com.choicemaker.cm.oaba.api.OabaSettingsController;
 import com.choicemaker.cm.oaba.api.RecordIdController;
@@ -59,7 +59,7 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 	// -- Instance data
 
 	@EJB
-	private OabaJobController jobController;
+	private OabaJobManager jobController;
 
 	@EJB
 	private OabaSettingsController oabaSettingsController;
@@ -97,7 +97,7 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 
 	// -- Accessors
 
-	protected final OabaJobController getJobController() {
+	protected final OabaJobManager getJobController() {
 		return jobController;
 	}
 

@@ -21,7 +21,7 @@ import com.choicemaker.cm.args.PersistentObject;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.api.BatchJob;
-import com.choicemaker.cm.batch.api.BatchJobController;
+import com.choicemaker.cm.batch.api.BatchJobManager;
 import com.choicemaker.cm.batch.api.OperationalPropertyController;
 import com.choicemaker.cm.batch.api.EventPersistenceManager;
 import com.choicemaker.cm.oaba.api.DefaultServerConfiguration;
@@ -39,7 +39,7 @@ import com.choicemaker.cm.oaba.ejb.AbaSettingsJPA;
 import com.choicemaker.cm.oaba.ejb.DefaultSettingsEntity;
 import com.choicemaker.cm.oaba.ejb.OabaSettingsEntity;
 import com.choicemaker.cm.oaba.ejb.OabaSettingsJPA;
-import com.choicemaker.cm.transitivity.api.TransitivityJobController;
+import com.choicemaker.cm.transitivity.api.TransitivityJobManager;
 import com.choicemaker.cm.transitivity.api.TransitivityParametersController;
 
 /**
@@ -109,7 +109,7 @@ public class TestEntityCounts {
 	private Set<BatchJob> batchJobs = new LinkedHashSet<>();
 
 	public TestEntityCounts(final Logger testLogger,
-			final BatchJobController oabaJobController,
+			final BatchJobManager oabaJobController,
 			final OabaParametersController oabaParamsController,
 			final OabaSettingsController oabaSettingsController,
 			final ServerConfigurationController serverController,
@@ -118,16 +118,16 @@ public class TestEntityCounts {
 			final RecordSourceController rsController,
 			final RecordIdController ridController) throws Exception {
 		this(testLogger, oabaJobController, oabaParamsController,
-				(TransitivityJobController) null,
+				(TransitivityJobManager) null,
 				(TransitivityParametersController) null,
 				oabaSettingsController, serverController, eventManager,
 				opPropController, rsController, ridController);
 	}
 
 	public TestEntityCounts(Logger testLogger,
-			BatchJobController oabaJobController,
+			BatchJobManager oabaJobController,
 			OabaParametersController oabaParamsController,
-			TransitivityJobController transJobController,
+			TransitivityJobManager transJobController,
 			TransitivityParametersController transParamsController,
 			OabaSettingsController oabaSettingsController,
 			ServerConfigurationController serverController,
@@ -356,7 +356,7 @@ public class TestEntityCounts {
 
 	public void checkCounts(Logger testLogger, final EntityManager em,
 			final UserTransaction utx,
-			final BatchJobController oabaJobController,
+			final BatchJobManager oabaJobController,
 			final OabaParametersController oabaParamsController,
 			final OabaSettingsController settingsController,
 			final ServerConfigurationController serverController,
@@ -365,16 +365,16 @@ public class TestEntityCounts {
 			final RecordSourceController rsController,
 			final RecordIdController ridController) throws AssertionError {
 		checkCounts(testLogger, em, utx, oabaJobController,
-				oabaParamsController, (TransitivityJobController) null,
+				oabaParamsController, (TransitivityJobManager) null,
 				(TransitivityParametersController) null, settingsController,
 				serverController, eventManager, opPropController,
 				rsController, ridController);
 	}
 
 	public void checkCounts(Logger testLogger, EntityManager em,
-			UserTransaction utx, BatchJobController oabaJobController,
+			UserTransaction utx, BatchJobManager oabaJobController,
 			OabaParametersController oabaParamsController,
-			TransitivityJobController transJobController,
+			TransitivityJobManager transJobController,
 			TransitivityParametersController transParamsController,
 			OabaSettingsController settingsController,
 			ServerConfigurationController serverController,
@@ -441,9 +441,9 @@ public class TestEntityCounts {
 	 * current counts of test entities.
 	 */
 	protected void logMaybeAssert(boolean doAssert, Logger testLogger,
-			final BatchJobController oabaJobController,
+			final BatchJobManager oabaJobController,
 			final OabaParametersController oabaParamsController,
-			final TransitivityJobController transJobController,
+			final TransitivityJobManager transJobController,
 			final TransitivityParametersController transParamsController,
 			final OabaSettingsController oabaSettingsController,
 			final ServerConfigurationController serverController,

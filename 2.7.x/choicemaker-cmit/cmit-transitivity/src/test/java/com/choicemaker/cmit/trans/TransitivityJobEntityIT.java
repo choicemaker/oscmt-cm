@@ -26,14 +26,14 @@ import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.BatchJobStatus;
 import com.choicemaker.cm.batch.api.OperationalPropertyController;
 import com.choicemaker.cm.batch.api.EventPersistenceManager;
-import com.choicemaker.cm.oaba.api.OabaJobController;
+import com.choicemaker.cm.oaba.api.OabaJobManager;
 import com.choicemaker.cm.oaba.api.OabaParametersController;
 import com.choicemaker.cm.oaba.api.OabaService;
 import com.choicemaker.cm.oaba.api.OabaSettingsController;
 import com.choicemaker.cm.oaba.api.RecordIdController;
 import com.choicemaker.cm.oaba.api.RecordSourceController;
 import com.choicemaker.cm.oaba.api.ServerConfigurationController;
-import com.choicemaker.cm.transitivity.api.TransitivityJobController;
+import com.choicemaker.cm.transitivity.api.TransitivityJobManager;
 import com.choicemaker.cmit.trans.util.TransitivityDeploymentUtils;
 import com.choicemaker.cmit.utils.j2ee.BatchJobUtils;
 import com.choicemaker.cmit.utils.j2ee.TestEntityCounts;
@@ -67,10 +67,10 @@ public class TransitivityJobEntityIT {
 	private EntityManager em;
 
 	@EJB
-	private OabaJobController oabaJobController;
+	private OabaJobManager oabaJobController;
 
 	@EJB
-	protected TransitivityJobController transJobController;
+	protected TransitivityJobManager transJobController;
 
 	@EJB
 	private OabaParametersController oabaParamsController;

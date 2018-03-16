@@ -38,7 +38,7 @@ import com.choicemaker.cm.batch.ejb.BatchJobFileUtils;
 import com.choicemaker.cm.oaba.api.OabaSettingsController;
 import com.choicemaker.cm.oaba.api.ServerConfigurationController;
 import com.choicemaker.cm.oaba.api.ServerConfigurationException;
-import com.choicemaker.cm.transitivity.api.TransitivityJobController;
+import com.choicemaker.cm.transitivity.api.TransitivityJobManager;
 import com.choicemaker.cm.transitivity.api.TransitivityParametersController;
 
 /**
@@ -48,10 +48,10 @@ import com.choicemaker.cm.transitivity.api.TransitivityParametersController;
  * @author rphall
  */
 @Stateless
-public class TransitivityJobControllerBean implements TransitivityJobController {
+public class TransitivityJobManagerBean implements TransitivityJobManager {
 
 	private static final Logger logger = Logger
-			.getLogger(TransitivityJobControllerBean.class.getName());
+			.getLogger(TransitivityJobManagerBean.class.getName());
 
 	@PersistenceContext(unitName = "oaba")
 	private EntityManager em;

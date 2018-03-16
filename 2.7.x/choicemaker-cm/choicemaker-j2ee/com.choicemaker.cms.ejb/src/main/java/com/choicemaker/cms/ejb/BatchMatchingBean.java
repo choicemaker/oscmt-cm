@@ -33,7 +33,7 @@ import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.BatchProcessingNotification;
-import com.choicemaker.cm.oaba.api.OabaJobController;
+import com.choicemaker.cm.oaba.api.OabaJobManager;
 import com.choicemaker.cm.oaba.api.OabaService;
 import com.choicemaker.cm.oaba.api.OabaSettingsController;
 import com.choicemaker.cm.oaba.api.ServerConfigurationController;
@@ -41,12 +41,12 @@ import com.choicemaker.cm.oaba.api.ServerConfigurationException;
 import com.choicemaker.cm.oaba.core.IMatchRecord2Source;
 import com.choicemaker.cm.oaba.core.RecordMatchingMode;
 import com.choicemaker.cm.oaba.ejb.data.OabaNotification;
-import com.choicemaker.cm.transitivity.api.TransitivityJobController;
+import com.choicemaker.cm.transitivity.api.TransitivityJobManager;
 import com.choicemaker.cm.transitivity.api.TransitivityParametersController;
 import com.choicemaker.cm.transitivity.api.TransitivityService;
 import com.choicemaker.cm.transitivity.ejb.TransitivityNotification;
 import com.choicemaker.cms.api.BatchMatching;
-import com.choicemaker.cms.api.UrmJobController;
+import com.choicemaker.cms.api.UrmJobManager;
 import com.choicemaker.cms.api.WorkFlowManager;
 import com.choicemaker.cms.api.remote.BatchMatchingRemote;
 
@@ -68,7 +68,7 @@ public class BatchMatchingBean implements BatchMatching, WorkFlowManager {
 	private Set<Long> transtivityAnalysisPending = new HashSet<>();
 
 	@EJB
-	private UrmJobController urmJobController;
+	private UrmJobManager urmJobController;
 
 	@EJB
 	private OabaService oabaService;
@@ -77,10 +77,10 @@ public class BatchMatchingBean implements BatchMatching, WorkFlowManager {
 	private TransitivityService transService;
 
 	@EJB
-	private OabaJobController oabaJobController;
+	private OabaJobManager oabaJobController;
 
 	@EJB
-	private TransitivityJobController transJobController;
+	private TransitivityJobManager transJobController;
 
 	@EJB
 	private TransitivityParametersController paramsController;

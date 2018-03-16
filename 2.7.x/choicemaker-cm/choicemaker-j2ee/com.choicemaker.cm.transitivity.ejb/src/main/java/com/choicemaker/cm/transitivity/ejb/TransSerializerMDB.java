@@ -44,7 +44,7 @@ import com.choicemaker.cm.oaba.api.OabaSettingsController;
 import com.choicemaker.cm.oaba.api.ServerConfigurationController;
 import com.choicemaker.cm.oaba.ejb.data.OabaJobMessage;
 import com.choicemaker.cm.oaba.impl.MatchRecord2CompositeSource;
-import com.choicemaker.cm.transitivity.api.TransitivityJobController;
+import com.choicemaker.cm.transitivity.api.TransitivityJobManager;
 import com.choicemaker.cm.transitivity.api.TransitivityParametersController;
 import com.choicemaker.cm.transitivity.core.TransitivityResult;
 import com.choicemaker.cm.transitivity.core.TransitivityResultCompositeSerializer;
@@ -106,7 +106,7 @@ public class TransSerializerMDB implements MessageListener, Serializable {
 	private EntityManager em;
 
 	@EJB
-	private TransitivityJobController jobController;
+	private TransitivityJobManager jobController;
 
 	@EJB
 	private OabaSettingsController oabaSettingsController;

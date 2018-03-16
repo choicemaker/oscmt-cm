@@ -43,7 +43,7 @@ import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.base.MatchRecord2;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.util.MatchUtils;
-import com.choicemaker.cm.oaba.api.OabaJobController;
+import com.choicemaker.cm.oaba.api.OabaJobManager;
 import com.choicemaker.cm.oaba.api.OabaParametersController;
 import com.choicemaker.cm.oaba.api.OabaSettingsController;
 import com.choicemaker.cm.oaba.api.ServerConfigurationController;
@@ -92,7 +92,7 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 	/** Reports completion to the scheduler that uses this matcher */
 	protected abstract void sendToScheduler(MatchWriterMessage data);
 
-	protected abstract OabaJobController getJobController();
+	protected abstract OabaJobManager getJobController();
 
 	protected abstract OabaParametersController getOabaParametersController();
 

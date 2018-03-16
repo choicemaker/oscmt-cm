@@ -32,7 +32,7 @@ import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.batch.api.OperationalPropertyController;
 import com.choicemaker.cm.batch.api.EventPersistenceManager;
 import com.choicemaker.cm.oaba.api.DefaultSettings;
-import com.choicemaker.cm.oaba.api.OabaJobController;
+import com.choicemaker.cm.oaba.api.OabaJobManager;
 import com.choicemaker.cm.oaba.api.OabaParametersController;
 import com.choicemaker.cm.oaba.api.OabaService;
 import com.choicemaker.cm.oaba.api.OabaSettingsController;
@@ -103,7 +103,7 @@ public class SettingsControllerBeanIT {
 	EntityManager em;
 
 	@EJB(beanName = "OabaJobControllerBean")
-	private OabaJobController oabaController;
+	private OabaJobManager oabaController;
 
 	@EJB
 	private OabaParametersController paramsController;

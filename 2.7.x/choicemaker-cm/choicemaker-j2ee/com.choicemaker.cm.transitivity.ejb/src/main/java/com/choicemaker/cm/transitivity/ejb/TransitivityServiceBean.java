@@ -36,7 +36,7 @@ import com.choicemaker.cm.oaba.ejb.BatchJobUtils;
 import com.choicemaker.cm.oaba.ejb.ServerConfigurationEntity;
 import com.choicemaker.cm.oaba.ejb.data.OabaJobMessage;
 import com.choicemaker.cm.oaba.ejb.util.MessageBeanUtils;
-import com.choicemaker.cm.transitivity.api.TransitivityJobController;
+import com.choicemaker.cm.transitivity.api.TransitivityJobManager;
 import com.choicemaker.cm.transitivity.api.TransitivityService;
 
 /**
@@ -98,7 +98,7 @@ public class TransitivityServiceBean implements TransitivityService {
 	OabaParametersController oabaParamsController;
 
 	@EJB
-	TransitivityJobController jobController;
+	TransitivityJobManager jobController;
 
 	@EJB
 	private OperationalPropertyController propController;

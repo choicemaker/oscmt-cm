@@ -34,7 +34,7 @@ import com.choicemaker.cm.batch.ejb.BatchJobFileUtils;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.base.RECORD_SOURCE_ROLE;
 import com.choicemaker.cm.oaba.api.ImmutableRecordIdTranslatorLocal;
-import com.choicemaker.cm.oaba.api.OabaJobController;
+import com.choicemaker.cm.oaba.api.OabaJobManager;
 import com.choicemaker.cm.oaba.api.RecordIdController;
 import com.choicemaker.cm.oaba.api.RecordIdTranslation;
 import com.choicemaker.cm.oaba.core.IRecordIdFactory;
@@ -90,7 +90,7 @@ public class RecordIdControllerBean implements RecordIdController {
 	private EntityManager em;
 
 	@EJB(beanName = "OabaJobControllerBean")
-	private OabaJobController jobController;
+	private OabaJobManager jobController;
 
 	@Override
 	public <T extends Comparable<T>> ImmutableRecordIdTranslatorLocal<T> findRecordIdTranslator(

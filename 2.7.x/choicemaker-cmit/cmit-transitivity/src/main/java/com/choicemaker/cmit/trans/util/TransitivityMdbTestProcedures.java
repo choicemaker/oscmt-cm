@@ -34,7 +34,7 @@ import com.choicemaker.cm.oaba.ejb.OabaJobEntity;
 import com.choicemaker.cm.oaba.ejb.ServerConfigurationControllerBean;
 import com.choicemaker.cm.oaba.ejb.ServerConfigurationEntity;
 import com.choicemaker.cm.oaba.ejb.data.OabaJobMessage;
-import com.choicemaker.cm.transitivity.api.TransitivityJobController;
+import com.choicemaker.cm.transitivity.api.TransitivityJobManager;
 import com.choicemaker.cm.transitivity.api.TransitivityService;
 import com.choicemaker.cm.transitivity.ejb.TransitivityParametersEntity;
 import com.choicemaker.cmit.trans.AbstractTransitivityMdbTest;
@@ -209,7 +209,7 @@ public class TransitivityMdbTestProcedures {
 		assertTrue(jobId != NONPERSISTENT_ID);
 
 		// Find the transitivity job
-		final TransitivityJobController transJobController =
+		final TransitivityJobManager transJobController =
 			ta.getTransJobController();
 		BatchJob transJob = transJobController.findTransitivityJob(jobId);
 		assertTrue(transJob != null);

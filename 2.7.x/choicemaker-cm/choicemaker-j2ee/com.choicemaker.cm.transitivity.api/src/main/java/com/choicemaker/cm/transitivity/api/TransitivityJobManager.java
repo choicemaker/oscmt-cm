@@ -15,11 +15,11 @@ import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.api.BatchJob;
-import com.choicemaker.cm.batch.api.BatchJobController;
+import com.choicemaker.cm.batch.api.BatchJobManager;
 import com.choicemaker.cm.oaba.api.ServerConfigurationException;
 
 @Local
-public interface TransitivityJobController extends BatchJobController {
+public interface TransitivityJobManager extends BatchJobManager {
 
 	BatchJob createPersistentTransitivityJob(String externalID,
 			TransitivityParameters params, BatchJob batchJob,

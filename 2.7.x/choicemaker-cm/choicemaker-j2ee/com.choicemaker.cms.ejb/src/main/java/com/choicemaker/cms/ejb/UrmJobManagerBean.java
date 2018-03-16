@@ -22,7 +22,7 @@ import com.choicemaker.cm.oaba.api.OabaSettingsController;
 import com.choicemaker.cm.oaba.api.ServerConfigurationController;
 import com.choicemaker.cm.oaba.ejb.OabaJobJPA;
 import com.choicemaker.cm.transitivity.api.TransitivityParametersController;
-import com.choicemaker.cms.api.UrmJobController;
+import com.choicemaker.cms.api.UrmJobManager;
 
 /**
  * A stateless EJB used to manage the persistence of UrmJobEntity instances.
@@ -30,10 +30,10 @@ import com.choicemaker.cms.api.UrmJobController;
  * @author rphall
  */
 @Stateless
-public class UrmJobControllerBean implements UrmJobController {
+public class UrmJobManagerBean implements UrmJobManager {
 
 	private static final Logger logger = Logger
-			.getLogger(UrmJobControllerBean.class.getName());
+			.getLogger(UrmJobManagerBean.class.getName());
 
 	@PersistenceContext(unitName = "oaba")
 	private EntityManager em;

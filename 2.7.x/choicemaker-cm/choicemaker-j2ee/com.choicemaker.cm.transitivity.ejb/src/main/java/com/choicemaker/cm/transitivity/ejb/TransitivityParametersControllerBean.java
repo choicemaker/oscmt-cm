@@ -19,12 +19,12 @@ import javax.persistence.Query;
 
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.api.BatchJob;
-import com.choicemaker.cm.transitivity.api.TransitivityJobController;
+import com.choicemaker.cm.transitivity.api.TransitivityJobManager;
 import com.choicemaker.cm.transitivity.api.TransitivityParametersController;
 
 /**
  * An EJB used to test TransitivityParameter beans within container-defined
- * transactions; see {@link TransitivityJobControllerBean} as an example of a
+ * transactions; see {@link TransitivityJobManagerBean} as an example of a
  * similar controller.
  *
  * @author rphall
@@ -40,9 +40,9 @@ public class TransitivityParametersControllerBean implements
 	private EntityManager em;
 
 	@EJB
-	private TransitivityJobController jobController;
+	private TransitivityJobManager jobController;
 
-	protected TransitivityJobController getTransJobController() {
+	protected TransitivityJobManager getTransJobController() {
 		return jobController;
 	}
 

@@ -77,7 +77,7 @@ public class OabaJobEntity extends BatchJobEntity implements IControl {
 	 * Creates an isolated BatchJob entity with {@link BatchJob#DEFAULT_RIGOR
 	 * default rigor} but without any required, ancillary objects. The preferred
 	 * method for creating an BatchJob entity is via the
-	 * {@link OabaJobControllerBean}
+	 * {@link OabaJobManagerBean}
 	 *
 	 * @param params
 	 *            non-null
@@ -97,7 +97,7 @@ public class OabaJobEntity extends BatchJobEntity implements IControl {
 	/**
 	 * Creates an isolated BatchJob entity without any required, ancillary
 	 * objects. The preferred method for creating an BatchJob entity is via the
-	 * {@link OabaJobControllerBean}
+	 * {@link OabaJobManagerBean}
 	 * 
 	 * @param params
 	 *            non-null

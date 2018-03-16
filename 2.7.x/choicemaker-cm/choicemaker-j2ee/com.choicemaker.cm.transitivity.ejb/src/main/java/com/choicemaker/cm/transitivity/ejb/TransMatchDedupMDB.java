@@ -42,7 +42,7 @@ import com.choicemaker.cm.oaba.ejb.BatchJobUtils;
 import com.choicemaker.cm.oaba.ejb.OabaFileUtils;
 import com.choicemaker.cm.oaba.ejb.data.OabaJobMessage;
 import com.choicemaker.cm.oaba.ejb.util.MessageBeanUtils;
-import com.choicemaker.cm.transitivity.api.TransitivityJobController;
+import com.choicemaker.cm.transitivity.api.TransitivityJobManager;
 import com.choicemaker.cm.transitivity.api.TransitivityParametersController;
 
 /**
@@ -71,7 +71,7 @@ public class TransMatchDedupMDB extends AbstractTransitivityMDB {
 			+ TransMatchDedupMDB.class.getName());
 
 	@EJB
-	private TransitivityJobController jobController;
+	private TransitivityJobManager jobController;
 
 	@EJB
 	private OabaSettingsController oabaSettingsController;

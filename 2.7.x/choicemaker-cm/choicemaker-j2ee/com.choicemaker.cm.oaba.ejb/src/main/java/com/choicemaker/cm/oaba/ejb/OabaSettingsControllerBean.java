@@ -21,7 +21,7 @@ import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.oaba.api.DefaultSettings;
-import com.choicemaker.cm.oaba.api.OabaJobController;
+import com.choicemaker.cm.oaba.api.OabaJobManager;
 import com.choicemaker.cm.oaba.api.OabaSettingsController;
 
 @Stateless
@@ -34,7 +34,7 @@ public class OabaSettingsControllerBean implements OabaSettingsController {
 	private EntityManager em;
 
 	@EJB
-	private OabaJobController jobController;
+	private OabaJobManager jobController;
 
 	@Override
 	public AbaSettings save(final AbaSettings settings) {

@@ -2,7 +2,7 @@ package com.choicemaker.cm.batch.api;
 
 import java.util.List;
 
-public interface BatchJobController {
+public interface BatchJobManager {
 
 	void delete(BatchJob batchJob);
 

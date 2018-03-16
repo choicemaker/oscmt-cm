@@ -37,7 +37,7 @@ import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.BatchProcessingEvent;
 import com.choicemaker.cm.batch.api.EventPersistenceManager;
 import com.choicemaker.cm.batch.ejb.BatchJobFileUtils;
-import com.choicemaker.cm.oaba.api.OabaJobController;
+import com.choicemaker.cm.oaba.api.OabaJobManager;
 import com.choicemaker.cm.oaba.api.OabaParametersController;
 import com.choicemaker.cm.oaba.api.OabaSettingsController;
 import com.choicemaker.cm.oaba.api.ServerConfigurationController;
@@ -49,10 +49,10 @@ import com.choicemaker.cm.oaba.api.ServerConfigurationException;
  * @author rphall
  */
 @Stateless
-public class OabaJobControllerBean implements OabaJobController {
+public class OabaJobManagerBean implements OabaJobManager {
 
 	private static final Logger logger = Logger
-			.getLogger(OabaJobControllerBean.class.getName());
+			.getLogger(OabaJobManagerBean.class.getName());
 
 	@PersistenceContext(unitName = "oaba")
 	private EntityManager em;

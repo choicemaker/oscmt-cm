@@ -24,14 +24,14 @@ import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.OperationalPropertyController;
 import com.choicemaker.cm.batch.api.EventPersistenceManager;
-import com.choicemaker.cm.oaba.api.OabaJobController;
+import com.choicemaker.cm.oaba.api.OabaJobManager;
 import com.choicemaker.cm.oaba.api.OabaParametersController;
 import com.choicemaker.cm.oaba.api.OabaService;
 import com.choicemaker.cm.oaba.api.OabaSettingsController;
 import com.choicemaker.cm.oaba.api.RecordIdController;
 import com.choicemaker.cm.oaba.api.RecordSourceController;
 import com.choicemaker.cm.oaba.api.ServerConfigurationController;
-import com.choicemaker.cm.transitivity.api.TransitivityJobController;
+import com.choicemaker.cm.transitivity.api.TransitivityJobManager;
 import com.choicemaker.cm.transitivity.api.TransitivityParametersController;
 import com.choicemaker.cm.transitivity.api.TransitivityService;
 import com.choicemaker.cmit.trans.util.TransitivityMdbTestProcedures;
@@ -94,7 +94,7 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 	private TransitivityService transService;
 
 	@EJB
-	private TransitivityJobController transJobController;
+	private TransitivityJobManager transJobController;
 
 	@EJB
 	private TransitivityParametersController transParamsController;
@@ -103,7 +103,7 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 	private OabaService oabaService;
 
 	@EJB
-	private OabaJobController oabaJobController;
+	private OabaJobManager oabaJobController;
 
 	@EJB
 	private OabaParametersController oabaParamsController;
@@ -378,7 +378,7 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 		return transService;
 	}
 
-	public final TransitivityJobController getTransJobController() {
+	public final TransitivityJobManager getTransJobController() {
 		return transJobController;
 	}
 
@@ -406,7 +406,7 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 		return jmsContext;
 	}
 
-	protected final OabaJobController getOabaJobController() {
+	protected final OabaJobManager getOabaJobController() {
 		return oabaJobController;
 	}
 
@@ -589,7 +589,7 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 		}
 
 		@Override
-		public final OabaJobController getOabaJobController() {
+		public final OabaJobManager getOabaJobController() {
 			return d.getOabaJobController();
 		}
 

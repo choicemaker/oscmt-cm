@@ -15,7 +15,7 @@ import javax.persistence.PersistenceContext;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.oaba.ejb.OabaSettingsControllerBean;
-import com.choicemaker.cm.transitivity.api.TransitivityJobController;
+import com.choicemaker.cm.transitivity.api.TransitivityJobManager;
 import com.choicemaker.cm.transitivity.api.TransitivitySettingsController;
 
 @Stateless
@@ -25,7 +25,7 @@ public class TransitivitySettingsControllerBean extends OabaSettingsControllerBe
 	private EntityManager em;
 
 	@EJB
-	private TransitivityJobController jobController;
+	private TransitivityJobManager jobController;
 
 	@Override
 	public OabaSettings findSettingsByTransitivityJobId(long jobId) {

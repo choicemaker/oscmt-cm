@@ -29,7 +29,7 @@ import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.OperationalPropertyController;
 import com.choicemaker.cm.batch.api.EventPersistenceManager;
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.oaba.api.OabaJobController;
+import com.choicemaker.cm.oaba.api.OabaJobManager;
 import com.choicemaker.cm.oaba.api.OabaParametersController;
 import com.choicemaker.cm.oaba.api.OabaService;
 import com.choicemaker.cm.oaba.api.OabaSettingsController;
@@ -233,10 +233,10 @@ public class RecordIdTranslatorIT {
 	private EntityManager em;
 
 	@EJB
-	private OabaJobController oabaController;
+	private OabaJobManager oabaController;
 
 	@EJB(beanName = "OabaJobControllerBean")
-	private OabaJobController jobController;
+	private OabaJobManager jobController;
 
 	@EJB
 	private OabaParametersController paramsController;

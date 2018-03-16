@@ -25,7 +25,7 @@ import javax.persistence.Query;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.base.MatchRecord2;
-import com.choicemaker.cm.oaba.api.OabaJobController;
+import com.choicemaker.cm.oaba.api.OabaJobManager;
 import com.choicemaker.cm.oaba.api.OabaPairResultController;
 import com.choicemaker.cm.oaba.core.IMatchRecord2Sink;
 import com.choicemaker.cm.oaba.core.IMatchRecord2Source;
@@ -53,7 +53,7 @@ public class OabaPairResultControllerBean implements OabaPairResultController {
 	private EntityManager em;
 
 	@EJB(beanName = "OabaJobControllerBean")
-	private OabaJobController jobController;
+	private OabaJobManager jobController;
 
 	@Override
 	public int getResultCount(BatchJob job) throws BlockingException {

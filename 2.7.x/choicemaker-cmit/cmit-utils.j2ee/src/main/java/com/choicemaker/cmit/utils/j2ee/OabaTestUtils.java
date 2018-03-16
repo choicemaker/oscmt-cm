@@ -13,7 +13,7 @@ import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.oaba.api.DefaultServerConfiguration;
-import com.choicemaker.cm.oaba.api.OabaJobController;
+import com.choicemaker.cm.oaba.api.OabaJobManager;
 import com.choicemaker.cm.oaba.api.OabaParametersController;
 import com.choicemaker.cm.oaba.api.OabaService;
 import com.choicemaker.cm.oaba.api.OabaSettingsController;
@@ -162,7 +162,7 @@ public class OabaTestUtils {
 			fail(e.toString());
 		}
 
-		final OabaJobController jobController = test.getOabaJobController();
+		final OabaJobManager jobController = test.getOabaJobController();
 		assertTrue(jobId != NONPERSISTENT_ID);
 		BatchJob retVal = jobController.findOabaJob(jobId);
 		assertTrue(retVal != null);
@@ -235,7 +235,7 @@ public class OabaTestUtils {
 			RecordSourceController rsController,
 			OabaSettingsController oabaSettingsController,
 			ServerConfigurationController serverController,
-			OabaJobController jobController, TestEntityCounts te)
+			OabaJobManager jobController, TestEntityCounts te)
 			throws ServerConfigurationException {
 
 		final String methodName = "createPersistentOabaJob";

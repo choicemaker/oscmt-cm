@@ -11,9 +11,9 @@ import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.api.BatchJob;
-import com.choicemaker.cm.batch.api.BatchJobController;
+import com.choicemaker.cm.batch.api.BatchJobManager;
 
-public interface OabaJobController extends BatchJobController {
+public interface OabaJobManager extends BatchJobManager {
 
 	BatchJob createPersistentOabaJob(String externalID, OabaParameters params,
 			OabaSettings settings, ServerConfiguration sc)

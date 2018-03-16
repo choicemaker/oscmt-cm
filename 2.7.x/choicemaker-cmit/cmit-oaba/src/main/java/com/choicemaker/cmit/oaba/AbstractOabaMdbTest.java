@@ -24,7 +24,7 @@ import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.OperationalPropertyController;
 import com.choicemaker.cm.batch.api.EventPersistenceManager;
-import com.choicemaker.cm.oaba.api.OabaJobController;
+import com.choicemaker.cm.oaba.api.OabaJobManager;
 import com.choicemaker.cm.oaba.api.OabaParametersController;
 import com.choicemaker.cm.oaba.api.OabaService;
 import com.choicemaker.cm.oaba.api.OabaSettingsController;
@@ -90,7 +90,7 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 	private OabaService oabaService;
 
 	@EJB
-	private OabaJobController oabaJobController;
+	private OabaJobManager oabaJobController;
 
 	@EJB
 	private OabaParametersController oabaParamsController;
@@ -345,7 +345,7 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 		return jmsContext;
 	}
 
-	protected final OabaJobController getOabaJobController() {
+	protected final OabaJobManager getOabaJobController() {
 		return oabaJobController;
 	}
 
@@ -499,7 +499,7 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 		}
 
 		@Override
-		public final OabaJobController getOabaJobController() {
+		public final OabaJobManager getOabaJobController() {
 			return AbstractOabaMdbTest.this.getOabaJobController();
 		}
 

@@ -25,7 +25,7 @@ import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.api.BatchJob;
-import com.choicemaker.cm.batch.api.BatchJobController;
+import com.choicemaker.cm.batch.api.BatchJobManager;
 import com.choicemaker.cm.batch.api.BatchJobStatus;
 import com.choicemaker.cm.batch.api.OperationalPropertyController;
 import com.choicemaker.cm.batch.api.EventPersistenceManager;
@@ -33,13 +33,13 @@ import com.choicemaker.cm.batch.api.ProcessingEventLog;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
-import com.choicemaker.cm.oaba.api.OabaJobController;
+import com.choicemaker.cm.oaba.api.OabaJobManager;
 import com.choicemaker.cm.oaba.api.RecordIdController;
 import com.choicemaker.cm.oaba.api.RecordSourceController;
 import com.choicemaker.cm.oaba.api.SqlRecordSourceController;
 import com.choicemaker.cm.oaba.core.RecordMatchingMode;
 import com.choicemaker.cm.transitivity.api.TransitivityConfigurationController;
-import com.choicemaker.cm.transitivity.api.TransitivityJobController;
+import com.choicemaker.cm.transitivity.api.TransitivityJobManager;
 import com.choicemaker.cm.transitivity.api.TransitivityParametersController;
 import com.choicemaker.cm.transitivity.api.TransitivitySettingsController;
 import com.choicemaker.cm.oaba.ejb.BatchJobUtils;
@@ -62,10 +62,10 @@ public abstract class AbstractTransitivityMDB implements MessageListener,
 	// -- Instance data
 
 	@EJB
-	private OabaJobController oabaJobController;
+	private OabaJobManager oabaJobController;
 
 	@EJB
-	private TransitivityJobController transJobController;
+	private TransitivityJobManager transJobController;
 
 	@EJB
 	private TransitivitySettingsController settingsController;
@@ -100,11 +100,11 @@ public abstract class AbstractTransitivityMDB implements MessageListener,
 
 	// -- Accessors
 
-	protected final BatchJobController getOabaJobController() {
+	protected final BatchJobManager getOabaJobController() {
 		return oabaJobController;
 	}
 
-	protected final TransitivityJobController getTransitivityJobController() {
+	protected final TransitivityJobManager getTransitivityJobController() {
 		return transJobController;
 	}
 

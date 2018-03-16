@@ -38,7 +38,7 @@ import com.choicemaker.cmit.utils.j2ee.EntityManagerUtils;
 import com.choicemaker.cmit.utils.j2ee.OabaTestUtils;
 import com.choicemaker.cmit.utils.j2ee.TransitivityTestParameters;
 import com.choicemaker.cmit.utils.j2ee.WellKnownTestConfiguration;
-import com.choicemaker.cms.api.UrmJobController;
+import com.choicemaker.cms.api.UrmJobManager;
 import com.choicemaker.cms.ejb.UrmDeploymentUtils;
 
 @RunWith(Arquillian.class)
@@ -64,7 +64,7 @@ public class BatchMatchAnalyzerBeanIT extends
 	BatchMatchAnalyzer bma;
 
 	@EJB
-	UrmJobController urmJobController;
+	UrmJobManager urmJobController;
 
 	// @SuppressWarnings("unused")
 	// private final MatchDedupMdbProcessing oabaProcessing =

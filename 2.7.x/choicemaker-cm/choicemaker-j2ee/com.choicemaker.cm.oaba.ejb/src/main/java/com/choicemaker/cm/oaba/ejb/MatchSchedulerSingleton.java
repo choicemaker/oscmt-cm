@@ -30,7 +30,7 @@ import com.choicemaker.cm.batch.api.EventPersistenceManager;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
-import com.choicemaker.cm.oaba.api.OabaJobController;
+import com.choicemaker.cm.oaba.api.OabaJobManager;
 import com.choicemaker.cm.oaba.api.OabaParametersController;
 import com.choicemaker.cm.oaba.api.OabaSettingsController;
 import com.choicemaker.cm.oaba.api.ServerConfigurationController;
@@ -67,7 +67,7 @@ public class MatchSchedulerSingleton extends AbstractSchedulerSingleton {
 	// -- Injected data
 
 	@EJB
-	private OabaJobController jobController;
+	private OabaJobManager jobController;
 
 	@EJB
 	private OabaSettingsController oabaSettingsController;
@@ -104,7 +104,7 @@ public class MatchSchedulerSingleton extends AbstractSchedulerSingleton {
 	// -- Callbacks
 
 	@Override
-	protected OabaJobController getJobController() {
+	protected OabaJobManager getJobController() {
 		return jobController;
 	}
 
