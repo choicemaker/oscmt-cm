@@ -23,7 +23,7 @@ import org.junit.Test;
 import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.OperationalPropertyController;
-import com.choicemaker.cm.batch.api.ProcessingController;
+import com.choicemaker.cm.batch.api.EventPersistenceManager;
 import com.choicemaker.cm.oaba.api.OabaJobController;
 import com.choicemaker.cm.oaba.api.OabaParametersController;
 import com.choicemaker.cm.oaba.api.OabaService;
@@ -102,7 +102,7 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 	private ServerConfigurationController serverController;
 
 	@EJB(beanName = "OabaProcessingControllerBean")
-	private ProcessingController processingController;
+	private EventPersistenceManager eventManager;
 
 	@EJB
 	private OperationalPropertyController opPropController;
@@ -381,8 +381,8 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 		return oabaParamsController;
 	}
 
-	protected final ProcessingController getOabaProcessingController() {
-		return processingController;
+	protected final EventPersistenceManager getOabaProcessingController() {
+		return eventManager;
 	}
 
 	protected final RecordSourceController getRecordSourceController() {
@@ -544,7 +544,7 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 		}
 
 		@Override
-		public final ProcessingController getOabaProcessingController() {
+		public final EventPersistenceManager getOabaProcessingController() {
 			return AbstractOabaMdbTest.this.getOabaProcessingController();
 		}
 

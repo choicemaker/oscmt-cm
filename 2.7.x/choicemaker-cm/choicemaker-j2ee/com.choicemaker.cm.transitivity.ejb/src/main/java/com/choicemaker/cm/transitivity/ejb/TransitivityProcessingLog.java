@@ -47,7 +47,7 @@ public class TransitivityProcessingLog implements ProcessingEventLog {
 	}
 
 	protected BatchProcessingEvent getCurrentTransitivityProcessingEvent() {
-		return TransitivityProcessingControllerBean
+		return TransitivityEventManager
 				.getCurrentBatchProcessingEvent(em, batchJob);
 	}
 
@@ -81,7 +81,7 @@ public class TransitivityProcessingLog implements ProcessingEventLog {
 	public void setCurrentProcessingEvent(ProcessingEvent event, String info) {
 		logger.info(LOG_SOURCE + ".setCurrentProcessingEvent: " + event + " (job "
 				+ this.batchJob.getId() + ")");
-		TransitivityProcessingControllerBean.updateStatus(em, batchJob, event,
+		TransitivityEventManager.updateStatus(em, batchJob, event,
 				new Date(), info);
 	}
 

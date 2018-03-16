@@ -35,7 +35,7 @@ import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.BatchJobStatus;
 import com.choicemaker.cm.batch.api.OperationalPropertyController;
-import com.choicemaker.cm.batch.api.ProcessingController;
+import com.choicemaker.cm.batch.api.EventPersistenceManager;
 import com.choicemaker.cm.batch.api.ProcessingEventLog;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
@@ -96,7 +96,7 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 	private OabaParametersController paramsController;
 
 	@EJB
-	private ProcessingController processingController;
+	private EventPersistenceManager eventManager;
 
 	@EJB
 	private ServerConfigurationController serverController;
@@ -192,7 +192,7 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 		final OabaParameters params =
 			paramsController.findOabaParametersByBatchJobId(jobId);
 		final ProcessingEventLog processingEntry =
-			processingController.getProcessingLog(batchJob);
+			eventManager.getProcessingLog(batchJob);
 		final String modelConfigId = params.getModelConfigurationName();
 		final ImmutableProbabilityModel model =
 			PMManager.getModelInstance(modelConfigId);
@@ -234,7 +234,7 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 		final OabaParameters params =
 			paramsController.findOabaParametersByBatchJobId(jobId);
 		final ProcessingEventLog processingEntry =
-			processingController.getProcessingLog(batchJob);
+			eventManager.getProcessingLog(batchJob);
 		final String modelConfigId = params.getModelConfigurationName();
 		final ImmutableProbabilityModel model =
 			PMManager.getModelInstance(modelConfigId);
@@ -310,7 +310,7 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 
 	private void sendToUpdateStatus(BatchJob job, ProcessingEventBean event,
 			Date timestamp, String info) {
-		processingController.updateStatusWithNotification(job, event,
+		eventManager.updateStatusWithNotification(job, event,
 				timestamp, info);
 	}
 

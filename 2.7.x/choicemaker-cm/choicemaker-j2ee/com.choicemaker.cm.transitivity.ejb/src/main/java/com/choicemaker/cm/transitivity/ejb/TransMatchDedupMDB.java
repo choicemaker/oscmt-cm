@@ -27,7 +27,7 @@ import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.OperationalPropertyController;
-import com.choicemaker.cm.batch.api.ProcessingController;
+import com.choicemaker.cm.batch.api.EventPersistenceManager;
 import com.choicemaker.cm.batch.api.ProcessingEventLog;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
@@ -80,7 +80,7 @@ public class TransMatchDedupMDB extends AbstractTransitivityMDB {
 	private TransitivityParametersController paramsController;
 
 	@EJB
-	private ProcessingController processingController;
+	private EventPersistenceManager eventManager;
 
 	@EJB
 	private ServerConfigurationController serverController;
@@ -217,7 +217,7 @@ public class TransMatchDedupMDB extends AbstractTransitivityMDB {
 
 	protected void sendToUpdateStatus(BatchJob job, ProcessingEvent event,
 			Date timestamp, String info) {
-		processingController.updateStatusWithNotification(job, event,
+		eventManager.updateStatusWithNotification(job, event,
 				timestamp, info);
 	}
 

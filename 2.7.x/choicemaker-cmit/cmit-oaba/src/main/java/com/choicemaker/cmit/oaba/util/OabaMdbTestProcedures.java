@@ -16,7 +16,7 @@ import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.BatchProcessingNotification;
-import com.choicemaker.cm.batch.api.ProcessingController;
+import com.choicemaker.cm.batch.api.EventPersistenceManager;
 import com.choicemaker.cm.batch.api.ProcessingEventLog;
 import com.choicemaker.cm.oaba.api.OabaParametersController;
 import com.choicemaker.cm.oaba.api.ServerConfigurationException;
@@ -200,10 +200,10 @@ public class OabaMdbTestProcedures {
 		}
 
 		// Find the entry in the processing history updated by the OABA
-		final ProcessingController processingController =
+		final EventPersistenceManager eventManager =
 			otp.getOabaProcessingController();
 		ProcessingEventLog processingEntry =
-			processingController.getProcessingLog(batchJob);
+			eventManager.getProcessingLog(batchJob);
 
 		// Validate that processing entry is correct for this stage of the OABA
 		assertTrue(processingEntry != null);

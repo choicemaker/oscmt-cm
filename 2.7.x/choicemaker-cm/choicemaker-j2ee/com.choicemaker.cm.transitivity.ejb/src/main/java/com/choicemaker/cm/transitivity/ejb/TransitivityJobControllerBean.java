@@ -33,7 +33,7 @@ import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.BatchProcessingEvent;
 import com.choicemaker.cm.batch.api.BatchJobStatus;
-import com.choicemaker.cm.batch.api.ProcessingController;
+import com.choicemaker.cm.batch.api.EventPersistenceManager;
 import com.choicemaker.cm.batch.ejb.BatchJobFileUtils;
 import com.choicemaker.cm.oaba.api.OabaSettingsController;
 import com.choicemaker.cm.oaba.api.ServerConfigurationController;
@@ -66,7 +66,7 @@ public class TransitivityJobControllerBean implements TransitivityJobController 
 	private ServerConfigurationController serverManager;
 
 	@EJB
-	private ProcessingController processingController;
+	private EventPersistenceManager eventManager;
 
 	@Inject
 	private JMSContext jmsContext;
@@ -145,13 +145,13 @@ public class TransitivityJobControllerBean implements TransitivityJobController 
 
 		// Create a new processing entry
 		// ProcessingEventLog processing =
-		// processingController.getProcessingLog(retVal);
+		// eventManager.getProcessingLog(retVal);
 		// Create a new entry in the processing log and check it
-		TransitivityProcessingControllerBean.updateStatusWithNotification(em,
+		TransitivityEventManager.updateStatusWithNotification(em,
 				jmsContext, transStatusTopic, retVal,
 				ProcessingEventBean.INIT, new Date(), null);
 		BatchProcessingEvent ope =
-			TransitivityProcessingControllerBean
+			TransitivityEventManager
 					.getCurrentBatchProcessingEvent(em, retVal);
 		ProcessingEvent currentProcessingEvent = ope.getProcessingEvent();
 		assert currentProcessingEvent.getEventId() == ProcessingEventBean.INIT

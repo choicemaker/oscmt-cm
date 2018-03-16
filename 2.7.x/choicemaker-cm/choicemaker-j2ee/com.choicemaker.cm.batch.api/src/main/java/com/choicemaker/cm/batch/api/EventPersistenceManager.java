@@ -7,7 +7,7 @@ import java.util.List;
 
 import com.choicemaker.cm.args.ProcessingEvent;
 
-public interface ProcessingController {
+public interface EventPersistenceManager {
 
 	/**
 	 * The name of a system property that can be set to "true" to turn on

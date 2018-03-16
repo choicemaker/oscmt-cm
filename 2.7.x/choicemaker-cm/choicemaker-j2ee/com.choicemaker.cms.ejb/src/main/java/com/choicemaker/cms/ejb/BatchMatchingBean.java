@@ -92,7 +92,7 @@ public class BatchMatchingBean implements BatchMatching, WorkFlowManager {
 	private ServerConfigurationController serverManager;
 
 	// @EJB
-	// private ProcessingController processingController;
+	// private ProcessingController eventManager;
 
 	// -- Access control
 
@@ -273,7 +273,7 @@ public class BatchMatchingBean implements BatchMatching, WorkFlowManager {
 	protected void sendToUpdateStatus(BatchJob job, ProcessingEvent event,
 			Date timestamp, String info) {
 		// FIXME
-		// processingController.updateStatusWithNotification(job, event,
+		// eventManager.updateStatusWithNotification(job, event,
 		// timestamp, info);
 	}
 

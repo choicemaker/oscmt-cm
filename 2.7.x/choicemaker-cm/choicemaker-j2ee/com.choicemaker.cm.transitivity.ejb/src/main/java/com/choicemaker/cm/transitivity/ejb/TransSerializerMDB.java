@@ -38,7 +38,7 @@ import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.BatchJobStatus;
 import com.choicemaker.cm.batch.api.OperationalPropertyController;
-import com.choicemaker.cm.batch.api.ProcessingController;
+import com.choicemaker.cm.batch.api.EventPersistenceManager;
 import com.choicemaker.cm.batch.api.ProcessingEventLog;
 import com.choicemaker.cm.oaba.api.OabaSettingsController;
 import com.choicemaker.cm.oaba.api.ServerConfigurationController;
@@ -115,7 +115,7 @@ public class TransSerializerMDB implements MessageListener, Serializable {
 	private TransitivityParametersController paramsController;
 
 	@EJB
-	private ProcessingController processingController;
+	private EventPersistenceManager eventManager;
 
 	@EJB
 	private ServerConfigurationController serverController;
@@ -175,7 +175,7 @@ public class TransSerializerMDB implements MessageListener, Serializable {
 		final TransitivityParameters params =
 			this.paramsController.findTransitivityParametersByBatchJobId(jobId);
 		final ProcessingEventLog processingEntry =
-			processingController.getProcessingLog(batchJob);
+			eventManager.getProcessingLog(batchJob);
 		final IGraphProperty graph = params.getGraphProperty();
 		final AnalysisResultFormat format = params.getAnalysisResultFormat();
 		final String modelConfigId = params.getModelConfigurationName();
@@ -263,7 +263,7 @@ public class TransSerializerMDB implements MessageListener, Serializable {
 
 	protected void sendToUpdateStatus(BatchJob job, ProcessingEvent event,
 			Date timestamp, String info) {
-		processingController.updateStatusWithNotification(job, event,
+		eventManager.updateStatusWithNotification(job, event,
 				timestamp, info);
 	}
 

@@ -26,7 +26,7 @@ import org.junit.runner.RunWith;
 
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.api.OperationalPropertyController;
-import com.choicemaker.cm.batch.api.ProcessingController;
+import com.choicemaker.cm.batch.api.EventPersistenceManager;
 import com.choicemaker.cm.oaba.api.DefaultServerConfiguration;
 import com.choicemaker.cm.oaba.api.MutableServerConfiguration;
 import com.choicemaker.cm.oaba.api.OabaJobController;
@@ -82,7 +82,7 @@ public class ServerConfigurationManagerBeanIT {
 	private OabaSettingsController oabaSettingsController;
 
 	@EJB
-	private ProcessingController processingController;
+	private EventPersistenceManager eventManager;
 
 	@EJB
 	private OabaService oabaService;
@@ -106,7 +106,7 @@ public class ServerConfigurationManagerBeanIT {
 		te =
 			new TestEntityCounts(logger, oabaController, paramsController,
 					oabaSettingsController, serverController,
-					processingController, opPropController, rsController,
+					eventManager, opPropController, rsController,
 					ridController);
 	}
 
@@ -114,7 +114,7 @@ public class ServerConfigurationManagerBeanIT {
 		if (te != null) {
 			te.checkCounts(logger, em, utx, oabaController, paramsController,
 					oabaSettingsController, serverController,
-					processingController, opPropController, rsController,
+					eventManager, opPropController, rsController,
 					ridController);
 		} else {
 			throw new Error("Counts not initialized");

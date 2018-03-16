@@ -28,7 +28,7 @@ import org.junit.runner.RunWith;
 
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.OperationalPropertyController;
-import com.choicemaker.cm.batch.api.ProcessingController;
+import com.choicemaker.cm.batch.api.EventPersistenceManager;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.oaba.api.ImmutableRecordIdTranslatorLocal;
 import com.choicemaker.cm.oaba.api.OabaJobController;
@@ -132,7 +132,7 @@ public class RecordIdControllerBeanIT {
 	private OabaSettingsController oabaSettingsController;
 
 	@EJB
-	private ProcessingController processingController;
+	private EventPersistenceManager eventManager;
 
 	@EJB
 	private OabaService oabaService;
@@ -213,7 +213,7 @@ public class RecordIdControllerBeanIT {
 		te =
 			new TestEntityCounts(logger, oabaController, paramsController,
 					oabaSettingsController, serverController,
-					processingController, opPropController, rsController,
+					eventManager, opPropController, rsController,
 					ridController);
 	}
 
@@ -221,7 +221,7 @@ public class RecordIdControllerBeanIT {
 		if (te != null) {
 			te.checkCounts(logger, em, utx, oabaController, paramsController,
 					oabaSettingsController, serverController,
-					processingController, opPropController, rsController,
+					eventManager, opPropController, rsController,
 					ridController);
 		} else {
 			throw new Error("Counts not initialized");

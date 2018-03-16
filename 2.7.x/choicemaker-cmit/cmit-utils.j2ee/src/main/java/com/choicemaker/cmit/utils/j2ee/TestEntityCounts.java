@@ -23,7 +23,7 @@ import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.BatchJobController;
 import com.choicemaker.cm.batch.api.OperationalPropertyController;
-import com.choicemaker.cm.batch.api.ProcessingController;
+import com.choicemaker.cm.batch.api.EventPersistenceManager;
 import com.choicemaker.cm.oaba.api.DefaultServerConfiguration;
 import com.choicemaker.cm.oaba.api.DefaultSettings;
 import com.choicemaker.cm.oaba.api.DefaultSettingsPK;
@@ -113,14 +113,14 @@ public class TestEntityCounts {
 			final OabaParametersController oabaParamsController,
 			final OabaSettingsController oabaSettingsController,
 			final ServerConfigurationController serverController,
-			final ProcessingController processingController,
+			final EventPersistenceManager eventManager,
 			final OperationalPropertyController opPropController,
 			final RecordSourceController rsController,
 			final RecordIdController ridController) throws Exception {
 		this(testLogger, oabaJobController, oabaParamsController,
 				(TransitivityJobController) null,
 				(TransitivityParametersController) null,
-				oabaSettingsController, serverController, processingController,
+				oabaSettingsController, serverController, eventManager,
 				opPropController, rsController, ridController);
 	}
 
@@ -131,7 +131,7 @@ public class TestEntityCounts {
 			TransitivityParametersController transParamsController,
 			OabaSettingsController oabaSettingsController,
 			ServerConfigurationController serverController,
-			ProcessingController processingController,
+			EventPersistenceManager eventManager,
 			OperationalPropertyController opPropController,
 			RecordSourceController rsController,
 			RecordIdController ridController) {
@@ -219,12 +219,12 @@ public class TestEntityCounts {
 		msg = "defaultServerConfigurationCount: " + defaultServerIC;
 		testLogger.fine(msg);
 
-		if (processingController != null) {
+		if (eventManager != null) {
 			oabaEventIC =
-					processingController.findAllProcessingEvents().size();
+					eventManager.findAllProcessingEvents().size();
 		} else {
 			oabaEventIC = 0;
-			msg = "Null processingController";
+			msg = "Null eventManager";
 			testLogger.fine(msg);
 		}
 		msg = "Initial oabaEvent count: " + oabaEventIC;
@@ -360,14 +360,14 @@ public class TestEntityCounts {
 			final OabaParametersController oabaParamsController,
 			final OabaSettingsController settingsController,
 			final ServerConfigurationController serverController,
-			final ProcessingController processingController,
+			final EventPersistenceManager eventManager,
 			final OperationalPropertyController opPropController,
 			final RecordSourceController rsController,
 			final RecordIdController ridController) throws AssertionError {
 		checkCounts(testLogger, em, utx, oabaJobController,
 				oabaParamsController, (TransitivityJobController) null,
 				(TransitivityParametersController) null, settingsController,
-				serverController, processingController, opPropController,
+				serverController, eventManager, opPropController,
 				rsController, ridController);
 	}
 
@@ -378,7 +378,7 @@ public class TestEntityCounts {
 			TransitivityParametersController transParamsController,
 			OabaSettingsController settingsController,
 			ServerConfigurationController serverController,
-			ProcessingController processingController,
+			EventPersistenceManager eventManager,
 			OperationalPropertyController opPropController,
 			RecordSourceController rsController,
 			RecordIdController ridController) throws AssertionError {
@@ -388,7 +388,7 @@ public class TestEntityCounts {
 			try {
 				testLogger.info("Removing test entities");
 				removeTestEntities(em, utx, serverController,
-						settingsController, processingController,
+						settingsController, eventManager,
 						opPropController, ridController);
 			} catch (Exception x) {
 				throw new AssertionError("Unable to remove test entities: "
@@ -400,13 +400,13 @@ public class TestEntityCounts {
 		logMaybeAssert(doAssert, testLogger, oabaJobController,
 				oabaParamsController, transJobController,
 				transParamsController, settingsController, serverController,
-				processingController, opPropController, rsController,
+				eventManager, opPropController, rsController,
 				ridController);
 	}
 
 	protected void removeTestEntities(EntityManager em, UserTransaction utx,
 			ServerConfigurationController scc, OabaSettingsController osc,
-			final ProcessingController processingController,
+			final EventPersistenceManager eventManager,
 			final OperationalPropertyController propertyController,
 			RecordIdController ridController) throws Exception {
 		if (em == null || scc == null) {
@@ -427,7 +427,7 @@ public class TestEntityCounts {
 			removeDefaultServerConfigurations(defaultServerConfigs, em, utx,
 					scc, usingUtx);
 			removeDefaultSettings(defaultSettings, em, utx, usingUtx);
-			removeJobEventsProperties(batchJobs, processingController,
+			removeJobEventsProperties(batchJobs, eventManager,
 					propertyController);
 			removeTranslations(recordIdTranslators, em, utx, ridController,
 					usingUtx);
@@ -447,7 +447,7 @@ public class TestEntityCounts {
 			final TransitivityParametersController transParamsController,
 			final OabaSettingsController oabaSettingsController,
 			final ServerConfigurationController serverController,
-			final ProcessingController processingController,
+			final EventPersistenceManager eventManager,
 			final OperationalPropertyController opPropController,
 			final RecordSourceController rsController,
 			final RecordIdController ridController) {
@@ -574,12 +574,12 @@ public class TestEntityCounts {
 		}
 
 		final int oabaEventCC;
-		if (processingController != null) {
+		if (eventManager != null) {
 			oabaEventCC =
-					processingController.findAllProcessingEvents().size();
+					eventManager.findAllProcessingEvents().size();
 		} else {
 			oabaEventCC = 0;
-			msg = "Null processingController";
+			msg = "Null eventManager";
 			testLogger.fine(msg);
 		}
 		w = warnOrLog(testLogger, "oabaEvent", oabaEventIC, oabaEventCC);
@@ -755,7 +755,7 @@ public class TestEntityCounts {
 	}
 
 	protected static void removeJobEventsProperties(Set<BatchJob> batchJobs,
-			ProcessingController processingController,
+			EventPersistenceManager eventManager,
 			OperationalPropertyController propertyController) throws Exception {
 		String msg = "Removing events and properties created during testing";
 		logger.fine(msg);
@@ -767,7 +767,7 @@ public class TestEntityCounts {
 			long jobId = job.getId();
 			if (job.isPersistent()) {
 				eCount +=
-					processingController
+					eventManager
 							.deleteProcessingEventsByJobId(jobId);
 				pCount +=
 					propertyController

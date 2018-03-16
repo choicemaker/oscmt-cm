@@ -5,13 +5,13 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *******************************************************************************/
-package com.choicemaker.cm.transitivity.ejb;
+package com.choicemaker.cm.oaba.ejb;
 
-import static com.choicemaker.cm.transitivity.ejb.TransitivityProcessingEventJPA.PN_TRANSPROCESSING_DELETE_BY_JOBID_JOBID;
-import static com.choicemaker.cm.transitivity.ejb.TransitivityProcessingEventJPA.PN_TRANSPROCESSING_FIND_BY_JOBID_JOBID;
-import static com.choicemaker.cm.transitivity.ejb.TransitivityProcessingEventJPA.QN_TRANSPROCESSING_DELETE_BY_JOBID;
-import static com.choicemaker.cm.transitivity.ejb.TransitivityProcessingEventJPA.QN_TRANSPROCESSING_FIND_ALL;
-import static com.choicemaker.cm.transitivity.ejb.TransitivityProcessingEventJPA.QN_TRANSPROCESSING_FIND_BY_JOBID;
+import static com.choicemaker.cm.oaba.ejb.OabaProcessingEventJPA.PN_OABAPROCESSING_DELETE_BY_JOBID_JOBID;
+import static com.choicemaker.cm.oaba.ejb.OabaProcessingEventJPA.PN_OABAPROCESSING_FIND_BY_JOBID_JOBID;
+import static com.choicemaker.cm.oaba.ejb.OabaProcessingEventJPA.QN_OABAPROCESSING_DELETE_BY_JOBID;
+import static com.choicemaker.cm.oaba.ejb.OabaProcessingEventJPA.QN_OABAPROCESSING_FIND_ALL;
+import static com.choicemaker.cm.oaba.ejb.OabaProcessingEventJPA.QN_OABAPROCESSING_FIND_BY_JOBID;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -34,31 +34,32 @@ import javax.persistence.Query;
 import com.choicemaker.cm.args.ProcessingEvent;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.BatchProcessingEvent;
-import com.choicemaker.cm.batch.api.ProcessingController;
+import com.choicemaker.cm.batch.api.EventPersistenceManager;
+import com.choicemaker.cm.batch.api.ProcessingEventLog;
+import com.choicemaker.cm.batch.ejb.BatchProcessingEventEntity;
+import com.choicemaker.cm.oaba.ejb.data.OabaNotification;
 import com.choicemaker.cm.oaba.ejb.util.MessageBeanUtils;
-import com.choicemaker.cm.transitivity.api.TransitivityProcessingEvent;
-
 
 /**
- * This stateless EJB provides Transitivity, job-specific processing logs and
+ * This stateless EJB provides OABA, job-specific processing logs and
  * stand-alone methods for creating and finding log entries.
  *
  * @author pcheung
  * @author rphall (migration to EJB3)
  */
 @Stateless
-public class TransitivityProcessingControllerBean implements ProcessingController {
+public class OabaEventManager implements EventPersistenceManager {
 
 	private static final Logger logger = Logger
-			.getLogger(TransitivityProcessingControllerBean.class.getName());
+			.getLogger(OabaEventManager.class.getName());
 
 	// Don't use this directly; use isOrderByDebuggingRequested() instead
 	static Boolean _isOrderByDebuggingRequested = null;
 
 	static List<BatchProcessingEvent> findProcessingLogEntriesByJobId(
 			EntityManager em, long id) {
-		Query query = em.createNamedQuery(QN_TRANSPROCESSING_FIND_BY_JOBID);
-		query.setParameter(PN_TRANSPROCESSING_FIND_BY_JOBID_JOBID, id);
+		Query query = em.createNamedQuery(QN_OABAPROCESSING_FIND_BY_JOBID);
+		query.setParameter(PN_OABAPROCESSING_FIND_BY_JOBID_JOBID, id);
 		@SuppressWarnings("unchecked")
 		List<BatchProcessingEvent> entries = query.getResultList();
 		if (entries == null) {
@@ -67,9 +68,9 @@ public class TransitivityProcessingControllerBean implements ProcessingControlle
 		return entries;
 	}
 
-	static List<BatchProcessingEvent> findAllTransitivityProcessingEvents(
+	static List<BatchProcessingEvent> findAllOabaProcessingEvents(
 			EntityManager em) {
-		Query query = em.createNamedQuery(QN_TRANSPROCESSING_FIND_ALL);
+		Query query = em.createNamedQuery(QN_OABAPROCESSING_FIND_ALL);
 		@SuppressWarnings("unchecked")
 		List<BatchProcessingEvent> entries = query.getResultList();
 		if (entries == null) {
@@ -79,13 +80,13 @@ public class TransitivityProcessingControllerBean implements ProcessingControlle
 	}
 
 	static int deleteProcessingLogEntriesByJobId(EntityManager em, long id) {
-		Query query = em.createNamedQuery(QN_TRANSPROCESSING_DELETE_BY_JOBID);
-		query.setParameter(PN_TRANSPROCESSING_DELETE_BY_JOBID_JOBID, id);
+		Query query = em.createNamedQuery(QN_OABAPROCESSING_DELETE_BY_JOBID);
+		query.setParameter(PN_OABAPROCESSING_DELETE_BY_JOBID_JOBID, id);
 		int deletedCount = query.executeUpdate();
 		return deletedCount;
 	}
 
-	static TransitivityProcessingEvent updateStatus(EntityManager em, BatchJob job,
+	static BatchProcessingEventEntity updateStatus(EntityManager em, BatchJob job,
 			ProcessingEvent event, Date timestamp, String info) {
 		if (em == null) {
 			throw new IllegalArgumentException("null EntityManager");
@@ -99,30 +100,30 @@ public class TransitivityProcessingControllerBean implements ProcessingControlle
 		if (timestamp == null) {
 			throw new IllegalArgumentException("null timestamp");
 		}
-		TransitivityProcessingEventEntity ope =
-			new TransitivityProcessingEventEntity(job, event, info);
+		BatchProcessingEventEntity ope =
+			new OabaProcessingEventEntity(job, event, info);
 		em.persist(ope);
 		return ope;
 	}
 
 	static void updateStatusWithNotification(EntityManager em,
-			JMSContext jmsContext, Topic statusTopic, BatchJob job,
+			JMSContext jmsContext, Topic oabaStatusTopic, BatchJob job,
 			ProcessingEvent event, Date timestamp, String info) {
 		if (jmsContext == null) {
 			throw new IllegalStateException("null JMS context");
 		}
-		if (statusTopic == null) {
+		if (oabaStatusTopic == null) {
 			throw new IllegalStateException("null JMS topic");
 		}
-		TransitivityProcessingEvent ope =
+		BatchProcessingEventEntity ope =
 			updateStatus(em, job, event, new Date(), info);
-		TransitivityNotification data = new TransitivityNotification(ope);
+		OabaNotification data = new OabaNotification(ope);
 		ObjectMessage message = jmsContext.createObjectMessage(data);
 		JMSProducer sender = jmsContext.createProducer();
 		logger.info(MessageBeanUtils
-				.topicInfo("Sending", statusTopic, data));
-		sender.send(statusTopic, message);
-		logger.info(MessageBeanUtils.topicInfo("Sent", statusTopic, data));
+				.topicInfo("Sending", oabaStatusTopic, data));
+		sender.send(oabaStatusTopic, message);
+		logger.info(MessageBeanUtils.topicInfo("Sent", oabaStatusTopic, data));
 	}
 
 	/**
@@ -130,7 +131,7 @@ public class TransitivityProcessingControllerBean implements ProcessingControlle
 	 */
 	static boolean isOrderByDebuggingRequested() {
 		if (_isOrderByDebuggingRequested == null) {
-			String pn = ProcessingController.PN_PROCESSINGEVENT_ORDERBY_DEBUGGING;
+			String pn = EventPersistenceManager.PN_PROCESSINGEVENT_ORDERBY_DEBUGGING;
 			String defaultValue = Boolean.FALSE.toString();
 			String value = System.getProperty(pn, defaultValue);
 			_isOrderByDebuggingRequested = Boolean.valueOf(value);
@@ -145,7 +146,7 @@ public class TransitivityProcessingControllerBean implements ProcessingControlle
 	static BatchProcessingEvent getCurrentBatchProcessingEvent(EntityManager em,
 			BatchJob batchJob) {
 		List<BatchProcessingEvent> entries =
-			TransitivityProcessingControllerBean.findProcessingLogEntriesByJobId(em,
+			OabaEventManager.findProcessingLogEntriesByJobId(em,
 					batchJob.getId());
 		final BatchProcessingEvent retVal;
 		if (entries == null || entries.isEmpty()) {
@@ -162,7 +163,7 @@ public class TransitivityProcessingControllerBean implements ProcessingControlle
 							String summary =
 								"Invalid BatchProcessingEvent ordering";
 							String msg =
-								TransitivityProcessingControllerBean
+								OabaEventManager
 										.createOrderingDetailMesssage(summary,
 												retVal, e2);
 							logger.severe(msg);
@@ -175,7 +176,7 @@ public class TransitivityProcessingControllerBean implements ProcessingControlle
 							String summary =
 								"Ambiguous BatchProcessingEvent timestamps";
 							String msg =
-								TransitivityProcessingControllerBean
+								OabaEventManager
 										.createOrderingDetailMesssage(summary,
 												retVal, e2);
 							logger.fine(msg);
@@ -204,8 +205,8 @@ public class TransitivityProcessingControllerBean implements ProcessingControlle
 	@Inject
 	private JMSContext jmsContext;
 
-	@Resource(lookup = "java:/choicemaker/urm/jms/transStatusTopic")
-	private Topic transStatusTopic;
+	@Resource(lookup = "java:/choicemaker/urm/jms/statusTopic")
+	private Topic oabaStatusTopic;
 
 	@Override
 	public List<BatchProcessingEvent> findProcessingEventsByJobId(
@@ -215,7 +216,7 @@ public class TransitivityProcessingControllerBean implements ProcessingControlle
 
 	@Override
 	public List<BatchProcessingEvent> findAllProcessingEvents() {
-		return findAllTransitivityProcessingEvents(em);
+		return findAllOabaProcessingEvents(em);
 	}
 
 	@Override
@@ -224,14 +225,14 @@ public class TransitivityProcessingControllerBean implements ProcessingControlle
 	}
 
 	@Override
-	public TransitivityProcessingLog getProcessingLog(BatchJob job) {
-		return new TransitivityProcessingLog(em, job);
+	public ProcessingEventLog getProcessingLog(BatchJob job) {
+		return new OabaProcessingLog(em, job);
 	}
 
 	@Override
 	public void updateStatusWithNotification(BatchJob job, ProcessingEvent event,
 			Date timestamp, String info) {
-		updateStatusWithNotification(em, jmsContext, transStatusTopic, job,
+		updateStatusWithNotification(em, jmsContext, oabaStatusTopic, job,
 				event, timestamp, info);
 	}
 

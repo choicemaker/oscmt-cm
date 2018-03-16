@@ -35,7 +35,7 @@ import com.choicemaker.cm.args.ProcessingEvent;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.BatchProcessingEvent;
-import com.choicemaker.cm.batch.api.ProcessingController;
+import com.choicemaker.cm.batch.api.EventPersistenceManager;
 import com.choicemaker.cm.batch.ejb.BatchJobFileUtils;
 import com.choicemaker.cm.oaba.api.OabaJobController;
 import com.choicemaker.cm.oaba.api.OabaParametersController;
@@ -67,7 +67,7 @@ public class OabaJobControllerBean implements OabaJobController {
 	private ServerConfigurationController serverManager;
 
 	@EJB
-	private ProcessingController processingController;
+	private EventPersistenceManager eventManager;
 
 	@Inject
 	private JMSContext jmsContext;
@@ -138,11 +138,11 @@ public class OabaJobControllerBean implements OabaJobController {
 		assert retVal.isPersistent();
 
 		// Create a new entry in the processing log and check it
-		OabaProcessingControllerBean.updateStatusWithNotification(em,
+		OabaEventManager.updateStatusWithNotification(em,
 				jmsContext, oabaStatusTopic, retVal, ProcessingEventBean.INIT,
 				new Date(), null);
 		BatchProcessingEvent ope =
-			OabaProcessingControllerBean.getCurrentBatchProcessingEvent(em,
+			OabaEventManager.getCurrentBatchProcessingEvent(em,
 					retVal);
 		ProcessingEvent currentProcessingEvent = ope.getProcessingEvent();
 		assert currentProcessingEvent.getEventId() == ProcessingEventBean.INIT

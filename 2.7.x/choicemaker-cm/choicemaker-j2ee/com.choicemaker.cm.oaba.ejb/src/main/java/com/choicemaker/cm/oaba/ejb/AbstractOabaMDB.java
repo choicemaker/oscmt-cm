@@ -27,7 +27,7 @@ import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.BatchJobStatus;
 import com.choicemaker.cm.batch.api.OperationalPropertyController;
-import com.choicemaker.cm.batch.api.ProcessingController;
+import com.choicemaker.cm.batch.api.EventPersistenceManager;
 import com.choicemaker.cm.batch.api.ProcessingEventLog;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
@@ -68,7 +68,7 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 	private OabaParametersController paramsController;
 
 	@EJB
-	private ProcessingController processingController;
+	private EventPersistenceManager eventManager;
 
 	@EJB
 	private ServerConfigurationController serverController;
@@ -109,8 +109,8 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 		return paramsController;
 	}
 
-	protected final ProcessingController getProcessingController() {
-		return processingController;
+	protected final EventPersistenceManager getEventManager() {
+		return eventManager;
 	}
 
 	protected final ServerConfigurationController getServerController() {
@@ -160,7 +160,7 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 				OabaSettings oabaSettings =
 					getSettingsController().findOabaSettingsByJobId(jobId);
 				ProcessingEventLog processingLog =
-					getProcessingController().getProcessingLog(batchJob);
+					getEventManager().getProcessingLog(batchJob);
 				ServerConfiguration serverConfig =
 					getServerController().findServerConfigurationByJobId(jobId);
 
@@ -229,7 +229,7 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 
 	protected void updateOabaProcessingStatus(BatchJob job,
 			ProcessingEventBean event, Date timestamp, String info) {
-		getProcessingController().updateStatusWithNotification(job, event,
+		getEventManager().updateStatusWithNotification(job, event,
 				timestamp, info);
 	}
 

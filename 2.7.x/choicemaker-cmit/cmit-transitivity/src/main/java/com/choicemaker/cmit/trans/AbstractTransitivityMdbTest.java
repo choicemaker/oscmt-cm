@@ -23,7 +23,7 @@ import org.junit.Test;
 import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.OperationalPropertyController;
-import com.choicemaker.cm.batch.api.ProcessingController;
+import com.choicemaker.cm.batch.api.EventPersistenceManager;
 import com.choicemaker.cm.oaba.api.OabaJobController;
 import com.choicemaker.cm.oaba.api.OabaParametersController;
 import com.choicemaker.cm.oaba.api.OabaService;
@@ -115,10 +115,10 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 	private ServerConfigurationController serverController;
 
 	@EJB(beanName = "OabaProcessingControllerBean")
-	private ProcessingController oabaProcessingController;
+	private EventPersistenceManager oabaProcessingController;
 
 	@EJB(beanName = "TransitivityProcessingControllerBean")
-	private ProcessingController transProcessingController;
+	private EventPersistenceManager transProcessingController;
 
 	@EJB
 	private OperationalPropertyController opPropController;
@@ -446,11 +446,11 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 		return ridController;
 	}
 
-	protected final ProcessingController getOabaProcessingController() {
+	protected final EventPersistenceManager getOabaProcessingController() {
 		return oabaProcessingController;
 	}
 
-	protected final ProcessingController getTransitivityProcessingController() {
+	protected final EventPersistenceManager getTransitivityProcessingController() {
 		return transProcessingController;
 	}
 
@@ -639,12 +639,12 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 		}
 
 		@Override
-		public final ProcessingController getOabaProcessingController() {
+		public final EventPersistenceManager getOabaProcessingController() {
 			return d.getOabaProcessingController();
 		}
 
 		@Override
-		public final ProcessingController getTransitivityProcessingController() {
+		public final EventPersistenceManager getTransitivityProcessingController() {
 			return d.getTransitivityProcessingController();
 		}
 

@@ -33,7 +33,7 @@ import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.BatchJobController;
 import com.choicemaker.cm.batch.api.BatchJobStatus;
 import com.choicemaker.cm.batch.api.OperationalPropertyController;
-import com.choicemaker.cm.batch.api.ProcessingController;
+import com.choicemaker.cm.batch.api.EventPersistenceManager;
 import com.choicemaker.cm.batch.api.ProcessingEventLog;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
@@ -120,7 +120,7 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 
 	protected abstract OperationalPropertyController getPropertyController();
 
-	protected abstract ProcessingController getProcessingController();
+	protected abstract EventPersistenceManager getEventManager();
 
 	protected abstract JMSContext getJmsContext();
 
@@ -201,7 +201,7 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 					getLogger().info("Max index for intermediate pairwise result files: " + getNumProcessors());
 
 					ProcessingEventLog processingLog =
-						getProcessingController().getProcessingLog(batchJob);
+						getEventManager().getProcessingLog(batchJob);
 					if (processingLog.getCurrentProcessingEventId() >= OabaProcessingConstants.EVT_DONE_MATCHING_DATA) {
 						// matching is already done, so go on to the next step.
 						nextSteps(batchJob, sd);
@@ -277,7 +277,7 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 		BatchJob batchJob = getJobController().findBatchJob(jobId);
 		OabaJobMessage sd = new OabaJobMessage(mwd);
 		ProcessingEventLog status =
-			getProcessingController().getProcessingLog(batchJob);
+			getEventManager().getProcessingLog(batchJob);
 
 		// keeping track of messages sent and received.
 		countMessages--;
@@ -419,7 +419,7 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 		final long jobId = sd.jobID;
 		BatchJob batchJob = getJobController().findBatchJob(jobId);
 		ProcessingEventLog processingLog =
-			getProcessingController().getProcessingLog(batchJob);
+			getEventManager().getProcessingLog(batchJob);
 
 		if (BatchJobStatus.ABORT_REQUESTED == batchJob.getStatus()) {
 			MessageBeanUtils.stopJob(batchJob, getPropertyController(),

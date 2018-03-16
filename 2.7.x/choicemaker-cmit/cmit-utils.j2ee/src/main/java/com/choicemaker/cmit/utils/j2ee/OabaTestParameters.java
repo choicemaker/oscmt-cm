@@ -11,7 +11,7 @@ import javax.transaction.UserTransaction;
 
 import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.batch.api.OperationalPropertyController;
-import com.choicemaker.cm.batch.api.ProcessingController;
+import com.choicemaker.cm.batch.api.EventPersistenceManager;
 import com.choicemaker.cm.oaba.api.OabaJobController;
 import com.choicemaker.cm.oaba.api.OabaParametersController;
 import com.choicemaker.cm.oaba.api.OabaService;
@@ -47,7 +47,7 @@ public interface OabaTestParameters {
 
 	OabaParametersController getOabaParamsController();
 
-	ProcessingController getOabaProcessingController();
+	EventPersistenceManager getOabaProcessingController();
 
 	OabaService getOabaService();
 

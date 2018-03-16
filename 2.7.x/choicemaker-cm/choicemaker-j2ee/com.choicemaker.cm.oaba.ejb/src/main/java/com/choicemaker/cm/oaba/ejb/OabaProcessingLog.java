@@ -47,7 +47,7 @@ public class OabaProcessingLog implements ProcessingEventLog {
 	}
 
 	protected BatchProcessingEvent getCurrentOabaProcessingEvent() {
-		return OabaProcessingControllerBean.getCurrentBatchProcessingEvent(em,
+		return OabaEventManager.getCurrentBatchProcessingEvent(em,
 				batchJob);
 	}
 
@@ -79,7 +79,7 @@ public class OabaProcessingLog implements ProcessingEventLog {
 	public void setCurrentProcessingEvent(ProcessingEvent event, String info) {
 		logger.info(LOG_SOURCE + ".setCurrentProcessingEvent: " + event + " (job "
 				+ this.batchJob.getId() + ")");
-		OabaProcessingControllerBean.updateStatus(em, batchJob, event,
+		OabaEventManager.updateStatus(em, batchJob, event,
 				new Date(), info);
 	}
 

@@ -236,7 +236,7 @@ public class StartTransitivityMDB extends AbstractTransitivityMDB {
 		// ProcessingEventLog, and then set the persistent value after the
 		// chunk service completes.)
 		ProcessingEventLog status =
-			this.getProcessingController().getProcessingLog(transJob);
+			this.getEventManager().getProcessingLog(transJob);
 		status.setCurrentProcessingEvent(DONE_TRANS_DEDUP_OVERSIZED);
 
 		final RecordMatchingMode mode = getRecordMatchingMode(transJob);

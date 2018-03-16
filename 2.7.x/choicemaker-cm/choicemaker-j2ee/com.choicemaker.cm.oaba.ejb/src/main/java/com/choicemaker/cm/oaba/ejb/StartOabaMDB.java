@@ -95,7 +95,7 @@ public class StartOabaMDB extends AbstractOabaMDB {
 				OabaSettings oabaSettings =
 					getSettingsController().findOabaSettingsByJobId(jobId);
 				ProcessingEventLog processingEntry =
-					getProcessingController().getProcessingLog(batchJob);
+					getEventManager().getProcessingLog(batchJob);
 				if (batchJob == null || oabaParams == null || oabaSettings == null) {
 					String s =
 						"Unable to find a job, parameters or settings for "

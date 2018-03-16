@@ -20,7 +20,7 @@ import javax.jms.Queue;
 
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.OperationalPropertyController;
-import com.choicemaker.cm.batch.api.ProcessingController;
+import com.choicemaker.cm.batch.api.EventPersistenceManager;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.base.MatchRecord2;
 import com.choicemaker.cm.oaba.api.OabaJobController;
@@ -73,7 +73,7 @@ public class MatcherMDB extends AbstractMatcher {
 	private OabaParametersController paramsController;
 
 	@EJB
-	private ProcessingController processingController;
+	private EventPersistenceManager eventManager;
 
 	@EJB
 	private ServerConfigurationController serverController;
@@ -100,8 +100,8 @@ public class MatcherMDB extends AbstractMatcher {
 	}
 
 	@Override
-	protected ProcessingController getProcessingController() {
-		return processingController;
+	protected EventPersistenceManager getEventManager() {
+		return eventManager;
 	}
 
 	@Override

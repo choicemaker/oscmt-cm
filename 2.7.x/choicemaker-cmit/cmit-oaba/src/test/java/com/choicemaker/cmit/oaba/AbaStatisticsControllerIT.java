@@ -23,7 +23,7 @@ import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.batch.api.OperationalPropertyController;
-import com.choicemaker.cm.batch.api.ProcessingController;
+import com.choicemaker.cm.batch.api.EventPersistenceManager;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.oaba.api.AbaStatisticsController;
@@ -91,7 +91,7 @@ public class AbaStatisticsControllerIT {
 	private OabaSettingsController oabaSettingsController;
 
 	@EJB
-	private ProcessingController processingController;
+	private EventPersistenceManager eventManager;
 
 	@EJB
 	private OabaService oabaService;
@@ -156,7 +156,7 @@ public class AbaStatisticsControllerIT {
 	@Before
 	public void setUp() throws Exception {
 		te = new TestEntityCounts(logger, oabaController, paramsController,
-				oabaSettingsController, serverController, processingController,
+				oabaSettingsController, serverController, eventManager,
 				opPropController, rsController, ridController);
 	}
 
@@ -164,7 +164,7 @@ public class AbaStatisticsControllerIT {
 		if (te != null) {
 			te.checkCounts(logger, em, utx, oabaController, paramsController,
 					oabaSettingsController, serverController,
-					processingController, opPropController, rsController,
+					eventManager, opPropController, rsController,
 					ridController);
 		} else {
 			throw new Error("Counts not initialized");

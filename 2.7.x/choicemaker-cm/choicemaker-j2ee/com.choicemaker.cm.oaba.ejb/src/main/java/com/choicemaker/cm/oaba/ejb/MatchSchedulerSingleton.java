@@ -26,7 +26,7 @@ import com.choicemaker.cm.args.ProcessingEvent;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.OperationalPropertyController;
-import com.choicemaker.cm.batch.api.ProcessingController;
+import com.choicemaker.cm.batch.api.EventPersistenceManager;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
@@ -82,7 +82,7 @@ public class MatchSchedulerSingleton extends AbstractSchedulerSingleton {
 	private OperationalPropertyController propertyController;
 
 	@EJB
-	private ProcessingController processingController;
+	private EventPersistenceManager eventManager;
 
 	@Resource(lookup = "java:/choicemaker/urm/jms/matchDedupQueue")
 	private Queue matchDedupQueue;
@@ -129,8 +129,8 @@ public class MatchSchedulerSingleton extends AbstractSchedulerSingleton {
 	}
 
 	@Override
-	protected ProcessingController getProcessingController() {
-		return processingController;
+	protected EventPersistenceManager getEventManager() {
+		return eventManager;
 	}
 
 	@Override
@@ -226,7 +226,7 @@ public class MatchSchedulerSingleton extends AbstractSchedulerSingleton {
 	@Override
 	protected void sendToUpdateStatus(BatchJob job, ProcessingEvent event,
 			Date timestamp, String info) {
-		getProcessingController().updateStatusWithNotification(job, event,
+		getEventManager().updateStatusWithNotification(job, event,
 				timestamp, info);
 	}
 

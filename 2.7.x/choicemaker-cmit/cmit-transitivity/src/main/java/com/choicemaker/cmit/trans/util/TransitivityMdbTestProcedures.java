@@ -24,7 +24,7 @@ import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.BatchJobStatus;
 import com.choicemaker.cm.batch.api.BatchProcessingNotification;
-import com.choicemaker.cm.batch.api.ProcessingController;
+import com.choicemaker.cm.batch.api.EventPersistenceManager;
 import com.choicemaker.cm.batch.api.ProcessingEventLog;
 import com.choicemaker.cm.oaba.api.DefaultServerConfiguration;
 import com.choicemaker.cm.oaba.api.OabaParametersController;
@@ -288,10 +288,10 @@ public class TransitivityMdbTestProcedures {
 		}
 
 		// Find the entry in the processing history updated by Transitivity
-		final ProcessingController processingController =
+		final EventPersistenceManager eventManager =
 			tp.getTransitivityProcessingController();
 		ProcessingEventLog processingEntry =
-			processingController.getProcessingLog(transJob);
+			eventManager.getProcessingLog(transJob);
 
 		// Validate that processing entry is correct
 		assertTrue(processingEntry != null);

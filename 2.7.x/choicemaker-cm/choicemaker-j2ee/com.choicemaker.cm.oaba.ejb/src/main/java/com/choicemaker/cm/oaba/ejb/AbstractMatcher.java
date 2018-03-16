@@ -33,7 +33,7 @@ import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.BatchJobStatus;
 import com.choicemaker.cm.batch.api.OperationalPropertyController;
-import com.choicemaker.cm.batch.api.ProcessingController;
+import com.choicemaker.cm.batch.api.EventPersistenceManager;
 import com.choicemaker.cm.batch.api.ProcessingEventLog;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ClueSet;
@@ -96,7 +96,7 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 
 	protected abstract OabaParametersController getOabaParametersController();
 
-	protected abstract ProcessingController getProcessingController();
+	protected abstract EventPersistenceManager getEventManager();
 
 	protected abstract ServerConfigurationController getServerController();
 
@@ -130,7 +130,7 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 						getOabaParametersController().findOabaParametersByBatchJobId(
 								jobId);
 					final ProcessingEventLog processingLog =
-						getProcessingController().getProcessingLog(batchJob);
+						getEventManager().getProcessingLog(batchJob);
 					final OabaSettings oabaSettings =
 						getSettingsController().findOabaSettingsByJobId(jobId);
 					final ServerConfiguration serverConfig =
