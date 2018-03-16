@@ -18,7 +18,7 @@ import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 
 import com.choicemaker.cm.batch.api.BatchProcessingNotification;
-import com.choicemaker.cms.api.WorkFlowManager;
+import com.choicemaker.cm.batch.api.WorkflowListener;
 
 /**
  * Base class for UrmOabaListenerMDB and UrmTransitivityListenerMDB
@@ -32,7 +32,7 @@ public abstract class AbstractStatusListener implements MessageListener,
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
 			+ AbstractStatusListener.class.getName());
 
-	protected abstract WorkFlowManager getWorkFlowManager();
+	protected abstract WorkflowListener getWorkFlowManager();
 
 	@Override
 	public void onMessage(Message inMessage) {

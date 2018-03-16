@@ -33,6 +33,7 @@ import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.BatchProcessingNotification;
+import com.choicemaker.cm.batch.api.WorkflowListener;
 import com.choicemaker.cm.oaba.api.OabaJobManager;
 import com.choicemaker.cm.oaba.api.OabaService;
 import com.choicemaker.cm.oaba.api.OabaSettingsController;
@@ -47,14 +48,13 @@ import com.choicemaker.cm.transitivity.api.TransitivityService;
 import com.choicemaker.cm.transitivity.ejb.TransitivityNotification;
 import com.choicemaker.cms.api.BatchMatching;
 import com.choicemaker.cms.api.UrmJobManager;
-import com.choicemaker.cms.api.WorkFlowManager;
 import com.choicemaker.cms.api.remote.BatchMatchingRemote;
 
 @Singleton
 @Local({
-		BatchMatching.class, WorkFlowManager.class })
+		BatchMatching.class, WorkflowListener.class })
 @Remote(BatchMatchingRemote.class)
-public class BatchMatchingBean implements BatchMatching, WorkFlowManager {
+public class BatchMatchingBean implements BatchMatching, WorkflowListener {
 
 	// private static final long serialVersionUID = 271L;
 

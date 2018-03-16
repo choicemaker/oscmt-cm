@@ -14,7 +14,7 @@ import javax.ejb.ActivationConfigProperty;
 import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
 
-import com.choicemaker.cms.api.WorkFlowManager;
+import com.choicemaker.cm.batch.api.WorkflowListener;
 
 @MessageDriven(activationConfig = {
 		@ActivationConfigProperty(propertyName = "destinationLookup",
@@ -26,10 +26,10 @@ public class UrmTransitivityListenerMDB extends AbstractStatusListener {
 	private static final long serialVersionUID = 271L;
 
 	@EJB(beanName="BatchMatchingBean")
-	protected WorkFlowManager bmaBean;
+	protected WorkflowListener bmaBean;
 
 	@Override
-	protected WorkFlowManager getWorkFlowManager() {
+	protected WorkflowListener getWorkFlowManager() {
 		return bmaBean;
 	}
 
