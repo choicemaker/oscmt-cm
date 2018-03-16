@@ -33,7 +33,7 @@ import javax.persistence.Query;
 
 import com.choicemaker.cm.args.ProcessingEvent;
 import com.choicemaker.cm.batch.api.BatchJob;
-import com.choicemaker.cm.batch.api.BatchJobProcessingEvent;
+import com.choicemaker.cm.batch.api.BatchProcessingEvent;
 import com.choicemaker.cm.batch.api.ProcessingController;
 import com.choicemaker.cm.batch.api.ProcessingEventLog;
 import com.choicemaker.cm.batch.ejb.BatchProcessingEventEntity;
@@ -41,7 +41,7 @@ import com.choicemaker.cm.oaba.ejb.data.OabaNotification;
 import com.choicemaker.cm.oaba.ejb.util.MessageBeanUtils;
 
 /**
- * This stateless EJB provides OABA, job-specific processing logs and a
+ * This stateless EJB provides OABA, job-specific processing logs and
  * stand-alone methods for creating and finding log entries.
  *
  * @author pcheung
@@ -56,23 +56,23 @@ public class OabaProcessingControllerBean implements ProcessingController {
 	// Don't use this directly; use isOrderByDebuggingRequested() instead
 	static Boolean _isOrderByDebuggingRequested = null;
 
-	static List<BatchJobProcessingEvent> findProcessingLogEntriesByJobId(
+	static List<BatchProcessingEvent> findProcessingLogEntriesByJobId(
 			EntityManager em, long id) {
 		Query query = em.createNamedQuery(QN_OABAPROCESSING_FIND_BY_JOBID);
 		query.setParameter(PN_OABAPROCESSING_FIND_BY_JOBID_JOBID, id);
 		@SuppressWarnings("unchecked")
-		List<BatchJobProcessingEvent> entries = query.getResultList();
+		List<BatchProcessingEvent> entries = query.getResultList();
 		if (entries == null) {
 			entries = Collections.emptyList();
 		}
 		return entries;
 	}
 
-	static List<BatchJobProcessingEvent> findAllOabaProcessingEvents(
+	static List<BatchProcessingEvent> findAllOabaProcessingEvents(
 			EntityManager em) {
 		Query query = em.createNamedQuery(QN_OABAPROCESSING_FIND_ALL);
 		@SuppressWarnings("unchecked")
-		List<BatchJobProcessingEvent> entries = query.getResultList();
+		List<BatchProcessingEvent> entries = query.getResultList();
 		if (entries == null) {
 			entries = Collections.emptyList();
 		}
@@ -143,12 +143,12 @@ public class OabaProcessingControllerBean implements ProcessingController {
 		return retVal;
 	}
 
-	static BatchJobProcessingEvent getCurrentBatchProcessingEvent(EntityManager em,
+	static BatchProcessingEvent getCurrentBatchProcessingEvent(EntityManager em,
 			BatchJob batchJob) {
-		List<BatchJobProcessingEvent> entries =
+		List<BatchProcessingEvent> entries =
 			OabaProcessingControllerBean.findProcessingLogEntriesByJobId(em,
 					batchJob.getId());
-		final BatchJobProcessingEvent retVal;
+		final BatchProcessingEvent retVal;
 		if (entries == null || entries.isEmpty()) {
 			retVal = null;
 		} else {
@@ -157,11 +157,11 @@ public class OabaProcessingControllerBean implements ProcessingController {
 				final Date mostRecent = retVal.getEventTimestamp();
 				if (entries.size() > 1) {
 					for (int i = 1; i < entries.size(); i++) {
-						final BatchJobProcessingEvent e2 = entries.get(i);
+						final BatchProcessingEvent e2 = entries.get(i);
 						final Date d2 = e2.getEventTimestamp();
 						if (mostRecent.compareTo(d2) < 0) {
 							String summary =
-								"Invalid BatchJobProcessingEvent ordering";
+								"Invalid BatchProcessingEvent ordering";
 							String msg =
 								OabaProcessingControllerBean
 										.createOrderingDetailMesssage(summary,
@@ -174,7 +174,7 @@ public class OabaProcessingControllerBean implements ProcessingController {
 							// if events are very close together, but
 							// may be disambiguated by ordering of ids
 							String summary =
-								"Ambiguous BatchJobProcessingEvent timestamps";
+								"Ambiguous BatchProcessingEvent timestamps";
 							String msg =
 								OabaProcessingControllerBean
 										.createOrderingDetailMesssage(summary,
@@ -189,7 +189,7 @@ public class OabaProcessingControllerBean implements ProcessingController {
 	}
 
 	static String createOrderingDetailMesssage(String summary,
-			BatchJobProcessingEvent e1, BatchJobProcessingEvent e2) {
+			BatchProcessingEvent e1, BatchProcessingEvent e2) {
 		final String INDENT = "   ";
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);
@@ -209,13 +209,13 @@ public class OabaProcessingControllerBean implements ProcessingController {
 	private Topic oabaStatusTopic;
 
 	@Override
-	public List<BatchJobProcessingEvent> findProcessingEventsByJobId(
+	public List<BatchProcessingEvent> findProcessingEventsByJobId(
 			long id) {
 		return findProcessingLogEntriesByJobId(em, id);
 	}
 
 	@Override
-	public List<BatchJobProcessingEvent> findAllProcessingEvents() {
+	public List<BatchProcessingEvent> findAllProcessingEvents() {
 		return findAllOabaProcessingEvents(em);
 	}
 
@@ -239,7 +239,7 @@ public class OabaProcessingControllerBean implements ProcessingController {
 	@Override
 	public ProcessingEvent getCurrentProcessingEvent(BatchJob batchJob) {
 		ProcessingEvent retVal = null;
-		BatchJobProcessingEvent ope = getCurrentBatchProcessingEvent(em, batchJob);
+		BatchProcessingEvent ope = getCurrentBatchProcessingEvent(em, batchJob);
 		if (ope != null) {
 			retVal = ope.getProcessingEvent();
 		}

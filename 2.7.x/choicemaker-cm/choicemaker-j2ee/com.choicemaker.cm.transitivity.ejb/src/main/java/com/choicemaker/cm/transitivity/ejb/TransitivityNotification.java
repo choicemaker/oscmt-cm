@@ -12,7 +12,7 @@ import java.util.Date;
 import com.choicemaker.cm.args.ProcessingEvent;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.BatchProcessingNotification;
-import com.choicemaker.cm.transitivity.api.TransitivityBatchProcessingEvent;
+import com.choicemaker.cm.transitivity.api.TransitivityProcessingEvent;
 
 /**
  * This is the data object that gets passed to the UpdateStatusMDB message bean.
@@ -33,12 +33,12 @@ public class TransitivityNotification extends BatchProcessingNotification {
 	public TransitivityNotification(BatchJob job, ProcessingEvent event,
 			Date timestamp, String info) {
 		super(job.getId(), TransitivityJobJPA.DISCRIMINATOR_VALUE, event
-				.getPercentComplete(), event.getEventId(),
+				.getFractionComplete(), event.getEventId(),
 				TransitivityProcessingEventJPA.DISCRIMINATOR_VALUE, event
 						.getEventName(), timestamp, info);
 	}
 
-	public TransitivityNotification(TransitivityBatchProcessingEvent ope) {
+	public TransitivityNotification(TransitivityProcessingEvent ope) {
 		super(ope.getJobId(), TransitivityJobJPA.DISCRIMINATOR_VALUE, ope
 				.getFractionComplete(), ope.getEventSequenceNumber(),
 				TransitivityProcessingEventJPA.DISCRIMINATOR_VALUE, ope

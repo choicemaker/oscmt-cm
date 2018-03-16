@@ -23,7 +23,7 @@ import javax.persistence.NamedQuery;
 import com.choicemaker.cm.args.ProcessingEvent;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.ejb.BatchProcessingEventEntity;
-import com.choicemaker.cm.transitivity.api.TransitivityBatchProcessingEvent;
+import com.choicemaker.cm.transitivity.api.TransitivityProcessingEvent;
 import com.choicemaker.cm.transitivity.core.TransitivityEventBean;
 
 /**
@@ -40,7 +40,7 @@ import com.choicemaker.cm.transitivity.core.TransitivityEventBean;
 @Entity
 @DiscriminatorValue(DISCRIMINATOR_VALUE)
 public class TransitivityProcessingEventEntity extends
-		BatchProcessingEventEntity implements TransitivityBatchProcessingEvent {
+		BatchProcessingEventEntity implements TransitivityProcessingEvent {
 
 	private static final long serialVersionUID = 271L;
 
@@ -59,7 +59,7 @@ public class TransitivityProcessingEventEntity extends
 	public TransitivityProcessingEventEntity(BatchJob job,
 			ProcessingEvent event, String info) {
 		super(job.getId(), DISCRIMINATOR_VALUE, event.getEventName(), event
-				.getEventId(), event.getPercentComplete(), info);
+				.getEventId(), event.getFractionComplete(), info);
 	}
 
 	@Override

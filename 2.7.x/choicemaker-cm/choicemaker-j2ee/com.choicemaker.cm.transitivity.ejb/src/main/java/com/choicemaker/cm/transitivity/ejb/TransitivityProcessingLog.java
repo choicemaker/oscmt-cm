@@ -14,7 +14,7 @@ import javax.persistence.EntityManager;
 
 import com.choicemaker.cm.args.ProcessingEvent;
 import com.choicemaker.cm.batch.api.BatchJob;
-import com.choicemaker.cm.batch.api.BatchJobProcessingEvent;
+import com.choicemaker.cm.batch.api.BatchProcessingEvent;
 import com.choicemaker.cm.batch.api.ProcessingEventLog;
 
 /**
@@ -46,14 +46,14 @@ public class TransitivityProcessingLog implements ProcessingEventLog {
 		this.batchJob = job;
 	}
 
-	protected BatchJobProcessingEvent getCurrentTransitivityProcessingEvent() {
+	protected BatchProcessingEvent getCurrentTransitivityProcessingEvent() {
 		return TransitivityProcessingControllerBean
 				.getCurrentBatchProcessingEvent(em, batchJob);
 	}
 
 	@Override
 	public ProcessingEvent getCurrentProcessingEvent() {
-		BatchJobProcessingEvent ope =
+		BatchProcessingEvent ope =
 			getCurrentTransitivityProcessingEvent();
 		ProcessingEvent retVal = ope.getProcessingEvent();
 		return retVal;
@@ -66,7 +66,7 @@ public class TransitivityProcessingLog implements ProcessingEventLog {
 
 	@Override
 	public String getCurrentProcessingEventInfo() {
-		BatchJobProcessingEvent ope =
+		BatchProcessingEvent ope =
 			getCurrentTransitivityProcessingEvent();
 		String retVal = ope.getEventInfo();
 		return retVal;

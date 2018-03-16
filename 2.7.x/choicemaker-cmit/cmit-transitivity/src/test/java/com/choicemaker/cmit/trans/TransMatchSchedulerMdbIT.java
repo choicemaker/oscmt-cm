@@ -1,7 +1,7 @@
 package com.choicemaker.cmit.trans;
 
-import static com.choicemaker.cm.transitivity.core.TransitivityProcessing.EVT_DONE_MATCHING_DATA;
-import static com.choicemaker.cm.transitivity.core.TransitivityProcessing.PCT_DONE_MATCHING_DATA;
+import static com.choicemaker.cm.transitivity.core.TransitivityProcessingConstants.EVT_DONE_MATCHING_DATA;
+import static com.choicemaker.cm.transitivity.core.TransitivityProcessingConstants.PCT_DONE_MATCHING_DATA;
 
 import java.util.logging.Logger;
 

@@ -96,7 +96,7 @@ public class UrmJobControllerBean implements UrmJobController {
 		// UrmProcessingControllerBean.updateStatusWithNotification(em,
 		// jmsContext, transStatusTopic, retVal, BatchProcessingEvent.INIT,
 		// new Date(), null);
-		// BatchJobProcessingEvent ope =
+		// BatchProcessingEvent ope =
 		// UrmProcessingControllerBean.getCurrentBatchProcessingEvent(em,
 		// retVal);
 		// ProcessingEvent currentProcessingEvent = ope.getProcessingEvent();

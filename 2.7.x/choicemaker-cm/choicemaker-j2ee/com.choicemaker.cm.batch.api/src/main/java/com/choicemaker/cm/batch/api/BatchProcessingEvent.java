@@ -6,7 +6,12 @@ import java.util.Date;
 import com.choicemaker.cm.args.PersistentObject;
 import com.choicemaker.cm.args.ProcessingEvent;
 
-public interface BatchJobProcessingEvent extends PersistentObject, Serializable {
+/**
+ * Batch processing events are persistent, read-only markers of the progress
+ * of a batch job. They are essentially persistent versions of ProcessingEvents
+ * that are associated with a particular BatchJob.
+ */
+public interface BatchProcessingEvent extends PersistentObject, Serializable {
 
 	/** Default id value for non-persistent batch jobs */
 	public static final long INVALID_ID = 0;

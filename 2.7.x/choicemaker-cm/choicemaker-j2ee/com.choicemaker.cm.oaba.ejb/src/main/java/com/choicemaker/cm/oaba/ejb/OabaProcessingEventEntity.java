@@ -23,7 +23,7 @@ import javax.persistence.NamedQuery;
 import com.choicemaker.cm.args.ProcessingEvent;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.ejb.BatchProcessingEventEntity;
-import com.choicemaker.cm.oaba.api.OabaBatchProcessingEvent;
+import com.choicemaker.cm.oaba.api.OabaProcessingEvent;
 import com.choicemaker.cm.oaba.core.OabaEventBean;
 
 /**
@@ -40,7 +40,7 @@ import com.choicemaker.cm.oaba.core.OabaEventBean;
 @Entity
 @DiscriminatorValue(DISCRIMINATOR_VALUE)
 public class OabaProcessingEventEntity extends BatchProcessingEventEntity
-		implements OabaBatchProcessingEvent {
+		implements OabaProcessingEvent {
 
 	private static final long serialVersionUID = 271L;
 
@@ -58,7 +58,7 @@ public class OabaProcessingEventEntity extends BatchProcessingEventEntity
 	public OabaProcessingEventEntity(BatchJob job, ProcessingEvent event,
 			String info) {
 		super(job.getId(), DISCRIMINATOR_VALUE, event.getEventName(), event
-				.getEventId(), event.getPercentComplete(), info);
+				.getEventId(), event.getFractionComplete(), info);
 	}
 
 	@Override

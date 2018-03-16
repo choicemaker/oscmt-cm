@@ -33,14 +33,14 @@ import javax.persistence.Query;
 
 import com.choicemaker.cm.args.ProcessingEvent;
 import com.choicemaker.cm.batch.api.BatchJob;
-import com.choicemaker.cm.batch.api.BatchJobProcessingEvent;
+import com.choicemaker.cm.batch.api.BatchProcessingEvent;
 import com.choicemaker.cm.batch.api.ProcessingController;
 import com.choicemaker.cm.oaba.ejb.util.MessageBeanUtils;
-import com.choicemaker.cm.transitivity.api.TransitivityBatchProcessingEvent;
+import com.choicemaker.cm.transitivity.api.TransitivityProcessingEvent;
 
 
 /**
- * This stateless EJB provides OABA, job-specific processing logs and a
+ * This stateless EJB provides Transitivity, job-specific processing logs and
  * stand-alone methods for creating and finding log entries.
  *
  * @author pcheung
@@ -55,23 +55,23 @@ public class TransitivityProcessingControllerBean implements ProcessingControlle
 	// Don't use this directly; use isOrderByDebuggingRequested() instead
 	static Boolean _isOrderByDebuggingRequested = null;
 
-	static List<BatchJobProcessingEvent> findProcessingLogEntriesByJobId(
+	static List<BatchProcessingEvent> findProcessingLogEntriesByJobId(
 			EntityManager em, long id) {
 		Query query = em.createNamedQuery(QN_TRANSPROCESSING_FIND_BY_JOBID);
 		query.setParameter(PN_TRANSPROCESSING_FIND_BY_JOBID_JOBID, id);
 		@SuppressWarnings("unchecked")
-		List<BatchJobProcessingEvent> entries = query.getResultList();
+		List<BatchProcessingEvent> entries = query.getResultList();
 		if (entries == null) {
 			entries = Collections.emptyList();
 		}
 		return entries;
 	}
 
-	static List<BatchJobProcessingEvent> findAllTransitivityProcessingEvents(
+	static List<BatchProcessingEvent> findAllTransitivityProcessingEvents(
 			EntityManager em) {
 		Query query = em.createNamedQuery(QN_TRANSPROCESSING_FIND_ALL);
 		@SuppressWarnings("unchecked")
-		List<BatchJobProcessingEvent> entries = query.getResultList();
+		List<BatchProcessingEvent> entries = query.getResultList();
 		if (entries == null) {
 			entries = Collections.emptyList();
 		}
@@ -85,7 +85,7 @@ public class TransitivityProcessingControllerBean implements ProcessingControlle
 		return deletedCount;
 	}
 
-	static TransitivityBatchProcessingEvent updateStatus(EntityManager em, BatchJob job,
+	static TransitivityProcessingEvent updateStatus(EntityManager em, BatchJob job,
 			ProcessingEvent event, Date timestamp, String info) {
 		if (em == null) {
 			throw new IllegalArgumentException("null EntityManager");
@@ -114,7 +114,7 @@ public class TransitivityProcessingControllerBean implements ProcessingControlle
 		if (statusTopic == null) {
 			throw new IllegalStateException("null JMS topic");
 		}
-		TransitivityBatchProcessingEvent ope =
+		TransitivityProcessingEvent ope =
 			updateStatus(em, job, event, new Date(), info);
 		TransitivityNotification data = new TransitivityNotification(ope);
 		ObjectMessage message = jmsContext.createObjectMessage(data);
@@ -142,12 +142,12 @@ public class TransitivityProcessingControllerBean implements ProcessingControlle
 		return retVal;
 	}
 
-	static BatchJobProcessingEvent getCurrentBatchProcessingEvent(EntityManager em,
+	static BatchProcessingEvent getCurrentBatchProcessingEvent(EntityManager em,
 			BatchJob batchJob) {
-		List<BatchJobProcessingEvent> entries =
+		List<BatchProcessingEvent> entries =
 			TransitivityProcessingControllerBean.findProcessingLogEntriesByJobId(em,
 					batchJob.getId());
-		final BatchJobProcessingEvent retVal;
+		final BatchProcessingEvent retVal;
 		if (entries == null || entries.isEmpty()) {
 			retVal = null;
 		} else {
@@ -156,11 +156,11 @@ public class TransitivityProcessingControllerBean implements ProcessingControlle
 				final Date mostRecent = retVal.getEventTimestamp();
 				if (entries.size() > 1) {
 					for (int i = 1; i < entries.size(); i++) {
-						final BatchJobProcessingEvent e2 = entries.get(i);
+						final BatchProcessingEvent e2 = entries.get(i);
 						final Date d2 = e2.getEventTimestamp();
 						if (mostRecent.compareTo(d2) < 0) {
 							String summary =
-								"Invalid BatchJobProcessingEvent ordering";
+								"Invalid BatchProcessingEvent ordering";
 							String msg =
 								TransitivityProcessingControllerBean
 										.createOrderingDetailMesssage(summary,
@@ -173,7 +173,7 @@ public class TransitivityProcessingControllerBean implements ProcessingControlle
 							// if events are very close together, but
 							// may be disambiguated by ordering of ids
 							String summary =
-								"Ambiguous BatchJobProcessingEvent timestamps";
+								"Ambiguous BatchProcessingEvent timestamps";
 							String msg =
 								TransitivityProcessingControllerBean
 										.createOrderingDetailMesssage(summary,
@@ -188,7 +188,7 @@ public class TransitivityProcessingControllerBean implements ProcessingControlle
 	}
 
 	static String createOrderingDetailMesssage(String summary,
-			BatchJobProcessingEvent e1, BatchJobProcessingEvent e2) {
+			BatchProcessingEvent e1, BatchProcessingEvent e2) {
 		final String INDENT = "   ";
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);
@@ -208,13 +208,13 @@ public class TransitivityProcessingControllerBean implements ProcessingControlle
 	private Topic transStatusTopic;
 
 	@Override
-	public List<BatchJobProcessingEvent> findProcessingEventsByJobId(
+	public List<BatchProcessingEvent> findProcessingEventsByJobId(
 			long id) {
 		return findProcessingLogEntriesByJobId(em, id);
 	}
 
 	@Override
-	public List<BatchJobProcessingEvent> findAllProcessingEvents() {
+	public List<BatchProcessingEvent> findAllProcessingEvents() {
 		return findAllTransitivityProcessingEvents(em);
 	}
 
@@ -238,7 +238,7 @@ public class TransitivityProcessingControllerBean implements ProcessingControlle
 	@Override
 	public ProcessingEvent getCurrentProcessingEvent(BatchJob batchJob) {
 		ProcessingEvent retVal = null;
-		BatchJobProcessingEvent ope = getCurrentBatchProcessingEvent(em, batchJob);
+		BatchProcessingEvent ope = getCurrentBatchProcessingEvent(em, batchJob);
 		if (ope != null) {
 			retVal = ope.getProcessingEvent();
 		}

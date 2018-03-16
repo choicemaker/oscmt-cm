@@ -37,7 +37,7 @@ import com.choicemaker.cm.args.BatchProcessingConstants;
 import com.choicemaker.cm.args.ProcessingEventBean;
 import com.choicemaker.cm.args.PersistentObject;
 import com.choicemaker.cm.args.ProcessingEvent;
-import com.choicemaker.cm.batch.api.BatchJobProcessingEvent;
+import com.choicemaker.cm.batch.api.BatchProcessingEvent;
 
 @Entity
 @Table(/* schema = "CHOICEMAKER", */name = TABLE_NAME)
@@ -45,7 +45,7 @@ import com.choicemaker.cm.batch.api.BatchJobProcessingEvent;
 		discriminatorType = DiscriminatorType.STRING)
 @DiscriminatorValue(DISCRIMINATOR_VALUE)
 public class BatchProcessingEventEntity extends AbstractPersistentObject
-		implements BatchProcessingConstants, BatchJobProcessingEvent, Serializable {
+		implements BatchProcessingConstants, BatchProcessingEvent, Serializable {
 
 	private static final long serialVersionUID = 271L;
 

@@ -7,7 +7,6 @@ import java.util.List;
 
 import com.choicemaker.cm.args.ProcessingEvent;
 
-//@Local
 public interface ProcessingController {
 
 	/**
@@ -17,9 +16,9 @@ public interface ProcessingController {
 	public static final String PN_PROCESSINGEVENT_ORDERBY_DEBUGGING =
 		"ProcessingEventOrderByDebugging";
 
-	List<BatchJobProcessingEvent> findAllProcessingEvents();
+	List<BatchProcessingEvent> findAllProcessingEvents();
 
-	List<BatchJobProcessingEvent> findProcessingEventsByJobId(long id);
+	List<BatchProcessingEvent> findProcessingEventsByJobId(long id);
 
 	/** Returns a count of the number of events deleted */
 	int deleteProcessingEventsByJobId(long id);

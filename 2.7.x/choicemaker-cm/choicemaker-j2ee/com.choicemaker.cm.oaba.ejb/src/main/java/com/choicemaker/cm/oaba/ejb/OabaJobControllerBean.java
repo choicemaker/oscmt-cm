@@ -34,7 +34,7 @@ import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ProcessingEvent;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.api.BatchJob;
-import com.choicemaker.cm.batch.api.BatchJobProcessingEvent;
+import com.choicemaker.cm.batch.api.BatchProcessingEvent;
 import com.choicemaker.cm.batch.api.ProcessingController;
 import com.choicemaker.cm.batch.ejb.BatchJobFileUtils;
 import com.choicemaker.cm.oaba.api.OabaJobController;
@@ -141,14 +141,14 @@ public class OabaJobControllerBean implements OabaJobController {
 		OabaProcessingControllerBean.updateStatusWithNotification(em,
 				jmsContext, oabaStatusTopic, retVal, ProcessingEventBean.INIT,
 				new Date(), null);
-		BatchJobProcessingEvent ope =
+		BatchProcessingEvent ope =
 			OabaProcessingControllerBean.getCurrentBatchProcessingEvent(em,
 					retVal);
 		ProcessingEvent currentProcessingEvent = ope.getProcessingEvent();
 		assert currentProcessingEvent.getEventId() == ProcessingEventBean.INIT
 				.getEventId();
-		assert currentProcessingEvent.getPercentComplete() == ProcessingEventBean.INIT
-				.getPercentComplete();
+		assert currentProcessingEvent.getFractionComplete() == ProcessingEventBean.INIT
+				.getFractionComplete();
 
 		// Create the working directory
 		File workingDir = BatchJobFileUtils.createWorkingDirectory(sc, retVal);

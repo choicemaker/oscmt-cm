@@ -26,9 +26,9 @@ import javax.persistence.PersistenceContext;
 
 import com.choicemaker.cm.args.ProcessingEvent;
 import com.choicemaker.cm.batch.api.BatchJob;
-import com.choicemaker.cm.batch.api.BatchJobProcessingEvent;
+import com.choicemaker.cm.batch.api.BatchProcessingEvent;
 import com.choicemaker.cm.batch.api.ProcessingController;
-import com.choicemaker.cm.transitivity.api.TransitivityBatchProcessingEvent;
+import com.choicemaker.cm.transitivity.api.TransitivityProcessingEvent;
 
 /**
  * This stateless EJB provides OABA, job-specific processing logs and a
@@ -46,25 +46,25 @@ public class UrmProcessingControllerBean /* implements ProcessingController */{
 	// Don't use this directly; use isOrderByDebuggingRequested() instead
 	static Boolean _isOrderByDebuggingRequested = null;
 
-	static List<BatchJobProcessingEvent> findProcessingLogEntriesByJobId(
+	static List<BatchProcessingEvent> findProcessingLogEntriesByJobId(
 			EntityManager em, long id) {
 		throw new Error("not yet implemented");
 		// Query query = em.createNamedQuery(QN_TRANSPROCESSING_FIND_BY_JOBID);
 		// query.setParameter(PN_TRANSPROCESSING_FIND_BY_JOBID_JOBID, id);
 		// @SuppressWarnings("unchecked")
-		// List<BatchJobProcessingEvent> entries = query.getResultList();
+		// List<BatchProcessingEvent> entries = query.getResultList();
 		// if (entries == null) {
 		// entries = Collections.emptyList();
 		// }
 		// return entries;
 	}
 
-	static List<BatchJobProcessingEvent> findAllTransitivityProcessingEvents(
+	static List<BatchProcessingEvent> findAllTransitivityProcessingEvents(
 			EntityManager em) {
 		throw new Error("not yet implemented");
 		// Query query = em.createNamedQuery(QN_TRANSPROCESSING_FIND_ALL);
 		// @SuppressWarnings("unchecked")
-		// List<BatchJobProcessingEvent> entries = query.getResultList();
+		// List<BatchProcessingEvent> entries = query.getResultList();
 		// if (entries == null) {
 		// entries = Collections.emptyList();
 		// }
@@ -80,7 +80,7 @@ public class UrmProcessingControllerBean /* implements ProcessingController */{
 		// return deletedCount;
 	}
 
-	static TransitivityBatchProcessingEvent updateStatus(EntityManager em,
+	static TransitivityProcessingEvent updateStatus(EntityManager em,
 			BatchJob job, ProcessingEvent event, Date timestamp, String info) {
 		if (em == null) {
 			throw new IllegalArgumentException("null EntityManager");
@@ -140,12 +140,12 @@ public class UrmProcessingControllerBean /* implements ProcessingController */{
 		return retVal;
 	}
 
-	static BatchJobProcessingEvent getCurrentBatchProcessingEvent(
+	static BatchProcessingEvent getCurrentBatchProcessingEvent(
 			EntityManager em, BatchJob batchJob) {
-		List<BatchJobProcessingEvent> entries =
+		List<BatchProcessingEvent> entries =
 			UrmProcessingControllerBean.findProcessingLogEntriesByJobId(em,
 					batchJob.getId());
-		final BatchJobProcessingEvent retVal;
+		final BatchProcessingEvent retVal;
 		if (entries == null || entries.isEmpty()) {
 			retVal = null;
 		} else {
@@ -154,11 +154,11 @@ public class UrmProcessingControllerBean /* implements ProcessingController */{
 				final Date mostRecent = retVal.getEventTimestamp();
 				if (entries.size() > 1) {
 					for (int i = 1; i < entries.size(); i++) {
-						final BatchJobProcessingEvent e2 = entries.get(i);
+						final BatchProcessingEvent e2 = entries.get(i);
 						final Date d2 = e2.getEventTimestamp();
 						if (mostRecent.compareTo(d2) < 0) {
 							String summary =
-								"Invalid BatchJobProcessingEvent ordering";
+								"Invalid BatchProcessingEvent ordering";
 							String msg =
 								UrmProcessingControllerBean
 										.createOrderingDetailMesssage(summary,
@@ -171,7 +171,7 @@ public class UrmProcessingControllerBean /* implements ProcessingController */{
 							// if events are very close together, but
 							// may be disambiguated by ordering of ids
 							String summary =
-								"Ambiguous BatchJobProcessingEvent timestamps";
+								"Ambiguous BatchProcessingEvent timestamps";
 							String msg =
 								UrmProcessingControllerBean
 										.createOrderingDetailMesssage(summary,
@@ -186,7 +186,7 @@ public class UrmProcessingControllerBean /* implements ProcessingController */{
 	}
 
 	static String createOrderingDetailMesssage(String summary,
-			BatchJobProcessingEvent e1, BatchJobProcessingEvent e2) {
+			BatchProcessingEvent e1, BatchProcessingEvent e2) {
 		final String INDENT = "   ";
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);
@@ -206,13 +206,13 @@ public class UrmProcessingControllerBean /* implements ProcessingController */{
 	private Topic transStatusTopic;
 
 	// @Override
-	// public List<BatchJobProcessingEvent> findProcessingEventsByJobId(
+	// public List<BatchProcessingEvent> findProcessingEventsByJobId(
 	// long id) {
 	// return findProcessingLogEntriesByJobId(em, id);
 	// }
 	//
 	// @Override
-	// public List<BatchJobProcessingEvent> findAllProcessingEvents() {
+	// public List<BatchProcessingEvent> findAllProcessingEvents() {
 	// return findAllTransitivityProcessingEvents(em);
 	// }
 	//
@@ -236,7 +236,7 @@ public class UrmProcessingControllerBean /* implements ProcessingController */{
 	// @Override
 	// public ProcessingEvent getCurrentProcessingEvent(BatchJob batchJob) {
 	// ProcessingEvent retVal = null;
-	// BatchJobProcessingEvent ope = getCurrentBatchProcessingEvent(em,
+	// BatchProcessingEvent ope = getCurrentBatchProcessingEvent(em,
 	// batchJob);
 	// if (ope != null) {
 	// retVal = ope.getProcessingEvent();

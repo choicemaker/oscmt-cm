@@ -14,7 +14,7 @@ import javax.persistence.EntityManager;
 
 import com.choicemaker.cm.args.ProcessingEvent;
 import com.choicemaker.cm.batch.api.BatchJob;
-import com.choicemaker.cm.batch.api.BatchJobProcessingEvent;
+import com.choicemaker.cm.batch.api.BatchProcessingEvent;
 import com.choicemaker.cm.batch.api.ProcessingEventLog;
 
 /**
@@ -46,14 +46,14 @@ public class OabaProcessingLog implements ProcessingEventLog {
 		this.batchJob = job;
 	}
 
-	protected BatchJobProcessingEvent getCurrentOabaProcessingEvent() {
+	protected BatchProcessingEvent getCurrentOabaProcessingEvent() {
 		return OabaProcessingControllerBean.getCurrentBatchProcessingEvent(em,
 				batchJob);
 	}
 
 	@Override
 	public ProcessingEvent getCurrentProcessingEvent() {
-		BatchJobProcessingEvent ope = getCurrentOabaProcessingEvent();
+		BatchProcessingEvent ope = getCurrentOabaProcessingEvent();
 		ProcessingEvent retVal = ope.getProcessingEvent();
 		return retVal;
 	}
@@ -65,7 +65,7 @@ public class OabaProcessingLog implements ProcessingEventLog {
 
 	@Override
 	public String getCurrentProcessingEventInfo() {
-		BatchJobProcessingEvent ope = getCurrentOabaProcessingEvent();
+		BatchProcessingEvent ope = getCurrentOabaProcessingEvent();
 		String retVal = ope.getEventInfo();
 		return retVal;
 	}

@@ -7,10 +7,10 @@
  *******************************************************************************/
 package com.choicemaker.cm.transitivity.api;
 
-import com.choicemaker.cm.batch.api.BatchJobProcessingEvent;
+import com.choicemaker.cm.batch.api.BatchProcessingEvent;
 import com.choicemaker.cm.transitivity.core.TransitivityProcessingConstants;
 
-public interface TransitivityBatchProcessingEvent extends BatchJobProcessingEvent,
+public interface TransitivityProcessingEvent extends BatchProcessingEvent,
 		TransitivityProcessingConstants {
 
 	String DEFAULT_EJB_REF_NAME = "ejb/TransitivityBatchProcessingEvent";

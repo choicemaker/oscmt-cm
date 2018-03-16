@@ -50,7 +50,7 @@ public class ProcessingEventBean implements ProcessingEvent, BatchProcessingCons
 	}
 
 	@Override
-	public final float getPercentComplete() {
+	public final float getFractionComplete() {
 		return percentComplete;
 	}
 

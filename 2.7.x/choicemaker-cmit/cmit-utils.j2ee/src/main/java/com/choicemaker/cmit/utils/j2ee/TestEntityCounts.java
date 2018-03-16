@@ -28,7 +28,7 @@ import com.choicemaker.cm.oaba.api.DefaultServerConfiguration;
 import com.choicemaker.cm.oaba.api.DefaultSettings;
 import com.choicemaker.cm.oaba.api.DefaultSettingsPK;
 import com.choicemaker.cm.oaba.api.ImmutableRecordIdTranslatorLocal;
-import com.choicemaker.cm.oaba.api.OabaBatchProcessingEvent;
+import com.choicemaker.cm.oaba.api.OabaProcessingEvent;
 import com.choicemaker.cm.oaba.api.OabaParametersController;
 import com.choicemaker.cm.oaba.api.OabaSettingsController;
 import com.choicemaker.cm.oaba.api.RecordIdController;
@@ -293,7 +293,7 @@ public class TestEntityCounts {
 		add((Object) tp);
 	}
 
-	public void add(OabaBatchProcessingEvent p) {
+	public void add(OabaProcessingEvent p) {
 		add((Object) p);
 	}
 

@@ -7,10 +7,10 @@
  *******************************************************************************/
 package com.choicemaker.cm.oaba.api;
 
-import com.choicemaker.cm.batch.api.BatchJobProcessingEvent;
+import com.choicemaker.cm.batch.api.BatchProcessingEvent;
 import com.choicemaker.cm.oaba.core.OabaProcessingConstants;
 
-public interface OabaBatchProcessingEvent extends BatchJobProcessingEvent,
+public interface OabaProcessingEvent extends BatchProcessingEvent,
 		OabaProcessingConstants {
 
 	String DEFAULT_EJB_REF_NAME = "ejb/OabaBatchProcessingEvent";

@@ -31,7 +31,7 @@ import com.choicemaker.cm.args.ProcessingEvent;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.api.BatchJob;
-import com.choicemaker.cm.batch.api.BatchJobProcessingEvent;
+import com.choicemaker.cm.batch.api.BatchProcessingEvent;
 import com.choicemaker.cm.batch.api.BatchJobStatus;
 import com.choicemaker.cm.batch.api.ProcessingController;
 import com.choicemaker.cm.batch.ejb.BatchJobFileUtils;
@@ -150,14 +150,14 @@ public class TransitivityJobControllerBean implements TransitivityJobController 
 		TransitivityProcessingControllerBean.updateStatusWithNotification(em,
 				jmsContext, transStatusTopic, retVal,
 				ProcessingEventBean.INIT, new Date(), null);
-		BatchJobProcessingEvent ope =
+		BatchProcessingEvent ope =
 			TransitivityProcessingControllerBean
 					.getCurrentBatchProcessingEvent(em, retVal);
 		ProcessingEvent currentProcessingEvent = ope.getProcessingEvent();
 		assert currentProcessingEvent.getEventId() == ProcessingEventBean.INIT
 				.getEventId();
-		assert currentProcessingEvent.getPercentComplete() == ProcessingEventBean.INIT
-				.getPercentComplete();
+		assert currentProcessingEvent.getFractionComplete() == ProcessingEventBean.INIT
+				.getFractionComplete();
 
 		// Create the working directory
 		File workingDir = BatchJobFileUtils.createWorkingDirectory(sc, retVal);
