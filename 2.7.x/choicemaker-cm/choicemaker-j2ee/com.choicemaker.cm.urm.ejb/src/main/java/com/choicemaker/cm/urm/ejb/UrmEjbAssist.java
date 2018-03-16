@@ -23,6 +23,8 @@ import com.choicemaker.client.api.MergeGroup;
 import com.choicemaker.client.api.QueryCandidatePair;
 import com.choicemaker.client.api.TransitiveGroup;
 import com.choicemaker.cm.args.OabaLinkageType;
+import com.choicemaker.cm.batch.api.BatchJob;
+import com.choicemaker.cm.batch.api.BatchJobStatus;
 import com.choicemaker.cm.core.DatabaseException;
 import com.choicemaker.cm.urm.api.UrmConfigurationAdapter;
 import com.choicemaker.cm.urm.base.CompositeMatchScore;
@@ -34,6 +36,7 @@ import com.choicemaker.cm.urm.base.IMatchScore;
 import com.choicemaker.cm.urm.base.IRecord;
 import com.choicemaker.cm.urm.base.IRecordCollection;
 import com.choicemaker.cm.urm.base.IRecordHolder;
+import com.choicemaker.cm.urm.base.JobStatus;
 import com.choicemaker.cm.urm.base.LinkCriteria;
 import com.choicemaker.cm.urm.base.LinkedRecordSet;
 import com.choicemaker.cm.urm.base.MatchScore;
@@ -193,6 +196,27 @@ class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 			retVal = OabaLinkageType.valueOf(cmConf.getTask());
 		}
 
+		return retVal;
+	}
+
+	public JobStatus createJobStatus(BatchJob batchJob) {
+		JobStatus retVal = new JobStatus();
+		retVal.setStartDate(batchJob.getStarted());
+		retVal.setAbortRequestDate(batchJob.getAbortRequested());
+		BatchJobStatus batchJobStatus = batchJob.getStatus();
+		switch (batchJobStatus) {
+		case COMPLETED:
+			retVal.setFinishDate(batchJob.getCompleted());
+			break;
+		case FAILED:
+			retVal.setFinishDate(batchJob.getFailed());
+			break;
+		case ABORTED:
+			retVal.setFinishDate(batchJob.getAborted());
+			break;
+		default:
+			assert retVal.getFinishDate() == null;
+		}
 		return retVal;
 	}
 
