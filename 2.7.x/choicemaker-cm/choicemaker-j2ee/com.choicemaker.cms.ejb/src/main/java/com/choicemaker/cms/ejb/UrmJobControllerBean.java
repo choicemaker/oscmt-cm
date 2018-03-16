@@ -47,9 +47,6 @@ public class UrmJobControllerBean implements UrmJobController {
 	@EJB
 	private ServerConfigurationController serverManager;
 
-	// @EJB
-	// private ProcessingController processingController;
-
 	// FIXME
 	// @Inject
 	// private JMSContext jmsContext;
@@ -87,25 +84,6 @@ public class UrmJobControllerBean implements UrmJobController {
 		UrmJobEntity retVal = new UrmJobEntity(externalID);
 		em.persist(retVal);
 		assert retVal.isPersistent();
-
-		// FIXME
-		// // Create a new processing entry
-		// // ProcessingEventLog processing =
-		// // processingController.getProcessingLog(retVal);
-		// // Create a new entry in the processing log and check it
-		// UrmProcessingControllerBean.updateStatusWithNotification(em,
-		// jmsContext, transStatusTopic, retVal, BatchProcessingEvent.INIT,
-		// new Date(), null);
-		// BatchProcessingEvent ope =
-		// UrmProcessingControllerBean.getCurrentBatchProcessingEvent(em,
-		// retVal);
-		// ProcessingEvent currentProcessingEvent = ope.getProcessingEvent();
-		// assert currentProcessingEvent.getEventId() ==
-		// BatchProcessingEvent.INIT
-		// .getEventId();
-		// assert currentProcessingEvent.getPercentComplete() ==
-		// BatchProcessingEvent.INIT
-		// .getPercentComplete();
 
 		return retVal;
 	}

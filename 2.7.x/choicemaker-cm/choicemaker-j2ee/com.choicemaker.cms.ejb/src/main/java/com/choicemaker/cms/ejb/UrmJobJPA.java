@@ -3,7 +3,7 @@ package com.choicemaker.cms.ejb;
 import com.choicemaker.cm.transitivity.ejb.TransitivityJobJPA;
 
 /**
- * Java Persistence API (JPA) for TransitivityJob beans.<br/>
+ * Java Persistence API (JPA) for UrmJob beans.<br/>
  * Prefixes:
  * <ul>
  * <li>JPQL -- Java Persistence Query Language</li>
