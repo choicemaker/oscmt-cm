@@ -34,7 +34,7 @@ public class OabaSettingsControllerBean implements OabaSettingsController {
 	private EntityManager em;
 
 	@EJB
-	private OabaJobManager jobController;
+	private OabaJobManager jobManager;
 
 	@Override
 	public AbaSettings save(final AbaSettings settings) {
@@ -146,7 +146,7 @@ public class OabaSettingsControllerBean implements OabaSettingsController {
 	@Override
 	public OabaSettings findOabaSettingsByJobId(long jobId) {
 		OabaSettings retVal = null;
-		BatchJob batchJob = jobController.findBatchJob(jobId);
+		BatchJob batchJob = jobManager.findBatchJob(jobId);
 		if (batchJob != null) {
 			long settingsId = batchJob.getSettingsId();
 			retVal = findOabaSettings(settingsId);

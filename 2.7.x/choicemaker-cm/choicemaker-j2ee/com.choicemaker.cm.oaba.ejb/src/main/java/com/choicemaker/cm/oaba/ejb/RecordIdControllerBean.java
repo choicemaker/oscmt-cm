@@ -90,7 +90,7 @@ public class RecordIdControllerBean implements RecordIdController {
 	private EntityManager em;
 
 	@EJB(beanName = "OabaJobControllerBean")
-	private OabaJobManager jobController;
+	private OabaJobManager jobManager;
 
 	@Override
 	public <T extends Comparable<T>> ImmutableRecordIdTranslatorLocal<T> findRecordIdTranslator(

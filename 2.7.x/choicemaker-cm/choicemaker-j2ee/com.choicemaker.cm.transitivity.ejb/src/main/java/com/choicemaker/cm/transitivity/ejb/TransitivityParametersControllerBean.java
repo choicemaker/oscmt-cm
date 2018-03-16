@@ -40,10 +40,10 @@ public class TransitivityParametersControllerBean implements
 	private EntityManager em;
 
 	@EJB
-	private TransitivityJobManager jobController;
+	private TransitivityJobManager jobManager;
 
 	protected TransitivityJobManager getTransJobController() {
-		return jobController;
+		return jobManager;
 	}
 
 	protected TransitivityParametersEntity getBean(TransitivityParameters p) {

@@ -106,7 +106,7 @@ public class TransSerializerMDB implements MessageListener, Serializable {
 	private EntityManager em;
 
 	@EJB
-	private TransitivityJobManager jobController;
+	private TransitivityJobManager jobManager;
 
 	@EJB
 	private OabaSettingsController oabaSettingsController;
@@ -139,7 +139,7 @@ public class TransSerializerMDB implements MessageListener, Serializable {
 				if (o instanceof OabaJobMessage) {
 					OabaJobMessage data = (OabaJobMessage) o;
 					long jobId = data.jobID;
-					batchJob = jobController.findTransitivityJob(jobId);
+					batchJob = jobManager.findTransitivityJob(jobId);
 					processOabaMessage(batchJob);
 				} else {
 					log.warning("wrong message body: " + o.getClass().getName());

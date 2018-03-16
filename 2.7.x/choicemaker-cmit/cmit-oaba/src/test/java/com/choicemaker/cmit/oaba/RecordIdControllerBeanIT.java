@@ -120,10 +120,10 @@ public class RecordIdControllerBeanIT {
 	private EntityManager em;
 
 	@EJB
-	private OabaJobManager oabaController;
+	private OabaJobManager oabaManager;
 
 	@EJB(beanName = "OabaJobControllerBean")
-	private OabaJobManager jobController;
+	private OabaJobManager jobManager;
 
 	@EJB
 	private OabaParametersController paramsController;
@@ -197,7 +197,7 @@ public class RecordIdControllerBeanIT {
 		WellKnownTestConfiguration c = getTestConfiguration();
 		return OabaTestUtils.createPersistentOabaJob(c, e2service,
 				rsController, oabaSettingsController, serverController,
-				jobController, te);
+				jobManager, te);
 	}
 
 	MutableRecordIdTranslator<?> createEmptyTranslator(String tag)
@@ -211,7 +211,7 @@ public class RecordIdControllerBeanIT {
 	@Before
 	public void setUp() throws Exception {
 		te =
-			new TestEntityCounts(logger, oabaController, paramsController,
+			new TestEntityCounts(logger, oabaManager, paramsController,
 					oabaSettingsController, serverController,
 					eventManager, opPropController, rsController,
 					ridController);
@@ -219,7 +219,7 @@ public class RecordIdControllerBeanIT {
 
 	public void checkCounts() {
 		if (te != null) {
-			te.checkCounts(logger, em, utx, oabaController, paramsController,
+			te.checkCounts(logger, em, utx, oabaManager, paramsController,
 					oabaSettingsController, serverController,
 					eventManager, opPropController, rsController,
 					ridController);

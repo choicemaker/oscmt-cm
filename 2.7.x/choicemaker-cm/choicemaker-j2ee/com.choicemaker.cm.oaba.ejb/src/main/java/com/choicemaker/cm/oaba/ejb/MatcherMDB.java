@@ -64,7 +64,7 @@ public class MatcherMDB extends AbstractMatcher {
 	// -- Injected instance data
 
 	@EJB
-	private OabaJobManager jobController;
+	private OabaJobManager jobManager;
 
 	@EJB
 	private OabaSettingsController oabaSettingsController;
@@ -90,8 +90,8 @@ public class MatcherMDB extends AbstractMatcher {
 	// -- Call-back methods
 
 	@Override
-	protected OabaJobManager getJobController() {
-		return jobController;
+	protected OabaJobManager getOabaJobManager() {
+		return jobManager;
 	}
 
 	@Override
@@ -144,7 +144,7 @@ public class MatcherMDB extends AbstractMatcher {
 		if (!matches.isEmpty()) {
 			// first figure out the correct file for this processor
 			final long jobId = data.jobID;
-			BatchJob batchJob = getJobController().findBatchJob(jobId);
+			BatchJob batchJob = getOabaJobManager().findBatchJob(jobId);
 			IMatchRecord2Sink mSink =
 				OabaFileUtils.getMatchChunkFactory(batchJob).getSink(
 						data.treeIndex);

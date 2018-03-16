@@ -59,7 +59,7 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 	// -- Instance data
 
 	@EJB
-	private OabaJobManager jobController;
+	private OabaJobManager jobManager;
 
 	@EJB
 	private OabaSettingsController oabaSettingsController;
@@ -98,7 +98,7 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 	// -- Accessors
 
 	protected final OabaJobManager getJobController() {
-		return jobController;
+		return jobManager;
 	}
 
 	protected final OabaSettingsController getSettingsController() {

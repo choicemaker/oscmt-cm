@@ -87,7 +87,7 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 			+ MatchDedupMDB.class.getName());
 
 	@EJB
-	private OabaJobManager jobController;
+	private OabaJobManager jobManager;
 
 	@EJB
 	private OabaSettingsController oabaSettingsController;
@@ -138,7 +138,7 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 					countMessages = 0;
 					OabaJobMessage data = (OabaJobMessage) o;
 					long jobId = data.jobID;
-					batchJob = jobController.findBatchJob(jobId);
+					batchJob = jobManager.findBatchJob(jobId);
 					handleDedupEach(data, batchJob);
 
 				} else if (o instanceof MatchWriterMessage) {
@@ -147,7 +147,7 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 					// processors are done
 					MatchWriterMessage data = (MatchWriterMessage) o;
 					long jobId = data.jobID;
-					batchJob = jobController.findBatchJob(jobId);
+					batchJob = jobManager.findBatchJob(jobId);
 					countMessages--;
 					log.info("outstanding messages: " + countMessages);
 					if (countMessages == 0) {
@@ -188,7 +188,7 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 			throws BlockingException {
 
 		final long jobId = d.jobID;
-		final BatchJob batchJob = jobController.findBatchJob(jobId);
+		final BatchJob batchJob = jobManager.findBatchJob(jobId);
 		final OabaParameters params =
 			paramsController.findOabaParametersByBatchJobId(jobId);
 		final ProcessingEventLog processingEntry =

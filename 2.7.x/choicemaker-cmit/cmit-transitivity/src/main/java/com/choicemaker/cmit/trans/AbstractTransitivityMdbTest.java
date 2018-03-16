@@ -589,7 +589,7 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 		}
 
 		@Override
-		public final OabaJobManager getOabaJobController() {
+		public final OabaJobManager getOabaJobManager() {
 			return d.getOabaJobController();
 		}
 

@@ -61,7 +61,7 @@ public class TransMatchSchedulerSingleton extends AbstractSchedulerSingleton {
 	// -- Injected data
 
 	@EJB
-	private OabaJobManager jobController;
+	private OabaJobManager jobManager;
 
 	@EJB
 	private OabaSettingsController oabaSettingsController;
@@ -118,7 +118,7 @@ public class TransMatchSchedulerSingleton extends AbstractSchedulerSingleton {
 
 	@Override
 	protected OabaJobManager getJobController() {
-		return jobController;
+		return jobManager;
 	}
 
 	@Override

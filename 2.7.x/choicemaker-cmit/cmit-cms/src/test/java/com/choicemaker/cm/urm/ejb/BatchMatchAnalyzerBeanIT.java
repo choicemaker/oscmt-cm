@@ -64,7 +64,7 @@ public class BatchMatchAnalyzerBeanIT extends
 	BatchMatchAnalyzer bma;
 
 	@EJB
-	UrmJobManager urmJobController;
+	UrmJobManager urmJobManager;
 
 	// @SuppressWarnings("unused")
 	// private final MatchDedupMdbProcessing oabaProcessing =
@@ -255,7 +255,7 @@ public class BatchMatchAnalyzerBeanIT extends
 		}
 
 		assertTrue(urmId != NONPERSISTENT_ID);
-		BatchJob urmJob = urmJobController.findBatchJob(urmId);
+		BatchJob urmJob = urmJobManager.findBatchJob(urmId);
 		assertTrue(urmJob != null);
 
 		// FIXME RESTOREME

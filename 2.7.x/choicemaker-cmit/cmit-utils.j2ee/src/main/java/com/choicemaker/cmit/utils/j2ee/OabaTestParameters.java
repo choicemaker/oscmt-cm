@@ -43,7 +43,7 @@ public interface OabaTestParameters {
 
 	Queue getMatchSchedulerQueue();
 
-	OabaJobManager getOabaJobController();
+	OabaJobManager getOabaJobManager();
 
 	OabaParametersController getOabaParamsController();
 

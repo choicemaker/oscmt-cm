@@ -61,7 +61,7 @@ public class OabaServiceBean implements OabaService {
 			.getName());
 
 	@EJB
-	private OabaJobManager jobController;
+	private OabaJobManager jobManager;
 
 	@EJB
 	private OperationalPropertyController propController;
@@ -216,7 +216,7 @@ public class OabaServiceBean implements OabaService {
 
 		// Create and persist the job and its associated objects
 		BatchJob oabaJob =
-			jobController.createPersistentOabaJob(externalID, batchParams,
+			jobManager.createPersistentOabaJob(externalID, batchParams,
 					oabaSettings, serverConfiguration, urmJob);
 		final long retVal = oabaJob.getId();
 		assert oabaJob.isPersistent();
@@ -247,7 +247,7 @@ public class OabaServiceBean implements OabaService {
 	 */
 	private int abortBatch(long jobID, boolean cleanStatus) {
 		logger.info("aborting job " + jobID + " " + cleanStatus);
-		BatchJob batchJob = jobController.findBatchJob(jobID);
+		BatchJob batchJob = jobManager.findBatchJob(jobID);
 		if (batchJob == null) {
 			String msg = "No OABA job found: " + jobID;
 			logger.warning(msg);
@@ -261,19 +261,19 @@ public class OabaServiceBean implements OabaService {
 
 	@Override
 	public BatchJob getOabaJob(long jobId) {
-		BatchJob batchJob = jobController.findBatchJob(jobId);
+		BatchJob batchJob = jobManager.findBatchJob(jobId);
 		return batchJob;
 	}
 
 	@Override
 	public String checkStatus(long jobID) {
-		BatchJob oabaJob = jobController.findBatchJob(jobID);
+		BatchJob oabaJob = jobManager.findBatchJob(jobID);
 		return oabaJob.getStatus().name();
 	}
 
 	public boolean removeWorkingDirectory(long jobID) throws RemoteException,
 			NamingException {
-		BatchJob job = jobController.findBatchJob(jobID);
+		BatchJob job = jobManager.findBatchJob(jobID);
 		return BatchJobFileUtils.removeTempDir(job);
 	}
 
@@ -287,7 +287,7 @@ public class OabaServiceBean implements OabaService {
 	@Override
 	public int resumeJob(long jobID) {
 
-		BatchJob job = jobController.findBatchJob(jobID);
+		BatchJob job = jobManager.findBatchJob(jobID);
 
 		final String _clearResources =
 			propController.getJobProperty(job, PN_CLEAR_RESOURCES);
@@ -334,7 +334,7 @@ public class OabaServiceBean implements OabaService {
 		MatchRecord2Source mrs = null;
 
 		// check to make sure the job is completed
-		BatchJob batchJob = jobController.findBatchJob(jobID);
+		BatchJob batchJob = jobManager.findBatchJob(jobID);
 		if (!batchJob.getStatus().equals(BatchJobStatus.COMPLETED)) {
 			throw new IllegalStateException("The job has not completed.");
 		} else {

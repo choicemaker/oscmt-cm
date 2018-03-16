@@ -38,7 +38,7 @@ public class PersistableRecordSourceControllerBean implements
 	private EntityManager em;
 
 	@EJB(beanName = "OabaJobControllerBean")
-	private OabaJobManager jobController;
+	private OabaJobManager jobManager;
 
 	@EJB
 	private OabaParametersController paramsController;

@@ -98,7 +98,7 @@ public class TransitivityServiceBean implements TransitivityService {
 	OabaParametersController oabaParamsController;
 
 	@EJB
-	TransitivityJobManager jobController;
+	TransitivityJobManager jobManager;
 
 	@EJB
 	private OperationalPropertyController propController;
@@ -139,7 +139,7 @@ public class TransitivityServiceBean implements TransitivityService {
 
 		// Create and persist a transitivity job and its associated objects
 		BatchJob transJob =
-			jobController.createPersistentTransitivityJob(externalID, batchParams,
+			jobManager.createPersistentTransitivityJob(externalID, batchParams,
 					batchJob, settings, serverConfiguration, urmJob);
 		assert transJob.isPersistent();
 		final long retVal = transJob.getId();
@@ -160,7 +160,7 @@ public class TransitivityServiceBean implements TransitivityService {
 		// TODO FIXME not yet re-implemented
 		throw new Error("not yet implemented");
 		//
-		// TransitivityJob transJob = jobController.findTransitivityJob(jobID);
+		// TransitivityJob transJob = jobManager.findTransitivityJob(jobID);
 		// TransitivityJobStatus status =
 		// new TransitivityJobStatus(transJob.getId(), transJob.getStatus(),
 		// transJob.getStarted(), transJob.getCompleted());

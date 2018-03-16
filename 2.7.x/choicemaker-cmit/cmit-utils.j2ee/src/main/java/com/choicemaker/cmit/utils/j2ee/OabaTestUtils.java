@@ -162,9 +162,9 @@ public class OabaTestUtils {
 			fail(e.toString());
 		}
 
-		final OabaJobManager jobController = test.getOabaJobController();
+		final OabaJobManager jobManager = test.getOabaJobManager();
 		assertTrue(jobId != NONPERSISTENT_ID);
-		BatchJob retVal = jobController.findOabaJob(jobId);
+		BatchJob retVal = jobManager.findOabaJob(jobId);
 		assertTrue(retVal != null);
 
 		// Validate that the job parameters are correct
@@ -235,7 +235,7 @@ public class OabaTestUtils {
 			RecordSourceController rsController,
 			OabaSettingsController oabaSettingsController,
 			ServerConfigurationController serverController,
-			OabaJobManager jobController, TestEntityCounts te)
+			OabaJobManager jobManager, TestEntityCounts te)
 			throws ServerConfigurationException {
 
 		final String methodName = "createPersistentOabaJob";
@@ -246,7 +246,7 @@ public class OabaTestUtils {
 		assertTrue(rsController != null);
 		assertTrue(oabaSettingsController != null);
 		assertTrue(serverController != null);
-		assertTrue(jobController != null);
+		assertTrue(jobManager != null);
 		assertTrue(te != null);
 
 		final String externalId =
@@ -284,7 +284,7 @@ public class OabaTestUtils {
 		te.add(serverConfiguration);
 
 		BatchJob retVal =
-			jobController.createPersistentOabaJob(externalId, bp, oabaSettings,
+			jobManager.createPersistentOabaJob(externalId, bp, oabaSettings,
 					serverConfiguration);
 		te.add(retVal);
 		assertTrue(te.contains(retVal));

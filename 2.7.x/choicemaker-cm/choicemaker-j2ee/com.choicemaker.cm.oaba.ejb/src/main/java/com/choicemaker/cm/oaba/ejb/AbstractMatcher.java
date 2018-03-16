@@ -92,7 +92,7 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 	/** Reports completion to the scheduler that uses this matcher */
 	protected abstract void sendToScheduler(MatchWriterMessage data);
 
-	protected abstract OabaJobManager getJobController();
+	protected abstract OabaJobManager getOabaJobManager();
 
 	protected abstract OabaParametersController getOabaParametersController();
 
@@ -125,7 +125,7 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 					OabaJobMessage data = ((OabaJobMessage) o);
 					final long jobId = data.jobID;
 
-					batchJob = getJobController().findBatchJob(jobId);
+					batchJob = getOabaJobManager().findBatchJob(jobId);
 					final OabaParameters params =
 						getOabaParametersController().findOabaParametersByBatchJobId(
 								jobId);
@@ -392,7 +392,7 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 			final int numProcessors, final int maxBlockSize,
 			final int currentChunk) throws BlockingException {
 
-		BatchJob job = getJobController().findBatchJob(data.jobID);
+		BatchJob job = getOabaJobManager().findBatchJob(data.jobID);
 
 		final String _numRegularChunks =
 			getPropertyController().getJobProperty(job,

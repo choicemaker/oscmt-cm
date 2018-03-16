@@ -38,11 +38,11 @@ public class UrmJobEntityIT {
 	public static final int MAX_TEST_ITERATIONS = 10;
 
 	@EJB
-	protected UrmJobManager urmJobController;
+	protected UrmJobManager urmJobManager;
 
 	@Test
 	public void testPrerequisites() {
-		assertTrue(urmJobController != null);
+		assertTrue(urmJobManager != null);
 	}
 
 	@Test
@@ -77,17 +77,17 @@ public class UrmJobEntityIT {
 		assertTrue(!j1.isPersistent());
 
 		// Save the job
-		urmJobController.save(j1);
+		urmJobManager.save(j1);
 		assertTrue(j1.isPersistent());
 
 		// Find the job
-		final BatchJob j2 = urmJobController.findUrmJob(j1.getId());
+		final BatchJob j2 = urmJobManager.findUrmJob(j1.getId());
 		assertTrue(j1.getId() == j2.getId());
 		assertTrue(j1.equals(j2));
 
 		// Delete the job
-		urmJobController.delete(j2);
-		BatchJob j3 = urmJobController.findUrmJob(j1.getId());
+		urmJobManager.delete(j2);
+		BatchJob j3 = urmJobManager.findUrmJob(j1.getId());
 		assertTrue(j3 == null);
 
 	}
@@ -100,14 +100,14 @@ public class UrmJobEntityIT {
 		for (int i = 0; i < MAX_TEST_ITERATIONS; i++) {
 			// Create and save a job
 			BatchJob job = createEphemeralUrmJob(METHOD);
-			urmJobController.save(job);
+			urmJobManager.save(job);
 			long id = job.getId();
 			assertTrue(!jobIds.contains(id));
 			jobIds.add(id);
 		}
 
 		// Verify the number of jobs has increased
-		List<BatchJob> jobs = urmJobController.findAllUrmJobs();
+		List<BatchJob> jobs = urmJobManager.findAllUrmJobs();
 		assertTrue(jobs != null);
 
 		// Find the jobs
@@ -116,7 +116,7 @@ public class UrmJobEntityIT {
 			for (BatchJob job : jobs) {
 				if (jobId == job.getId()) {
 					isFound = true;
-					urmJobController.delete(job);
+					urmJobManager.delete(job);
 					break;
 				}
 			}

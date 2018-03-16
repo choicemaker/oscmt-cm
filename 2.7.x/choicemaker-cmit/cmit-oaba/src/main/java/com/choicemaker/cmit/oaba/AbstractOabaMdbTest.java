@@ -499,7 +499,7 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 		}
 
 		@Override
-		public final OabaJobManager getOabaJobController() {
+		public final OabaJobManager getOabaJobManager() {
 			return AbstractOabaMdbTest.this.getOabaJobController();
 		}
 

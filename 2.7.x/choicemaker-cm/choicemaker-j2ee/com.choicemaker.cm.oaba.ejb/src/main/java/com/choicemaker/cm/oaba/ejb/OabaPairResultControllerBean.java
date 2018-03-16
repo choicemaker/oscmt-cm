@@ -53,7 +53,7 @@ public class OabaPairResultControllerBean implements OabaPairResultController {
 	private EntityManager em;
 
 	@EJB(beanName = "OabaJobControllerBean")
-	private OabaJobManager jobController;
+	private OabaJobManager jobManager;
 
 	@Override
 	public int getResultCount(BatchJob job) throws BlockingException {

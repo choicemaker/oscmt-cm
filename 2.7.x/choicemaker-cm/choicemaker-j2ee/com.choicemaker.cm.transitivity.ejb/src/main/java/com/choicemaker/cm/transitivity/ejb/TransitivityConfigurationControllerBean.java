@@ -28,13 +28,13 @@ public class TransitivityConfigurationControllerBean
 	private EntityManager em;
 
 	@EJB
-	private TransitivityJobManager jobController;
+	private TransitivityJobManager jobManager;
 
 	@Override
 	public ServerConfiguration findConfigurationByTransitivityJobId(
 			long jobId) {
 		ServerConfiguration retVal = null;
-		BatchJob batchJob = jobController.findTransitivityJob(jobId);
+		BatchJob batchJob = jobManager.findTransitivityJob(jobId);
 		if (batchJob != null) {
 			long serverId = batchJob.getServerId();
 			retVal = findServerConfiguration(serverId);

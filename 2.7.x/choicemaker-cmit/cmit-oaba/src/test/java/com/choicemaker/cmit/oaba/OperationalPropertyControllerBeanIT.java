@@ -86,7 +86,7 @@ public class OperationalPropertyControllerBeanIT {
 	EntityManager em;
 
 	@EJB(beanName = "OabaJobControllerBean")
-	private OabaJobManager oabaController;
+	private OabaJobManager oabaManager;
 
 	@EJB
 	private OabaParametersController paramsController;
@@ -118,7 +118,7 @@ public class OperationalPropertyControllerBeanIT {
 
 	public void checkCounts() {
 		if (te != null) {
-			te.checkCounts(logger, em, utx, oabaController, paramsController,
+			te.checkCounts(logger, em, utx, oabaManager, paramsController,
 					oabaSettingsController, serverController,
 					eventManager, opPropController, rsController,
 					ridController);
@@ -130,7 +130,7 @@ public class OperationalPropertyControllerBeanIT {
 	@Before
 	public void setUp() throws Exception {
 		te =
-			new TestEntityCounts(logger, oabaController, paramsController,
+			new TestEntityCounts(logger, oabaManager, paramsController,
 					oabaSettingsController, serverController,
 					eventManager, opPropController, rsController,
 					ridController);
@@ -162,7 +162,7 @@ public class OperationalPropertyControllerBeanIT {
 		OabaJobEntity _job = createEphemeralOabaJobEntity(te, METHOD, true);
 		assertTrue(_job != null);
 		assertTrue(_job.getId() == PersistentObject.NONPERSISTENT_ID);
-		BatchJob job = oabaController.save(_job);
+		BatchJob job = oabaManager.save(_job);
 		final long jobId = job.getId();
 		assertTrue(jobId != PersistentObject.NONPERSISTENT_ID);
 

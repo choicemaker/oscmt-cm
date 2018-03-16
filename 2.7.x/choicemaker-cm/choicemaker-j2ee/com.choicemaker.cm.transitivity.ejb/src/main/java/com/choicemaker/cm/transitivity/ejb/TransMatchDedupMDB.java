@@ -71,7 +71,7 @@ public class TransMatchDedupMDB extends AbstractTransitivityMDB {
 			+ TransMatchDedupMDB.class.getName());
 
 	@EJB
-	private TransitivityJobManager jobController;
+	private TransitivityJobManager jobManager;
 
 	@EJB
 	private OabaSettingsController oabaSettingsController;

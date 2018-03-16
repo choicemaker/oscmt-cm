@@ -68,7 +68,7 @@ public class BatchMatchingBean implements BatchMatching, WorkFlowManager {
 	private Set<Long> transtivityAnalysisPending = new HashSet<>();
 
 	@EJB
-	private UrmJobManager urmJobController;
+	private UrmJobManager urmJobManager;
 
 	@EJB
 	private OabaService oabaService;
@@ -126,7 +126,7 @@ public class BatchMatchingBean implements BatchMatching, WorkFlowManager {
 		logger.entering(SOURCE_CLASS, METHOD);
 
 		// Create and persist the job and its associated objects
-		BatchJob urmJob = urmJobController.createPersistentUrmJob(externalID);
+		BatchJob urmJob = urmJobManager.createPersistentUrmJob(externalID);
 		final long retVal = urmJob.getId();
 		assert urmJob.isPersistent();
 		logger.info("Offline batch deduplication and analysis (job id: "
@@ -171,7 +171,7 @@ public class BatchMatchingBean implements BatchMatching, WorkFlowManager {
 		logger.entering(SOURCE_CLASS, METHOD);
 
 		// Create and persist the job and its associated objects
-		BatchJob urmJob = urmJobController.createPersistentUrmJob(externalID);
+		BatchJob urmJob = urmJobManager.createPersistentUrmJob(externalID);
 		final long retVal = urmJob.getId();
 		assert urmJob.isPersistent();
 		logger.info(
@@ -259,7 +259,7 @@ public class BatchMatchingBean implements BatchMatching, WorkFlowManager {
 		}
 
 		final long urmId = transJob.getUrmId();
-		final BatchJob urmJob = urmJobController.findUrmJob(urmId);
+		final BatchJob urmJob = urmJobManager.findUrmJob(urmId);
 		if (urmJob == null) {
 			String msg = "Missing URM job: " + urmId;
 			throw new IllegalStateException(msg);
@@ -290,7 +290,7 @@ public class BatchMatchingBean implements BatchMatching, WorkFlowManager {
 		}
 
 		final long urmId = oabaJob.getUrmId();
-		final BatchJob urmJob = urmJobController.findUrmJob(urmId);
+		final BatchJob urmJob = urmJobManager.findUrmJob(urmId);
 		if (urmJob == null) {
 			String msg = "Missing URM job: " + urmId;
 			throw new IllegalStateException(msg);

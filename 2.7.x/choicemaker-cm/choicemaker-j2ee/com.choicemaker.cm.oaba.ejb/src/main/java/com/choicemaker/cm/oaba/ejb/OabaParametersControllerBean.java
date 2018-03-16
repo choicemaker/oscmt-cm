@@ -51,13 +51,13 @@ public class OabaParametersControllerBean implements OabaParametersController {
 	private EntityManager em;
 
 	@EJB
-	private OabaJobManager jobController;
+	private OabaJobManager jobManager;
 
 	@EJB
 	private SqlRecordSourceController sqlController;
 
 	protected OabaJobManager getOabaJobController() {
-		return jobController;
+		return jobManager;
 	}
 
 	protected OabaParametersEntity getBean(OabaParameters p) {

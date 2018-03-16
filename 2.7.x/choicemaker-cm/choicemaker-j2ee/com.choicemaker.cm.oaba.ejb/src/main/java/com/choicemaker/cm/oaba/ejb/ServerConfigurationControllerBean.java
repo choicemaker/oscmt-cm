@@ -97,7 +97,7 @@ public class ServerConfigurationControllerBean implements
 	private EntityManager em;
 
 	@EJB
-	private OabaJobManager jobController;
+	private OabaJobManager jobManager;
 
 	@Override
 	public ServerConfiguration findServerConfiguration(long id) {
@@ -184,7 +184,7 @@ public class ServerConfigurationControllerBean implements
 	@Override
 	public ServerConfiguration findServerConfigurationByJobId(long jobId) {
 		ServerConfiguration retVal = null;
-		BatchJob batchJob = jobController.findBatchJob(jobId);
+		BatchJob batchJob = jobManager.findBatchJob(jobId);
 		if (batchJob != null) {
 			long serverId = batchJob.getServerId();
 			retVal = findServerConfiguration(serverId);
