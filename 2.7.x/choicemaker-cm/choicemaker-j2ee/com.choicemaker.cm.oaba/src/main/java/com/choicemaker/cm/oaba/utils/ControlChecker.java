@@ -11,10 +11,9 @@ import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.IControl;
 
 /**
- * This utility object
+ * Utility class for checking periodically whether a process should be stopped.
  * 
  * @author pcheung
- *
  */
 public class ControlChecker {
 
