@@ -26,6 +26,6 @@ public interface OabaJobManager extends BatchJobManager {
 
 	BatchJob findOabaJob(long id);
 
-	// OabaJobEntity save(OabaJobEntity job);
+	// List<BatchJob> findAllOabaJobs();
 
 }

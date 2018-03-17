@@ -9,7 +9,6 @@ package com.choicemaker.cm.transitivity.api;
 
 import java.util.List;
 
-import javax.ejb.Local;
 
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
@@ -18,7 +17,6 @@ import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.BatchJobManager;
 import com.choicemaker.cm.oaba.api.ServerConfigurationException;
 
-@Local
 public interface TransitivityJobManager extends BatchJobManager {
 
 	BatchJob createPersistentTransitivityJob(String externalID,
@@ -36,7 +34,5 @@ public interface TransitivityJobManager extends BatchJobManager {
 	BatchJob findTransitivityJob(long id);
 
 	List<BatchJob> findAllTransitivityJobs();
-
-	// TransitivityJobEntity save(TransitivityJobEntity job);
 
 }

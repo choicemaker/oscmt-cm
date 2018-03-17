@@ -89,6 +89,7 @@ public class BatchMatchAnalyzerBean implements BatchMatchAnalyzer {
 	@Override
 	public JobStatus getJobStatus(long jobID) throws ArgumentException,
 			ConfigException, CmRuntimeException, RemoteException {
+		// HERE
 		throw new Error("not yet implemented");
 	}
 
