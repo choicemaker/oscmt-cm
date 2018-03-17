@@ -1,4 +1,4 @@
-package com.choicemaker.cm.transitivity.api;
+package com.choicemaker.cms.api;
 
 import java.net.URL;
 
@@ -7,6 +7,6 @@ import com.choicemaker.cm.batch.api.BatchResultsManager;
 import com.choicemaker.cm.batch.api.ProcessController;
 import com.choicemaker.cm.batch.api.WorkflowMonitor;
 
-public interface TransitivityProcessController
-		extends BatchResultsManager, WorkflowMonitor, TransitivityJobManager, ProcessController {
+public interface UrmBatchController
+		extends BatchResultsManager, WorkflowMonitor, UrmJobManager, ProcessController {
 }

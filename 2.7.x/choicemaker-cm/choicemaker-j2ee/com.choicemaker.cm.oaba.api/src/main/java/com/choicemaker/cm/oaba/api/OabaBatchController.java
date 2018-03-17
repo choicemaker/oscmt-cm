@@ -7,6 +7,6 @@ import com.choicemaker.cm.batch.api.BatchResultsManager;
 import com.choicemaker.cm.batch.api.ProcessController;
 import com.choicemaker.cm.batch.api.WorkflowMonitor;
 
-public interface OabaProcessController
+public interface OabaBatchController
 		extends BatchResultsManager, WorkflowMonitor, OabaJobManager, ProcessController {
 }
