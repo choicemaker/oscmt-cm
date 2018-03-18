@@ -5,14 +5,14 @@ import javax.ejb.Stateless;
 
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.ProcessController;
-import com.choicemaker.cm.oaba.api.TransitivityJobManager;
+import com.choicemaker.cm.oaba.api.OabaJobManager;
 import com.choicemaker.util.Precondition;
 
 @Stateless
 public class OabaProcessControllerBean implements ProcessController {
 
 	@EJB
-	TransitivityJobManager oabaJobManager;
+	OabaJobManager oabaJobManager;
 
 	@Override
 	public void abortBatchJob(BatchJob batchJob) {

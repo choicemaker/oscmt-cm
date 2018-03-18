@@ -7,6 +7,6 @@ import com.choicemaker.cm.batch.api.BatchResultsManager;
 import com.choicemaker.cm.batch.api.ProcessController;
 import com.choicemaker.cm.batch.api.WorkflowMonitor;
 
-public interface TransitivityBatchController
-		extends BatchResultsManager, WorkflowMonitor, TransitivityJobManager, ProcessController {
+public interface TransitivityBatchController extends BatchResultsManager,
+		/* FIXME WorkflowMonitor, */ TransitivityJobManager, ProcessController {
 }

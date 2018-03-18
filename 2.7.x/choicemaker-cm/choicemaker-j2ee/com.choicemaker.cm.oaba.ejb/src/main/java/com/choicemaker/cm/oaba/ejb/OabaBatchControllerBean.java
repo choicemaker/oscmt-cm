@@ -13,14 +13,14 @@ import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.oaba.api.OabaBatchController;
-import com.choicemaker.cm.oaba.api.TransitivityJobManager;
+import com.choicemaker.cm.oaba.api.OabaJobManager;
 import com.choicemaker.cm.oaba.api.ServerConfigurationException;
 
 @Stateless
 public class OabaBatchControllerBean implements OabaBatchController {
 
 	@EJB
-	TransitivityJobManager oabaJobManager;
+	OabaJobManager oabaJobManager;
 
 	@EJB
 	OabaProcessControllerBean oabaProcessController;
