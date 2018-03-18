@@ -10,9 +10,9 @@ import javax.ejb.Remote;
 import javax.ejb.Stateless;
 
 import com.choicemaker.client.api.DataAccessObject;
-import com.choicemaker.client.api.QueryCandidatePair;
 import com.choicemaker.client.api.IGraphProperty;
 import com.choicemaker.client.api.MatchGroup;
+import com.choicemaker.client.api.QueryCandidatePair;
 import com.choicemaker.client.api.TransitiveGroup;
 import com.choicemaker.cm.args.AbaSettings;
 import com.choicemaker.cm.args.TransitivityException;
