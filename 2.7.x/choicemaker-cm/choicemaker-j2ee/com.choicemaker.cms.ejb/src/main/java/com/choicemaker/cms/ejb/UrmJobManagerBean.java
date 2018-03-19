@@ -47,10 +47,6 @@ public class UrmJobManagerBean implements UrmJobManager {
 	@EJB
 	private ServerConfigurationController serverManager;
 
-	// FIXME
-	// @Inject
-	// private JMSContext jmsContext;
-
 	@Resource(lookup = "java:/choicemaker/urm/jms/transStatusTopic")
 	private Topic transStatusTopic;
 

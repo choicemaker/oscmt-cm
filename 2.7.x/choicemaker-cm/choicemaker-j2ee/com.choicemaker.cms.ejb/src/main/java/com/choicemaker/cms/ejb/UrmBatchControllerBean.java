@@ -1,0 +1,92 @@
+package com.choicemaker.cms.ejb;
+
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+
+import com.choicemaker.cm.args.OabaSettings;
+import com.choicemaker.cm.args.ServerConfiguration;
+import com.choicemaker.cm.args.TransitivityParameters;
+import com.choicemaker.cm.batch.api.BatchJob;
+import com.choicemaker.cm.oaba.api.ServerConfigurationException;
+import com.choicemaker.cms.api.UrmBatchController;
+import com.choicemaker.cms.api.UrmJobManager;
+
+@Stateless
+public class UrmBatchControllerBean implements UrmBatchController {
+
+	@EJB
+	UrmJobManager urmJobManager;
+
+	@EJB
+	UrmProcessControllerBean urmProcessController;
+
+	@EJB
+	UrmResultsManagerBean urmResultsManager;
+
+	@Override
+	public void exportResults(BatchJob batchJob, URI container)
+			throws IOException, URISyntaxException {
+		urmResultsManager.exportResults(batchJob, container);
+	}
+
+	@Override
+	public BatchJob createPersistentUrmJob(String externalID) {
+		return urmJobManager.createPersistentUrmJob(externalID);
+	}
+
+	@Override
+	public List<BatchJob> findAllLinkedByUrmId(long urmId) {
+		return urmJobManager.findAllLinkedByUrmId(urmId);
+	}
+
+	@Override
+	public BatchJob findUrmJob(long id) {
+		return urmJobManager.findUrmJob(id);
+	}
+
+	@Override
+	public List<BatchJob> findAllUrmJobs() {
+		return urmJobManager.findAllUrmJobs();
+	}
+
+	@Override
+	public void delete(BatchJob batchJob) {
+		urmJobManager.delete(batchJob);
+	}
+
+	@Override
+	public void detach(BatchJob transitivityJob) {
+		urmJobManager.detach(transitivityJob);
+	}
+
+	@Override
+	public BatchJob findBatchJob(long id) {
+		return urmJobManager.findBatchJob(id);
+	}
+
+	@Override
+	public List<BatchJob> findAll() {
+		return urmJobManager.findAll();
+	}
+
+	@Override
+	public BatchJob save(BatchJob batchJob) {
+		return urmJobManager.save(batchJob);
+	}
+
+	@Override
+	public void abortBatchJob(BatchJob batchJob) {
+		urmProcessController.abortBatchJob(batchJob);
+	}
+
+	@Override
+	public void restartBatchJob(BatchJob batchJob) {
+		urmProcessController.restartBatchJob(batchJob);
+	}
+
+}

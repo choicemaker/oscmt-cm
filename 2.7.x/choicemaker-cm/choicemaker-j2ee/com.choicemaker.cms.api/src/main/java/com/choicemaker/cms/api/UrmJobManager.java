@@ -16,7 +16,7 @@ public interface UrmJobManager extends BatchJobManager {
 
 	BatchJob createPersistentUrmJob(String externalID);
 
-	List<BatchJob> findAllLinkedByUrmId(long oabaJobId);
+	List<BatchJob> findAllLinkedByUrmId(long urmJobId);
 
 	BatchJob findUrmJob(long id);
 
