@@ -74,15 +74,15 @@ public class TransitivityJobManagerBean implements TransitivityJobManager {
 	@Resource(lookup = "java:/choicemaker/urm/jms/transStatusTopic")
 	private Topic transStatusTopic;
 
-	protected TransitivityJobEntity getBean(BatchJob oabaJob) {
-		TransitivityJobEntity retVal = null;
+	protected UrmJobEntity getBean(BatchJob oabaJob) {
+		UrmJobEntity retVal = null;
 		if (oabaJob != null) {
 			final long jobId = oabaJob.getId();
-			if (oabaJob instanceof TransitivityJobEntity) {
-				retVal = (TransitivityJobEntity) oabaJob;
+			if (oabaJob instanceof UrmJobEntity) {
+				retVal = (UrmJobEntity) oabaJob;
 			} else {
 				if (oabaJob.isPersistent()) {
-					retVal = em.find(TransitivityJobEntity.class, jobId);
+					retVal = em.find(UrmJobEntity.class, jobId);
 					if (retVal == null) {
 						String msg =
 							"Unable to find persistent OABA job: " + jobId;
@@ -91,7 +91,7 @@ public class TransitivityJobManagerBean implements TransitivityJobManager {
 				}
 			}
 			if (retVal == null) {
-				retVal = new TransitivityJobEntity(oabaJob);
+				retVal = new UrmJobEntity(oabaJob);
 			}
 		}
 		return retVal;
@@ -137,8 +137,8 @@ public class TransitivityJobManagerBean implements TransitivityJobManager {
 		settingsController.save(settings);
 		serverManager.save(sc);
 
-		TransitivityJobEntity retVal =
-			new TransitivityJobEntity(params, settings, sc, batchJob, urmJob,
+		UrmJobEntity retVal =
+			new UrmJobEntity(params, settings, sc, batchJob, urmJob,
 					externalID);
 		em.persist(retVal);
 		assert retVal.isPersistent();
@@ -178,7 +178,7 @@ public class TransitivityJobManagerBean implements TransitivityJobManager {
 		return save(getBean(batchJob));
 	}
 
-	public TransitivityJobEntity save(TransitivityJobEntity job) {
+	public UrmJobEntity save(UrmJobEntity job) {
 		logger.fine("Saving " + job);
 		if (job == null) {
 			throw new IllegalArgumentException("null job");
@@ -195,7 +195,7 @@ public class TransitivityJobManagerBean implements TransitivityJobManager {
 
 	@Override
 	public BatchJob findTransitivityJob(long id) {
-		TransitivityJobEntity job = em.find(TransitivityJobEntity.class, id);
+		UrmJobEntity job = em.find(UrmJobEntity.class, id);
 		return job;
 	}
 
@@ -229,13 +229,13 @@ public class TransitivityJobManagerBean implements TransitivityJobManager {
 	@Override
 	public void delete(BatchJob transitivityJob) {
 		if (transitivityJob.isPersistent()) {
-			TransitivityJobEntity bean =
-				em.find(TransitivityJobEntity.class, transitivityJob.getId());
+			UrmJobEntity bean =
+				em.find(UrmJobEntity.class, transitivityJob.getId());
 			delete(bean);
 		}
 	}
 
-	void delete(TransitivityJobEntity bean) {
+	void delete(UrmJobEntity bean) {
 		if (bean != null) {
 			bean = em.merge(bean);
 			em.remove(bean);
