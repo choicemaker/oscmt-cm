@@ -32,6 +32,7 @@ import com.choicemaker.cm.args.ProcessingEvent;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.api.BatchJob;
+import com.choicemaker.cm.batch.api.BatchJobStatus;
 import com.choicemaker.cm.batch.api.BatchProcessingNotification;
 import com.choicemaker.cm.batch.api.WorkflowListener;
 import com.choicemaker.cm.oaba.api.OabaJobManager;
@@ -47,7 +48,7 @@ import com.choicemaker.cm.transitivity.api.TransitivityParametersController;
 import com.choicemaker.cm.transitivity.api.TransitivityService;
 import com.choicemaker.cm.transitivity.ejb.TransitivityNotification;
 import com.choicemaker.cms.api.BatchMatching;
-import com.choicemaker.cms.api.UrmJobManager;
+import com.choicemaker.cms.api.UrmBatchController;
 import com.choicemaker.cms.api.remote.BatchMatchingRemote;
 
 @Singleton
@@ -68,7 +69,7 @@ public class BatchMatchingBean implements BatchMatching, WorkflowListener {
 	private Set<Long> transtivityAnalysisPending = new HashSet<>();
 
 	@EJB
-	private UrmJobManager urmJobManager;
+	private UrmBatchController urmJobManager;
 
 	@EJB
 	private OabaService oabaService;
@@ -90,9 +91,6 @@ public class BatchMatchingBean implements BatchMatching, WorkflowListener {
 
 	@EJB
 	private ServerConfigurationController serverManager;
-
-	// @EJB
-	// private ProcessingController eventManager;
 
 	// -- Access control
 
@@ -390,27 +388,58 @@ public class BatchMatchingBean implements BatchMatching, WorkflowListener {
 
 	@Override
 	public boolean abortJob(long jobID) {
-		throw new Error("not yet implemented");
+		BatchJob urmJob = urmJobManager.findBatchJob(jobID);
+		boolean retVal;
+		if (urmJob == null) {
+			String msg = "BatchMatchingBean.checkStatus: unknown jobID: " + jobID;
+			logger.warning(msg);
+			retVal = false;
+		} else {
+			urmJobManager.abortBatchJob(urmJob);
+			retVal = true;
+		}
+		return retVal;
 	}
 
 	@Override
 	public boolean suspendJob(long jobID) {
-		throw new Error("not yet implemented");
+		return abortJob(jobID);
 	}
 
 	@Override
 	public String checkStatus(long jobID) {
-		throw new Error("not yet implemented");
+		BatchJob urmJob = urmJobManager.findBatchJob(jobID);
+		String retVal;
+		if (urmJob == null) {
+			String msg = "BatchMatchingBean.checkStatus: unknown jobID: " + jobID;
+			logger.warning(msg);
+			retVal = null;
+		} else {
+			BatchJobStatus status = urmJob.getStatus();
+			retVal = status == null ? null : status.toString();
+		}
+		return retVal;
 	}
 
 	@Override
 	public boolean resumeJob(long jobID) {
-		throw new Error("not yet implemented");
+		BatchJob urmJob = urmJobManager.findBatchJob(jobID);
+		boolean retVal;
+		if (urmJob == null) {
+			String msg = "BatchMatchingBean.checkStatus: unknown jobID: " + jobID;
+			logger.warning(msg);
+			retVal = false;
+		} else {
+			urmJobManager.abortBatchJob(urmJob);
+			retVal = true;
+		}
+		return retVal;
 	}
 
 	@Override
 	public boolean cleanJob(long jobID) {
-		throw new Error("not yet implemented");
+		logger.warning("BatchMatchingBean.cleanJob: not yet implemented");
+		return false;
 	}
 
 }
