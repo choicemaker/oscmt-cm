@@ -35,7 +35,7 @@ import com.choicemaker.cm.oaba.ejb.OabaJobEntity;
 import com.choicemaker.cm.oaba.ejb.OabaParametersEntity;
 import com.choicemaker.cm.oaba.ejb.OabaSettingsEntity;
 import com.choicemaker.cm.oaba.ejb.ServerConfigurationControllerBean;
-import com.choicemaker.cm.transitivity.ejb.UrmJobEntity;
+import com.choicemaker.cm.transitivity.ejb.TransitivityJobEntity;
 import com.choicemaker.cm.transitivity.ejb.TransitivityParametersEntity;
 
 /** Utility methods used in tests of OabaJobEntity and TransitivityJobEntity */
@@ -208,7 +208,7 @@ public class BatchJobUtils {
 				|| batchJob == null) {
 			throw new IllegalArgumentException("null argument");
 		}
-		UrmJobEntity retVal = null;
+		TransitivityJobEntity retVal = null;
 		try {
 			utx.begin();
 			long oabaParamsId = batchJob.getParametersId();
@@ -225,7 +225,7 @@ public class BatchJobUtils {
 			}
 			final BatchJob urmJob = null;
 			retVal =
-				new UrmJobEntity(params, settings, sc, batchJob,
+				new TransitivityJobEntity(params, settings, sc, batchJob,
 						urmJob, extId);
 			te.add(retVal);
 			utx.commit();

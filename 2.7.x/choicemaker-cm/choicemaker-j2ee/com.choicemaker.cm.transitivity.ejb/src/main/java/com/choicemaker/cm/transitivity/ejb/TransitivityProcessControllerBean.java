@@ -18,7 +18,7 @@ public class TransitivityProcessControllerBean implements ProcessController {
 	public void abortBatchJob(BatchJob batchJob) {
 		Precondition.assertNonNullArgument("null batch job", batchJob);
 		Precondition.assertBoolean("not an OABA Job entity",
-				batchJob instanceof UrmJobEntity);
+				batchJob instanceof TransitivityJobEntity);
 		batchJob.markAsAbortRequested();
 		batchJob.markAsAborted();
 	}

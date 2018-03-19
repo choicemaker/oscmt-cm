@@ -30,7 +30,7 @@ public class TransitivityResultsManagerBean implements BatchResultsManager {
 	public void exportResults(BatchJob batchJob, URI container)
 			throws IOException, URISyntaxException {
 		Precondition.assertBoolean("not a Transitivity Job entity",
-				batchJob instanceof UrmJobEntity);
+				batchJob instanceof TransitivityJobEntity);
 
 		BatchExportUtils.exportResults(batchJob, container, propController,
 				PN_TRANSITIVITY_CACHED_PAIRS_FILE);
