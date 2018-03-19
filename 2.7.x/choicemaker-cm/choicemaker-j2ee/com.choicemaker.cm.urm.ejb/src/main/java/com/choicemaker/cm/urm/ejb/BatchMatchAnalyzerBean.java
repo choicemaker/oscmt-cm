@@ -38,6 +38,7 @@ import com.choicemaker.cm.urm.exceptions.RecordCollectionException;
 import com.choicemaker.cms.api.BatchMatching;
 import com.choicemaker.cms.api.NamedConfiguration;
 import com.choicemaker.cms.api.NamedConfigurationController;
+import com.choicemaker.cms.api.UrmBatchController;
 import com.choicemaker.cms.ejb.NamedConfigConversion;
 import com.choicemaker.util.Precondition;
 
@@ -45,7 +46,7 @@ import com.choicemaker.util.Precondition;
  * Delegates to CMS BatchMatching bean.
  */
 @Stateless
-@Remote(BatchMatchAnalyzer.class )
+@Remote(BatchMatchAnalyzer.class)
 public class BatchMatchAnalyzerBean implements BatchMatchAnalyzer {
 
 	private static final String VERSION = "2.7.1";
@@ -61,6 +62,9 @@ public class BatchMatchAnalyzerBean implements BatchMatchAnalyzer {
 
 	@EJB(lookup = "java:app/com.choicemaker.cms.ejb/NamedConfigurationControllerBean!com.choicemaker.cms.api.NamedConfigurationController")
 	private NamedConfigurationController ncController;
+
+	@EJB(lookup = "java:app/com.choicemaker.cms.ejb/UrmBatchControllerBean!com.choicemaker.cms.api.UrmBatchController")
+	private UrmBatchController urmBatchController;
 
 	private UrmEjbAssist<?> assist = new UrmEjbAssist<>();
 
@@ -200,6 +204,13 @@ public class BatchMatchAnalyzerBean implements BatchMatchAnalyzer {
 			logger.fine(msg);
 		}
 		return delegateRetVal;
+	}
+
+	@Override
+	public void copyResult(long jobID, RefRecordCollection resRc)
+			throws ModelException, RecordCollectionException, ConfigException,
+			ArgumentException, CmRuntimeException, RemoteException {
+		assist.copyResult(urmBatchController, jobID, resRc);
 	}
 
 }

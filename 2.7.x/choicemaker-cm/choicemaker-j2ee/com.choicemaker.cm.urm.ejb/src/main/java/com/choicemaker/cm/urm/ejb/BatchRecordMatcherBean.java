@@ -22,7 +22,6 @@ import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.oaba.api.ServerConfigurationException;
-import com.choicemaker.cm.urm.api.BatchMatchAnalyzer;
 import com.choicemaker.cm.urm.api.BatchRecordMatcher;
 import com.choicemaker.cm.urm.api.UrmConfigurationAdapter;
 import com.choicemaker.cm.urm.base.IRecordCollection;
@@ -36,6 +35,7 @@ import com.choicemaker.cm.urm.exceptions.RecordCollectionException;
 import com.choicemaker.cms.api.BatchMatching;
 import com.choicemaker.cms.api.NamedConfiguration;
 import com.choicemaker.cms.api.NamedConfigurationController;
+import com.choicemaker.cms.api.UrmBatchController;
 import com.choicemaker.cms.ejb.NamedConfigConversion;
 import com.choicemaker.util.Precondition;
 
@@ -57,6 +57,9 @@ public class BatchRecordMatcherBean implements BatchRecordMatcher {
 	@EJB(lookup = "java:app/com.choicemaker.cms.ejb/NamedConfigurationControllerBean!com.choicemaker.cms.api.NamedConfigurationController")
 	private NamedConfigurationController ncController;
 
+	@EJB(lookup = "java:app/com.choicemaker.cms.ejb/UrmBatchControllerBean!com.choicemaker.cms.api.UrmBatchController")
+	private UrmBatchController urmBatchController;
+
 	private UrmEjbAssist<?> assist = new UrmEjbAssist<>();
 
 	@Override
@@ -67,6 +70,13 @@ public class BatchRecordMatcherBean implements BatchRecordMatcher {
 	@Override
 	public boolean cleanJob(long jobID) throws CmRuntimeException {
 		throw new Error("not yet implemented");
+	}
+
+	@Override
+	public void copyResult(long jobID, RefRecordCollection resRc)
+			throws ModelException, RecordCollectionException, ConfigException,
+			ArgumentException, CmRuntimeException, RemoteException {
+		assist.copyResult(urmBatchController, jobID, resRc);
 	}
 
 	@Override

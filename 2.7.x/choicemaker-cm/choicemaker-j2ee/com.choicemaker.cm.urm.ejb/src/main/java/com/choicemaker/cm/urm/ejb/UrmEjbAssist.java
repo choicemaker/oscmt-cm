@@ -7,7 +7,11 @@
  *******************************************************************************/
 package com.choicemaker.cm.urm.ejb;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.SortedSet;
@@ -42,9 +46,15 @@ import com.choicemaker.cm.urm.base.LinkedRecordSet;
 import com.choicemaker.cm.urm.base.MatchScore;
 import com.choicemaker.cm.urm.base.RefRecordCollection;
 import com.choicemaker.cm.urm.base.SubsetDbRecordCollection;
+import com.choicemaker.cm.urm.base.TextRefRecordCollection;
+import com.choicemaker.cm.urm.exceptions.ArgumentException;
+import com.choicemaker.cm.urm.exceptions.CmRuntimeException;
 import com.choicemaker.cm.urm.exceptions.ConfigException;
+import com.choicemaker.cm.urm.exceptions.ModelException;
+import com.choicemaker.cm.urm.exceptions.RecordCollectionException;
 import com.choicemaker.cms.api.NamedConfiguration;
 import com.choicemaker.cms.api.NamedConfigurationController;
+import com.choicemaker.cms.api.UrmBatchController;
 import com.choicemaker.cms.ejb.NamedConfigurationEntity;
 import com.choicemaker.cms.util.IdentifiableWrapper;
 import com.choicemaker.util.Precondition;
@@ -62,6 +72,61 @@ class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 		Logger.getLogger(UrmEjbAssist.class.getName());
 
 	public UrmEjbAssist() {
+	}
+
+	public URI extractLocationURI(TextRefRecordCollection resRc)
+			throws URISyntaxException {
+		Precondition.assertNonNullArgument("null record collection", resRc);
+
+		// target files or urls
+		String urlBeginingPart = null;
+		String urlEndingPart = null;
+
+		String urlString = resRc.getUrl();
+		final int lastPeriod = urlString.lastIndexOf(".");
+		final int lastSlash = urlString.lastIndexOf("/");
+		final int lastBkSlash = urlString.lastIndexOf("\\");
+		if (lastPeriod == -1 || lastPeriod < lastSlash
+				|| lastPeriod < lastBkSlash) {
+			urlBeginingPart = urlString;
+			urlEndingPart = "";
+		} else {
+			urlBeginingPart = urlString.substring(0, lastPeriod);
+			urlEndingPart = urlString.substring(lastPeriod);
+		}
+		String url = urlBeginingPart + urlEndingPart;
+		logger.fine("BatchMatchAnalyzer.extractLocationURI: '" + url + "'");
+		URI retVal = new URI(url);
+		return retVal;
+	}
+
+	public void copyResult(UrmBatchController urmBatchController, long jobID,
+			RefRecordCollection resRc)
+			throws ModelException, RecordCollectionException, ConfigException,
+			ArgumentException, CmRuntimeException, RemoteException {
+		// Precondition
+		if (!(resRc instanceof TextRefRecordCollection)) {
+			String msg = "BatchMatchAnalyzer.copyResult: "
+					+ "this method supports only text record collection copying";
+			throw new ArgumentException(msg);
+		}
+		TextRefRecordCollection textRefRc = (TextRefRecordCollection) resRc;
+
+		// Extract URM batch job
+		BatchJob urmJob = urmBatchController.findUrmJob(jobID);
+		if (urmJob == null) {
+			logger.warning(
+					"BatchMatchAnalyzer.copyResult: no such URM job: " + jobID);
+		} else {
+			try {
+				URI container = extractLocationURI(textRefRc);
+				urmBatchController.exportResults(urmJob, container);
+			} catch (IOException | URISyntaxException e) {
+				String msg = "BatchMatchAnalyzer.copyResult: "
+						+ "unable to copy result: " + e.toString();
+				throw new RecordCollectionException(msg);
+			}
+		}
 	}
 
 	public EvaluatedRecord[] computeEvaluatedRecords(MatchGroup<T> matchGroup) {
@@ -420,7 +485,8 @@ class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 			IdentifiableWrapper<T> wrapper = new IdentifiableWrapper<>(record);
 			boolean isRemoved = singleRecords.remove(wrapper);
 			if (logger.isLoggable(Level.FINER)) {
-				String msg = (isRemoved? "Removed " : "Did not remove ") + record;
+				String msg =
+					(isRemoved ? "Removed " : "Did not remove ") + record;
 				logger.finer(msg);
 			}
 		}

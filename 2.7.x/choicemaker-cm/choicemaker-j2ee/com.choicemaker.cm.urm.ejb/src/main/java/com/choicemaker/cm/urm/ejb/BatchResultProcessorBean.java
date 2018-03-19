@@ -48,6 +48,13 @@ public class BatchResultProcessorBean implements BatchResultProcessor {
 	}
 
 	@Override
+	public void copyResult(long jobID, RefRecordCollection resRc)
+			throws ModelException, RecordCollectionException, ConfigException,
+			ArgumentException, CmRuntimeException, RemoteException {
+		throw new Error("not yet implemente");
+	}
+
+	@Override
 	public JobStatus getJobStatus(long jobID) throws ArgumentException,
 			ConfigException, CmRuntimeException, RemoteException {
 		// TODO Auto-generated method stub
