@@ -73,7 +73,7 @@ public abstract class AbstractTransitivityMDB implements MessageListener,
 	@EJB
 	private TransitivityParametersController paramsController;
 
-	@EJB(beanName = "TransitivityProcessingControllerBean")
+	@EJB(beanName = "TransitivityEventManager")
 	private EventPersistenceManager eventManager;
 
 	@EJB
