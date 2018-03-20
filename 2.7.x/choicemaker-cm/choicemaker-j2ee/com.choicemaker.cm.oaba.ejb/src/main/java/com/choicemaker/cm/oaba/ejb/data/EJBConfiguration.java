@@ -29,9 +29,6 @@ import javax.sql.DataSource;
  */
 public class EJBConfiguration implements Serializable {
 
-	// private static final Logger log =
-	// Logger.getLogger(OabaProcessingControllerBean.class.getName());
-
 	private static final long serialVersionUID = 271;
 
 	// -- Enterprise Naming Context
