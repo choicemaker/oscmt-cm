@@ -89,7 +89,7 @@ public class RecordIdControllerBean implements RecordIdController {
 	@PersistenceContext(unitName = "oaba")
 	private EntityManager em;
 
-	@EJB(beanName = "OabaJobControllerBean")
+	@EJB(beanName = "OabaJobManagerBean")
 	private OabaJobManager jobManager;
 
 	@Override

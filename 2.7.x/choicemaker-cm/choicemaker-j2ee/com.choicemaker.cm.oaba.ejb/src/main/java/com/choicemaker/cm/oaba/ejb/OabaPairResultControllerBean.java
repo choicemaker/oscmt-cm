@@ -52,7 +52,7 @@ public class OabaPairResultControllerBean implements OabaPairResultController {
 	@PersistenceContext(unitName = "oaba")
 	private EntityManager em;
 
-	@EJB(beanName = "OabaJobControllerBean")
+	@EJB(beanName = "OabaJobManagerBean")
 	private OabaJobManager jobManager;
 
 	@Override
@@ -79,7 +79,7 @@ public class OabaPairResultControllerBean implements OabaPairResultController {
 			while (rs.next()) {
 				++resultCount;
 				Integer i = rs.getInt(QUERY_INDEX_RECORD_COUNT);
-				if (i == null) {
+				if (i == null || i.intValue() == 0) {
 					String msg = "null record count";
 					throw new IllegalStateException(msg);
 				}
@@ -156,7 +156,7 @@ public class OabaPairResultControllerBean implements OabaPairResultController {
 			ResultSet rs = stmt.executeQuery(query);
 			while (rs.next()) {
 				Integer i = rs.getInt(QUERY_INDEX_RECORD_ID_TYPE);
-				if (i == null) {
+				if (i == null || i.intValue() == 0) {
 					String msg = "null record-id type";
 					throw new IllegalStateException(msg);
 				}
