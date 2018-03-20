@@ -23,10 +23,10 @@ public class TransitivityBatchControllerBean
 	@EJB
 	TransitivityJobManager transitivityJobManager;
 
-	@EJB
+	@EJB(lookup = "java:app/com.choicemaker.cm.transitivity.ejb/TransitivityProcessControllerBean!com.choicemaker.cm.batch.api.ProcessController")
 	TransitivityProcessControllerBean transitivityProcessController;
 
-	@EJB
+	@EJB(lookup = "java:app/com.choicemaker.cm.transitivity.ejb/TransitivityResultsManagerBean!com.choicemaker.cm.batch.api.BatchResultsManager")
 	TransitivityResultsManagerBean transitivityResultsManager;
 
 	@Override

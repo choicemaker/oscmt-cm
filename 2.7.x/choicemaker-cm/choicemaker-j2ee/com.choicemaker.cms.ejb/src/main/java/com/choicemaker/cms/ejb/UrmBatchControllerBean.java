@@ -8,11 +8,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import com.choicemaker.cm.args.OabaSettings;
-import com.choicemaker.cm.args.ServerConfiguration;
-import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.api.BatchJob;
-import com.choicemaker.cm.oaba.api.ServerConfigurationException;
 import com.choicemaker.cms.api.UrmBatchController;
 import com.choicemaker.cms.api.UrmJobManager;
 
@@ -22,10 +18,10 @@ public class UrmBatchControllerBean implements UrmBatchController {
 	@EJB
 	UrmJobManager urmJobManager;
 
-	@EJB
+	@EJB(lookup = "java:app/com.choicemaker.cms.ejb/UrmProcessControllerBean!com.choicemaker.cm.batch.api.ProcessController")
 	UrmProcessControllerBean urmProcessController;
 
-	@EJB
+	@EJB(lookup = "java:app/com.choicemaker.cms.ejb/UrmResultsManagerBean!com.choicemaker.cm.batch.api.BatchResultsManager")
 	UrmResultsManagerBean urmResultsManager;
 
 	@Override

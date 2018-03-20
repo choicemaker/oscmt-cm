@@ -22,10 +22,10 @@ public class OabaBatchControllerBean implements OabaBatchController {
 	@EJB
 	OabaJobManager oabaJobManager;
 
-	@EJB
+	@EJB(lookup = "java:app/com.choicemaker.cm.oaba.ejb/OabaProcessControllerBean!com.choicemaker.cm.batch.api.ProcessController")
 	OabaProcessControllerBean oabaProcessController;
 
-	@EJB
+	@EJB(lookup = "java:app/com.choicemaker.cm.oaba.ejb/OabaResultsManagerBean!com.choicemaker.cm.batch.api.BatchResultsManager")
 	OabaResultsManagerBean oabaResultsManager;
 
 	@Override

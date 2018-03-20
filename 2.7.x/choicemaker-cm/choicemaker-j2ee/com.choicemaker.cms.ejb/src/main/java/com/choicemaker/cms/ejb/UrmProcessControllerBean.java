@@ -25,10 +25,10 @@ public class UrmProcessControllerBean implements ProcessController {
 	@EJB
 	UrmJobManager urmJobManager;
 
-	@EJB
+	@EJB(lookup = "java:app/com.choicemaker.cm.oaba.ejb/OabaProcessControllerBean!com.choicemaker.cm.batch.api.ProcessController")
 	private OabaProcessControllerBean oabaProcessController;
 
-	@EJB
+	@EJB(lookup = "java:app/com.choicemaker.cm.transitivity.ejb/TransitivityProcessControllerBean!com.choicemaker.cm.batch.api.ProcessController")
 	private TransitivityProcessControllerBean transitivityProcessController;
 
 	@Override
