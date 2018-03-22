@@ -298,7 +298,7 @@ public class DbbCountsCreatorSQL {
 		logger.fine(msg);
 		stmt2.setInt(1, fieldId);
 		stmt2.setString(2, view);
-		stmt2.setString(4, masterId);
+		stmt2.setString(3, masterId);
 	}
 
 	/**
