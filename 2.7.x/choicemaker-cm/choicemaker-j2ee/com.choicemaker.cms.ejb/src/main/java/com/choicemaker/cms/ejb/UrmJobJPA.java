@@ -26,17 +26,17 @@ public interface UrmJobJPA extends TransitivityJobJPA {
 	String QN_URM_FIND_ALL = "urmFindAll";
 
 	/** JPQL used to implement {@link #QN_URM_FIND_ALL} */
-	String JPQL_URM_FIND_ALL = "Select job from UrmJobEntity job";
+	String JPQL_URM_FIND_ALL = "Select job from UrmJobEntity job order by job.id";
 
 	/**
 	 * Name of the query that finds all persistent batch jobs that are
 	 * linked with a given URM job via their urmId field.
 	 */
-	String QN_URM_FIND_ALL_BY_URM_ID = "urmFindAllByParentId";
+	String QN_URM_FIND_ALL_BY_URM_ID = "urmFindAllByUrmId";
 
 	/** JPQL used to implement {@link #QN_URM_FIND_ALL_BY_URM_ID} */
 	String JPQL_URM_FIND_ALL_BY_URM_ID =
-		"Select job from UrmJobEntity job where job.urmId = :urmId";
+		"Select job from BatchJobEntity job where job.urmId = :urmId";
 
 	/**
 	 * Name of the parameter used to specify the parent-id parameter of

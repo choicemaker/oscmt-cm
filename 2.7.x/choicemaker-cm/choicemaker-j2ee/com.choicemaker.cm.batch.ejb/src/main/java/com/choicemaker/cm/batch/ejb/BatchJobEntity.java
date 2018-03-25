@@ -67,7 +67,7 @@ import com.choicemaker.cm.batch.api.BatchJobStatus;
 @Table(/* schema = "CHOICEMAKER", */name = TABLE_NAME)
 @DiscriminatorColumn(name = DISCRIMINATOR_COLUMN,
 		discriminatorType = DiscriminatorType.STRING)
-@DiscriminatorValue(DISCRIMINATOR_VALUE)
+//@DiscriminatorValue(DISCRIMINATOR_VALUE)
 public abstract class BatchJobEntity extends AbstractPersistentObject implements
 		Serializable, BatchJob {
 

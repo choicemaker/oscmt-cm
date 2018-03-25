@@ -26,18 +26,18 @@ public class UrmProcessControllerBean implements ProcessController {
 	UrmJobManager urmJobManager;
 
 	@EJB(lookup = "java:app/com.choicemaker.cm.oaba.ejb/OabaProcessControllerBean!com.choicemaker.cm.batch.api.ProcessController")
-	private OabaProcessControllerBean oabaProcessController;
+	private ProcessController oabaProcessController;
 
 	@EJB(lookup = "java:app/com.choicemaker.cm.transitivity.ejb/TransitivityProcessControllerBean!com.choicemaker.cm.batch.api.ProcessController")
-	private TransitivityProcessControllerBean transitivityProcessController;
+	private ProcessController transitivityProcessController;
 
 	@Override
-	public void abortBatchJob(BatchJob batchJob) {
-		Precondition.assertNonNullArgument("null batch job", batchJob);
+	public void abortBatchJob(BatchJob urmJob) {
+		Precondition.assertNonNullArgument("null batch job", urmJob);
 		Precondition.assertBoolean("not an OABA Job entity",
-				batchJob instanceof UrmJobEntity);
+				urmJob instanceof UrmJobEntity);
 
-		long urmId = batchJob.getId();
+		long urmId = urmJob.getId();
 		logger.finer("UrmAbort: urm job id: " + urmId);
 		List<Long> unexpectedJobs = new ArrayList<>();
 		List<BatchJob> delegates = urmJobManager.findAllLinkedByUrmId(urmId);
@@ -57,11 +57,13 @@ public class UrmProcessControllerBean implements ProcessController {
 				// Keep processing...
 			}
 		}
+		urmJob.markAsAbortRequested();
+		urmJob.markAsAborted();
+		urmJobManager.save(urmJob);
 
 		if (unexpectedJobs.size() > 0) {
 			String msg = "Unable to abort jobs: " + unexpectedJobs.toString();
-			logger.severe(msg);
-			throw new Error(msg);
+			logger.warning(msg);
 		}
 	}
 

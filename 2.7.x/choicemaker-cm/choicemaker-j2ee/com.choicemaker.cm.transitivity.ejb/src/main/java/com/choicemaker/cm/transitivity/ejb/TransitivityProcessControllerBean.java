@@ -21,6 +21,7 @@ public class TransitivityProcessControllerBean implements ProcessController {
 				batchJob instanceof TransitivityJobEntity);
 		batchJob.markAsAbortRequested();
 		batchJob.markAsAborted();
+		transitivityJobManager.save(batchJob);
 	}
 
 	@Override

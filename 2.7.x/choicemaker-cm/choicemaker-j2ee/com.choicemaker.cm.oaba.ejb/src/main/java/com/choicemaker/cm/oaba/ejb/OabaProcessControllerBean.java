@@ -21,6 +21,7 @@ public class OabaProcessControllerBean implements ProcessController {
 				batchJob instanceof OabaJobEntity);
 		batchJob.markAsAbortRequested();
 		batchJob.markAsAborted();
+		oabaJobManager.save(batchJob);
 	}
 
 	@Override
