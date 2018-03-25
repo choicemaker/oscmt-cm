@@ -13,6 +13,8 @@ import com.choicemaker.cm.args.BatchProcessingConstants;
 
 enum OabaEvent {
 
+	QUEUED(
+		EVT_INIT, PCT_INIT),
 	CREATE_REC_VAL(
 		EVT_CREATE_REC_VAL, PCT_CREATE_REC_VAL),
 	DONE_REC_VAL(

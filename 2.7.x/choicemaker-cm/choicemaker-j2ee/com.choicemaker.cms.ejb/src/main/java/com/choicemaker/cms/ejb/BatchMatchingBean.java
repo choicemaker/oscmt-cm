@@ -205,40 +205,142 @@ public class BatchMatchingBean implements BatchMatching, WorkflowListener {
 	}
 
 	// -- Workflow processing
+	// FIXME create a WorkflowController delegate
 
 	@Override
 	public void jobUpdated(BatchProcessingNotification bpn) {
-		logger.info("Received update notification for job " + bpn);
-		final long jobId = bpn.getJobId();
-		if (isTransitivityAnalysisPending(jobId)) {
-			logger.fine("Transitivity analysis pending for " + jobId);
-			if (bpn.getJobPercentComplete() >= 1.0f) {
-				setTransitivityAnalysisPending(jobId, false);
-				if (bpn instanceof OabaNotification) {
-					try {
-						logger.fine("OabaNotification for " + jobId);
-						startTransitivity(bpn);
-					} catch (ServerConfigurationException e) {
-						logger.severe("Transitivity analysis failed for job "
-								+ jobId + ": " + e);
-					}
+		logger.info("Received OABA update notification for job " + bpn);
+		if (bpn instanceof OabaNotification) {
+			handleOabaNotification(bpn);
 
-				} else if (bpn instanceof TransitivityNotification) {
-					logger.fine("TransitivityNotification for " + jobId);
-					notifyCompletion(bpn);
+		} else if (bpn instanceof TransitivityNotification) {
+			handleTransitivityNotification(bpn);
 
-				} else {
-					logger.warning("Unexpected notification type: "
-							+ bpn.getClass().getName());
+		} else {
+			logger.warning("Unexpected notification type: "
+					+ bpn.getClass().getName());
+		}
+	}
+
+	protected BatchJob getUrmJobFromOabaJobId(final long oabaJobId) {
+		BatchJob oabaJob = oabaService.getOabaJob(oabaJobId);
+		assert oabaJob != null;
+		long urmJobId = oabaJob.getUrmId();
+		BatchJob retVal = urmJobManager.findUrmJob(urmJobId);
+		return retVal;
+	}
+
+	private BatchJob getUrmJobFromTransitivityJobId(long transitivityJobId) {
+		BatchJob transitivityJob =
+			transService.getTransitivityJob(transitivityJobId);
+		assert transitivityJob != null;
+		long urmJobId = transitivityJob.getUrmId();
+		BatchJob urmJob = urmJobManager.findUrmJob(urmJobId);
+		return urmJob;
+	}
+
+	protected void handleOabaNotification(
+			final BatchProcessingNotification bpn) {
+		final long oabaJobId = bpn.getJobId();
+		logger.fine("OabaNotification for " + oabaJobId);
+
+		final BatchJob urmJob = getUrmJobFromOabaJobId(oabaJobId);
+		logger.fine("URM parent job " + urmJob);
+
+		if (urmJob == null) {
+			logger.warning("Unable to handle OABA notification in "
+					+ "BatchMatchingBean.handleOabaNotification: " + bpn);
+			return;
+		}
+
+		if (bpn.getJobPercentComplete() == 0.0f) {
+			if (urmJob.getStatus() == BatchJobStatus.NEW) {
+				urmJob.markAsQueued();
+			} else {
+				logger.fine("ignoring notification: " + bpn);
+			}
+
+		} else if (bpn.getJobPercentComplete() > 0.0f
+				&& bpn.getJobPercentComplete() < 1.0f) {
+			if (urmJob.getStatus() == BatchJobStatus.NEW) {
+				urmJob.markAsQueued();
+			}
+			if (urmJob.getStatus() == BatchJobStatus.QUEUED) {
+				urmJob.markAsStarted();
+			} else {
+				logger.fine("ignoring notification: " + bpn);
+			}
+
+		} else if (bpn.getJobPercentComplete() >= 1.0f) {
+			if (isTransitivityAnalysisPending(oabaJobId)) {
+				logger.fine("Transitivity analysis pending for " + oabaJobId);
+				final boolean isPending = false;
+				setTransitivityAnalysisPending(oabaJobId, isPending);
+				try {
+					logger.fine("OabaNotification for " + oabaJobId);
+					startTransitivity(bpn);
+				} catch (ServerConfigurationException e) {
+					logger.severe("Transitivity analysis failed for job "
+							+ oabaJobId + ": " + e);
 				}
 
 			} else {
-				// Possible failure, but usually benign
-				logger.fine("Incomplete results for job " + jobId);
+				logger.fine("URM job completed after OABA notification for job "
+						+ oabaJobId);
+				urmJob.markAsCompleted();
 			}
 
 		} else {
-			logger.fine("Ignoring notification for job " + jobId);
+			// Possible failure, but usually benign
+			logger.fine("Incomplete results for job " + oabaJobId);
+		}
+
+	}
+
+	private void handleTransitivityNotification(
+			BatchProcessingNotification bpn) {
+		final long transitivityJobId = bpn.getJobId();
+		logger.fine("TransitivityNotification for " + transitivityJobId);
+
+		final BatchJob urmJob =
+			getUrmJobFromTransitivityJobId(transitivityJobId);
+		logger.fine("URM parent job " + urmJob);
+
+		if (urmJob == null) {
+			logger.warning("Unable to handle transitivity notification in "
+					+ "BatchMatchingBean.handleTransitivityNotification: "
+					+ bpn);
+			return;
+		}
+
+		if (bpn.getJobPercentComplete() == 0.0f) {
+			if (urmJob.getStatus() == BatchJobStatus.NEW) {
+				urmJob.markAsQueued();
+			} else {
+				logger.fine("ignoring notification: " + bpn);
+			}
+
+		} else if (bpn.getJobPercentComplete() > 0.0f
+				&& bpn.getJobPercentComplete() < 1.0f) {
+			if (urmJob.getStatus() == BatchJobStatus.NEW) {
+				urmJob.markAsQueued();
+			}
+			if (urmJob.getStatus() == BatchJobStatus.QUEUED) {
+				urmJob.markAsStarted();
+			} else {
+				logger.fine("ignoring notification: " + bpn);
+			}
+
+		} else if (bpn.getJobPercentComplete() >= 1.0f) {
+			logger.fine(
+					"URM job completed after Transitivity notification for job "
+							+ transitivityJobId);
+			urmJob.markAsCompleted();
+			notifyCompletion(bpn);
+
+		} else {
+			// Possible failure, but usually benign
+			logger.fine("Incomplete results for job " + transitivityJobId);
 		}
 	}
 
@@ -391,7 +493,8 @@ public class BatchMatchingBean implements BatchMatching, WorkflowListener {
 		BatchJob urmJob = urmJobManager.findBatchJob(jobID);
 		boolean retVal;
 		if (urmJob == null) {
-			String msg = "BatchMatchingBean.checkStatus: unknown jobID: " + jobID;
+			String msg =
+				"BatchMatchingBean.checkStatus: unknown jobID: " + jobID;
 			logger.warning(msg);
 			retVal = false;
 		} else {
@@ -411,7 +514,8 @@ public class BatchMatchingBean implements BatchMatching, WorkflowListener {
 		BatchJob urmJob = urmJobManager.findBatchJob(jobID);
 		String retVal;
 		if (urmJob == null) {
-			String msg = "BatchMatchingBean.checkStatus: unknown jobID: " + jobID;
+			String msg =
+				"BatchMatchingBean.checkStatus: unknown jobID: " + jobID;
 			logger.warning(msg);
 			retVal = null;
 		} else {
@@ -426,7 +530,8 @@ public class BatchMatchingBean implements BatchMatching, WorkflowListener {
 		BatchJob urmJob = urmJobManager.findBatchJob(jobID);
 		boolean retVal;
 		if (urmJob == null) {
-			String msg = "BatchMatchingBean.checkStatus: unknown jobID: " + jobID;
+			String msg =
+				"BatchMatchingBean.checkStatus: unknown jobID: " + jobID;
 			logger.warning(msg);
 			retVal = false;
 		} else {

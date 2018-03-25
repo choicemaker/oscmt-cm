@@ -23,8 +23,8 @@ public class TransitivityEventBean extends ProcessingEventBean implements
 		super(event.name(), event.getEventId(), event.getPercentComplete());
 	}
 
-	public static final TransitivityEventBean INIT_TRANSANALYSIS =
-		new TransitivityEventBean(TransitivityEvent.INIT);
+	public static final TransitivityEventBean QUEUED =
+		new TransitivityEventBean(TransitivityEvent.QUEUED);
 
 	public static final TransitivityEventBean CREATE_REC_VAL =
 		new TransitivityEventBean(TransitivityEvent.CREATE_REC_VAL);

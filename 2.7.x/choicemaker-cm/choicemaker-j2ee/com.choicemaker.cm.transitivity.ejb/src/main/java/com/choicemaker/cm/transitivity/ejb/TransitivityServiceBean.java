@@ -9,6 +9,7 @@ package com.choicemaker.cm.transitivity.ejb;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -28,6 +29,7 @@ import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.api.BatchJob;
+import com.choicemaker.cm.batch.api.EventPersistenceManager;
 import com.choicemaker.cm.batch.api.OperationalPropertyController;
 import com.choicemaker.cm.oaba.api.OabaParametersController;
 import com.choicemaker.cm.oaba.api.ServerConfigurationException;
@@ -38,6 +40,7 @@ import com.choicemaker.cm.oaba.ejb.data.OabaJobMessage;
 import com.choicemaker.cm.oaba.ejb.util.MessageBeanUtils;
 import com.choicemaker.cm.transitivity.api.TransitivityJobManager;
 import com.choicemaker.cm.transitivity.api.TransitivityService;
+import com.choicemaker.cm.transitivity.core.TransitivityEventBean;
 
 /**
  * @author pcheung
@@ -103,6 +106,9 @@ public class TransitivityServiceBean implements TransitivityService {
 	@EJB
 	private OperationalPropertyController propController;
 
+	@EJB
+	private EventPersistenceManager eventManager;
+
 	@Resource(name = "jms/transitivityQueue",
 			lookup = "java:/choicemaker/urm/jms/transitivityQueue")
 	private Queue queue;
@@ -146,10 +152,12 @@ public class TransitivityServiceBean implements TransitivityService {
 		BatchJobUtils.setRecordMatchingMode(propController, transJob, mode);
 		log.info("Started transitivity analysis (job id: " + retVal + ")");
 
-		// Mark the job as queued and start processing by the
-		// StartTransitivityMDB EJB
+		// Mark the job as queued, start processing by the StartTransitivityMDB,
+		// and notify listeners that the job is queued.
 		transJob.markAsQueued();
 		sendToTransitivity(retVal);
+		eventManager.updateStatusWithNotification(transJob,
+				TransitivityEventBean.QUEUED, new Date(), null);
 
 		log.exiting(SOURCE_CLASS, METHOD, retVal);
 		return retVal;
@@ -157,15 +165,8 @@ public class TransitivityServiceBean implements TransitivityService {
 
 	@Override
 	public BatchJob getTransitivityJob(long jobId) {
-		// TODO FIXME not yet re-implemented
-		throw new Error("not yet implemented");
-		//
-		// TransitivityJob transJob = jobManager.findTransitivityJob(jobID);
-		// TransitivityJobStatus status =
-		// new TransitivityJobStatus(transJob.getId(), transJob.getStatus(),
-		// transJob.getStarted(), transJob.getCompleted());
-		//
-		// return status;
+		BatchJob transJob = jobManager.findTransitivityJob(jobId);
+		 return transJob;
 	}
 
 	/**

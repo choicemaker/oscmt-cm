@@ -8,12 +8,14 @@
 package com.choicemaker.cm.oaba.ejb;
 
 import static com.choicemaker.cm.args.OabaLinkageType.*;
+import static com.choicemaker.cm.args.OabaLinkageType.TA_STAGING_DEDUPLICATION;
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_CLEAR_RESOURCES;
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_OABA_CACHED_RESULTS_FILE;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.rmi.RemoteException;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -33,6 +35,7 @@ import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.BatchJobStatus;
+import com.choicemaker.cm.batch.api.EventPersistenceManager;
 import com.choicemaker.cm.batch.api.OperationalPropertyController;
 import com.choicemaker.cm.batch.ejb.BatchJobFileUtils;
 import com.choicemaker.cm.oaba.api.OabaJobManager;
@@ -40,6 +43,7 @@ import com.choicemaker.cm.oaba.api.OabaService;
 import com.choicemaker.cm.oaba.api.ServerConfigurationException;
 import com.choicemaker.cm.oaba.core.EXTERNAL_DATA_FORMAT;
 import com.choicemaker.cm.oaba.core.IMatchRecord2Source;
+import com.choicemaker.cm.oaba.core.OabaEventBean;
 import com.choicemaker.cm.oaba.ejb.data.OabaJobMessage;
 import com.choicemaker.cm.oaba.ejb.util.MessageBeanUtils;
 import com.choicemaker.cm.oaba.impl.MatchRecord2Source;
@@ -65,6 +69,9 @@ public class OabaServiceBean implements OabaService {
 
 	@EJB
 	private OperationalPropertyController propController;
+
+	@EJB
+	private EventPersistenceManager eventManager;
 
 	@Resource(name = "jms/startQueue",
 			lookup = "java:/choicemaker/urm/jms/startQueue")
@@ -222,9 +229,12 @@ public class OabaServiceBean implements OabaService {
 		assert oabaJob.isPersistent();
 		logger.info("Started offline matching (job id: " + retVal + ")");
 
-		// Mark the job as queued and start processing by the StartOabaMDB EJB
+		// Mark the job as queued, start processing by the StartOabaMDB EJB,
+		// and notify listeners that the job is queued.
 		oabaJob.markAsQueued();
 		sendToStartOABA(retVal);
+		eventManager.updateStatusWithNotification(oabaJob, OabaEventBean.QUEUED,
+				new Date(), null);
 
 		logger.exiting(SOURCE_CLASS, METHOD, retVal);
 		return retVal;
@@ -297,9 +307,14 @@ public class OabaServiceBean implements OabaService {
 
 		int ret;
 		if (!isCompleted && !clearResources) {
+			// Mark the job as restarted (which is the same as 'queued'),
+			// start processing by the StartOabaMDB EJB, and notify listeners
+			// that the job is queued.
 			logger.info("Resuming job " + jobID);
 			job.markAsReStarted();
 			sendToStartOABA(jobID);
+			eventManager.updateStatusWithNotification(job, OabaEventBean.QUEUED,
+					new Date(), null);
 			ret = 1;
 
 		} else {

@@ -23,6 +23,9 @@ public class OabaEventBean extends ProcessingEventBean implements
 		super(event.name(), event.getEventId(), event.getPercentComplete());
 	}
 
+	public static final OabaEventBean QUEUED =
+			new OabaEventBean(OabaEvent.QUEUED);
+
 	public static final OabaEventBean CREATE_REC_VAL =
 		new OabaEventBean(OabaEvent.CREATE_REC_VAL);
 

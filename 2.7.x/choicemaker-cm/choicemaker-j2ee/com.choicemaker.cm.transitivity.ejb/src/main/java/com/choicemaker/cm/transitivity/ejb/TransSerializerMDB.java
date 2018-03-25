@@ -247,6 +247,8 @@ public class TransSerializerMDB implements MessageListener, Serializable {
 			propController.setJobProperty(batchJob,
 					PN_TRANSITIVITY_CACHED_GROUPS_FILE, resultFile);
 
+			// mark as done
+			batchJob.markAsCompleted();
 			final Date now = new Date();
 			final String info = null;
 			sendToUpdateStatus(batchJob, DONE, now, info);
