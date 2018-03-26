@@ -10,6 +10,7 @@ package com.choicemaker.cm.urm.ejb;
 import java.net.URISyntaxException;
 import java.rmi.RemoteException;
 import java.util.Iterator;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.ejb.EJB;
@@ -64,19 +65,22 @@ public class BatchRecordMatcherBean implements BatchRecordMatcher {
 
 	@Override
 	public boolean abortJob(long jobId) {
-		throw new Error("not yet implemented");
+		boolean delegateRetVal = delegate.abortJob(jobId);
+		if (logger.isLoggable(Level.FINE)) {
+			String msg = "BatchMatchingBean.abortJob: " + delegateRetVal;
+			logger.fine(msg);
+		}
+		return delegateRetVal;
 	}
 
 	@Override
 	public boolean cleanJob(long jobID) throws CmRuntimeException {
-		throw new Error("not yet implemented");
-	}
-
-	@Override
-	public void copyResult(long jobID, RefRecordCollection resRc)
-			throws ModelException, RecordCollectionException, ConfigException,
-			ArgumentException, CmRuntimeException, RemoteException {
-		assist.copyResult(urmBatchController, jobID, resRc);
+		boolean delegateRetVal = delegate.cleanJob(jobID);
+		if (logger.isLoggable(Level.FINE)) {
+			String msg = "BatchMatchingBean.cleanJob: " + delegateRetVal;
+			logger.fine(msg);
+		}
+		return delegateRetVal;
 	}
 
 	@Override
@@ -111,9 +115,13 @@ public class BatchRecordMatcherBean implements BatchRecordMatcher {
 	}
 
 	@Override
-	public boolean resumeJob(long jobId) throws ArgumentException,
-			ConfigException, CmRuntimeException, RemoteException {
-		throw new Error("not yet implemented");
+	public boolean resumeJob(long jobID) {
+		boolean delegateRetVal = delegate.resumeJob(jobID);
+		if (logger.isLoggable(Level.FINE)) {
+			String msg = "BatchMatchingBean.resumeJob: " + delegateRetVal;
+			logger.fine(msg);
+		}
+		return delegateRetVal;
 	}
 
 	@Override
@@ -157,10 +165,10 @@ public class BatchRecordMatcherBean implements BatchRecordMatcher {
 
 			if (isLinkage) {
 				retVal = delegate.startLinkage(trackingId, batchParams,
-						oabaSettings, serverConfig, null);
+						oabaSettings, serverConfig);
 			} else {
 				retVal = delegate.startDeduplication(trackingId, batchParams,
-						oabaSettings, serverConfig, null);
+						oabaSettings, serverConfig);
 			}
 		} catch (NamingException | ServerConfigurationException
 				| URISyntaxException e) {
@@ -175,7 +183,19 @@ public class BatchRecordMatcherBean implements BatchRecordMatcher {
 
 	@Override
 	public boolean suspendJob(long jobId) {
-		throw new Error("not implemented");
+		boolean delegateRetVal = delegate.suspendJob(jobId);
+		if (logger.isLoggable(Level.FINE)) {
+			String msg = "BatchMatchingBean.suspendJob: " + delegateRetVal;
+			logger.fine(msg);
+		}
+		return delegateRetVal;
+	}
+
+	@Override
+	public void copyResult(long jobID, RefRecordCollection resRc)
+			throws ModelException, RecordCollectionException, ConfigException,
+			ArgumentException, CmRuntimeException, RemoteException {
+		assist.copyResult(urmBatchController, jobID, resRc);
 	}
 
 }
