@@ -32,6 +32,7 @@ public interface OabaService {
 	/**
 	 * This method starts the Offline Automated Blocking Algorithm to compare a
 	 * set of records against themselves.
+	 * @param urmJob 
 	 * 
 	 * @param urmJob
 	 *            may be null
@@ -55,7 +56,7 @@ public interface OabaService {
 	 * This method attempts to abort a job.
 	 * 
 	 * @param jobID
-	 *            - This is the unique job id created by the Choicemaker Batch
+	 *            - This is the unique job id created by the ChoiceMaker Batch
 	 *            system.
 	 * @return 0 means attempt to abort was successful. -1 means cannot abort
 	 *         either because the job is already done, already aborted, or
