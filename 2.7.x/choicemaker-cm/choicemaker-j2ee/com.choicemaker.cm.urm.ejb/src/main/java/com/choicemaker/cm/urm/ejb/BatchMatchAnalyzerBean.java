@@ -182,7 +182,7 @@ public class BatchMatchAnalyzerBean implements BatchMatchAnalyzer {
 						oabaSettings, serverConfig);
 			} else {
 				retVal = delegate.startDeduplicationAndAnalysis(trackingId,
-						null, oabaSettings, serverConfig);
+						tp, oabaSettings, serverConfig);
 			}
 		} catch (NamingException | ServerConfigurationException
 				| URISyntaxException e) {
