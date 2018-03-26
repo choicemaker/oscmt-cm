@@ -36,20 +36,21 @@ public interface BatchMatching {
 	/**
 	 * This method starts the Offline Automated Blocking Algorithm to compare a
 	 * set of records against themselves.
-	 * @param cmsJob may be null
+	 * @param urmJob may be null
+	 * @throws ServerConfigurationException 
 	 */
 	public long startDeduplication(String externalID, OabaParameters bp,
-			OabaSettings oabaSettings, ServerConfiguration serverConfiguration,
-			BatchJob cmsJob) throws ServerConfigurationException;
+			OabaSettings oabaSettings, ServerConfiguration serverConfiguration)
+			throws ServerConfigurationException;
 
 	/**
 	 * This method starts the Offline Automated Blocking Algorithm to compare
 	 * staging records against themselves or against master records.
-	 * @param cmsJob may be null
+	 * @param urmJob may be null
 	 */
 	public long startLinkage(String externalID, OabaParameters batchParams,
-			OabaSettings oabaSettings, ServerConfiguration serverConfiguration,
-			BatchJob cmsJob) throws ServerConfigurationException;
+			OabaSettings oabaSettings, ServerConfiguration serverConfiguration)
+			throws ServerConfigurationException;
 
 	/**
 	 * This method attempts to abort a job.
@@ -126,22 +127,22 @@ public interface BatchMatching {
 	 * This method starts transitivity analysis of the specified OABA job. The
 	 * OABA job must have completed successfully. Record matching is performed
 	 * in the same mode as was used for the OABA job.
-	 * @cmsJob may be null
+	 * @oabaJob may not be null
 	 */
 	long startTransitivity(String externalID,
-			TransitivityParameters batchParams, BatchJob batchJob,
-			OabaSettings settings, ServerConfiguration serverConfiguration,
-			BatchJob cmsJob) throws ServerConfigurationException;
+			TransitivityParameters batchParams, BatchJob oabaJob,
+			OabaSettings settings, ServerConfiguration serverConfiguration)
+			throws ServerConfigurationException;
 
 	/**
 	 * This method starts transitivity analysis of the specified OABA job, but
 	 * allows a different record-matching mode to be specified.
-	 * @cmsJob may be null
+	 * @oabaJob may be null
 	 */
 	long startTransitivity(String externalID,
-			TransitivityParameters batchParams, BatchJob batchJob,
+			TransitivityParameters batchParams, BatchJob oabaJob,
 			OabaSettings settings, ServerConfiguration serverConfiguration,
-			BatchJob cmsJob, RecordMatchingMode mode)
+			RecordMatchingMode mode)
 			throws ServerConfigurationException;
 
 	public BatchJob getTransitivityJob(long jobId);
