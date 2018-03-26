@@ -214,6 +214,7 @@ public abstract class AbstractTransitivityMDB implements MessageListener,
 			getLogger().severe(msg0);
 			if (batchJob != null) {
 				batchJob.markAsFailed();
+        getTransitivityJobController().save(batchJob);
 			}
 		}
 		getJmsTrace()
@@ -231,8 +232,8 @@ public abstract class AbstractTransitivityMDB implements MessageListener,
 
 	protected void abortProcessing(BatchJob batchJob,
 			ProcessingEventLog processingLog) {
-		MessageBeanUtils.stopJob(batchJob, getPropertyController(),
-				processingLog);
+		MessageBeanUtils.stopJob(batchJob, getTransitivityJobController(),
+				getPropertyController(), processingLog);
 	}
 
 	protected void updateTransivitityProcessingStatus(BatchJob job,

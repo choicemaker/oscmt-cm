@@ -830,6 +830,16 @@
         <version>1.0.15-SNAPSHOT</version>
       </dependency>
       <dependency>
+        <groupId>org.eclipse.persistence</groupId>
+        <artifactId>org.eclipse.persistence.jpa</artifactId>
+        <version>2.5.2</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.persistence</groupId>
+        <artifactId>org.eclipse.persistence.oracle</artifactId>
+        <version>2.5.2</version>
+      </dependency>
+      <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>org.eclipse.core.boot</artifactId>
         <version>2.1.2-SNAPSHOT</version>

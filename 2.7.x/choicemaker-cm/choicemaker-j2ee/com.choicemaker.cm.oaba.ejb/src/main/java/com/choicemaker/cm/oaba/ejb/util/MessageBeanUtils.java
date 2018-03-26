@@ -20,11 +20,13 @@ import javax.jms.Topic;
 
 import com.choicemaker.cm.args.ProcessingEventBean;
 import com.choicemaker.cm.batch.api.BatchJob;
+import com.choicemaker.cm.batch.api.BatchJobManager;
 import com.choicemaker.cm.batch.api.OperationalPropertyController;
 import com.choicemaker.cm.batch.api.ProcessingEventLog;
 import com.choicemaker.cm.batch.ejb.BatchJobFileUtils;
 import com.choicemaker.cm.oaba.ejb.data.MatchWriterMessage;
 import com.choicemaker.cm.oaba.ejb.data.OabaJobMessage;
+import com.choicemaker.util.Precondition;
 
 /**
  * This object contains common message bean utilities such as canceling a Batch
@@ -46,10 +48,16 @@ public class MessageBeanUtils {
 	 * This method stops the BatchJob by setting the status to aborted, and
 	 * removes the temporary directory for the job.
 	 */
-	public static void stopJob(BatchJob batchJob,
+	public static void stopJob(BatchJob batchJob, BatchJobManager jobManager,
 			OperationalPropertyController propController, ProcessingEventLog status) {
 
+    Precondition.assertNonNullArgument("null batchJob", batchJob);
+    Precondition.assertNonNullArgument("null jobManager", jobManager);
+    Precondition.assertNonNullArgument("null propController", propController);
+    Precondition.assertNonNullArgument("null status", status);
+
 		batchJob.markAsAborted();
+		jobManager.save(batchJob);
 
 		final String _clearResources =
 			propController.getJobProperty(batchJob, PN_CLEAR_RESOURCES);

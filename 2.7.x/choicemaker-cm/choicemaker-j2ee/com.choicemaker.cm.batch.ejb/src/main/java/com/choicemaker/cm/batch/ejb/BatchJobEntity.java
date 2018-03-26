@@ -42,7 +42,6 @@ import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
-import javax.persistence.DiscriminatorValue;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -60,6 +59,7 @@ import com.choicemaker.cm.args.PersistentObject;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.BatchJobRigor;
 import com.choicemaker.cm.batch.api.BatchJobStatus;
+import com.choicemaker.util.Precondition;
 
 @NamedQuery(name = QN_BATCHJOB_FIND_BY_JOBID,
 		query = JPQL_BATCHJOB_FIND_BY_JOBID)
@@ -67,13 +67,14 @@ import com.choicemaker.cm.batch.api.BatchJobStatus;
 @Table(/* schema = "CHOICEMAKER", */name = TABLE_NAME)
 @DiscriminatorColumn(name = DISCRIMINATOR_COLUMN,
 		discriminatorType = DiscriminatorType.STRING)
-//@DiscriminatorValue(DISCRIMINATOR_VALUE)
-public abstract class BatchJobEntity extends AbstractPersistentObject implements
-		Serializable, BatchJob {
+// @DiscriminatorValue(DISCRIMINATOR_VALUE)
+public abstract class BatchJobEntity extends AbstractPersistentObject
+		implements Serializable, BatchJob {
 
 	private static final long serialVersionUID = 271L;
 
-	private static Logger log = Logger.getLogger(BatchJobEntity.class.getName());
+	private static Logger log =
+		Logger.getLogger(BatchJobEntity.class.getName());
 
 	private static Map<BatchJobStatus, Set<BatchJobStatus>> allowedTransitions =
 		new HashMap<>();
@@ -92,7 +93,7 @@ public abstract class BatchJobEntity extends AbstractPersistentObject implements
 		allowed.add(BatchJobStatus.ABORTED);
 		allowedTransitions.put(BatchJobStatus.QUEUED, allowed);
 		allowed = new HashSet<>();
-		allowed.add(BatchJobStatus.PROCESSING);
+		// allowed.add(BatchJobStatus.PROCESSING);
 		allowed.add(BatchJobStatus.COMPLETED);
 		allowed.add(BatchJobStatus.FAILED);
 		allowed.add(BatchJobStatus.ABORT_REQUESTED);
@@ -137,8 +138,8 @@ public abstract class BatchJobEntity extends AbstractPersistentObject implements
 	protected final String type;
 
 	/**
-	 * {@link com.choicemaker.cm.args.PersistentObject#NONPERSISTENT_ID} or
-	 * the id of some other BatchJobEntity
+	 * {@link com.choicemaker.cm.args.PersistentObject#NONPERSISTENT_ID} or the
+	 * id of some other BatchJobEntity
 	 */
 	@Column(name = CN_BPARENT_ID)
 	protected final long bparentId;
@@ -190,8 +191,8 @@ public abstract class BatchJobEntity extends AbstractPersistentObject implements
 	@MapKeyColumn(name = CN_TIMESTAMP)
 	@MapKeyTemporal(TemporalType.TIMESTAMP)
 	@Column(name = CN_STATUS)
-	@CollectionTable(name = AUDIT_TABLE_NAME, joinColumns = @JoinColumn(
-			name = CN_AUDIT_JOIN))
+	@CollectionTable(name = AUDIT_TABLE_NAME,
+			joinColumns = @JoinColumn(name = CN_AUDIT_JOIN))
 	protected Map<Date, String> audit = new HashMap<>();
 
 	private static final String[] _nonterminal = new String[] {
@@ -334,9 +335,8 @@ public abstract class BatchJobEntity extends AbstractPersistentObject implements
 	}
 
 	protected void logTransition(BatchJobStatus newStatus) {
-		String msg =
-			getId() + ", '" + getExternalId() + "': transitioning from "
-					+ getStatus() + " to " + newStatus;
+		String msg = getId() + ", '" + getExternalId()
+				+ "': transitioning from " + getStatus() + " to " + newStatus;
 		if (newStatus != null && newStatus.equals(getStatus())) {
 			log.fine("UNNECESSARY TRANSITION: " + msg);
 		} else {
@@ -345,17 +345,20 @@ public abstract class BatchJobEntity extends AbstractPersistentObject implements
 	}
 
 	protected void logIgnoredTransition(String transition) {
-		String msg =
-			getId() + ", '" + getExternalId() + "': " + transition
-					+ " ignored (status == '" + getStatus() + "')";
+		String msg = getId() + ", '" + getExternalId() + "': " + transition
+				+ " ignored (status == '" + getStatus() + "')";
 		log.warning(msg);
 	}
 
 	/** For testing only; use markAsXxx() methods instead */
 	public void setStatus(BatchJobStatus newStatus) {
-		if (newStatus == null) {
-			throw new IllegalArgumentException("null status");
-		}
+		BatchJobUtils.updateBatchJobStatusFromTo(this, this.getStatus(),
+				newStatus);
+	}
+
+	/** For testing only; use markAsXxx() methods instead */
+	void setStatusInternal(BatchJobStatus newStatus) {
+		Precondition.assertNonNullArgument("null status", newStatus);
 		this.status = newStatus.name();
 		setTimeStamp(this.status, new Date());
 	}
@@ -376,9 +379,11 @@ public abstract class BatchJobEntity extends AbstractPersistentObject implements
 	}
 
 	protected BatchJobEntity() {
-		this(DISCRIMINATOR_VALUE, PersistentObject.NONPERSISTENT_ID, PersistentObject.NONPERSISTENT_ID,
+		this(DISCRIMINATOR_VALUE, PersistentObject.NONPERSISTENT_ID,
+				PersistentObject.NONPERSISTENT_ID,
 				PersistentObject.NONPERSISTENT_ID, null, randomTransactionId(),
-				PersistentObject.NONPERSISTENT_ID, PersistentObject.NONPERSISTENT_ID, DEFAULT_RIGOR);
+				PersistentObject.NONPERSISTENT_ID,
+				PersistentObject.NONPERSISTENT_ID, DEFAULT_RIGOR);
 	}
 
 	/**
@@ -408,7 +413,7 @@ public abstract class BatchJobEntity extends AbstractPersistentObject implements
 		this.bparentId = bpid;
 		this.urmId = urmid;
 		this.rigor = bjr.symbol;
-		setStatus(BatchJobStatus.NEW);
+		setStatusInternal(BatchJobStatus.NEW);
 	}
 
 	@Override
@@ -433,7 +438,7 @@ public abstract class BatchJobEntity extends AbstractPersistentObject implements
 
 	@Override
 	public void markAsReStarted() {
-		setStatus(BatchJobStatus.QUEUED);
+		markAsQueued();
 	}
 
 	@Override
@@ -481,7 +486,8 @@ public abstract class BatchJobEntity extends AbstractPersistentObject implements
 
 	@Override
 	public String toString() {
-		return "BatchJob [" + id + "/" + getUUID() + "/" + externalId + "/" + status + "]";
+		return "BatchJob [" + id + "/" + getUUID() + "/" + externalId + "/"
+				+ status + "]";
 	}
 
 	public static String[] getStatusValues() {

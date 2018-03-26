@@ -167,6 +167,7 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 			log.severe(msg0);
 			if (batchJob != null) {
 				batchJob.markAsFailed();
+				jobManager.save(batchJob);
 			}
 		}
 		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
@@ -205,7 +206,8 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 			BatchJobUtils.getMaxTempPairwiseIndex(propController, batchJob);
 
 		if (BatchJobStatus.ABORT_REQUESTED.equals(batchJob.getStatus())) {
-			MessageBeanUtils.stopJob(batchJob, propController, processingEntry);
+			MessageBeanUtils.stopJob(batchJob, jobManager, propController,
+					processingEntry);
 
 		} else {
 			processingEntry
@@ -246,7 +248,8 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 		final int numTempResults = getMaxTempPairwiseIndex(batchJob);
 
 		if (BatchJobStatus.ABORT_REQUESTED.equals(batchJob.getStatus())) {
-			MessageBeanUtils.stopJob(batchJob, propController, processingEntry);
+			MessageBeanUtils.stopJob(batchJob, jobManager, propController,
+					processingEntry);
 
 		} else {
 			countMessages = numTempResults;

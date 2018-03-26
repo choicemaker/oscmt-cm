@@ -132,6 +132,7 @@ public class BatchMatchingBean implements BatchMatching, WorkflowListener {
 		// Mark the job as started and start processing by the StartOabaMDB EJB
 		urmJob.markAsQueued();
 		urmJob.markAsStarted();
+		urmJobManager.save(urmJob);
 
 		long oabaId = oabaService.startDeduplication(externalID, tp,
 				oabaSettings, serverConfiguration, urmJob);
@@ -207,6 +208,7 @@ public class BatchMatchingBean implements BatchMatching, WorkflowListener {
 		// Mark the job as started and start processing by the StartOabaMDB EJB
 		urmJob.markAsQueued();
 		urmJob.markAsStarted();
+		urmJobManager.save(urmJob);
 
 		long oabaId = oabaService.startLinkage(externalID, tp, oabaSettings,
 				serverConfiguration, urmJob);
@@ -269,6 +271,7 @@ public class BatchMatchingBean implements BatchMatching, WorkflowListener {
 		if (bpn.getJobPercentComplete() == 0.0f) {
 			if (urmJob.getStatus() == BatchJobStatus.NEW) {
 				urmJob.markAsQueued();
+		    urmJobManager.save(urmJob);
 			} else {
 				logger.fine("ignoring notification: " + bpn);
 			}
@@ -278,8 +281,10 @@ public class BatchMatchingBean implements BatchMatching, WorkflowListener {
 			if (urmJob.getStatus() == BatchJobStatus.NEW) {
 				urmJob.markAsQueued();
 				urmJob.markAsStarted();
+				urmJobManager.save(urmJob);
 			} else if (urmJob.getStatus() == BatchJobStatus.QUEUED) {
 				urmJob.markAsStarted();
+				urmJobManager.save(urmJob);
 			} else {
 				logger.fine("ignoring notification: " + bpn);
 			}
@@ -301,6 +306,7 @@ public class BatchMatchingBean implements BatchMatching, WorkflowListener {
 				logger.fine("URM job completed after OABA notification for job "
 						+ oabaJobId);
 				urmJob.markAsCompleted();
+		    urmJobManager.save(urmJob);
 			}
 
 		} else {
@@ -329,6 +335,7 @@ public class BatchMatchingBean implements BatchMatching, WorkflowListener {
 		if (bpn.getJobPercentComplete() == 0.0f) {
 			if (urmJob.getStatus() == BatchJobStatus.NEW) {
 				urmJob.markAsQueued();
+		    urmJobManager.save(urmJob);
 			} else {
 				logger.fine("ignoring notification: " + bpn);
 			}
@@ -338,8 +345,10 @@ public class BatchMatchingBean implements BatchMatching, WorkflowListener {
 			if (urmJob.getStatus() == BatchJobStatus.NEW) {
 				urmJob.markAsQueued();
 				urmJob.markAsStarted();
+				urmJobManager.save(urmJob);
 			} else  if (urmJob.getStatus() == BatchJobStatus.QUEUED) {
 				urmJob.markAsStarted();
+				urmJobManager.save(urmJob);
 			} else {
 				logger.fine("ignoring notification: " + bpn);
 			}
@@ -349,6 +358,7 @@ public class BatchMatchingBean implements BatchMatching, WorkflowListener {
 					"URM job completed after Transitivity notification for job "
 							+ transitivityJobId);
 			urmJob.markAsCompleted();
+		  urmJobManager.save(urmJob);
 //			notifyCompletion(bpn);
 
 		} else {
@@ -463,6 +473,7 @@ public class BatchMatchingBean implements BatchMatching, WorkflowListener {
 		// Mark the job as started and start processing by the StartOabaMDB EJB
 		urmJob.markAsQueued();
 		urmJob.markAsStarted();
+		urmJobManager.save(urmJob);
 
 		long transId = transService.startTransitivity(externalID, tp, oabaJob,
 				oabaSettings, serverConfiguration, urmJob);
@@ -490,6 +501,7 @@ public class BatchMatchingBean implements BatchMatching, WorkflowListener {
 		// Mark the job as started and start processing by the StartOabaMDB EJB
 		urmJob.markAsQueued();
 		urmJob.markAsStarted();
+		urmJobManager.save(urmJob);
 
 		long transId = transService.startTransitivity(externalID, tp, oabaJob,
 				oabaSettings, serverConfiguration, urmJob, mode);
@@ -523,6 +535,7 @@ public class BatchMatchingBean implements BatchMatching, WorkflowListener {
 		// Mark the job as started and start processing by the StartOabaMDB EJB
 		urmJob.markAsQueued();
 		urmJob.markAsStarted();
+		urmJobManager.save(urmJob);
 
 		long oabaId = oabaService.startDeduplication(externalID, bp,
 				oabaSettings, serverConfiguration, urmJob);
@@ -549,6 +562,7 @@ public class BatchMatchingBean implements BatchMatching, WorkflowListener {
 		// Mark the job as started and start processing by the StartOabaMDB EJB
 		urmJob.markAsQueued();
 		urmJob.markAsStarted();
+		urmJobManager.save(urmJob);
 
 		long oabaId = oabaService.startLinkage(externalID, batchParams,
 				oabaSettings, serverConfiguration, urmJob);

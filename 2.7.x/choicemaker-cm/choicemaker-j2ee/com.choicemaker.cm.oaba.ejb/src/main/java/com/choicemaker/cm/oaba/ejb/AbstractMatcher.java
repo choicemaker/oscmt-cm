@@ -168,7 +168,7 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 									+ currentChunk + " " + data.treeIndex);
 
 					if (BatchJobStatus.ABORT_REQUESTED == batchJob.getStatus()) {
-						MessageBeanUtils.stopJob(batchJob,
+						MessageBeanUtils.stopJob(batchJob, getOabaJobManager(),
 								getPropertyController(), processingLog);
 
 					} else {
@@ -191,6 +191,7 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 			getLogger().severe(msg0);
 			if (batchJob != null) {
 				batchJob.markAsFailed();
+				getOabaJobManager().save(batchJob);
 			}
 		}
 		getJMSTrace()

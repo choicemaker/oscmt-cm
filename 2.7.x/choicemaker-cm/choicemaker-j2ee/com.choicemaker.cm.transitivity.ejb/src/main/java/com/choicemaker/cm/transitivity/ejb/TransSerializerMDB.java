@@ -154,6 +154,7 @@ public class TransSerializerMDB implements MessageListener, Serializable {
 			log.severe(msg0);
 			if (batchJob != null) {
 				batchJob.markAsFailed();
+				jobManager.save(batchJob);
 			}
 		}
 		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
@@ -195,6 +196,7 @@ public class TransSerializerMDB implements MessageListener, Serializable {
 			final BatchJobStatus jobStatus = batchJob.getStatus();
 			if (jobStatus == ABORT_REQUESTED) {
 				batchJob.markAsAborted();
+				jobManager.save(batchJob);
 				log.fine("Transitivity serialization job marked as aborted: "
 						+ batchJob);
 				return;
@@ -231,6 +233,7 @@ public class TransSerializerMDB implements MessageListener, Serializable {
 			} catch (Exception x) {
 				log.severe("Unable to create clustering iterator: " + x);
 				batchJob.markAsFailed();
+				jobManager.save(batchJob);
 				return;
 			}
 
@@ -249,6 +252,7 @@ public class TransSerializerMDB implements MessageListener, Serializable {
 
 			// mark as done
 			batchJob.markAsCompleted();
+			jobManager.save(batchJob);
 			final Date now = new Date();
 			final String info = null;
 			sendToUpdateStatus(batchJob, DONE, now, info);
@@ -258,6 +262,7 @@ public class TransSerializerMDB implements MessageListener, Serializable {
 			log.severe(e.toString());
 			if (batchJob != null) {
 				batchJob.markAsFailed();
+			  jobManager.save(batchJob);
 			}
 		}
 		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());

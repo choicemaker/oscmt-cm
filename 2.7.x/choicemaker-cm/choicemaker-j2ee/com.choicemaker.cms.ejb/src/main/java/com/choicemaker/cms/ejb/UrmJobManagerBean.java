@@ -7,21 +7,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import javax.annotation.Resource;
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
-import javax.jms.Topic;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import com.choicemaker.cm.batch.api.BatchJob;
-import com.choicemaker.cm.oaba.api.OabaSettingsController;
-import com.choicemaker.cm.oaba.api.ServerConfigurationController;
 import com.choicemaker.cm.oaba.ejb.OabaJobJPA;
-import com.choicemaker.cm.transitivity.api.TransitivityParametersController;
 import com.choicemaker.cms.api.UrmJobManager;
 
 /**
@@ -37,18 +31,6 @@ public class UrmJobManagerBean implements UrmJobManager {
 
 	@PersistenceContext(unitName = "oaba")
 	private EntityManager em;
-
-	@EJB
-	private TransitivityParametersController paramsController;
-
-	@EJB
-	private OabaSettingsController settingsController;
-
-	@EJB
-	private ServerConfigurationController serverManager;
-
-	@Resource(lookup = "java:/choicemaker/urm/jms/transStatusTopic")
-	private Topic transStatusTopic;
 
 	protected UrmJobEntity getBean(BatchJob oabaJob) {
 		UrmJobEntity retVal = null;

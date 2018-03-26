@@ -206,6 +206,7 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 			getLogger().severe(msg0);
 			if (batchJob != null) {
 				batchJob.markAsFailed();
+				jobManager.save(batchJob);
 			}
 		}
 		getJmsTrace()
@@ -223,8 +224,8 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 
 	protected void abortProcessing(BatchJob batchJob,
 			ProcessingEventLog processingLog) {
-		MessageBeanUtils.stopJob(batchJob, getPropertyController(),
-				processingLog);
+		MessageBeanUtils.stopJob(batchJob, getJobController(),
+				getPropertyController(), processingLog);
 	}
 
 	protected void updateOabaProcessingStatus(BatchJob job,

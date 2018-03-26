@@ -240,6 +240,7 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 			getLogger().severe(msg0);
 			if (batchJob != null) {
 				batchJob.markAsFailed();
+				getJobController().save(batchJob);
 			}
 		}
 		getJMSTrace()
@@ -284,7 +285,8 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 		getLogger().info("outstanding messages: " + countMessages);
 
 		if (BatchJobStatus.ABORT_REQUESTED == batchJob.getStatus()) {
-			MessageBeanUtils.stopJob(batchJob, getPropertyController(), status);
+			MessageBeanUtils.stopJob(batchJob, getJobController(),
+					getPropertyController(), status);
 
 		} else if (BatchJobStatus.ABORTED != batchJob.getStatus()) {
 			// if there are multiple processors, we have don't do anything for
@@ -422,8 +424,8 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 			getEventManager().getProcessingLog(batchJob);
 
 		if (BatchJobStatus.ABORT_REQUESTED == batchJob.getStatus()) {
-			MessageBeanUtils.stopJob(batchJob, getPropertyController(),
-					processingLog);
+			MessageBeanUtils.stopJob(batchJob, getJobController(),
+					getPropertyController(), processingLog);
 
 		} else {
 			currentChunk = 0;

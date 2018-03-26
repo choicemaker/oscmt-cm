@@ -68,6 +68,11 @@
 
   <dependencies>
     <dependency>
+      <groupId>org.eclipse.persistence</groupId>
+      <artifactId>org.eclipse.persistence.jpa</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>com.choicemaker.util</groupId>
       <artifactId>choicemaker-util</artifactId>
     </dependency>

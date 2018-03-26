@@ -115,6 +115,7 @@ public class StartOabaMDB extends AbstractOabaMDB {
 
 				// update status to mark as start
 				batchJob.markAsStarted();
+		    getJobController().save(batchJob);
 
 				getLogger().info("Job id: " + jobId);
 				getLogger().info(
@@ -231,6 +232,7 @@ public class StartOabaMDB extends AbstractOabaMDB {
 			log.severe(msg0);
 			if (batchJob != null) {
 				batchJob.markAsFailed();
+		    getJobController().save(batchJob);
 			}
 		}
 		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());

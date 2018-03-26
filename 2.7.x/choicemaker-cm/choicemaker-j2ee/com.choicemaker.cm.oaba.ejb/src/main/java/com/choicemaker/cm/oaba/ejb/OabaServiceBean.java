@@ -211,6 +211,7 @@ public class OabaServiceBean implements OabaService {
 		// Mark the job as queued, start processing by the StartOabaMDB EJB,
 		// and notify listeners that the job is queued.
 		oabaJob.markAsQueued();
+		jobManager.save(oabaJob);
 		sendToStartOABA(retVal);
 		eventManager.updateStatusWithNotification(oabaJob, OabaEventBean.QUEUED,
 				new Date(), null);
@@ -242,6 +243,7 @@ public class OabaServiceBean implements OabaService {
 			logger.warning(msg);
 		} else {
 			batchJob.markAsAbortRequested();
+		  jobManager.save(batchJob);
 			propController.setJobProperty(batchJob, PN_CLEAR_RESOURCES,
 					String.valueOf(cleanStatus));
 		}
@@ -291,6 +293,7 @@ public class OabaServiceBean implements OabaService {
 			// that the job is queued.
 			logger.info("Resuming job " + jobID);
 			job.markAsReStarted();
+		  jobManager.save(job);
 			sendToStartOABA(jobID);
 			eventManager.updateStatusWithNotification(job, OabaEventBean.QUEUED,
 					new Date(), null);

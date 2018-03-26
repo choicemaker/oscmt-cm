@@ -109,6 +109,7 @@ public class StartTransitivityMDB extends AbstractTransitivityMDB {
 			ImmutableProbabilityModel model) throws BlockingException {
 
 		batchJob.markAsStarted();
+    getTransitivityJobController().save(batchJob);
 		removeOldFiles(batchJob);
 		createChunks(batchJob, params, oabaSettings, serverConfig);
 	}

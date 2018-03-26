@@ -155,6 +155,7 @@ public class TransitivityServiceBean implements TransitivityService {
 		// Mark the job as queued, start processing by the StartTransitivityMDB,
 		// and notify listeners that the job is queued.
 		transJob.markAsQueued();
+		jobManager.save(transJob);
 		sendToTransitivity(retVal);
 		eventManager.updateStatusWithNotification(transJob,
 				TransitivityEventBean.QUEUED, new Date(), null);
