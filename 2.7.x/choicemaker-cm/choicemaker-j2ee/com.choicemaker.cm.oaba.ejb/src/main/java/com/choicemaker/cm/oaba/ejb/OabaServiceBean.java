@@ -183,27 +183,6 @@ public class OabaServiceBean implements OabaService {
 	public long startDeduplication(String externalID, OabaParameters bp,
 			OabaSettings oabaSettings, ServerConfiguration serverConfiguration,
 			BatchJob urmJob) throws ServerConfigurationException {
-		if (bp == null) {
-			throw new IllegalArgumentException("null batch parameters");
-		}
-
-		// FIXME REMOVEME
-//		OabaParameters submittedParams;
-//		final OabaLinkageType task = bp.getOabaLinkageType();
-//		if (bp.getReferenceRsId() == null && bp.getReferenceRsType() == null
-//				&& STAGING_DEDUPLICATION == task) {
-//			submittedParams = bp;
-//		} else {
-//			submittedParams =
-//				new OabaParametersEntity(bp.getModelConfigurationName(),
-//						bp.getLowThreshold(), bp.getHighThreshold(),
-//						bp.getQueryRsId(), bp.getQueryRsType(),
-//						bp.isQueryRsDeduplicated(),
-//						bp.getQueryRsDatabaseConfiguration(),
-//						bp.getQueryToQueryBlockingConfiguration(), null, null,
-//						null, null, STAGING_DEDUPLICATION);
-//		}
-
 		return startLinkage(externalID, bp, oabaSettings,
 				serverConfiguration, urmJob);
 	}
