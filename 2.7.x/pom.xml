@@ -61,7 +61,7 @@
     <module>choicemaker-assembly</module>
     <module>choicemaker-base</module>
 
-    <module>choicemaker-util</module>
+    <module>choicemaker-utils</module>
     <module>choicemaker-e2</module>
     <module>choicemaker-cm</module>
     <module>choicemaker-maven</module>

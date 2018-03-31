@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+  xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+>
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.choicemaker.cm</groupId>
+    <artifactId>choicemaker-base</artifactId>
+    <version>2.7.1-SNAPSHOT</version>
+    <relativePath>../choicemaker-base/pom.xml</relativePath>
+  </parent>
+
+  <artifactId>choicemaker-utils</artifactId>
+  <packaging>pom</packaging>
+
+  <name>ChoiceMaker Utilities</name>
+  <url>http://oscmt.sourceforge.net/dev-doc</url>
+
+  <scm>
+    <!-- connection>scm:git:ssh://git.code.sf.net/p/oscmt/cm.git</connection -->
+    <url>http://sourceforge.net/p/oscmt/cm/ci/master/tree/2.7.x/</url>
+    <!-- developerConnection>scm:git:ssh://git.code.sf.net/p/oscmt/cm.git</developerConnection -->
+  </scm>
+
+  <issueManagement>
+    <url>http://sourceforge.net/projects/oscmt/support</url>
+  </issueManagement>
+
+  <modules>
+    <module>choicemaker-util</module>
+    <module>choicemaker-dates</module>
+  </modules>
+
+</project>
