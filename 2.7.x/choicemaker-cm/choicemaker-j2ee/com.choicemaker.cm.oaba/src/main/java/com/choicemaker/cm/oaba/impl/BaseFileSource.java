@@ -7,7 +7,7 @@
  *******************************************************************************/
 package com.choicemaker.cm.oaba.impl;
 
-import static com.choicemaker.cm.oaba.impl.BaseFileSink.printStackTrace;
+import static com.choicemaker.util.DebugUtils.printStackTrace;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;

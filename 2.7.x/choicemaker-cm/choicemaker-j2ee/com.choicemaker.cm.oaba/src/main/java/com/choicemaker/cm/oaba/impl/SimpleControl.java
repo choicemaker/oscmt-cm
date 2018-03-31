@@ -9,19 +9,8 @@ package com.choicemaker.cm.oaba.impl;
 
 import com.choicemaker.cm.core.IControl;
 
-/**
- * @author pcheung
- *
- */
 public class SimpleControl implements IControl {
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.choicemaker.cm.oaba.core.IControl#shouldStop
-	 * ()
-	 */
 	@Override
 	public boolean shouldStop() {
 		return false;

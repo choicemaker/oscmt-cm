@@ -14,6 +14,8 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.ejb.Remote;
+import javax.ejb.Stateless;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -38,6 +40,8 @@ import com.choicemaker.cm.urm.exceptions.RecordCollectionException;
 import com.choicemaker.cms.ejb.DefaultUpdateDerivedFieldsRegistry;
 import com.choicemaker.util.Precondition;
 
+@Stateless
+@Remote(CmServerAdmin.class)
 public class CmServerAdminBean implements CmServerAdmin {
 
 	private static final String VERSION = "2.7.1";

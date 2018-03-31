@@ -1,5 +1,6 @@
 package com.choicemaker.cm.batch.ejb;
 
+import static com.choicemaker.util.DebugUtils.printStackTrace;
 import static com.choicemaker.cm.batch.ejb.BatchJobJPA.AUDIT_TABLE_NAME;
 import static com.choicemaker.cm.batch.ejb.BatchJobJPA.CN_AUDIT_JOIN;
 import static com.choicemaker.cm.batch.ejb.BatchJobJPA.CN_BPARENT_ID;
@@ -36,6 +37,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.persistence.CollectionTable;
@@ -322,11 +324,28 @@ public abstract class BatchJobEntity extends AbstractPersistentObject
 
 	@Override
 	public boolean shouldStop() {
-		if (getStatus().equals(BatchJobStatus.ABORT_REQUESTED)
-				|| getStatus().equals(BatchJobStatus.ABORTED))
-			return true;
-		else
-			return false;
+		boolean retVal;
+		BatchJobStatus status = getStatus();
+		if (log.isLoggable(Level.FINEST)) {
+			String msg = "Status: " + status;
+			log.finest(msg);
+		}
+		if (status == BatchJobStatus.ABORT_REQUESTED
+				|| status == BatchJobStatus.ABORTED) {
+			retVal = true;
+		} else {
+			retVal = false;
+		}
+		if (log.isLoggable(Level.FINE)) {
+			String msg =
+				"Status: " + status + ": returning shouldStop == " + retVal;
+			log.fine(msg);
+			if (log.isLoggable(Level.FINER)) {
+				String msg2 = printStackTrace(msg);
+				log.finer(msg2);
+			}
+		}
+		return retVal;
 	}
 
 	@Override
