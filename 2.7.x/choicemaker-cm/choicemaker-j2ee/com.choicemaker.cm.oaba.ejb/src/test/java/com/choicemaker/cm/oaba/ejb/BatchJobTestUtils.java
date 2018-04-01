@@ -191,7 +191,7 @@ class BatchJobStub implements BatchJob {
 	}
 
 	@Override
-	public boolean shouldStop() {
+	public boolean stopProcessing() {
 		return false;
 	}
 

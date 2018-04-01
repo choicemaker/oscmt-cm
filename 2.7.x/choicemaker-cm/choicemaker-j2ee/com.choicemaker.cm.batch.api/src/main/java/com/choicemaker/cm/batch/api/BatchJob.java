@@ -7,7 +7,7 @@ import java.util.Date;
 import com.choicemaker.cm.args.PersistentObject;
 import com.choicemaker.cm.core.IControl;
 
-public interface BatchJob extends PersistentObject, IControl, Serializable {
+public interface BatchJob extends PersistentObject, Serializable {
 
 	/** Minimum valid value for fractionComplete (inclusive) */
 	int MIN_PERCENTAGE_COMPLETED = 0;
@@ -87,7 +87,6 @@ public interface BatchJob extends PersistentObject, IControl, Serializable {
 
 	void markAsAborted();
 
-	@Override
-	boolean shouldStop();
+	boolean stopProcessing();
 
 }

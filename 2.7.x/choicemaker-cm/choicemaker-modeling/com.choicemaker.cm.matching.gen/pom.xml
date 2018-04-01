@@ -63,6 +63,10 @@
       <artifactId>choicemaker-util</artifactId>
     </dependency>
     <dependency>
+      <groupId>com.choicemaker.util</groupId>
+      <artifactId>choicemaker-dates</artifactId>
+    </dependency>
+    <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.core</artifactId>
     </dependency>

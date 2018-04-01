@@ -45,7 +45,7 @@ import com.choicemaker.cm.core.IControl;
 				query = JPQL_URM_FIND_ALL_BY_URM_ID) })
 @Entity
 @DiscriminatorValue(value = DISCRIMINATOR_VALUE)
-public class UrmJobEntity extends BatchJobEntity implements IControl {
+public class UrmJobEntity extends BatchJobEntity /*implements IControl*/ {
 
 	private static final long serialVersionUID = 271L;
 

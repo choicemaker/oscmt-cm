@@ -23,6 +23,7 @@ import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.ProcessingEventLog;
+import com.choicemaker.cm.batch.ejb.BatchJobControl;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ISerializableRecordSource;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
@@ -120,6 +121,9 @@ public class Chunk2MDB extends AbstractOabaMDB {
 		
 		final RecordMatchingMode mode = getRecordMatchingMode(batchJob);
 
+		final BatchJobControl control =
+			new BatchJobControl(this.getJobController(), batchJob);
+
 		ChunkService3 chunkService =
 			new ChunkService3(OabaFileUtils.getTreeSetSource(batchJob), source2,
 					staging, master, model,
@@ -127,7 +131,7 @@ public class Chunk2MDB extends AbstractOabaMDB {
 					OabaFileUtils.getStageDataFactory(batchJob, model),
 					OabaFileUtils.getMasterDataFactory(batchJob, model),
 					translator, tTransformer, transformerO,
-					maxChunk, maxChunkFiles, processingLog, batchJob, mode);
+					maxChunk, maxChunkFiles, processingLog, control, mode);
 		log.info("Chunk service: " + chunkService);
 		chunkService.runService();
 		log.info("Done creating chunks " + chunkService.getTimeElapsed());

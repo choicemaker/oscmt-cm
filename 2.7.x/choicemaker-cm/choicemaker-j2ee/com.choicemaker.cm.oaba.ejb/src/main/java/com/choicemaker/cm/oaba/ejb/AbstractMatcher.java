@@ -35,6 +35,7 @@ import com.choicemaker.cm.batch.api.BatchJobStatus;
 import com.choicemaker.cm.batch.api.OperationalPropertyController;
 import com.choicemaker.cm.batch.api.EventPersistenceManager;
 import com.choicemaker.cm.batch.api.ProcessingEventLog;
+import com.choicemaker.cm.batch.ejb.BatchJobControl;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ClueSet;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
@@ -279,7 +280,9 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 			ImmutableProbabilityModel stageModel, ImmutableThresholds t)
 			throws RemoteException, BlockingException {
 
-		boolean stop = batchJob.shouldStop();
+		final BatchJobControl control =
+				new BatchJobControl(this.getOabaJobManager(), batchJob);
+		boolean stop = control.shouldStop();
 		ComparisonPair p;
 		Record q, m;
 		MatchRecord2 match;
@@ -290,7 +293,7 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 			p = cSet.getNextPair();
 			compares++;
 
-			stop = ControlChecker.checkStop(batchJob, compares, INTERVAL);
+			stop = ControlChecker.checkStop(control, compares, INTERVAL);
 
 			q = getQ(dataStore, p);
 			m = getM(dataStore, p);

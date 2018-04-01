@@ -29,6 +29,7 @@ import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.ProcessingEventLog;
+import com.choicemaker.cm.batch.ejb.BatchJobControl;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ISerializableRecordSource;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
@@ -186,12 +187,14 @@ public class StartOabaMDB extends AbstractOabaMDB {
 							.getReferenceDatabaseConfiguration(oabaParams);
 				RecValSinkSourceFactory recvalFactory =
 					OabaFileUtils.getRecValFactory(batchJob);
+				final BatchJobControl control =
+						new BatchJobControl(this.getJobController(), batchJob);
 				RecValService3 rvService =
 					new RecValService3(staging, master, model,
 							blockingConfiguration, queryConfiguration,
 							referenceConfiguration, recvalFactory,
 							ric, translator,
-							processingEntry, batchJob, mode);
+							processingEntry, control, mode);
 				rvService.runService();
 				getLogger().info(
 						"Done creating rec_id, val_id files: "

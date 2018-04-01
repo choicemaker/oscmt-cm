@@ -22,6 +22,7 @@ import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.ProcessingEventLog;
+import com.choicemaker.cm.batch.ejb.BatchJobControl;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.oaba.core.IBlockSink;
@@ -79,12 +80,14 @@ public class BlockingMDB extends AbstractOabaMDB {
 				getPropertyController().getJobProperty(batchJob,
 						PN_BLOCKING_FIELD_COUNT);
 			final int numBlockFields = Integer.valueOf(_numBlockFields);
+			final BatchJobControl control =
+					new BatchJobControl(this.getJobController(), batchJob);
 			blockingService =
 				new OABABlockingService(maxBlock, bGroup,
 						OabaFileUtils.getOversizedGroupFactory(batchJob),
 						osSpecial, null,
 						OabaFileUtils.getRecValFactory(batchJob),
-						numBlockFields, data.validator, processingLog, batchJob,
+						numBlockFields, data.validator, processingLog, control,
 						minFields, maxOversized);
 		} catch (IOException e) {
 			throw new BlockingException(e.getMessage(), e);

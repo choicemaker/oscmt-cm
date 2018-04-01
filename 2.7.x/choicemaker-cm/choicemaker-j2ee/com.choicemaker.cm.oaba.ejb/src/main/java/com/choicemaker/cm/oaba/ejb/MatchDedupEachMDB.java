@@ -21,6 +21,7 @@ import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.ProcessingEventLog;
+import com.choicemaker.cm.batch.ejb.BatchJobControl;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.oaba.core.IComparableSink;
@@ -108,9 +109,11 @@ public class MatchDedupEachMDB extends AbstractOabaMDB {
 			new ComparableMRSinkSourceFactory(factory);
 
 		if (source.exists()) {
+			final BatchJobControl control =
+					new BatchJobControl(this.getJobController(), batchJob);
 			GenericDedupService service =
 				new GenericDedupService(source, sink, mFactory, maxMatches,
-						batchJob);
+						control);
 			service.runDedup();
 			int before = service.getNumBefore();
 			int after = service.getNumAfter();

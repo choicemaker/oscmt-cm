@@ -323,7 +323,7 @@ public abstract class BatchJobEntity extends AbstractPersistentObject
 	}
 
 	@Override
-	public boolean shouldStop() {
+	public boolean stopProcessing() {
 		boolean retVal;
 		BatchJobStatus status = getStatus();
 		if (log.isLoggable(Level.FINEST)) {

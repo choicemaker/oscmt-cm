@@ -35,6 +35,7 @@ import com.choicemaker.cm.batch.api.BatchJobStatus;
 import com.choicemaker.cm.batch.api.OperationalPropertyController;
 import com.choicemaker.cm.batch.api.EventPersistenceManager;
 import com.choicemaker.cm.batch.api.ProcessingEventLog;
+import com.choicemaker.cm.batch.ejb.BatchJobControl;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.RecordSource;
@@ -542,9 +543,11 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 		this.timegc += t;
 
 		// read in the data;
+		final BatchJobControl control =
+				new BatchJobControl(this.getJobController(), batchJob);
 		t = System.currentTimeMillis();
 		dataStore.init(stageRS[currentChunk], model, masterRS[currentChunk],
-				maxChunkSize, batchJob);
+				maxChunkSize, control);
 
 		t = System.currentTimeMillis() - t;
 		this.timeReadData += t;

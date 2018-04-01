@@ -26,6 +26,7 @@ import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.ProcessingEventLog;
+import com.choicemaker.cm.batch.ejb.BatchJobControl;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ISerializableRecordSource;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
@@ -242,13 +243,16 @@ public class StartTransitivityMDB extends AbstractTransitivityMDB {
 
 		final RecordMatchingMode mode = getRecordMatchingMode(transJob);
 
+		final BatchJobControl control =
+			new BatchJobControl(this.getTransitivityJobController(), transJob);
+
 		ChunkService3 chunkService =
 			new ChunkService3(source2, null, staging, master, model,
 					OabaFileUtils.getChunkIDFactory(transJob),
 					OabaFileUtils.getStageDataFactory(transJob, model),
 					OabaFileUtils.getMasterDataFactory(transJob, model),
 					currentTranslator, transformerO, null, maxChunk, numFiles,
-					status, transJob, mode);
+					status, control, mode);
 		chunkService.runService();
 		log.info("Done creating chunks " + chunkService.getTimeElapsed());
 

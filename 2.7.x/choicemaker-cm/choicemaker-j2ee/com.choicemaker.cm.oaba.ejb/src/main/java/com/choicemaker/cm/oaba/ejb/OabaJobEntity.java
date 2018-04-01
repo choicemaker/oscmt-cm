@@ -51,7 +51,7 @@ import com.choicemaker.cm.core.IControl;
 @NamedQuery(name = QN_OABAJOB_FIND_ALL, query = JPQL_OABAJOB_FIND_ALL)
 @Entity
 @DiscriminatorValue(DISCRIMINATOR_VALUE)
-public class OabaJobEntity extends BatchJobEntity implements IControl {
+public class OabaJobEntity extends BatchJobEntity /*implements IControl*/ {
 
 	private static final long serialVersionUID = 271L;
 
