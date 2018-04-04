@@ -29,6 +29,7 @@ import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.api.BatchJob;
+import com.choicemaker.cm.batch.api.BatchJobStatus;
 import com.choicemaker.cm.batch.api.EventPersistenceManager;
 import com.choicemaker.cm.batch.api.OperationalPropertyController;
 import com.choicemaker.cm.oaba.api.OabaParametersController;
@@ -48,11 +49,11 @@ import com.choicemaker.cm.transitivity.core.TransitivityEventBean;
 @Stateless
 public class TransitivityServiceBean implements TransitivityService {
 
-	private static final Logger log = Logger
-			.getLogger(TransitivityServiceBean.class.getName());
+	private static final Logger log =
+		Logger.getLogger(TransitivityServiceBean.class.getName());
 
-	private static final String SOURCE_CLASS = TransitivityServiceBean.class
-			.getSimpleName();
+	private static final String SOURCE_CLASS =
+		TransitivityServiceBean.class.getSimpleName();
 
 	protected static void logStartParameters(String externalID,
 			TransitivityParameters tp, BatchJob batchJob,
@@ -69,8 +70,8 @@ public class TransitivityServiceBean implements TransitivityService {
 	}
 
 	protected static void validateStartParameters(String externalID,
-			TransitivityParameters tp, BatchJob batchJob, ServerConfiguration sc,
-			RecordMatchingMode mode) {
+			TransitivityParameters tp, BatchJob batchJob,
+			ServerConfiguration sc, RecordMatchingMode mode) {
 
 		// Create an empty list of invalid parameters
 		List<String> validityErrors = new LinkedList<>();
@@ -89,9 +90,8 @@ public class TransitivityServiceBean implements TransitivityService {
 			validityErrors.add("null record-matching mode");
 		}
 		if (!validityErrors.isEmpty()) {
-			String msg =
-				"Invalid parameters to OabaService.startOABA: "
-						+ validityErrors.toString();
+			String msg = "Invalid parameters to OabaService.startOABA: "
+					+ validityErrors.toString();
 			log.severe(msg);
 			throw new IllegalArgumentException(msg);
 		}
@@ -131,15 +131,17 @@ public class TransitivityServiceBean implements TransitivityService {
 	public long startTransitivity(String externalID,
 			TransitivityParameters batchParams, BatchJob batchJob,
 			OabaSettings settings, ServerConfiguration serverConfiguration,
-			BatchJob urmJob, RecordMatchingMode mode) throws ServerConfigurationException {
+			BatchJob urmJob, RecordMatchingMode mode)
+			throws ServerConfigurationException {
 
 		final String METHOD = "startTransitivity";
 		log.entering(SOURCE_CLASS, METHOD);
 
-		validateStartParameters(externalID, batchParams, batchJob, serverConfiguration, mode);
+		validateStartParameters(externalID, batchParams, batchJob,
+				serverConfiguration, mode);
 
-		OabaParameters oabaParams =
-			oabaParamsController.findOabaParametersByBatchJobId(batchJob.getId());
+		OabaParameters oabaParams = oabaParamsController
+				.findOabaParametersByBatchJobId(batchJob.getId());
 		logStartParameters(externalID, batchParams, batchJob, oabaParams,
 				serverConfiguration, mode);
 
@@ -150,15 +152,38 @@ public class TransitivityServiceBean implements TransitivityService {
 		assert transJob.isPersistent();
 		final long retVal = transJob.getId();
 		BatchJobUtils.setRecordMatchingMode(propController, transJob, mode);
-		log.info("Started transitivity analysis (job id: " + retVal + ")");
 
-		// Mark the job as queued, start processing by the StartTransitivityMDB,
-		// and notify listeners that the job is queued.
-		transJob.markAsQueued();
-		jobManager.save(transJob);
-		sendToTransitivity(retVal);
-		eventManager.updateStatusWithNotification(transJob,
-				TransitivityEventBean.QUEUED, new Date(), null);
+		// Abort or continue depending on the status of the parent URM job
+		final BatchJobStatus urmStatus = urmJob.getStatus();
+		switch (urmStatus) {
+		case ABORT_REQUESTED:
+		case ABORTED:
+		case COMPLETED:
+		case FAILED: {
+			// Mark the job as aborted and notify listeners
+			log.info("Aborted transitivity analysis (job id: " + retVal + ")");
+			transJob.markAsAborted();
+			jobManager.save(transJob);
+			eventManager.updateStatusWithNotification(transJob,
+					TransitivityEventBean.DONE, new Date(), null);
+			break;
+		}
+		case NEW:
+		case QUEUED:
+		case PROCESSING:
+		default: {
+			// Mark the job as queued, start processing by the
+			// StartTransitivityMDB,
+			// and notify listeners that the job is queued.
+			log.info("Started transitivity analysis (job id: " + retVal + ")");
+			transJob.markAsQueued();
+			jobManager.save(transJob);
+			sendToTransitivity(retVal);
+			eventManager.updateStatusWithNotification(transJob,
+					TransitivityEventBean.QUEUED, new Date(), null);
+			break;
+		}
+		}
 
 		log.exiting(SOURCE_CLASS, METHOD, retVal);
 		return retVal;
@@ -167,7 +192,7 @@ public class TransitivityServiceBean implements TransitivityService {
 	@Override
 	public BatchJob getTransitivityJob(long jobId) {
 		BatchJob transJob = jobManager.findTransitivityJob(jobId);
-		 return transJob;
+		return transJob;
 	}
 
 	/**

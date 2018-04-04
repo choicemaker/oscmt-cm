@@ -117,19 +117,34 @@ public class TransitivityJobManagerBean implements TransitivityJobManager {
 			throw new IllegalArgumentException("null argument");
 		}
 
-		// Check the OABA job persistence and status (should be completed)
+		// Check the OABA job persistence and status
 		if (!batchJob.isPersistent()) {
 			throw new IllegalArgumentException("non-persistent OABA job");
 		}
 		BatchJobStatus oabaStatus = batchJob.getStatus();
-		String msg0 =
-			"Precedessor OABA (job " + batchJob.getId() + ") status: "
-					+ oabaStatus;
+		assert oabaStatus != null;
+		String msg0 = "Precedessor OABA (job " + batchJob.getId() + ") status: "
+				+ oabaStatus;
 		logger.info(msg0);
-		if (BatchJobStatus.COMPLETED != oabaStatus) {
-			String msg = "INVALID: " + msg0;
-			logger.severe(msg);
-			throw new IllegalArgumentException(msg);
+		switch (oabaStatus) {
+		case COMPLETED:
+			logger.finest("Typical case: OABA status: " + oabaStatus);
+			break;
+		case ABORT_REQUESTED:
+		case ABORTED:
+		case FAILED:
+			logger.warning("Abort state: OABA status: " + oabaStatus);
+			break;
+		case NEW:
+		case QUEUED:
+		case PROCESSING:
+			String msg1 = "Incomplete state: OABA status: " + oabaStatus;
+			logger.severe(msg1);
+			throw new IllegalArgumentException(msg1);
+		default:
+			String msg2 = "Unexpectd state: OABA status: " + oabaStatus;
+			logger.severe(msg2);
+			throw new IllegalStateException(msg2);
 		}
 
 		// Save the parameters

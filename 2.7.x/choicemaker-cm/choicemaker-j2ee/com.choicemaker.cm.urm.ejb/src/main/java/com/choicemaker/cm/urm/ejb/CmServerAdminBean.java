@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.ejb.EJB;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.naming.Context;
@@ -106,7 +107,7 @@ public class CmServerAdminBean implements CmServerAdmin {
 		return retVal;
 	}
 
-	// @EJB
+	@EJB
 	AbaStatisticsController statsController;
 
 	@Override
