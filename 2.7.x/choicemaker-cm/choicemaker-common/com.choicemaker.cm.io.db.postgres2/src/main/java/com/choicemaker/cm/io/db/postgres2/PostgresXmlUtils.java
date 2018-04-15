@@ -5,9 +5,9 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *******************************************************************************/
-package com.choicemaker.cm.io.db.sqlserver;
+package com.choicemaker.cm.io.db.postgres2;
 
-public class SqlServerXmlUtils {
+public class PostgresXmlUtils {
 
 	public static final String EN_SQLSERVERCOMPOSITERECORDSOURCE =
 		"sqlServerCompositeRecordSource";
@@ -53,7 +53,7 @@ public class SqlServerXmlUtils {
 	/** @deprecated */
 	public static final String PN_LIMITSINGLEBLOCKINGSET = "limitPerBlockingSet";
 
-	private SqlServerXmlUtils() {
+	private PostgresXmlUtils() {
 	}
 
 	public static String xmlElementStart(String entityName) {

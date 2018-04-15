@@ -9,7 +9,7 @@
  * Created on Feb 5, 2004
  *
  */
-package com.choicemaker.cm.io.db.sqlserver;
+package com.choicemaker.cm.io.db.postgres2;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -28,16 +28,16 @@ import com.choicemaker.cm.core.Sink;
 import com.choicemaker.cm.io.db.base.DataSources;
 import com.choicemaker.cm.io.db.base.DbAccessor;
 import com.choicemaker.cm.io.db.base.DbReaderSequential;
-import com.choicemaker.cm.io.db.sqlserver.dbom.SqlDbObjectMaker;
+import com.choicemaker.cm.io.db.postgres2.dbom.PostgresDbObjectMaker;
 
 /**
  * @author ajwinkel
  *
  */
-public class SqlServerRecordSource implements RecordSource {
+public class PostgresRecordSource implements RecordSource {
 	
 	private static final Logger logger = Logger
-			.getLogger(SqlServerRecordSource.class.getName());
+			.getLogger(PostgresRecordSource.class.getName());
 
 	private String fileName;
 	private ImmutableProbabilityModel model;
@@ -50,10 +50,10 @@ public class SqlServerRecordSource implements RecordSource {
 	private Statement stmt;
 	private DbReaderSequential dbr;
 	
-	public SqlServerRecordSource() {
+	public PostgresRecordSource() {
 	}
 	
-	public SqlServerRecordSource(String fileName,
+	public PostgresRecordSource(String fileName,
 			ImmutableProbabilityModel model, String dsName,
 			String dbConfiguration, String idsQuery) {
 		this.model = model;
@@ -231,12 +231,12 @@ public class SqlServerRecordSource implements RecordSource {
 		b.append("DECLARE @ids TABLE (id " + dbr.getMasterIdType() + ")"
 				+ Constants.LINE_SEPARATOR);
 		b.append("INSERT INTO @ids " + idsQuery + Constants.LINE_SEPARATOR);
-		b.append(SqlDbObjectMaker.getMultiQuery(model, dbConfiguration));
+		b.append(PostgresDbObjectMaker.getMultiQuery(model, dbConfiguration));
 		return b.toString();
 	}
 
 	public String toString() {
-		return "SqlServerRecordSource [fileName=" + fileName + ", model="
+		return "PostgresRecordSource [fileName=" + fileName + ", model="
 				+ model + ", dbConfiguration=" + dbConfiguration
 				+ ", idsQuery=" + idsQuery + ", dsName=" + dsName + "]";
 	}

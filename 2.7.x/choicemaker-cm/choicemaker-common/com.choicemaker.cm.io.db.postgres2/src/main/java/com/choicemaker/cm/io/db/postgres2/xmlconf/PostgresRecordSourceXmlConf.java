@@ -6,7 +6,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *******************************************************************************/
 
-package com.choicemaker.cm.io.db.sqlserver.xmlconf;
+package com.choicemaker.cm.io.db.postgres2.xmlconf;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -22,24 +22,24 @@ import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.xmlconf.RecordSourceXmlConfigurator;
 import com.choicemaker.cm.io.db.base.xmlconf.ConnectionPoolDataSourceXmlConf;
-import com.choicemaker.cm.io.db.sqlserver.SqlServerRecordSource;
-import com.choicemaker.cm.io.db.sqlserver.SqlServerXmlUtils;
+import com.choicemaker.cm.io.db.postgres2.PostgresRecordSource;
+import com.choicemaker.cm.io.db.postgres2.PostgresXmlUtils;
 
 /**
  * Handling of Db Marked Record Pair sources.
  *
  * @author    Martin Buechi
  */
-public class SqlServerRecordSourceXmlConf implements RecordSourceXmlConfigurator {
+public class PostgresRecordSourceXmlConf implements RecordSourceXmlConfigurator {
 	
-	public static final String EXTENSION_POINT_ID = "com.choicemaker.cm.io.db.sqlserver.sqlServerRsReader";
+	public static final String EXTENSION_POINT_ID = "com.choicemaker.cm.io.db.postgres2.sqlServerRsReader";
 
 	public Object getHandler() {
 		return this;
 	}
 
 	public Class getHandledType() {
-		return SqlServerRecordSource.class;
+		return PostgresRecordSource.class;
 	}
 
 	/**
@@ -47,13 +47,13 @@ public class SqlServerRecordSourceXmlConf implements RecordSourceXmlConfigurator
 	 */
 	public void add(RecordSource s) throws XmlConfException {
 		try {
-			SqlServerRecordSource src = (SqlServerRecordSource) s;
+			PostgresRecordSource src = (PostgresRecordSource) s;
 			String fileName = src.getFileName();
-			Element e = new Element(SqlServerXmlUtils.EN_RECORDSOURCE);
-			e.setAttribute(SqlServerXmlUtils.AN_RS_CLASS, EXTENSION_POINT_ID);
-			e.setAttribute(SqlServerXmlUtils.AN_RS_DATASOURCENAME, src.getDataSourceName());
-			e.setAttribute(SqlServerXmlUtils.AN_RS_DBCONFIGURATION, src.getDbConfiguration());
-			e.addContent(new Element(SqlServerXmlUtils.AN_RS_IDSQUERY).setText(src.getIdsQuery()));
+			Element e = new Element(PostgresXmlUtils.EN_RECORDSOURCE);
+			e.setAttribute(PostgresXmlUtils.AN_RS_CLASS, EXTENSION_POINT_ID);
+			e.setAttribute(PostgresXmlUtils.AN_RS_DATASOURCENAME, src.getDataSourceName());
+			e.setAttribute(PostgresXmlUtils.AN_RS_DBCONFIGURATION, src.getDbConfiguration());
+			e.addContent(new Element(PostgresXmlUtils.AN_RS_IDSQUERY).setText(src.getIdsQuery()));
 			FileOutputStream fs = new FileOutputStream(new File(fileName).getAbsoluteFile());
 			Format format = Format.getPrettyFormat();
 			XMLOutputter o = new XMLOutputter(format);
@@ -66,10 +66,10 @@ public class SqlServerRecordSourceXmlConf implements RecordSourceXmlConfigurator
 
 	public RecordSource getRecordSource(String fileName, Element e, ImmutableProbabilityModel model)
 		throws XmlConfException {
-		String dataSourceName = e.getAttributeValue(SqlServerXmlUtils.AN_RS_DATASOURCENAME);
-		String dbConfiguration = e.getAttributeValue(SqlServerXmlUtils.AN_RS_DBCONFIGURATION);
-		String idsQuery = e.getChildText(SqlServerXmlUtils.AN_RS_IDSQUERY);
-		return new SqlServerRecordSource(fileName, model, dataSourceName, dbConfiguration, idsQuery);
+		String dataSourceName = e.getAttributeValue(PostgresXmlUtils.AN_RS_DATASOURCENAME);
+		String dbConfiguration = e.getAttributeValue(PostgresXmlUtils.AN_RS_DBCONFIGURATION);
+		String idsQuery = e.getChildText(PostgresXmlUtils.AN_RS_IDSQUERY);
+		return new PostgresRecordSource(fileName, model, dataSourceName, dbConfiguration, idsQuery);
 	}
 	
 	static {

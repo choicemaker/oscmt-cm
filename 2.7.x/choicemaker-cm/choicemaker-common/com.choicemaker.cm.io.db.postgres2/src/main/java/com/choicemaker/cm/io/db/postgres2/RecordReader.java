@@ -6,7 +6,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *******************************************************************************/
 
-package com.choicemaker.cm.io.db.sqlserver;
+package com.choicemaker.cm.io.db.postgres2;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -158,7 +158,7 @@ public class RecordReader implements RecordSource {
 			"DECLARE @ids TABLE (id " + dbr.getMasterIdType() + ")" + Constants.LINE_SEPARATOR + "INSERT INTO @ids ");
 		b.append(condition);
 		b.append(Constants.LINE_SEPARATOR);
-		b.append((String) p.getProperty(dbr.getName() + ":SQLServer"));
+		b.append((String) p.getProperty(dbr.getName() + ":Postgres"));
 		return b.toString();
 	}
 

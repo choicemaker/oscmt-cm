@@ -5,7 +5,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *******************************************************************************/
-package com.choicemaker.cm.io.db.sqlserver;
+package com.choicemaker.cm.io.db.postgres2;
 
 import java.util.logging.Logger;
 
@@ -82,7 +82,7 @@ public class HorizontalPartitioner {
 		String subQuery = setMinMax ( idsQuery, idName, minb.toString(), maxb.toString(), excludeMax );
 		log.fine (subQuery); 
 					
-		SqlServerRecordSource srs = new SqlServerRecordSource ();
+		PostgresRecordSource srs = new PostgresRecordSource ();
 		srs.setDataSource(dsName,ds);
 		srs.setModel(model);
 		srs.setDbConfiguration(dbConfiguration);

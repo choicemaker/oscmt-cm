@@ -6,7 +6,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *******************************************************************************/
 
-package com.choicemaker.cm.io.db.sqlserver.dbom;
+package com.choicemaker.cm.io.db.postgres2.dbom;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -39,14 +39,14 @@ import com.choicemaker.cm.io.db.base.DbView;
 import com.choicemaker.e2.CMPlatformRunnable;
 
 /**
- * Writes a Sql Server script (SqlServer_Custom_Objects.txt) that creates DB
+ * Writes a Sql Server script (Postgres_Custom_Objects.txt) that creates DB
  * objects (views) based on the schemas of models specified in the
  * productionModels section of a CM Analyzer configuration file.
  */
-public class SqlDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
+public class PostgresDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 
 	private static final Logger logger = Logger
-			.getLogger(SqlDbObjectMaker.class.getName());
+			.getLogger(PostgresDbObjectMaker.class.getName());
 
 	public Object run(Object args) throws Exception {
 		CommandLineArguments cla = new CommandLineArguments();
@@ -74,7 +74,7 @@ public class SqlDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 	}
 	
 	public void generateObjects(File outDir) throws IOException {
-		File outFile = new File(outDir, "SqlServer_Custom_Objects.txt").getAbsoluteFile();
+		File outFile = new File(outDir, "Postgres_Custom_Objects.txt").getAbsoluteFile();
 		Writer w = new FileWriter(outFile);
 		Properties unused = new Properties();
 		processAllModels(unused, w, true);
@@ -118,7 +118,7 @@ public class SqlDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 
 	/**
 	 * Updates and returns the specified properties <code>p</code> with SQL DDL
-	 * statements that create the views used by the SqlServer database accessor.
+	 * statements that create the views used by the Postgres database accessor.
 	 *
 	 * @param p
 	 *            a non-null Properties instance, which is update and returned.
@@ -130,7 +130,7 @@ public class SqlDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 	 *            the name of a database configuration specified by the model
 	 *            record-layout schema
 	 * @param insertGo
-	 *            a flag indicating with SqlServer <code>GO</code> directives
+	 *            a flag indicating with Postgres <code>GO</code> directives
 	 *            should be written to the output writer
 	 * @return a modified copy of the input properties
 	 * @throws IOException
@@ -204,18 +204,18 @@ public class SqlDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 				}
 				String multiStr = multi.toString();
 				//w.write("INSERT INTO TB_CMT_CURSORS VALUES('" + dbConf + "','" + multiStr + "');" + Constants.LINE_SEPARATOR);
-				p.setProperty(dbConf + ":SQLServer", multiStr);
+				p.setProperty(dbConf + ":Postgres", multiStr);
 			}
 		}
 		return p;
 	}
 
 	public static String getMultiKey(ImmutableProbabilityModel model, String dbConfiguration) {
-		return model.getAccessor().getSchemaName() + ":r:" + dbConfiguration + ":SQLServer";
+		return model.getAccessor().getSchemaName() + ":r:" + dbConfiguration + ":Postgres";
 	}
 	
 	public static String getMultiKey(DbReader dbReader) {
-		return dbReader.getName() + ":SQLServer";
+		return dbReader.getName() + ":Postgres";
 	}
 
 	public static String getMultiQuery(ImmutableProbabilityModel model,

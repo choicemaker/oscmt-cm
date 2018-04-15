@@ -9,7 +9,7 @@
  * Created on Aug 18, 2004
  *
  */
-package com.choicemaker.cm.io.db.sqlserver;
+package com.choicemaker.cm.io.db.postgres2;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -28,19 +28,19 @@ import com.choicemaker.cm.core.Sink;
 import com.choicemaker.cm.core.base.PMManager;
 
 /**
- * This is a wrapper object around SqlServerRecordSource and it can be serialized, because it
- * stores string values with which to create the SqlServerRecordSource.
+ * This is a wrapper object around PostgresRecordSource and it can be serialized, because it
+ * stores string values with which to create the PostgresRecordSource.
  * 
  * @author pcheung
  *
  */
-public class SQLServerSerializableCompositeRecordSource implements
+public class PostgresSerializableCompositeRecordSource implements
 		ISerializableRecordSource {
 	
 	private static final long serialVersionUID = 271L;
 
 	private static final Logger log = Logger
-			.getLogger(SQLServerSerializableCompositeRecordSource.class
+			.getLogger(PostgresSerializableCompositeRecordSource.class
 					.getName());
 	
 	/** Default maximum composite size (currently 100,000 records) */
@@ -58,7 +58,7 @@ public class SQLServerSerializableCompositeRecordSource implements
 	private String sqlQuery;
 	private int maxCompositeSize;
 	
-	private transient SqlServerCompositeRecordSource sqlRS;
+	private transient PostgresCompositeRecordSource sqlRS;
 	private transient DataSource ds;
 	private transient ImmutableProbabilityModel model;
 	
@@ -77,7 +77,7 @@ public class SQLServerSerializableCompositeRecordSource implements
 	 * SELECT record_id AS ID FROM records
 	 * </pre>
 	 */
-	public SQLServerSerializableCompositeRecordSource(String ds, String model,
+	public PostgresSerializableCompositeRecordSource(String ds, String model,
 			String dbConf, String sql) {
 		this(ds, model, dbConf, sql, DEFAULT_MAX_COMPOSITE_SIZE);
 	}
@@ -96,9 +96,9 @@ public class SQLServerSerializableCompositeRecordSource implements
 	 * SELECT record_id AS ID FROM records
 	 * </pre>
 	 * @param maxCompositeSize
-	 *            used to construct {@link SqlServerCompositeRecordSource}
+	 *            used to construct {@link PostgresCompositeRecordSource}
 	 */
-	public SQLServerSerializableCompositeRecordSource(String ds,
+	public PostgresSerializableCompositeRecordSource(String ds,
 			String model, String dbConf, String sql,
 			int maxCompositeSize) {
 		if (!isTrimmedNonBlankString(ds)) {
@@ -137,7 +137,7 @@ public class SQLServerSerializableCompositeRecordSource implements
 	 * An obsolete constructor with an unused parameter, <code>unused</code>
 	 * @deprecated
 	 */
-	public SQLServerSerializableCompositeRecordSource (String ds, String unused, String modelName,
+	public PostgresSerializableCompositeRecordSource (String ds, String unused, String modelName,
 		String dbConfig, String sql, int maxCompositeSize) {
 		this(ds, modelName, dbConfig, sql, maxCompositeSize);
 	}
@@ -155,9 +155,9 @@ public class SQLServerSerializableCompositeRecordSource implements
 		return ds;
 	}
 	
-	private SqlServerCompositeRecordSource getRS () {
+	private PostgresCompositeRecordSource getRS () {
 		if (sqlRS == null) {
-			sqlRS = new SqlServerCompositeRecordSource (getDataSource(), getModel(), sqlQuery, 
+			sqlRS = new PostgresCompositeRecordSource (getDataSource(), getModel(), sqlQuery, 
 			dbConfig, maxCompositeSize);
 		}
 		return sqlRS;
@@ -244,8 +244,8 @@ public class SQLServerSerializableCompositeRecordSource implements
 
 
 	public boolean equals (Object o) {
-		if (o instanceof SQLServerSerializableCompositeRecordSource) {
-			SQLServerSerializableCompositeRecordSource rs = (SQLServerSerializableCompositeRecordSource) o;
+		if (o instanceof PostgresSerializableCompositeRecordSource) {
+			PostgresSerializableCompositeRecordSource rs = (PostgresSerializableCompositeRecordSource) o;
 			return rs.dbConfig.equals(this.dbConfig) && 
 				rs.dsJNDIName.equals(this.dsJNDIName) &&
 				rs.modelName.equals(this.modelName) &&
@@ -257,7 +257,7 @@ public class SQLServerSerializableCompositeRecordSource implements
 	}
 
 	public String toString() {
-		return "SQLServerSerializableCompositeRecordSource [dsJNDIName="
+		return "PostgresSerializableCompositeRecordSource [dsJNDIName="
 				+ dsJNDIName + ", modelName=" + modelName + ", dbConfig="
 				+ dbConfig + ", sqlQuery=" + sqlQuery + ", maxCompositeSize="
 				+ maxCompositeSize + "]";
@@ -329,13 +329,13 @@ public class SQLServerSerializableCompositeRecordSource implements
 	
 	public String toXML() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(SqlServerXmlUtils.xmlElementStart(SqlServerXmlUtils.EN_SQLSERVERCOMPOSITERECORDSOURCE));
-		sb.append(SqlServerXmlUtils.xmlAttribute(SqlServerXmlUtils.AN_RS_DATASOURCENAME,dsJNDIName));
-		sb.append(SqlServerXmlUtils.xmlAttribute(SqlServerXmlUtils.AN_RS_MODEL,modelName));
-		sb.append(SqlServerXmlUtils.xmlAttribute(SqlServerXmlUtils.AN_RS_DBCONFIGURATION,dbConfig));
-		sb.append(SqlServerXmlUtils.xmlAttribute(SqlServerXmlUtils.AN_RS_IDSQUERY,sqlQuery));
-		sb.append(SqlServerXmlUtils.xmlAttribute(SqlServerXmlUtils.AN_RS_MAXCOMPOSITESIZE,String.valueOf(maxCompositeSize)));
-		sb.append(SqlServerXmlUtils.xmlElementEndInline());
+		sb.append(PostgresXmlUtils.xmlElementStart(PostgresXmlUtils.EN_SQLSERVERCOMPOSITERECORDSOURCE));
+		sb.append(PostgresXmlUtils.xmlAttribute(PostgresXmlUtils.AN_RS_DATASOURCENAME,dsJNDIName));
+		sb.append(PostgresXmlUtils.xmlAttribute(PostgresXmlUtils.AN_RS_MODEL,modelName));
+		sb.append(PostgresXmlUtils.xmlAttribute(PostgresXmlUtils.AN_RS_DBCONFIGURATION,dbConfig));
+		sb.append(PostgresXmlUtils.xmlAttribute(PostgresXmlUtils.AN_RS_IDSQUERY,sqlQuery));
+		sb.append(PostgresXmlUtils.xmlAttribute(PostgresXmlUtils.AN_RS_MAXCOMPOSITESIZE,String.valueOf(maxCompositeSize)));
+		sb.append(PostgresXmlUtils.xmlElementEndInline());
 		return sb.toString();
 	}
 

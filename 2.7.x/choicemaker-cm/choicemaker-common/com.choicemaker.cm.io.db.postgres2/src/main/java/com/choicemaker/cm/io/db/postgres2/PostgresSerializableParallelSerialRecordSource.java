@@ -9,7 +9,7 @@
  * Created on Aug 18, 2004
  *
  */
-package com.choicemaker.cm.io.db.sqlserver;
+package com.choicemaker.cm.io.db.postgres2;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -31,23 +31,23 @@ import com.choicemaker.util.Precondition;
 import com.choicemaker.util.StringUtils;
 
 /**
- * This is a wrapper object around SqlServerParallelRecordSource and it can be
+ * This is a wrapper object around PostgresParallelRecordSource and it can be
  * serialized, because it stores string values with which to create the
- * SqlServerRecordSource.
+ * PostgresRecordSource.
  * 
- * This is faster than SQLServerSerializableCompositeRecordSource because it uses
+ * This is faster than PostgresSerializableCompositeRecordSource because it uses
  * DbParallelReader instead of DbSerialReader.
  * 
  * @author pcheung
  *
  */
-public class SQLServerSerializableParallelSerialRecordSource implements
+public class PostgresSerializableParallelSerialRecordSource implements
 		ISerializableDbRecordSource {
 	
 	private static final long serialVersionUID = 271L;
 
 	private static final Logger log = Logger
-			.getLogger(SQLServerSerializableParallelSerialRecordSource.class.getName());
+			.getLogger(PostgresSerializableParallelSerialRecordSource.class.getName());
 	
 	protected static final String DEFAULT_DS_MAP_NAME = null;
 	protected static final int DEFAULT_MAX_COMPOSITE_SIZE = 0;
@@ -58,12 +58,12 @@ public class SQLServerSerializableParallelSerialRecordSource implements
 	private String dbConfig;
 	private String sqlQuery;
 	
-	private transient SqlServerParallelRecordSource sqlRS;
+	private transient PostgresParallelRecordSource sqlRS;
 	private transient DataSource ds;
 	private transient ImmutableProbabilityModel model;
 
 	/**
-	 * Constructs a serializable version of {@link SqlServerParallelRecordSource}.
+	 * Constructs a serializable version of {@link PostgresParallelRecordSource}.
 	 * 
 	 * @param dsJNDIName
 	 *            JNDI name of a configured data source
@@ -78,7 +78,7 @@ public class SQLServerSerializableParallelSerialRecordSource implements
 	 * SELECT record_id AS ID FROM records
 	 * </pre>
 	 */
-	public SQLServerSerializableParallelSerialRecordSource(String dsJNDIName,
+	public PostgresSerializableParallelSerialRecordSource(String dsJNDIName,
 			String modelName, String dbConfig, String sqlQuery) {
 		this(dsJNDIName, DEFAULT_DS_MAP_NAME, modelName, dbConfig, sqlQuery,
 				DEFAULT_MAX_COMPOSITE_SIZE);
@@ -86,7 +86,7 @@ public class SQLServerSerializableParallelSerialRecordSource implements
 
 	/**
 	 * A constructor with unused parameters but the same signature as
-	 * SQLServerSerializableCompositeRecordSource
+	 * PostgresSerializableCompositeRecordSource
 	 * 
 	 * @param dsJNDIName
 	 *            JNDI name of a configured data source
@@ -105,7 +105,7 @@ public class SQLServerSerializableParallelSerialRecordSource implements
 	 * @param maxCompositeSize
 	 *            unused
 	 */
-	public SQLServerSerializableParallelSerialRecordSource(String dsJNDIName,
+	public PostgresSerializableParallelSerialRecordSource(String dsJNDIName,
 			String dsMapName, String modelName, String dbConfig,
 			String sqlQuery, int maxCompositeSize) {
 
@@ -141,9 +141,9 @@ public class SQLServerSerializableParallelSerialRecordSource implements
 		return ds;
 	}
 	
-	private SqlServerParallelRecordSource getRS () {
+	private PostgresParallelRecordSource getRS () {
 		if (sqlRS == null) {
-			sqlRS = new SqlServerParallelRecordSource ("", getModel(),
+			sqlRS = new PostgresParallelRecordSource ("", getModel(),
 				dsJNDIName, dbConfig, getSqlQuery());
 			sqlRS.setDataSource(dsJNDIName, getDataSource());
 
@@ -229,9 +229,9 @@ public class SQLServerSerializableParallelSerialRecordSource implements
 	}
 
 	public boolean equals (Object o) {
-		if (o instanceof SQLServerSerializableParallelSerialRecordSource) {
-			SQLServerSerializableParallelSerialRecordSource rs =
-				(SQLServerSerializableParallelSerialRecordSource) o;
+		if (o instanceof PostgresSerializableParallelSerialRecordSource) {
+			PostgresSerializableParallelSerialRecordSource rs =
+				(PostgresSerializableParallelSerialRecordSource) o;
 			return rs.dbConfig.equals(this.dbConfig)
 					&& rs.dsJNDIName.equals(this.dsJNDIName)
 					&& rs.modelName.equals(this.modelName)
@@ -329,7 +329,7 @@ public class SQLServerSerializableParallelSerialRecordSource implements
 	}
 
 	public String toString() {
-		return "SQLServerSerializableParallelSerialRecordSource [dsJNDIName="
+		return "PostgresSerializableParallelSerialRecordSource [dsJNDIName="
 				+ dsJNDIName + ", modelName=" + modelName + ", dbConfig="
 				+ dbConfig + ", sqlQuery=" + sqlQuery + "]";
 	}

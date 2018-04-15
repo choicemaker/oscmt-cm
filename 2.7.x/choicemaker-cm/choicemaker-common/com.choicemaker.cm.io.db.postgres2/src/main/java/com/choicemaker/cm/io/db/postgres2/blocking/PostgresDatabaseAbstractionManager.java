@@ -5,7 +5,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *******************************************************************************/
-package com.choicemaker.cm.io.db.sqlserver.blocking;
+package com.choicemaker.cm.io.db.postgres2.blocking;
 
 import javax.sql.DataSource;
 
@@ -15,17 +15,17 @@ import com.choicemaker.cm.io.db.base.DatabaseAbstractionManager;
 
 /**
  * A hard-coded implementation of DatabaseAbstractionManager that handles only
- * SqlServer DataSources.
+ * Postgres DataSources.
  * <p>
  * FIXME replace with a plugin-based manager
  * 
  * @author rphall
  * @deprecated
  */
-public class SqlServerDatabaseAbstractionManager implements
+public class PostgresDatabaseAbstractionManager implements
 		DatabaseAbstractionManager {
 
-	public SqlServerDatabaseAbstractionManager() {
+	public PostgresDatabaseAbstractionManager() {
 		// TODO Auto-generated constructor stub
 	}
 
@@ -40,31 +40,31 @@ public class SqlServerDatabaseAbstractionManager implements
 		// Default value for unknown data sources
 		DatabaseAbstraction retVal = null;
 
-		// Microsoft SqlServer DataSource implementations
+		// Microsoft Postgres DataSource implementations
 		try {
 			if (ds.isWrapperFor(Class
 					.forName("com.microsoft.sqlserver.jdbc.CommonDataSource"))) {
-				retVal = new SqlDatabaseAbstraction();
+				retVal = new PostgresDatabaseAbstraction();
 
 			} else if (ds
 					.isWrapperFor(Class
-							.forName("com.microsoft.sqlserver.jdbc.ISQLServerDataSource"))) {
-				retVal = new SqlDatabaseAbstraction();
+							.forName("com.microsoft.sqlserver.jdbc.IPostgresDataSource"))) {
+				retVal = new PostgresDatabaseAbstraction();
 
 			} else if (ds
 					.isWrapperFor(Class
-							.forName("com.microsoft.sqlserver.jdbc.SQLServerConnectionPoolDataSource"))) {
-				retVal = new SqlDatabaseAbstraction();
+							.forName("com.microsoft.sqlserver.jdbc.PostgresConnectionPoolDataSource"))) {
+				retVal = new PostgresDatabaseAbstraction();
 
 			} else if (ds
 					.isWrapperFor(Class
-							.forName("com.microsoft.sqlserver.jdbc.SQLServerDataSource"))) {
-				retVal = new SqlDatabaseAbstraction();
+							.forName("com.microsoft.sqlserver.jdbc.PostgresDataSource"))) {
+				retVal = new PostgresDatabaseAbstraction();
 
 			} else if (ds
 					.isWrapperFor(Class
-							.forName("com.microsoft.sqlserver.jdbc.SQLServerXADataSource"))) {
-				retVal = new SqlDatabaseAbstraction();
+							.forName("com.microsoft.sqlserver.jdbc.PostgresXADataSource"))) {
+				retVal = new PostgresDatabaseAbstraction();
 			}
 
 			// Error if unknown

@@ -9,7 +9,7 @@
  * Created on Jun 2, 2004
  *
  */
-package com.choicemaker.cm.io.db.sqlserver;
+package com.choicemaker.cm.io.db.postgres2;
 
 import java.io.IOException;
 import java.util.ArrayList;

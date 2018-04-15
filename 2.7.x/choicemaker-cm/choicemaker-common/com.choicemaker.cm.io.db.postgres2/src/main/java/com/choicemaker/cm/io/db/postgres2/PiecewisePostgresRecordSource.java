@@ -9,7 +9,7 @@
  * Created on Feb 21, 2004
  *
  */
-package com.choicemaker.cm.io.db.sqlserver;
+package com.choicemaker.cm.io.db.postgres2;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -26,7 +26,7 @@ import com.choicemaker.cm.core.Sink;
  * @author ajwinkel
  *
  */
-public class PiecewiseSqlServerRecordSource implements RecordSource {
+public class PiecewisePostgresRecordSource implements RecordSource {
 
 	protected ImmutableProbabilityModel model;
 	protected Connection conn;
@@ -38,14 +38,14 @@ public class PiecewiseSqlServerRecordSource implements RecordSource {
 	
 	protected boolean open;
 	
-	protected SqlServerRecordSource pieceRs;
+	protected PostgresRecordSource pieceRs;
 	protected int currentPiece;
 	protected int recordsRead;
 
 	/**
 	 * Assumes that 
 	 */
-	public PiecewiseSqlServerRecordSource(
+	public PiecewisePostgresRecordSource(
 		ImmutableProbabilityModel model,
 		Connection conn,
 		String dbConfiguration,
@@ -100,7 +100,7 @@ public class PiecewiseSqlServerRecordSource implements RecordSource {
 		
 		currentPiece++;
 		if (currentPiece <= lastPiece) {
-			pieceRs = new SqlServerRecordSource();
+			pieceRs = new PostgresRecordSource();
 			pieceRs.setModel(model);
 			pieceRs.setConnection(conn);
 			pieceRs.setDbConfiguration(dbConfiguration);
@@ -173,7 +173,7 @@ public class PiecewiseSqlServerRecordSource implements RecordSource {
 	}
 
 	public String toString() {
-		return "PiecewiseSqlServerRecordSource [model=" + model
+		return "PiecewisePostgresRecordSource [model=" + model
 				+ ", dbConfiguration=" + dbConfiguration + ", tableName="
 				+ tableName + ", rsId=" + rsId + ", currentPiece="
 				+ currentPiece + ", recordsRead=" + recordsRead + "]";

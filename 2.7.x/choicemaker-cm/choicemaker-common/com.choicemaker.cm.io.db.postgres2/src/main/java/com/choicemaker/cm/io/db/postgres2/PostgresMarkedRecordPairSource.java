@@ -9,7 +9,7 @@
  * Created on Mar 18, 2004
  *
  */
-package com.choicemaker.cm.io.db.sqlserver;
+package com.choicemaker.cm.io.db.postgres2;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,7 +35,7 @@ import com.choicemaker.cm.io.db.base.DataSources;
  * @author ajwinkel
  *
  */
-public class SqlServerMarkedRecordPairSource implements MarkedRecordPairSource {
+public class PostgresMarkedRecordPairSource implements MarkedRecordPairSource {
 
 	private String fileName;
 	
@@ -47,14 +47,14 @@ public class SqlServerMarkedRecordPairSource implements MarkedRecordPairSource {
 
 	private Iterator pairIterator;
 
-	public SqlServerMarkedRecordPairSource() { }
+	public PostgresMarkedRecordPairSource() { }
 
 	/**
 	 * mrpsQuery should be something like: 
 	 * 
 	 *  select qid as id, mid as id_matched, decision from table where ...
 	 */
-	public SqlServerMarkedRecordPairSource(String fileName, ImmutableProbabilityModel model, String dsName, String dbConfiguration, String mrpsQuery) {
+	public PostgresMarkedRecordPairSource(String fileName, ImmutableProbabilityModel model, String dsName, String dbConfiguration, String mrpsQuery) {
 		this.fileName = fileName;
 		this.model = model;
 		this.dsName = dsName;
@@ -133,7 +133,7 @@ public class SqlServerMarkedRecordPairSource implements MarkedRecordPairSource {
 	private RecordSource createRecordSource(Connection conn, String mrpsQuery) {
 		String rsQuery = createRsQuery(mrpsQuery);
 		
-		SqlServerRecordSource rs = new SqlServerRecordSource();
+		PostgresRecordSource rs = new PostgresRecordSource();
 		rs.setModel(model);
 		rs.setConnection(conn);
 		rs.setDbConfiguration(dbConfiguration);

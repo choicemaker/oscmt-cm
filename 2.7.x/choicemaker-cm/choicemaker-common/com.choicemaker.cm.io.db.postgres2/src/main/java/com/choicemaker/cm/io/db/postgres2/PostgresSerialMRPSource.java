@@ -9,7 +9,7 @@
  * Created on Mar 18, 2004
  *
  */
-package com.choicemaker.cm.io.db.sqlserver;
+package com.choicemaker.cm.io.db.postgres2;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -39,9 +39,9 @@ import com.choicemaker.cm.core.base.PMManager;
  * @author ajwinkel
  *
  */
-public class SqlServerSerialMRPSource implements MarkedRecordPairSource, Serializable {
+public class PostgresSerialMRPSource implements MarkedRecordPairSource, Serializable {
 
-	private static Logger logger = Logger.getLogger(SqlServerSerialMRPSource.class.getName());
+	private static Logger logger = Logger.getLogger(PostgresSerialMRPSource.class.getName());
 
 	/* As of 2010-03-10 */
 	static final long serialVersionUID = -5758345719984451125L;
@@ -58,14 +58,14 @@ public class SqlServerSerialMRPSource implements MarkedRecordPairSource, Seriali
 
 	private Iterator pairIterator;
 
-	public SqlServerSerialMRPSource() { }
+	public PostgresSerialMRPSource() { }
 
 	/**
 	 * mrpsQuery should be something like: 
 	 * 
 	 *  select qid as id, mid as id_matched, decision from table where ...
 	 */
-	public SqlServerSerialMRPSource(String dsName, String modelName, String dbConfiguration, String mrpsQuery) {
+	public PostgresSerialMRPSource(String dsName, String modelName, String dbConfiguration, String mrpsQuery) {
 		this.dsName = dsName;
 		this.modelName = modelName;
 		this.dsName = dsName;
@@ -142,7 +142,7 @@ public class SqlServerSerialMRPSource implements MarkedRecordPairSource, Seriali
 	private RecordSource createRecordSource(Connection conn, String mrpsQuery) {
 		String rsQuery = createRsQuery(mrpsQuery);
 		
-		SqlServerRecordSource rs = new SqlServerRecordSource();
+		PostgresRecordSource rs = new PostgresRecordSource();
 		rs.setModel(getModel ());
 		rs.setConnection(conn);
 		rs.setDbConfiguration(dbConfiguration);
@@ -253,7 +253,7 @@ public class SqlServerSerialMRPSource implements MarkedRecordPairSource, Seriali
 	}
 
 	public String toString() {
-		return "SqlServerSerialMRPSource [dsName=" + dsName + ", modelName="
+		return "PostgresSerialMRPSource [dsName=" + dsName + ", modelName="
 				+ modelName + ", dbConfiguration=" + dbConfiguration
 				+ ", mrpsQuery=" + mrpsQuery + "]";
 	}

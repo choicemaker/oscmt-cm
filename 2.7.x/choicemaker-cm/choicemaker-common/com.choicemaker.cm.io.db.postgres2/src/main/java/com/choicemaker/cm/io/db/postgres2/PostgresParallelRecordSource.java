@@ -11,7 +11,7 @@
  * To change the template for this generated file go to
  * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
-package com.choicemaker.cm.io.db.sqlserver;
+package com.choicemaker.cm.io.db.postgres2;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -39,10 +39,10 @@ import com.choicemaker.cm.io.db.base.DbView;
 /**
  * @author pcheung
  */
-public class SqlServerParallelRecordSource implements RecordSource {
+public class PostgresParallelRecordSource implements RecordSource {
 
 	private static Logger logger = Logger
-			.getLogger(SqlServerParallelRecordSource.class.getName());
+			.getLogger(PostgresParallelRecordSource.class.getName());
 
 	private final String fileName;
 	private final String dbConfiguration;
@@ -59,7 +59,7 @@ public class SqlServerParallelRecordSource implements RecordSource {
 
 	private static final String DATA_VIEW = "DATAVIEW_1001";
 
-	public SqlServerParallelRecordSource(String fileName,
+	public PostgresParallelRecordSource(String fileName,
 			ImmutableProbabilityModel model, String dsName,
 			String dbConfiguration, String idsQuery) {
 
@@ -67,7 +67,7 @@ public class SqlServerParallelRecordSource implements RecordSource {
 				+ " " + dbConfiguration + " " + idsQuery);
 
 		if (fileName == null) {
-			logger.fine("Null file name for SqlServerParallelRecordSource");
+			logger.fine("Null file name for PostgresParallelRecordSource");
 		}
 		if (dbConfiguration == null || dbConfiguration.trim().isEmpty()) {
 			throw new IllegalArgumentException("null or blank database configuration name");
@@ -278,7 +278,7 @@ public class SqlServerParallelRecordSource implements RecordSource {
 			final int count = exceptionMessages.size();
 			StringWriter sw = new StringWriter();
 			PrintWriter pw = new PrintWriter(sw);
-			String msg = "Problem(s) closing SqlServerParallelReader: " + count;
+			String msg = "Problem(s) closing PostgresParallelReader: " + count;
 			pw.println(msg);
 			for (int i=0; i<count; i++) {
 				msg = (String) exceptionMessages.get(i);
@@ -376,7 +376,7 @@ public class SqlServerParallelRecordSource implements RecordSource {
 	}
 
 	public String toString() {
-		return "SqlServerParallelRecordSource [fileName=" + getFileName()
+		return "PostgresParallelRecordSource [fileName=" + getFileName()
 				+ ", model=" + getModel() + ", dbConfiguration=" + getDbConfiguration()
 				+ ", idsQuery=" + getIdsQuery() + ", dsName=" + getDataSourceName() + "]";
 	}

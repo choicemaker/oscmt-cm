@@ -6,7 +6,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *******************************************************************************/
 
-package com.choicemaker.cm.io.db.sqlserver.blocking;
+package com.choicemaker.cm.io.db.postgres2.blocking;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -30,11 +30,11 @@ import com.choicemaker.cm.core.Constants;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.io.db.base.DbAccessor;
 import com.choicemaker.cm.io.db.base.DbReaderSequential;
-import com.choicemaker.cm.io.db.sqlserver.dbom.SqlDbObjectMaker;
+import com.choicemaker.cm.io.db.postgres2.dbom.PostgresDbObjectMaker;
 import com.choicemaker.util.StringUtils;
 
-public class SqlDatabaseAccessor implements DatabaseAccessor {
-	private static Logger logger = Logger.getLogger(SqlDatabaseAccessor.class.getName());
+public class PostgresDatabaseAccessor implements DatabaseAccessor {
+	private static Logger logger = Logger.getLogger(PostgresDatabaseAccessor.class.getName());
 
 	// These two objects have the same life span -- see isConsistent()
 	private DataSource ds;
@@ -54,11 +54,11 @@ public class SqlDatabaseAccessor implements DatabaseAccessor {
 		return isConsistent;
 	}
 
-	public SqlDatabaseAccessor() {
+	public PostgresDatabaseAccessor() {
 		assert isConsistent();
 	}
 
-	public SqlDatabaseAccessor(DataSource ds, String condition) {
+	public PostgresDatabaseAccessor(DataSource ds, String condition) {
 		setDataSource(ds);
 		setCondition(condition);
 	}
@@ -251,7 +251,7 @@ public class SqlDatabaseAccessor implements DatabaseAccessor {
 			b.append(condition);
 		}
 		b.append(Constants.LINE_SEPARATOR);
-		//b.append((String) blocker.accessProvider.properties.get(dbr.getName() + ":SQLServer"));
+		//b.append((String) blocker.accessProvider.properties.get(dbr.getName() + ":Postgres"));
 		b.append(getMultiQuery(p, blocker, dbr));
 		
 		logger.fine(b.toString());
@@ -261,11 +261,11 @@ public class SqlDatabaseAccessor implements DatabaseAccessor {
 
 	private String getMultiQuery(Properties p, AutomatedBlocker blocker,
 			DbReaderSequential dbr) {
-		String key = dbr.getName() + ":SQLServer";
+		String key = dbr.getName() + ":Postgres";
 		if (!p.containsKey(key)) {
 			try {
 				// NOTE: this loads the multi string into the properties
-				SqlDbObjectMaker.getAllModels(p);
+				PostgresDbObjectMaker.getAllModels(p);
 			} catch (IOException ex) {
 				logger.severe(ex.toString());
 			}

@@ -9,7 +9,7 @@
  * Created on Sep 8, 2004
  *
  */
-package com.choicemaker.cm.io.db.sqlserver;
+package com.choicemaker.cm.io.db.postgres2;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -31,8 +31,8 @@ import com.choicemaker.cm.io.db.base.DbAccessor;
 import com.choicemaker.cm.io.db.base.DbReaderSequential;
 
 /**
- * This version is a workaround for SqlServerRecordSource. The
- * SqlServerRecordSource encounters OutOfMemoryException when it tries to bring
+ * This version is a workaround for PostgresRecordSource. The
+ * PostgresRecordSource encounters OutOfMemoryException when it tries to bring
  * a lot of data. This solution is the chop up the query into smaller chunks. It
  * uses a CompositeRecordSource to store the smaller chunks.
  * 
@@ -42,10 +42,10 @@ import com.choicemaker.cm.io.db.base.DbReaderSequential;
  * @author pcheung
  *
  */
-public class SqlServerCompositeRecordSource implements RecordSource {
+public class PostgresCompositeRecordSource implements RecordSource {
 
 	private static final Logger log = Logger
-			.getLogger(SqlServerCompositeRecordSource.class.getName());
+			.getLogger(PostgresCompositeRecordSource.class.getName());
 
 	private CompositeRecordSource compositeSource;
 	private ImmutableProbabilityModel model;
@@ -60,7 +60,7 @@ public class SqlServerCompositeRecordSource implements RecordSource {
 	/**
 	 * Default Constructor that does nothing.
 	 */
-	public SqlServerCompositeRecordSource (){
+	public PostgresCompositeRecordSource (){
 	}
 
 	/** This constructor takes these arguments
@@ -71,7 +71,7 @@ public class SqlServerCompositeRecordSource implements RecordSource {
 	 * @param dbConfiguration - db configuration name in the schema file.
 	 * @param maxSize - maximum number of records in each of the composite.
 	 */
-	public SqlServerCompositeRecordSource(DataSource ds,
+	public PostgresCompositeRecordSource(DataSource ds,
 			ImmutableProbabilityModel model, String idsQuery,
 			String dbConfiguration, int maxSize) {
 		this.model = model;
@@ -90,7 +90,7 @@ public class SqlServerCompositeRecordSource implements RecordSource {
 	 * @param dbConfiguration - db configuration name in the schema file.
 	 * @param maxSize - maximum number of records in each of the composite.
 	 */
-	public SqlServerCompositeRecordSource(String dsName,
+	public PostgresCompositeRecordSource(String dsName,
 			ImmutableProbabilityModel model, String idsQuery,
 			String dbConfiguration, int maxSize) {
 		this.model = model;
@@ -178,7 +178,7 @@ public class SqlServerCompositeRecordSource implements RecordSource {
 
 				log.fine(subQuery);
 
-				SqlServerRecordSource srs = new SqlServerRecordSource();
+				PostgresRecordSource srs = new PostgresRecordSource();
 				srs.setDataSource(dsName, ds);
 				srs.setModel(model);
 				srs.setDbConfiguration(dbConfiguration);
@@ -225,7 +225,7 @@ public class SqlServerCompositeRecordSource implements RecordSource {
 			if (count < maxSize) {
 				String subQuery = setMinMax(idsQuery, idName, min, max);
 
-				SqlServerRecordSource srs = new SqlServerRecordSource();
+				PostgresRecordSource srs = new PostgresRecordSource();
 				srs.setDataSource(dsName, ds);
 				srs.setModel(model);
 				srs.setDbConfiguration(dbConfiguration);
@@ -414,7 +414,7 @@ public class SqlServerCompositeRecordSource implements RecordSource {
 	}
 
 	public String toString() {
-		return "SqlServerCompositeRecordSource [model=" + model
+		return "PostgresCompositeRecordSource [model=" + model
 				+ ", dbConfiguration=" + dbConfiguration + ", idsQuery="
 				+ idsQuery + ", dsName=" + dsName + ", maxSize=" + maxSize
 				+ "]";

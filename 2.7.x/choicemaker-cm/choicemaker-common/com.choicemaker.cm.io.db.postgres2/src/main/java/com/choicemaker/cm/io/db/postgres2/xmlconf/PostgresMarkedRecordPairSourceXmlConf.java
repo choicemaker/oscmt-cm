@@ -6,7 +6,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *******************************************************************************/
 
-package com.choicemaker.cm.io.db.sqlserver.xmlconf;
+package com.choicemaker.cm.io.db.postgres2.xmlconf;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -22,24 +22,24 @@ import com.choicemaker.cm.core.MarkedRecordPairSource;
 import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.xmlconf.MarkedRecordPairSourceXmlConfigurator;
 import com.choicemaker.cm.io.db.base.xmlconf.ConnectionPoolDataSourceXmlConf;
-import com.choicemaker.cm.io.db.sqlserver.SqlServerMarkedRecordPairSource;
-import com.choicemaker.cm.io.db.sqlserver.SqlServerXmlUtils;
+import com.choicemaker.cm.io.db.postgres2.PostgresMarkedRecordPairSource;
+import com.choicemaker.cm.io.db.postgres2.PostgresXmlUtils;
 
 /**
  * Handling of Db Marked Record Pair sources.
  *
  * @author    Martin Buechi
  */
-public class SqlServerMarkedRecordPairSourceXmlConf implements MarkedRecordPairSourceXmlConfigurator {
+public class PostgresMarkedRecordPairSourceXmlConf implements MarkedRecordPairSourceXmlConfigurator {
 	
-	public static final String EXTENSION_POINT_ID = "com.choicemaker.cm.io.db.sqlserver.sqlServerMrpsReader";
+	public static final String EXTENSION_POINT_ID = "com.choicemaker.cm.io.db.postgres2.sqlServerMrpsReader";
 
 	public Object getHandler() {
 		return this;
 	}
 
 	public Class getHandledType() {
-		return SqlServerMarkedRecordPairSource.class;
+		return PostgresMarkedRecordPairSource.class;
 	}
 
 	/**
@@ -47,13 +47,13 @@ public class SqlServerMarkedRecordPairSourceXmlConf implements MarkedRecordPairS
 	 */
 	public void add(MarkedRecordPairSource s) throws XmlConfException {
 		try {
-			SqlServerMarkedRecordPairSource src = (SqlServerMarkedRecordPairSource) s;
+			PostgresMarkedRecordPairSource src = (PostgresMarkedRecordPairSource) s;
 			String fileName = src.getFileName();
-			Element e = new Element(SqlServerXmlUtils.EN_MARKEDRECORDPAIRSOURCE);
-			e.setAttribute(SqlServerXmlUtils.AN_MRPS_CLASS, EXTENSION_POINT_ID);
-			e.setAttribute(SqlServerXmlUtils.AN_MRPS_DATASOURCENAME, src.getDataSourceName());
-			e.setAttribute(SqlServerXmlUtils.AN_MRPS_DBCONFIGURATION, src.getDbConfiguration());
-			e.addContent(new Element(SqlServerXmlUtils.AN_MRPS_IDSQUERY).setText(src.getMrpsQuery()));
+			Element e = new Element(PostgresXmlUtils.EN_MARKEDRECORDPAIRSOURCE);
+			e.setAttribute(PostgresXmlUtils.AN_MRPS_CLASS, EXTENSION_POINT_ID);
+			e.setAttribute(PostgresXmlUtils.AN_MRPS_DATASOURCENAME, src.getDataSourceName());
+			e.setAttribute(PostgresXmlUtils.AN_MRPS_DBCONFIGURATION, src.getDbConfiguration());
+			e.addContent(new Element(PostgresXmlUtils.AN_MRPS_IDSQUERY).setText(src.getMrpsQuery()));
 			FileOutputStream fs = new FileOutputStream(new File(fileName).getAbsoluteFile());
 			Format format = Format.getPrettyFormat();
 			XMLOutputter o = new XMLOutputter(format);
@@ -66,10 +66,10 @@ public class SqlServerMarkedRecordPairSourceXmlConf implements MarkedRecordPairS
 
 	public MarkedRecordPairSource getMarkedRecordPairSource(String fileName, Element e, ImmutableProbabilityModel model)
 		throws XmlConfException {
-		String dataSourceName = e.getChildText(SqlServerXmlUtils.AN_MRPS_DATASOURCENAME);
-		String dbConfiguration = e.getAttributeValue(SqlServerXmlUtils.AN_MRPS_DBCONFIGURATION);
-		String mrpsQuery = e.getChildText(SqlServerXmlUtils.AN_MRPS_IDSQUERY);
-		return new SqlServerMarkedRecordPairSource(fileName, model, dataSourceName, dbConfiguration, mrpsQuery);
+		String dataSourceName = e.getChildText(PostgresXmlUtils.AN_MRPS_DATASOURCENAME);
+		String dbConfiguration = e.getAttributeValue(PostgresXmlUtils.AN_MRPS_DBCONFIGURATION);
+		String mrpsQuery = e.getChildText(PostgresXmlUtils.AN_MRPS_IDSQUERY);
+		return new PostgresMarkedRecordPairSource(fileName, model, dataSourceName, dbConfiguration, mrpsQuery);
 	}
 	
 	static {

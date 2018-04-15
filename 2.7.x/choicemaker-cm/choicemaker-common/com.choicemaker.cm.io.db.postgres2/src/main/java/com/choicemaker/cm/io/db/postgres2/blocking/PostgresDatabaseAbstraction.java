@@ -5,7 +5,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *******************************************************************************/
-package com.choicemaker.cm.io.db.sqlserver.blocking;
+package com.choicemaker.cm.io.db.postgres2.blocking;
 
 import com.choicemaker.cm.io.db.base.DatabaseAbstraction;
 
@@ -14,7 +14,7 @@ import com.choicemaker.cm.io.db.base.DatabaseAbstraction;
  * 
  * @author  Martin Buechi
  */
-public class SqlDatabaseAbstraction implements DatabaseAbstraction {
+public class PostgresDatabaseAbstraction implements DatabaseAbstraction {
 
 	/**
 	 * @see com.choicemaker.cm.io.db.base.plugin.automatedblocking.db.DatabaseAbstraction#getSetDateFormatExpression()

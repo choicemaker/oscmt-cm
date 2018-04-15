@@ -38,6 +38,7 @@
     <module>com.choicemaker.cm.io.db.postgres</module>
 -->
     <module>com.choicemaker.cm.io.db.oracle</module>
+    <module>com.choicemaker.cm.io.db.postgres2</module>
     <module>com.choicemaker.cm.io.db.sqlserver</module>
     <module>com.choicemaker.cm.io.flatfile.base</module>
     <module>com.choicemaker.cm.io.xml.base</module>
