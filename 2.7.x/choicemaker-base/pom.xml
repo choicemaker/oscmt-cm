@@ -591,6 +591,26 @@
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
+        <artifactId>com.choicemaker.cm.io.db.postgres</artifactId>
+        <version>${choicemaker.release.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>com.choicemaker.cm.io.db.postgres.gui</artifactId>
+        <version>${choicemaker.release.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>com.choicemaker.cm.io.db.postgres2</artifactId>
+        <version>${choicemaker.release.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>com.choicemaker.cm.io.db.postgres2.gui</artifactId>
+        <version>${choicemaker.release.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.flatfile.base</artifactId>
         <version>${choicemaker.release.version}</version>
       </dependency>
