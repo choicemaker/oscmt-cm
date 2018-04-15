@@ -329,7 +329,7 @@ public class PostgresSerializableCompositeRecordSource implements
 	
 	public String toXML() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(PostgresXmlUtils.xmlElementStart(PostgresXmlUtils.EN_SQLSERVERCOMPOSITERECORDSOURCE));
+		sb.append(PostgresXmlUtils.xmlElementStart(PostgresXmlUtils.EN_POSTGRESCOMPOSITERECORDSOURCE));
 		sb.append(PostgresXmlUtils.xmlAttribute(PostgresXmlUtils.AN_RS_DATASOURCENAME,dsJNDIName));
 		sb.append(PostgresXmlUtils.xmlAttribute(PostgresXmlUtils.AN_RS_MODEL,modelName));
 		sb.append(PostgresXmlUtils.xmlAttribute(PostgresXmlUtils.AN_RS_DBCONFIGURATION,dbConfig));

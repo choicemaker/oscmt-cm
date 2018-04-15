@@ -32,7 +32,7 @@ import com.choicemaker.cm.io.db.postgres2.PostgresXmlUtils;
  */
 public class PostgresRecordSourceXmlConf implements RecordSourceXmlConfigurator {
 	
-	public static final String EXTENSION_POINT_ID = "com.choicemaker.cm.io.db.postgres2.sqlServerRsReader";
+	public static final String EXTENSION_POINT_ID = "com.choicemaker.cm.io.db.postgres2.postgresRsReader";
 
 	public Object getHandler() {
 		return this;

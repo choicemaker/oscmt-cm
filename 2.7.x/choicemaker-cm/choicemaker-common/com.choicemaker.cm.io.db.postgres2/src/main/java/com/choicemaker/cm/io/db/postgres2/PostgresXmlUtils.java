@@ -9,8 +9,8 @@ package com.choicemaker.cm.io.db.postgres2;
 
 public class PostgresXmlUtils {
 
-	public static final String EN_SQLSERVERCOMPOSITERECORDSOURCE =
-		"sqlServerCompositeRecordSource";
+	public static final String EN_POSTGRESCOMPOSITERECORDSOURCE =
+		"postgresCompositeRecordSource";
 	
 	public static final String EN_MARKEDRECORDPAIRSOURCE =
 			"MarkedRecordPairSource";

@@ -32,7 +32,7 @@ import com.choicemaker.cm.io.db.postgres2.PostgresXmlUtils;
  */
 public class PostgresMarkedRecordPairSourceXmlConf implements MarkedRecordPairSourceXmlConfigurator {
 	
-	public static final String EXTENSION_POINT_ID = "com.choicemaker.cm.io.db.postgres2.sqlServerMrpsReader";
+	public static final String EXTENSION_POINT_ID = "com.choicemaker.cm.io.db.postgres2.postgresMrpsReader";
 
 	public Object getHandler() {
 		return this;

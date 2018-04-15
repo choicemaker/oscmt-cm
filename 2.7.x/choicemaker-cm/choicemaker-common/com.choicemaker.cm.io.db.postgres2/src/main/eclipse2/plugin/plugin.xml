@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plugin>
 <plugin
-   id="com.choicemaker.cm.io.db.sqlserver"
-   name="MS SqlServer DB Plug-in"
+   id="com.choicemaker.cm.io.db.postgres2"
+   name="MS Postgres DB Plug-in"
    version="2.5.0"
    provider-name="ChoiceMaker">
 
    <runtime>
-      <library name="sqlserver.jar">
+      <library name="postgres2.jar">
          <export name="*"/>
       </library>
    </runtime>
@@ -21,54 +21,54 @@
 
 
    <extension
-         id="SqlDbObjectMakerApp"
+         id="PostgresDbObjectMakerApp"
          point="com.choicemaker.e2.applications">
       <application>
          <run
-               class="com.choicemaker.cm.io.db.sqlserver.dbom.SqlDbObjectMaker">
+               class="com.choicemaker.cm.io.db.postgres2.dbom.PostgresDbObjectMaker">
          </run>
       </application>
    </extension>
    <extension
-         id="sqlDbObjectMaker"
+         id="postgresDbObjectMaker"
          point="com.choicemaker.cm.core.objectGenerator">
       <generator
-            description="SQL Server Custom Objects (DDL)"
-            class="com.choicemaker.cm.io.db.sqlserver.dbom.SqlDbObjectMaker">
+            description="Postgres Custom Objects (DDL)"
+            class="com.choicemaker.cm.io.db.postgres2.dbom.PostgresDbObjectMaker">
       </generator>
    </extension>
    <extension
-         id="sqlServerDatabaseAccessor"
-         name="sqlServerDatabaseAccessor"
+         id="postgresDatabaseAccessor"
+         name="postgresDatabaseAccessor"
          point="com.choicemaker.cm.aba.base.databaseAccessor">
       <databaseAccessor
-            class="com.choicemaker.cm.io.db.sqlserver.blocking.SqlDatabaseAccessor">
+            class="com.choicemaker.cm.io.db.postgres2.blocking.PostgresDatabaseAccessor">
       </databaseAccessor>
    </extension>
    <extension
-         id="sqlServerDatabaseAbstraction"
-         name="sqlServerDatabaseAbstraction"
+         id="postgresDatabaseAbstraction"
+         name="postgresDatabaseAbstraction"
          point="com.choicemaker.cm.io.db.base.databaseAbstraction">
       <databaseAbstraction
-            class="com.choicemaker.cm.io.db.sqlserver.blocking.SqlDatabaseAbstraction">
+            class="com.choicemaker.cm.io.db.postgres2.blocking.PostgresDatabaseAbstraction">
       </databaseAbstraction>
    </extension>
    <extension
-         id="sqlServerRsReader"
+         id="postgresRsReader"
          point="com.choicemaker.cm.core.rsReader">
       <handler
-            name="SQL Server"
-            class="com.choicemaker.cm.io.db.sqlserver.xmlconf.SqlServerRecordSourceXmlConf"
-            handledClass="com.choicemaker.cm.io.db.sqlserver.SqlServerRecordSource">
+            name="Postgres"
+            class="com.choicemaker.cm.io.db.postgres2.xmlconf.PostgresRecordSourceXmlConf"
+            handledClass="com.choicemaker.cm.io.db.postgres2.PostgresRecordSource">
       </handler>
    </extension>
    <extension
-         id="sqlServerMrpsReader"
+         id="postgresMrpsReader"
          point="com.choicemaker.cm.core.mrpsReader">
       <handler
-            name="SQL Server"
-            class="com.choicemaker.cm.io.db.sqlserver.xmlconf.SqlServerMarkedRecordPairSourceXmlConf"
-            handledClass="com.choicemaker.cm.io.db.sqlserver.SqlServerMarkedRecordPairSource">
+            name="Postgres"
+            class="com.choicemaker.cm.io.db.postgres2.xmlconf.PostgresMarkedRecordPairSourceXmlConf"
+            handledClass="com.choicemaker.cm.io.db.postgres2.PostgresMarkedRecordPairSource">
       </handler>
    </extension>
 
