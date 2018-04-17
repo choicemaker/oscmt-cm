@@ -112,9 +112,7 @@ public class PostgresParallelRecordSource implements RecordSource {
 
 	private void createView(Connection conn) throws SQLException {
 		Statement view = conn.createStatement();
-		String s =
-			"IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = '"
-					+ DATA_VIEW + "') DROP VIEW " + DATA_VIEW;
+		String s = "DROP VIEW IF EXISTS " + DATA_VIEW;
 		logger.fine(s);
 		view.execute(s);
 
@@ -126,9 +124,7 @@ public class PostgresParallelRecordSource implements RecordSource {
 
 	private void dropView(Connection conn) throws SQLException {
 		Statement view = conn.createStatement();
-		String s =
-			"IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = '"
-					+ DATA_VIEW + "') DROP VIEW " + DATA_VIEW;
+		String s = "DROP VIEW IF EXISTS " + DATA_VIEW;
 		logger.fine(s);
 		view.execute(s);
 		view.close();
