@@ -41,13 +41,13 @@ import com.choicemaker.util.StringUtils;
  * @author pcheung
  *
  */
-public class PostgresSerializableParallelSerialRecordSource implements
+public class PostgresSerializableRecordSource implements
 		ISerializableDbRecordSource {
 	
 	private static final long serialVersionUID = 271L;
 
 	private static final Logger log = Logger
-			.getLogger(PostgresSerializableParallelSerialRecordSource.class.getName());
+			.getLogger(PostgresSerializableRecordSource.class.getName());
 	
 	protected static final String DEFAULT_DS_MAP_NAME = null;
 	protected static final int DEFAULT_MAX_COMPOSITE_SIZE = 0;
@@ -78,7 +78,7 @@ public class PostgresSerializableParallelSerialRecordSource implements
 	 * SELECT record_id AS ID FROM records
 	 * </pre>
 	 */
-	public PostgresSerializableParallelSerialRecordSource(String dsJNDIName,
+	public PostgresSerializableRecordSource(String dsJNDIName,
 			String modelName, String dbConfig, String sqlQuery) {
 		this(dsJNDIName, DEFAULT_DS_MAP_NAME, modelName, dbConfig, sqlQuery,
 				DEFAULT_MAX_COMPOSITE_SIZE);
@@ -105,7 +105,7 @@ public class PostgresSerializableParallelSerialRecordSource implements
 	 * @param maxCompositeSize
 	 *            unused
 	 */
-	public PostgresSerializableParallelSerialRecordSource(String dsJNDIName,
+	public PostgresSerializableRecordSource(String dsJNDIName,
 			String dsMapName, String modelName, String dbConfig,
 			String sqlQuery, int maxCompositeSize) {
 
@@ -229,9 +229,9 @@ public class PostgresSerializableParallelSerialRecordSource implements
 	}
 
 	public boolean equals (Object o) {
-		if (o instanceof PostgresSerializableParallelSerialRecordSource) {
-			PostgresSerializableParallelSerialRecordSource rs =
-				(PostgresSerializableParallelSerialRecordSource) o;
+		if (o instanceof PostgresSerializableRecordSource) {
+			PostgresSerializableRecordSource rs =
+				(PostgresSerializableRecordSource) o;
 			return rs.dbConfig.equals(this.dbConfig)
 					&& rs.dsJNDIName.equals(this.dsJNDIName)
 					&& rs.modelName.equals(this.modelName)
