@@ -907,6 +907,11 @@
         <version>${choicemaker.release.version}</version>
       </dependency>
       <dependency>
+        <groupId>com.choicemaker.util</groupId>
+        <artifactId>choicemaker-dates</artifactId>
+        <version>${choicemaker.release.version}</version>
+      </dependency>
+      <dependency>
         <groupId>com.choicemaker.utilit</groupId>
         <artifactId>choicemaker-utilit</artifactId>
         <version>${choicemaker.release.version}</version>
