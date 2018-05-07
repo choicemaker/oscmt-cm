@@ -323,7 +323,7 @@ public class OnlineDelegate<T extends Comparable<T> & Serializable> {
 				T childId = (T) childNode.getNodeId();
 				assert childId != null;
 				if (!childId.equals(queryId)) {
-					Match m = (Match) matchMap.get(childId);
+					Match m = matchMap.get(childId);
 					assert m != null;
 					QueryCandidatePair<T> pair = getEvaluatedPair(query, m, model);
 					pairs.add(pair);
@@ -345,7 +345,7 @@ public class OnlineDelegate<T extends Comparable<T> & Serializable> {
 							|| childId.equals(queryId)) {
 						containsQuery = true;
 					} else {
-						Match m = (Match) matchMap.get(child);
+						Match m = matchMap.get(childId);
 						addQueryMatchPairToList(query, m, model,
 								queryCandidatePairs);
 					}
