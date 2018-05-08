@@ -44,7 +44,7 @@ public class ParameterHelper {
 	public static void cacheAbaStatics(
 			final AbaStatisticsController statsController, final DataSource ds)
 			throws BlockingException {
-		if (!areCountsCached.compareAndSet(false, true)) {
+		if (areCountsCached.compareAndSet(false, true)) {
 			cacheAbaStatistics(statsController, ds);
 		}
 	}
@@ -55,6 +55,10 @@ public class ParameterHelper {
 			throws BlockingException {
 
 		logger.info("Caching ABA statistics for reference records..");
+		logger.fine("cacheAbaStatistics: areCountsCached: " + areCountsCached.get());
+		logger.finer("cacheAbaStatistics: thread: "
+				+ Thread.currentThread().getName() + ": "
+				+ Thread.currentThread().getId());
 		Precondition.assertNonNullArgument("null ABA statistics",
 				statsController);
 		Precondition.assertNonNullArgument("null data source", ds);
@@ -66,12 +70,22 @@ public class ParameterHelper {
 			DbbCountsCreator cc = new DbbCountsCreator();
 			cc.updateAbaStatisticsCache(ds, dba, statsController);
 		} catch (SQLException | DatabaseException e) {
+			areCountsCached.set(false);
 			String msg = "Unable to cache master ABA statistics: " + e;
 			logger.severe(msg);
+			logger.fine("cacheAbaStatistics: areCountsCached: " + areCountsCached.get());
+			logger.finer("cacheAbaStatistics: thread: "
+					+ Thread.currentThread().getName() + ": "
+					+ Thread.currentThread().getId());
 			throw new BlockingException(msg);
 		}
+		areCountsCached.set(true);
 		logger.info(
 				"... finished caching ABA statistics for reference records.");
+		logger.fine("cacheAbaStatistics: areCountsCached: " + areCountsCached.get());
+		logger.finer("cacheAbaStatistics: thread: "
+				+ Thread.currentThread().getName() + ": "
+				+ Thread.currentThread().getId());
 	}
 
 	public static DataSource getDataSource(String jndiName)
