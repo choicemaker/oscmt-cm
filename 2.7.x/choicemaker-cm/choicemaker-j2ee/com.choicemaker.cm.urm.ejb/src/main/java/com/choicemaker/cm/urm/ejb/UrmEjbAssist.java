@@ -178,6 +178,7 @@ class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 		// records. If a record is later added to a CompositeRecord,
 		// it will be removed from this set.
 		SortedSet<IdentifiableWrapper<T>> singleRecords = new TreeSet<>();
+		// Note tcs.getCandidateRecords() excludes the query record
 		for (DataAccessObject<T> candidate : tcs.getCandidateRecords()) {
 			IdentifiableWrapper<T> wrappedCandidate =
 				new IdentifiableWrapper<>(candidate);
@@ -224,7 +225,10 @@ class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 			}
 		}
 
-		if (mergeGroupIdOfQuery == null && linkCriteria.isMustIncludeQuery()) {
+		// Note that the singleRecords collection excluded the query record,
+		// so if it is required, then it must be added here, regardless of
+		// whether it was included in any merge group
+		if (/*mergeGroupIdOfQuery == null &&*/ linkCriteria.isMustIncludeQuery()) {
 			// Create a match relationship between the query record and itself
 			IRecordHolder<T> q = (IRecordHolder<T>) queryRecord;
 			IMatchScore matchScore = new MatchScore(1.0f, Decision3.MATCH, "");
