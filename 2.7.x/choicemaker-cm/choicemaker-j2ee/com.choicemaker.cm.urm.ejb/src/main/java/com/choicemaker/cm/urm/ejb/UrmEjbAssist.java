@@ -8,7 +8,9 @@
 package com.choicemaker.cm.urm.ejb;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.Serializable;
+import java.io.StringWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.rmi.RemoteException;
@@ -32,6 +34,7 @@ import com.choicemaker.cm.batch.api.BatchJobStatus;
 import com.choicemaker.cm.core.DatabaseException;
 import com.choicemaker.cm.urm.api.UrmConfigurationAdapter;
 import com.choicemaker.cm.urm.base.CompositeMatchScore;
+import com.choicemaker.cm.urm.base.CompositeRecord;
 import com.choicemaker.cm.urm.base.DbRecordCollection;
 import com.choicemaker.cm.urm.base.Decision3;
 import com.choicemaker.cm.urm.base.EvaluatedRecord;
@@ -40,6 +43,7 @@ import com.choicemaker.cm.urm.base.IMatchScore;
 import com.choicemaker.cm.urm.base.IRecord;
 import com.choicemaker.cm.urm.base.IRecordCollection;
 import com.choicemaker.cm.urm.base.IRecordHolder;
+import com.choicemaker.cm.urm.base.ISingleRecord;
 import com.choicemaker.cm.urm.base.JobStatus;
 import com.choicemaker.cm.urm.base.LinkCriteria;
 import com.choicemaker.cm.urm.base.LinkedRecordSet;
@@ -71,6 +75,15 @@ class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 	private static final Logger logger =
 		Logger.getLogger(UrmEjbAssist.class.getName());
 
+	public static final MatchScore PERFECT_SCORE =
+		new MatchScore(1.0f, Decision3.MATCH, "");
+
+	private static boolean _assertsEnabled = false;
+	static {
+		assert _assertsEnabled = true;
+	}
+	public static final boolean assertsEnabled = _assertsEnabled;
+
 	public UrmEjbAssist() {
 	}
 
@@ -98,6 +111,33 @@ class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 		logger.fine("BatchMatchAnalyzer.extractLocationURI: '" + url + "'");
 		URI retVal = new URI(url);
 		return retVal;
+	}
+
+	public void assertValid(List<EvaluatedRecord> records) {
+		if (assertsEnabled) {
+			assert records != null;
+			boolean isValid = true;
+			for (int i = 0; i < records.size(); i++) {
+				EvaluatedRecord record = records.get(i);
+				if (record == null) {
+					isValid = false;
+					logger.warning("Record " + i + " is null");
+				}
+				if (!equalRecordAndScoreCount(record)) {
+					isValid = false;
+					String msg =
+						"Unequal record and score counts for evaluated record "
+								+ i;
+					logger.severe(msg);
+					if (logger.isLoggable(Level.FINE)) {
+						msg = "Evaluated Record index: " + i + ": "
+								+ dumpInfo(record);
+						logger.fine(msg);
+					}
+				}
+			}
+			assert isValid;
+		}
 	}
 
 	public void copyResult(UrmBatchController urmBatchController, long jobID,
@@ -187,6 +227,7 @@ class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 
 		String mergeGroupIdOfQuery = null;
 		List<EvaluatedRecord> evaluatedRecords = new ArrayList<>();
+		assertValid(evaluatedRecords);
 		for (MergeGroup<T> mergeGroup : mergeGroups) {
 
 			if (mergeGroup.containsRecord(queryRecord)) {
@@ -203,7 +244,8 @@ class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 				 * merge group doesn't contain the query record, then skip this
 				 * merge group. This will effectively break up the merge group
 				 * into individual records linked to the query record and add
-				 * them to the evaluated record list
+				 * them to the evaluated record list. A group containing the
+				 * query record must be handled specially
 				 */
 				logger.fine("Skipping merge group " + mergeGroup.getGroupId());
 
@@ -213,30 +255,72 @@ class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 				 * add it to the evaluated record list. Remove each candidate
 				 * record from the set of singleRecords.
 				 */
+				LinkedRecordSet<T> lrs;
+				CompositeMatchScore cms;
+				if (mergeGroup.containsRecord(queryRecord)) {
+					// Create a match relationship between the query record and
+					// itself and add it as the first evaluated record
+					logger.finest(
+							"Adding query record as first evaluated record");
+					IRecordHolder<T> q = (IRecordHolder<T>) queryRecord;
+					IMatchScore matchScore = PERFECT_SCORE;
+					EvaluatedRecord er = new EvaluatedRecord(q, matchScore);
+					evaluatedRecords.add(0, er);
+					assertValid(evaluatedRecords);
+					logger.finer(
+							"Added query record as first evaluated record");
+				}
 				logger.fine("Add merge group " + mergeGroup.getGroupId()
-						+ " as LinkdRecordSet");
-				LinkedRecordSet<T> lrs = createLinkedRecordSetFromMergeGroup(
+						+ " as a LinkdRecordSet");
+				lrs = createLinkedRecordSetFromMergeGroup(queryRecord,
 						mergeGroup, linkCriteria);
-				CompositeMatchScore cms =
-					createCompositeMatchScoreFromMergeGroup(mergeGroup);
+				cms = createCompositeMatchScoreFromMergeGroup(queryRecord,
+						mergeGroup);
+				assert lrs.getRecords() != null;
+				assert cms.getInnerScores() != null;
+				assert lrs.getRecords().length == cms.getInnerScores().length;
 				removeLinkedRecordsFromSingleRecords(lrs, singleRecords);
 				EvaluatedRecord er = new EvaluatedRecord(lrs, cms);
 				evaluatedRecords.add(er);
+				assertValid(evaluatedRecords);
 			}
 		}
 
 		// Note that the singleRecords collection excluded the query record,
-		// so if it is required, then it must be added here, regardless of
-		// whether it was included in any merge group
-		if (/*mergeGroupIdOfQuery == null &&*/ linkCriteria.isMustIncludeQuery()) {
+		// so if it is required, then it must be added here, unless it was
+		// already handled as part of some other merge group
+		if (mergeGroupIdOfQuery == null && linkCriteria.isMustIncludeQuery()) {
 			// Create a match relationship between the query record and itself
+			// and add it as the first evaluated record
+			logger.finest("Adding query record as first evaluated record");
 			IRecordHolder<T> q = (IRecordHolder<T>) queryRecord;
-			IMatchScore matchScore = new MatchScore(1.0f, Decision3.MATCH, "");
+			IMatchScore matchScore = PERFECT_SCORE;
 			EvaluatedRecord er = new EvaluatedRecord(q, matchScore);
-			evaluatedRecords.add(er);
+			evaluatedRecords.add(0, er);
+			assertValid(evaluatedRecords);
+			logger.finer("Added query record as first evaluated record");
 		}
 
-		// Add any remaining single records as evaluated records
+		// At this point, the query record is the first evaluated if
+		// (1) it was part of some merge group or (2) it was required.
+		if (assertsEnabled && evaluatedRecords.size() > 0) {
+			if (mergeGroupIdOfQuery != null
+					|| linkCriteria.isMustIncludeQuery()) {
+				EvaluatedRecord firstER = evaluatedRecords.get(0);
+				assert PERFECT_SCORE.equals(firstER.getScore());
+				IRecord<?> firstIR = firstER.getRecord();
+				assert firstIR != null;
+				Comparable<?> firstId = firstIR.getId();
+				if (firstId == null) {
+					assert queryRecord.getId() == null;
+				} else {
+					assert firstId.equals(queryRecord.getId());
+				}
+			}
+		}
+
+		// Add any remaining single records as evaluated records.
+		// Exclude the query record since it is already be added.
 		for (IdentifiableWrapper<T> wrappedCandidate : singleRecords) {
 			DataAccessObject<T> candidate =
 				(DataAccessObject<T>) wrappedCandidate.getWrapped();
@@ -245,8 +329,10 @@ class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 			MatchScore matchScore = createMatchScore(qcp);
 			EvaluatedRecord er = new EvaluatedRecord(irh, matchScore);
 			evaluatedRecords.add(er);
+			assertValid(evaluatedRecords);
 		}
 
+		assertValid(evaluatedRecords);
 		EvaluatedRecord[] retVal = evaluatedRecords
 				.toArray(new EvaluatedRecord[evaluatedRecords.size()]);
 		return retVal;
@@ -289,18 +375,42 @@ class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 		return retVal;
 	}
 
+	// public CompositeMatchScore createCompositeMatchScoreFromMergeGroup(
+	// MergeGroup<T> mergeGroup) {
+	// List<MatchScore> list = new ArrayList<>();
+	// for (EvaluatedPair<T> er : mergeGroup.getGroupPairs()) {
+	// MatchScore matchScore = createMatchScore(er);
+	// list.add(matchScore);
+	// }
+	// CompositeMatchScore retVal = new CompositeMatchScore(list);
+	// return retVal;
+	// }
+
+	/**
+	 * Create a composite score from scores of candidate records against the
+	 * query record.
+	 */
 	public CompositeMatchScore createCompositeMatchScoreFromMergeGroup(
-			MergeGroup<T> mergeGroup) {
-		List<MatchScore> list = new ArrayList<>();
-		for (EvaluatedPair<T> er : mergeGroup.getGroupPairs()) {
-			MatchScore matchScore = createMatchScore(er);
-			list.add(matchScore);
+			DataAccessObject<T> queryRecord, MergeGroup<T> mergeGroup0) {
+		List<MatchScore> scores = new ArrayList<>();
+		for (EvaluatedPair<T> ep : mergeGroup0.getGroupPairs()) {
+			if (!ep.getRecord1().equals(queryRecord)
+					&& !ep.getRecord2().equals(queryRecord)) {
+				// Neither record matches the query record
+				continue;
+			}
+			if (ep.getRecord1().equals(queryRecord)
+					&& ep.getRecord2().equals(queryRecord)) {
+				// Skip a match of the query record against itself
+				continue;
+			}
+			MatchScore matchScore = createMatchScore(ep);
+			scores.add(matchScore);
 		}
-		CompositeMatchScore retVal = new CompositeMatchScore(list);
+		CompositeMatchScore retVal = new CompositeMatchScore(scores);
 		return retVal;
 	}
 
-	/* public */
 	public NamedConfiguration createCustomizedConfiguration(
 			UrmConfigurationAdapter adapter,
 			NamedConfigurationController ncController, DbRecordCollection mRc,
@@ -450,8 +560,33 @@ class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 		return retVal;
 	}
 
+	// public LinkedRecordSet<T> createLinkedRecordSetFromMergeGroup(
+	// MergeGroup<T> mergeGroup, LinkCriteria linkCriteria) {
+	// Precondition.assertNonNullArgument("null merge group", mergeGroup);
+	// Precondition.assertNonNullArgument("null link criteria", linkCriteria);
+	// Precondition.assertBoolean("inconsistent graph property",
+	// linkCriteria.getGraphPropType().getName()
+	// .equals(linkCriteria.getGraphPropType().getName()));
+	//
+	// List<IRecordHolder<T>> list = new ArrayList<>();
+	// for (DataAccessObject<T> record : mergeGroup.getGroupRecords()) {
+	// IRecordHolder<T> irh = (IRecordHolder<T>) record;
+	// list.add(irh);
+	// }
+	// LinkedRecordSet<T> retVal =
+	// new LinkedRecordSet<T>(null, list, linkCriteria);
+	//
+	// return retVal;
+	// }
+
+	/**
+	 * Create a linked record set from candidate records, excluding the query
+	 * record.
+	 */
 	public LinkedRecordSet<T> createLinkedRecordSetFromMergeGroup(
-			MergeGroup<T> mergeGroup, LinkCriteria linkCriteria) {
+			DataAccessObject<T> queryRecord, MergeGroup<T> mergeGroup,
+			LinkCriteria linkCriteria) {
+		Precondition.assertNonNullArgument("null query record", queryRecord);
 		Precondition.assertNonNullArgument("null merge group", mergeGroup);
 		Precondition.assertNonNullArgument("null link criteria", linkCriteria);
 		Precondition.assertBoolean("inconsistent graph property",
@@ -460,12 +595,14 @@ class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 
 		List<IRecordHolder<T>> list = new ArrayList<>();
 		for (DataAccessObject<T> record : mergeGroup.getGroupRecords()) {
+			if (queryRecord.equals(record)) {
+				continue;
+			}
 			IRecordHolder<T> irh = (IRecordHolder<T>) record;
 			list.add(irh);
 		}
 		LinkedRecordSet<T> retVal =
 			new LinkedRecordSet<T>(null, list, linkCriteria);
-
 		return retVal;
 	}
 
@@ -496,5 +633,99 @@ class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 		}
 		logger.finer("Single record count: " + singleRecords.size());
 	}
+
+	public boolean equalRecordAndScoreCount(EvaluatedRecord evaluatedRecord) {
+		boolean retVal;
+		IRecord<?> r = evaluatedRecord.getRecord();
+		if (r instanceof ISingleRecord<?>) {
+			retVal = true;
+		} else if (r instanceof CompositeRecord<?>) {
+			CompositeRecord<?> cr = (CompositeRecord<?>) r;
+			IRecord<?>[] records = cr.getRecords();
+			CompositeMatchScore cms =
+				(CompositeMatchScore) evaluatedRecord.getScore();
+			MatchScore[] scores = cms.getInnerScores();
+			retVal = records.length == scores.length;
+		} else {
+			logger.warning("Unexpected record type: " + r.getClass().getName());
+			retVal = false;
+		}
+		return retVal;
+	}
+
+	public boolean equalRecordAndScoreCount(
+			EvaluatedRecord[] evaluatedRecords) {
+		Precondition.assertNonNullArgument("null records", evaluatedRecords);
+		boolean retVal = true;
+		for (int i = 0; i < evaluatedRecords.length; i++) {
+			EvaluatedRecord er = evaluatedRecords[i];
+			if (!equalRecordAndScoreCount(er)) {
+				retVal = false;
+			}
+		}
+		return retVal;
+	}
+
+	public String dumpInfo(EvaluatedRecord er) {
+		final String INDENT = "  ";
+		final String TWODENT = INDENT + INDENT;
+		StringWriter sw = new StringWriter();
+		PrintWriter pw = new PrintWriter(sw);
+		if (er == null) {
+			pw.println("<null>");
+		} else {
+			IRecord<?> r = er.getRecord();
+			pw.print("EvaluatedRecord info");
+			if (r instanceof ISingleRecord<?>) {
+				ISingleRecord<?> isr = (ISingleRecord<?>) r;
+				pw.println(INDENT + "Record id: " + isr.getId());
+				MatchScore ms = (MatchScore) er.getScore();
+				pw.println(INDENT + "Score: " + ms.toString());
+			} else if (r instanceof CompositeRecord<?>) {
+				CompositeRecord<?> cr = (CompositeRecord<?>) r;
+				pw.println(INDENT + "Composite id: " + cr.getId());
+				if (cr instanceof LinkedRecordSet<?>) {
+					LinkedRecordSet<?> lrs = (LinkedRecordSet<?>) cr;
+					pw.println(INDENT + "Linkage criteria: "
+							+ lrs.getCriteria().toString());
+				}
+				IRecord<?>[] records = cr.getRecords();
+				pw.println(INDENT + "Records: " + records.length);
+				CompositeMatchScore cms = (CompositeMatchScore) er.getScore();
+				MatchScore[] scores = cms.getInnerScores();
+				pw.println(INDENT + "Scores: " + scores.length);
+				final int limit = Math.max(records.length, scores.length);
+				for (int i = 0; i < limit; i++) {
+					pw.print(TWODENT);
+					if (i < records.length) {
+						pw.print("Record[" + i + "]: " + records[i].getId()
+								+ " ");
+					}
+					if (i < scores.length) {
+						pw.print("Score[" + i + "]: " + scores[i].toString());
+					}
+					pw.println();
+				}
+			} else {
+				pw.println("Unexpected record type: " + r.getClass().getName());
+			}
+		}
+		String reVal = sw.toString();
+		return reVal;
+	}
+
+	// public MergeGroup<T> stripQueryRecordFromMergeGroup(
+	// DataAccessObject<T> queryRecord, MergeGroup<T> mergeGroup) {
+	// IGraphProperty gp = mergeGroup.getGraphConnectivity();
+	// List<EvaluatedPair<T>> pairs = mergeGroup.getGroupPairs();
+	// for (EvaluatedPair<T> pair : pairs) {
+	//
+	// }
+	// MergeGroupBean<T> retVal = new MergeGroupBean<>();
+	// public MergeGroupBean(IGraphProperty mergeConnectivity,
+	// List<EvaluatedPair<T>> pairs) {
+	// // TODO Auto-generated method stub
+	// return null;
+	// }
 
 }

@@ -5,8 +5,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.logging.Logger;
@@ -55,6 +57,16 @@ public class OnlineDelegate<T extends Comparable<T> & Serializable> {
 		Logger.getLogger(OnlineDelegate.class.getName());
 
 	public void addQueryMatchPairToList(DataAccessObject<T> query, Match match,
+			ImmutableProbabilityModel model, Set<QueryCandidatePair<T>> set) {
+		Precondition.assertNonNullArgument("null query", query);
+		Precondition.assertNonNullArgument("null match", match);
+		Precondition.assertNonNullArgument("null model", model);
+		Precondition.assertNonNullArgument("null list", set);
+		QueryCandidatePair<T> ep = getEvaluatedPair(query, match, model);
+		set.add(ep);
+	}
+
+	public void addQueryMatchPairToList(DataAccessObject<T> query, Match match,
 			ImmutableProbabilityModel model, List<QueryCandidatePair<T>> list) {
 		Precondition.assertNonNullArgument("null query", query);
 		Precondition.assertNonNullArgument("null match", match);
@@ -70,7 +82,8 @@ public class OnlineDelegate<T extends Comparable<T> & Serializable> {
 		Precondition.assertNonNullArgument("null list", list);
 		float p = 1.0f;
 		Decision d = Decision.MATCH;
-		QueryCandidatePair<T> ep = new QueryCandidatePair<T>(query, query, p, d);
+		QueryCandidatePair<T> ep =
+			new QueryCandidatePair<T>(query, query, p, d);
 		list.add(ep);
 	}
 
@@ -313,8 +326,8 @@ public class OnlineDelegate<T extends Comparable<T> & Serializable> {
 		 */
 		T queryId = query.getId();
 
-		final List<QueryCandidatePair<T>> pairs = new ArrayList<>();
-		final List<MergeGroup<T>> mergeGroups = new ArrayList<>();
+		final Set<QueryCandidatePair<T>> pairs = new LinkedHashSet<>();
+		final Set<MergeGroup<T>> mergeGroups = new LinkedHashSet<>();
 		for (INode<?> childNode : childEntities) {
 
 			// Handle an isolated record
@@ -325,15 +338,17 @@ public class OnlineDelegate<T extends Comparable<T> & Serializable> {
 				if (!childId.equals(queryId)) {
 					Match m = matchMap.get(childId);
 					assert m != null;
-					QueryCandidatePair<T> pair = getEvaluatedPair(query, m, model);
+					QueryCandidatePair<T> pair =
+						getEvaluatedPair(query, m, model);
 					pairs.add(pair);
 				}
 
 				// Handle a group of records
 			} else if (childNode instanceof CompositeEntity) {
 				CompositeEntity compositeEntity = (CompositeEntity) childNode;
-				List<QueryCandidatePair<T>> queryCandidatePairs = new ArrayList<>();
-				List<EvaluatedPair<T>> mergGroupPairs = new ArrayList<>();
+				Set<QueryCandidatePair<T>> queryCandidatePairs =
+					new LinkedHashSet<>();
+				Set<EvaluatedPair<T>> mergGroupPairs = new LinkedHashSet<>();
 				boolean containsQuery = false;
 
 				// Add evaluated pairs from the group
@@ -368,9 +383,10 @@ public class OnlineDelegate<T extends Comparable<T> & Serializable> {
 							DataAccessObject<T> c1 = candidateMap.get(id1);
 							DataAccessObject<T> c2 = candidateMap.get(id2);
 							if (c1 != null && c2 != null) {
-								QueryCandidatePair<T> ep = new QueryCandidatePair<>(c1,
-										c2, mr.getProbability(),
-										mr.getMatchType(), mr.getNotes());
+								QueryCandidatePair<T> ep =
+									new QueryCandidatePair<>(c1, c2,
+											mr.getProbability(),
+											mr.getMatchType(), mr.getNotes());
 								mergGroupPairs.add(ep);
 							}
 						}
@@ -385,8 +401,8 @@ public class OnlineDelegate<T extends Comparable<T> & Serializable> {
 				 * record. Otherwise, add the group as a merge group.
 				 */
 				if (mustIncludeQuery && !containsQuery) {
-					SortedSet<T> mIndices =
-						getCandidateIndicesFromPairs(queryCandidatePairs);
+					SortedSet<T> mIndices = getCandidateIndicesFromPairs(
+							new ArrayList<>(queryCandidatePairs));
 					for (T idx : mIndices) {
 						Match match = matchMap.get(idx);
 						addQueryMatchPairToList(query, match, model, pairs);
@@ -396,11 +412,11 @@ public class OnlineDelegate<T extends Comparable<T> & Serializable> {
 				} else {
 					assert containsQuery || !mustIncludeQuery;
 					pairs.addAll(queryCandidatePairs);
-//					if (containsQuery) {
-//						mergGroupPairs.addAll(queryCandidatePairs);
-//					}
+					if (containsQuery) {
+						mergGroupPairs.addAll(queryCandidatePairs);
+					}
 					MergeGroup<T> mergeGroup = new MergeGroupBean<T>(
-							mergeConnectivity, mergGroupPairs);
+							mergeConnectivity, new ArrayList<>(mergGroupPairs));
 					mergeGroups.add(mergeGroup);
 				}
 
@@ -411,8 +427,9 @@ public class OnlineDelegate<T extends Comparable<T> & Serializable> {
 			}
 
 		}
-		TransitiveGroupBean<T> retVal =
-			new TransitiveGroupBean<T>(query, pairs, mergeGroups);
+
+		TransitiveGroupBean<T> retVal = new TransitiveGroupBean<T>(query,
+				new ArrayList<>(pairs), new ArrayList<>(mergeGroups));
 		return retVal;
 	}
 
