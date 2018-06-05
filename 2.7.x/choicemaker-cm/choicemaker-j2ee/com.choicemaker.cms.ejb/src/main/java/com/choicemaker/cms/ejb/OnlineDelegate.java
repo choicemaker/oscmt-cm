@@ -394,10 +394,11 @@ public class OnlineDelegate<T extends Comparable<T> & Serializable> {
 
 					// Otherwise, add the group as a mergeGroup
 				} else {
+					assert containsQuery || !mustIncludeQuery;
 					pairs.addAll(queryCandidatePairs);
-					if (containsQuery) {
-						mergGroupPairs.addAll(queryCandidatePairs);
-					}
+//					if (containsQuery) {
+//						mergGroupPairs.addAll(queryCandidatePairs);
+//					}
 					MergeGroup<T> mergeGroup = new MergeGroupBean<T>(
 							mergeConnectivity, mergGroupPairs);
 					mergeGroups.add(mergeGroup);
