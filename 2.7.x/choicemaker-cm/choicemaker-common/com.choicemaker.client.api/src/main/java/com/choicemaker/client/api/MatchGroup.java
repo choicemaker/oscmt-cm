@@ -3,7 +3,8 @@ package com.choicemaker.client.api;
 import java.io.Serializable;
 import java.util.List;
 
-public interface MatchGroup<T extends Comparable<T> & Serializable> extends Serializable {
+public interface MatchGroup<T extends Comparable<T> & Serializable>
+		extends Serializable {
 
 	/** Returns a unique identifier for the group */
 	String getGroupId();
@@ -17,8 +18,8 @@ public interface MatchGroup<T extends Comparable<T> & Serializable> extends Seri
 	List<DataAccessObject<T>> getCandidateRecords();
 
 	/**
-	 * Returns a list of all EvaluatedPairs between the query record and
-	 * the candidate records.
+	 * Returns a list of all EvaluatedPairs between the query record and the
+	 * candidate records.
 	 */
 	List<QueryCandidatePair<T>> getQueryCandidatePairs();
 
