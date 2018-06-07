@@ -34,7 +34,8 @@ import com.choicemaker.cm.io.db.postgres2.dbom.PostgresDbObjectMaker;
 import com.choicemaker.util.StringUtils;
 
 public class PostgresDatabaseAccessor implements DatabaseAccessor {
-	private static Logger logger = Logger.getLogger(PostgresDatabaseAccessor.class.getName());
+	private static Logger logger =
+		Logger.getLogger(PostgresDatabaseAccessor.class.getName());
 
 	// These two objects have the same life span -- see isConsistent()
 	private DataSource ds;
@@ -43,7 +44,8 @@ public class PostgresDatabaseAccessor implements DatabaseAccessor {
 	private Connection connection;
 	private DbReaderSequential dbr;
 	private Statement stmt;
-	private String condition;
+	private String condition1;
+	private String condition2;
 
 	/**
 	 * An invariant for this class
@@ -81,11 +83,35 @@ public class PostgresDatabaseAccessor implements DatabaseAccessor {
 	}
 
 	public void setCondition(Object condition) {
-		this.condition = (String)condition;
+		String[] conditions = (String[]) condition;
+		if (conditions == null || conditions.length == 0) {
+			logger.finer("No conditions on database accessor");
+		} else {
+			if (conditions.length > 0) {
+				condition1 = conditions[0];
+				logger.finer("Condition 1 on database accessor: ");
+			}
+			if (conditions.length > 1) {
+				condition2 = conditions[1];
+				logger.finer("Condition 2 on database accessor: ");
+			}
+			if (conditions.length > 2) {
+				final int extra = conditions.length - 2;
+				StringBuilder sb =
+					new StringBuilder("Ignoring " + extra + "conditions: ");
+				for (int i = extra; i < conditions.length; i++) {
+					sb.append(conditions[i]);
+					if (i < conditions.length - 1) {
+						sb.append(" | ");
+					}
+				}
+				logger.finer(sb.toString());
+			}
+		}
 	}
 
 	public DatabaseAccessor cloneWithNewConnection()
-		throws CloneNotSupportedException {
+			throws CloneNotSupportedException {
 		throw new CloneNotSupportedException("not yet implemented");
 	}
 
@@ -97,16 +123,18 @@ public class PostgresDatabaseAccessor implements DatabaseAccessor {
 		try {
 			query = getQuery(getProperties(), blocker, dbr);
 			connection = getDataSource().getConnection();
-//			connection.setAutoCommit(false); // 2015-04-01a EJB3 CHANGE rphall
+			// connection.setAutoCommit(false); // 2015-04-01a EJB3 CHANGE
+			// rphall
 			stmt = connection.createStatement();
 			stmt.setFetchSize(100);
 			logger.fine(query);
 			// BUG 2015-04-01 rphall
 			// SQL query returns multiple result sets,
-			// 		but executeQuery can't handle more than one.
-			//ResultSet rs = stmt.executeQuery(query);
+			// but executeQuery can't handle more than one.
+			// ResultSet rs = stmt.executeQuery(query);
 			// BUGFIX: see
-			// How to Retrieve Multiple Result Sets from a Stored Procedure in JDBC
+			// How to Retrieve Multiple Result Sets from a Stored Procedure in
+			// JDBC
 			// http://links.rph.cx/m9jJav
 			ResultSet rs = null;
 			boolean isResultSet = stmt.execute(query);
@@ -134,11 +162,12 @@ public class PostgresDatabaseAccessor implements DatabaseAccessor {
 			rs.setFetchSize(100);
 			dbr.open(rs, stmt);
 		} catch (SQLException ex) {
-			logger.severe("Opening blocking data: " + query + ": " + ex.toString());
+			logger.severe(
+					"Opening blocking data: " + query + ": " + ex.toString());
 			throw new IOException(ex.toString());
 		}
 	}
-	
+
 	public void close() throws IOException {
 		Exception ex = null;
 		try {
@@ -156,12 +185,12 @@ public class PostgresDatabaseAccessor implements DatabaseAccessor {
 			// database using EJB3 managed connections. They should not be
 			// explicitly closed, but rather rely on the EJB3 container to
 			// do so.
-//			try {
-//				connection.commit();
-//			} catch (java.sql.SQLException e) {
-//				ex = e;
-//				logger.severe("Commiting: " + e.toString());
-//			}
+			// try {
+			// connection.commit();
+			// } catch (java.sql.SQLException e) {
+			// ex = e;
+			// logger.severe("Commiting: " + e.toString());
+			// }
 			// END EJB3 CHANGE
 			try {
 				connection.close();
@@ -180,19 +209,21 @@ public class PostgresDatabaseAccessor implements DatabaseAccessor {
 		return dbr.hasNext();
 	}
 
-	public Record getNext() throws IOException {
+	public Record<?> getNext() throws IOException {
 		return dbr.getNext();
 	}
 
-	private String getQuery(final Properties p, AutomatedBlocker blocker, DbReaderSequential dbr) {
+	private String getQuery(final Properties p, AutomatedBlocker blocker,
+			DbReaderSequential dbr) {
 		StringBuffer b = new StringBuffer(16000);
 		String id = dbr.getMasterId();
-		b.append("DECLARE @ids TABLE (id " + dbr.getMasterIdType() + ")" + Constants.LINE_SEPARATOR + "INSERT INTO @ids");
-		if (StringUtils.nonEmptyString(condition)) {
-			b.append(" SELECT b.");
-			b.append(id);
-			b.append(" FROM (");
-		}
+		b.append("DECLARE @ids TABLE (id " + dbr.getMasterIdType() + ")"
+				+ Constants.LINE_SEPARATOR + "INSERT INTO @ids");
+		// if (StringUtils.nonEmptyString(condition)) {
+		// b.append(" SELECT b.");
+		// b.append(id);
+		// b.append(" FROM (");
+		// }
 		int numBlockingSets = blocker.getBlockingSets().size();
 		for (int i = 0; i < numBlockingSets; ++i) {
 			if (i == 0) {
@@ -206,10 +237,10 @@ public class PostgresDatabaseAccessor implements DatabaseAccessor {
 			}
 			// AJW 2/26/04: to make stuff work for Phoenix.
 			// This doesn't fix the problem, it just gets rid of a horrible
-			// severe.  If blocking fields are on different tables, and each table
-			// has an ID column, then things don't work...
+			// severe. If blocking fields are on different tables, and each
+			// table has an ID column, then things don't work...
 			b.append("v0." + id);
-			//b.append(id);
+			// b.append(id);
 			b.append(" FROM ");
 			IBlockingSet bs = (IBlockingSet) blocker.getBlockingSets().get(i);
 			int numViews = bs.getNumTables();
@@ -218,7 +249,8 @@ public class PostgresDatabaseAccessor implements DatabaseAccessor {
 					b.append(",");
 				}
 				IGroupTable gt = bs.getTable(j);
-				b.append(gt.getTable().getName()).append(" v").append(gt.getNumber());
+				b.append(gt.getTable().getName()).append(" v")
+						.append(gt.getNumber());
 			}
 			b.append(" WHERE ");
 			int numValues = bs.numFields();
@@ -229,7 +261,8 @@ public class PostgresDatabaseAccessor implements DatabaseAccessor {
 				IBlockingValue bv = bs.getBlockingValue(j);
 				IBlockingField bf = bv.getBlockingField();
 				IDbField dbf = bf.getDbField();
-				b.append("v").append(bs.getGroupTable(bf).getNumber()).append(".").append(dbf.getName()).append("=");
+				b.append("v").append(bs.getGroupTable(bf).getNumber())
+						.append(".").append(dbf.getName()).append("=");
 				if (mustQuote(bf.getDbField().getType())) {
 					b.append("'" + escape(bv.getValue()) + "'");
 				} else {
@@ -246,16 +279,18 @@ public class PostgresDatabaseAccessor implements DatabaseAccessor {
 				}
 			}
 		}
-		if (StringUtils.nonEmptyString(condition)) {
-			b.append(") b,");
-			b.append(condition);
+		if (StringUtils.nonEmptyString(condition1) || StringUtils.nonEmptyString(condition2)) {
+			logger.warning("FIXME not setting conditions");
+//			b.append(") b,");
+//			b.append(condition);
 		}
 		b.append(Constants.LINE_SEPARATOR);
-		//b.append((String) blocker.accessProvider.properties.get(dbr.getName() + ":Postgres"));
+		// b.append((String) blocker.accessProvider.properties.get(dbr.getName()
+		// + ":Postgres"));
 		b.append(getMultiQuery(p, blocker, dbr));
-		
+
 		logger.fine(b.toString());
-		
+
 		return b.toString();
 	}
 
