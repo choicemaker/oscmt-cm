@@ -18,14 +18,14 @@ import com.choicemaker.cm.core.Record;
  *
  * @author    Martin Buechi
  */
-public interface DbReader {
+public interface DbReader<T extends Comparable<T>> {
 	/**
 	 * Returns the next entity.
 	 *
 	 * @return  The next entity.
 	 * @throws  SQLException  if an exception occurs while reading from the result sets.
 	 */
-	Record getNext() throws java.sql.SQLException;
+	Record<T> getNext() throws java.sql.SQLException;
 
 	/**
 	 * Answers whether there are more entities to be retrieved.
