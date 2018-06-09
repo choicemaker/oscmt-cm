@@ -8,30 +8,30 @@ import com.choicemaker.cm.core.base.*;
 import com.choicemaker.cm.core.util.*;
 import com.choicemaker.cm.io.xml.base.*;
 import com.choicemaker.util.*;
-import com.choicemaker.cm.custom.mci.gend.MciRecords.AddressImpl;
-import com.choicemaker.cm.custom.mci.gend.MciRecords.ContactsImpl;
-import com.choicemaker.cm.custom.mci.gend.MciRecords.EthnicityImpl;
-import com.choicemaker.cm.custom.mci.gend.MciRecords.EventsImpl;
-import com.choicemaker.cm.custom.mci.gend.MciRecords.FrozenImpl;
-import com.choicemaker.cm.custom.mci.gend.MciRecords.IdsImpl;
-import com.choicemaker.cm.custom.mci.gend.MciRecords.IndexAndOutstandingImpl;
-import com.choicemaker.cm.custom.mci.gend.MciRecords.MothersImpl;
-import com.choicemaker.cm.custom.mci.gend.MciRecords.NamesImpl;
-import com.choicemaker.cm.custom.mci.gend.MciRecords.PatientImpl;
-import com.choicemaker.cm.custom.mci.gend.MciRecords.ProvidersImpl;
-import com.choicemaker.cm.custom.mci.gend.MciRecords.RaceImpl;
-import com.choicemaker.cm.custom.mci.gend.MciRecords.RelImpl;
-import com.choicemaker.cm.custom.mci.gend.internal.MciRecords.*;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 import com.choicemaker.util.StringUtils;
-import com.choicemaker.cm.custom.mci.encryption.*;
-import com.choicemaker.cm.custom.mci.matching.*;
-import com.choicemaker.cm.custom.mci.nameparser.*;
-import com.choicemaker.cm.custom.mci.validation.*;
-import com.choicemaker.cm.matching.en.*;
-import com.choicemaker.cm.matching.en.us.*;
-import com.choicemaker.cm.matching.gen.*;
-import com.choicemaker.cm.validation.eclipse.*;
-import com.choicemaker.cm.validation.eclipse.impl.*;
+
+
+
+
+
+
+
+
+
 import java.util.*;
 public final class MciRecordsXmlRecordOutputter implements XmlRecordOutputter {
 private static Logger logger = Logger.getLogger(com.choicemaker.cm.testobjects.mci.internal.MciRecords.xml.MciRecordsXmlRecordOutputter.class.getName());

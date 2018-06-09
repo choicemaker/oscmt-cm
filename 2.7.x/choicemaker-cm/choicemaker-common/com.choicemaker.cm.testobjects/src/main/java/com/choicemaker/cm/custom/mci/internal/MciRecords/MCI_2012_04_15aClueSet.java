@@ -2,19 +2,19 @@
 //    Source: /Users/rphall/Documents/git.nosync/mci-proprietary/2.7.x/mci-models/mci20120415a/etc/models/MCI_2012_04_15a.clues
 //    Date:   2/5/18 1:26 PM
 
-package com.choicemaker.cm.custom.mci.gend.MciRecords;
+package com.choicemaker.cm.custom.mci.internal.MciRecords;
 import java.util.*;
 import java.text.SimpleDateFormat;
 import com.choicemaker.util.StringUtils;
-import com.choicemaker.cm.matching.en.*;
-import com.choicemaker.cm.matching.en.us.*;
-import com.choicemaker.cm.matching.gen.*;
-import com.choicemaker.cm.validation.*;
-import com.choicemaker.cm.validation.eclipse.*;
-import com.choicemaker.cm.validation.eclipse.impl.*;
-import com.choicemaker.cm.custom.mci.matching.*;
-import com.choicemaker.cm.custom.mci.nameparser.*;
-import com.choicemaker.cm.custom.mci.validation.*;
+
+
+
+.*;
+
+
+
+
+
 import com.choicemaker.cm.core.*;
 import com.choicemaker.cm.core.base.*;
 import java.util.logging.*;
@@ -44,7 +44,7 @@ public class MCI_2012_04_15aClueSet implements com.choicemaker.cm.core.ClueSet {
    private boolean __exists0(PatientImpl q, PatientImpl m) throws java.lang.Exception {
       for (int i = 0; i < q.ids.length; i = i + 1)
          {
-            if (((q.ids[i].identifier_type != null) && FacilityUtils.isVital(q.ids[i].identifier_type)))
+
                {
                   return true;
                };
@@ -54,7 +54,7 @@ public class MCI_2012_04_15aClueSet implements com.choicemaker.cm.core.ClueSet {
    private boolean __exists1(PatientImpl q, PatientImpl m) throws java.lang.Exception {
       for (int j = 0; j < m.ids.length; j = j + 1)
          {
-            if (((m.ids[j].identifier_type != null) && FacilityUtils.isVital(m.ids[j].identifier_type)))
+
                {
                   return true;
                };
@@ -74,7 +74,7 @@ public class MCI_2012_04_15aClueSet implements com.choicemaker.cm.core.ClueSet {
    private boolean __exists2(PatientImpl q, PatientImpl m) throws java.lang.Exception {
       for (int i = 0; i < q.ids.length; i = i + 1)
          {
-            if (((q.ids[i].identifier_type != null) && FacilityUtils.isVital(q.ids[i].identifier_type)))
+
                {
                   return true;
                };
@@ -84,7 +84,7 @@ public class MCI_2012_04_15aClueSet implements com.choicemaker.cm.core.ClueSet {
    private boolean __exists3(PatientImpl q, PatientImpl m) throws java.lang.Exception {
       for (int j = 0; j < m.ids.length; j = j + 1)
          {
-            if (((m.ids[j].identifier_type != null) && FacilityUtils.isVital(m.ids[j].identifier_type)))
+
                {
                   return true;
                };
@@ -735,12 +735,12 @@ public class MCI_2012_04_15aClueSet implements com.choicemaker.cm.core.ClueSet {
       boolean $70 = false;
       for (int i = 0; i < q.ids.length; i = i + 1)
          {
-            $70 = (q.ids[i].identifier_type != null) && FacilityUtils.isVital(q.ids[i].identifier_type);
+
             if ($70)
                return true;
             for (int j = 0; j < m.ids.length; j = j + 1)
                {
-                  if (($70 || ((m.ids[j].identifier_type != null) && FacilityUtils.isVital(m.ids[j].identifier_type))))
+
                      {
                         return true;
                      };
@@ -766,13 +766,13 @@ public class MCI_2012_04_15aClueSet implements com.choicemaker.cm.core.ClueSet {
          {
             $72 = m.multi_birth_ind == 'N';
             z$75 = false;
-            if ((((!z$75) && (z$75 = true)) ?(($74 = ((q.multi_birth_ind == 'N') && (q.ids[i].identifier_type != null)) && FacilityUtils.isVital(q.ids[i].identifier_type))) : ($74)))
+
                return true;
-            if ((!((((!z$75) && (z$75 = true)) ?(($74 = ((q.multi_birth_ind == 'N') && (q.ids[i].identifier_type != null)) && FacilityUtils.isVital(q.ids[i].identifier_type))) : ($74)) || $72)))
+
                continue ;
             for (int j = 0; j < m.ids.length; j = j + 1)
                {
-                  if (((((!z$75) && (z$75 = true)) ?(($74 = ((q.multi_birth_ind == 'N') && (q.ids[i].identifier_type != null)) && FacilityUtils.isVital(q.ids[i].identifier_type))) : ($74)) || (($72 && (m.ids[j].identifier_type != null)) && FacilityUtils.isVital(m.ids[j].identifier_type))))
+
                      {
                         return true;
                      };
@@ -3090,7 +3090,7 @@ public class MCI_2012_04_15aClueSet implements com.choicemaker.cm.core.ClueSet {
                continue ;
             for (int j = 0; j < m.names.length; j = j + 1)
                {
-                  if (((($252 && m.names[j].__v_dob) && DateUtils.sameMonthAndYear(((!z$255) && (z$255 = true)) ?(($254 = q.names[i].dob)) : ($254), m.names[j].dob)) && ((((!z$257) && (z$257 = true)) ?(($256 = (DateUtils.isFirstOfMonth(q.names[i].dob) && q.names[i].__v_facility_id) && FacilityUtils.isHipFacility(q.names[i].facility_id))) : ($256)) || ((DateUtils.isFirstOfMonth(m.names[j].dob) && m.names[j].__v_facility_id) && FacilityUtils.isHipFacility(m.names[j].facility_id)))))
+
                      {
                         return true;
                      };
@@ -3121,7 +3121,7 @@ public class MCI_2012_04_15aClueSet implements com.choicemaker.cm.core.ClueSet {
    private boolean __exists103(PatientImpl q, PatientImpl m) throws java.lang.Exception {
       for (int i = 0; i < q.names.length; i = i + 1)
          {
-            if ((((q.names[i].__v_dob && q.names[i].__v_facility_id) && DateUtils.isFirstOfMonth(q.names[i].dob)) && FacilityUtils.isHipFacility(q.names[i].facility_id)))
+
                {
                   return true;
                };
@@ -3131,7 +3131,7 @@ public class MCI_2012_04_15aClueSet implements com.choicemaker.cm.core.ClueSet {
    private boolean __exists104(PatientImpl q, PatientImpl m) throws java.lang.Exception {
       for (int i = 0; i < m.names.length; i = i + 1)
          {
-            if ((((m.names[i].__v_dob && m.names[i].__v_facility_id) && DateUtils.isFirstOfMonth(m.names[i].dob)) && FacilityUtils.isHipFacility(m.names[i].facility_id)))
+
                {
                   return true;
                };
@@ -3173,7 +3173,7 @@ public class MCI_2012_04_15aClueSet implements com.choicemaker.cm.core.ClueSet {
                continue ;
             for (int j = 0; j < m.names.length; j = j + 1)
                {
-                  if (((($258 && m.names[j].__v_dob) && DateUtils.sameDayAndMonth(((!z$261) && (z$261 = true)) ?(($260 = q.names[i].dob)) : ($260), m.names[j].dob)) && ((((!z$263) && (z$263 = true)) ?(($262 = (DateUtils.isFirstOfMonth(q.names[i].dob) && q.names[i].__v_facility_id) && FacilityUtils.isHipFacility(q.names[i].facility_id))) : ($262)) || ((DateUtils.isFirstOfMonth(m.names[j].dob) && m.names[j].__v_facility_id) && FacilityUtils.isHipFacility(m.names[j].facility_id)))))
+
                      {
                         return true;
                      };
@@ -3250,7 +3250,7 @@ public class MCI_2012_04_15aClueSet implements com.choicemaker.cm.core.ClueSet {
                continue ;
             for (int j = 0; j < q.providers.length; j = j + 1)
                {
-                  if ((($272 && q.providers[j].__v_facility_id) && FacilityUtils.isHipFacility(q.providers[j].facility_id)))
+
                      {
                         return true;
                      };
@@ -3267,7 +3267,7 @@ public class MCI_2012_04_15aClueSet implements com.choicemaker.cm.core.ClueSet {
                continue ;
             for (int j = 0; j < m.providers.length; j = j + 1)
                {
-                  if ((($274 && m.providers[j].__v_facility_id) && FacilityUtils.isHipFacility(m.providers[j].facility_id)))
+
                      {
                         return true;
                      };
@@ -3869,7 +3869,7 @@ public class MCI_2012_04_15aClueSet implements com.choicemaker.cm.core.ClueSet {
       boolean $328 = false;
       for (int i = 0; i < q.names.length; i = i + 1)
          {
-            $328 = (q.names[i].first_name != null) && Sets.includes("maleIndicators", q.names[i].first_name.trim());
+
             if ((!$328))
                continue ;
             for (int j = 0; j < m.names.length; j = j + 1)
@@ -3891,7 +3891,7 @@ public class MCI_2012_04_15aClueSet implements com.choicemaker.cm.core.ClueSet {
                continue ;
             for (int j = 0; j < m.names.length; j = j + 1)
                {
-                  if ((((m.names[j].first_name != null) && Sets.includes("maleIndicators", m.names[j].first_name.trim())) && $330))
+
                      {
                         return true;
                      };
@@ -3903,7 +3903,7 @@ public class MCI_2012_04_15aClueSet implements com.choicemaker.cm.core.ClueSet {
       boolean $332 = false;
       for (int i = 0; i < q.names.length; i = i + 1)
          {
-            $332 = (q.names[i].first_name != null) && Sets.includes("femaleIndicators", q.names[i].first_name.trim());
+
             if ((!$332))
                continue ;
             for (int j = 0; j < m.names.length; j = j + 1)
@@ -3925,7 +3925,7 @@ public class MCI_2012_04_15aClueSet implements com.choicemaker.cm.core.ClueSet {
                continue ;
             for (int j = 0; j < m.names.length; j = j + 1)
                {
-                  if ((((m.names[j].first_name != null) && Sets.includes("femaleIndicators", m.names[j].first_name.trim())) && $334))
+
                      {
                         return true;
                      };
@@ -4019,13 +4019,13 @@ public class MCI_2012_04_15aClueSet implements com.choicemaker.cm.core.ClueSet {
       boolean z$343;
       for (int __i0 = 0; __i0 < q.events.length; __i0 = __i0 + 1)
          {
-            $340 = (q.events[__i0].__v_event_type_cd && q.events[__i0].__v_facility_id) && (!FacilityUtils.isLead(q.events[__i0].event_type_cd));
+
             z$343 = false;
             if ((!$340))
                continue ;
             for (int __j0 = 0; __j0 < m.events.length; __j0 = __j0 + 1)
                {
-                  if ((($340 && ((m.events[__j0].__v_event_type_cd && m.events[__j0].__v_facility_id) && (!FacilityUtils.isLead(m.events[__j0].event_type_cd)))) && m.events[__j0].facility_id.equals(((!z$343) && (z$343 = true)) ?(($342 = q.events[__i0].facility_id)) : ($342))))
+
                      {
                         return true;
                      };
@@ -4166,14 +4166,14 @@ public class MCI_2012_04_15aClueSet implements com.choicemaker.cm.core.ClueSet {
       boolean z$353;
       for (int __i0 = 0; __i0 < q.ids.length; __i0 = __i0 + 1)
          {
-            $348 = (q.ids[__i0].__v_identifier_type && q.ids[__i0].__v_patient_id_norm) && FacilityUtils.isFacility(q.ids[__i0].identifier_type);
+
             z$351 = false;
             z$353 = false;
             if ((!$348))
                continue ;
             for (int __j0 = 0; __j0 < m.ids.length; __j0 = __j0 + 1)
                {
-                  if ((($348 && ((m.ids[__j0].__v_identifier_type && m.ids[__j0].__v_patient_id_norm) && FacilityUtils.isFacility(m.ids[__j0].identifier_type))) && (m.ids[__j0].patient_id_norm.equals(((!z$351) && (z$351 = true)) ?(($350 = q.ids[__i0].patient_id_norm)) : ($350)) && m.ids[__j0].identifier_type.equals(((!z$353) && (z$353 = true)) ?(($352 = q.ids[__i0].identifier_type)) : ($352)))))
+
                      {
                         return true;
                      };
@@ -4207,13 +4207,13 @@ public class MCI_2012_04_15aClueSet implements com.choicemaker.cm.core.ClueSet {
       boolean z$357;
       for (int __i0 = 0; __i0 < q.ids.length; __i0 = __i0 + 1)
          {
-            $354 = (q.ids[__i0].__v_identifier_type && q.ids[__i0].__v_patient_id_norm) && FacilityUtils.isVital(q.ids[__i0].identifier_type);
+
             z$357 = false;
             if ((!$354))
                continue ;
             for (int __j0 = 0; __j0 < m.ids.length; __j0 = __j0 + 1)
                {
-                  if ((($354 && ((m.ids[__j0].__v_identifier_type && m.ids[__j0].__v_patient_id_norm) && FacilityUtils.isVital(m.ids[__j0].identifier_type))) && m.ids[__j0].patient_id_norm.equals(((!z$357) && (z$357 = true)) ?(($356 = q.ids[__i0].patient_id_norm)) : ($356))))
+
                      {
                         return true;
                      };
@@ -4244,7 +4244,7 @@ public class MCI_2012_04_15aClueSet implements com.choicemaker.cm.core.ClueSet {
    private boolean __exists144(PatientImpl q, PatientImpl m) throws java.lang.Exception {
       for (int __i0 = 0; __i0 < q.ids.length; __i0 = __i0 + 1)
          {
-            if (((q.ids[__i0].__v_identifier_type && q.ids[__i0].__v_patient_id_norm) && FacilityUtils.isVital(q.ids[__i0].identifier_type)))
+
                {
                   return true;
                };
@@ -4254,7 +4254,7 @@ public class MCI_2012_04_15aClueSet implements com.choicemaker.cm.core.ClueSet {
    private boolean __exists145(PatientImpl q, PatientImpl m) throws java.lang.Exception {
       for (int __j0 = 0; __j0 < m.ids.length; __j0 = __j0 + 1)
          {
-            if (((m.ids[__j0].__v_identifier_type && m.ids[__j0].__v_patient_id_norm) && FacilityUtils.isVital(m.ids[__j0].identifier_type)))
+
                {
                   return true;
                };
@@ -4267,13 +4267,13 @@ public class MCI_2012_04_15aClueSet implements com.choicemaker.cm.core.ClueSet {
       boolean z$361;
       for (int __i0 = 0; __i0 < q.ids.length; __i0 = __i0 + 1)
          {
-            $358 = (q.ids[__i0].__v_identifier_type && q.ids[__i0].__v_patient_id_norm) && FacilityUtils.isVital(q.ids[__i0].identifier_type);
+
             z$361 = false;
             if ((!$358))
                continue ;
             for (int __j0 = 0; __j0 < m.ids.length; __j0 = __j0 + 1)
                {
-                  if ((!(!(($358 && ((m.ids[__j0].__v_identifier_type && m.ids[__j0].__v_patient_id_norm) && FacilityUtils.isVital(m.ids[__j0].identifier_type))) && m.ids[__j0].patient_id_norm.equals(((!z$361) && (z$361 = true)) ?(($360 = q.ids[__i0].patient_id_norm)) : ($360))))))
+
                      {
                         return false;
                      };
@@ -4307,13 +4307,13 @@ public class MCI_2012_04_15aClueSet implements com.choicemaker.cm.core.ClueSet {
       boolean z$365;
       for (int __i0 = 0; __i0 < q.ids.length; __i0 = __i0 + 1)
          {
-            $362 = (q.ids[__i0].__v_identifier_type && q.ids[__i0].__v_patient_id_norm) && FacilityUtils.isMedicaid(q.ids[__i0].identifier_type);
+
             z$365 = false;
             if ((!$362))
                continue ;
             for (int __j0 = 0; __j0 < m.ids.length; __j0 = __j0 + 1)
                {
-                  if ((($362 && ((m.ids[__j0].__v_identifier_type && m.ids[__j0].__v_patient_id_norm) && FacilityUtils.isMedicaid(m.ids[__j0].identifier_type))) && StringUtils.removeNonDigits(m.ids[__j0].patient_id_norm).equals(((!z$365) && (z$365 = true)) ?(($364 = StringUtils.removeNonDigits(q.ids[__i0].patient_id_norm))) : ($364))))
+
                      {
                         return true;
                      };
@@ -4364,7 +4364,7 @@ public class MCI_2012_04_15aClueSet implements com.choicemaker.cm.core.ClueSet {
    private boolean __exists148(PatientImpl q, PatientImpl m) throws java.lang.Exception {
       for (int __i0 = 0; __i0 < q.ids.length; __i0 = __i0 + 1)
          {
-            if (((q.ids[__i0].__v_identifier_type && q.ids[__i0].__v_patient_id_norm) && FacilityUtils.isMedicaid(q.ids[__i0].identifier_type)))
+
                {
                   return true;
                };
@@ -4374,7 +4374,7 @@ public class MCI_2012_04_15aClueSet implements com.choicemaker.cm.core.ClueSet {
    private boolean __exists149(PatientImpl q, PatientImpl m) throws java.lang.Exception {
       for (int __j0 = 0; __j0 < m.ids.length; __j0 = __j0 + 1)
          {
-            if (((m.ids[__j0].__v_identifier_type && m.ids[__j0].__v_patient_id_norm) && FacilityUtils.isMedicaid(m.ids[__j0].identifier_type)))
+
                {
                   return true;
                };
@@ -4387,13 +4387,13 @@ public class MCI_2012_04_15aClueSet implements com.choicemaker.cm.core.ClueSet {
       boolean z$369;
       for (int __i0 = 0; __i0 < q.ids.length; __i0 = __i0 + 1)
          {
-            $366 = (q.ids[__i0].__v_identifier_type && q.ids[__i0].__v_patient_id_norm) && FacilityUtils.isMedicaid(q.ids[__i0].identifier_type);
+
             z$369 = false;
             if ((!$366))
                continue ;
             for (int __j0 = 0; __j0 < m.ids.length; __j0 = __j0 + 1)
                {
-                  if ((!(!(($366 && ((m.ids[__j0].__v_identifier_type && m.ids[__j0].__v_patient_id_norm) && FacilityUtils.isMedicaid(m.ids[__j0].identifier_type))) && m.ids[__j0].patient_id_norm.equals(((!z$369) && (z$369 = true)) ?(($368 = q.ids[__i0].patient_id_norm)) : ($368))))))
+
                      {
                         return false;
                      };
@@ -4427,13 +4427,13 @@ public class MCI_2012_04_15aClueSet implements com.choicemaker.cm.core.ClueSet {
       boolean z$373;
       for (int __i0 = 0; __i0 < q.ids.length; __i0 = __i0 + 1)
          {
-            $370 = (q.ids[__i0].__v_identifier_type && q.ids[__i0].__v_patient_id_norm) && (FacilityUtils.isMedicalRecord(q.ids[__i0].identifier_type) || FacilityUtils.isFacility(q.ids[__i0].identifier_type));
+
             z$373 = false;
             if ((!$370))
                continue ;
             for (int __j0 = 0; __j0 < m.ids.length; __j0 = __j0 + 1)
                {
-                  if ((($370 && ((m.ids[__j0].__v_identifier_type && m.ids[__j0].__v_patient_id_norm) && (FacilityUtils.isMedicalRecord(m.ids[__j0].identifier_type) || FacilityUtils.isFacility(m.ids[__j0].identifier_type)))) && m.ids[__j0].patient_id_norm.equals(((!z$373) && (z$373 = true)) ?(($372 = q.ids[__i0].patient_id_norm)) : ($372))))
+
                      {
                         return true;
                      };
@@ -4484,11 +4484,11 @@ public class MCI_2012_04_15aClueSet implements com.choicemaker.cm.core.ClueSet {
             z$383 = false;
             z$385 = false;
             z$387 = false;
-            if ((!((($374 && (((!z$377) && (z$377 = true)) ?(($376 = q.ids[i].__v_identifier_type)) : ($376))) && (((!z$379) && (z$379 = true)) ?(($378 = q.ids[i].__v_facility_id)) : ($378))) && (((!z$387) && (z$387 = true)) ?(($386 = FacilityUtils.isMedicalRecord(q.ids[i].identifier_type) || FacilityUtils.isFacility(q.ids[i].identifier_type))) : ($386)))))
+
                continue ;
             for (int j = 0; j < m.ids.length; j = j + 1)
                {
-                  if ((((((((((($374 && m.ids[j].__v_patient_id_norm) && (((!z$377) && (z$377 = true)) ?(($376 = q.ids[i].__v_identifier_type)) : ($376))) && m.ids[j].__v_identifier_type) && (((!z$379) && (z$379 = true)) ?(($378 = q.ids[i].__v_facility_id)) : ($378))) && m.ids[j].__v_facility_id) && (((!z$381) && (z$381 = true)) ?(($380 = q.ids[i].facility_id)) : ($380)).equals(m.ids[j].facility_id)) && (!(((!z$383) && (z$383 = true)) ?(($382 = q.ids[i].patient_id_norm)) : ($382)).equals(m.ids[j].patient_id_norm))) && (((!z$385) && (z$385 = true)) ?(($384 = q.ids[i].identifier_type)) : ($384)).equals(m.ids[j].identifier_type)) && (((!z$387) && (z$387 = true)) ?(($386 = FacilityUtils.isMedicalRecord(q.ids[i].identifier_type) || FacilityUtils.isFacility(q.ids[i].identifier_type))) : ($386))) && (FacilityUtils.isMedicalRecord(m.ids[j].identifier_type) || FacilityUtils.isFacility(m.ids[j].identifier_type))))
+
                      {
                         return true;
                      };
@@ -4519,7 +4519,7 @@ public class MCI_2012_04_15aClueSet implements com.choicemaker.cm.core.ClueSet {
    private boolean __exists153(PatientImpl q, PatientImpl m) throws java.lang.Exception {
       for (int __i0 = 0; __i0 < q.ids.length; __i0 = __i0 + 1)
          {
-            if (((q.ids[__i0].__v_identifier_type && q.ids[__i0].__v_patient_id_norm) && (FacilityUtils.isMedicalRecord(q.ids[__i0].identifier_type) || FacilityUtils.isFacility(q.ids[__i0].identifier_type))))
+
                {
                   return true;
                };
@@ -4529,7 +4529,7 @@ public class MCI_2012_04_15aClueSet implements com.choicemaker.cm.core.ClueSet {
    private boolean __exists154(PatientImpl q, PatientImpl m) throws java.lang.Exception {
       for (int __j0 = 0; __j0 < m.ids.length; __j0 = __j0 + 1)
          {
-            if (((m.ids[__j0].__v_identifier_type && m.ids[__j0].__v_patient_id_norm) && (FacilityUtils.isMedicalRecord(m.ids[__j0].identifier_type) || FacilityUtils.isFacility(m.ids[__j0].identifier_type))))
+
                {
                   return true;
                };
@@ -4542,13 +4542,13 @@ public class MCI_2012_04_15aClueSet implements com.choicemaker.cm.core.ClueSet {
       boolean z$391;
       for (int __i0 = 0; __i0 < q.ids.length; __i0 = __i0 + 1)
          {
-            $388 = (q.ids[__i0].__v_identifier_type && q.ids[__i0].__v_patient_id_norm) && (FacilityUtils.isMedicalRecord(q.ids[__i0].identifier_type) || FacilityUtils.isFacility(q.ids[__i0].identifier_type));
+
             z$391 = false;
             if ((!$388))
                continue ;
             for (int __j0 = 0; __j0 < m.ids.length; __j0 = __j0 + 1)
                {
-                  if ((!(!(($388 && ((m.ids[__j0].__v_identifier_type && m.ids[__j0].__v_patient_id_norm) && (FacilityUtils.isMedicalRecord(m.ids[__j0].identifier_type) || FacilityUtils.isFacility(m.ids[__j0].identifier_type)))) && m.ids[__j0].patient_id_norm.equals(((!z$391) && (z$391 = true)) ?(($390 = q.ids[__i0].patient_id_norm)) : ($390))))))
+
                      {
                         return false;
                      };
@@ -4582,13 +4582,13 @@ public class MCI_2012_04_15aClueSet implements com.choicemaker.cm.core.ClueSet {
       boolean z$395;
       for (int __i0 = 0; __i0 < q.ids.length; __i0 = __i0 + 1)
          {
-            $392 = (q.ids[__i0].__v_patient_id_norm && q.ids[__i0].__v_identifier_type) && ((StringUtils.countDigits(q.ids[__i0].patient_id_norm) >= 4) && (FacilityUtils.isMedicalRecord(q.ids[__i0].identifier_type) || FacilityUtils.isFacility(q.ids[__i0].identifier_type)));
+
             z$395 = false;
             if ((!$392))
                continue ;
             for (int __j0 = 0; __j0 < m.ids.length; __j0 = __j0 + 1)
                {
-                  if ((($392 && ((m.ids[__j0].__v_patient_id_norm && m.ids[__j0].__v_identifier_type) && ((StringUtils.countDigits(m.ids[__j0].patient_id_norm) >= 4) && (FacilityUtils.isMedicalRecord(m.ids[__j0].identifier_type) || FacilityUtils.isFacility(m.ids[__j0].identifier_type))))) && StringUtils.removeNonDigits(m.ids[__j0].patient_id_norm).equals(((!z$395) && (z$395 = true)) ?(($394 = StringUtils.removeNonDigits(q.ids[__i0].patient_id_norm))) : ($394))))
+
                      {
                         return true;
                      };
@@ -4622,13 +4622,13 @@ public class MCI_2012_04_15aClueSet implements com.choicemaker.cm.core.ClueSet {
       boolean z$399;
       for (int __i0 = 0; __i0 < q.ids.length; __i0 = __i0 + 1)
          {
-            $396 = (q.ids[__i0].__v_identifier_type && q.ids[__i0].__v_patient_id_norm) && (FacilityUtils.isMedicalRecord(q.ids[__i0].identifier_type) || FacilityUtils.isFacility(q.ids[__i0].identifier_type));
+
             z$399 = false;
             if ((!$396))
                continue ;
             for (int __j0 = 0; __j0 < m.ids.length; __j0 = __j0 + 1)
                {
-                  if ((($396 && ((m.ids[__j0].__v_identifier_type && m.ids[__j0].__v_patient_id_norm) && (FacilityUtils.isMedicalRecord(m.ids[__j0].identifier_type) || FacilityUtils.isFacility(m.ids[__j0].identifier_type)))) && StringUtils.removeNonDigits(m.ids[__j0].patient_id_norm).equals(((!z$399) && (z$399 = true)) ?(($398 = StringUtils.removeNonDigits(q.ids[__i0].patient_id_norm))) : ($398))))
+
                      {
                         return true;
                      };
@@ -4655,13 +4655,13 @@ public class MCI_2012_04_15aClueSet implements com.choicemaker.cm.core.ClueSet {
       boolean z$403;
       for (int i = 0; i < q.ids.length; i = i + 1)
          {
-            $400 = (q.ids[i].__v_identifier_type && q.ids[i].__v_patient_id_norm) && FacilityUtils.isVital(q.ids[i].identifier_type);
+
             z$403 = false;
             if ((!$400))
                continue ;
             for (int j = 0; j < m.ids.length; j = j + 1)
                {
-                  if ((((($400 && m.ids[j].__v_identifier_type) && m.ids[j].__v_patient_id_norm) && FacilityUtils.isVital(m.ids[j].identifier_type)) && let159(q, m, i, j, ((!z$403) && (z$403 = true)) ?(($402 = StringUtils.parseLongString(q.ids[i].patient_id_norm))) : ($402), StringUtils.parseLongString(m.ids[j].patient_id_norm))))
+
                      {
                         return true;
                      };
@@ -4698,13 +4698,13 @@ public class MCI_2012_04_15aClueSet implements com.choicemaker.cm.core.ClueSet {
       boolean z$407;
       for (int i = 0; i < q.ids.length; i = i + 1)
          {
-            $404 = ((q.ids[i].__v_identifier_type && q.ids[i].__v_patient_id_norm) && (FacilityUtils.isMedicalRecord(q.ids[i].identifier_type) || (FacilityUtils.isFacility(q.ids[i].identifier_type) && (!FacilityUtils.isHipFacility(q.ids[i].identifier_type))))) && ((!q.ids[i].__v_facility_id) || (!FacilityUtils.isHipFacility(q.ids[i].facility_id)));
+
             z$407 = false;
             if ((!$404))
                continue ;
             for (int j = 0; j < m.ids.length; j = j + 1)
                {
-                  if (((((($404 && m.ids[j].__v_identifier_type) && m.ids[j].__v_patient_id_norm) && (FacilityUtils.isMedicalRecord(m.ids[j].identifier_type) || (FacilityUtils.isFacility(m.ids[j].identifier_type) && (!FacilityUtils.isHipFacility(m.ids[j].identifier_type))))) && ((!m.ids[j].__v_facility_id) || (!FacilityUtils.isHipFacility(m.ids[j].facility_id)))) && let161(q, m, i, j, ((!z$407) && (z$407 = true)) ?(($406 = StringUtils.parseLongString(q.ids[i].patient_id_norm))) : ($406), StringUtils.parseLongString(m.ids[j].patient_id_norm))))
+
                      {
                         return true;
                      };
@@ -4741,13 +4741,13 @@ public class MCI_2012_04_15aClueSet implements com.choicemaker.cm.core.ClueSet {
       boolean z$411;
       for (int i = 0; i < q.ids.length; i = i + 1)
          {
-            $408 = ((q.ids[i].__v_identifier_type && q.ids[i].__v_patient_id_norm) && (FacilityUtils.isMedicalRecord(q.ids[i].identifier_type) || (FacilityUtils.isFacility(q.ids[i].identifier_type) && (!FacilityUtils.isHipFacility(q.ids[i].identifier_type))))) && ((!q.ids[i].__v_facility_id) || (!FacilityUtils.isHipFacility(q.ids[i].facility_id)));
+
             z$411 = false;
             if ((!$408))
                continue ;
             for (int j = 0; j < m.ids.length; j = j + 1)
                {
-                  if (((((($408 && m.ids[j].__v_identifier_type) && m.ids[j].__v_patient_id_norm) && (FacilityUtils.isMedicalRecord(m.ids[j].identifier_type) || (FacilityUtils.isFacility(m.ids[j].identifier_type) && (!FacilityUtils.isHipFacility(m.ids[j].identifier_type))))) && ((!m.ids[j].__v_facility_id) || (!FacilityUtils.isHipFacility(m.ids[j].facility_id)))) && let163(q, m, i, j, ((!z$411) && (z$411 = true)) ?(($410 = StringUtils.parseLongString(q.ids[i].patient_id_norm))) : ($410), StringUtils.parseLongString(m.ids[j].patient_id_norm))))
+
                      {
                         return true;
                      };
@@ -4774,13 +4774,13 @@ public class MCI_2012_04_15aClueSet implements com.choicemaker.cm.core.ClueSet {
       boolean z$415;
       for (int i = 0; i < q.ids.length; i = i + 1)
          {
-            $412 = ((q.ids[i].__v_identifier_type && q.ids[i].__v_patient_id_norm) && (FacilityUtils.isMedicalRecord(q.ids[i].identifier_type) || (FacilityUtils.isFacility(q.ids[i].identifier_type) && (!FacilityUtils.isHipFacility(q.ids[i].identifier_type))))) && ((!q.ids[i].__v_facility_id) || (!FacilityUtils.isHipFacility(q.ids[i].facility_id)));
+
             z$415 = false;
             if ((!$412))
                continue ;
             for (int j = 0; j < m.ids.length; j = j + 1)
                {
-                  if (((((($412 && m.ids[j].__v_identifier_type) && m.ids[j].__v_patient_id_norm) && (FacilityUtils.isMedicalRecord(m.ids[j].identifier_type) || (FacilityUtils.isFacility(m.ids[j].identifier_type) && (!FacilityUtils.isHipFacility(m.ids[j].identifier_type))))) && ((!m.ids[j].__v_facility_id) || (!FacilityUtils.isHipFacility(m.ids[j].facility_id)))) && let165(q, m, i, j, ((!z$415) && (z$415 = true)) ?(($414 = StringUtils.parseLongString(q.ids[i].patient_id_norm))) : ($414), StringUtils.parseLongString(m.ids[j].patient_id_norm))))
+
                      {
                         return true;
                      };
@@ -4809,11 +4809,11 @@ public class MCI_2012_04_15aClueSet implements com.choicemaker.cm.core.ClueSet {
             $416 = q.ids[i].__v_identifier_type;
             z$419 = false;
             z$421 = false;
-            if ((!($416 && (((!z$419) && (z$419 = true)) ?(($418 = FacilityUtils.isFacility(q.ids[i].identifier_type))) : ($418)))))
+
                continue ;
             for (int j = 0; j < m.providers.length; j = j + 1)
                {
-                  if ((((($416 && m.providers[j].__v_facility_id) && (((!z$419) && (z$419 = true)) ?(($418 = FacilityUtils.isFacility(q.ids[i].identifier_type))) : ($418))) && FacilityUtils.isFacility(m.providers[j].facility_id)) && (((!z$421) && (z$421 = true)) ?(($420 = q.ids[i].identifier_type)) : ($420)).equals(m.providers[j].facility_id)))
+
                      {
                         return true;
                      };
@@ -4832,11 +4832,11 @@ public class MCI_2012_04_15aClueSet implements com.choicemaker.cm.core.ClueSet {
             $422 = q.providers[i].__v_facility_id;
             z$425 = false;
             z$427 = false;
-            if ((!($422 && (((!z$425) && (z$425 = true)) ?(($424 = FacilityUtils.isFacility(q.providers[i].facility_id))) : ($424)))))
+
                continue ;
             for (int j = 0; j < m.ids.length; j = j + 1)
                {
-                  if ((((($422 && m.ids[j].__v_identifier_type) && (((!z$425) && (z$425 = true)) ?(($424 = FacilityUtils.isFacility(q.providers[i].facility_id))) : ($424))) && FacilityUtils.isFacility(m.ids[j].identifier_type)) && (((!z$427) && (z$427 = true)) ?(($426 = q.providers[i].facility_id)) : ($426)).equals(m.ids[j].identifier_type)))
+
                      {
                         return true;
                      };
@@ -9303,7 +9303,7 @@ public class MCI_2012_04_15aClueSet implements com.choicemaker.cm.core.ClueSet {
    private boolean __exists320(PatientImpl q, PatientImpl m) throws java.lang.Exception {
       for (int i = 0; i < q.ids.length; i = i + 1)
          {
-            if (FacilityUtils.isVital(q.ids[i].identifier_type))
+
                {
                   return true;
                };
@@ -9313,7 +9313,7 @@ public class MCI_2012_04_15aClueSet implements com.choicemaker.cm.core.ClueSet {
    private boolean __exists321(PatientImpl q, PatientImpl m) throws java.lang.Exception {
       for (int i = 0; i < m.ids.length; i = i + 1)
          {
-            if (FacilityUtils.isVital(m.ids[i].identifier_type))
+
                {
                   return true;
                };
@@ -9343,7 +9343,7 @@ public class MCI_2012_04_15aClueSet implements com.choicemaker.cm.core.ClueSet {
    private boolean __all322(PatientImpl q, PatientImpl m) throws java.lang.Exception {
       for (int i = 0; i < q.ids.length; i = i + 1)
          {
-            if ((!((q.ids[i].identifier_type == null) || (!FacilityUtils.isVital(q.ids[i].identifier_type)))))
+
                {
                   return false;
                };
@@ -9389,7 +9389,7 @@ public class MCI_2012_04_15aClueSet implements com.choicemaker.cm.core.ClueSet {
    private boolean __all324(PatientImpl q, PatientImpl m) throws java.lang.Exception {
       for (int i = 0; i < m.ids.length; i = i + 1)
          {
-            if ((!((m.ids[i].identifier_type == null) || (!FacilityUtils.isVital(m.ids[i].identifier_type)))))
+
                {
                   return false;
                };
@@ -10420,13 +10420,13 @@ public class MCI_2012_04_15aClueSet implements com.choicemaker.cm.core.ClueSet {
       boolean z$945;
       for (int __i0 = 0; __i0 < q.ids.length; __i0 = __i0 + 1)
          {
-            $942 = (q.ids[__i0].__v_identifier_type && q.ids[__i0].__v_patient_id) && FacilityUtils.isVital(q.ids[__i0].identifier_type);
+
             z$945 = false;
             if ((!$942))
                continue ;
             for (int __j0 = 0; __j0 < m.ids.length; __j0 = __j0 + 1)
                {
-                  if ((($942 && ((m.ids[__j0].__v_identifier_type && m.ids[__j0].__v_patient_id) && FacilityUtils.isVital(m.ids[__j0].identifier_type))) && m.ids[__j0].patient_id.equals(((!z$945) && (z$945 = true)) ?(($944 = q.ids[__i0].patient_id)) : ($944))))
+
                      {
                         return true;
                      };
@@ -10959,12 +10959,12 @@ public class MCI_2012_04_15aClueSet implements com.choicemaker.cm.core.ClueSet {
       boolean $1010 = false;
       for (int i = 0; i < q.names.length; i = i + 1)
          {
-            $1010 = (q.names[i].first_name == null) || Sets.includes("genericFirstNames", q.names[i].first_name.trim());
+
             if ($1010)
                return true;
             for (int j = 0; j < m.names.length; j = j + 1)
                {
-                  if ((($1010 || (m.names[j].first_name == null)) || Sets.includes("genericFirstNames", m.names[j].first_name.trim())))
+
                      {
                         return true;
                      };

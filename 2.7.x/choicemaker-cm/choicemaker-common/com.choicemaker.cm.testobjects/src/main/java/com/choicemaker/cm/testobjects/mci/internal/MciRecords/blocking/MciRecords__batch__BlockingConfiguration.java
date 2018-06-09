@@ -6,22 +6,22 @@ import com.choicemaker.cm.core.*;
 import com.choicemaker.cm.core.base.*;
 import com.choicemaker.cm.io.blocking.automated.*;
 import com.choicemaker.cm.io.blocking.automated.base.*;
-import com.choicemaker.cm.custom.mci.gend.MciRecords.AddressImpl;
-import com.choicemaker.cm.custom.mci.gend.MciRecords.IdsImpl;
-import com.choicemaker.cm.custom.mci.gend.MciRecords.MothersImpl;
-import com.choicemaker.cm.custom.mci.gend.MciRecords.NamesImpl;
-import com.choicemaker.cm.custom.mci.gend.MciRecords.PatientImpl;
-import com.choicemaker.cm.custom.mci.gend.internal.MciRecords.*;
+
+
+
+
+
+
 import com.choicemaker.util.StringUtils;
-import com.choicemaker.cm.custom.mci.encryption.*;
-import com.choicemaker.cm.custom.mci.matching.*;
-import com.choicemaker.cm.custom.mci.nameparser.*;
-import com.choicemaker.cm.custom.mci.validation.*;
-import com.choicemaker.cm.matching.en.*;
-import com.choicemaker.cm.matching.en.us.*;
-import com.choicemaker.cm.matching.gen.*;
-import com.choicemaker.cm.validation.eclipse.*;
-import com.choicemaker.cm.validation.eclipse.impl.*;
+
+
+
+
+
+
+
+
+
 import java.util.*;
 public final class MciRecords__batch__BlockingConfiguration extends BlockingConfiguration {
 private static Logger logger = Logger.getLogger(com.choicemaker.cm.testobjects.mci.internal.MciRecords.blocking.MciRecords__batch__BlockingConfiguration.class.getName());
