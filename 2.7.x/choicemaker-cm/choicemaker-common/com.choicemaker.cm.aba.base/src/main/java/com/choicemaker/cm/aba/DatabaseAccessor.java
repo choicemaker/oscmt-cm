@@ -14,7 +14,7 @@ import javax.sql.DataSource;
 import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.choicemaker.cm.core.Record;
 
-public interface DatabaseAccessor {
+public interface DatabaseAccessor<T extends Comparable<T>> {
 
 	String EXTENSION_POINT =
 		ChoiceMakerExtensionPoint.CM_IO_BLOCKING_AUTOMATED_BASE_DATABASEACCESSOR;
@@ -26,7 +26,7 @@ public interface DatabaseAccessor {
 
 	boolean hasNext();
 
-	Record getNext() throws IOException;
+	Record<T> getNext() throws IOException;
 
 	void setDataSource(DataSource dataSource);
 
@@ -42,5 +42,6 @@ public interface DatabaseAccessor {
 	 * @exception CloneNotSupportException
 	 *                if this object can't be cloned.
 	 */
-	DatabaseAccessor cloneWithNewConnection() throws CloneNotSupportedException;
+	DatabaseAccessor<T> cloneWithNewConnection()
+			throws CloneNotSupportedException;
 }

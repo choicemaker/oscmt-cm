@@ -33,7 +33,9 @@ import com.choicemaker.cm.io.db.base.DbReaderSequential;
 import com.choicemaker.cm.io.db.postgres2.dbom.PostgresDbObjectMaker;
 import com.choicemaker.util.StringUtils;
 
-public class PostgresDatabaseAccessor implements DatabaseAccessor {
+public class PostgresDatabaseAccessor<T extends Comparable<T>>
+		implements DatabaseAccessor<T> {
+
 	private static Logger logger =
 		Logger.getLogger(PostgresDatabaseAccessor.class.getName());
 
@@ -42,7 +44,7 @@ public class PostgresDatabaseAccessor implements DatabaseAccessor {
 	private Properties p;
 
 	private Connection connection;
-	private DbReaderSequential dbr;
+	private DbReaderSequential<T> dbr;
 	private Statement stmt;
 	private String condition1;
 	private String condition2;
@@ -209,13 +211,13 @@ public class PostgresDatabaseAccessor implements DatabaseAccessor {
 		return dbr.hasNext();
 	}
 
-	public Record<?> getNext() throws IOException {
+	public Record<T> getNext() throws IOException {
 		return dbr.getNext();
 	}
 
 	// Package-access for testing
-	String getQuery(final Properties p, AutomatedBlocker blocker,
-			DbReaderSequential dbr) {
+	String getQuery(final Properties unused, AutomatedBlocker blocker,
+			DbReaderSequential<T> dbr) {
 		StringBuffer b = new StringBuffer(16000);
 		String id = dbr.getMasterId();
 		b.append("DECLARE @ids TABLE (id " + dbr.getMasterIdType() + ")"
@@ -280,10 +282,11 @@ public class PostgresDatabaseAccessor implements DatabaseAccessor {
 				}
 			}
 		}
-		if (StringUtils.nonEmptyString(condition1) || StringUtils.nonEmptyString(condition2)) {
+		if (StringUtils.nonEmptyString(condition1)
+				|| StringUtils.nonEmptyString(condition2)) {
 			logger.warning("FIXME not setting conditions");
-//			b.append(") b,");
-//			b.append(condition);
+			// b.append(") b,");
+			// b.append(condition);
 		}
 		b.append(Constants.LINE_SEPARATOR);
 		// b.append((String) blocker.accessProvider.properties.get(dbr.getName()
