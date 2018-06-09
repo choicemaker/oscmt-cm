@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plugin>
+<plugin
+   id="com.choicemaker.cm.args"
+   name="com.choicemaker.cm.args"
+   version="2.7.1">
+
+   <runtime>
+      <library name="args.jar"/>
+   </runtime>
+
+</plugin>

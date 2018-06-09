@@ -213,7 +213,8 @@ public class PostgresDatabaseAccessor implements DatabaseAccessor {
 		return dbr.getNext();
 	}
 
-	private String getQuery(final Properties p, AutomatedBlocker blocker,
+	// Package-access for testing
+	String getQuery(final Properties p, AutomatedBlocker blocker,
 			DbReaderSequential dbr) {
 		StringBuffer b = new StringBuffer(16000);
 		String id = dbr.getMasterId();
