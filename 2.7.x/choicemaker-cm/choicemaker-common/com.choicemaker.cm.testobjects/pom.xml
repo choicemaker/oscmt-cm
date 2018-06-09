@@ -12,27 +12,21 @@
     <relativePath>../pom.xml</relativePath>
   </parent>
 
-  <artifactId>com.choicemaker.cm.args</artifactId>
+  <artifactId>com.choicemaker.cm.testobjects</artifactId>
   <packaging>jar</packaging>
-  <name>ChoiceMaker Method Arguments</name>
+  <name>ChoiceMaker Test Objects</name>
   <description><![CDATA[
-  Definitions of certain method arguments that are used across various other ChoiceMaker modules.
-  This module has no dependencies on any other ChoiceMaker modules.
+  Examples of generated classes based on the NYC DOHMH MCI project
   ]]>
   </description>
-
-  <properties>
-    <eclipse.plugin.runtime.library.name>args.jar</eclipse.plugin.runtime.library.name>
-    <eclipse.plugin.src.zip.name>argssrc.zip</eclipse.plugin.src.zip.name>
-  </properties>
 
   <build>
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
-          <source>1.7</source>
-          <target>1.7</target>
+          <source>1.8</source>
+          <target>1.8</target>
         </configuration>
       </plugin>
 
