@@ -1,12 +1,14 @@
 package com.choicemaker.cm.io.db.postgres2.blocking;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import com.choicemaker.cm.aba.AutomatedBlocker;
 
 public class PostgresDatabaseAccessorTest {
 
@@ -28,6 +30,7 @@ public class PostgresDatabaseAccessorTest {
 
 	@Test
 	public void testGetQuery() {
+		AutomatedBlocker blocker = null;
 		fail("Not yet implemented");
 	}
 
