@@ -87,7 +87,7 @@ public class PostgresDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 		StringTokenizer st = new StringTokenizer(w.toString(), Constants.LINE_SEPARATOR);
 		String[] res = new String[st.countTokens()];
 		for (int i = 0; i < res.length; i++) {
-			res[i] = st.nextToken();
+			res[i] = st.nextToken() + ";";
 		}
 		return res;
 	}
@@ -172,15 +172,16 @@ public class PostgresDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 					} else {
 						multi.append(" UNION ");
 					}
-					multi.append("SELECT * FROM " + viewName + " WHERE " + masterId + " IN " + "(SELECT ID FROM @ids)");
+					multi.append("SELECT * FROM " + viewName + " WHERE " + masterId + " IN " + "(SELECT ID FROM ids)");
 					if (!more) {
 						if (!first) {
-							multi.append(")");
+							multi.append(") AS A");
 						}
 						if (v.orderBy.length > 0) {
 							multi.append(" ORDER BY ");
 							multi.append(getOrderBy(v));
 						}
+						multi.append(";");
 					}
 					w.write(
 						"IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = '"
@@ -241,10 +242,10 @@ public class PostgresDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 			} else {
 				multi.append(" UNION ");
 			}
-			multi.append("SELECT * FROM " + viewName + " WHERE " + masterId + " IN (SELECT ID FROM @ids)");
+			multi.append("SELECT * FROM " + viewName + " WHERE " + masterId + " IN (SELECT ID FROM ids)");
 			if (!more) {
 				if (!first) {
-					multi.append(")");
+					multi.append(") AS A");
 				}
 				if (v.orderBy.length > 0) {
 					multi.append(" ORDER BY ");

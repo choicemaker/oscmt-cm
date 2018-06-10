@@ -32,12 +32,15 @@ import com.choicemaker.cm.io.db.base.DbAccessor;
 import com.choicemaker.cm.io.db.base.DbReaderSequential;
 import com.choicemaker.cm.io.db.postgres2.dbom.PostgresDbObjectMaker;
 import com.choicemaker.util.StringUtils;
+import com.choicemaker.util.SystemPropertyUtils;
 
 public class PostgresDatabaseAccessor<T extends Comparable<T>>
 		implements DatabaseAccessor<T> {
 
 	private static Logger logger =
 		Logger.getLogger(PostgresDatabaseAccessor.class.getName());
+	
+	private static final String EOL = SystemPropertyUtils.PV_LINE_SEPARATOR;
 
 	// These two objects have the same life span -- see isConsistent()
 	private DataSource ds;
@@ -112,15 +115,17 @@ public class PostgresDatabaseAccessor<T extends Comparable<T>>
 		}
 	}
 
-	public DatabaseAccessor cloneWithNewConnection()
+	public DatabaseAccessor<T> cloneWithNewConnection()
 			throws CloneNotSupportedException {
 		throw new CloneNotSupportedException("not yet implemented");
 	}
 
+	@SuppressWarnings("unchecked")
 	public void open(AutomatedBlocker blocker, String databaseConfiguration)
 			throws IOException {
 		Accessor acc = blocker.getModel().getAccessor();
-		dbr = ((DbAccessor) acc).getDbReaderSequential(databaseConfiguration);
+		DbAccessor dba = (DbAccessor) acc;
+		dbr = dba.getDbReaderSequential(databaseConfiguration);
 		String query = null;
 		try {
 			query = getQuery(getProperties(), blocker, dbr);
@@ -215,18 +220,24 @@ public class PostgresDatabaseAccessor<T extends Comparable<T>>
 		return dbr.getNext();
 	}
 
-	// Package-access for testing
-	String getQuery(final Properties unused, AutomatedBlocker blocker,
+	// Public access for testing only
+	public String getQuery(final Properties unused, AutomatedBlocker blocker,
 			DbReaderSequential<T> dbr) {
-		StringBuffer b = new StringBuffer(16000);
 		String id = dbr.getMasterId();
-		b.append("DECLARE @ids TABLE (id " + dbr.getMasterIdType() + ")"
-				+ Constants.LINE_SEPARATOR + "INSERT INTO @ids");
+
+		StringBuilder b = new StringBuilder(16000);
+		b.append("DO $$").append(EOL).append("BEGIN").append(EOL);
+		b.append("DROP TABLE IF EXISTS ids;").append(EOL);
+		b.append("CREATE TEMP TABLE ids(id ").append(dbr.getMasterIdType())
+				.append(");").append(EOL);
+		b.append("INSERT INTO ids ");
+
 		// if (StringUtils.nonEmptyString(condition)) {
 		// b.append(" SELECT b.");
 		// b.append(id);
 		// b.append(" FROM (");
 		// }
+
 		int numBlockingSets = blocker.getBlockingSets().size();
 		for (int i = 0; i < numBlockingSets; ++i) {
 			if (i == 0) {
@@ -288,9 +299,8 @@ public class PostgresDatabaseAccessor<T extends Comparable<T>>
 			// b.append(") b,");
 			// b.append(condition);
 		}
-		b.append(Constants.LINE_SEPARATOR);
-		// b.append((String) blocker.accessProvider.properties.get(dbr.getName()
-		// + ":Postgres"));
+		b.append(";").append(EOL).append("END $$;").append(EOL);
+
 		b.append(getMultiQuery(p, blocker, dbr));
 
 		logger.fine(b.toString());
@@ -299,7 +309,7 @@ public class PostgresDatabaseAccessor<T extends Comparable<T>>
 	}
 
 	private String getMultiQuery(Properties p, AutomatedBlocker blocker,
-			DbReaderSequential dbr) {
+			DbReaderSequential<T> dbr) {
 		String key = dbr.getName() + ":Postgres";
 		if (!p.containsKey(key)) {
 			try {
