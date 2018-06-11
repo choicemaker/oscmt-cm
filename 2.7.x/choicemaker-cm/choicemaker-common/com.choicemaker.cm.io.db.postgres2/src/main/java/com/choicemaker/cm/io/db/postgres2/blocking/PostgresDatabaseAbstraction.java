@@ -20,20 +20,20 @@ public class PostgresDatabaseAbstraction implements DatabaseAbstraction {
 	 * @see com.choicemaker.cm.io.db.base.plugin.automatedblocking.db.DatabaseAbstraction#getSetDateFormatExpression()
 	 */
 	public String getSetDateFormatExpression() {
-		return "SET DATEFORMAT ymd"; // doesn't really matter
+		return "SET datestyle = \"ISO, YMD\";";
 	}
 
 	/**
 	 * @see com.choicemaker.cm.io.db.base.plugin.automatedblocking.db.DatabaseAbstraction#getSysdateExpression()
 	 */
 	public String getSysdateExpression() {
-		return "getdate()";
+		return "now()";
 	}
 
 	/**
 	 * @see com.choicemaker.cm.io.db.base.plugin.automatedblocking.db.DatabaseAbstraction#getDateFieldExpression(java.lang.String)
 	 */
 	public String getDateFieldExpression(String field) {
-		return "Convert(VARCHAR(10), " + field + ", 120)";
+		return "to_char(" + field + ", 'YYYY-MM-DD')";
 	}
 }
