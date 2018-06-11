@@ -22,8 +22,8 @@ public /*final*/ class QueryCandidatePair<T extends Comparable<T> & Serializable
 		extends EvaluatedPair<T> {
 
 	private static final long serialVersionUID = 271L;
-	private Comparable<T> queryId = this.getRecord1().getId();
-	private Comparable<T> candidateId = this.getRecord2().getId();
+	private T queryId = this.getRecord1().getId();
+	private T candidateId = this.getRecord2().getId();
 
 	public QueryCandidatePair(DataAccessObject<T> q, DataAccessObject<T> m,
 			float p, Decision d) {
