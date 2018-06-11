@@ -481,7 +481,7 @@ class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 			UrmConfigurationAdapter adapter,
 			NamedConfigurationController ncController, IRecordCollection qRc,
 			RefRecordCollection mRc, String modelName, float differThreshold,
-			float matchThreshold, int maxSingle) throws ConfigException {
+			float matchThreshold, int obaMaxSingle) throws ConfigException {
 
 		assert adapter != null;
 		assert ncController != null;
@@ -518,7 +518,7 @@ class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 		NamedConfigurationEntity retVal = new NamedConfigurationEntity(nc);
 		retVal.setLowThreshold(differThreshold);
 		retVal.setHighThreshold(matchThreshold);
-		retVal.setOabaMaxSingle(maxSingle);
+		retVal.setOabaMaxSingle(obaMaxSingle);
 
 		String jndiQuerySource = null;
 		if (qRc instanceof DbRecordCollection) {
