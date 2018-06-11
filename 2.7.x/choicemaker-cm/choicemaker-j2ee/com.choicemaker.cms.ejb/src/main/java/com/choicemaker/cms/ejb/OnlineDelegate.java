@@ -182,17 +182,18 @@ public class OnlineDelegate<T extends Comparable<T> & Serializable> {
 		return "".intern();
 	}
 
-	protected Map<T, Match> createMatchMap(List<Match> matches)
+	public Map<T, Match> createMatchMap(List<Match> matches)
 			throws BlockingException {
-		/*
-		 * No null indices are expected, because Match instances record ids from
-		 * the database.
-		 */
+		Precondition.assertNonNullArgument("null match list",matches);
 		Map<T, Match> retVal = new HashMap<>();
 		for (Match match : matches) {
 			@SuppressWarnings("unchecked")
 			T id = (T) match.id;
-			assert id != null;
+			/*
+			 * No null indices are expected, because Match instances record ids
+			 * from the database.
+			 */
+			Precondition.assertNonNullArgument("null id", id);
 			retVal.put(id, match);
 		}
 		return retVal;
