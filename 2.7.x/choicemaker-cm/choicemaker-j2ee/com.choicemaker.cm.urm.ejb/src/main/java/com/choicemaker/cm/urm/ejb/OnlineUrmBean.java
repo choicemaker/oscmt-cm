@@ -22,6 +22,7 @@ import com.choicemaker.client.api.TransitiveGroup;
 import com.choicemaker.cm.args.AbaSettings;
 import com.choicemaker.cm.args.TransitivityException;
 import com.choicemaker.cm.core.BlockingException;
+import com.choicemaker.cm.oaba.api.AbaStatisticsController;
 import com.choicemaker.cm.urm.api.OnlineMatchAnalyzer;
 import com.choicemaker.cm.urm.api.OnlineRecordMatcher;
 import com.choicemaker.cm.urm.api.UrmConfigurationAdapter;
@@ -62,6 +63,9 @@ public class OnlineUrmBean<T extends Comparable<T> & Serializable>
 	// This implementation depends on a local interface
 	@EJB(lookup = "java:app/com.choicemaker.cms.ejb/OnlineMatchingBean!com.choicemaker.cms.api.OnlineMatching")
 	private OnlineMatching<T> delegate;
+
+	@EJB(lookup = "java:app/com.choicemaker.cm.oaba.ejb/AbaStatisticsSingleton!com.choicemaker.cm.oaba.api.AbaStatisticsController")
+	private AbaStatisticsController statsController;
 
 	@EJB(lookup = "java:module/UrmConfigurationSingleton")
 	private UrmConfigurationAdapter adapter;
