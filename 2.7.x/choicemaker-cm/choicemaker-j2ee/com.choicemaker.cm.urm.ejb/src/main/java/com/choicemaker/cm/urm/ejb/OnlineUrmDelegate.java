@@ -9,13 +9,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import com.choicemaker.cm.aba.IncompleteBlockingSetsException;
+import com.choicemaker.cm.aba.UnderspecifiedQueryException;
 import com.choicemaker.cm.args.AbaSettings;
 import com.choicemaker.cm.args.TransitivityException;
+import com.choicemaker.cm.core.Accessor;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Match;
 import com.choicemaker.cm.core.Record;
-import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.oaba.api.AbaStatisticsController;
 import com.choicemaker.cm.transitivity.core.CompositeEntity;
 import com.choicemaker.cm.transitivity.core.Entity;
@@ -41,11 +43,9 @@ import com.choicemaker.cms.api.AbaParameters;
 import com.choicemaker.cms.api.AbaServerConfiguration;
 import com.choicemaker.cms.api.NamedConfiguration;
 import com.choicemaker.cms.api.NamedConfigurationController;
-import com.choicemaker.cms.beans.AbaParametersBean;
-import com.choicemaker.cms.beans.AbaServerConfigurationBean;
-import com.choicemaker.cms.beans.AbaSettingsBean;
 import com.choicemaker.cms.ejb.NamedConfigConversion;
 import com.choicemaker.cms.ejb.OnlineDelegate;
+import com.choicemaker.cms.ejb.ParameterHelper;
 import com.choicemaker.util.Precondition;
 
 public class OnlineUrmDelegate<T extends Comparable<T> & Serializable> {
@@ -55,7 +55,7 @@ public class OnlineUrmDelegate<T extends Comparable<T> & Serializable> {
 
 	public EvaluatedRecord[] getCompositeMatchCandidates(
 			final ISingleRecord<T> queryRecord,
-			final DbRecordCollection masterCollection, final String modelName,
+			final DbRecordCollection masterCollection, final String modelConfigurationName,
 			final float differThreshold, final float matchThreshold,
 			final int UNUSED_maxNumMatches, final LinkCriteria linkCriteria,
 			final EvalRecordFormat resultFormat, final String externalId,
@@ -65,15 +65,11 @@ public class OnlineUrmDelegate<T extends Comparable<T> & Serializable> {
 			final UrmEjbAssist<T> assist)
 			throws ConfigException, UrmIncompleteBlockingSetsException,
 			UrmUnderspecifiedQueryException, CmRuntimeException,
-			RemoteException/*
-							 * ModelException, ArgumentException
-							 * RecordException, RecordCollectionException, ,
-							 * SQLException, DatabaseException
-							 */ {
+			RemoteException {
 
 		Precondition.assertNonNullArgument("null query", queryRecord);
 		Precondition.assertNonNullArgument("null references", masterCollection);
-		Precondition.assertNonEmptyString("null or empty model", modelName);
+		Precondition.assertNonEmptyString("null or empty model", modelConfigurationName);
 		Precondition.assertBoolean("invalid differ threshold",
 				differThreshold >= 0f && differThreshold <= 1f);
 		Precondition.assertBoolean("invalid match threshold",
@@ -88,33 +84,44 @@ public class OnlineUrmDelegate<T extends Comparable<T> & Serializable> {
 
 		final int oabaMaxSingle = Integer.MAX_VALUE;
 		NamedConfiguration cmConf = assist.createCustomizedConfiguration(
-				adapter, ncController, masterCollection, modelName,
+				adapter, ncController, masterCollection, modelConfigurationName,
 				differThreshold, matchThreshold, oabaMaxSingle);
 
 		List<EvaluatedRecord> evalRecords = new ArrayList<>();
 		try {
-			final AbaParameters abaParams = new AbaParametersBean(
-					NamedConfigConversion.createAbaParameters(cmConf));
+			final AbaParameters abaParams =
+				NamedConfigConversion.createAbaParameters(cmConf);
+			assert abaParams != null;
 
-			final AbaSettings abaSettings = new AbaSettingsBean(
-					NamedConfigConversion.createAbaSettings(cmConf));
+			final AbaSettings abaSettings =
+				NamedConfigConversion.createAbaSettings(cmConf);
+			assert abaSettings != null;
 
 			final AbaServerConfiguration serverConfig =
-				new AbaServerConfigurationBean(NamedConfigConversion
-						.createAbaServerConfiguration(cmConf));
+				NamedConfigConversion.createAbaServerConfiguration(cmConf);
+			assert serverConfig != null;
 
-			OnlineDelegate<T> delegate = new OnlineDelegate<>();
+			final OnlineDelegate<T> delegate = new OnlineDelegate<>();
 			final T queryId = queryRecord.getId();
-			@SuppressWarnings("unchecked")
-			final Record<T> q = (Record<T>) queryRecord;
+
+			/*
+			 * Construct a server-side RecordImpl from a client-side
+			 * RecordHolder
+			 */
+			final ImmutableProbabilityModel model =
+					ParameterHelper.getModel(abaParams);
+			final String modelName = model.getModelName();
+			final Accessor accessor = model.getAccessor();
+			final Record<T> q = accessor.toImpl(queryRecord);
+
+			// Perform matching
 			List<Match> sortedMatches = delegate.getMatchList(queryRecord,
 					abaParams, abaSettings, serverConfig, statsController);
 
+			// Create a map of candidate ids to candidate records
 			Map<T, Match> matches = delegate.createMatchMap(sortedMatches);
 
 			// Get a iterator over the returned records
-			ImmutableProbabilityModel model =
-				PMManager.getModelInstance(modelName);
 			CEFromMatchesBuilder builder =
 				new CEFromMatchesBuilder(q, sortedMatches.iterator(), modelName,
 						differThreshold, matchThreshold);
@@ -251,6 +258,14 @@ public class OnlineUrmDelegate<T extends Comparable<T> & Serializable> {
 
 			}
 
+		} catch (IncompleteBlockingSetsException e) {
+			String msg = e.toString();
+			logger.severe(msg);
+			throw new UrmIncompleteBlockingSetsException(msg);
+		} catch (UnderspecifiedQueryException e) {
+			String msg = e.toString();
+			logger.severe(msg);
+			throw new UrmUnderspecifiedQueryException(msg);
 		} catch (BlockingException | IOException | TransitivityException e) {
 			String msg = e.toString();
 			logger.severe(msg);
@@ -275,8 +290,10 @@ public class OnlineUrmDelegate<T extends Comparable<T> & Serializable> {
 		assert match.m != null : "null candidate record";
 		assert match.m instanceof ISingleRecord : "not a database record: "
 				+ match.m.getClass().getName();
+		Accessor accessor = model.getAccessor();
 		@SuppressWarnings("unchecked")
-		ISingleRecord<T> retVal = (ISingleRecord<T>) match.m;
+		ISingleRecord<T> retVal =
+			(ISingleRecord<T>) accessor.toRecordHolder(match.m);
 		return retVal;
 	}
 

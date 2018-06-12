@@ -460,7 +460,7 @@ public class OnlineDelegate<T extends Comparable<T> & Serializable> {
 		 * FIXME check required fields of non-null parameters, settings and
 		 * configuration
 		 */
-		logger.warning("listIncompleteSpecifications is not fully implemented");
+		logger.fine("listIncompleteSpecifications is not fully implemented");
 		return retVal;
 	}
 

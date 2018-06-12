@@ -88,7 +88,7 @@ public class OnlineUrmBean<T extends Comparable<T> & Serializable>
 	@Override
 	public EvaluatedRecord[] getMatchCandidates(ISingleRecord<T> queryRecord,
 			DbRecordCollection masterCollection, String modelName,
-			float differThreshold, float matchThreshold, int maxNumMatches,
+			float differThreshold, float matchThreshold, int UNUSED_maxNumMatches,
 			EvalRecordFormat resultFormat, String externalId)
 			throws ModelException, ArgumentException,
 			UrmIncompleteBlockingSetsException, UrmUnderspecifiedQueryException,
@@ -105,9 +105,10 @@ public class OnlineUrmBean<T extends Comparable<T> & Serializable>
 		Precondition.assertBoolean("invalid thresholds (differ > match)",
 				differThreshold <= matchThreshold);
 
+		final int oabaMaxSingle = Integer.MAX_VALUE;
 		NamedConfiguration cmConf = assist.createCustomizedConfiguration(
 				adapter, ncController, masterCollection, modelName,
-				differThreshold, matchThreshold, maxNumMatches);
+				differThreshold, matchThreshold, oabaMaxSingle);
 
 		MatchGroup<T> matchCandidates = null;
 		try {
