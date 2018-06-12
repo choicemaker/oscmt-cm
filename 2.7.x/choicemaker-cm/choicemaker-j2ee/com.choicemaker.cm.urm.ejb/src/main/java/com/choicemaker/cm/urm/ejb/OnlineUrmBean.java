@@ -124,8 +124,8 @@ public class OnlineUrmBean<T extends Comparable<T> & Serializable>
 				NamedConfigConversion.createAbaServerConfiguration(cmConf);
 			assert serverConfig != null;
 
-			matchCandidates = delegate.getMatchGroup(queryRecord,
-					abaParams, oabaSettings, serverConfig);
+			matchCandidates = delegate.getMatchGroup(queryRecord, abaParams,
+					oabaSettings, serverConfig);
 		} catch (BlockingException | IOException e) {
 			String msg = e.toString();
 			logger.severe(msg);
@@ -142,6 +142,24 @@ public class OnlineUrmBean<T extends Comparable<T> & Serializable>
 
 	@Override
 	public EvaluatedRecord[] getCompositeMatchCandidates(
+			ISingleRecord<T> queryRecord, DbRecordCollection masterCollection,
+			String modelName, float differThreshold, float matchThreshold,
+			int maxNumMatches, LinkCriteria linkCriteria,
+			EvalRecordFormat resultFormat, String externalId)
+			throws ModelException, ArgumentException,
+			UrmIncompleteBlockingSetsException, UrmUnderspecifiedQueryException,
+			RecordException, RecordCollectionException, ConfigException,
+			CmRuntimeException, RemoteException {
+		OnlineUrmDelegate<T> urmDelegate = new OnlineUrmDelegate<>();
+		EvaluatedRecord[] retVal = urmDelegate.getCompositeMatchCandidates(
+				queryRecord, masterCollection, modelName, differThreshold,
+				matchThreshold, maxNumMatches, linkCriteria, resultFormat,
+				externalId, adapter, ncController, statsController, assist);
+		return retVal;
+	}
+
+	@SuppressWarnings("unused")
+	private EvaluatedRecord[] PREFERRED_NOT_YET_WORKING_getCompositeMatchCandidates(
 			ISingleRecord<T> queryRecord, DbRecordCollection masterCollection,
 			String modelName, float differThreshold, float matchThreshold,
 			int maxNumMatches, LinkCriteria linkCriteria,
@@ -183,9 +201,9 @@ public class OnlineUrmBean<T extends Comparable<T> & Serializable>
 			IGraphProperty mergeConnectivity = linkCriteria.getGraphPropType();
 			boolean mustIncludeQuery = linkCriteria.isMustIncludeQuery();
 
-			transitiveCandidates = delegate.getTransitiveGroup(queryRecord,
-					abaParams, abaSettings, serverConfig, mergeConnectivity,
-					mustIncludeQuery);
+			transitiveCandidates =
+				delegate.getTransitiveGroup(queryRecord, abaParams, abaSettings,
+						serverConfig, mergeConnectivity, mustIncludeQuery);
 		} catch (BlockingException | IOException | TransitivityException e) {
 			String msg = e.toString();
 			logger.severe(msg);
