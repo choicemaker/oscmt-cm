@@ -26,11 +26,11 @@ import com.choicemaker.cm.aba.IBlockingValue;
 import com.choicemaker.cm.aba.IDbField;
 import com.choicemaker.cm.aba.IGroupTable;
 import com.choicemaker.cm.core.Accessor;
-import com.choicemaker.cm.core.Constants;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.io.db.base.DbAccessor;
 import com.choicemaker.cm.io.db.base.DbReaderSequential;
 import com.choicemaker.cm.io.db.postgres2.dbom.PostgresDbObjectMaker;
+import com.choicemaker.util.Precondition;
 import com.choicemaker.util.StringUtils;
 import com.choicemaker.util.SystemPropertyUtils;
 
@@ -39,7 +39,7 @@ public class PostgresDatabaseAccessor<T extends Comparable<T>>
 
 	private static Logger logger =
 		Logger.getLogger(PostgresDatabaseAccessor.class.getName());
-	
+
 	private static final String EOL = SystemPropertyUtils.PV_LINE_SEPARATOR;
 
 	// These two objects have the same life span -- see isConsistent()
@@ -65,7 +65,13 @@ public class PostgresDatabaseAccessor<T extends Comparable<T>>
 		assert isConsistent();
 	}
 
-	public PostgresDatabaseAccessor(DataSource ds, String condition) {
+	public PostgresDatabaseAccessor(DataSource ds, String[] conditions) {
+		setDataSource(ds);
+		setConditions(conditions);
+	}
+
+	@Deprecated
+	public PostgresDatabaseAccessor(DataSource ds, Object condition) {
 		setDataSource(ds);
 		setCondition(condition);
 	}
@@ -87,31 +93,39 @@ public class PostgresDatabaseAccessor<T extends Comparable<T>>
 		return p;
 	}
 
+	@Deprecated
 	public void setCondition(Object condition) {
-		String[] conditions = (String[]) condition;
+		setConditions((String[]) condition);
+	}
+
+	public void setConditions(String[] conditions) {
 		if (conditions == null || conditions.length == 0) {
-			logger.finer("No conditions on database accessor");
+			condition1 = null;
+			condition2 = null;
+		} else if (conditions.length == 1) {
+			condition1 = null;
+			condition2 = conditions[0];
 		} else {
-			if (conditions.length > 0) {
-				condition1 = conditions[0];
-				logger.finer("Condition 1 on database accessor: ");
-			}
-			if (conditions.length > 1) {
-				condition2 = conditions[1];
-				logger.finer("Condition 2 on database accessor: ");
-			}
-			if (conditions.length > 2) {
-				final int extra = conditions.length - 2;
-				StringBuilder sb =
-					new StringBuilder("Ignoring " + extra + "conditions: ");
-				for (int i = extra; i < conditions.length; i++) {
-					sb.append(conditions[i]);
-					if (i < conditions.length - 1) {
-						sb.append(" | ");
-					}
+			assert conditions.length >= 2;
+			condition1 = conditions[0];
+			condition2 = conditions[1];
+		}
+		logger.finer("Condition 1 on database accessor: " + condition1);
+		logger.finer("Condition 2 on database accessor: " + condition2);
+		if (conditions != null && conditions.length > 2) {
+			assert conditions.length > 2;
+			condition1 = conditions[0];
+			condition2 = conditions[1];
+			final int extra = conditions.length - 2;
+			StringBuilder sb =
+				new StringBuilder("Ignoring " + extra + "conditions: ");
+			for (int i = extra; i < conditions.length; i++) {
+				sb.append(conditions[i]);
+				if (i < conditions.length - 1) {
+					sb.append(" | ");
 				}
-				logger.finer(sb.toString());
 			}
+			logger.finer(sb.toString());
 		}
 	}
 
@@ -135,14 +149,8 @@ public class PostgresDatabaseAccessor<T extends Comparable<T>>
 			stmt = connection.createStatement();
 			stmt.setFetchSize(100);
 			logger.fine(query);
-			// BUG 2015-04-01 rphall
-			// SQL query returns multiple result sets,
-			// but executeQuery can't handle more than one.
-			// ResultSet rs = stmt.executeQuery(query);
-			// BUGFIX: see
-			// How to Retrieve Multiple Result Sets from a Stored Procedure in
-			// JDBC
-			// http://links.rph.cx/m9jJav
+			// See: How to Retrieve Multiple Result Sets from a Stored
+			// Procedure in JDBC (http://links.rph.cx/m9jJav)
 			ResultSet rs = null;
 			boolean isResultSet = stmt.execute(query);
 			int count = 0;
@@ -187,18 +195,10 @@ public class PostgresDatabaseAccessor<T extends Comparable<T>>
 			logger.severe("Closing statement: " + e.toString());
 		}
 		if (connection != null) {
-			// EJB3 CHANGE 2015-04-01 rphall
 			// Database accessors are used only when blocking against a SQL
 			// database using EJB3 managed connections. They should not be
-			// explicitly closed, but rather rely on the EJB3 container to
+			// explicitly committed, but rather rely on the EJB3 container to
 			// do so.
-			// try {
-			// connection.commit();
-			// } catch (java.sql.SQLException e) {
-			// ex = e;
-			// logger.severe("Commiting: " + e.toString());
-			// }
-			// END EJB3 CHANGE
 			try {
 				connection.close();
 				connection = null;
@@ -223,6 +223,18 @@ public class PostgresDatabaseAccessor<T extends Comparable<T>>
 	// Public access for testing only
 	public String getQuery(final Properties unused, AutomatedBlocker blocker,
 			DbReaderSequential<T> dbr) {
+
+		Precondition.assertNonNullArgument("null blocker", blocker);
+		Precondition.assertNonNullArgument("null database result-set reader",
+				dbr);
+
+		if (unused != null && unused.size() > 0) {
+			logger.fine("FIXME not using properties");
+		}
+		if (StringUtils.nonEmptyString(condition1)) {
+			logger.fine("FIXME not using condition1");
+		}
+
 		String id = dbr.getMasterId();
 
 		StringBuilder b = new StringBuilder(16000);
@@ -232,11 +244,11 @@ public class PostgresDatabaseAccessor<T extends Comparable<T>>
 				.append(");").append(EOL);
 		b.append("INSERT INTO ids ");
 
-		// if (StringUtils.nonEmptyString(condition)) {
-		// b.append(" SELECT b.");
-		// b.append(id);
-		// b.append(" FROM (");
-		// }
+		if (StringUtils.nonEmptyString(condition2)) {
+			b.append(" SELECT b.");
+			b.append(id);
+			b.append(" FROM (");
+		}
 
 		int numBlockingSets = blocker.getBlockingSets().size();
 		for (int i = 0; i < numBlockingSets; ++i) {
@@ -254,7 +266,6 @@ public class PostgresDatabaseAccessor<T extends Comparable<T>>
 			// severe. If blocking fields are on different tables, and each
 			// table has an ID column, then things don't work...
 			b.append("v0." + id);
-			// b.append(id);
 			b.append(" FROM ");
 			IBlockingSet bs = (IBlockingSet) blocker.getBlockingSets().get(i);
 			int numViews = bs.getNumTables();
@@ -293,16 +304,13 @@ public class PostgresDatabaseAccessor<T extends Comparable<T>>
 				}
 			}
 		}
-		if (StringUtils.nonEmptyString(condition1)
-				|| StringUtils.nonEmptyString(condition2)) {
-			logger.warning("FIXME not setting conditions");
-			// b.append(") b,");
-			// b.append(condition);
+
+		if (StringUtils.nonEmptyString(condition2)) {
+			 b.append(") b,");
+			 b.append(condition2);
 		}
 		b.append(";").append(EOL).append("END $$;").append(EOL);
-
 		b.append(getMultiQuery(p, blocker, dbr));
-
 		logger.fine(b.toString());
 
 		return b.toString();
