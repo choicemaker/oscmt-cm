@@ -429,17 +429,18 @@ class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 			UrmConfigurationAdapter adapter,
 			NamedConfigurationController ncController, IRecordCollection qRc,
 			RefRecordCollection mRc, String modelName, float differThreshold,
-			float matchThreshold, int obaMaxSingle) throws ConfigException {
+			float matchThreshold, /* FIXME maxNumMatches */int FIXME_unused)
+			throws ConfigException {
 
 		assert adapter != null;
 		assert ncController != null;
-		assert qRc != null;
+		assert mRc != null;
 		assert StringUtils.nonEmptyString(modelName);
 		assert differThreshold >= 0f && differThreshold <= 1f;
 		assert matchThreshold >= 0f && matchThreshold <= 1f;
 		assert differThreshold <= matchThreshold;
 
-		String ncName;
+		String ncName = null;
 		try {
 			logger.fine("Model name: '" + modelName + "'");
 			ncName = adapter.getCmsConfigurationName(modelName);
@@ -449,6 +450,7 @@ class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 			logger.severe(msg);
 			throw new ConfigException(msg);
 		}
+		logger.fine("namedConfiguration: " + ncName);
 		if (!StringUtils.nonEmptyString(ncName)) {
 			String msg = "Missing named configuration for model configuration '"
 					+ modelName + "'";
@@ -466,7 +468,7 @@ class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 		NamedConfigurationEntity retVal = new NamedConfigurationEntity(nc);
 		retVal.setLowThreshold(differThreshold);
 		retVal.setHighThreshold(matchThreshold);
-		retVal.setOabaMaxSingle(obaMaxSingle);
+		retVal.setOabaMaxSingle(/* FIXME maxNumMatches */ FIXME_unused);
 
 		String jndiQuerySource = null;
 		if (qRc instanceof DbRecordCollection) {
