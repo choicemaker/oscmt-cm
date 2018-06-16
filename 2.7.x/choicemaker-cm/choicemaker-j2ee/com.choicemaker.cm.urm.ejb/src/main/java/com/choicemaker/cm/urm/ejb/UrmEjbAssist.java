@@ -415,65 +415,13 @@ class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 			UrmConfigurationAdapter adapter,
 			NamedConfigurationController ncController, DbRecordCollection mRc,
 			String modelName, float differThreshold, float matchThreshold,
-			int maxNumMatches) throws ConfigException {
+			/* FIXME maxNumMatches */int FIXME_unused) throws ConfigException {
 
-		assert adapter != null;
-		assert ncController != null;
-		assert mRc != null;
-		assert StringUtils.nonEmptyString(modelName);
-		assert differThreshold >= 0f && differThreshold <= 1f;
-		assert matchThreshold >= 0f && matchThreshold <= 1f;
-		assert differThreshold <= matchThreshold;
-
-		String ncName;
-		try {
-			ncName = adapter.getCmsConfigurationName(modelName);
-		} catch (DatabaseException e) {
-			String msg = e.toString();
-			logger.severe(msg);
-			throw new ConfigException(msg);
-		}
-		logger.fine("namedConfiguration: " + ncName);
-		if (!StringUtils.nonEmptyString(ncName)) {
-			String msg = "Missing named configuration for model configuration '"
-					+ modelName + "'";
-			logger.severe(msg);
-			throw new ConfigException(msg);
-		}
-
-		NamedConfiguration nc =
-			ncController.findNamedConfigurationByName(ncName);
-		if (nc == null) {
-			String msg = "Missing named configuration for '" + ncName + "'";
-			logger.severe(msg);
-			throw new ConfigException(msg);
-		}
-		NamedConfigurationEntity retVal = new NamedConfigurationEntity(nc);
-		retVal.setLowThreshold(differThreshold);
-		retVal.setHighThreshold(matchThreshold);
-
-		String jndiReferenceSource = mRc == null ? null : mRc.getUrl();
-		if (StringUtils.nonEmptyString(jndiReferenceSource)) {
-			retVal.setDataSource(jndiReferenceSource);
-			String msg = "Using data source from reference record collection: "
-					+ retVal.getDataSource();
-			logger.fine(msg);
-		} else if (StringUtils.nonEmptyString(retVal.getDataSource())) {
-			String msg = "Using data source from named configuration: "
-					+ retVal.getDataSource();
-			logger.fine(msg);
-		} else {
-			String msg = "No data source configured";
-			logger.severe(msg);
-			throw new ConfigException(msg);
-		}
-
-		if (mRc instanceof SubsetDbRecordCollection) {
-			String referenceSelection =
-				((SubsetDbRecordCollection) mRc).getIdsQuery();
-			retVal.setReferenceSelection(referenceSelection);
-		}
-
+		final IRecordCollection qRc = null;
+		final int /* FIXME maxNumMatches */ FIXME_oabaMaxSingle = 0;
+		NamedConfiguration retVal = createCustomizedConfiguration(adapter,
+				ncController, qRc, mRc, modelName, differThreshold,
+				matchThreshold, FIXME_oabaMaxSingle);
 		return retVal;
 	}
 
