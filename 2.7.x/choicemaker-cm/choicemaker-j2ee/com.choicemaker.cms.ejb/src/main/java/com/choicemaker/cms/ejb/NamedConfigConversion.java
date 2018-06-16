@@ -100,6 +100,7 @@ public class NamedConfigConversion {
 	public static AbaSettings createAbaSettings(NamedConfiguration nc) {
 		Precondition.assertNonNullArgument("null named configuration", nc);
 		AbaSettingsBean retVal = new AbaSettingsBean();
+		retVal.setAbaMaxMatches(nc.getAbaMaxMatches());
 		retVal.setLimitPerBlockingSet(nc.getAbaLimitPerBlockingSet());
 		retVal.setLimitSingleBlockingSet(nc.getAbaLimitSingleBlockingSet());
 		retVal.setSingleTableBlockingSetGraceLimit(

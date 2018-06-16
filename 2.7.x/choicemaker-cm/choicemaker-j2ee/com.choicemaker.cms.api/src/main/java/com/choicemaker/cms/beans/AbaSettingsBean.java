@@ -7,6 +7,7 @@ public class AbaSettingsBean implements AbaSettings {
 	private static final long serialVersionUID = 1L;
 
 	private long id = NONPERSISTENT_ABA_SETTINGS_ID;
+	private int abaMaxMatches = DEFAULT_ABA_MAX_MATCHES;
 	private int limitPerBlockingSet = DEFAULT_LIMIT_PER_BLOCKING_SET;
 	private int limitSingleBlockingSet = DEFAULT_LIMIT_SINGLE_BLOCKING_SET;
 	private int singleTableBlockingSetGraceLimit =
@@ -28,6 +29,11 @@ public class AbaSettingsBean implements AbaSettings {
 	}
 
 	@Override
+	public int getAbaMaxMatches() {
+		return abaMaxMatches;
+	}
+
+	@Override
 	public int getLimitPerBlockingSet() {
 		return limitPerBlockingSet;
 	}
@@ -45,6 +51,10 @@ public class AbaSettingsBean implements AbaSettings {
 	@Override
 	public boolean isPersistent() {
 		return id != NONPERSISTENT_ABA_SETTINGS_ID;
+	}
+
+	public void setAbaMaxMatches(int abaMaxMatches) {
+		this.abaMaxMatches = abaMaxMatches;
 	}
 
 	public void setLimitPerBlockingSet(int limitPerBlockingSet) {

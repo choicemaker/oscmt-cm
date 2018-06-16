@@ -8,6 +8,7 @@
 package com.choicemaker.cm.oaba.ejb;
 
 import static com.choicemaker.cm.oaba.ejb.AbaSettingsJPA.CN_ID;
+import static com.choicemaker.cm.oaba.ejb.AbaSettingsJPA.CN_ABA_MAX_MATCHES;
 import static com.choicemaker.cm.oaba.ejb.AbaSettingsJPA.CN_LIMIT_BLOCKSET;
 import static com.choicemaker.cm.oaba.ejb.AbaSettingsJPA.CN_LIMIT_SINGLESET;
 import static com.choicemaker.cm.oaba.ejb.AbaSettingsJPA.CN_LIMIT_SINGLETABLE;
@@ -74,6 +75,9 @@ public class AbaSettingsEntity extends AbstractPersistentObject implements
 
 	@Column(name = CN_TYPE)
 	private final String type;
+
+	@Column(name = CN_ABA_MAX_MATCHES)
+	private int abaMaxMatches;
 
 	@Column(name = CN_LIMIT_BLOCKSET)
 	private int limitPerBlockingSet;
@@ -143,6 +147,11 @@ public class AbaSettingsEntity extends AbstractPersistentObject implements
 	@Override
 	public long getId() {
 		return id;
+	}
+
+	@Override
+	public int getAbaMaxMatches() {
+		return abaMaxMatches;
 	}
 
 	@Override

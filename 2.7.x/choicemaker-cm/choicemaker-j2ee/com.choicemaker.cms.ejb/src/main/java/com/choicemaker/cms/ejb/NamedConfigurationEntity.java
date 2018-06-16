@@ -10,6 +10,7 @@ import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_GRAPH;
 import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_HIGH_THRESHOLD;
 import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_ID;
 import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_INTERVAL;
+import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_ABA_MAX_MATCHES;
 import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_LIMIT_BLOCKSET;
 import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_LIMIT_SINGLESET;
 import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_LIMIT_SINGLETABLE;
@@ -155,6 +156,9 @@ public class NamedConfigurationEntity extends AbstractPersistentObject
 	protected String transitivityGraph = DEFAULT_TRANSITIVITYGRAPH;
 
 	// -- ABA settings
+	
+	@Column(name = CN_ABA_MAX_MATCHES)
+	protected int abaMaxMatches = DEFAULT_ABAMAXMATCHES;
 
 	@Column(name = CN_LIMIT_BLOCKSET)
 	protected int abaLimitPerBlockingSet = DEFAULT_ABALIMITPERBLOCKINGSET;
@@ -226,6 +230,7 @@ public class NamedConfigurationEntity extends AbstractPersistentObject
 				.getReferenceDatabaseAccessor());
 		this.setTransitivityFormat(nc.getTransitivityFormat());
 		this.setTransitivityGraph(nc.getTransitivityGraph());
+		this.setAbaMaxMatches(nc.getAbaMaxMatches());
 		this.setAbaLimitPerBlockingSet(nc.getAbaLimitPerBlockingSet());
 		this.setAbaLimitSingleBlockingSet(nc.getAbaLimitSingleBlockingSet());
 		this.setAbaSingleTableBlockingSetGraceLimit(nc
@@ -344,6 +349,11 @@ public class NamedConfigurationEntity extends AbstractPersistentObject
 	@Override
 	public String getTransitivityGraph() {
 		return transitivityGraph;
+	}
+
+	@Override
+	public int getAbaMaxMatches() {
+		return abaMaxMatches;
 	}
 
 	@Override
@@ -491,6 +501,10 @@ public class NamedConfigurationEntity extends AbstractPersistentObject
 
 	public void setTransitivityGraph(String transitivityGraph) {
 		this.transitivityGraph = transitivityGraph;
+	}
+
+	public void setAbaMaxMatches(int abaMaxMatches) {
+		this.abaMaxMatches = abaMaxMatches;
 	}
 
 	public void setAbaLimitPerBlockingSet(int abaLimitPerBlockingSet) {

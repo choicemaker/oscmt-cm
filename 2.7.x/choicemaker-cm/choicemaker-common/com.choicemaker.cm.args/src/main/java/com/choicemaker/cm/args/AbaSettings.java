@@ -23,6 +23,12 @@ import java.io.Serializable;
  */
 public interface AbaSettings extends Serializable {
 
+	/**
+	 * The default value for {@line #getAbaMaxMatches()}. The value 0 (zero)
+	 * indicates no maximum.
+	 */
+	int DEFAULT_ABA_MAX_MATCHES = 0;
+
 	/** The default value for {@link #getLimitPerBlockingSet()} */
 	int DEFAULT_LIMIT_PER_BLOCKING_SET = 50;
 
@@ -43,6 +49,13 @@ public interface AbaSettings extends Serializable {
 	long getId();
 
 	boolean isPersistent();
+
+	/**
+	 * The maximum number of matches returned by Online matching. The value
+	 * 0 (zero) indicates no maximum; that is, no limit to the number of
+	 * matches returned.
+	 */
+	int getAbaMaxMatches();
 
 	/**
 	 * The maximum of size of a blocking set before it must be refined by

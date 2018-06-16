@@ -43,6 +43,7 @@ public interface NamedConfiguration {
 	public static final String DEFAULT_TRANSITIVITYFORMAT = SORT_BY_HOLD_GROUP
 			.name();
 	public static final String DEFAULT_TRANSITIVITYGRAPH = GPN_SCM;
+	public static final int DEFAULT_ABAMAXMATCHES = 0;
 	public static final int DEFAULT_ABALIMITPERBLOCKINGSET = 50;
 	public static final int DEFAULT_ABALIMITSINGLEBLOCKINGSET = 100;
 	public static final int DEFAULT_ABASINGLETABLEBLOCKINGSETGRACELIMIT = 200;
@@ -97,6 +98,8 @@ public interface NamedConfiguration {
 	String getTransitivityFormat();
 
 	String getTransitivityGraph();
+
+	int getAbaMaxMatches();
 
 	int getAbaLimitPerBlockingSet();
 

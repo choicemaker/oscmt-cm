@@ -50,6 +50,7 @@ public interface NamedConfigurationJPA {
 	String CN_GRAPH = AbstractParametersJPA.CN_GRAPH;
 
 	// ABA settings (nearly independent of a particular job)
+	String CN_ABA_MAX_MATCHES = AbaSettingsJPA.CN_ABA_MAX_MATCHES;
 	String CN_LIMIT_BLOCKSET = AbaSettingsJPA.CN_LIMIT_BLOCKSET;
 	String CN_LIMIT_SINGLESET = AbaSettingsJPA.CN_LIMIT_SINGLESET;
 	String CN_LIMIT_SINGLETABLE = AbaSettingsJPA.CN_LIMIT_SINGLETABLE;
