@@ -54,7 +54,7 @@ public class OracleRecordSource implements RecordSource {
 	private ResultSet[] rs;
 	private ResultSet outer;
 	private DbReaderParallel dbr;
-	private Record record;
+	private Record<?> record;
 
 	/**
 	 * Creates an uninitialized instance.
@@ -130,8 +130,8 @@ public class OracleRecordSource implements RecordSource {
 		return record != null;
 	}
 
-	public Record getNext() throws IOException {
-		Record r = record;
+	public Record<?> getNext() throws IOException {
+		Record<?> r = record;
 		getNextMain();
 		return r;
 	}
