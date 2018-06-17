@@ -11,6 +11,7 @@ import java.util.List;
 
 import com.choicemaker.cm.core.DatabaseException;
 import com.choicemaker.cm.urm.api.UrmConfiguration;
+import com.choicemaker.cm.urm.exceptions.ConfigException;
 
 /**
  * Maps URM 2.5 model configuration names to CMS 2.7 named configurations.
@@ -20,7 +21,7 @@ import com.choicemaker.cm.urm.api.UrmConfiguration;
 public interface UrmConfigurationAdapter {
 
 	String getCmsConfigurationName(String urmConfigurationName)
-			throws DatabaseException;
+			throws DatabaseException, ConfigException;
 
 	UrmConfiguration findUrmConfigurationByName(String urmConfigurationName);
 

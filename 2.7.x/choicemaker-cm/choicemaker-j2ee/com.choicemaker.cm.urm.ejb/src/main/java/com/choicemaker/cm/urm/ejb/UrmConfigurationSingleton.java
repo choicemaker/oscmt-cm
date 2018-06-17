@@ -19,6 +19,7 @@ import javax.persistence.Query;
 import com.choicemaker.cm.core.DatabaseException;
 import com.choicemaker.cm.urm.api.UrmConfiguration;
 import com.choicemaker.cm.urm.api.UrmConfigurationAdapter;
+import com.choicemaker.cm.urm.exceptions.ConfigException;
 
 @Singleton
 public class UrmConfigurationSingleton implements UrmConfigurationAdapter {
@@ -64,18 +65,16 @@ public class UrmConfigurationSingleton implements UrmConfigurationAdapter {
 
 	@Override
 	public String getCmsConfigurationName(String urmConfigurationName)
-			throws DatabaseException {
+			throws ConfigException, DatabaseException {
 		String retVal = null;
 		UrmConfiguration uc = findUrmConfigurationByName(urmConfigurationName);
 		if (uc != null) {
 			retVal = uc.getCmsConfigurationName();
 		} else {
-			// FIXME always returns the same configuration name, which may
-			// or may not exist
-			retVal = "MCI 2012-04-15a (4-thread) /tmp Oracle LINKAGE";
-			logger.warning(
-					"FIXME: " + UrmConfigurationSingleton.class.getSimpleName()
-							+ "returning HACK: " + retVal);
+			String msg = "No CMS configuration mapped to URM configuration '"
+					+ urmConfigurationName + "'";
+			logger.severe(msg);
+			throw new ConfigException(msg);
 		}
 		return retVal;
 	}

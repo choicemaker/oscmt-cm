@@ -8,7 +8,7 @@ public interface UrmConfigurationJPA {
 	String TABLE_NAME = "CMT_URM_CONFIG";
 
 	// Basic persistence parameters
-	String CN_ID = "NC_ID";
+	String CN_ID = "URM_CONFIG_ID";
 	String CN_UUID = AbstractPersistentObjectJPA.CN_UUID;
 	String CN_OPTLOCK = AbstractPersistentObjectJPA.CN_OPTLOCK;
 
