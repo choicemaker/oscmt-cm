@@ -33,6 +33,7 @@ import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_REF_DBACCESSOR;
 import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_REF_DBCONF;
 import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_REF_DBREADER;
 import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_REF_SQL;
+import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_RIGOR;
 import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_RS_TYPE;
 import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_TASK;
 import static com.choicemaker.cms.ejb.NamedConfigurationJPA.ID_GENERATOR_NAME;
@@ -106,8 +107,8 @@ public class NamedConfigurationEntity extends AbstractPersistentObject
 	@Column(name = CN_TASK)
 	protected String task = DEFAULT_TASK;
 
-//	@Column(name = CN_RIGOR)
-//	protected String rigor = DEFAULT_RIGOR;
+	@Column(name = CN_RIGOR)
+	protected String rigor = DEFAULT_RIGOR;
 
 	// -- Common record source parameters
 
@@ -293,8 +294,7 @@ public class NamedConfigurationEntity extends AbstractPersistentObject
 
 	@Override
 	public String getRigor() {
-//		return rigor;
-		return null;
+		return rigor;
 	}
 
 	@Override
@@ -464,7 +464,7 @@ public class NamedConfigurationEntity extends AbstractPersistentObject
 	}
 
 	public void setRigor(String rigor) {
-//		this.rigor = rigor;
+		this.rigor = rigor;
 	}
 
 	public void setDataSource(String dataSource) {
