@@ -11,6 +11,7 @@ import java.rmi.RemoteException;
 import java.util.Iterator;
 
 import com.choicemaker.cm.args.AnalysisResultFormat;
+import com.choicemaker.cm.batch.api.BatchJobRigor;
 import com.choicemaker.cm.urm.base.IRecordCollection;
 import com.choicemaker.cm.urm.base.LinkCriteria;
 import com.choicemaker.cm.urm.base.RefRecordCollection;
@@ -37,6 +38,11 @@ public interface BatchMatchAnalyzer extends BatchBase {
 			AnalysisResultFormat serializationFormat, String trackingId)
 			throws ModelException, ConfigException, ArgumentException,
 			CmRuntimeException, RemoteException;
+
+	long startAnalysis(long jobId, LinkCriteria c,
+			AnalysisResultFormat serializationFormat, String trackingId,
+			BatchJobRigor rigor) throws ModelException, ConfigException,
+			ArgumentException, CmRuntimeException, RemoteException;
 
 	public long startMatchAndAnalysis(IRecordCollection qRc,
 			RefRecordCollection mRc, String modelName, float differThreshold,

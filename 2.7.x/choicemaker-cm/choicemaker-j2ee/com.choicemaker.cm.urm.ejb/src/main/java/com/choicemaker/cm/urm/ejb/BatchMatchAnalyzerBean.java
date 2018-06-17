@@ -23,6 +23,7 @@ import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
+import com.choicemaker.cm.batch.api.BatchJobRigor;
 import com.choicemaker.cm.oaba.api.ServerConfigurationException;
 import com.choicemaker.cm.urm.api.BatchMatchAnalyzer;
 import com.choicemaker.cm.urm.api.UrmConfigurationAdapter;
@@ -129,6 +130,15 @@ public class BatchMatchAnalyzerBean implements BatchMatchAnalyzer {
 	@Override
 	public long startAnalysis(long jobId, LinkCriteria c,
 			AnalysisResultFormat serializationFormat, String trackingId)
+			throws ModelException, ConfigException, ArgumentException,
+			CmRuntimeException, RemoteException {
+		throw new Error("never implemented");
+	}
+
+	@Override
+	public long startAnalysis(long jobId, LinkCriteria c,
+			AnalysisResultFormat serializationFormat, String trackingId,
+			BatchJobRigor rigor)
 			throws ModelException, ConfigException, ArgumentException,
 			CmRuntimeException, RemoteException {
 		throw new Error("never implemented");
