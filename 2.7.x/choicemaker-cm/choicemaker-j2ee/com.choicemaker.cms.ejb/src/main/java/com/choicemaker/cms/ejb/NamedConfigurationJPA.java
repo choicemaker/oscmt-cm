@@ -18,8 +18,9 @@ public interface NamedConfigurationJPA {
 	String CN_UUID = AbstractPersistentObjectJPA.CN_UUID;
 	String CN_OPTLOCK = AbstractPersistentObjectJPA.CN_OPTLOCK;
 
-	/** Configuration name */
+	/** Configuration name and description */
 	String CN_CONF_NAME = "NC_NAME";
+	String CN_CONF_DESCRIPTION = "NC_DESC";
 
 	// Basic matching parameters
 	String CN_MODEL = DefaultSettingsJPA.CN_MODEL;

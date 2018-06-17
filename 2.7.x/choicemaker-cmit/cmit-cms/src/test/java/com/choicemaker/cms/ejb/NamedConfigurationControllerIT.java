@@ -84,6 +84,7 @@ public class NamedConfigurationControllerIT {
 			NamedConfigurationEntity _nce = new NamedConfigurationEntity();
 			final String configName = UUID.randomUUID().toString();
 			_nce.setConfigurationName(configName);
+			_nce.setConfigurationDescription("Description for " + configName);
 			assertTrue(_nce.getId() == PersistentObject.NONPERSISTENT_ID);
 			NamedConfiguration nc = ncController.save(_nce);
 			final long ncId = nc.getId();
@@ -129,6 +130,7 @@ public class NamedConfigurationControllerIT {
 		NamedConfigurationEntity _nce = new NamedConfigurationEntity();
 		final String configName = UUID.randomUUID().toString();
 		_nce.setConfigurationName(configName);
+		_nce.setConfigurationDescription("Description for " + configName);
 		assertTrue(_nce.getId() == PersistentObject.NONPERSISTENT_ID);
 		NamedConfiguration nc = ncController.save(_nce);
 		final long ncId = nc.getId();
@@ -161,6 +163,7 @@ public class NamedConfigurationControllerIT {
 		NamedConfigurationEntity _nce = new NamedConfigurationEntity();
 		final String configName = UUID.randomUUID().toString();
 		_nce.setConfigurationName(configName);
+		_nce.setConfigurationDescription("Description for " + configName);
 		assertTrue(_nce.getId() == PersistentObject.NONPERSISTENT_ID);
 		NamedConfiguration nc = ncController.save(_nce);
 		final long ncId = nc.getId();

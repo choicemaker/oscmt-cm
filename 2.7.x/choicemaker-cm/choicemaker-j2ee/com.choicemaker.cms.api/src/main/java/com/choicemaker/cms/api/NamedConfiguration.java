@@ -13,6 +13,7 @@ public interface NamedConfiguration {
 	public static final long DEFAULT_CONFIGURATIONID =
 		PersistentObject.NONPERSISTENT_ID;
 	public static final String DEFAULT_CONFIGURATIONNAME = "";
+	public static final String DEFAULT_CONFIGURATIONDESC = "";
 	public static final String DEFAULT_MODELNAME = "";
 	public static final float DEFAULT_LOWTHRESHOLD = 0.20f;
 	public static final float DEFAULT_HIGHTHRESHOLD = 0.80f;
@@ -62,6 +63,8 @@ public interface NamedConfiguration {
 	long getId();
 
 	String getConfigurationName();
+
+	String getConfigurationDescription();
 
 	String getModelName();
 

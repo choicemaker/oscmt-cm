@@ -3,6 +3,7 @@ package com.choicemaker.cms.ejb;
 import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_BKCONF;
 import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_CM_IO_CLASS;
 import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_CONF_NAME;
+import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_CONF_DESCRIPTION;
 import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_DATASOURCE;
 import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_FILE;
 import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_FORMAT;
@@ -86,6 +87,10 @@ public class NamedConfigurationEntity extends AbstractPersistentObject
 
 	@Column(name = CN_CONF_NAME, unique = true, nullable = false)
 	protected String configurationName = DEFAULT_CONFIGURATIONNAME;
+
+	@Column(name = CN_CONF_DESCRIPTION, unique = false, nullable = true)
+	protected String configurationDescription = DEFAULT_CONFIGURATIONDESC;
+
 
 	// -- Basic matching
 
@@ -212,6 +217,7 @@ public class NamedConfigurationEntity extends AbstractPersistentObject
 
 	public NamedConfigurationEntity(NamedConfiguration nc) {
 		this.setConfigurationName(nc.getConfigurationName());
+		this.setConfigurationDescription(nc.getConfigurationDescription());
 		this.setModelName(nc.getModelName());
 		this.setLowThreshold(nc.getLowThreshold());
 		this.setHighThreshold(nc.getHighThreshold());
@@ -258,6 +264,11 @@ public class NamedConfigurationEntity extends AbstractPersistentObject
 	@Override
 	public String getConfigurationName() {
 		return configurationName;
+	}
+
+	@Override
+	public String getConfigurationDescription() {
+		return configurationDescription;
 	}
 
 	@Override
@@ -430,6 +441,10 @@ public class NamedConfigurationEntity extends AbstractPersistentObject
 
 	public void setConfigurationName(String configurationName) {
 		this.configurationName = configurationName;
+	}
+
+	public void setConfigurationDescription(String configurationDescription) {
+		this.configurationDescription = configurationDescription;
 	}
 
 	public void setModelName(String modelName) {
