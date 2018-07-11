@@ -35,6 +35,7 @@ import com.choicemaker.cm.urm.base.LinkCriteria;
 import com.choicemaker.cm.urm.base.LinkedRecordSet;
 import com.choicemaker.cm.urm.base.MatchScore;
 import com.choicemaker.cm.urm.base.RecordType;
+import com.choicemaker.cm.urm.base.ScoreType;
 import com.choicemaker.cm.urm.exceptions.CmRuntimeException;
 import com.choicemaker.cm.urm.exceptions.ConfigException;
 import com.choicemaker.cm.urm.exceptions.UrmIncompleteBlockingSetsException;
@@ -49,6 +50,8 @@ import com.choicemaker.cms.ejb.ParameterHelper;
 import com.choicemaker.util.Precondition;
 
 public class OnlineUrmDelegate<T extends Comparable<T> & Serializable> {
+
+	public static final String NOTE_SEPARATOR = "\t";
 
 	private static final Logger logger =
 		Logger.getLogger(OnlineUrmDelegate.class.getName());
@@ -211,7 +214,9 @@ public class OnlineUrmDelegate<T extends Comparable<T> & Serializable> {
 						} else {
 							Match match =
 								(Match) matches.get(groupChildNode.getNodeId());
-							groupRecords.add(getSingleRecord(match, model));
+							final ScoreType unused = null;
+							groupRecords
+									.add(getSingleRecord(unused, match, model));
 							groupScores.add(getMatchScore(match, model));
 						}
 
@@ -278,14 +283,18 @@ public class OnlineUrmDelegate<T extends Comparable<T> & Serializable> {
 
 	private MatchScore getMatchScore(Match match,
 			ImmutableProbabilityModel model) {
-		String FIXME_NOTE = null;
+		String note = "";
+		String[] notes = match.ac.getNotes(model);
+		for (String n : notes) {
+			note += NOTE_SEPARATOR + n;
+		}
 		String decisionName = match.decision.getName();
 		Decision3 d3 = Decision3.valueOf(decisionName);
-		MatchScore score = new MatchScore(match.probability, d3, FIXME_NOTE);
+		MatchScore score = new MatchScore(match.probability, d3, note);
 		return score;
 	}
 
-	private ISingleRecord<T> getSingleRecord(Match match,
+	private ISingleRecord<T> getSingleRecord(ScoreType unused, Match match,
 			ImmutableProbabilityModel model) {
 		assert match.m != null : "null candidate record";
 		assert match.m instanceof ISingleRecord : "not a database record: "
@@ -299,7 +308,8 @@ public class OnlineUrmDelegate<T extends Comparable<T> & Serializable> {
 
 	private EvaluatedRecord getSingleEvaluatedRecord(EvalRecordFormat unused,
 			Match m, ImmutableProbabilityModel model) {
-		ISingleRecord<T> candidate = getSingleRecord(m, model);
+		final ScoreType unused2 = null;
+		ISingleRecord<T> candidate = getSingleRecord(unused2, m, model);
 		MatchScore score = getMatchScore(m, model);
 		EvaluatedRecord retVal = new EvaluatedRecord(candidate, score);
 		return retVal;
