@@ -41,8 +41,8 @@ public class IdentifiableComparator<T extends Comparable<T>>
 
 	public IdentifiableComparator(boolean enableAssertions) {
 		boolean b = false;
-		assert b = enableAssertions;
-		this.assertionsEnabled = b;
+		assert b = true;
+		this.assertionsEnabled = b && enableAssertions;
 	}
 
 	public boolean equals(Identifiable<T> o1, Identifiable<T> o2) {
@@ -54,7 +54,7 @@ public class IdentifiableComparator<T extends Comparable<T>>
 			retVal = (id1 == id2);
 			if (retVal == false && id1 != null && id2 != null) {
 				retVal = id1.equals(id2);
-				assert id2.equals(id1); // required by the contract for equals
+				assert !retVal || id2.equals(id1); // required: equals contract
 			}
 		}
 		if (assertionsEnabled) {
