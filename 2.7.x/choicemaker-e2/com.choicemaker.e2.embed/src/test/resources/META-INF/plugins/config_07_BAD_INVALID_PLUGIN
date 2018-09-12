@@ -1,9 +1,5 @@
 com_choicemaker_cm_compiler_BAD_PLUGIN_07/plugin.xml
 com_choicemaker_cm_core_2_5_0/plugin.xml
-com_choicemaker_cm_io_blocking_automated_base_2_5_0/plugin.xml
-com_choicemaker_cm_io_blocking_automated_offline_2_5_0/plugin.xml
-com_choicemaker_cm_io_blocking_automated_offline_core_2_5_0/plugin.xml
-com_choicemaker_cm_io_blocking_automated_offline_server_2_5_0/plugin.xml
 com_choicemaker_cm_io_blocking_base_2_5_0/plugin.xml
 com_choicemaker_cm_io_composite_base_2_5_0/plugin.xml
 com_choicemaker_cm_io_db_base_2_5_0/plugin.xml
@@ -29,7 +25,6 @@ com_choicemaker_eclipse_runtime_1_0_0/plugin.xml
 javax_sql_2_0_0/plugin.xml
 org_apache_ant_1_5_3/plugin.xml
 org_apache_bcel_5_0_0/plugin.xml
-org_eclipse_ant_core_2_1_3/plugin.xml
 org_eclipse_core_resources_2_1_1/plugin.xml
 org_eclipse_core_runtime_2_1_1/plugin.xml
 com_choicemaker_cm_compiler_tools_jdk142_2_5_0
