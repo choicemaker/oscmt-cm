@@ -60,6 +60,7 @@
   </extension>
 
    <!-- Tasks -->
+<!-- REMOVEME
    <extension point="org.eclipse.ant.core.antTasks">
       <antTask
          name="eclipse.convertPath"
@@ -77,10 +78,13 @@
          library="ant_tasks/resources-ant.jar">
       </antTask>
    </extension>
+-->
 
    <!-- Extra Classpath -->
+<!-- REMOVEME
    <extension point="org.eclipse.ant.core.extraClasspathEntries">
       <extraClasspathEntry library="ant_tasks/resources-ant.jar"/>
    </extension>
+-->
 
 </plugin>
