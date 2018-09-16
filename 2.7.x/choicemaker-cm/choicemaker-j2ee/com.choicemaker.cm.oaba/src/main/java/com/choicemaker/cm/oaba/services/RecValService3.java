@@ -7,7 +7,14 @@
  *******************************************************************************/
 package com.choicemaker.cm.oaba.services;
 
+import static com.choicemaker.util.SystemPropertyUtils.PV_LINE_SEPARATOR;
+
 import java.io.IOException;
+import java.io.LineNumberReader;
+import java.io.PrintWriter;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.util.Enumeration;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -283,27 +290,35 @@ public class RecValService3 {
 	 *
 	 */
 	private void createFiles() throws BlockingException {
+ 		final String METHOD = "createFiles()";
+ 		final String CLASS = this.getClass().getSimpleName();
+ 		final String TAG = CLASS + "." + METHOD + ": ";
+
 		sinks = new IRecValSink[numBlockFields];
-
-		int count = 0;
-
 		for (int i = 0; i < numBlockFields; i++) {
 			sinks[i] = rvFactory.getNextSink();
+			log.finest(TAG + "opening sink #" + i);
 			sinks[i].open();
 		}
+		log.finest(TAG + "sinks opened: " + numBlockFields);
 
+		log.finest(TAG + "opening translator");
 		mutableTranslator.open();
+		log.finest(TAG + "translator opened");
 
 		try {
-			Record r;
-
+			int count = 0;
+			Record r = null;
 			boolean stop = this.control.shouldStop();
+			log.finest(TAG + "shouldStop: " + this.control.shouldStop());
 
 			// write the stage record source
 			if (stage != null) {
 				stage.setModel(model);
 				try {
+					log.finest(TAG + "opening stage");
 					stage.open();
+					log.finest(TAG + "stage opened");
 					BlockingAccessor ba =
 						(BlockingAccessor) model.getAccessor();
 					IBlockingConfiguration bc =
@@ -313,27 +328,34 @@ public class RecValService3 {
 					while (stage.hasNext() && !stop) {
 						count++;
 						if (count % OUTPUT_INTERVAL == 0) {
+							log.finest(TAG + "count: " + count);
 							MemoryEstimator.writeMem();
 						}
 
 						r = stage.getNext();
 						writeRecord(bc, r, model);
 						if (firstStage) {
+							log.finest(TAG + "count: " + count);
 							Object O = r.getId();
 							recordIdType =
 								RECORD_ID_TYPE.fromInstance((Comparable) O);
 							firstStage = false;
+							log.finest(TAG + "firstStage: " + firstStage);
 						}
 
 						stop = ControlChecker.checkStop(control, count);
+						log.finest(TAG + "shouldStop: " + this.control.shouldStop());
 					}
 
 				} finally {
+					log.finest(TAG + "closing stage");
 					stage.close();
+					log.finest(TAG + "stage closed");
 				}
 			}
 
 			log.info(count + " stage records read");
+			int masterCount = 0;
 
 			// Conditionally write the master record source
 			if (master == null) {
@@ -348,10 +370,14 @@ public class RecValService3 {
 				assert mode == RecordMatchingMode.BRM;
 				log.fine("Reading master records (mode: '" + mode.name() + "')");
 
+				log.finest(TAG + "spliting translator");
 				mutableTranslator.split();
+				log.finest(TAG + "translator split");
 
 				try {
+					log.finest(TAG + "opening master");
 					master.open();
+					log.finest(TAG + "master opened");
 					BlockingAccessor ba =
 						(BlockingAccessor) model.getAccessor();
 					IBlockingConfiguration bc =
@@ -359,22 +385,29 @@ public class RecValService3 {
 								referenceConfiguration);
 
 					while (master.hasNext() && !stop) {
+						masterCount++;
 						count++;
 						if (count % OUTPUT_INTERVAL == 0) {
+							log.finest(TAG + "masterCount: " + masterCount);
+							log.finest(TAG + "count: " + count);
 							MemoryEstimator.writeMem();
 						}
 
 						r = master.getNext();
 						writeRecord(bc, r, model);
 						if (firstMaster) {
+							log.finest(TAG + "masterCount: " + masterCount);
+							log.finest(TAG + "count: " + count);
 							Object O = r.getId();
 							RECORD_ID_TYPE rit =
 								RECORD_ID_TYPE.fromInstance((Comparable) O);
 							assert rit == recordIdType;
 							firstMaster = false;
+							log.finest(TAG + "firstStage: " + firstStage);
 						}
 
 						stop = ControlChecker.checkStop(control, count);
+						log.finest(TAG + "shouldStop: " + this.control.shouldStop());
 					}
 
 				} finally {
@@ -382,6 +415,7 @@ public class RecValService3 {
 				}
 			}
 
+			log.info(masterCount + " master records read");
 			log.info(count + " total records read");
 		} catch (IOException ex) {
 			throw new BlockingException(ex.toString());
@@ -389,8 +423,12 @@ public class RecValService3 {
 
 		// close rec val sinks
 		for (int i = 0; i < sinks.length; i++) {
+			log.finest(TAG + "closing sink #" + i);
 			sinks[i].close();
 		}
+		log.finest(TAG + "sinks closed: " + sinks.length);
+
+		log.finest(TAG + "converting translator to immutable");
 		ImmutableRecordIdTranslator usedLater =
 			recidFactory.toImmutableTranslator(mutableTranslator);
 		log.info("Converted record-id translator to immutable: " + usedLater);
@@ -403,50 +441,85 @@ public class RecValService3 {
 	private void writeRecord(IBlockingConfiguration bc, Record r,
 			ImmutableProbabilityModel model) throws BlockingException {
 
-		Object O = r.getId();
-		int internal = mutableTranslator.translate((Comparable) O);
+ 		final String METHOD = "writeRecord(..)";
+ 		final String CLASS = this.getClass().getSimpleName();
+ 		final String TAG = CLASS + "." + METHOD + ": ";
+
+		assert r != null : "null database record" ;
+    final Object recordId = r.getId();
+		assert recordId != null : "null database record id" ;
+		final int internal = mutableTranslator.translate((Comparable) recordId);
 
 		HashSet seen = new HashSet(); // stores field value it has seen
 		Hashtable values = new Hashtable(); // stores values per field
 
-		IBlockingValue[] bvs = bc.createBlockingValues(r);
+    int blockingValueIdx = -1;
+    int blockingFieldIdx = -1;
+    try {
+			IBlockingValue[] bvs = bc.createBlockingValues(r);
 
-		// loop over the blocking value for this record
-		for (int j = 0; j < bvs.length; j++) {
-			IBlockingValue bv = bvs[j];
-			IBlockingField bf = bv.getBlockingField();
+			// loop over the blocking value for this record
+			for (int j = 0; j < bvs.length; j++) {
+        blockingValueIdx = j;
+				IBlockingValue bv = bvs[j];
+				IBlockingField bf = bv.getBlockingField();
 
-			Integer C = new Integer(bf.getDbField().getNumber());
+				Integer C = new Integer(bf.getDbField().getNumber());
+				blockingFieldIdx = C;
 
-			// System.out.println (bf.number + " " + bv.value + " " +
-			// bf.dbField.number + " " + bf.dbField.name);
+				String val = new String(bv.getValue());
+				String key = bf.getDbField().getNumber() + val;
 
-			String val = new String(bv.getValue());
-			String key = bf.getDbField().getNumber() + val;
+				if (!seen.contains(key)) {
+					seen.add(key);
 
-			if (!seen.contains(key)) {
-				seen.add(key);
+					IntArrayList list = (IntArrayList) values.get(C);
+					if (list == null) {
+						list = new IntArrayList(1);
+					}
 
-				IntArrayList list = (IntArrayList) values.get(C);
-				if (list == null) {
-					list = new IntArrayList(1);
+					list.add(val.hashCode()); // use hashcode of the string
+					values.put(C, list);
 				}
 
-				list.add(val.hashCode()); // use hashcode of the string
-				values.put(C, list);
+			} // end for
+
+			Enumeration e = values.keys();
+			while (e.hasMoreElements()) {
+				Integer C = (Integer) e.nextElement();
+				sinks[C.intValue()].writeRecordValue((long) internal,
+						(IntArrayList) values.get(C));
+
+				if (internal % DEBUG_INTERVAL == 0) {
+					log.fine("id " + internal + " C " + C + " " + values.get(C));
+				}
+			}
+		} catch (RuntimeException | Error | BlockingException x) {
+			final String CONTEXT = "[BlockingValue index: " + blockingValueIdx + ", BlockingField index: " + blockingValueIdx + "]: ";
+			StringWriter sw = new StringWriter();
+			PrintWriter pw = new PrintWriter(sw);
+			x.printStackTrace(pw);
+
+			String s = sw.toString();
+			sw = new StringWriter();
+			pw = new PrintWriter(sw);
+			StringReader sr = new StringReader(s);
+			LineNumberReader lnr = new LineNumberReader(sr);
+      String STACK = null;
+			try {
+				while ( (s=lnr.readLine()) != null ) {
+					if (s.contains("choicemaker")) {
+						pw.println(s);
+					}
+				}
+        STACK = sw.toString();
+			} catch (IOException x2) {
+				STACK = "<no stack>: " + x.toString();
 			}
 
-		} // end for
-
-		Enumeration e = values.keys();
-		while (e.hasMoreElements()) {
-			Integer C = (Integer) e.nextElement();
-			sinks[C.intValue()].writeRecordValue((long) internal,
-					(IntArrayList) values.get(C));
-
-			if (internal % DEBUG_INTERVAL == 0) {
-				log.fine("id " + internal + " C " + C + " " + values.get(C));
-			}
+			String msg = TAG + CONTEXT + x.toString() + PV_LINE_SEPARATOR + STACK;
+			log.severe(msg);
+			throw x;
 		}
 	}
 
