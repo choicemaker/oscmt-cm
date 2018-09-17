@@ -265,12 +265,14 @@ public class TransitivityJobManagerBean implements TransitivityJobManager {
 
 	@Override
 	public BatchJob findBatchJob(long id) {
-		throw new Error("not yet implemented");
+		BatchJob retVal = findTransitivityJob(id);
+		return retVal;
 	}
 
 	@Override
 	public List<BatchJob> findAll() {
-		throw new Error("not yet implemented");
+		List<BatchJob> retVal = findAllTransitivityJobs();
+		return retVal;
 	}
 
 }
