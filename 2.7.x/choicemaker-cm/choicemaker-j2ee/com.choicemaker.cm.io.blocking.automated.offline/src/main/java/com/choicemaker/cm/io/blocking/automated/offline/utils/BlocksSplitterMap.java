@@ -30,7 +30,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSource;
  */
 @SuppressWarnings({
 		"rawtypes", "unchecked" })
-public class BlocksSpliterMap {
+public class BlocksSplitterMap {
 
 	// this stores all the block sinks
 	ArrayList sinks;
@@ -42,7 +42,7 @@ public class BlocksSpliterMap {
 
 	IBlockSinkSourceFactory bFactory;
 
-	public BlocksSpliterMap(IBlockSinkSourceFactory bFactory) {
+	public BlocksSplitterMap(IBlockSinkSourceFactory bFactory) {
 		this.bFactory = bFactory;
 	}
 

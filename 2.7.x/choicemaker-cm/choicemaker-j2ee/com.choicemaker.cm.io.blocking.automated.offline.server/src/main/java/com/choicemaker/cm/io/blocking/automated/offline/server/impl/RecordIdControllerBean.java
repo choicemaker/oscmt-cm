@@ -51,13 +51,6 @@ public class RecordIdControllerBean implements RecordIdController {
 	private static final Logger logger = Logger
 			.getLogger(RecordIdControllerBean.class.getName());
 
-	/**
-	 * The name of a system property that can be set to "true" to keep files
-	 * used in intermediate computations. By default, intermediate files are
-	 * removed once the chunk service has run.
-	 */
-	public static final String PN_KEEP_FILES = "oaba.RecordIdControllerBean.keepFiles";
-
 	public static final String BASENAME_RECORDID_TRANSLATOR = "translator";
 
 	public static final String BASENAME_RECORDID_STORE = "recordID";
@@ -83,10 +76,8 @@ public class RecordIdControllerBean implements RecordIdController {
 				BatchJobFileUtils.TEXT_SUFFIX);
 	}
 
-	/**
-	 * Checks the system property {@link #PN_KEEP_FILES} and caches the result
-	 */
-	private boolean isKeepFilesRequested() {
+	/** Checks the system property {@link RecordIdController#PN_KEEP_FILES} */
+	public static boolean isKeepFilesRequested() {
 		String value = System.getProperty(PN_KEEP_FILES, "false");
 		Boolean _keepFiles = Boolean.valueOf(value);
 		boolean retVal = _keepFiles.booleanValue();

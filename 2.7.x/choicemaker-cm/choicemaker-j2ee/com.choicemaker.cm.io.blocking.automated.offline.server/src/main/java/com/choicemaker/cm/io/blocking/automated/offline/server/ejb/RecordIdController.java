@@ -23,6 +23,13 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
 public interface RecordIdController extends IRecordIdFactory {
 
 	/**
+	 * The name of a system property that can be set to "true" to keep files
+	 * used in intermediate computations. By default, intermediate files are
+	 * removed once the chunk service has run.
+	 */
+	String PN_KEEP_FILES = "oaba.RecordIdControllerBean.keepFiles";
+
+	/**
 	 * Saves the translations of a mutable translator to persistent storage (if
 	 * they are not saved already) and returns an immutable translator that uses
 	 * the saved translations. Translations can be saved only once, and once
