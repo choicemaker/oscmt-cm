@@ -583,7 +583,7 @@ public class DbbCountsCreatorSQL {
 		ResultSet rs = null;
 		try {
 			logger.info(
-					"SQL to insert missing tables into TB_CMT_COUNT_FIELDS: "
+					"SQL to select missing tables from TB_CMT_COUNT_CONFIG_FIELDS: "
 							+ sqlSelectMissingTablesCountFields);
 			stmt = connection.createStatement();
 			rs = stmt.executeQuery(sqlSelectMissingTablesCountFields);
