@@ -13,6 +13,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Arrays;
 import java.util.Properties;
 import java.util.logging.Logger;
 
@@ -34,7 +35,8 @@ import com.choicemaker.cm.io.db.sqlserver.dbom.SqlDbObjectMaker;
 import com.choicemaker.util.StringUtils;
 
 public class SqlDatabaseAccessor implements DatabaseAccessor {
-	private static Logger logger = Logger.getLogger(SqlDatabaseAccessor.class.getName());
+	private static Logger logger =
+		Logger.getLogger(SqlDatabaseAccessor.class.getName());
 
 	// These two objects have the same life span -- see isConsistent()
 	private DataSource ds;
@@ -80,12 +82,40 @@ public class SqlDatabaseAccessor implements DatabaseAccessor {
 		return p;
 	}
 
-	public void setCondition(Object condition) {
-		this.condition = (String)condition;
+	public void setCondition(Object c) {
+		if (c instanceof String) {
+			logger.fine(String.format("setting condition to '%s'", (String) c));
+			this.condition = (String) c;
+		} else if (c instanceof String[]) {
+			String[] sarray = (String[]) c;
+			if (sarray.length == 0) {
+				logger.fine("ignoring missing condition");
+				this.condition = null;
+			} else if (sarray.length == 1) {
+				logger.fine(
+						String.format("setting condition to '%s'", sarray[0]));
+				this.condition = sarray[0];
+			} else if (sarray.length == 2) {
+				logger.fine(
+						String.format("ignoring condition[0] '%s'", sarray[0]));
+				logger.fine(
+						String.format("setting condition to '%s'", sarray[1]));
+				this.condition = sarray[1];
+			} else {
+				String msg = String.format("Ignoring conditions[] '%s'",
+						Arrays.toString(sarray));
+				logger.warning(msg);
+				this.condition = null;
+			}
+		} else {
+			String msg = String.format("Ignoring conditions[] '%s'", c);
+			logger.warning(msg);
+			this.condition = null;
+		}
 	}
 
 	public DatabaseAccessor cloneWithNewConnection()
-		throws CloneNotSupportedException {
+			throws CloneNotSupportedException {
 		throw new CloneNotSupportedException("not yet implemented");
 	}
 
@@ -97,16 +127,18 @@ public class SqlDatabaseAccessor implements DatabaseAccessor {
 		try {
 			query = getQuery(getProperties(), blocker, dbr);
 			connection = getDataSource().getConnection();
-//			connection.setAutoCommit(false); // 2015-04-01a EJB3 CHANGE rphall
+			// connection.setAutoCommit(false); // 2015-04-01a EJB3 CHANGE
+			// rphall
 			stmt = connection.createStatement();
 			stmt.setFetchSize(100);
 			logger.fine(query);
 			// BUG 2015-04-01 rphall
 			// SQL query returns multiple result sets,
-			// 		but executeQuery can't handle more than one.
-			//ResultSet rs = stmt.executeQuery(query);
+			// but executeQuery can't handle more than one.
+			// ResultSet rs = stmt.executeQuery(query);
 			// BUGFIX: see
-			// How to Retrieve Multiple Result Sets from a Stored Procedure in JDBC
+			// How to Retrieve Multiple Result Sets from a Stored Procedure in
+			// JDBC
 			// http://links.rph.cx/m9jJav
 			ResultSet rs = null;
 			boolean isResultSet = stmt.execute(query);
@@ -134,11 +166,12 @@ public class SqlDatabaseAccessor implements DatabaseAccessor {
 			rs.setFetchSize(100);
 			dbr.open(rs, stmt);
 		} catch (SQLException ex) {
-			logger.severe("Opening blocking data: " + query + ": " + ex.toString());
+			logger.severe(
+					"Opening blocking data: " + query + ": " + ex.toString());
 			throw new IOException(ex.toString());
 		}
 	}
-	
+
 	public void close() throws IOException {
 		Exception ex = null;
 		try {
@@ -156,12 +189,12 @@ public class SqlDatabaseAccessor implements DatabaseAccessor {
 			// database using EJB3 managed connections. They should not be
 			// explicitly closed, but rather rely on the EJB3 container to
 			// do so.
-//			try {
-//				connection.commit();
-//			} catch (java.sql.SQLException e) {
-//				ex = e;
-//				logger.severe("Commiting: " + e.toString());
-//			}
+			// try {
+			// connection.commit();
+			// } catch (java.sql.SQLException e) {
+			// ex = e;
+			// logger.severe("Commiting: " + e.toString());
+			// }
 			// END EJB3 CHANGE
 			try {
 				connection.close();
@@ -184,10 +217,12 @@ public class SqlDatabaseAccessor implements DatabaseAccessor {
 		return dbr.getNext();
 	}
 
-	private String getQuery(final Properties p, AutomatedBlocker blocker, DbReaderSequential dbr) {
+	private String getQuery(final Properties p, AutomatedBlocker blocker,
+			DbReaderSequential dbr) {
 		StringBuffer b = new StringBuffer(16000);
 		String id = dbr.getMasterId();
-		b.append("DECLARE @ids TABLE (id " + dbr.getMasterIdType() + ")" + Constants.LINE_SEPARATOR + "INSERT INTO @ids");
+		b.append("DECLARE @ids TABLE (id " + dbr.getMasterIdType() + ")"
+				+ Constants.LINE_SEPARATOR + "INSERT INTO @ids");
 		if (StringUtils.nonEmptyString(condition)) {
 			b.append(" SELECT b.");
 			b.append(id);
@@ -206,10 +241,11 @@ public class SqlDatabaseAccessor implements DatabaseAccessor {
 			}
 			// AJW 2/26/04: to make stuff work for Phoenix.
 			// This doesn't fix the problem, it just gets rid of a horrible
-			// severe.  If blocking fields are on different tables, and each table
+			// severe. If blocking fields are on different tables, and each
+			// table
 			// has an ID column, then things don't work...
 			b.append("v0." + id);
-			//b.append(id);
+			// b.append(id);
 			b.append(" FROM ");
 			IBlockingSet bs = (IBlockingSet) blocker.getBlockingSets().get(i);
 			int numViews = bs.getNumTables();
@@ -218,7 +254,8 @@ public class SqlDatabaseAccessor implements DatabaseAccessor {
 					b.append(",");
 				}
 				IGroupTable gt = bs.getTable(j);
-				b.append(gt.getTable().getName()).append(" v").append(gt.getNumber());
+				b.append(gt.getTable().getName()).append(" v")
+						.append(gt.getNumber());
 			}
 			b.append(" WHERE ");
 			int numValues = bs.numFields();
@@ -229,7 +266,8 @@ public class SqlDatabaseAccessor implements DatabaseAccessor {
 				IBlockingValue bv = bs.getBlockingValue(j);
 				IBlockingField bf = bv.getBlockingField();
 				IDbField dbf = bf.getDbField();
-				b.append("v").append(bs.getGroupTable(bf).getNumber()).append(".").append(dbf.getName()).append("=");
+				b.append("v").append(bs.getGroupTable(bf).getNumber())
+						.append(".").append(dbf.getName()).append("=");
 				if (mustQuote(bf.getDbField().getType())) {
 					b.append("'" + escape(bv.getValue()) + "'");
 				} else {
@@ -251,11 +289,12 @@ public class SqlDatabaseAccessor implements DatabaseAccessor {
 			b.append(condition);
 		}
 		b.append(Constants.LINE_SEPARATOR);
-		//b.append((String) blocker.accessProvider.properties.get(dbr.getName() + ":SQLServer"));
+		// b.append((String) blocker.accessProvider.properties.get(dbr.getName()
+		// + ":SQLServer"));
 		b.append(getMultiQuery(p, blocker, dbr));
-		
+
 		logger.fine(b.toString());
-		
+
 		return b.toString();
 	}
 
