@@ -26,7 +26,7 @@ import com.choicemaker.cm.core.DerivedSource;
 /**
  * Auxiliary methods for generators.
  *
- * @author    Martin Buechi
+ * @author Martin Buechi
  */
 public class GeneratorHelper {
 	private static final List<Element> EMPTY_LIST = new ArrayList<>();
@@ -42,10 +42,13 @@ public class GeneratorHelper {
 	/**
 	 * Remove the fields that are derived for the specified source.
 	 *
-	 * @param   fields  The list of fields to be filtered.
-	 * @param   src  The source for which the filtering is to be done.
+	 * @param fields
+	 *            The list of fields to be filtered.
+	 * @param src
+	 *            The source for which the filtering is to be done.
 	 */
-	public static int filterFields(List<Element> fields, DerivedSource src, String field) {
+	public static int filterFields(List<Element> fields, DerivedSource src,
+			String field) {
 		return filterFields(fields, src, field, "all");
 	}
 
@@ -64,12 +67,14 @@ public class GeneratorHelper {
 		return false;
 	}
 
-	public static int filterFields(List<Element> fields, DerivedSource src, String field, String confName) {
+	public static int filterFields(List<Element> fields, DerivedSource src,
+			String field, String confName) {
 		DerivedSource conf = DerivedSource.valueOf(confName);
 		Element[] p = new Element[RANGE];
 		int lastPos = -1;
 		int maxPos = -1;
-		for (Iterator<Element> iFields = fields.iterator(); iFields.hasNext();) {
+		for (Iterator<Element> iFields = fields.iterator(); iFields
+				.hasNext();) {
 			Element f = (Element) iFields.next();
 			Element d = f.getChild("derived");
 			if (d != null) {
@@ -80,7 +85,8 @@ public class GeneratorHelper {
 			}
 			Element c = f.getChild(field);
 			if (c != null) {
-				if ("false".equals(c.getAttributeValue(CoreTags.USE)) || !includesConf(c, conf)) {
+				if ("false".equals(c.getAttributeValue(CoreTags.USE))
+						|| !includesConf(c, conf)) {
 					continue;
 				}
 				String pos = c.getAttributeValue("pos");
@@ -105,20 +111,23 @@ public class GeneratorHelper {
 		return OK;
 	}
 
-
-	/** This version fixes the assumption that each field can only have 1 dbField.
+	/**
+	 * This version fixes the assumption that each field can only have 1
+	 * dbField.
 	 * 
 	 * @param fields
 	 * @param src
 	 * @param field
 	 * @param confName
 	 */
-	public static int filterFields2(List<Element> fields, DerivedSource src, String field, String confName) {
+	public static int filterFields2(List<Element> fields, DerivedSource src,
+			String field, String confName) {
 		DerivedSource conf = DerivedSource.valueOf(confName);
 		Element[] p = new Element[RANGE];
 		int lastPos = -1;
 		int maxPos = -1;
-		for (Iterator<Element> iFields = fields.iterator(); iFields.hasNext();) {
+		for (Iterator<Element> iFields = fields.iterator(); iFields
+				.hasNext();) {
 			Element f = (Element) iFields.next();
 			Element d = f.getChild("derived");
 			if (d != null) {
@@ -127,17 +136,18 @@ public class GeneratorHelper {
 					continue;
 				}
 			}
-			
-			//key fix here
-			//Element c = f.getChild(field);
-			
-			//gets the dbField children for this field
+
+			// key fix here
+			// Element c = f.getChild(field);
+
+			// gets the dbField children for this field
 			List<Element> list = f.getChildren(field);
 			boolean found = false;
-			for (int i=0; i<list.size(); i++) {
+			for (int i = 0; i < list.size(); i++) {
 				Element c = (Element) list.get(i);
 				if (c != null) {
-					if (includesConf(c, conf) && !"false".equals(c.getAttributeValue(CoreTags.USE))) {
+					if (includesConf(c, conf) && !"false"
+							.equals(c.getAttributeValue(CoreTags.USE))) {
 						found = true;
 					}
 					String pos = c.getAttributeValue("pos");
@@ -145,11 +155,13 @@ public class GeneratorHelper {
 						lastPos = Integer.parseInt(pos) - 1;
 					}
 				}
-			} //end for i
-			if (list.size() == 0) found = true; //if no dbField is specified, assume it's included.
-			if (!found) 
+			} // end for i
+			if (list.size() == 0)
+				found = true; // if no dbField is specified, assume it's
+								// included.
+			if (!found)
 				continue;
-			
+
 			++lastPos;
 			if (lastPos < 0 || lastPos >= RANGE) {
 				return POS_OUTSIDE_RANGE;
@@ -159,7 +171,7 @@ public class GeneratorHelper {
 			}
 			p[lastPos] = f;
 			maxPos = Math.max(maxPos, lastPos);
-		} //end for iterator
+		} // end for iterator
 		fields.clear();
 		for (int j = 0; j <= maxPos; ++j) {
 			fields.add(p[j]);
@@ -171,10 +183,12 @@ public class GeneratorHelper {
 	 * Returns a Java source code expression to convert a value of a variable
 	 * into an object type.
 	 *
-	 * @param   type  The type of the variable.
-	 * @param   name  The name of the variable.
-	 * @return  The Java source code expression to convert a value of a variable
-	 *            into an object type.
+	 * @param type
+	 *            The type of the variable.
+	 * @param name
+	 *            The name of the variable.
+	 * @return The Java source code expression to convert a value of a variable
+	 *         into an object type.
 	 */
 	public static String getObjectExpr(String type, String name) {
 		type = type.intern();
@@ -202,8 +216,9 @@ public class GeneratorHelper {
 	/**
 	 * Returns the object type of a primitive type.
 	 *
-	 * @param   type  The type of the variable.
-	 * @return  The Java source code expression of the object type
+	 * @param type
+	 *            The type of the variable.
+	 * @return The Java source code expression of the object type
 	 */
 	public static String getObjectType(String type) {
 		if (type == null) {
@@ -237,8 +252,10 @@ public class GeneratorHelper {
 			return "String.valueOf(" + name + ")";
 		} else if ("String" == type || "java.lang.String" == type) {
 			return name;
-		} else if ("Date" == type || "java.util.Date" == type || "java.sql.Date" == type) {
-			return "com.choicemaker.cm.core.util.DateHelper.formatDb(" + name + ")";
+		} else if ("Date" == type || "java.util.Date" == type
+				|| "java.sql.Date" == type) {
+			return "com.choicemaker.cm.core.util.DateHelper.formatDb(" + name
+					+ ")";
 		} else {
 			return name + ".toString()";
 		}
@@ -248,13 +265,8 @@ public class GeneratorHelper {
 		type = type.intern();
 		if (type == "boolean") {
 			return "false";
-		} else if (
-			type == "byte"
-				|| type == "short"
-				|| type == "char"
-				|| type == "int"
-				|| type == "long"
-				|| type == "float"
+		} else if (type == "byte" || type == "short" || type == "char"
+				|| type == "int" || type == "long" || type == "float"
 				|| type == "double") {
 			return "0";
 		} else {
@@ -266,22 +278,21 @@ public class GeneratorHelper {
 	 * Returns a Java source code expression to convert a String expression into
 	 * a value of a specified type.
 	 *
-	 * @param   type  The result type of the expression.
-	 * @param   expr  The String expression.
-	 * @return  Java source code expression to convert a String expression into
-	 *            a value of a specified type.
+	 * @param type
+	 *            The result type of the expression.
+	 * @param expr
+	 *            The String expression.
+	 * @return Java source code expression to convert a String expression into a
+	 *         value of a specified type.
 	 */
-	public static String getFromStringConversionExpression(
-		String type,
-		String expr,
-		boolean sqlDate,
-		boolean intern,
-		boolean computed) {
+	public static String getFromStringConversionExpression(String type,
+			String expr, boolean sqlDate, boolean intern, boolean computed) {
 		type = type.intern();
 		if (type == "String" || type == "java.lang.String") {
 			if (intern) {
 				if (computed) {
-					return "(__tmpStr = (" + expr + ")) != null ? __tmpStr.intern() : null";
+					return "(__tmpStr = (" + expr
+							+ ")) != null ? __tmpStr.intern() : null";
 				} else {
 					return expr + " != null ? " + expr + ".intern() : null";
 				}
@@ -289,21 +300,29 @@ public class GeneratorHelper {
 				return expr;
 			}
 		} else if (type == "boolean") {
-			return expr + ".length() == 0 ? false : Boolean.getBoolean(" + expr + ")";
+			return expr + ".length() == 0 ? false : Boolean.getBoolean(" + expr
+					+ ")";
 		} else if (type == "byte") {
-			return expr + ".length() == 0 ? (byte)0 : Byte.parseByte(" + expr + ")";
+			return expr + ".length() == 0 ? (byte)0 : Byte.parseByte(" + expr
+					+ ")";
 		} else if (type == "short") {
-			return expr + ".length() == 0 ? (short)0 : Short.parseShort(" + expr + ")";
+			return expr + ".length() == 0 ? (short)0 : Short.parseShort(" + expr
+					+ ")";
 		} else if (type == "char") {
-			return expr + ".length() == 0 ? (char)0 : StringUtils.getChar(" + expr + ")";
+			return expr + ".length() == 0 ? (char)0 : StringUtils.getChar("
+					+ expr + ")";
 		} else if (type == "int") {
-			return expr + ".length() == 0 ? (int)0 : Integer.parseInt(" + expr + ")";
+			return expr + ".length() == 0 ? (int)0 : Integer.parseInt(" + expr
+					+ ")";
 		} else if (type == "long") {
-			return expr + ".length() == 0 ? (long)0 : Long.parseLong(" + expr + ")";
+			return expr + ".length() == 0 ? (long)0 : Long.parseLong(" + expr
+					+ ")";
 		} else if (type == "float") {
-			return expr + ".length() == 0 ? (float)0 : Float.parseFloat(" + expr + ")";
+			return expr + ".length() == 0 ? (float)0 : Float.parseFloat(" + expr
+					+ ")";
 		} else if (type == "double") {
-			return expr + ".length() == 0 ? (double)0 : Double.parseDouble(" + expr + ")";
+			return expr + ".length() == 0 ? (double)0 : Double.parseDouble("
+					+ expr + ")";
 		} else if (type == "Date") {
 			if (sqlDate) {
 				return "DateHelper.parseSqlDateOrTimestamp(" + expr + ")";
@@ -315,7 +334,8 @@ public class GeneratorHelper {
 		}
 	}
 
-	public static String compareField(String f1, String f2, String type, boolean eq) {
+	public static String compareField(String f1, String f2, String type,
+			boolean eq) {
 		if (isPrimitiveType(type)) {
 			if (eq) {
 				return f1 + " == " + f2;
@@ -327,15 +347,18 @@ public class GeneratorHelper {
 		}
 	}
 
-	public static String compareField(String f1, String f2, String type, boolean intern, boolean eq) {
-		if (isPrimitiveType(type) || (intern && ("String".equals(type) || "java.lang.String".equals(type)))) {
+	public static String compareField(String f1, String f2, String type,
+			boolean intern, boolean eq) {
+		if (isPrimitiveType(type) || (intern && ("String".equals(type)
+				|| "java.lang.String".equals(type)))) {
 			if (eq) {
 				return f1 + " == " + f2;
 			} else {
 				return f1 + " != " + f2;
 			}
 		} else {
-			String exp = f1 + " == null ? " + f2 + " == null : " + f1 + ".equals(" + f2 + ")";
+			String exp = f1 + " == null ? " + f2 + " == null : " + f1
+					+ ".equals(" + f2 + ")";
 			if (!eq) {
 				exp = "!(" + exp + ")";
 			}
@@ -345,14 +368,9 @@ public class GeneratorHelper {
 
 	public static boolean isPrimitiveType(String type) {
 		type = type.intern();
-		return type == "boolean"
-			|| type == "byte"
-			|| type == "short"
-			|| type == "char"
-			|| type == "int"
-			|| type == "long"
-			|| type == "float"
-			|| type == "double";
+		return type == "boolean" || type == "byte" || type == "short"
+				|| type == "char" || type == "int" || type == "long"
+				|| type == "float" || type == "double";
 	}
 
 	public static Element getNodeTypeExt(Element r, String name) {
@@ -364,49 +382,58 @@ public class GeneratorHelper {
 		}
 	}
 
-	public static Element getPhysicalField(Element schemaField, String confName, String physicalTypeName) {
-		List<Element> list = schemaField.getChildren(physicalTypeName+"Field");
+	public static Element getPhysicalField(Element schemaField, String confName,
+			String physicalTypeName) {
+		List<Element> list =
+			schemaField.getChildren(physicalTypeName + "Field");
 		if (list == null)
 			return null;
-		Element	allConfElm = null;
-		for (int i=0; i< list.size(); i++) {
+		Element allConfElm = null;
+		for (int i = 0; i < list.size(); i++) {
 			Element et = (Element) list.get(i);
-//				System.out.println ("element " + et.getName() + " " + et.getAttributeValue("conf") + " " + et.getAttributeValue("from"));
+			// System.out.println ("element " + et.getName() + " " +
+			// et.getAttributeValue("conf") + " " +
+			// et.getAttributeValue("from"));
 			String conf = et.getAttributeValue("conf");
 			if (conf == null || conf.equals("all"))
 				allConfElm = et;
 			else {
-				if( conf.indexOf(confName) != -1)
-//					TODO: add condition preventing one conf substring of another
+				if (conf.indexOf(confName) != -1)
+					// TODO: add condition preventing one conf substring of
+					// another
 					return et;
-			}	
+			}
 		}
-//		if nothing matches, then return the element with no conf filed because default is - all
+		// if nothing matches, then return the element with no conf filed
+		// because default is - all
 		return allConfElm;
 	}
 
-
-	public static Element getNodeTypeExt(Element r, String name, String confName) {
+	public static Element getNodeTypeExt(Element r, String name,
+			String confName) {
 		Element e = r.getChild(CoreTags.NODE_TYPE_EXT);
 		if (e != null) {
-//			return e.getChild(name + "NodeType");
-			
+			// return e.getChild(name + "NodeType");
+
 			List<Element> list = e.getChildren(name + "NodeType");
-//			System.out.println ("list size: " + list.size());
+			// System.out.println ("list size: " + list.size());
 
 			if (list != null) {
-				for (int i=0; i< list.size(); i++) {
+				for (int i = 0; i < list.size(); i++) {
 					Element et = (Element) list.get(i);
-//					System.out.println ("element " + et.getName() + " " + et.getAttributeValue("conf") + " " + et.getAttributeValue("from"));
+					// System.out.println ("element " + et.getName() + " " +
+					// et.getAttributeValue("conf") + " " +
+					// et.getAttributeValue("from"));
 					String conf = et.getAttributeValue("conf");
-					if ((conf != null) && conf.equals(confName)) return et;
+					if ((conf != null) && conf.equals(confName))
+						return et;
 				}
-				//if nothing matches, then return the first value
+				// if nothing matches, then return the first value
 				return (Element) list.get(0);
 			} else {
 				return null;
 			}
-			
+
 		} else {
 			return null;
 		}
@@ -449,6 +476,7 @@ public class GeneratorHelper {
 		public String type;
 		public String name;
 		public Element field;
+
 		Id(String type, String name, Element field) {
 			this.type = type;
 			this.name = name;
@@ -468,12 +496,14 @@ public class GeneratorHelper {
 				if (keyField == null) {
 					keyField = e;
 				} else {
-					g.error("Record " + r.getAttributeValue("name") + " must have exactly 1 " + tpe + " key field.");
+					g.error("Record " + r.getAttributeValue("name")
+							+ " must have exactly 1 " + tpe + " key field.");
 				}
 			}
 		}
 		if (keyField != null) {
-			return new Id(keyField.getAttributeValue("type"), keyField.getAttributeValue("name"), keyField);
+			return new Id(keyField.getAttributeValue("type"),
+					keyField.getAttributeValue("name"), keyField);
 		} else {
 			// Return a placeholder and hope that it will be replaced
 			String msg = "Using placeholder key field 'key' of type 'int'.";
@@ -482,17 +512,20 @@ public class GeneratorHelper {
 		}
 	}
 
-	public static void multiFileFieldDeclarations(IGenerator g, Writer w, Element r, String tpe, LinkedList<Id> ids)
-		throws IOException {
+	public static void multiFileFieldDeclarations(IGenerator g, Writer w,
+			Element r, String tpe, LinkedList<Id> ids) throws IOException {
 		String className = r.getAttributeValue("className");
-		w.write("private " + className + " o__" + className + ";" + Constants.LINE_SEPARATOR);
+		w.write("private " + className + " o__" + className + ";"
+				+ Constants.LINE_SEPARATOR);
 		if (!ids.isEmpty()) {
-			w.write("private LinkedList l__" + className + " = new LinkedList();" + Constants.LINE_SEPARATOR);
+			w.write("private LinkedList l__" + className
+					+ " = new LinkedList();" + Constants.LINE_SEPARATOR);
 		}
 		Iterator<Id> i = ids.iterator();
 		while (i.hasNext()) {
 			Id id = (Id) i.next();
-			w.write("private " + id.type + " " + className + "__" + id.name + ";" + Constants.LINE_SEPARATOR);
+			w.write("private " + id.type + " " + className + "__" + id.name
+					+ ";" + Constants.LINE_SEPARATOR);
 		}
 		List<Element> records = r.getChildren(CoreTags.NODE_TYPE);
 		if (!records.isEmpty()) {
@@ -518,7 +551,8 @@ public class GeneratorHelper {
 		}
 	}
 
-	public static int getUnknown(Element e, String attributeName, int defaultValue) {
+	public static int getUnknown(Element e, String attributeName,
+			int defaultValue) {
 		String att = e.getAttributeValue(attributeName);
 		if (att != null) {
 			if (att.equals("warn")) {
@@ -532,11 +566,13 @@ public class GeneratorHelper {
 		return defaultValue;
 	}
 
-	public static boolean getBooleanAttribute(Element e, String attributeName, boolean defaultValue) {
+	public static boolean getBooleanAttribute(Element e, String attributeName,
+			boolean defaultValue) {
 		return getBooleanAttribute(e.getAttribute(attributeName), defaultValue);
 	}
 
-	public static boolean getBooleanAttribute(Attribute attribute, boolean defaultValue) {
+	public static boolean getBooleanAttribute(Attribute attribute,
+			boolean defaultValue) {
 		boolean res = defaultValue;
 		if (attribute != null) {
 			String val = attribute.getValue();
@@ -551,7 +587,8 @@ public class GeneratorHelper {
 
 	public static Element findNodeType(Element node, String fqNodeTypeName) {
 		int pos = fqNodeTypeName.indexOf('.');
-		String s = pos == -1 ? fqNodeTypeName : fqNodeTypeName.substring(0, pos);
+		String s =
+			pos == -1 ? fqNodeTypeName : fqNodeTypeName.substring(0, pos);
 		List<Element> l = node.getChildren(CoreTags.NODE_TYPE);
 		for (Iterator<Element> iL = l.iterator(); iL.hasNext();) {
 			Element e = (Element) iL.next();
@@ -578,6 +615,7 @@ public class GeneratorHelper {
 	}
 
 	public static boolean isNodeInitScope(Element field) {
-		return CoreTags.NODE_INIT.equals(field.getAttributeValue(CoreTags.SCOPE));
+		return CoreTags.NODE_INIT
+				.equals(field.getAttributeValue(CoreTags.SCOPE));
 	}
 }

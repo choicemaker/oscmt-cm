@@ -17,20 +17,23 @@ import com.choicemaker.cm.core.gen.IGenerator;
 /**
  * Main generator plugin for Blocking IO.
  *
- * @author    Martin Buechi
+ * @author Martin Buechi
  */
 public class BlockingGenerator implements GeneratorPlugin {
 	static boolean filesAdded;
 
 	public void generate(IGenerator g) throws GenException {
 		filesAdded = false;
-		g.addAccessorImport("import com.choicemaker.cm.aba.base.*;" + Constants.LINE_SEPARATOR);
+		g.addAccessorImport("import com.choicemaker.cm.aba.base.*;"
+				+ Constants.LINE_SEPARATOR);
 		g.addAccessorImplements(", com.choicemaker.cm.aba.BlockingAccessor");
-		String directoryName = g.getSourceCodePackageRoot() + File.separator + "blocking";
+		String directoryName =
+			g.getSourceCodePackageRoot() + File.separator + "blocking";
 		new File(directoryName).mkdir();
 		BlockingConfigurationsGenerator.instance.generate(g);
 		if (filesAdded) {
-			g.addAccessorImport("import " + g.getPackage() + ".blocking.*;" + Constants.LINE_SEPARATOR);
+			g.addAccessorImport("import " + g.getPackage() + ".blocking.*;"
+					+ Constants.LINE_SEPARATOR);
 		}
 	}
 }

@@ -25,64 +25,73 @@ import com.choicemaker.cm.io.blocking.base.gen.BlockingTags;
 /**
  * Description
  *
- * @author    Martin Buechi
+ * @author Martin Buechi
  */
 public class BlockingConfigurationsGenerator implements GeneratorPlugin {
-	public static BlockingConfigurationsGenerator instance = new BlockingConfigurationsGenerator();
+	public static BlockingConfigurationsGenerator instance =
+		new BlockingConfigurationsGenerator();
 
 	private BlockingConfigurationsGenerator() {
 	}
 
-	private BlockingConfigurationGenerator[] addConfigurations(IGenerator g) throws IOException, GenException {
+	private BlockingConfigurationGenerator[] addConfigurations(IGenerator g)
+			throws IOException, GenException {
 		List<BlockingConfigurationGenerator> confList = new ArrayList<>();
-		List<Element> blockingDefs = GeneratorHelper.getGlobalExts(g.getRootElement(), BlockingTags.BLOCKING);
+		List<Element> blockingDefs = GeneratorHelper
+				.getGlobalExts(g.getRootElement(), BlockingTags.BLOCKING);
 		Iterator<Element> iBlockingDefs = blockingDefs.iterator();
 		while (iBlockingDefs.hasNext()) {
 			Element d = (Element) iBlockingDefs.next();
 			String dbConf = d.getAttributeValue(BlockingTags.DB_CONF);
-			if(GeneratorHelper.getBooleanAttribute(d, BlockingTags.AUTOMATED, false) && dbConf != null && !"none".equals(dbConf)) {
+			if (GeneratorHelper.getBooleanAttribute(d, BlockingTags.AUTOMATED,
+					false) && dbConf != null && !"none".equals(dbConf)) {
 				BlockingConfigurationGenerator c =
-					new BlockingConfigurationGenerator(g, d.getAttributeValue(CoreTags.CONF), getDefaultCount(g, d, 10), d);
-				if(c.generated) {
+					new BlockingConfigurationGenerator(g,
+							d.getAttributeValue(CoreTags.CONF),
+							getDefaultCount(g, d, 10), d);
+				if (c.generated) {
 					confList.add(c);
 				}
 			}
 		}
-		return (BlockingConfigurationGenerator[]) confList.toArray(new BlockingConfigurationGenerator[confList.size()]);
+		return (BlockingConfigurationGenerator[]) confList
+				.toArray(new BlockingConfigurationGenerator[confList.size()]);
 	}
 
 	public synchronized void generate(IGenerator g) throws GenException {
 		try {
 			BlockingConfigurationGenerator[] confs = addConfigurations(g);
 			String packageName = g.getPackage() + ".blocking";
-			g.addAccessorBody("public Object getBlockingConfiguration(String name, String dbConf) {" + Constants.LINE_SEPARATOR);
+			g.addAccessorBody(
+					"public Object getBlockingConfiguration(String name, String dbConf) {"
+							+ Constants.LINE_SEPARATOR);
 			for (int i = 0; i < confs.length; ++i) {
 				g.addAccessorBody(
-					"if(\""
-						+ confs[i].name
-						+ "\".equals(name)) return new "
-						+ packageName
-						+ "."
-						+ confs[i].className
-						+ "(dbConf);" + Constants.LINE_SEPARATOR);
+						"if(\"" + confs[i].name + "\".equals(name)) return new "
+								+ packageName + "." + confs[i].className
+								+ "(dbConf);" + Constants.LINE_SEPARATOR);
 			}
 			if (confs.length == 0) {
 				g.addAccessorBody("return null;" + Constants.LINE_SEPARATOR);
 			} else {
 				BlockingGenerator.filesAdded = true;
-				g.addAccessorBody("return new " + packageName + "." + confs[0].className + "(dbConf);" + Constants.LINE_SEPARATOR);
+				g.addAccessorBody(
+						"return new " + packageName + "." + confs[0].className
+								+ "(dbConf);" + Constants.LINE_SEPARATOR);
 			}
 			g.addAccessorBody("}" + Constants.LINE_SEPARATOR);
-			g.addAccessorBody("private static String[] blockingConfigurations = {");
+			g.addAccessorBody(
+					"private static String[] blockingConfigurations = {");
 			for (int i = 0; i < confs.length; i++) {
-				if(i != 0) {
+				if (i != 0) {
 					g.addAccessorBody(",");
 				}
 				g.addAccessorBody("\"" + confs[i].name + "\"");
 			}
 			g.addAccessorBody("};" + Constants.LINE_SEPARATOR);
 			g.addAccessorBody("public String[] getBlockingConfigurations() {");
-			g.addAccessorBody("return blockingConfigurations;" + Constants.LINE_SEPARATOR);
+			g.addAccessorBody("return blockingConfigurations;"
+					+ Constants.LINE_SEPARATOR);
 			g.addAccessorBody("}" + Constants.LINE_SEPARATOR);
 		} catch (IOException ex) {
 			throw new GenException("Problem writing file.", ex);
