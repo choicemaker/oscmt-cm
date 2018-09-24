@@ -20,6 +20,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import org.jdom2.Element;
 
@@ -31,7 +32,8 @@ import com.choicemaker.cm.core.gen.GeneratorHelper;
 import com.choicemaker.cm.core.gen.IGenerator;
 import com.choicemaker.cm.io.blocking.base.gen.BlockingTags;
 import com.choicemaker.cm.io.db.base.gen.DbGenerator;
-import com.choicemaker.cm.io.db.base.gen.DbTags;;
+import com.choicemaker.cm.io.db.base.gen.DbTags;
+import com.mchange.v2.lang.StringUtils;
 
 /**
  * Description
@@ -39,18 +41,21 @@ import com.choicemaker.cm.io.db.base.gen.DbTags;;
  * @author Martin Buechi
  */
 public class BlockingConfigurationGenerator {
-	IGenerator g;
-	String name;
-	int defaultCount;
-	Element blockingGlobal;
-	String className;
-	DerivedSource conf;
-	List<?> illegalCombinations; // @todo
-	Writer w;
-	Set<String> usedRecords;
-	String uniqueId;
-	DbC[] dbCs;
-	boolean generated;
+
+	private static Logger logger =
+		Logger.getLogger(BlockingConfigurationGenerator.class.getName());
+
+	private final IGenerator g;
+	final String name;
+	private final int defaultCount;
+	private final Element blockingGlobal;
+	final String className;
+	private final DerivedSource conf;
+	// private final List<?> illegalCombinations; // @todo
+	private Writer w;
+	private final Set<String> usedRecords;
+	private DbC[] dbCs;
+	final boolean generated;
 
 	private static class DbC {
 		QField qf;
@@ -60,11 +65,19 @@ public class BlockingConfigurationGenerator {
 		List<BField> bfs = new ArrayList<>();
 		String name;
 		int number;
+		// String uniqueId;
 
 		DbC(String name, int number) {
 			this.name = name;
 			this.number = number;
 		}
+
+		@Override
+		public String toString() {
+			return "DbC [name=" + name + ", number=" + number + ", dbtbs="
+					+ dbtbs + "]";
+		}
+
 	}
 
 	BlockingConfigurationGenerator(IGenerator g, String name, int defaultCount,
@@ -76,7 +89,7 @@ public class BlockingConfigurationGenerator {
 		this.defaultCount = defaultCount;
 		this.blockingGlobal = def;
 		this.conf = DerivedSource.valueOf(name);
-		illegalCombinations = new ArrayList<>();
+		// illegalCombinations = new ArrayList<>();
 		usedRecords = new HashSet<>();
 		initDbCs();
 		if (dbCs.length > 0) {
@@ -193,13 +206,11 @@ public class BlockingConfigurationGenerator {
 				}
 			}
 			// custom
-			@SuppressWarnings("unchecked")
 			List<Element> illegal =
 				blockingGlobal.getChildren(BlockingTags.ILLEGAL_COMBINATION);
 			Iterator<Element> iIllegal = illegal.iterator();
 			while (iIllegal.hasNext()) {
 				Element ic = (Element) iIllegal.next();
-				@SuppressWarnings("unchecked")
 				List<Element> fields = ic.getChildren();
 				int size = fields.size();
 				IField[][] ics = new IField[size][size - 1];
@@ -309,6 +320,7 @@ public class BlockingConfigurationGenerator {
 		// QueryFields
 		for (int k = 0; k < dbCs.length; ++k) {
 			DbC dbC = dbCs[k];
+			String uniqueId = null;
 			w.write("qfs = new QueryField[] {" + Constants.LINE_SEPARATOR);
 			Iterator<QField> iQfs = dbC.qfs.iterator();
 			while (iQfs.hasNext()) {
@@ -317,17 +329,33 @@ public class BlockingConfigurationGenerator {
 						+ "new QueryField()");
 			}
 			w.write(Constants.LINE_SEPARATOR + "};" + Constants.LINE_SEPARATOR);
-			// DbTable
-			if (uniqueId == null) {
-				g.error("Root record must have key.");
-			}
 			w.write("dbts = new DbTable[] {" + Constants.LINE_SEPARATOR);
 			Iterator<DView> iDbts = dbC.dbtbs.iterator();
 			while (iDbts.hasNext()) {
 				DView d = (DView) iDbts.next();
-				w.write((d.number != 0 ? "," + Constants.LINE_SEPARATOR : "")
-						+ "new DbTable(\"" + d.name + "\", " + d.number + ", \""
-						+ uniqueId + "\")");
+				if (d.number == 0) {
+					// Root table
+					if (!StringUtils.nonEmptyString(d.getKeyColumnName())) {
+						g.error("Root record must have a key (2nd check).");
+						logger.severe(String.format(
+								"Root record (%s) missing key (2nd check).",
+								d.name));
+						assert StringUtils.nonEmptyString(d.getKeyColumnName());
+					}
+					uniqueId = d.getKeyColumnName();
+  				} else {
+  					// Child table
+					if (!StringUtils.nonEmptyString(uniqueId)) {
+						g.error("Root record must have a key (3rd check).");
+						logger.severe(String.format(
+								"Root record (%s) missing key (3rd check).",
+								d.name));
+						assert StringUtils.nonEmptyString(uniqueId);
+					}
+					w.write("," + Constants.LINE_SEPARATOR);
+				}
+				w.write(String.format("new DbTable(\"%s\", %s, \"%s\")",
+						d.name, d.number, uniqueId));
 			}
 			w.write(Constants.LINE_SEPARATOR + "};" + Constants.LINE_SEPARATOR);
 			// DbField
@@ -370,19 +398,16 @@ public class BlockingConfigurationGenerator {
 
 	private boolean computeUsedRecords(Element r) {
 		boolean used = false;
-		@SuppressWarnings("unchecked")
 		List<Element> records = r.getChildren(CoreTags.NODE_TYPE);
 		Iterator<Element> iRecords = records.iterator();
 		while (iRecords.hasNext()) {
 			used |= computeUsedRecords((Element) iRecords.next());
 		}
 		if (!used) {
-			@SuppressWarnings("unchecked")
 			List<Element> fields = r.getChildren("field");
 			Iterator<Element> iFields = fields.iterator();
 			while (!used && iFields.hasNext()) {
 				Element f = (Element) iFields.next();
-				@SuppressWarnings("unchecked")
 				Iterator<Element> iBlockingFields =
 					f.getChildren(BlockingTags.BLOCKING_FIELD).iterator();
 				while (!used && iBlockingFields.hasNext()) {
@@ -399,17 +424,14 @@ public class BlockingConfigurationGenerator {
 		return used;
 	}
 
-	private void processRecord(Element r, String sourceNodeTypeName)
+	private void processRecord(final Element r, final String sourceNodeTypeName)
 			throws IOException {
 		String className = r.getAttributeValue("className");
 		int recordNumber =
 			Integer.parseInt(r.getAttributeValue("recordNumber"));
-		// 2014-04-24 rphall: Commented out unused local variable.
-		// String nodeViewName = null;
 		int recordDefaultCount = defaultCount;
 		Element hd = GeneratorHelper.getNodeTypeExt(r, BlockingTags.BLOCKING);
 		if (hd != null) {
-			// nodeViewName = hd.getAttributeValue(BlockingTags.VIEW);
 			recordDefaultCount = BlockingConfigurationsGenerator
 					.getDefaultCount(g, hd, recordDefaultCount);
 		}
@@ -434,14 +456,13 @@ public class BlockingConfigurationGenerator {
 					+ Constants.LINE_SEPARATOR);
 			w.write(className + " r = rs[i];" + Constants.LINE_SEPARATOR);
 		}
-		@SuppressWarnings("unchecked")
 		List<Element> fields = r.getChildren("field");
 		Iterator<Element> iFields = fields.iterator();
+		String uniqueId = null;
 		while (iFields.hasNext()) {
 			Element f = (Element) iFields.next();
 			String sourceFieldName = f.getAttributeValue("name");
 			String type = f.getAttributeValue("type");
-			@SuppressWarnings("unchecked")
 			Iterator<Element> iBlockingFields =
 				f.getChildren(BlockingTags.BLOCKING_FIELD).iterator();
 			for (int i = 0; i < dbCs.length; i++) {
@@ -469,8 +490,47 @@ public class BlockingConfigurationGenerator {
 								dc = 1;
 							} else {
 								g.error("Root record must have single key.");
+								logger.severe(String.format(
+										"Root record (%s) must have single key.",
+										targetNodeTypeName));
 							}
 						}
+						// BUGFIX 2018-09-23 rphall:
+						// Add column name, not field name as record key
+						logger.fine("db configurations: "
+								+ Arrays.toString(this.dbCs));
+						for (int k = 0; k < dbCs.length; k++) {
+							Element dbNodeType =
+								GeneratorHelper.getNodeTypeExt(r, DbTags.DB);
+							if (dbNodeType != null && GeneratorHelper
+									.getBooleanAttribute(dbNodeType,
+											CoreTags.VIRTUAL, false)) {
+								// virtual root
+							} else {
+								String viewName = DbGenerator
+										.getViewNameForNode(r, dbCs[k].name, g);
+								DView view =
+									createOrGetDView(dbCs[k], viewName);
+								logger.fine("view: " + view);
+								assert view != null;
+								DbC dbC = dbCs[k];
+								DField dbf = createOrGetViewKeyColumn(dbC,
+										targetNodeTypeName, targetFieldName,
+										type, dc);
+								logger.fine("key field: " + dbf);
+								assert dbf != null;
+								logger.fine(
+										"key column: " + dbf.targetColumnName);
+								assert StringUtils
+										.nonEmptyString(dbf.targetColumnName);
+								view.setKeyColumnName(dbf.targetColumnName);
+								uniqueId = dbf.targetColumnName;
+								logger.fine("view: " + view);
+								logger.fine("db configurations: "
+										+ Arrays.toString(this.dbCs));
+							}
+						}
+						// END BUGFIX
 					}
 					if (!"false".equals(bf.getAttributeValue(CoreTags.USE))) {
 						if (targetNodeTypeName == null) {
@@ -517,7 +577,6 @@ public class BlockingConfigurationGenerator {
 									if (base != null && k == 0) {
 										g.error("Cannot specify base as attribute and child.");
 									} else {
-										@SuppressWarnings("unchecked")
 										List<Element> baseFields =
 											bc.getChildren();
 										int size = baseFields.size();
@@ -561,7 +620,12 @@ public class BlockingConfigurationGenerator {
 				}
 			}
 		}
-		@SuppressWarnings("unchecked")
+		if (recordNumber == 0 && !StringUtils.nonEmptyString(uniqueId)) {
+			g.error("Root record must have a key (1st check).");
+			logger.severe(String.format(
+					"Root record (%s) missing key (1st check).", uniqueId));
+			assert StringUtils.nonEmptyString(uniqueId);
+		}
 		List<Element> records =
 			new ArrayList<>(r.getChildren(CoreTags.NODE_TYPE));
 		Iterator<Element> iRecords = records.iterator();
@@ -635,6 +699,12 @@ public class BlockingConfigurationGenerator {
 		g.error("Field not found: dbf view=\"" + viewName + "\" column=\""
 				+ column + "\"");
 		return null;
+	}
+
+	private DField createOrGetViewKeyColumn(DbC dbC, String viewName,
+			String column, String type, int defaultCount) {
+		DField res = new DField(dbC, -1, viewName, column, type, defaultCount);
+		return res;
 	}
 
 	private DField createOrGetDField(DbC dbC, String viewName, String column,
@@ -735,12 +805,27 @@ public class BlockingConfigurationGenerator {
 	}
 
 	private static class DView {
-		int number;
-		String name;
+		final int number;
+		final String name;
+		private String keyColumnName;
 
 		DView(int number, String name) {
 			this.number = number;
 			this.name = name;
+		}
+
+		String getKeyColumnName() {
+			return keyColumnName;
+		}
+
+		void setKeyColumnName(String keyColumnName) {
+			this.keyColumnName = keyColumnName;
+		}
+
+		@Override
+		public String toString() {
+			return "DView [number=" + number + ", name=" + name
+					+ ", keyColumnName=" + keyColumnName + "]";
 		}
 	}
 
@@ -768,9 +853,9 @@ public class BlockingConfigurationGenerator {
 					Element targetColumnElm = GeneratorHelper
 							.getPhysicalField(field, dbC.name, DbTags.DB);
 					if (targetColumnElm != null)
+						// TODO define manifest constant for "name"
 						targetColumnName =
-							targetColumnElm.getAttributeValue("name"); // TODO
-																		// "name"
+							targetColumnElm.getAttributeValue("name");
 					if (targetColumnName == null
 							|| targetColumnName.length() == 0)
 						targetColumnName = targetFieldName;
@@ -784,13 +869,22 @@ public class BlockingConfigurationGenerator {
 			}
 		}
 
+		// public String toString() {
+		// return "dbfs[" + number + "]";
+		// }
+
+		@Override
 		public String toString() {
-			return "dbfs[" + number + "]";
+			return "DField [targetNodeTypeName=" + targetNodeTypeName
+					+ ", view=" + view + ", targetFieldName=" + targetFieldName
+					+ ", targetColumnName=" + targetColumnName + ", type="
+					+ type + ", _defaultCount=" + _defaultCount + "]";
 		}
 
 		int getTypeId() {
 			return 1;
 		}
+
 	}
 
 	private static class BField extends IField {
