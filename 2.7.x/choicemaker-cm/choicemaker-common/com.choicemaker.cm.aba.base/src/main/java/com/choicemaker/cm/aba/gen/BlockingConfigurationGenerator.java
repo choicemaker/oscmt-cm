@@ -343,8 +343,8 @@ public class BlockingConfigurationGenerator {
 						assert StringUtils.nonEmptyString(d.getKeyColumnName());
 					}
 					uniqueId = d.getKeyColumnName();
-  				} else {
-  					// Child table
+				} else {
+					// Child table
 					if (!StringUtils.nonEmptyString(uniqueId)) {
 						g.error("Root record must have a key (3rd check).");
 						logger.severe(String.format(
@@ -354,8 +354,8 @@ public class BlockingConfigurationGenerator {
 					}
 					w.write("," + Constants.LINE_SEPARATOR);
 				}
-				w.write(String.format("new DbTable(\"%s\", %s, \"%s\")",
-						d.name, d.number, uniqueId));
+				w.write(String.format("new DbTable(\"%s\", %s, \"%s\")", d.name,
+						d.number, uniqueId));
 			}
 			w.write(Constants.LINE_SEPARATOR + "};" + Constants.LINE_SEPARATOR);
 			// DbField
@@ -869,17 +869,19 @@ public class BlockingConfigurationGenerator {
 			}
 		}
 
-		// public String toString() {
-		// return "dbfs[" + number + "]";
-		// }
-
+		// FIXME this method is used to generate Java code, not just for debug
 		@Override
 		public String toString() {
-			return "DField [targetNodeTypeName=" + targetNodeTypeName
-					+ ", view=" + view + ", targetFieldName=" + targetFieldName
-					+ ", targetColumnName=" + targetColumnName + ", type="
-					+ type + ", _defaultCount=" + _defaultCount + "]";
+			return "dbfs[" + number + "]";
 		}
+
+		// @Override
+		// public String toString() {
+		// return "DField [targetNodeTypeName=" + targetNodeTypeName
+		// + ", view=" + view + ", targetFieldName=" + targetFieldName
+		// + ", targetColumnName=" + targetColumnName + ", type="
+		// + type + ", _defaultCount=" + _defaultCount + "]";
+		// }
 
 		int getTypeId() {
 			return 1;
