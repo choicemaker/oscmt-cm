@@ -38,6 +38,7 @@ public abstract class BlockingConfiguration
 
 	private ArrayList<IBlockingValue>[] values;
 
+	@Override
 	public abstract IBlockingValue[] createBlockingValues(Record q);
 
 	@SuppressWarnings("unchecked")
@@ -58,7 +59,7 @@ public abstract class BlockingConfiguration
 			ArrayList<IBlockingValue> l = values[i];
 			int s = l.size();
 			for (int j = 0; j < s; ++j) {
-				res[out++] = (IBlockingValue) l.get(j);
+				res[out++] = l.get(j);
 			}
 		}
 		values = null;
@@ -72,7 +73,7 @@ public abstract class BlockingConfiguration
 		ArrayList<IBlockingValue> l = values[index];
 		int size = l.size();
 		int i = 0;
-		while (i < size && ((IBlockingValue) l.get(i)).getValue() != value) {
+		while (i < size && l.get(i).getValue() != value) {
 			++i;
 		}
 		if (i == size) {

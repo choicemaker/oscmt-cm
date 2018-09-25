@@ -159,7 +159,7 @@ public class TransMatcherMDB extends AbstractMatcher implements MessageListener 
 			sink.writeComparables(matches.iterator());
 
 			// write the separator
-			MatchRecord2 mr = (MatchRecord2) matches.get(0);
+			MatchRecord2 mr = matches.get(0);
 			mr = MatchRecord2Factory.getSeparator(mr.getRecordID1());
 			sink.writeComparable(mr);
 

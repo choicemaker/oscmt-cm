@@ -250,7 +250,7 @@ public class BlockingSetFactory {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Listing final blocking sets...");
 			for (int i = 0; i < blockingSets.size(); i++) {
-				IBlockingSet b = (IBlockingSet) blockingSets.get(i);
+				IBlockingSet b = blockingSets.get(i);
 				PrintUtils.logBlockingSet(
 					logger,
 					Level.INFO,
@@ -386,7 +386,7 @@ public class BlockingSetFactory {
 			int size = oversized.size();
 			for (int j = 0; j < size; ++j) {
 
-				IBlockingSet currentSubset = (IBlockingSet) oversized.get(j);
+				IBlockingSet currentSubset = oversized.get(j);
 				PrintUtils.logBlockingSet(
 					logger,
 					"Refining blocking set " + j + " ",
@@ -628,7 +628,7 @@ public class BlockingSetFactory {
 		for (Iterator<IBlockingValue> iter = allBlockingValues.iterator();
 			missingBlockingValues.size() > 0 && iter.hasNext();
 			) {
-			IBlockingValue valueToCheck = (IBlockingValue) iter.next();
+			IBlockingValue valueToCheck = iter.next();
 			if (missingBlockingValues.contains(valueToCheck)
 				&& notUsedBecauseOfOptimization.contains(valueToCheck)) {
 				missingBlockingValues.remove(valueToCheck);
@@ -650,7 +650,7 @@ public class BlockingSetFactory {
 		for (int i = 0;
 			missingBlockingValues.size() > 0 && i < blockingSets.size();
 			i++) {
-			IBlockingSet b = (IBlockingSet) blockingSets.get(i);
+			IBlockingSet b = blockingSets.get(i);
 			IBlockingValue[] bv = b.getBlockingValues();
 			for (int j = 0;
 				missingBlockingValues.size() > 0 && j < bv.length;
@@ -677,15 +677,15 @@ public class BlockingSetFactory {
 		}
 
 		IBlockingValue[] retVal =
-			(IBlockingValue[]) missingBlockingValues.toArray(
-				new IBlockingValue[missingBlockingValues.size()]);
+			missingBlockingValues.toArray(
+			new IBlockingValue[missingBlockingValues.size()]);
 		return retVal;
 	}
 
 	private static String prettyPrintMissingBlockingValues(Collection<IBlockingValue> missingBlockingValues) {
 		IBlockingValue[] array =
-			(IBlockingValue[]) missingBlockingValues.toArray(
-				new IBlockingValue[0]);
+			missingBlockingValues.toArray(
+			new IBlockingValue[0]);
 		return prettyPrintMissingBlockingValues(array);
 	}
 

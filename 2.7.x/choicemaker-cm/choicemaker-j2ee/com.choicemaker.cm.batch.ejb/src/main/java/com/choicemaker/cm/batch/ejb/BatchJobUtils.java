@@ -13,7 +13,7 @@ public class BatchJobUtils {
 
 	public static void updateBatchJobStatusFromTo(final BatchJobEntity batchJob,
 			final BatchJobStatus current, final BatchJobStatus next) {
-		updateBatchJobStatusFromTo(batchJob, current, next, (int) 0);
+		updateBatchJobStatusFromTo(batchJob, current, next, 0);
 	}
 
 	public static final int MAX_RETRY = 5;

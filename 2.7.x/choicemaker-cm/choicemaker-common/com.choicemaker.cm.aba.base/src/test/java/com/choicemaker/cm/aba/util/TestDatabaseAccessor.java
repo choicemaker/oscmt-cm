@@ -30,12 +30,15 @@ import com.choicemaker.cm.core.Record;
  * @author    
  * @deprecated Write a JUnit test instead of trying to use this one
  */
+@Deprecated
 public class TestDatabaseAccessor implements DatabaseAccessor {
 	private Connection connection;
 
+	@Override
 	public void setDataSource(DataSource dataSource) {
 	}
 	
+	@Override
 	public void setCondition(Object condition) {
 	}
 
@@ -43,6 +46,7 @@ public class TestDatabaseAccessor implements DatabaseAccessor {
 		this.connection = connection;
 	}
 
+	@Override
 	public DatabaseAccessor cloneWithNewConnection()
 		throws CloneNotSupportedException {
 		throw new CloneNotSupportedException("not yet implemented");
@@ -95,13 +99,14 @@ public class TestDatabaseAccessor implements DatabaseAccessor {
 		return -1;
 	}
 
+	@Override
 	public void open(AutomatedBlocker blocker, String databaseConfiguration)
 			throws IOException {
 		System.out.println("=============== open");
 		Iterator<IBlockingSet> iBlockingSets = blocker.getBlockingSets().iterator();
 		int i = 0;
 		while (iBlockingSets.hasNext()) {
-			IBlockingSet bs = (IBlockingSet) iBlockingSets.next();
+			IBlockingSet bs = iBlockingSets.next();
 
 			System.out.println(
 				"------------- Blocking Set " + i + ": " + bs.getExpectedCount() + " : " + getActualCount(bs));
@@ -127,6 +132,7 @@ public class TestDatabaseAccessor implements DatabaseAccessor {
 			++i;
 		}
 	}
+	@Override
 	public void close() {
 		System.out.println("close");
 		try {
@@ -135,10 +141,12 @@ public class TestDatabaseAccessor implements DatabaseAccessor {
 			ex.printStackTrace();
 		}
 	}
+	@Override
 	public boolean hasNext() {
 		System.out.println("hasNext");
 		return false;
 	}
+	@Override
 	public Record getNext() {
 		return null;
 	}

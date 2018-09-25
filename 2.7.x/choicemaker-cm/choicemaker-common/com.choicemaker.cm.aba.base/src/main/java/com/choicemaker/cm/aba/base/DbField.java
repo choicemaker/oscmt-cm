@@ -72,6 +72,7 @@ public class DbField extends Field implements IDbField {
 		return defaultCount;
 	}
 
+	@Override
 	public boolean equals(Object o) {
 		boolean retVal = false;
 		if (o instanceof DbField) {
@@ -96,6 +97,7 @@ public class DbField extends Field implements IDbField {
 		return retVal;
 	}
 	
+	@Override
 	public int hashCode() {
 		int retVal = getNumber();
 		if (getName() != null) {

@@ -41,7 +41,7 @@ public class BlockingConfigurationsGenerator implements GeneratorPlugin {
 				.getGlobalExts(g.getRootElement(), BlockingTags.BLOCKING);
 		Iterator<Element> iBlockingDefs = blockingDefs.iterator();
 		while (iBlockingDefs.hasNext()) {
-			Element d = (Element) iBlockingDefs.next();
+			Element d = iBlockingDefs.next();
 			String dbConf = d.getAttributeValue(BlockingTags.DB_CONF);
 			if (GeneratorHelper.getBooleanAttribute(d, BlockingTags.AUTOMATED,
 					false) && dbConf != null && !"none".equals(dbConf)) {
@@ -54,10 +54,11 @@ public class BlockingConfigurationsGenerator implements GeneratorPlugin {
 				}
 			}
 		}
-		return (BlockingConfigurationGenerator[]) confList
+		return confList
 				.toArray(new BlockingConfigurationGenerator[confList.size()]);
 	}
 
+	@Override
 	public synchronized void generate(IGenerator g) throws GenException {
 		try {
 			BlockingConfigurationGenerator[] confs = addConfigurations(g);

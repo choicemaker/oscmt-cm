@@ -213,7 +213,7 @@ public class OnlineUrmDelegate<T extends Comparable<T> & Serializable> {
 							// to the query record
 						} else {
 							Match match =
-								(Match) matches.get(groupChildNode.getNodeId());
+								matches.get(groupChildNode.getNodeId());
 							final ScoreType unused = null;
 							groupRecords
 									.add(getSingleRecord(unused, match, model));
@@ -231,7 +231,7 @@ public class OnlineUrmDelegate<T extends Comparable<T> & Serializable> {
 						for (int n = 0; n < groupRecords.size(); n++) {
 							ISingleRecord<T> singleRecord = groupRecords.get(n);
 							MatchScore singleScore =
-								(MatchScore) groupScores.get(n);
+								groupScores.get(n);
 							EvaluatedRecord er =
 								new EvaluatedRecord(singleRecord, singleScore);
 							evalRecords.add(er);
@@ -246,7 +246,7 @@ public class OnlineUrmDelegate<T extends Comparable<T> & Serializable> {
 									linkCriteria.isMustIncludeQuery());
 						LinkedRecordSet<T> lrs = new LinkedRecordSet<>(null,
 								arGroupRecords, criteria);
-						MatchScore[] scores = (MatchScore[]) groupScores
+						MatchScore[] scores = groupScores
 								.toArray(new MatchScore[0]);
 						CompositeMatchScore compositeScore =
 							new CompositeMatchScore(scores);

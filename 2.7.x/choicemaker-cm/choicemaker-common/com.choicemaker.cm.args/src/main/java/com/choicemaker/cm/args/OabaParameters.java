@@ -24,6 +24,7 @@ public interface OabaParameters extends PersistentObject, Serializable {
 
 	boolean DEFAULT_QUERY_RS_IS_DEDUPLICATED = false;
 
+	@Override
 	long getId();
 
 	String getModelConfigurationName();

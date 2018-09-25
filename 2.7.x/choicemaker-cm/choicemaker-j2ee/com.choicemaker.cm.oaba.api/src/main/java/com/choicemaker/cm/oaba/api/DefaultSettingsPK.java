@@ -10,8 +10,10 @@ public interface DefaultSettingsPK {
 
 	String getBlockingConfiguration();
 
+	@Override
 	int hashCode();
 
+	@Override
 	boolean equals(Object obj);
 
 }

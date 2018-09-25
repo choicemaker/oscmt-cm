@@ -91,7 +91,7 @@ public class CMPlatformUtils {
 			loaders.add(loader);
 		}
 		ClassLoader[] retVal = new ClassLoader[loaders.size()];
-		retVal = (ClassLoader[]) loaders.toArray(retVal);
+		retVal = loaders.toArray(retVal);
 		logger.exiting(SIMPLE_CLASS_NAME, METHOD, retVal);
 		return retVal;
 	}
@@ -114,7 +114,7 @@ public class CMPlatformUtils {
 			}
 		}
 		URL[] retVal = new URL[urls.size()];
-		retVal = (URL[]) urls.toArray(retVal);
+		retVal = urls.toArray(retVal);
 		logger.exiting(SIMPLE_CLASS_NAME, METHOD, retVal);
 		return retVal;
 	}

@@ -35,8 +35,10 @@ public interface IBlockingValue extends Cloneable, Serializable {
 
 	int compareTo(IBlockingValue obv);
 
+	@Override
 	boolean equals(Object o);
 
+	@Override
 	int hashCode();
 
 }

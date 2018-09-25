@@ -26,6 +26,7 @@ import com.choicemaker.cm.io.db.base.DatabaseAbstractionManager;
  * @author rphall
  * @deprecated
  */
+@Deprecated
 public class AggregateDatabaseAbstractionManager implements
 		DatabaseAbstractionManager {
 
@@ -99,6 +100,7 @@ public class AggregateDatabaseAbstractionManager implements
 		}
 	}
 
+	@Override
 	public DatabaseAbstraction lookupDatabaseAbstraction(DataSource ds)
 			throws DatabaseException {
 

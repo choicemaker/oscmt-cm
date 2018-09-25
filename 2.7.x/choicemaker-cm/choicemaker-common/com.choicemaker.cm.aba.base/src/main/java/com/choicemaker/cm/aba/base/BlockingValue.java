@@ -122,6 +122,7 @@ public class BlockingValue implements Comparable<IBlockingValue>, Cloneable,
 		return false;
 	}
 
+	@Override
 	public boolean containsBase(IBlockingSet bs) {
 		if (bs.containsBlockingValue(this)) {
 			return true;
@@ -181,6 +182,7 @@ public class BlockingValue implements Comparable<IBlockingValue>, Cloneable,
 		return retVal;
 	}
 
+	@Override
 	public Object clone() {
 		try {
 			return super.clone();

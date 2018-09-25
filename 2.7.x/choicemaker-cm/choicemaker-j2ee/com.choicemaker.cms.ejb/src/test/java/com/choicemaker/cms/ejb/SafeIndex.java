@@ -57,7 +57,7 @@ public class SafeIndex<T extends Comparable<T> & Serializable>
 		} else if (o == null) {
 			retVal = 1;
 		} else {
-			final SafeIndex<T> that = (SafeIndex<T>) o;
+			final SafeIndex<T> that = o;
 			final T thatIndex = that.getIndex();
 			final T thisIndex = this.getIndex();
 			if (thisIndex == null && thatIndex == null) {

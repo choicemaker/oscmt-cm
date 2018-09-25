@@ -140,6 +140,7 @@ public class Blocker2 implements AutomatedBlocker {
 		this.limitSingleBlockingSet = limitSingleBlockingSet;
 	}
 
+	@Override
 	public void open() throws IOException {
 
 		this.numberOfRecordsRetrieved = 0;
@@ -209,9 +210,9 @@ public class Blocker2 implements AutomatedBlocker {
 				}
 				for (int i = 0; i < newBlockingSets.size(); i++) {
 					IBlockingSet newBlockingSet =
-						(IBlockingSet) newBlockingSets.get(i);
+						newBlockingSets.get(i);
 					IBlockingSet oldBlockingSet =
-						(IBlockingSet) oldBlockingSets.get(i);
+						oldBlockingSets.get(i);
 					if (newBlockingSet == null && oldBlockingSet != null) {
 						throw new IllegalStateException("Blocking sets " + i
 								+ " are different");
@@ -234,79 +235,98 @@ public class Blocker2 implements AutomatedBlocker {
 		return (BlockingAccessor) model.getAccessor();
 	}
 
+	@Override
 	public List<IBlockingSet> getBlockingSets() {
 		return blockingSets;
 	}
 
+	@Override
 	public void close() throws IOException {
 		databaseAccessor.close();
 	}
 
+	@Override
 	public boolean hasNext() {
 		return databaseAccessor.hasNext();
 	}
 
+	@Override
 	public Record getNext() throws IOException {
 		++this.numberOfRecordsRetrieved;
 		return databaseAccessor.getNext();
 	}
 
+	@Override
 	public boolean hasSink() {
 		return false;
 	}
 
+	@Override
 	public Sink getSink() {
 		throw new UnsupportedOperationException("no sink");
 	}
 
+	@Override
 	public int getNumberOfRecordsRetrieved() {
 		return this.numberOfRecordsRetrieved;
 	}
 
+	@Override
 	public String getFileName() {
 		throw new UnsupportedOperationException("not file based");
 	}
 
+	@Override
 	public ImmutableProbabilityModel getModel() {
 		return model;
 	}
 
+	@Override
 	public void setModel(ImmutableProbabilityModel m) {
 		throw new UnsupportedOperationException("can't change model after construction");
 	}
 
+	@Override
 	public String getName() {
 		return name;
 	}
 
+	@Override
 	public void setName(String name) {
 		this.name = name;
 	}
 
+	@Override
 	public IBlockingConfiguration getBlockingConfiguration() {
 		return blockingConfiguration;
 	}
 
+	@Override
 	public DatabaseAccessor getDatabaseAccessor() {
 		return databaseAccessor;
 	}
 
+	@Override
 	public AbaStatistics getCountSource() {
 		return abaStatistics;
 	}
 
+	@Override
 	public Record getQueryRecord() {
 		return q;
 	}
 
+	@Override
 	public int getLimitPerBlockingSet() {
 		return limitPerBlockingSet;
 	}
 
+	@Override
 	public int getSingleTableBlockingSetGraceLimit() {
 		return singleTableBlockingSetGraceLimit;
 	}
 
+	@Override
 	public int getLimitSingleBlockingSet() {
 		return limitSingleBlockingSet;
 	}

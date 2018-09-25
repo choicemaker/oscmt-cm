@@ -47,6 +47,7 @@ public class MatchBiMatchHoldFullyConnectedIterator implements Iterator {
 	 * 
 	 * @see java.util.Iterator#remove()
 	 */
+	@Override
 	public void remove() {
 		compositeEntities.remove();
 	}
@@ -56,6 +57,7 @@ public class MatchBiMatchHoldFullyConnectedIterator implements Iterator {
 	 * 
 	 * @see java.util.Iterator#hasNext()
 	 */
+	@Override
 	public boolean hasNext() {
 		return compositeEntities.hasNext();
 	}
@@ -65,6 +67,7 @@ public class MatchBiMatchHoldFullyConnectedIterator implements Iterator {
 	 * 
 	 * @see java.util.Iterator#next()
 	 */
+	@Override
 	public Object next() {
 		throw new RuntimeException("Not yet implemented");
 		// CompositeEntity ce = (CompositeEntity) compositeEntities.next();

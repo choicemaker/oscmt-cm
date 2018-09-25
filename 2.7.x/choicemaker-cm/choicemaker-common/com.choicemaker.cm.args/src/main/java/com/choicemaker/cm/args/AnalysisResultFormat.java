@@ -46,6 +46,7 @@ public enum AnalysisResultFormat {
 		this.displayName = ds;
 	}
 
+	@Override
 	public String toString() {
 		return name();
 	}

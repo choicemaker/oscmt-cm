@@ -110,7 +110,7 @@ public class BlockingConfigurationGenerator {
 				l.add(new DbC(dbConfs[i], i));
 			}
 		}
-		dbCs = (DbC[]) l.toArray(new DbC[l.size()]);
+		dbCs = l.toArray(new DbC[l.size()]);
 	}
 
 	private void generate() throws IOException, GenException {
@@ -191,7 +191,7 @@ public class BlockingConfigurationGenerator {
 			DbC dbC = dbCs[k];
 			Iterator<BField> iBfs = dbC.bfs.iterator();
 			while (iBfs.hasNext()) {
-				BField bf = (BField) iBfs.next();
+				BField bf = iBfs.next();
 				DField df = bf.dfield;
 				QField qf = bf.qfield;
 				BField[] base = bf.base;
@@ -210,12 +210,12 @@ public class BlockingConfigurationGenerator {
 				blockingGlobal.getChildren(BlockingTags.ILLEGAL_COMBINATION);
 			Iterator<Element> iIllegal = illegal.iterator();
 			while (iIllegal.hasNext()) {
-				Element ic = (Element) iIllegal.next();
+				Element ic = iIllegal.next();
 				List<Element> fields = ic.getChildren();
 				int size = fields.size();
 				IField[][] ics = new IField[size][size - 1];
 				for (int i = 0; i < size; ++i) {
-					IField f = getField(dbC, (Element) fields.get(i));
+					IField f = getField(dbC, fields.get(i));
 					if (f != null) {
 						f.addIllegal(ics[i]);
 						for (int j = 0; j < i; ++j) {
@@ -280,7 +280,7 @@ public class BlockingConfigurationGenerator {
 					if (i != 0)
 						w.write("," + Constants.LINE_SEPARATOR);
 					w.write("{");
-					IField[] ic = (IField[]) f.illegal.get(i);
+					IField[] ic = f.illegal.get(i);
 					for (int j = 0; j < ic.length; ++j) {
 						if (j != 0)
 							w.write(", ");
@@ -324,7 +324,7 @@ public class BlockingConfigurationGenerator {
 			w.write("qfs = new QueryField[] {" + Constants.LINE_SEPARATOR);
 			Iterator<QField> iQfs = dbC.qfs.iterator();
 			while (iQfs.hasNext()) {
-				QField q = (QField) iQfs.next();
+				QField q = iQfs.next();
 				w.write((q.number != 0 ? "," + Constants.LINE_SEPARATOR : "")
 						+ "new QueryField()");
 			}
@@ -332,7 +332,7 @@ public class BlockingConfigurationGenerator {
 			w.write("dbts = new DbTable[] {" + Constants.LINE_SEPARATOR);
 			Iterator<DView> iDbts = dbC.dbtbs.iterator();
 			while (iDbts.hasNext()) {
-				DView d = (DView) iDbts.next();
+				DView d = iDbts.next();
 				if (d.number == 0) {
 					// Root table
 					if (!StringUtils.nonEmptyString(d.getKeyColumnName())) {
@@ -362,7 +362,7 @@ public class BlockingConfigurationGenerator {
 			w.write("dbfs = new DbField[] {" + Constants.LINE_SEPARATOR);
 			Iterator<DField> iDbfs = dbC.dbfs.iterator();
 			while (iDbfs.hasNext()) {
-				DField d = (DField) iDbfs.next();
+				DField d = iDbfs.next();
 				w.write((d.number != 0 ? "," + Constants.LINE_SEPARATOR : "")
 						+ "new DbField(" + d.number + ", \""
 						// + d.targetFieldName elmus
@@ -374,7 +374,7 @@ public class BlockingConfigurationGenerator {
 			w.write("bfs = new BlockingField[] {" + Constants.LINE_SEPARATOR);
 			Iterator<BField> iBfs = dbC.bfs.iterator();
 			while (iBfs.hasNext()) {
-				BField b = (BField) iBfs.next();
+				BField b = iBfs.next();
 				w.write((b.number != 0 ? "," + Constants.LINE_SEPARATOR : "")
 						+ "new BlockingField(" + b.number + ", qfs["
 						+ b.qfield.number + "], dbfs[" + b.dfield.number
@@ -401,17 +401,17 @@ public class BlockingConfigurationGenerator {
 		List<Element> records = r.getChildren(CoreTags.NODE_TYPE);
 		Iterator<Element> iRecords = records.iterator();
 		while (iRecords.hasNext()) {
-			used |= computeUsedRecords((Element) iRecords.next());
+			used |= computeUsedRecords(iRecords.next());
 		}
 		if (!used) {
 			List<Element> fields = r.getChildren("field");
 			Iterator<Element> iFields = fields.iterator();
 			while (!used && iFields.hasNext()) {
-				Element f = (Element) iFields.next();
+				Element f = iFields.next();
 				Iterator<Element> iBlockingFields =
 					f.getChildren(BlockingTags.BLOCKING_FIELD).iterator();
 				while (!used && iBlockingFields.hasNext()) {
-					Element bf = (Element) iBlockingFields.next();
+					Element bf = iBlockingFields.next();
 					used = bf != null && GeneratorHelper.includesConf(bf, conf)
 							&& !"false"
 									.equals(bf.getAttributeValue(CoreTags.USE));
@@ -460,7 +460,7 @@ public class BlockingConfigurationGenerator {
 		Iterator<Element> iFields = fields.iterator();
 		String uniqueId = null;
 		while (iFields.hasNext()) {
-			Element f = (Element) iFields.next();
+			Element f = iFields.next();
 			String sourceFieldName = f.getAttributeValue("name");
 			String type = f.getAttributeValue("type");
 			Iterator<Element> iBlockingFields =
@@ -469,7 +469,7 @@ public class BlockingConfigurationGenerator {
 				dbCs[i].qf = null;
 			}
 			while (iBlockingFields.hasNext()) {
-				Element bf = (Element) iBlockingFields.next();
+				Element bf = iBlockingFields.next();
 				if (GeneratorHelper.includesConf(bf, conf)) {
 					String targetFieldName =
 						bf.getAttributeValue(BlockingTags.TARGET_FIELD_NAME);
@@ -583,7 +583,7 @@ public class BlockingConfigurationGenerator {
 										tbf.base = new BField[size];
 										for (int i = 0; i < size; ++i) {
 											tbf.base[i] = (BField) getField(dbC,
-													(Element) baseFields
+													baseFields
 															.get(i));
 										}
 									}
@@ -630,7 +630,7 @@ public class BlockingConfigurationGenerator {
 			new ArrayList<>(r.getChildren(CoreTags.NODE_TYPE));
 		Iterator<Element> iRecords = records.iterator();
 		while (iRecords.hasNext()) {
-			Element e = (Element) iRecords.next();
+			Element e = iRecords.next();
 			String eName = e.getAttributeValue("name");
 			String eClassName = e.getAttributeValue("className");
 			if (usedRecords.contains(eClassName)) {
@@ -646,7 +646,7 @@ public class BlockingConfigurationGenerator {
 		w.write("}" + Constants.LINE_SEPARATOR);
 		iRecords = records.iterator();
 		while (iRecords.hasNext()) {
-			Element e = (Element) iRecords.next();
+			Element e = iRecords.next();
 			String eName = e.getAttributeValue("name");
 			processRecord(e, sourceNodeTypeName + "." + eName);
 		}
@@ -656,7 +656,7 @@ public class BlockingConfigurationGenerator {
 			String fieldName) {
 		Iterator<QField> iQfs = dbC.qfs.iterator();
 		while (iQfs.hasNext()) {
-			QField qf = (QField) iQfs.next();
+			QField qf = iQfs.next();
 			if (compoundRecordName.equals(qf.sourceNodeTypeName)
 					&& fieldName.equals(qf.sourceFieldName)) {
 				return qf;
@@ -672,7 +672,7 @@ public class BlockingConfigurationGenerator {
 			boolean errorIfNotFound) {
 		Iterator<BField> iBfs = dbC.bfs.iterator();
 		while (iBfs.hasNext()) {
-			BField bf = (BField) iBfs.next();
+			BField bf = iBfs.next();
 			if (compoundRecordName.equals(bf.qfield.sourceNodeTypeName)
 					&& fieldName.equals(bf.qfield.sourceFieldName)
 					&& column.equals(bf.dfield.targetFieldName)
@@ -690,7 +690,7 @@ public class BlockingConfigurationGenerator {
 	private DField getDField(DbC dbC, String viewName, String column) {
 		Iterator<DField> iDbfs = dbC.dbfs.iterator();
 		while (iDbfs.hasNext()) {
-			DField df = (DField) iDbfs.next();
+			DField df = iDbfs.next();
 			if (viewName.equals(df.targetNodeTypeName)
 					&& column.equals(df.targetFieldName)) {
 				return df;
@@ -712,7 +712,7 @@ public class BlockingConfigurationGenerator {
 		List<DField> dbfs = dbC.dbfs;
 		Iterator<DField> iDbfs = dbfs.iterator();
 		while (iDbfs.hasNext()) {
-			DField df = (DField) iDbfs.next();
+			DField df = iDbfs.next();
 			if (viewName.equals(df.targetNodeTypeName)
 					&& column.equals(df.targetFieldName)) {
 				if (defaultCount < df._defaultCount) {
@@ -731,7 +731,7 @@ public class BlockingConfigurationGenerator {
 		List<DView> dbtbs = dbC.dbtbs;
 		Iterator<DView> iDbtbs = dbtbs.iterator();
 		while (iDbtbs.hasNext()) {
-			DView d = (DView) iDbtbs.next();
+			DView d = iDbtbs.next();
 			if (d.name.equals(name)) {
 				return d;
 			}
@@ -744,6 +744,7 @@ public class BlockingConfigurationGenerator {
 	private static abstract class IField {
 		private static Comparator<IField> comparator =
 			new Comparator<IField>() {
+				@Override
 				public int compare(IField f1, IField f2) {
 					int f1t = f1.getTypeId();
 					int f2t = f2.getTypeId();
@@ -770,7 +771,7 @@ public class BlockingConfigurationGenerator {
 			Arrays.sort(ic, comparator);
 			int size = illegal.size();
 			for (int i = 0; i < size; ++i) {
-				IField[] oc = (IField[]) illegal.get(i);
+				IField[] oc = illegal.get(i);
 				if (ic.length == oc.length) {
 					int j = 0;
 					while (j < ic.length && ic[j] == oc[j])
@@ -795,10 +796,12 @@ public class BlockingConfigurationGenerator {
 			this.sourceFieldName = sourceFieldName;
 		}
 
+		@Override
 		public String toString() {
 			return "qfs[" + number + "]";
 		}
 
+		@Override
 		int getTypeId() {
 			return 0;
 		}
@@ -883,6 +886,7 @@ public class BlockingConfigurationGenerator {
 		// + type + ", _defaultCount=" + _defaultCount + "]";
 		// }
 
+		@Override
 		int getTypeId() {
 			return 1;
 		}
@@ -904,10 +908,12 @@ public class BlockingConfigurationGenerator {
 			this.base = NULL_BFIELD;
 		}
 
+		@Override
 		public String toString() {
 			return "bfs[" + number + "]";
 		}
 
+		@Override
 		int getTypeId() {
 			return 2;
 		}

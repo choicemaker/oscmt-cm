@@ -26,6 +26,7 @@ import javax.naming.NamingException;
 
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
+import com.choicemaker.cm.args.ProcessingEventBean;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.api.BatchJob;
@@ -165,7 +166,7 @@ public class TransitivityServiceBean implements TransitivityService {
 			transJob.markAsAborted();
 			jobManager.save(transJob);
 			eventManager.updateStatusWithNotification(transJob,
-					TransitivityEventBean.DONE, new Date(), null);
+					ProcessingEventBean.DONE, new Date(), null);
 			break;
 		}
 		case NEW:

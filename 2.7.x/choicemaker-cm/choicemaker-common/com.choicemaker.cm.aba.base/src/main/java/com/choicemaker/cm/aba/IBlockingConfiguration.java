@@ -82,6 +82,7 @@ public interface IBlockingConfiguration {
 	 *         return the value computed by
 	 *         <code>equals(IBlockingConfiguration)</code>.
 	 */
+	@Override
 	boolean equals(Object o);
 
 	/**
@@ -89,6 +90,7 @@ public interface IBlockingConfiguration {
 	 * method consistent with <code>equals(Object)</code> and
 	 * <code>equals(IBlockingConfiguration)</code>
 	 */
+	@Override
 	int hashCode();
 
 }

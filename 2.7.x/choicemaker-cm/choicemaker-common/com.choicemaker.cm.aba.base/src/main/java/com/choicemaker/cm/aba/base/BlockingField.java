@@ -62,6 +62,7 @@ public class BlockingField extends Field implements IBlockingField {
 		return group;
 	}
 
+	@Override
 	public boolean equals(Object o) {
 		boolean retVal = false;
 		if (o instanceof BlockingField) {
@@ -86,6 +87,7 @@ public class BlockingField extends Field implements IBlockingField {
 		return retVal;
 	}
 	
+	@Override
 	public int hashCode() {
 		int retVal = this.getNumber();
 		if (this.getQueryField() != null) {

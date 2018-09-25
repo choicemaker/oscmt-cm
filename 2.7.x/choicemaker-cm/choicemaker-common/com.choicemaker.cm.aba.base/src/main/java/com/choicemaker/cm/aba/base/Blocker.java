@@ -35,6 +35,7 @@ import com.choicemaker.cm.core.Sink;
  * @deprecated Returns sometimes erroneous blockingSets;
  * use {@link Blocker2} instead.
  */
+@Deprecated
 @SuppressWarnings({
 		"rawtypes", "unchecked" })
 public class Blocker implements AutomatedBlocker {
@@ -151,6 +152,7 @@ public class Blocker implements AutomatedBlocker {
 		this.blockingConfiguration = blockingConfiguration;
 	}
 
+	@Override
 	public void open() throws IOException {
 		numberOfRecordsRetrieved = 0;
 		IBlockingValue[] blockingValues =
@@ -331,79 +333,98 @@ public class Blocker implements AutomatedBlocker {
 		getBlockingSets().add(nbs);
 	}
 
+	@Override
 	public void close() throws IOException {
 		getDatabaseAccessor().close();
 	}
 
+	@Override
 	public boolean hasNext() {
 		return getDatabaseAccessor().hasNext();
 	}
 
+	@Override
 	public Record getNext() throws IOException {
 		++numberOfRecordsRetrieved;
 		return getDatabaseAccessor().getNext();
 	}
 
+	@Override
 	public String getName() {
 		return name;
 	}
 
+	@Override
 	public void setName(String name) {
 		this.name = name;
 	}
 
+	@Override
 	public ImmutableProbabilityModel getModel() {
 		return model;
 	}
 
+	@Override
 	public void setModel(ImmutableProbabilityModel m) {
 		this.model = m;
 	}
 
+	@Override
 	public boolean hasSink() {
 		return false;
 	}
 
+	@Override
 	public Sink getSink() {
 		throw new UnsupportedOperationException("no sink");
 	}
 
+	@Override
 	public int getNumberOfRecordsRetrieved() {
 		return numberOfRecordsRetrieved;
 	}
 
+	@Override
 	public String getFileName() {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
 	public DatabaseAccessor getDatabaseAccessor() {
 		return databaseAccessor;
 	}
 
+	@Override
 	public IBlockingConfiguration getBlockingConfiguration() {
 		return blockingConfiguration;
 	}
 
+	@Override
 	public Record getQueryRecord() {
 		return q;
 	}
 
+	@Override
 	public int getLimitPerBlockingSet() {
 		return limitPerBlockingSet;
 	}
 
+	@Override
 	public int getSingleTableBlockingSetGraceLimit() {
 		return singleTableBlockingSetGraceLimit;
 	}
 
+	@Override
 	public int getLimitSingleBlockingSet() {
 		return limitSingleBlockingSet;
 	}
 
+	@Override
 	public List getBlockingSets() {
 		return blockingSets;
 	}
 
+	@Override
 	public AbaStatistics getCountSource() {
 		return abaStatistics;
 	}

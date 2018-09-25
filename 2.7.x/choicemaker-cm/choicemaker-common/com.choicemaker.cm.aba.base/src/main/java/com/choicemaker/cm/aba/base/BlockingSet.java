@@ -74,7 +74,7 @@ public class BlockingSet implements Serializable, IBlockingSet {
 		logger.fine("Blocking set size: " + size);
 		int i = 0;
 		while (i < size) {
-			IGroupTable gt = (IGroupTable) tables.get(i);
+			IGroupTable gt = tables.get(i);
 			if (gt.getTable() == bt && gt.getGroup() == g) {
 				bv.setGroupTable(gt);
 				logger.fine("Blocking value group table: " + gt);
@@ -113,7 +113,7 @@ public class BlockingSet implements Serializable, IBlockingSet {
 	@Override
 	public boolean returnsSupersetOf(IBlockingSet bs) {
 		for (int i = 0; i < blockingValues.size(); ++i) {
-			IBlockingValue bv = (IBlockingValue) blockingValues.get(i);
+			IBlockingValue bv = blockingValues.get(i);
 			if (!bv.containsBase(bs)) {
 				return false;
 			}
@@ -121,6 +121,7 @@ public class BlockingSet implements Serializable, IBlockingSet {
 		return true;
 	}
 
+	@Override
 	public boolean containsBlockingValue(IBlockingValue bv) {
 		int size = blockingValues.size();
 		for (int i = 0; i < size; ++i) {
@@ -131,10 +132,11 @@ public class BlockingSet implements Serializable, IBlockingSet {
 		return false;
 	}
 
+	@Override
 	public boolean containsField(IField f) {
 		int size = blockingValues.size();
 		for (int i = 0; i < size; ++i) {
-			IBlockingField b = ((IBlockingValue) blockingValues.get(i)).getBlockingField();
+			IBlockingField b = blockingValues.get(i).getBlockingField();
 			if (b == f || b.getDbField() == f || b.getQueryField() == f) {
 				return true;
 			}
@@ -142,6 +144,7 @@ public class BlockingSet implements Serializable, IBlockingSet {
 		return false;
 	}
 
+	@Override
 	public long getMainTableSize() {
 		return mainTableSize;
 	}
@@ -151,7 +154,7 @@ public class BlockingSet implements Serializable, IBlockingSet {
 		IDbTable table = bf.getDbField().getTable();
 		int size = tables.size();
 		for (int i = 0; i < size; ++i) {
-			IGroupTable gt = (IGroupTable) tables.get(i);
+			IGroupTable gt = tables.get(i);
 			if (gt.getTable() == table && bf.getGroup().equals(gt.getGroup())) {
 				return gt;
 			}
@@ -181,6 +184,7 @@ public class BlockingSet implements Serializable, IBlockingSet {
 		public int getNumber() {
 			return number;
 		}
+		@Override
 		public boolean equals(Object o) {
 			boolean retVal = false;
 			if (o instanceof GroupTable) {
@@ -196,6 +200,7 @@ public class BlockingSet implements Serializable, IBlockingSet {
 			}
 			return retVal;
 		}
+		@Override
 		public int hashCode() {
 			int retVal = getTable().hashCode() + getGroup().hashCode() + getNumber();
 			return retVal;
@@ -204,12 +209,12 @@ public class BlockingSet implements Serializable, IBlockingSet {
 	
 	@Override
 	public IBlockingValue[] getBlockingValues() {
-		return (IBlockingValue[]) blockingValues.toArray(new IBlockingValue[blockingValues.size()]);
+		return blockingValues.toArray(new IBlockingValue[blockingValues.size()]);
 	}
 	
 	@Override
 	public IBlockingValue getBlockingValue(int i) {
-		return (IBlockingValue)blockingValues.get(i);
+		return blockingValues.get(i);
 	}
 	
 	@Override
@@ -220,17 +225,17 @@ public class BlockingSet implements Serializable, IBlockingSet {
 				l.add(bv);
 			}
 		}
-		return (IBlockingValue[])l.toArray(new IBlockingValue[l.size()]);
+		return l.toArray(new IBlockingValue[l.size()]);
 	}
 	
 	@Override
 	public IGroupTable getTable(int i) {
-		return (IGroupTable) tables.get(i);
+		return tables.get(i);
 	}
 	
 	@Override
 	public IGroupTable[] getTables() {
-		return (IGroupTable[]) tables.toArray(new GroupTable[tables.size()]);
+		return tables.toArray(new GroupTable[tables.size()]);
 	}
 	
 	@Override
@@ -241,6 +246,7 @@ public class BlockingSet implements Serializable, IBlockingSet {
 	@Override
 	public void sortValues(final boolean ascending) {
 		Comparator<IBlockingValue> comparator = new Comparator<IBlockingValue>() {
+			@Override
 			public int compare(IBlockingValue o1, IBlockingValue o2) {
 				int res;
 				int cnt1 = o1.getCount();
@@ -267,6 +273,7 @@ public class BlockingSet implements Serializable, IBlockingSet {
 	public void sortTables(final boolean likeValues, final boolean firstValueDecidesOrder) {
 		if(tables.size() > 1) {
 			Comparator<IGroupTable> comparator = new Comparator<IGroupTable>() {
+				@Override
 				public int compare(IGroupTable o1, IGroupTable o2) {
 					int p1 = firstValueDecidesOrder ? getFirstIndex(o1) : getLastIndex(o1);
 					int p2 = firstValueDecidesOrder ? getFirstIndex(o2) : getLastIndex(o2);
@@ -304,6 +311,7 @@ public class BlockingSet implements Serializable, IBlockingSet {
 		}
 	}
 	
+	@Override
 	public boolean equals(Object o) {
 		boolean retVal = false;
 		if (o instanceof BlockingSet) {
@@ -338,6 +346,7 @@ public class BlockingSet implements Serializable, IBlockingSet {
 		return retVal;
 	}
 	
+	@Override
 	public int hashCode() {
 		// With apologies to the Double source code...
 		double d = expectedCount + getMainTableSize() + getTables().length + getBlockingValues().length + getNumTables();

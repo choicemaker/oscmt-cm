@@ -22,6 +22,7 @@ import com.choicemaker.cm.core.gen.IGenerator;
 public class BlockingGenerator implements GeneratorPlugin {
 	static boolean filesAdded;
 
+	@Override
 	public void generate(IGenerator g) throws GenException {
 		filesAdded = false;
 		g.addAccessorImport("import com.choicemaker.cm.aba.base.*;"

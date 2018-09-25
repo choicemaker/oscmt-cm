@@ -146,18 +146,22 @@ public final class InstallablePlatform implements CMPlatform {
 		}
 	}
 
+	@Override
 	public CMPluginRegistry getPluginRegistry() {
 		return getDelegate().getPluginRegistry();
 	}
 
+	@Override
 	public CMPlatformRunnable loaderGetRunnable(String applicationName) {
 		return getDelegate().loaderGetRunnable(applicationName);
 	}
 
+	@Override
 	public String getPluginDirectory(String id, String version) {
 		return getDelegate().getPluginDirectory(id, version);
 	}
 
+	@Override
 	public URL getPluginDescriptorUrl(String id, String version,
 			String descriptorFile) {
 		return getDelegate()

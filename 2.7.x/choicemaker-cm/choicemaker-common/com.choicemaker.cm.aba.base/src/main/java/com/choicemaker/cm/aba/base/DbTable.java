@@ -44,6 +44,7 @@ public class DbTable implements Serializable, IDbTable {
 		return uniqueId;
 	}
 
+	@Override
 	public boolean equals(Object o) {
 		if (o instanceof DbTable) {
 			IDbTable ot = (IDbTable) o;
@@ -54,6 +55,7 @@ public class DbTable implements Serializable, IDbTable {
 		}
 	}
 
+	@Override
 	public int hashCode() {
 		return getName().hashCode() + getUniqueId().hashCode();
 	}

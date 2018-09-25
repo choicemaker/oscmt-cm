@@ -28,12 +28,13 @@ public class BlockingSetReporter implements ReporterPlugin {
 		this.blocker = blocker;
 	}
 
+	@Override
 	public void report(StringBuffer b, boolean newLines) {
 		b.append("<blocking>");
 		if(newLines) b.append(Constants.LINE_SEPARATOR);
 		Iterator<IBlockingSet> iBlockingSets = blocker.getBlockingSets().iterator();
 		while (iBlockingSets.hasNext()) {
-			IBlockingSet bs = (IBlockingSet) iBlockingSets.next();
+			IBlockingSet bs = iBlockingSets.next();
 			b.append("<bs ec=\"").append(bs.getExpectedCount()).append("\">");
 			if(newLines) b.append(Constants.LINE_SEPARATOR);			
 			int size = bs.numFields();

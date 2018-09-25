@@ -393,7 +393,7 @@ public class RecordIdControllerBean implements RecordIdController {
 
 		@SuppressWarnings("unchecked")
 		ImmutableRecordIdTranslatorLocal<T> retVal =
-			(ImmutableRecordIdTranslatorLocal<T>) saveTranslatorImpl(job, impl);
+			saveTranslatorImpl(job, impl);
 
 		return retVal;
 	}

@@ -110,7 +110,7 @@ public class OabaParametersEntity extends AbstractParametersEntity implements
 			float lowThreshold, float highThreshold, String blocking,
 			PersistableRecordSource stageRs, String queryRsDbConfig) {
 		this(modelConfigurationName, lowThreshold, highThreshold, blocking,
-				stageRs, OabaParametersEntity.DEFAULT_QUERY_RS_IS_DEDUPLICATED,
+				stageRs, OabaParameters.DEFAULT_QUERY_RS_IS_DEDUPLICATED,
 				queryRsDbConfig, null, null,
 				OabaLinkageType.STAGING_DEDUPLICATION);
 	}
@@ -140,7 +140,7 @@ public class OabaParametersEntity extends AbstractParametersEntity implements
 			PersistableRecordSource masterRs, String refRsDbConfig,
 			OabaLinkageType taskType) {
 		this(modelConfigurationName, lowThreshold, highThreshold, blocking,
-				stageRs, OabaParametersEntity.DEFAULT_QUERY_RS_IS_DEDUPLICATED,
+				stageRs, OabaParameters.DEFAULT_QUERY_RS_IS_DEDUPLICATED,
 				queryRsDbConfig, masterRs, refRsDbConfig, taskType);
 	}
 

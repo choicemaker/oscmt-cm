@@ -26,6 +26,7 @@ public class BlockingSetComparator implements Comparator<BlockingSet> {
 	/* (non-Javadoc)
 	 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
 	 */
+	@Override
 	public int compare(BlockingSet o1, BlockingSet o2) {
 		int retVal = 0;
 		if (o1 != null && o2 != null) {

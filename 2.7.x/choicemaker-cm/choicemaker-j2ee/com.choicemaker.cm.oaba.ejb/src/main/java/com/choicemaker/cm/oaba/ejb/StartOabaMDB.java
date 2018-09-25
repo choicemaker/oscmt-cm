@@ -246,6 +246,7 @@ public class StartOabaMDB extends AbstractOabaMDB {
 				PN_RECORD_MATCHING_MODE, mode.name());
 	}
 
+	@Override
 	protected String throwableToString(Throwable throwable) {
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);

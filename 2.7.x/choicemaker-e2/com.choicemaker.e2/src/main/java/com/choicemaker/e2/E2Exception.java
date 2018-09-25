@@ -161,6 +161,7 @@ public class E2Exception extends Exception {
 	 * Prints a stack trace out for the exception, and any nested exception that
 	 * it may have embedded in its Status object.
 	 */
+	@Override
 	public void printStackTrace() {
 		printStackTrace(System.err);
 	}
@@ -169,6 +170,7 @@ public class E2Exception extends Exception {
 	 * Prints a stack trace out for the exception, and any nested exception that
 	 * it may have embedded in its Status object.
 	 */
+	@Override
 	public void printStackTrace(PrintStream output) {
 		synchronized (output) {
 			if (status.getException() != null) {
@@ -184,6 +186,7 @@ public class E2Exception extends Exception {
 	 * Prints a stack trace out for the exception, and any nested exception that
 	 * it may have embedded in its Status object.
 	 */
+	@Override
 	public void printStackTrace(PrintWriter output) {
 		synchronized (output) {
 			if (status.getException() != null) {

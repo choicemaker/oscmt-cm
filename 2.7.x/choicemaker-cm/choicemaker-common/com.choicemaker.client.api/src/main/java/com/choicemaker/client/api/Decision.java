@@ -57,6 +57,7 @@ public class Decision implements Serializable, Comparable<Decision> {
 	}
 
 	/** Same as {@link #getName()} */
+	@Override
 	public String toString() {
 		return name;
 	}
@@ -151,12 +152,14 @@ public class Decision implements Serializable, Comparable<Decision> {
 		return valueOf(no);
 	}
 
+	@Override
 	public boolean equals(Object o) {
 		Decision d = (Decision) o;
 		boolean retVal = this.no == d.no;
 		return retVal;
 	}
 
+	@Override
 	public int hashCode() {
 		return this.no;
 	}
@@ -170,7 +173,7 @@ public class Decision implements Serializable, Comparable<Decision> {
 	 */
 	@Override
 	public int compareTo(Decision o) {
-		Decision d = (Decision) o;
+		Decision d = o;
 		if (this == d) {
 			return 0;
 		} else if (this == DIFFER || (this == HOLD && d == MATCH)) {

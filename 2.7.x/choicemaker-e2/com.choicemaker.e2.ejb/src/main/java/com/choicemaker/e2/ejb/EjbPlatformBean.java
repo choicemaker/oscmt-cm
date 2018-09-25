@@ -65,20 +65,24 @@ public class EjbPlatformBean implements EjbPlatform {
 		// END FIXME
 	}
 
+	@Override
 	public CMPluginRegistry getPluginRegistry() {
 		return InstallablePlatform.getInstance().getPluginRegistry();
 	}
 
+	@Override
 	public CMPlatformRunnable loaderGetRunnable(String applicationName) {
 		return InstallablePlatform.getInstance().loaderGetRunnable(
 				applicationName);
 	}
 
+	@Override
 	public String getPluginDirectory(String id, String version) {
 		return InstallablePlatform.getInstance()
 				.getPluginDirectory(id, version);
 	}
 
+	@Override
 	public URL getPluginDescriptorUrl(String id, String version,
 			String descriptorFile) {
 		return InstallablePlatform.getInstance().getPluginDescriptorUrl(id,

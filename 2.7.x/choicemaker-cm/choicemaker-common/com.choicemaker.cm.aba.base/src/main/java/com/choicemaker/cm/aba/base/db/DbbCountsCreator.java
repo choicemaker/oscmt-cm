@@ -175,7 +175,7 @@ public class DbbCountsCreator {
 		String uniqueId = dbf.getTable().getUniqueId();
 		Iterator<FieldValueCounts> iCountFields = countFields.iterator();
 		while (iCountFields.hasNext()) {
-			FieldValueCounts cf = (FieldValueCounts) iCountFields.next();
+			FieldValueCounts cf = iCountFields.next();
 			if (column.equals(cf.getColumn()) && view.equals(cf.getView())
 					&& uniqueId.equals(cf.getUniqueId())) {
 				return cf;
@@ -213,7 +213,7 @@ public class DbbCountsCreator {
 
 	static int getTableSize(Map<DbTable, Integer> tableSizes, IDbTable dbt) {
 		int retVal = 0;
-		Integer s = (Integer) tableSizes.get(dbt);
+		Integer s = tableSizes.get(dbt);
 		if (s == null) {
 			String msg =
 				"Table size is null. Have ABA statistics been computed?";

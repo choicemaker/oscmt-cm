@@ -38,6 +38,7 @@ public class RecordIdSource<T extends Comparable<T>> extends BaseFileSource<T>
 		super(fileName, EXTERNAL_DATA_FORMAT.STRING);
 	}
 
+	@Override
 	protected void resetNext() {
 		this.nextID = null;
 		isFirst = true;
