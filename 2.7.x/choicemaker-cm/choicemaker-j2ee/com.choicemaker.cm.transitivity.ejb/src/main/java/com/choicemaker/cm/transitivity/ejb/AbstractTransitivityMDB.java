@@ -20,15 +20,15 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 
-import com.choicemaker.cm.args.ProcessingEventBean;
 import com.choicemaker.cm.args.OabaSettings;
+import com.choicemaker.cm.args.ProcessingEventBean;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.BatchJobManager;
 import com.choicemaker.cm.batch.api.BatchJobStatus;
-import com.choicemaker.cm.batch.api.OperationalPropertyController;
 import com.choicemaker.cm.batch.api.EventPersistenceManager;
+import com.choicemaker.cm.batch.api.OperationalPropertyController;
 import com.choicemaker.cm.batch.api.ProcessingEventLog;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
@@ -38,13 +38,13 @@ import com.choicemaker.cm.oaba.api.RecordIdController;
 import com.choicemaker.cm.oaba.api.RecordSourceController;
 import com.choicemaker.cm.oaba.api.SqlRecordSourceController;
 import com.choicemaker.cm.oaba.core.RecordMatchingMode;
+import com.choicemaker.cm.oaba.ejb.BatchJobUtils;
+import com.choicemaker.cm.oaba.ejb.data.OabaJobMessage;
+import com.choicemaker.cm.oaba.ejb.util.MessageBeanUtils;
 import com.choicemaker.cm.transitivity.api.TransitivityConfigurationController;
 import com.choicemaker.cm.transitivity.api.TransitivityJobManager;
 import com.choicemaker.cm.transitivity.api.TransitivityParametersController;
 import com.choicemaker.cm.transitivity.api.TransitivitySettingsController;
-import com.choicemaker.cm.oaba.ejb.BatchJobUtils;
-import com.choicemaker.cm.oaba.ejb.data.OabaJobMessage;
-import com.choicemaker.cm.oaba.ejb.util.MessageBeanUtils;
 import com.choicemaker.cm.transitivity.ejb.util.LoggingUtils;
 
 /**

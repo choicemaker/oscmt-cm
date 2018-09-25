@@ -1,6 +1,8 @@
 package com.choicemaker.cm.urm.ejb;
 
-import static com.choicemaker.cm.urm.ejb.UrmConfigurationJPA.*;
+import static com.choicemaker.cm.urm.ejb.UrmConfigurationJPA.CN_CMS_CONF_NAME;
+import static com.choicemaker.cm.urm.ejb.UrmConfigurationJPA.CN_ID;
+import static com.choicemaker.cm.urm.ejb.UrmConfigurationJPA.CN_URM_CONF_NAME;
 import static com.choicemaker.cm.urm.ejb.UrmConfigurationJPA.ID_GENERATOR_NAME;
 import static com.choicemaker.cm.urm.ejb.UrmConfigurationJPA.ID_GENERATOR_PK_COLUMN_NAME;
 import static com.choicemaker.cm.urm.ejb.UrmConfigurationJPA.ID_GENERATOR_PK_COLUMN_VALUE;

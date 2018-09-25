@@ -7,7 +7,7 @@
  *******************************************************************************/
 package com.choicemaker.cm.oaba.ejb;
 
-import static com.choicemaker.cm.args.OabaLinkageType.*;
+import static com.choicemaker.cm.args.OabaLinkageType.STAGING_DEDUPLICATION;
 import static com.choicemaker.cm.args.OabaLinkageType.TA_STAGING_DEDUPLICATION;
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_CLEAR_RESOURCES;
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_OABA_CACHED_RESULTS_FILE;

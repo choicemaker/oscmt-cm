@@ -7,8 +7,8 @@
  *******************************************************************************/
 package com.choicemaker.cm.oaba.ejb;
 
-import static com.choicemaker.cm.oaba.ejb.AbaSettingsJPA.CN_ID;
 import static com.choicemaker.cm.oaba.ejb.AbaSettingsJPA.CN_ABA_MAX_MATCHES;
+import static com.choicemaker.cm.oaba.ejb.AbaSettingsJPA.CN_ID;
 import static com.choicemaker.cm.oaba.ejb.AbaSettingsJPA.CN_LIMIT_BLOCKSET;
 import static com.choicemaker.cm.oaba.ejb.AbaSettingsJPA.CN_LIMIT_SINGLESET;
 import static com.choicemaker.cm.oaba.ejb.AbaSettingsJPA.CN_LIMIT_SINGLETABLE;

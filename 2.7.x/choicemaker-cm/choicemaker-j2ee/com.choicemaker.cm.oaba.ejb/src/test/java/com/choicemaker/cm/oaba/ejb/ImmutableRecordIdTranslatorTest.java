@@ -12,8 +12,6 @@ import org.junit.Test;
 
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.oaba.core.ImmutableRecordIdTranslator;
-import com.choicemaker.cm.oaba.ejb.RecordIdSink;
-import com.choicemaker.cm.oaba.ejb.RecordIdSource;
 
 public class ImmutableRecordIdTranslatorTest {
 

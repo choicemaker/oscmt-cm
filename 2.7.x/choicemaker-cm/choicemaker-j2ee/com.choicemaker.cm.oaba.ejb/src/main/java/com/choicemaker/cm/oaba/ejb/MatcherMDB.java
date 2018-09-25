@@ -19,8 +19,8 @@ import javax.jms.JMSContext;
 import javax.jms.Queue;
 
 import com.choicemaker.cm.batch.api.BatchJob;
-import com.choicemaker.cm.batch.api.OperationalPropertyController;
 import com.choicemaker.cm.batch.api.EventPersistenceManager;
+import com.choicemaker.cm.batch.api.OperationalPropertyController;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.base.MatchRecord2;
 import com.choicemaker.cm.oaba.api.OabaJobManager;

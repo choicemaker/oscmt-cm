@@ -10,7 +10,6 @@ package com.choicemaker.cm.urm.api;
 import java.util.List;
 
 import com.choicemaker.cm.core.DatabaseException;
-import com.choicemaker.cm.urm.api.UrmConfiguration;
 import com.choicemaker.cm.urm.exceptions.ConfigException;
 
 /**

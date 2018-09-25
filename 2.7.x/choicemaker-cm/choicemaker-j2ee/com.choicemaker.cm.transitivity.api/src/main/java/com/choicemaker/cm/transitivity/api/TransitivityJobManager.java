@@ -9,7 +9,6 @@ package com.choicemaker.cm.transitivity.api;
 
 import java.util.List;
 
-
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;

@@ -7,7 +7,36 @@
  *******************************************************************************/
 package com.choicemaker.cm.aba.base.db;
 
-import static com.choicemaker.cm.aba.base.db.DbbCountsCreatorSQL.*;
+import static com.choicemaker.cm.aba.base.db.DbbCountsCreatorSQL.INVALID_JDBC_TYPE;
+import static com.choicemaker.cm.aba.base.db.DbbCountsCreatorSQL.bindSqlDeleteCountConfigFields;
+import static com.choicemaker.cm.aba.base.db.DbbCountsCreatorSQL.bindSqlInsertFieldIntoCountConfigFields;
+import static com.choicemaker.cm.aba.base.db.DbbCountsCreatorSQL.bindSqlInsertTableIntoCountConfigFields;
+import static com.choicemaker.cm.aba.base.db.DbbCountsCreatorSQL.closeConnection;
+import static com.choicemaker.cm.aba.base.db.DbbCountsCreatorSQL.closeStatement;
+import static com.choicemaker.cm.aba.base.db.DbbCountsCreatorSQL.deleteCounts;
+import static com.choicemaker.cm.aba.base.db.DbbCountsCreatorSQL.getColumnType;
+import static com.choicemaker.cm.aba.base.db.DbbCountsCreatorSQL.insertFieldCounts;
+import static com.choicemaker.cm.aba.base.db.DbbCountsCreatorSQL.insertMissingFieldsCountFields;
+import static com.choicemaker.cm.aba.base.db.DbbCountsCreatorSQL.insertMissingTablesCountFields;
+import static com.choicemaker.cm.aba.base.db.DbbCountsCreatorSQL.insertTableSize;
+import static com.choicemaker.cm.aba.base.db.DbbCountsCreatorSQL.instance21;
+import static com.choicemaker.cm.aba.base.db.DbbCountsCreatorSQL.query10;
+import static com.choicemaker.cm.aba.base.db.DbbCountsCreatorSQL.query11;
+import static com.choicemaker.cm.aba.base.db.DbbCountsCreatorSQL.query12;
+import static com.choicemaker.cm.aba.base.db.DbbCountsCreatorSQL.selectEntriesCountFields;
+import static com.choicemaker.cm.aba.base.db.DbbCountsCreatorSQL.selectFieldId;
+import static com.choicemaker.cm.aba.base.db.DbbCountsCreatorSQL.selectMaxFieldIdCountFields;
+import static com.choicemaker.cm.aba.base.db.DbbCountsCreatorSQL.selectMissingFieldsCountFields;
+import static com.choicemaker.cm.aba.base.db.DbbCountsCreatorSQL.selectMissingTablesCountFields;
+import static com.choicemaker.cm.aba.base.db.DbbCountsCreatorSQL.selectTableSizes;
+import static com.choicemaker.cm.aba.base.db.DbbCountsCreatorSQL.setDateFormat;
+import static com.choicemaker.cm.aba.base.db.DbbCountsCreatorSQL.sqlDeleteCountConfigFields;
+import static com.choicemaker.cm.aba.base.db.DbbCountsCreatorSQL.sqlInsertFieldIntoCountConfigFields;
+import static com.choicemaker.cm.aba.base.db.DbbCountsCreatorSQL.sqlInsertTableIntoCountConfigFields;
+import static com.choicemaker.cm.aba.base.db.DbbCountsCreatorSQL.sqlSelectFieldIdCountFields;
+import static com.choicemaker.cm.aba.base.db.DbbCountsCreatorSQL.sqlSelectValueCount;
+import static com.choicemaker.cm.aba.base.db.DbbCountsCreatorSQL.updateCounts;
+import static com.choicemaker.cm.aba.base.db.DbbCountsCreatorSQL.updateTimeStampsCountFields;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

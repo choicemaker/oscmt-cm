@@ -34,9 +34,9 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.choicemaker.cm.args.BatchProcessingConstants;
-import com.choicemaker.cm.args.ProcessingEventBean;
 import com.choicemaker.cm.args.PersistentObject;
 import com.choicemaker.cm.args.ProcessingEvent;
+import com.choicemaker.cm.args.ProcessingEventBean;
 import com.choicemaker.cm.batch.api.BatchProcessingEvent;
 
 @Entity

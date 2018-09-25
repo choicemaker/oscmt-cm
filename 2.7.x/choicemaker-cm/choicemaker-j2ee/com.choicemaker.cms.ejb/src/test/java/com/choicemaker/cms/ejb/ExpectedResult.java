@@ -4,9 +4,9 @@ import java.io.Serializable;
 import java.util.List;
 
 import com.choicemaker.client.api.DataAccessObject;
-import com.choicemaker.client.api.QueryCandidatePair;
 import com.choicemaker.client.api.IGraphProperty;
 import com.choicemaker.client.api.MatchGroup;
+import com.choicemaker.client.api.QueryCandidatePair;
 import com.choicemaker.client.api.TransitiveGroup;
 import com.choicemaker.cm.core.Match;
 import com.choicemaker.cm.transitivity.core.CompositeEntity;

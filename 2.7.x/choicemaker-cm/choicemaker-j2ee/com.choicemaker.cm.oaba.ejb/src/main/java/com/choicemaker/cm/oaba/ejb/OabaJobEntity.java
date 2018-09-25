@@ -26,7 +26,6 @@ import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.BatchJobRigor;
 import com.choicemaker.cm.batch.ejb.BatchJobEntity;
-import com.choicemaker.cm.core.IControl;
 
 /**
  * This class tracks the progress of a (long-running) offline matching process.

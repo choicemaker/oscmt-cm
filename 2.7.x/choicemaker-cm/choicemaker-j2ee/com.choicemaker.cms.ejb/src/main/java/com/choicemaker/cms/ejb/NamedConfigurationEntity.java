@@ -1,9 +1,10 @@
 package com.choicemaker.cms.ejb;
 
+import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_ABA_MAX_MATCHES;
 import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_BKCONF;
 import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_CM_IO_CLASS;
-import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_CONF_NAME;
 import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_CONF_DESCRIPTION;
+import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_CONF_NAME;
 import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_DATASOURCE;
 import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_FILE;
 import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_FORMAT;
@@ -11,7 +12,6 @@ import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_GRAPH;
 import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_HIGH_THRESHOLD;
 import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_ID;
 import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_INTERVAL;
-import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_ABA_MAX_MATCHES;
 import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_LIMIT_BLOCKSET;
 import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_LIMIT_SINGLESET;
 import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_LIMIT_SINGLETABLE;

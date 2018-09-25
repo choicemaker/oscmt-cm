@@ -1,6 +1,5 @@
 package com.choicemaker.cm.batch.ejb;
 
-import static com.choicemaker.util.DebugUtils.printStackTrace;
 import static com.choicemaker.cm.batch.ejb.BatchJobJPA.AUDIT_TABLE_NAME;
 import static com.choicemaker.cm.batch.ejb.BatchJobJPA.CN_AUDIT_JOIN;
 import static com.choicemaker.cm.batch.ejb.BatchJobJPA.CN_BPARENT_ID;
@@ -26,6 +25,7 @@ import static com.choicemaker.cm.batch.ejb.BatchJobJPA.ID_GENERATOR_VALUE_COLUMN
 import static com.choicemaker.cm.batch.ejb.BatchJobJPA.JPQL_BATCHJOB_FIND_BY_JOBID;
 import static com.choicemaker.cm.batch.ejb.BatchJobJPA.QN_BATCHJOB_FIND_BY_JOBID;
 import static com.choicemaker.cm.batch.ejb.BatchJobJPA.TABLE_NAME;
+import static com.choicemaker.util.DebugUtils.printStackTrace;
 
 import java.io.File;
 import java.io.Serializable;

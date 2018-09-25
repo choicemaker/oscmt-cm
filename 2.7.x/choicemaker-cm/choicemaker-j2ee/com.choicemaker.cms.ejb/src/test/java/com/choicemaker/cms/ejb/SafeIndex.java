@@ -2,8 +2,6 @@ package com.choicemaker.cms.ejb;
 
 import java.io.Serializable;
 
-import com.choicemaker.cms.ejb.SafeIndex;
-
 /** Safe index instances of the same type with null index values are equal */
 public class SafeIndex<T extends Comparable<T> & Serializable>
 		implements Comparable<SafeIndex<T>>, Serializable {

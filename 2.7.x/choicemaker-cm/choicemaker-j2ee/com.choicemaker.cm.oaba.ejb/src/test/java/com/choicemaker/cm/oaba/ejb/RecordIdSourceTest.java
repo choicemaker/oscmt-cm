@@ -15,8 +15,6 @@ import org.junit.Test;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.oaba.core.RECORD_ID_TYPE;
-import com.choicemaker.cm.oaba.ejb.RecordIdSink;
-import com.choicemaker.cm.oaba.ejb.RecordIdSource;
 
 /**
  * This unit test relies on RecordIdSink working correctly. RecordIdSink is

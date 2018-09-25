@@ -15,7 +15,6 @@ import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.Match;
 import com.choicemaker.cm.transitivity.core.CompositeEntity;
 import com.choicemaker.cms.api.AbaParameters;
-import com.choicemaker.cms.ejb.OnlineDelegate;
 
 /**
  * Tests of the transitivity methods of OnlineDelegate. Non-transitivity methods

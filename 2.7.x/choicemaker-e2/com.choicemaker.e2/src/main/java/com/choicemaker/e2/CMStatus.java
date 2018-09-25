@@ -7,6 +7,8 @@
  *******************************************************************************/
 package com.choicemaker.e2;
 
+import com.choicemaker.e2.E2Exception.Status;
+
 /**
  * A status object represents the outcome of an operation.
  * All <code>E2Exception</code>s carry a status object to indicate 

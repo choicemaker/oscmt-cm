@@ -12,11 +12,6 @@ import org.junit.Test;
 import com.choicemaker.cm.aba.IBlockingField;
 import com.choicemaker.cm.aba.IBlockingValue;
 import com.choicemaker.cm.aba.IDbTable;
-import com.choicemaker.cm.aba.base.BlockingField;
-import com.choicemaker.cm.aba.base.BlockingValue;
-import com.choicemaker.cm.aba.base.DbField;
-import com.choicemaker.cm.aba.base.DbTable;
-import com.choicemaker.cm.aba.base.QueryField;
 
 public class BlockingSetTest {
 

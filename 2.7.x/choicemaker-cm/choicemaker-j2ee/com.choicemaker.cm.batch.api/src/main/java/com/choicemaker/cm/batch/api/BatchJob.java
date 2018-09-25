@@ -5,7 +5,6 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.choicemaker.cm.args.PersistentObject;
-import com.choicemaker.cm.core.IControl;
 
 public interface BatchJob extends PersistentObject, Serializable {
 

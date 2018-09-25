@@ -11,8 +11,6 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import com.choicemaker.cm.oaba.ejb.AbstractRecordIdTranslationEntity;
-
 public class AbstractRecordIdTranslationEntityTest {
 
 	@Test

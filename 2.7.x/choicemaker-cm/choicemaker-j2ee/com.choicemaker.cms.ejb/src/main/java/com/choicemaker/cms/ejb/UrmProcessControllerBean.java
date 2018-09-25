@@ -10,9 +10,7 @@ import javax.ejb.Stateless;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.ProcessController;
 import com.choicemaker.cm.oaba.ejb.OabaJobEntity;
-import com.choicemaker.cm.oaba.ejb.OabaProcessControllerBean;
 import com.choicemaker.cm.transitivity.ejb.TransitivityJobEntity;
-import com.choicemaker.cm.transitivity.ejb.TransitivityProcessControllerBean;
 import com.choicemaker.cms.api.UrmJobManager;
 import com.choicemaker.util.Precondition;
 

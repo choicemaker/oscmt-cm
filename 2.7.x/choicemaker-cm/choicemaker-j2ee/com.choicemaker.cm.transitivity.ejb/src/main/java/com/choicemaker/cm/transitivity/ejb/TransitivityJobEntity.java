@@ -27,7 +27,6 @@ import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.BatchJobRigor;
 import com.choicemaker.cm.batch.ejb.BatchJobEntity;
-import com.choicemaker.cm.core.IControl;
 
 /**
  * A TransitivityJobEntity is a type of BatchJob that tracks the progress of a

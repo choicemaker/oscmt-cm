@@ -23,8 +23,6 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import com.choicemaker.cms.ejb.NamedConfigurationEntity;
-
 public class NamedConfigurationEntityTest {
 
 	// private Random random = new Random();

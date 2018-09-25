@@ -7,9 +7,9 @@
  *******************************************************************************/
 package com.choicemaker.cm.transitivity.ejb;
 
-import static com.choicemaker.cm.args.ProcessingEventBean.DONE;
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_TRANSITIVITY_CACHED_GROUPS_FILE;
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_TRANSITIVITY_CACHED_PAIRS_FILE;
+import static com.choicemaker.cm.args.ProcessingEventBean.DONE;
 import static com.choicemaker.cm.batch.api.BatchJobStatus.ABORT_REQUESTED;
 
 import java.io.PrintWriter;
@@ -37,8 +37,8 @@ import com.choicemaker.cm.args.ProcessingEvent;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.BatchJobStatus;
-import com.choicemaker.cm.batch.api.OperationalPropertyController;
 import com.choicemaker.cm.batch.api.EventPersistenceManager;
+import com.choicemaker.cm.batch.api.OperationalPropertyController;
 import com.choicemaker.cm.batch.api.ProcessingEventLog;
 import com.choicemaker.cm.oaba.api.OabaSettingsController;
 import com.choicemaker.cm.oaba.api.ServerConfigurationController;
