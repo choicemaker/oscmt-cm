@@ -253,6 +253,7 @@ public class NamedConfigurationEntity extends AbstractPersistentObject
 		this.setServerMaxChunkSize(nc.getServerMaxChunkSize());
 		this.setServerMaxChunkCount(nc.getServerMaxChunkCount());
 		this.setServerFileURI(nc.getServerFileURI());
+		this.setReferenceDatabaseReader(nc.getReferenceDatabaseReader());
 	}
 
 	// -- Accessors
