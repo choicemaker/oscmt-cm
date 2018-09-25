@@ -17,8 +17,7 @@ public interface AbaStatisticsCache {
 	public void putStatistics(String blockingConfigurationId,
 			AbaStatistics counts);
 
-	public void putStatistics(IBlockingConfiguration bc,
-			AbaStatistics counts);
+	public void putStatistics(IBlockingConfiguration bc, AbaStatistics counts);
 
 	public AbaStatistics getStatistics(String bcId);
 

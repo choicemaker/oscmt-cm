@@ -50,8 +50,8 @@ import com.choicemaker.cm.oaba.ejb.util.MessageBeanUtils;
 @Stateless
 public class OabaEventManager implements EventPersistenceManager {
 
-	private static final Logger logger = Logger
-			.getLogger(OabaEventManager.class.getName());
+	private static final Logger logger =
+		Logger.getLogger(OabaEventManager.class.getName());
 
 	// Don't use this directly; use isOrderByDebuggingRequested() instead
 	static Boolean _isOrderByDebuggingRequested = null;
@@ -86,8 +86,8 @@ public class OabaEventManager implements EventPersistenceManager {
 		return deletedCount;
 	}
 
-	static BatchProcessingEventEntity updateStatus(EntityManager em, BatchJob job,
-			ProcessingEvent event, Date timestamp, String info) {
+	static BatchProcessingEventEntity updateStatus(EntityManager em,
+			BatchJob job, ProcessingEvent event, Date timestamp, String info) {
 		if (em == null) {
 			throw new IllegalArgumentException("null EntityManager");
 		}
@@ -120,8 +120,8 @@ public class OabaEventManager implements EventPersistenceManager {
 		OabaNotification data = new OabaNotification(ope);
 		ObjectMessage message = jmsContext.createObjectMessage(data);
 		JMSProducer sender = jmsContext.createProducer();
-		logger.info(MessageBeanUtils
-				.topicInfo("Sending", oabaStatusTopic, data));
+		logger.info(
+				MessageBeanUtils.topicInfo("Sending", oabaStatusTopic, data));
 		sender.send(oabaStatusTopic, message);
 		logger.info(MessageBeanUtils.topicInfo("Sent", oabaStatusTopic, data));
 	}
@@ -131,7 +131,8 @@ public class OabaEventManager implements EventPersistenceManager {
 	 */
 	static boolean isOrderByDebuggingRequested() {
 		if (_isOrderByDebuggingRequested == null) {
-			String pn = EventPersistenceManager.PN_PROCESSINGEVENT_ORDERBY_DEBUGGING;
+			String pn =
+				EventPersistenceManager.PN_PROCESSINGEVENT_ORDERBY_DEBUGGING;
 			String defaultValue = Boolean.FALSE.toString();
 			String value = System.getProperty(pn, defaultValue);
 			_isOrderByDebuggingRequested = Boolean.valueOf(value);
@@ -145,9 +146,8 @@ public class OabaEventManager implements EventPersistenceManager {
 
 	static BatchProcessingEvent getCurrentBatchProcessingEvent(EntityManager em,
 			BatchJob batchJob) {
-		List<BatchProcessingEvent> entries =
-			OabaEventManager.findProcessingLogEntriesByJobId(em,
-					batchJob.getId());
+		List<BatchProcessingEvent> entries = OabaEventManager
+				.findProcessingLogEntriesByJobId(em, batchJob.getId());
 		final BatchProcessingEvent retVal;
 		if (entries == null || entries.isEmpty()) {
 			retVal = null;
@@ -163,9 +163,8 @@ public class OabaEventManager implements EventPersistenceManager {
 							String summary =
 								"Invalid BatchProcessingEvent ordering";
 							String msg =
-								OabaEventManager
-										.createOrderingDetailMesssage(summary,
-												retVal, e2);
+								OabaEventManager.createOrderingDetailMesssage(
+										summary, retVal, e2);
 							logger.severe(msg);
 							throw new IllegalStateException(summary);
 
@@ -176,9 +175,8 @@ public class OabaEventManager implements EventPersistenceManager {
 							String summary =
 								"Ambiguous BatchProcessingEvent timestamps";
 							String msg =
-								OabaEventManager
-										.createOrderingDetailMesssage(summary,
-												retVal, e2);
+								OabaEventManager.createOrderingDetailMesssage(
+										summary, retVal, e2);
 							logger.fine(msg);
 						}
 					}
@@ -209,8 +207,7 @@ public class OabaEventManager implements EventPersistenceManager {
 	private Topic oabaStatusTopic;
 
 	@Override
-	public List<BatchProcessingEvent> findProcessingEventsByJobId(
-			long id) {
+	public List<BatchProcessingEvent> findProcessingEventsByJobId(long id) {
 		return findProcessingLogEntriesByJobId(em, id);
 	}
 
@@ -230,8 +227,8 @@ public class OabaEventManager implements EventPersistenceManager {
 	}
 
 	@Override
-	public void updateStatusWithNotification(BatchJob job, ProcessingEvent event,
-			Date timestamp, String info) {
+	public void updateStatusWithNotification(BatchJob job,
+			ProcessingEvent event, Date timestamp, String info) {
 		updateStatusWithNotification(em, jmsContext, oabaStatusTopic, job,
 				event, timestamp, info);
 	}

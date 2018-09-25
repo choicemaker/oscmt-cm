@@ -50,11 +50,11 @@ public class RecordIdSource<T extends Comparable<T>> extends BaseFileSource<T>
 			try {
 				this.nextID = readNext();
 			} catch (EOFException x) {
-				throw new NoSuchElementException("EOFException: "
-						+ x.getMessage());
+				throw new NoSuchElementException(
+						"EOFException: " + x.getMessage());
 			} catch (IOException x) {
-				throw new NoSuchElementException("BlockingException: "
-						+ x.getMessage());
+				throw new NoSuchElementException(
+						"BlockingException: " + x.getMessage());
 			}
 		}
 		T retVal = this.nextID;
@@ -78,8 +78,8 @@ public class RecordIdSource<T extends Comparable<T>> extends BaseFileSource<T>
 				if (dataType == null) {
 					dataType = RECORD_ID_TYPE.fromValue(Integer.parseInt(str));
 				} else {
-					assert dataType == RECORD_ID_TYPE.fromValue(Integer
-							.parseInt(str));
+					assert dataType == RECORD_ID_TYPE
+							.fromValue(Integer.parseInt(str));
 				}
 			}
 			isFirst = false;

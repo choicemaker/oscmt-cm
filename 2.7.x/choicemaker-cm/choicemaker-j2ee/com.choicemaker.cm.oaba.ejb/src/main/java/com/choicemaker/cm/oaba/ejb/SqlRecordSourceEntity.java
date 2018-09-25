@@ -32,10 +32,11 @@ import com.choicemaker.cm.args.PersistableSqlRecordSource;
 @Entity
 @Table(/* schema = "CHOICEMAKER", */name = TABLE_NAME)
 @DiscriminatorValue(DISCRIMINATOR_VALUE)
-public class SqlRecordSourceEntity extends BaseRecordSourceEntity implements
-		PersistableSqlRecordSource {
+public class SqlRecordSourceEntity extends BaseRecordSourceEntity
+		implements PersistableSqlRecordSource {
 
-	private static final Logger logger = Logger.getLogger(SqlRecordSourceEntity.class.getName());
+	private static final Logger logger =
+		Logger.getLogger(SqlRecordSourceEntity.class.getName());
 
 	private static final long serialVersionUID = 271L;
 
@@ -73,8 +74,8 @@ public class SqlRecordSourceEntity extends BaseRecordSourceEntity implements
 	}
 
 	public SqlRecordSourceEntity(PersistableSqlRecordSource psrs) {
-		this(psrs.getDatabaseReader(), psrs.getDataSource(), psrs.getModelId(), psrs
-				.getSqlSelectStatement(), psrs.getDatabaseConfiguration(),
+		this(psrs.getDatabaseReader(), psrs.getDataSource(), psrs.getModelId(),
+				psrs.getSqlSelectStatement(), psrs.getDatabaseConfiguration(),
 				psrs.getDatabaseAccessor());
 	}
 
@@ -107,7 +108,8 @@ public class SqlRecordSourceEntity extends BaseRecordSourceEntity implements
 		}
 		if (abaAccessor == null || !abaAccessor.equals(abaAccessor.trim())
 				|| abaAccessor.isEmpty()) {
-			String msg = "null or blank ABA database accessor'" + abaAccessor + "'";
+			String msg =
+				"null or blank ABA database accessor'" + abaAccessor + "'";
 			logger.fine(msg);
 			abaAccessor = null;
 		} else {

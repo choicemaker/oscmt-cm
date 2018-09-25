@@ -34,8 +34,8 @@ import com.choicemaker.cm.oaba.core.RECORD_ID_TYPE;
 @Stateless
 public class OabaPairResultControllerBean implements OabaPairResultController {
 
-	private static final Logger logger = Logger
-			.getLogger(OabaPairResultControllerBean.class.getName());
+	private static final Logger logger =
+		Logger.getLogger(OabaPairResultControllerBean.class.getName());
 
 	/**
 	 * The index in the {@link #createRecordIdTypeQuery(BatchJob)
@@ -70,7 +70,7 @@ public class OabaPairResultControllerBean implements OabaPairResultController {
 		try {
 			connection = em.unwrap(Connection.class);
 			connection.setReadOnly(true);
-//			connection.setAutoCommit(true); // 2015-04-01a EJB3 CHANGE rphall
+			// connection.setAutoCommit(true); // 2015-04-01a EJB3 CHANGE rphall
 			String query = createRecordCountQuery(job);
 			logger.fine(query);
 
@@ -84,11 +84,11 @@ public class OabaPairResultControllerBean implements OabaPairResultController {
 					throw new IllegalStateException(msg);
 				}
 				retVal = i;
-				logger.info("Result count (job " + job.getId() + "): " + retVal);
+				logger.info(
+						"Result count (job " + job.getId() + "): " + retVal);
 				if (resultCount > 1) {
-					String msg =
-						"Multiple result counts for job " + job.getId() + ". "
-								+ "Second count: " + retVal;
+					String msg = "Multiple result counts for job " + job.getId()
+							+ ". " + "Second count: " + retVal;
 					throw new IllegalStateException(msg);
 				}
 			}
@@ -108,10 +108,9 @@ public class OabaPairResultControllerBean implements OabaPairResultController {
 				try {
 					connection.close();
 				} catch (SQLException e) {
-					String msg =
-						this.getClass().getSimpleName()
-								+ ".getResultType(BatchJob): "
-								+ "unable to close JDBC connection: " + e;
+					String msg = this.getClass().getSimpleName()
+							+ ".getResultType(BatchJob): "
+							+ "unable to close JDBC connection: " + e;
 					logger.severe(msg);
 				}
 			}
@@ -124,8 +123,8 @@ public class OabaPairResultControllerBean implements OabaPairResultController {
 	protected String createRecordCountQuery(BatchJob job) {
 		final long jobId = job.getId();
 		StringBuffer b = new StringBuffer();
-		b.append("SELECT COUNT(*) ").append(
-				RecordIdTranslationJPA.CN_RECORD_TYPE);
+		b.append("SELECT COUNT(*) ")
+				.append(RecordIdTranslationJPA.CN_RECORD_TYPE);
 		b.append(" FROM ").append(RecordIdTranslationJPA.TABLE_NAME);
 		b.append(" WHERE ").append(RecordIdTranslationJPA.CN_JOB_ID);
 		b.append(" = ").append(jobId);
@@ -146,7 +145,7 @@ public class OabaPairResultControllerBean implements OabaPairResultController {
 		try {
 			connection = em.unwrap(Connection.class);
 			connection.setReadOnly(true);
-//			connection.setAutoCommit(true); // 2015-04-01a EJB3 CHANGE rphall
+			// connection.setAutoCommit(true); // 2015-04-01a EJB3 CHANGE rphall
 			String query = createRecordIdTypeQuery(job);
 			logger.fine(query);
 
@@ -168,9 +167,8 @@ public class OabaPairResultControllerBean implements OabaPairResultController {
 				String msg = "No OABA pair-wise results for job " + job;
 				throw new BlockingException(msg);
 			} else if (dataTypes.size() > 1) {
-				String msg =
-					"Inconsistent OABA pair-wise results for job " + job + "("
-							+ dataTypes + ")";
+				String msg = "Inconsistent OABA pair-wise results for job "
+						+ job + "(" + dataTypes + ")";
 				throw new BlockingException(msg);
 			}
 			assert dataTypes.size() == 1;
@@ -187,10 +185,9 @@ public class OabaPairResultControllerBean implements OabaPairResultController {
 				try {
 					connection.close();
 				} catch (SQLException e) {
-					String msg =
-						this.getClass().getSimpleName()
-								+ ".getResultType(BatchJob): "
-								+ "unable to close JDBC connection: " + e;
+					String msg = this.getClass().getSimpleName()
+							+ ".getResultType(BatchJob): "
+							+ "unable to close JDBC connection: " + e;
 					logger.severe(msg);
 				}
 			}
@@ -242,17 +239,16 @@ public class OabaPairResultControllerBean implements OabaPairResultController {
 
 	protected void getIntegerResults(BatchJob job,
 			IMatchRecord2Sink<Integer> results) throws BlockingException {
-		Query query =
-			em.createNamedQuery(OabaPairResultJPA.QN_PAIRRESULTINTEGER_FIND_BY_JOBID);
+		Query query = em.createNamedQuery(
+				OabaPairResultJPA.QN_PAIRRESULTINTEGER_FIND_BY_JOBID);
 		@SuppressWarnings("unchecked")
 		List<OabaPairResultInteger> entities = query.getResultList();
 		results.open();
 		for (OabaPairResultInteger entity : entities) {
-			MatchRecord2<Integer> mr =
-				new MatchRecord2<>(entity.getRecord1Id(),
-						entity.getRecord2Id(), entity.getRecord2Source(),
-						entity.getProbability(), entity.getDecision(),
-						entity.getNotesAsDelimitedString());
+			MatchRecord2<Integer> mr = new MatchRecord2<>(entity.getRecord1Id(),
+					entity.getRecord2Id(), entity.getRecord2Source(),
+					entity.getProbability(), entity.getDecision(),
+					entity.getNotesAsDelimitedString());
 			results.writeMatch(mr);
 		}
 		results.flush();
@@ -260,17 +256,16 @@ public class OabaPairResultControllerBean implements OabaPairResultController {
 
 	protected void getLongResults(BatchJob job, IMatchRecord2Sink<Long> results)
 			throws BlockingException {
-		Query query =
-			em.createNamedQuery(RecordIdTranslationJPA.QN_TRANSLATEDLONGID_FIND_BY_JOBID);
+		Query query = em.createNamedQuery(
+				RecordIdTranslationJPA.QN_TRANSLATEDLONGID_FIND_BY_JOBID);
 		@SuppressWarnings("unchecked")
 		List<OabaPairResultLong> entities = query.getResultList();
 		results.open();
 		for (OabaPairResultLong entity : entities) {
-			MatchRecord2<Long> mr =
-				new MatchRecord2<>(entity.getRecord1Id(),
-						entity.getRecord2Id(), entity.getRecord2Source(),
-						entity.getProbability(), entity.getDecision(),
-						entity.getNotesAsDelimitedString());
+			MatchRecord2<Long> mr = new MatchRecord2<>(entity.getRecord1Id(),
+					entity.getRecord2Id(), entity.getRecord2Source(),
+					entity.getProbability(), entity.getDecision(),
+					entity.getNotesAsDelimitedString());
 			results.writeMatch(mr);
 		}
 		results.flush();
@@ -278,17 +273,16 @@ public class OabaPairResultControllerBean implements OabaPairResultController {
 
 	protected void getStringResults(BatchJob job,
 			IMatchRecord2Sink<String> results) throws BlockingException {
-		Query query =
-			em.createNamedQuery(RecordIdTranslationJPA.QN_TRANSLATEDSTRINGID_FIND_BY_JOBID);
+		Query query = em.createNamedQuery(
+				RecordIdTranslationJPA.QN_TRANSLATEDSTRINGID_FIND_BY_JOBID);
 		@SuppressWarnings("unchecked")
 		List<OabaPairResultString> entities = query.getResultList();
 		results.open();
 		for (OabaPairResultString entity : entities) {
-			MatchRecord2<String> mr =
-				new MatchRecord2<>(entity.getRecord1Id(),
-						entity.getRecord2Id(), entity.getRecord2Source(),
-						entity.getProbability(), entity.getDecision(),
-						entity.getNotesAsDelimitedString());
+			MatchRecord2<String> mr = new MatchRecord2<>(entity.getRecord1Id(),
+					entity.getRecord2Id(), entity.getRecord2Source(),
+					entity.getProbability(), entity.getDecision(),
+					entity.getNotesAsDelimitedString());
 			results.writeMatch(mr);
 		}
 		results.flush();
@@ -355,11 +349,10 @@ public class OabaPairResultControllerBean implements OabaPairResultController {
 		@SuppressWarnings("unchecked")
 		final MatchRecord2<Integer> firstResult =
 			(MatchRecord2<Integer>) rawResult;
-		OabaPairResultInteger opr =
-			new OabaPairResultInteger(job, firstResult.getRecordID1(),
-					firstResult.getRecordID2(), firstResult.getRecord2Role(),
-					firstResult.getProbability(), firstResult.getMatchType(),
-					firstResult.getNotes());
+		OabaPairResultInteger opr = new OabaPairResultInteger(job,
+				firstResult.getRecordID1(), firstResult.getRecordID2(),
+				firstResult.getRecord2Role(), firstResult.getProbability(),
+				firstResult.getMatchType(), firstResult.getNotes());
 		em.persist(opr);
 
 		@SuppressWarnings("unchecked")
@@ -367,11 +360,10 @@ public class OabaPairResultControllerBean implements OabaPairResultController {
 			(IMatchRecord2Source<Integer>) rawResults;
 		while (results.hasNext()) {
 			MatchRecord2<Integer> result = results.next();
-			opr =
-				new OabaPairResultInteger(job, result.getRecordID1(),
-						result.getRecordID2(), result.getRecord2Role(),
-						result.getProbability(), result.getMatchType(),
-						result.getNotes());
+			opr = new OabaPairResultInteger(job, result.getRecordID1(),
+					result.getRecordID2(), result.getRecord2Role(),
+					result.getProbability(), result.getMatchType(),
+					result.getNotes());
 			em.persist(opr);
 		}
 	}
@@ -381,11 +373,10 @@ public class OabaPairResultControllerBean implements OabaPairResultController {
 
 		@SuppressWarnings("unchecked")
 		MatchRecord2<Long> firstResult = (MatchRecord2<Long>) rawResult;
-		OabaPairResultLong opr =
-			new OabaPairResultLong(job, firstResult.getRecordID1(),
-					firstResult.getRecordID2(), firstResult.getRecord2Role(),
-					firstResult.getProbability(), firstResult.getMatchType(),
-					firstResult.getNotes());
+		OabaPairResultLong opr = new OabaPairResultLong(job,
+				firstResult.getRecordID1(), firstResult.getRecordID2(),
+				firstResult.getRecord2Role(), firstResult.getProbability(),
+				firstResult.getMatchType(), firstResult.getNotes());
 		em.persist(opr);
 
 		@SuppressWarnings("unchecked")
@@ -393,11 +384,10 @@ public class OabaPairResultControllerBean implements OabaPairResultController {
 			(IMatchRecord2Source<Long>) rawResults;
 		while (results.hasNext()) {
 			MatchRecord2<Long> result = results.next();
-			opr =
-				new OabaPairResultLong(job, result.getRecordID1(),
-						result.getRecordID2(), result.getRecord2Role(),
-						result.getProbability(), result.getMatchType(),
-						result.getNotes());
+			opr = new OabaPairResultLong(job, result.getRecordID1(),
+					result.getRecordID2(), result.getRecord2Role(),
+					result.getProbability(), result.getMatchType(),
+					result.getNotes());
 			em.persist(opr);
 		}
 	}
@@ -407,11 +397,10 @@ public class OabaPairResultControllerBean implements OabaPairResultController {
 
 		@SuppressWarnings("unchecked")
 		MatchRecord2<String> firstResult = (MatchRecord2<String>) rawResult;
-		OabaPairResultString opr =
-			new OabaPairResultString(job, firstResult.getRecordID1(),
-					firstResult.getRecordID2(), firstResult.getRecord2Role(),
-					firstResult.getProbability(), firstResult.getMatchType(),
-					firstResult.getNotes());
+		OabaPairResultString opr = new OabaPairResultString(job,
+				firstResult.getRecordID1(), firstResult.getRecordID2(),
+				firstResult.getRecord2Role(), firstResult.getProbability(),
+				firstResult.getMatchType(), firstResult.getNotes());
 		em.persist(opr);
 
 		@SuppressWarnings("unchecked")
@@ -419,11 +408,10 @@ public class OabaPairResultControllerBean implements OabaPairResultController {
 			(IMatchRecord2Source<String>) rawResults;
 		while (results.hasNext()) {
 			MatchRecord2<String> result = results.next();
-			opr =
-				new OabaPairResultString(job, result.getRecordID1(),
-						result.getRecordID2(), result.getRecord2Role(),
-						result.getProbability(), result.getMatchType(),
-						result.getNotes());
+			opr = new OabaPairResultString(job, result.getRecordID1(),
+					result.getRecordID2(), result.getRecord2Role(),
+					result.getProbability(), result.getMatchType(),
+					result.getNotes());
 			em.persist(opr);
 		}
 	}

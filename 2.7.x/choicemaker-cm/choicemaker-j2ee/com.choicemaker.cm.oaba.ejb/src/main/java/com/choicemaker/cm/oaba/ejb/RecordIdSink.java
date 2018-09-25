@@ -24,7 +24,8 @@ import com.choicemaker.cm.oaba.impl.BaseFileSink;
  * @author pcheung
  *
  */
-@SuppressWarnings({ "rawtypes" })
+@SuppressWarnings({
+		"rawtypes" })
 public class RecordIdSink extends BaseFileSink implements IRecordIdSink {
 
 	protected RECORD_ID_TYPE idType = null;
@@ -79,9 +80,8 @@ public class RecordIdSink extends BaseFileSink implements IRecordIdSink {
 		if (this.getRecordIdTypeUnchecked() == null) {
 			this.idType = type;
 		} else if (type != this.idType) {
-			String msg =
-				"Specified type (" + type + ") conflicts with existing type ("
-						+ this.idType + ")";
+			String msg = "Specified type (" + type
+					+ ") conflicts with existing type (" + this.idType + ")";
 			throw new IllegalArgumentException(msg);
 		}
 	}

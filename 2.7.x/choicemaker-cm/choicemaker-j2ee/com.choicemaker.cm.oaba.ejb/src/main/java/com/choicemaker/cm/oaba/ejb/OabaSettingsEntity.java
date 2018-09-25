@@ -31,8 +31,8 @@ import com.choicemaker.cm.args.OabaSettings;
 @NamedQuery(name = QN_OABA_FIND_ALL, query = JPQL_OABA_FIND_ALL)
 @Entity
 @DiscriminatorValue(value = DISCRIMINATOR_VALUE)
-public class OabaSettingsEntity extends AbaSettingsEntity implements
-		OabaSettings {
+public class OabaSettingsEntity extends AbaSettingsEntity
+		implements OabaSettings {
 
 	private static final long serialVersionUID = 271L;
 
@@ -55,12 +55,13 @@ public class OabaSettingsEntity extends AbaSettingsEntity implements
 					+ s.getMaxSingle());
 			pw.println("OABA: Control loop interval: " + s.getInterval());
 			pw.println("OABA: Max block size: " + s.getMaxBlockSize());
-			pw.println("OABA: Max oversized block size: " + s.getMaxOversized());
+			pw.println(
+					"OABA: Max oversized block size: " + s.getMaxOversized());
 			pw.println("OABA: Min field count (oversized blocks): "
 					+ s.getMinFields());
 			pw.println("OABA: Max chunk size: " + s.getMaxChunkSize());
-			pw.println("OABA: Max matches per export file: "
-					+ s.getMaxMatches());
+			pw.println(
+					"OABA: Max matches per export file: " + s.getMaxMatches());
 		}
 		String retVal = sw.toString();
 		return retVal;
@@ -113,8 +114,8 @@ public class OabaSettingsEntity extends AbaSettingsEntity implements
 	}
 
 	public OabaSettingsEntity(AbaSettings aba) {
-		this(aba.getLimitPerBlockingSet(), aba.getLimitSingleBlockingSet(), aba
-				.getSingleTableBlockingSetGraceLimit(), DEFAULT_MAX_SINGLE,
+		this(aba.getLimitPerBlockingSet(), aba.getLimitSingleBlockingSet(),
+				aba.getSingleTableBlockingSetGraceLimit(), DEFAULT_MAX_SINGLE,
 				DEFAULT_MAX_BLOCKSIZE, DEFAULT_MAX_CHUNKSIZE,
 				DEFAULT_MAX_MATCHES, DEFAULT_MAX_OVERSIZED, DEFAULT_MIN_FIELDS,
 				DEFAULT_INTERVAL);
@@ -123,22 +124,23 @@ public class OabaSettingsEntity extends AbaSettingsEntity implements
 	public OabaSettingsEntity(AbaSettings aba, int maxSingle, int maxBlockSize,
 			int maxChunkSize, int maxMatches, int maxOversized, int minFields,
 			int interval) {
-		this(aba.getLimitPerBlockingSet(), aba.getLimitSingleBlockingSet(), aba
-				.getSingleTableBlockingSetGraceLimit(), maxSingle,
-				maxBlockSize, maxChunkSize, maxMatches, maxOversized,
-				minFields, interval);
+		this(aba.getLimitPerBlockingSet(), aba.getLimitSingleBlockingSet(),
+				aba.getSingleTableBlockingSetGraceLimit(), maxSingle,
+				maxBlockSize, maxChunkSize, maxMatches, maxOversized, minFields,
+				interval);
 	}
 
 	public OabaSettingsEntity(OabaSettings oaba) {
-		this(oaba, oaba.getMaxSingle(), oaba.getMaxBlockSize(), oaba
-				.getMaxChunkSize(), oaba.getMaxMatches(), oaba
-				.getMaxOversized(), oaba.getMinFields(), oaba.getInterval());
+		this(oaba, oaba.getMaxSingle(), oaba.getMaxBlockSize(),
+				oaba.getMaxChunkSize(), oaba.getMaxMatches(),
+				oaba.getMaxOversized(), oaba.getMinFields(),
+				oaba.getInterval());
 	}
 
 	public OabaSettingsEntity(OabaSettings oaba, int maxSingle2) {
-		this(oaba, maxSingle2, oaba.getMaxBlockSize(), oaba
-				.getMaxChunkSize(), oaba.getMaxMatches(), oaba
-				.getMaxOversized(), oaba.getMinFields(), oaba.getInterval());
+		this(oaba, maxSingle2, oaba.getMaxBlockSize(), oaba.getMaxChunkSize(),
+				oaba.getMaxMatches(), oaba.getMaxOversized(),
+				oaba.getMinFields(), oaba.getInterval());
 	}
 
 	public OabaSettingsEntity(int limPerBlockingSet, int limSingleBlockingSet,
@@ -146,8 +148,8 @@ public class OabaSettingsEntity extends AbaSettingsEntity implements
 			int maxChunkSize, int maxMatches, int maxOversized, int minFields,
 			int interval) {
 		this(limPerBlockingSet, limSingleBlockingSet, singleTableGraceLimit,
-				maxSingle, maxBlockSize, maxChunkSize, maxMatches,
-				maxOversized, minFields, interval, DISCRIMINATOR_VALUE);
+				maxSingle, maxBlockSize, maxChunkSize, maxMatches, maxOversized,
+				minFields, interval, DISCRIMINATOR_VALUE);
 	}
 
 	protected OabaSettingsEntity(int limPerBlockingSet,
@@ -160,24 +162,24 @@ public class OabaSettingsEntity extends AbaSettingsEntity implements
 			throw new IllegalArgumentException("invalid maxSingle" + maxSingle);
 		}
 		if (maxBlockSize < 0) {
-			throw new IllegalArgumentException("invalid maxBlockSize"
-					+ maxBlockSize);
+			throw new IllegalArgumentException(
+					"invalid maxBlockSize" + maxBlockSize);
 		}
 		if (maxChunkSize < 0) {
-			throw new IllegalArgumentException("invalid maxChunkSize"
-					+ maxChunkSize);
+			throw new IllegalArgumentException(
+					"invalid maxChunkSize" + maxChunkSize);
 		}
 		if (maxMatches < 0) {
-			throw new IllegalArgumentException("invalid maxMatches: "
-					+ maxOversized);
+			throw new IllegalArgumentException(
+					"invalid maxMatches: " + maxOversized);
 		}
 		if (maxOversized < 0) {
-			throw new IllegalArgumentException("invalid maxOversized: "
-					+ maxOversized);
+			throw new IllegalArgumentException(
+					"invalid maxOversized: " + maxOversized);
 		}
 		if (minFields < 0) {
-			throw new IllegalArgumentException("invalid minFields: "
-					+ minFields);
+			throw new IllegalArgumentException(
+					"invalid minFields: " + minFields);
 		}
 		if (interval < 0) {
 			throw new IllegalArgumentException("invalid interval: " + interval);

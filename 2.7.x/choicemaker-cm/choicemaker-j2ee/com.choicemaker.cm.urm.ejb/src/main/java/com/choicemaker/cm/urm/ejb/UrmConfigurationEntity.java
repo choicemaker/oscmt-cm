@@ -106,12 +106,14 @@ public class UrmConfigurationEntity extends AbstractPersistentObject
 		if (getCmsConfigurationName() == null) {
 			if (uc.getCmsConfigurationName() != null)
 				return false;
-		} else if (!getCmsConfigurationName().equals(uc.getCmsConfigurationName()))
+		} else if (!getCmsConfigurationName()
+				.equals(uc.getCmsConfigurationName()))
 			return false;
 		if (getUrmConfigurationName() == null) {
 			if (uc.getUrmConfigurationName() != null)
 				return false;
-		} else if (!getUrmConfigurationName().equals(uc.getUrmConfigurationName()))
+		} else if (!getUrmConfigurationName()
+				.equals(uc.getUrmConfigurationName()))
 			return false;
 		return true;
 	}

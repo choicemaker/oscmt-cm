@@ -32,18 +32,18 @@ public class TransitivityNotification extends BatchProcessingNotification {
 
 	public TransitivityNotification(BatchJob job, ProcessingEvent event,
 			Date timestamp, String info) {
-		super(job.getId(), TransitivityJobJPA.DISCRIMINATOR_VALUE, event
-				.getFractionComplete(), event.getEventId(),
-				TransitivityProcessingEventJPA.DISCRIMINATOR_VALUE, event
-						.getEventName(), timestamp, info);
+		super(job.getId(), TransitivityJobJPA.DISCRIMINATOR_VALUE,
+				event.getFractionComplete(), event.getEventId(),
+				TransitivityProcessingEventJPA.DISCRIMINATOR_VALUE,
+				event.getEventName(), timestamp, info);
 	}
 
 	public TransitivityNotification(TransitivityProcessingEvent ope) {
-		super(ope.getJobId(), TransitivityJobJPA.DISCRIMINATOR_VALUE, ope
-				.getFractionComplete(), ope.getEventSequenceNumber(),
-				TransitivityProcessingEventJPA.DISCRIMINATOR_VALUE, ope
-						.getEventName(), ope.getEventTimestamp(), ope
-						.getEventInfo());
+		super(ope.getJobId(), TransitivityJobJPA.DISCRIMINATOR_VALUE,
+				ope.getFractionComplete(), ope.getEventSequenceNumber(),
+				TransitivityProcessingEventJPA.DISCRIMINATOR_VALUE,
+				ope.getEventName(), ope.getEventTimestamp(),
+				ope.getEventInfo());
 	}
 
 }

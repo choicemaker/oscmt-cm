@@ -32,8 +32,8 @@ import com.choicemaker.cm.args.PersistableRecordSource;
 		query = JPQL_OABAPARAMETERS_FIND_ALL)
 @Entity
 @DiscriminatorValue(DV_OABA)
-public class OabaParametersEntity extends AbstractParametersEntity implements
-		Serializable, OabaParameters {
+public class OabaParametersEntity extends AbstractParametersEntity
+		implements Serializable, OabaParameters {
 
 	private static final long serialVersionUID = 271L;
 
@@ -81,7 +81,8 @@ public class OabaParametersEntity extends AbstractParametersEntity implements
 
 			case MASTER_TO_MASTER_LINKAGE:
 			case TA_MASTER_TO_MASTER_LINKAGE:
-				pw.println(" (linking a reference source to a reference source)");
+				pw.println(
+						" (linking a reference source to a reference source)");
 				pw.println(tag + ": Reference record source 1: "
 						+ p.getQueryRsId());
 				pw.println(tag + ": Reference record source 1 type: "
@@ -93,8 +94,8 @@ public class OabaParametersEntity extends AbstractParametersEntity implements
 				break;
 
 			default:
-				throw new IllegalArgumentException("unexpected task type: "
-						+ task);
+				throw new IllegalArgumentException(
+						"unexpected task type: " + task);
 			}
 		}
 		String retVal = sw.toString();
@@ -125,13 +126,14 @@ public class OabaParametersEntity extends AbstractParametersEntity implements
 	}
 
 	public OabaParametersEntity(OabaParameters bp) {
-		this(bp.getModelConfigurationName(), bp.getLowThreshold(), bp
-				.getHighThreshold(), bp.getBlockingConfiguration(), bp
-				.getQueryRsId(), bp.getQueryRsType(), bp
-				.isQueryRsDeduplicated(), bp.getQueryRsDatabaseConfiguration(),
-				bp.getReferenceRsId(), bp.getReferenceRsType(), bp
-						.getReferenceRsDatabaseConfiguration(), bp
-						.getOabaLinkageType());
+		this(bp.getModelConfigurationName(), bp.getLowThreshold(),
+				bp.getHighThreshold(), bp.getBlockingConfiguration(),
+				bp.getQueryRsId(), bp.getQueryRsType(),
+				bp.isQueryRsDeduplicated(),
+				bp.getQueryRsDatabaseConfiguration(), bp.getReferenceRsId(),
+				bp.getReferenceRsType(),
+				bp.getReferenceRsDatabaseConfiguration(),
+				bp.getOabaLinkageType());
 	}
 
 	public OabaParametersEntity(String modelConfigurationName,

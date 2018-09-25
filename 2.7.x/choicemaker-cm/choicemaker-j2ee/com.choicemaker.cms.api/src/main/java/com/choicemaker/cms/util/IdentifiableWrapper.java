@@ -21,7 +21,7 @@ public class IdentifiableWrapper<T extends Comparable<T>>
 		Precondition.assertNonNullArgument("null identifiable", identifiable);
 		this.wrapped = identifiable;
 	}
-	
+
 	public Identifiable<T> getWrapped() {
 		return wrapped;
 	}
@@ -57,7 +57,7 @@ public class IdentifiableWrapper<T extends Comparable<T>>
 			return false;
 		@SuppressWarnings("unchecked")
 		IdentifiableWrapper<T> other = (IdentifiableWrapper<T>) obj;
-		return comparator.compare(wrapped,other.wrapped) == 0;
+		return comparator.compare(wrapped, other.wrapped) == 0;
 	}
 
 	@Override

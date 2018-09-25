@@ -71,8 +71,8 @@ import com.choicemaker.util.HashUtils;
 public abstract class AbstractPairResultEntity<T extends Comparable<T>>
 		implements OabaPairResult<T> {
 
-	private static final Logger logger = Logger
-			.getLogger(AbstractPairResultEntity.class.getName());
+	private static final Logger logger =
+		Logger.getLogger(AbstractPairResultEntity.class.getName());
 
 	private static final long serialVersionUID = 271L;
 
@@ -254,12 +254,10 @@ public abstract class AbstractPairResultEntity<T extends Comparable<T>>
 		this.record2Source = record2Source;
 		this.probability = probability;
 		this.decision = decision;
-		SortedSet<String> sortedNotes =
-			MatchUtils.notesToSortedSet(notes);
+		SortedSet<String> sortedNotes = MatchUtils.notesToSortedSet(notes);
 		this.notes = MatchUtils.notesToString(sortedNotes);
-		this.pairSHA1 =
-			computePairSHA1(recordType, record1Id, record2Id, record2Source,
-					probability, decision, sortedNotes);
+		this.pairSHA1 = computePairSHA1(recordType, record1Id, record2Id,
+				record2Source, probability, decision, sortedNotes);
 		this.ecSHA1 = ecSHA1;
 	}
 

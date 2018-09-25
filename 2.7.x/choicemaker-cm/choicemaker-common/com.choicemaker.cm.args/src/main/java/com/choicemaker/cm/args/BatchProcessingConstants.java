@@ -20,9 +20,9 @@ import java.io.Serializable;
  * @author rphall (refactored from IStatus to BatchProcessingConstants)
  */
 public interface BatchProcessingConstants extends Serializable {
-	
+
 	// -- Event names
-	
+
 	String NAME_INIT = "INIT";
 	String NAME_DONE = "DONE";
 

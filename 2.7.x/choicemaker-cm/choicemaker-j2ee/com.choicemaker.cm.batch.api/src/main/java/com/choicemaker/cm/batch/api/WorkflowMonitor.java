@@ -5,5 +5,6 @@ package com.choicemaker.cm.batch.api;
  */
 public interface WorkflowMonitor extends WorkflowListener {
 	Workflow getWorkflow(BatchJob batchJob);
+
 	WorkflowStep getCurrentWorkflowStep(BatchJob batchJob);
 }

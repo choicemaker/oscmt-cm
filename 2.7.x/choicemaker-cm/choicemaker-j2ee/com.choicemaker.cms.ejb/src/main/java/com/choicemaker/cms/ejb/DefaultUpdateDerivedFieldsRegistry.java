@@ -12,17 +12,17 @@ import com.choicemaker.cm.core.configure.eclipse.EclipseRegistry;
 import com.choicemaker.cms.api.UpdateDerivedFieldsRegistration;
 
 /**
- * This class defines an instance of an eclipse-based registry
- * for derived-field update agents.
+ * This class defines an instance of an eclipse-based registry for derived-field
+ * update agents.
+ * 
  * @author rphall
  */
-public class DefaultUpdateDerivedFieldsRegistry
-	extends EclipseRegistry
-	implements UpdateDerivedFieldsRegistration {
+public class DefaultUpdateDerivedFieldsRegistry extends EclipseRegistry
+		implements UpdateDerivedFieldsRegistration {
 
 	public static EclipseRegistry getInstance() {
-		return EclipseRegistries.getInstance(
-			UPDATE_DERIVED_FIELD_EXTENSION_POINT);
+		return EclipseRegistries
+				.getInstance(UPDATE_DERIVED_FIELD_EXTENSION_POINT);
 	}
 
 	// This constructor is never used

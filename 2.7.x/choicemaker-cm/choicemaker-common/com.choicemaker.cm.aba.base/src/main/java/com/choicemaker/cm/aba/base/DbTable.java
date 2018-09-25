@@ -13,10 +13,10 @@ import com.choicemaker.cm.aba.IDbTable;
 
 /**
  *
- * @author    Martin Buechi
+ * @author Martin Buechi
  */
 public class DbTable implements Serializable, IDbTable {
-	
+
 	private static final long serialVersionUID = 271;
 
 	private final String name;
@@ -49,7 +49,8 @@ public class DbTable implements Serializable, IDbTable {
 		if (o instanceof DbTable) {
 			IDbTable ot = (IDbTable) o;
 			// don't compare num
-			return getName().equals(ot.getName()) && getUniqueId().equals(ot.getUniqueId());
+			return getName().equals(ot.getName())
+					&& getUniqueId().equals(ot.getUniqueId());
 		} else {
 			return false;
 		}

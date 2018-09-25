@@ -111,8 +111,8 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 
 	@Override
 	public void onMessage(Message inMessage) {
-		getJMSTrace().info(
-				"Entering onMessage for " + this.getClass().getName());
+		getJMSTrace()
+				.info("Entering onMessage for " + this.getClass().getName());
 		ObjectMessage msg = null;
 		BatchJob batchJob = null;
 
@@ -127,23 +127,21 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 					final long jobId = data.jobID;
 
 					batchJob = getOabaJobManager().findBatchJob(jobId);
-					final OabaParameters params =
-						getOabaParametersController().findOabaParametersByBatchJobId(
-								jobId);
+					final OabaParameters params = getOabaParametersController()
+							.findOabaParametersByBatchJobId(jobId);
 					final ProcessingEventLog processingLog =
 						getEventManager().getProcessingLog(batchJob);
 					final OabaSettings oabaSettings =
 						getSettingsController().findOabaSettingsByJobId(jobId);
 					final ServerConfiguration serverConfig =
-						getServerController().findServerConfigurationByJobId(
-								jobId);
+						getServerController()
+								.findServerConfigurationByJobId(jobId);
 
 					if (batchJob == null || params == null
 							|| oabaSettings == null || serverConfig == null) {
 						String s0 = "Null configuration info for job " + jobId;
-						String s =
-							LoggingUtils.buildDiagnostic(s0, batchJob, params,
-									oabaSettings, serverConfig);
+						String s = LoggingUtils.buildDiagnostic(s0, batchJob,
+								params, oabaSettings, serverConfig);
 						getLogger().severe(s);
 						throw new IllegalStateException(s);
 					}
@@ -153,22 +151,20 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 					ImmutableProbabilityModel model =
 						PMManager.getModelInstance(modelConfigId);
 					if (model == null) {
-						String s =
-							"No modelId corresponding to '" + modelConfigId
-									+ "'";
+						String s = "No modelId corresponding to '"
+								+ modelConfigId + "'";
 						getLogger().severe(s);
 						throw new IllegalArgumentException(s);
 					}
 
-					final String _currentChunk =
-						getPropertyController().getJobProperty(batchJob,
-								PN_CURRENT_CHUNK_INDEX);
+					final String _currentChunk = getPropertyController()
+							.getJobProperty(batchJob, PN_CURRENT_CHUNK_INDEX);
 					final int currentChunk = Integer.valueOf(_currentChunk);
-					getLogger().fine(
-							"MatcherMDB In onMessage " + data.jobID + " "
-									+ currentChunk + " " + data.treeIndex);
+					getLogger().fine("MatcherMDB In onMessage " + data.jobID
+							+ " " + currentChunk + " " + data.treeIndex);
 
-					if (BatchJobStatus.ABORT_REQUESTED == batchJob.getStatus()) {
+					if (BatchJobStatus.ABORT_REQUESTED == batchJob
+							.getStatus()) {
 						MessageBeanUtils.stopJob(batchJob, getOabaJobManager(),
 								getPropertyController(), processingLog);
 
@@ -210,17 +206,15 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 
 	protected final void handleMatching(OabaJobMessage data,
 			final BatchJob batchJob, final OabaParameters params,
-			final OabaSettings settings,
-			final ServerConfiguration serverConfig, final int currentChunk)
-			throws BlockingException, RemoteException, NamingException,
-			JMSException {
+			final OabaSettings settings, final ServerConfiguration serverConfig,
+			final int currentChunk) throws BlockingException, RemoteException,
+			NamingException, JMSException {
 
 		final String modelConfigId = params.getModelConfigurationName();
 		final ImmutableProbabilityModel stageModel =
 			PMManager.getModelInstance(modelConfigId);
-		final ImmutableThresholds t =
-			new ImmutableThresholds(params.getLowThreshold(),
-					params.getHighThreshold());
+		final ImmutableThresholds t = new ImmutableThresholds(
+				params.getLowThreshold(), params.getHighThreshold());
 		final int numProcessors = serverConfig.getMaxChoiceMakerThreads();
 		final int maxBlock = settings.getMaxBlockSize();
 
@@ -245,8 +239,8 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 			while (source.hasNext()) {
 				sets++;
 				IComparisonSet cSet = (IComparisonSet) source.next();
-				List<MatchRecord2> matches =
-					handleComparisonSet(cSet, batchJob, dataStore, stageModel, t);
+				List<MatchRecord2> matches = handleComparisonSet(cSet, batchJob,
+						dataStore, stageModel, t);
 				numMatches += matches.size();
 				writeMatches(data, matches);
 			}
@@ -254,10 +248,9 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 			source.close();
 		}
 
-		getLogger().info(
-				"Chunk: " + currentChunk + "_" + data.treeIndex + ", sets: "
-						+ sets + ", compares: " + compares + ", matches: "
-						+ numMatches);
+		getLogger().info("Chunk: " + currentChunk + "_" + data.treeIndex
+				+ ", sets: " + sets + ", compares: " + compares + ", matches: "
+				+ numMatches);
 
 		MatchWriterMessage mwd = new MatchWriterMessage(data);
 		mwd.numCompares = compares;
@@ -281,7 +274,7 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 			throws RemoteException, BlockingException {
 
 		final BatchJobControl control =
-				new BatchJobControl(this.getOabaJobManager(), batchJob);
+			new BatchJobControl(this.getOabaJobManager(), batchJob);
 		boolean stop = control.shouldStop();
 		ComparisonPair p;
 		Record q, m;
@@ -398,9 +391,8 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 
 		BatchJob job = getOabaJobManager().findBatchJob(data.jobID);
 
-		final String _numRegularChunks =
-			getPropertyController().getJobProperty(job,
-					PN_REGULAR_CHUNK_FILE_COUNT);
+		final String _numRegularChunks = getPropertyController()
+				.getJobProperty(job, PN_REGULAR_CHUNK_FILE_COUNT);
 		final int numRegularChunks = Integer.valueOf(_numRegularChunks);
 
 		if (currentChunk < numRegularChunks) {
@@ -420,15 +412,14 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 					new ComparisonTreeSetSource(source);
 				return setSource;
 			} else {
-				throw new BlockingException("Could not get regular source "
-						+ source.getInfo());
+				throw new BlockingException(
+						"Could not get regular source " + source.getInfo());
 			}
 		} else {
 			// over-sized chunks
 			int i = currentChunk - numRegularChunks;
-			ComparisonArrayGroupSinkSourceFactory factoryOS =
-				OabaFileUtils.getComparisonArrayGroupFactoryOS(job,
-						numProcessors);
+			ComparisonArrayGroupSinkSourceFactory factoryOS = OabaFileUtils
+					.getComparisonArrayGroupFactoryOS(job, numProcessors);
 			IComparisonArraySource sourceOS =
 				factoryOS.getSource(i, data.treeIndex);
 			if (sourceOS.exists()) {
@@ -437,8 +428,8 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 					new ComparisonSetOSSource(sourceOS, maxBlockSize);
 				return setSource;
 			} else {
-				throw new BlockingException("Could not get oversized source "
-						+ sourceOS.getInfo());
+				throw new BlockingException(
+						"Could not get oversized source " + sourceOS.getInfo());
 			}
 		}
 	}
@@ -461,8 +452,8 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 		final boolean[] enabledClues = model.getCluesToEvaluate();
 		final float low = t.getDifferThreshold();
 		final float high = t.getMatchThreshold();
-		return MatchUtils.compareRecords(clueSet, enabledClues, model, q,
-				m, isStage, low, high);
+		return MatchUtils.compareRecords(clueSet, enabledClues, model, q, m,
+				isStage, low, high);
 	}
 
 	/**

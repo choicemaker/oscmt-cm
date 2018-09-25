@@ -92,9 +92,9 @@ public interface OperationalPropertyNames {
 	// String PN_PROCESSING_INDEX = "PROCESSING_INDEX";
 
 	/**
-	 * The highest index (inclusive) of temporary match result files produced
-	 * by the OABA or Transitivity matching. This index is set or reset in a
-	 * few places:
+	 * The highest index (inclusive) of temporary match result files produced by
+	 * the OABA or Transitivity matching. This index is set or reset in a few
+	 * places:
 	 * <ul>
 	 * <li>AbstractScheduler</li>
 	 * <li>SingleRecordMatch</li>

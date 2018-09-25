@@ -2,7 +2,6 @@ package com.choicemaker.cm.batch.api;
 
 import com.choicemaker.cm.args.ProcessingEvent;
 
-
 public interface ProcessingEventLog {
 
 	/** This methods gets the most recent processing event */

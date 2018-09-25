@@ -56,10 +56,10 @@ import com.choicemaker.cm.oaba.impl.ComparableMRSink;
 public class MatcherMDB extends AbstractMatcher {
 
 	private static final long serialVersionUID = 271L;
-	private static final Logger log = Logger.getLogger(MatcherMDB.class
-			.getName());
-	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
-			+ MatcherMDB.class.getName());
+	private static final Logger log =
+		Logger.getLogger(MatcherMDB.class.getName());
+	private static final Logger jmsTrace =
+		Logger.getLogger("jmstrace." + MatcherMDB.class.getName());
 
 	// -- Injected instance data
 
@@ -145,9 +145,8 @@ public class MatcherMDB extends AbstractMatcher {
 			// first figure out the correct file for this processor
 			final long jobId = data.jobID;
 			BatchJob batchJob = getOabaJobManager().findBatchJob(jobId);
-			IMatchRecord2Sink mSink =
-				OabaFileUtils.getMatchChunkFactory(batchJob).getSink(
-						data.treeIndex);
+			IMatchRecord2Sink mSink = OabaFileUtils
+					.getMatchChunkFactory(batchJob).getSink(data.treeIndex);
 			IComparableSink sink = new ComparableMRSink(mSink);
 
 			// write matches to this file.

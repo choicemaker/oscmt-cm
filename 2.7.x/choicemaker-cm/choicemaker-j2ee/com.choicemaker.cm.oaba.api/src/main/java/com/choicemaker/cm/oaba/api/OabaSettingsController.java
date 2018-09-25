@@ -31,25 +31,25 @@ public interface OabaSettingsController {
 
 	OabaSettings findOabaSettingsByJobId(long jobId);
 
-	DefaultSettings setDefaultAbaConfiguration(
-			ImmutableProbabilityModel model, String databaseConfiguration,
-			String blockingConfiguration, AbaSettings aba);
+	DefaultSettings setDefaultAbaConfiguration(ImmutableProbabilityModel model,
+			String databaseConfiguration, String blockingConfiguration,
+			AbaSettings aba);
 
-	DefaultSettings setDefaultOabaConfiguration(
-			ImmutableProbabilityModel model, String databaseConfiguration,
-			String blockingConfiguration, OabaSettings oaba);
+	DefaultSettings setDefaultOabaConfiguration(ImmutableProbabilityModel model,
+			String databaseConfiguration, String blockingConfiguration,
+			OabaSettings oaba);
 
 	AbaSettings findDefaultAbaSettings(String modelConfigurationId,
 			String databaseConfiguration, String blockingConfiguration);
 
-//	AbaSettings findDefaultAbaSettings(ImmutableProbabilityModel model,
-//			String databaseConfigurationName, String blockingConfigurationName);
+	// AbaSettings findDefaultAbaSettings(ImmutableProbabilityModel model,
+	// String databaseConfigurationName, String blockingConfigurationName);
 
 	OabaSettings findDefaultOabaSettings(String modelConfigurationId,
 			String databaseConfiguration, String blockingConfiguration);
 
-//	OabaSettings findDefaultOabaSettings(ImmutableProbabilityModel model,
-//	String databaseConfigurationName, String blockingConfigurationName);
+	// OabaSettings findDefaultOabaSettings(ImmutableProbabilityModel model,
+	// String databaseConfigurationName, String blockingConfigurationName);
 
 	List<AbaSettings> findAllAbaSettings();
 

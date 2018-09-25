@@ -19,7 +19,7 @@ import com.choicemaker.cm.core.util.XmlOutput;
 /**
  * Description
  *
- * @author    Martin Buechi
+ * @author Martin Buechi
  */
 public class BlockingSetReporter implements ReporterPlugin {
 	private final AutomatedBlocker blocker;
@@ -31,23 +31,32 @@ public class BlockingSetReporter implements ReporterPlugin {
 	@Override
 	public void report(StringBuffer b, boolean newLines) {
 		b.append("<blocking>");
-		if(newLines) b.append(Constants.LINE_SEPARATOR);
-		Iterator<IBlockingSet> iBlockingSets = blocker.getBlockingSets().iterator();
+		if (newLines)
+			b.append(Constants.LINE_SEPARATOR);
+		Iterator<IBlockingSet> iBlockingSets =
+			blocker.getBlockingSets().iterator();
 		while (iBlockingSets.hasNext()) {
 			IBlockingSet bs = iBlockingSets.next();
 			b.append("<bs ec=\"").append(bs.getExpectedCount()).append("\">");
-			if(newLines) b.append(Constants.LINE_SEPARATOR);			
+			if (newLines)
+				b.append(Constants.LINE_SEPARATOR);
 			int size = bs.numFields();
 			for (int j = 0; j < size; ++j) {
 				IBlockingValue bv = bs.getBlockingValue(j);
 				b.append("<bv n=\"").append(bv.getBlockingField().getNumber());
-				b.append("\" v=\"").append(XmlOutput.escapeAttributeEntities(bv.getValue())).append("\"/>");
-				if(newLines) b.append(Constants.LINE_SEPARATOR);
+				b.append("\" v=\"")
+						.append(XmlOutput
+								.escapeAttributeEntities(bv.getValue()))
+						.append("\"/>");
+				if (newLines)
+					b.append(Constants.LINE_SEPARATOR);
 			}
 			b.append("</bs>");
-			if(newLines) b.append(Constants.LINE_SEPARATOR);
+			if (newLines)
+				b.append(Constants.LINE_SEPARATOR);
 		}
 		b.append("</blocking>");
-		if(newLines) b.append(Constants.LINE_SEPARATOR);
+		if (newLines)
+			b.append(Constants.LINE_SEPARATOR);
 	}
 }

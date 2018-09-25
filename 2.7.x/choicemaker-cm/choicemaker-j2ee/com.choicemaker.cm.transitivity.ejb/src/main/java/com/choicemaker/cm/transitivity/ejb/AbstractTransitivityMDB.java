@@ -54,8 +54,8 @@ import com.choicemaker.cm.transitivity.ejb.util.LoggingUtils;
  * @author rphall
  *
  */
-public abstract class AbstractTransitivityMDB implements MessageListener,
-		Serializable {
+public abstract class AbstractTransitivityMDB
+		implements MessageListener, Serializable {
 
 	private static final long serialVersionUID = 271L;
 
@@ -144,8 +144,8 @@ public abstract class AbstractTransitivityMDB implements MessageListener,
 
 	@Override
 	public void onMessage(Message inMessage) {
-		getJmsTrace().info(
-				"Entering onMessage for " + this.getClass().getName());
+		getJmsTrace()
+				.info("Entering onMessage for " + this.getClass().getName());
 		ObjectMessage msg = null;
 		OabaJobMessage oabaMsg = null;
 		BatchJob batchJob = null;
@@ -158,26 +158,22 @@ public abstract class AbstractTransitivityMDB implements MessageListener,
 				final long jobId = oabaMsg.jobID;
 				batchJob =
 					getTransitivityJobController().findTransitivityJob(jobId);
-				TransitivityParameters transParams =
-					getParametersController()
-							.findTransitivityParametersByBatchJobId(jobId);
-				OabaSettings settings =
-					getSettingsController().findSettingsByTransitivityJobId(
-							jobId);
+				TransitivityParameters transParams = getParametersController()
+						.findTransitivityParametersByBatchJobId(jobId);
+				OabaSettings settings = getSettingsController()
+						.findSettingsByTransitivityJobId(jobId);
 				ProcessingEventLog processingLog =
 					getEventManager().getProcessingLog(batchJob);
-				ServerConfiguration serverConfig =
-					getServerController().findConfigurationByTransitivityJobId(
-							jobId);
+				ServerConfiguration serverConfig = getServerController()
+						.findConfigurationByTransitivityJobId(jobId);
 
 				if (batchJob == null || transParams == null || settings == null
 						|| serverConfig == null) {
 					String s0 =
 						"Unable to find a job, parameters, settings or server configuration for "
 								+ jobId;
-					String s =
-						LoggingUtils.buildDiagnostic(s0, batchJob, transParams,
-								settings, serverConfig);
+					String s = LoggingUtils.buildDiagnostic(s0, batchJob,
+							transParams, settings, serverConfig);
 					getLogger().severe(s);
 					throw new IllegalStateException(s);
 				}
@@ -193,12 +189,13 @@ public abstract class AbstractTransitivityMDB implements MessageListener,
 					throw new IllegalArgumentException(s);
 				}
 
-				if (BatchJobStatus.ABORT_REQUESTED.equals(batchJob.getStatus())) {
+				if (BatchJobStatus.ABORT_REQUESTED
+						.equals(batchJob.getStatus())) {
 					abortProcessing(batchJob, processingLog);
 
 				} else {
-					processOabaMessage(oabaMsg, batchJob, transParams,
-							settings, processingLog, serverConfig, model);
+					processOabaMessage(oabaMsg, batchJob, transParams, settings,
+							processingLog, serverConfig, model);
 					updateTransivitityProcessingStatus(batchJob,
 							getCompletionEvent(), new Date(), null);
 					notifyProcessingCompleted(oabaMsg);
@@ -214,7 +211,7 @@ public abstract class AbstractTransitivityMDB implements MessageListener,
 			getLogger().severe(msg0);
 			if (batchJob != null) {
 				batchJob.markAsFailed();
-        getTransitivityJobController().save(batchJob);
+				getTransitivityJobController().save(batchJob);
 			}
 		}
 		getJmsTrace()
@@ -238,8 +235,8 @@ public abstract class AbstractTransitivityMDB implements MessageListener,
 
 	protected void updateTransivitityProcessingStatus(BatchJob job,
 			ProcessingEventBean event, Date timestamp, String info) {
-		getEventManager().updateStatusWithNotification(job, event,
-				timestamp, info);
+		getEventManager().updateStatusWithNotification(job, event, timestamp,
+				info);
 	}
 
 	protected RecordMatchingMode getRecordMatchingMode(final BatchJob job) {

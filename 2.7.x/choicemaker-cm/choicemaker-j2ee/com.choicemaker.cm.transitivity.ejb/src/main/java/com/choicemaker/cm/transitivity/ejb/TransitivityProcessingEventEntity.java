@@ -58,15 +58,14 @@ public class TransitivityProcessingEventEntity extends
 
 	public TransitivityProcessingEventEntity(BatchJob job,
 			ProcessingEvent event, String info) {
-		super(job.getId(), DISCRIMINATOR_VALUE, event.getEventName(), event
-				.getEventId(), event.getFractionComplete(), info);
+		super(job.getId(), DISCRIMINATOR_VALUE, event.getEventName(),
+				event.getEventId(), event.getFractionComplete(), info);
 	}
 
 	@Override
 	public ProcessingEvent getProcessingEvent() {
-		ProcessingEvent retVal =
-			new TransitivityEventBean(getEventName(),
-					getEventSequenceNumber(), getFractionComplete());
+		ProcessingEvent retVal = new TransitivityEventBean(getEventName(),
+				getEventSequenceNumber(), getFractionComplete());
 		return retVal;
 	}
 

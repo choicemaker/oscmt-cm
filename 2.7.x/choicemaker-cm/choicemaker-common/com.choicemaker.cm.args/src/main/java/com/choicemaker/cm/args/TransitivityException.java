@@ -12,18 +12,18 @@ package com.choicemaker.cm.args;
  * 
  * @author pcheung
  *
- * ChoiceMaker Technologies Inc.
+ *         ChoiceMaker Technologies Inc.
  */
 public class TransitivityException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 
-	public TransitivityException () {
-		super ();
+	public TransitivityException() {
+		super();
 	}
 
-	public TransitivityException (String message) {
-		super (message);
+	public TransitivityException(String message) {
+		super(message);
 	}
 
 }

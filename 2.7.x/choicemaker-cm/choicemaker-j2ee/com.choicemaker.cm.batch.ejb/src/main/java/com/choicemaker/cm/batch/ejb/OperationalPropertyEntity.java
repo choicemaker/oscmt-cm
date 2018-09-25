@@ -50,8 +50,8 @@ public class OperationalPropertyEntity extends AbstractPersistentObject
 
 	private static final long serialVersionUID = 1L;
 
-	private static final Logger logger = Logger
-			.getLogger(OperationalPropertyEntity.class.getName());
+	private static final Logger logger =
+		Logger.getLogger(OperationalPropertyEntity.class.getName());
 
 	public static final String INVALID_NAME = null;
 	public static final String INVALID_VALUE = null;
@@ -92,8 +92,8 @@ public class OperationalPropertyEntity extends AbstractPersistentObject
 			throw new IllegalArgumentException("invalid job: " + job);
 		}
 		if (pn == null || !pn.equals(pn.trim()) || pn.isEmpty()) {
-			throw new IllegalArgumentException("invalid property name: '" + pn
-					+ "'");
+			throw new IllegalArgumentException(
+					"invalid property name: '" + pn + "'");
 		}
 		final String stdName = pn.toUpperCase();
 		if (!pn.equals(stdName)) {
@@ -111,8 +111,8 @@ public class OperationalPropertyEntity extends AbstractPersistentObject
 	@Override
 	public void updateValue(String s) {
 		if (s == null) {
-			throw new IllegalArgumentException("invalid property value: '" + s
-					+ "'");
+			throw new IllegalArgumentException(
+					"invalid property value: '" + s + "'");
 		}
 		if (s.trim().isEmpty()) {
 			logger.warning("Blank value for '" + name + "'");

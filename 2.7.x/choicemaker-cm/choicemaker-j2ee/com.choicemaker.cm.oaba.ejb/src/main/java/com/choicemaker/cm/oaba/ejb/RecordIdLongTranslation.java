@@ -29,8 +29,8 @@ import com.choicemaker.cm.oaba.core.RECORD_ID_TYPE;
 				query = JPQL_TRANSLATEDLONGID_FIND_BY_JOBID) })
 @Entity
 @DiscriminatorValue(DV_LONG)
-public class RecordIdLongTranslation extends
-		AbstractRecordIdTranslationEntity<Long> {
+public class RecordIdLongTranslation
+		extends AbstractRecordIdTranslationEntity<Long> {
 
 	private static final long serialVersionUID = 271L;
 
@@ -63,8 +63,9 @@ public class RecordIdLongTranslation extends
 
 	public RecordIdLongTranslation(BatchJob job, long recordId,
 			RECORD_SOURCE_ROLE source, int translatedId) {
-		super(job.getId(), idToString(recordId), RECORD_ID_TYPE.TYPE_LONG
-				.getCharSymbol(), source.getCharSymbol(), translatedId);
+		super(job.getId(), idToString(recordId),
+				RECORD_ID_TYPE.TYPE_LONG.getCharSymbol(),
+				source.getCharSymbol(), translatedId);
 	}
 
 	@Override

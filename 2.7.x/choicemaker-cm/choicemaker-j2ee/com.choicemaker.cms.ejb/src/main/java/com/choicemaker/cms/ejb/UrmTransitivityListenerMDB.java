@@ -25,7 +25,7 @@ public class UrmTransitivityListenerMDB extends AbstractStatusListener {
 
 	private static final long serialVersionUID = 271L;
 
-	@EJB(beanName="BatchMatchingBean")
+	@EJB(beanName = "BatchMatchingBean")
 	protected WorkflowListener bmaBean;
 
 	@Override

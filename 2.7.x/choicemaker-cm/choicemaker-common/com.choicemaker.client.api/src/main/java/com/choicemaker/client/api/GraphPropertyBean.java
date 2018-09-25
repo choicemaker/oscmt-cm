@@ -7,8 +7,9 @@ import com.choicemaker.util.Precondition;
 public final class GraphPropertyBean implements IGraphProperty, Serializable {
 
 	private static final long serialVersionUID = 271L;
-	
-	public static final boolean equalOrNull(IGraphProperty igp1, IGraphProperty igp2) {
+
+	public static final boolean equalOrNull(IGraphProperty igp1,
+			IGraphProperty igp2) {
 		boolean retVal;
 		if (igp1 == null) {
 			retVal = igp2 == null;
@@ -58,7 +59,7 @@ public final class GraphPropertyBean implements IGraphProperty, Serializable {
 		if (!(obj instanceof IGraphProperty))
 			return false;
 		IGraphProperty other = (IGraphProperty) obj;
-		return equalOrNull(this,other);
+		return equalOrNull(this, other);
 	}
 
 	@Override

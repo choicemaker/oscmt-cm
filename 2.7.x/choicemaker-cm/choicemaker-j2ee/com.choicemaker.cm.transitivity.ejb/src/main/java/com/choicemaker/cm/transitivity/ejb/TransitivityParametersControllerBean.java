@@ -30,11 +30,11 @@ import com.choicemaker.cm.transitivity.api.TransitivityParametersController;
  * @author rphall
  */
 @Stateless
-public class TransitivityParametersControllerBean implements
-		TransitivityParametersController {
+public class TransitivityParametersControllerBean
+		implements TransitivityParametersController {
 
-	private static final Logger logger = Logger
-			.getLogger(TransitivityParametersControllerBean.class.getName());
+	private static final Logger logger =
+		Logger.getLogger(TransitivityParametersControllerBean.class.getName());
 
 	@PersistenceContext(unitName = "oaba")
 	private EntityManager em;
@@ -96,10 +96,10 @@ public class TransitivityParametersControllerBean implements
 	}
 
 	@Override
-	public TransitivityParameters findTransitivityParametersByBatchJobId(long jobId) {
+	public TransitivityParameters findTransitivityParametersByBatchJobId(
+			long jobId) {
 		TransitivityParameters retVal = null;
-		BatchJob job =
-			getTransJobController().findTransitivityJob(jobId);
+		BatchJob job = getTransJobController().findTransitivityJob(jobId);
 		if (job != null) {
 			long paramsId = job.getParametersId();
 			retVal = findTransitivityParameters(paramsId);
@@ -109,8 +109,8 @@ public class TransitivityParametersControllerBean implements
 
 	@Override
 	public List<TransitivityParameters> findAllTransitivityParameters() {
-		Query query =
-			em.createNamedQuery(TransitivityParametersJPA.QN_TRANSPARAMETERS_FIND_ALL);
+		Query query = em.createNamedQuery(
+				TransitivityParametersJPA.QN_TRANSPARAMETERS_FIND_ALL);
 		@SuppressWarnings("unchecked")
 		List<TransitivityParameters> entries = query.getResultList();
 		if (entries == null) {

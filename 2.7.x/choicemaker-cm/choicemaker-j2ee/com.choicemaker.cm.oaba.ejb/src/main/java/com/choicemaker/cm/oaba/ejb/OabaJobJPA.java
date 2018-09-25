@@ -9,7 +9,6 @@ package com.choicemaker.cm.oaba.ejb;
 
 import com.choicemaker.cm.batch.ejb.BatchJobJPA;
 
-
 /**
  * Java Persistence API (JPA) for BatchJob beans.<br/>
  * Prefixes:

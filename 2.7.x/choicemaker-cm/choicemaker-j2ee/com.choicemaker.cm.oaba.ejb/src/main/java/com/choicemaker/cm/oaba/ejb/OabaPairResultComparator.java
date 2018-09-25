@@ -13,8 +13,8 @@ import com.choicemaker.cm.core.util.MatchUtils;
 import com.choicemaker.cm.oaba.api.OabaPairResult;
 import com.choicemaker.cm.oaba.core.RECORD_ID_TYPE;
 
-public class OabaPairResultComparator<T extends Comparable<T>> implements
-		Comparator<OabaPairResult<T>> {
+public class OabaPairResultComparator<T extends Comparable<T>>
+		implements Comparator<OabaPairResult<T>> {
 
 	/**
 	 * Orders pairs by:

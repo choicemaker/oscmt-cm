@@ -97,10 +97,8 @@ public abstract class BatchProcessingNotification implements Serializable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + (int) (eventId ^ (eventId >>> 32));
-		result =
-			prime
-					* result
-					+ ((eventTimestamp == null) ? 0 : eventTimestamp.hashCode());
+		result = prime * result
+				+ ((eventTimestamp == null) ? 0 : eventTimestamp.hashCode());
 		result =
 			prime * result + ((eventType == null) ? 0 : eventType.hashCode());
 		result =

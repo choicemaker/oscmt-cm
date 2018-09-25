@@ -37,8 +37,8 @@ import com.choicemaker.cm.batch.ejb.AbstractPersistentObject;
 @DiscriminatorColumn(name = DISCRIMINATOR_COLUMN,
 		discriminatorType = DiscriminatorType.STRING)
 @Table(name = TABLE_NAME)
-public class BaseRecordSourceEntity extends AbstractPersistentObject implements
-		PersistableRecordSource {
+public class BaseRecordSourceEntity extends AbstractPersistentObject
+		implements PersistableRecordSource {
 
 	private static final long serialVersionUID = 271L;
 

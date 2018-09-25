@@ -26,8 +26,8 @@ import com.choicemaker.e2.PluginDiscovery;
  */
 public final class InstallablePluginDiscovery implements PluginDiscovery {
 
-	private static final Logger logger = Logger
-			.getLogger(InstallablePluginDiscovery.class.getName());
+	private static final Logger logger =
+		Logger.getLogger(InstallablePluginDiscovery.class.getName());
 
 	/** Property name */
 	public static final String INSTALLABLE_PLUGIN_DISCOVERY =
@@ -107,15 +107,14 @@ public final class InstallablePluginDiscovery implements PluginDiscovery {
 	 *
 	 * @throws IllegalArgumentException
 	 *             if the delegate can not be updated.
-	 * */
+	 */
 	public void install(PluginDiscovery newDelegate) {
 		if (newDelegate == null) {
 			throw new IllegalArgumentException("null delegate");
 		}
 		if (this.delegate != null) {
-			String msg =
-				"Replacing an installed delegate (" + this.delegate
-						+ ") with a new delegate (" + newDelegate + ")";
+			String msg = "Replacing an installed delegate (" + this.delegate
+					+ ") with a new delegate (" + newDelegate + ")";
 			logger.warning(msg);
 		}
 		this.delegate = newDelegate;

@@ -17,7 +17,7 @@ import com.choicemaker.cm.aba.IField;
  * @author mbuechi
  */
 public class BlockingField extends Field implements IBlockingField {
-	
+
 	private static final long serialVersionUID = 271;
 
 	private final int number;
@@ -25,23 +25,20 @@ public class BlockingField extends Field implements IBlockingField {
 	private final DbField dbField;
 	private final String group;
 
-	public BlockingField(int number, QueryField queryField, DbField dbField, String group) {
+	public BlockingField(int number, QueryField queryField, DbField dbField,
+			String group) {
 		this(number, queryField, dbField, group, NN_FIELD);
 	}
 
-	public BlockingField(
-		int number,
-		QueryField queryField,
-		DbField dbField,
-		String group,
-		IField[][] illegalCombinations) {
+	public BlockingField(int number, QueryField queryField, DbField dbField,
+			String group, IField[][] illegalCombinations) {
 		super(illegalCombinations);
 		this.number = number;
 		this.queryField = queryField;
 		this.dbField = dbField;
 		this.group = group;
 	}
-	
+
 	@Override
 	public int getNumber() {
 		return number;
@@ -86,7 +83,7 @@ public class BlockingField extends Field implements IBlockingField {
 		}
 		return retVal;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		int retVal = this.getNumber();

@@ -28,10 +28,10 @@ import com.choicemaker.cm.batch.api.BatchProcessingNotification;
 public class StatusListenerMDB implements MessageListener, Serializable {
 
 	private static final long serialVersionUID = 271L;
-	private static final Logger log = Logger.getLogger(StatusListenerMDB.class
-			.getName());
-	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
-			+ StatusListenerMDB.class.getName());
+	private static final Logger log =
+		Logger.getLogger(StatusListenerMDB.class.getName());
+	private static final Logger jmsTrace =
+		Logger.getLogger("jmstrace." + StatusListenerMDB.class.getName());
 
 	@Override
 	public void onMessage(Message inMessage) {
@@ -71,4 +71,3 @@ public class StatusListenerMDB implements MessageListener, Serializable {
 	}
 
 } // StatusListenerMDB
-

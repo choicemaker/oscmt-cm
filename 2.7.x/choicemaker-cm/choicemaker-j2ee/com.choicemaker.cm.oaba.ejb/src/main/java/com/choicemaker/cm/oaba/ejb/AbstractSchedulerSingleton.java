@@ -146,8 +146,8 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 	// -- Message processing
 
 	public void onMessage(Message inMessage) {
-		getJMSTrace().info(
-				"Entering onMessage for " + this.getClass().getName());
+		getJMSTrace()
+				.info("Entering onMessage for " + this.getClass().getName());
 		ObjectMessage msg = null;
 		BatchJob batchJob = null;
 
@@ -162,22 +162,19 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 					final OabaJobMessage sd = (OabaJobMessage) o;
 					final long jobId = sd.jobID;
 					batchJob = getJobController().findBatchJob(jobId);
-					OabaParameters params =
-						getOabaParametersController()
-								.findOabaParametersByBatchJobId(jobId);
+					OabaParameters params = getOabaParametersController()
+							.findOabaParametersByBatchJobId(jobId);
 					OabaSettings oabaSettings =
 						getSettingsController().findOabaSettingsByJobId(jobId);
-					ServerConfiguration serverConfig =
-						getServerController().findServerConfigurationByJobId(
-								jobId);
+					ServerConfiguration serverConfig = getServerController()
+							.findServerConfigurationByJobId(jobId);
 
 					if (batchJob == null /* FIXME || dbParams == null */
 							|| params == null || oabaSettings == null
 							|| serverConfig == null) {
 						String s0 = "Null configuration info for job " + jobId;
-						String s =
-							LoggingUtils.buildDiagnostic(s0, batchJob, params,
-									oabaSettings, serverConfig);
+						String s = LoggingUtils.buildDiagnostic(s0, batchJob,
+								params, oabaSettings, serverConfig);
 						getLogger().severe(s);
 						throw new IllegalStateException(s);
 					}
@@ -187,9 +184,8 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 					ImmutableProbabilityModel model =
 						PMManager.getModelInstance(modelConfigId);
 					if (model == null) {
-						String s =
-							"No modelId corresponding to '" + modelConfigId
-									+ "'";
+						String s = "No modelId corresponding to '"
+								+ modelConfigId + "'";
 						getLogger().severe(s);
 						throw new IllegalArgumentException(s);
 					}
@@ -197,14 +193,18 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 					countMessages = 0;
 					maxChunkSize = oabaSettings.getMaxChunkSize();
 					numProcessors = serverConfig.getMaxChoiceMakerThreads();
-					setMaxTempPairwiseIndex(batchJob,numProcessors);
+					setMaxTempPairwiseIndex(batchJob, numProcessors);
 					getLogger().info("Maximum chunk size: " + maxChunkSize);
-					getLogger().info("Number of processing threads: " + getNumProcessors());
-					getLogger().info("Max index for intermediate pairwise result files: " + getNumProcessors());
+					getLogger().info("Number of processing threads: "
+							+ getNumProcessors());
+					getLogger()
+							.info("Max index for intermediate pairwise result files: "
+									+ getNumProcessors());
 
 					ProcessingEventLog processingLog =
 						getEventManager().getProcessingLog(batchJob);
-					if (processingLog.getCurrentProcessingEventId() >= OabaProcessingConstants.EVT_DONE_MATCHING_DATA) {
+					if (processingLog
+							.getCurrentProcessingEventId() >= OabaProcessingConstants.EVT_DONE_MATCHING_DATA) {
 						// matching is already done, so go on to the next step.
 						nextSteps(batchJob, sd);
 					} else {
@@ -306,36 +306,32 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 			}
 
 			final String _latestChunkProcessed =
-			// getPropertyController().getJobProperty(batchJob,
-			// PN_CHUNK_FILE_COUNT);
+				// getPropertyController().getJobProperty(batchJob,
+				// PN_CHUNK_FILE_COUNT);
 				getPropertyController().getJobProperty(batchJob,
 						PN_CURRENT_CHUNK_INDEX);
 			final int latestChunkProcessed =
 				Integer.valueOf(_latestChunkProcessed);
 			getLogger().info("Current chunk: " + currentChunk);
-			getLogger().info(
-					"Chunk " + latestChunkProcessed + " tree " + mwd.treeIndex
-							+ " is done.");
+			getLogger().info("Chunk " + latestChunkProcessed + " tree "
+					+ mwd.treeIndex + " is done.");
 			assert latestChunkProcessed == currentChunk;
 
 			// Go on to the next chunk
 			if (countMessages == 0) {
-				final String _numChunks =
-					getPropertyController().getJobProperty(batchJob,
-							PN_CHUNK_FILE_COUNT);
+				final String _numChunks = getPropertyController()
+						.getJobProperty(batchJob, PN_CHUNK_FILE_COUNT);
 				final int numChunks = Integer.valueOf(_numChunks);
 
-				final String _numRegularChunks =
-					getPropertyController().getJobProperty(batchJob,
-							PN_REGULAR_CHUNK_FILE_COUNT);
+				final String _numRegularChunks = getPropertyController()
+						.getJobProperty(batchJob, PN_REGULAR_CHUNK_FILE_COUNT);
 				final int numRegularChunks = Integer.valueOf(_numRegularChunks);
 
-				String temp =
-					Integer.toString(numChunks) + DELIM
-							+ Integer.toString(numRegularChunks) + DELIM
-							+ Integer.toString(currentChunk);
-				status.setCurrentProcessingEvent(
-						OabaEventBean.MATCHING_DATA, temp);
+				String temp = Integer.toString(numChunks) + DELIM
+						+ Integer.toString(numRegularChunks) + DELIM
+						+ Integer.toString(currentChunk);
+				status.setCurrentProcessingEvent(OabaEventBean.MATCHING_DATA,
+						temp);
 
 				getLogger().info("Chunk " + latestChunkProcessed + " is done.");
 
@@ -345,11 +341,11 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 					startChunk(sd, currentChunk);
 				} else {
 					// all the chunks are done
-					status.setCurrentProcessingEvent(OabaEventBean.DONE_MATCHING_DATA);
+					status.setCurrentProcessingEvent(
+							OabaEventBean.DONE_MATCHING_DATA);
 
-					getLogger().info(
-							"total comparisons: " + numCompares
-									+ " total matches: " + numMatches);
+					getLogger().info("total comparisons: " + numCompares
+							+ " total matches: " + numMatches);
 					timeStart = System.currentTimeMillis() - timeStart;
 					getLogger().info("total matching time: " + timeStart);
 					getLogger()
@@ -360,11 +356,10 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 					// writing out time break downs
 					if (getLogger().isLoggable(Level.FINE)) {
 						for (int i = 0; i < getNumProcessors(); i++) {
-							getLogger().fine(
-									"Processor " + i + " writing time: "
-											+ timeWriting[i] + " lookup time: "
-											+ inHMLookUp[i] + " compare time: "
-											+ inCompare[i]);
+							getLogger().fine("Processor " + i
+									+ " writing time: " + timeWriting[i]
+									+ " lookup time: " + inHMLookUp[i]
+									+ " compare time: " + inCompare[i]);
 						}
 					}
 
@@ -392,8 +387,8 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 			throws BlockingException {
 
 		// Update the processing status and remove intermediate files
-		sendToUpdateStatus(job, OabaEventBean.DONE_MATCHING_CHUNKS,
-				new Date(), null);
+		sendToUpdateStatus(job, OabaEventBean.DONE_MATCHING_CHUNKS, new Date(),
+				null);
 		cleanUp(job, sd);
 
 		// Next processing stage depends on the record-matching mode
@@ -416,8 +411,8 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 	 * This method sends the different chunks to different beans.
 	 */
 	protected final void startMatch(final OabaJobMessage sd)
-			throws RemoteException, BlockingException,
-			NamingException, XmlConfException {
+			throws RemoteException, BlockingException, NamingException,
+			XmlConfException {
 
 		// init values
 		final long jobId = sd.jobID;
@@ -431,15 +426,15 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 
 		} else {
 			currentChunk = 0;
-			if (processingLog.getCurrentProcessingEventId() == OabaProcessingConstants.EVT_MATCHING_DATA) {
+			if (processingLog
+					.getCurrentProcessingEventId() == OabaProcessingConstants.EVT_MATCHING_DATA) {
 				currentChunk = recover(batchJob, sd, processingLog) + 1;
 				getLogger().info("recovering from " + currentChunk);
 			}
 
 			// set up the record source arrays.
-			OabaParameters oabaParams =
-				getOabaParametersController().findOabaParametersByBatchJobId(
-						jobId);
+			OabaParameters oabaParams = getOabaParametersController()
+					.findOabaParametersByBatchJobId(jobId);
 			String modelName = oabaParams.getModelConfigurationName();
 			ImmutableProbabilityModel ipm =
 				PMManager.getImmutableModelInstance(modelName);
@@ -448,9 +443,8 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 			IChunkDataSinkSourceFactory masterFactory =
 				OabaFileUtils.getMasterDataFactory(batchJob, ipm);
 
-			final String _numChunks =
-				getPropertyController().getJobProperty(batchJob,
-						PN_CHUNK_FILE_COUNT);
+			final String _numChunks = getPropertyController()
+					.getJobProperty(batchJob, PN_CHUNK_FILE_COUNT);
 			final int numChunks = Integer.valueOf(_numChunks);
 
 			stageRS = new RecordSource[numChunks];
@@ -532,8 +526,8 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 			PMManager.getModelInstance(modelConfigId);
 
 		getLogger().info("Current chunk " + currentChunk);
-		getPropertyController().setJobProperty(batchJob,
-				PN_CURRENT_CHUNK_INDEX, String.valueOf(currentChunk));
+		getPropertyController().setJobProperty(batchJob, PN_CURRENT_CHUNK_INDEX,
+				String.valueOf(currentChunk));
 
 		// call to garbage collection
 		long t = System.currentTimeMillis();
@@ -545,7 +539,7 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 
 		// read in the data;
 		final BatchJobControl control =
-				new BatchJobControl(this.getJobController(), batchJob);
+			new BatchJobControl(this.getJobController(), batchJob);
 		t = System.currentTimeMillis();
 		dataStore.init(stageRS[currentChunk], model, masterRS[currentChunk],
 				maxChunkSize, control);
@@ -566,7 +560,8 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 	}
 
 	private void setMaxTempPairwiseIndex(BatchJob job, int max) {
-		BatchJobUtils.setMaxTempPairwiseIndex(getPropertyController(), job, max);
+		BatchJobUtils.setMaxTempPairwiseIndex(getPropertyController(), job,
+				max);
 	}
 
 }

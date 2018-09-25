@@ -53,10 +53,10 @@ import com.choicemaker.cm.transitivity.api.TransitivityParametersController;
 public class TransMatchSchedulerSingleton extends AbstractSchedulerSingleton {
 
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Logger
-			.getLogger(TransMatchSchedulerSingleton.class.getName());
-	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
-			+ TransMatchSchedulerSingleton.class.getName());
+	private static final Logger log =
+		Logger.getLogger(TransMatchSchedulerSingleton.class.getName());
+	private static final Logger jmsTrace = Logger.getLogger(
+			"jmstrace." + TransMatchSchedulerSingleton.class.getName());
 
 	// -- Injected data
 
@@ -168,9 +168,8 @@ public class TransMatchSchedulerSingleton extends AbstractSchedulerSingleton {
 		log.info("Cleanup: removing intermediate chunck files");
 
 		final long jobId = batchJob.getId();
-		TransitivityParameters params =
-			getTransitivityParametersController()
-					.findTransitivityParametersByBatchJobId(jobId);
+		TransitivityParameters params = getTransitivityParametersController()
+				.findTransitivityParametersByBatchJobId(jobId);
 		ServerConfiguration serverConfig =
 			getServerController().findServerConfigurationByJobId(jobId);
 		final String modelConfigId = params.getModelConfigurationName();
@@ -185,14 +184,12 @@ public class TransMatchSchedulerSingleton extends AbstractSchedulerSingleton {
 		int numProcessors = serverConfig.getMaxChoiceMakerThreads();
 
 		// remove the data
-		final String _numChunks =
-			getPropertyController().getJobProperty(batchJob,
-					PN_CHUNK_FILE_COUNT);
+		final String _numChunks = getPropertyController()
+				.getJobProperty(batchJob, PN_CHUNK_FILE_COUNT);
 		final int numChunks = Integer.valueOf(_numChunks);
 
-		final String _numRegularChunks =
-			getPropertyController().getJobProperty(batchJob,
-					PN_REGULAR_CHUNK_FILE_COUNT);
+		final String _numRegularChunks = getPropertyController()
+				.getJobProperty(batchJob, PN_REGULAR_CHUNK_FILE_COUNT);
 		final int numRegularChunks = Integer.valueOf(_numRegularChunks);
 
 		IChunkDataSinkSourceFactory stageFactory =
@@ -206,9 +203,8 @@ public class TransMatchSchedulerSingleton extends AbstractSchedulerSingleton {
 		assert numOS > 0;
 
 		// remove the oversized array files
-		ComparisonArrayGroupSinkSourceFactory factoryOS =
-			OabaFileUtils.getComparisonArrayGroupFactoryOS(batchJob,
-					numProcessors);
+		ComparisonArrayGroupSinkSourceFactory factoryOS = OabaFileUtils
+				.getComparisonArrayGroupFactoryOS(batchJob, numProcessors);
 		for (int i = 0; i < numOS; i++) {
 			for (int j = 1; j <= numProcessors; j++) {
 				@SuppressWarnings("rawtypes")
@@ -221,26 +217,27 @@ public class TransMatchSchedulerSingleton extends AbstractSchedulerSingleton {
 
 	@Override
 	protected void sendToMatchDebup(BatchJob job, OabaJobMessage sd) {
-		MessageBeanUtils.sendStartData(sd, getJmsContext(), transMatchDedupQueue,
-				log);
+		MessageBeanUtils.sendStartData(sd, getJmsContext(),
+				transMatchDedupQueue, log);
 	}
 
 	@Override
 	protected void sendToMatcher(OabaJobMessage sd) {
-		MessageBeanUtils.sendStartData(sd, getJmsContext(), transMatcherQueue, log);
+		MessageBeanUtils.sendStartData(sd, getJmsContext(), transMatcherQueue,
+				log);
 	}
 
 	@Override
 	protected void sendToUpdateStatus(BatchJob job, ProcessingEvent event,
 			Date timestamp, String info) {
-		getEventManager().updateStatusWithNotification(job, event,
-				timestamp, info);
+		getEventManager().updateStatusWithNotification(job, event, timestamp,
+				info);
 	}
 
 	@Override
 	protected void sendToSingleRecordMatching(BatchJob job, OabaJobMessage sd) {
-		MessageBeanUtils.sendStartData(sd, getJmsContext(), transSingleMatchQueue,
-				getLogger());
+		MessageBeanUtils.sendStartData(sd, getJmsContext(),
+				transSingleMatchQueue, getLogger());
 	}
 
 }

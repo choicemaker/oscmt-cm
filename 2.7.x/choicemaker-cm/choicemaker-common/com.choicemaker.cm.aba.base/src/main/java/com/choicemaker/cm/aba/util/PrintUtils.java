@@ -17,13 +17,16 @@ import com.choicemaker.cm.aba.IBlockingValue;
 
 public class PrintUtils {
 
-	private PrintUtils() {}
+	private PrintUtils() {
+	}
 
-	public static void logBlockingValue(Logger logger, String msg, IBlockingValue bv) {
+	public static void logBlockingValue(Logger logger, String msg,
+			IBlockingValue bv) {
 		logBlockingValue(logger, Level.FINE, msg, bv);
 	}
 
-	public static void logBlockingValue(Logger logger, Level level, String msg, IBlockingValue bv) {
+	public static void logBlockingValue(Logger logger, Level level, String msg,
+			IBlockingValue bv) {
 		// Precondition
 		if (logger == null) {
 			throw new IllegalArgumentException("null logger");
@@ -39,7 +42,7 @@ public class PrintUtils {
 				pw.print(msg + " ");
 			}
 			printBlockingValue(pw, bv);
-			logger.log(level,sw.toString());
+			logger.log(level, sw.toString());
 		}
 	}
 
@@ -52,26 +55,20 @@ public class PrintUtils {
 		if (bv == null) {
 			pw.print("[null]");
 		} else {
-			pw.print(
-				"[value "
-					+ bv.getValue()
-					+ " count "
-					+ bv.getCount()
-					+ " "
-					+ bv.getBlockingField().getDbField().getName()
-					+ " "
+			pw.print("[value " + bv.getValue() + " count " + bv.getCount() + " "
+					+ bv.getBlockingField().getDbField().getName() + " "
 					+ bv.getBlockingField().getDbField().getTable().getName()
-					+ " "
-					+ bv.getTableSize()
-					+ "]");
+					+ " " + bv.getTableSize() + "]");
 		}
 	}
 
-	public static void logBlockingSet(Logger logger, String msg, IBlockingSet b) {
+	public static void logBlockingSet(Logger logger, String msg,
+			IBlockingSet b) {
 		logBlockingSet(logger, Level.FINE, msg, b);
 	}
 
-	public static void logBlockingSet(Logger logger, Level level, String msg, IBlockingSet b) {
+	public static void logBlockingSet(Logger logger, Level level, String msg,
+			IBlockingSet b) {
 		// Precondition
 		if (logger == null) {
 			throw new IllegalArgumentException("null logger");
@@ -86,23 +83,17 @@ public class PrintUtils {
 			if (msg != null) {
 				pw.print(msg + " ");
 			}
-			printBlockingSet(pw,b);
-			logger.log(level,sw.toString());
+			printBlockingSet(pw, b);
+			logger.log(level, sw.toString());
 		}
 	}
 
-	public static void printBlockingSet(
-		PrintWriter pw,
-		IBlockingSet b) {
+	public static void printBlockingSet(PrintWriter pw, IBlockingSet b) {
 		if (b == null) {
 			pw.print("[null]");
 		} else {
-			pw.print(
-				"[count: "
-					+ b.getExpectedCount()
-					+ " table: "
-					+ b.getNumTables()
-					+ " values: { ");
+			pw.print("[count: " + b.getExpectedCount() + " table: "
+					+ b.getNumTables() + " values: { ");
 			IBlockingValue[] bvs = b.getBlockingValues();
 			for (int j = 0; j < bvs.length; j++) {
 				printBlockingValue(pw, bvs[j]);
@@ -113,4 +104,3 @@ public class PrintUtils {
 	}
 
 }
-

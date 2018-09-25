@@ -20,7 +20,8 @@ import com.choicemaker.cms.api.AbaParameters;
 public class ExpectedResult<T extends Comparable<T> & Serializable> {
 
 	public static <T extends Comparable<T> & Serializable> CompositeEntity createCompositeEntity(
-			DataAccessObject<T> queryRecord, List<QueryCandidatePair<T>> pairs) {
+			DataAccessObject<T> queryRecord,
+			List<QueryCandidatePair<T>> pairs) {
 		return null;
 	}
 

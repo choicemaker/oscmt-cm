@@ -123,8 +123,8 @@ public class BatchMatchingBean implements BatchMatching, WorkflowListener {
 		final String METHOD = "startDeduplicationAndAnalysis";
 		logger.entering(SOURCE_CLASS, METHOD);
 
-		BatchJob urmJob = createAndPersistUrmJobAndTransitivityObjects(externalID,
-				tp, oabaSettings, serverConfiguration);
+		BatchJob urmJob = createAndPersistUrmJobAndTransitivityObjects(
+				externalID, tp, oabaSettings, serverConfiguration);
 		final long urmJobId = urmJob.getId();
 		logger.info("Offline batch deduplication and analysis (job id: "
 				+ urmJobId + ")");
@@ -143,15 +143,15 @@ public class BatchMatchingBean implements BatchMatching, WorkflowListener {
 		return urmJobId;
 	}
 
-	protected BatchJob createAndPersistUrmJobAndOabaObjects(
-			String externalID, OabaParameters op, OabaSettings os,
-			ServerConfiguration sc) throws ServerConfigurationException {
+	protected BatchJob createAndPersistUrmJobAndOabaObjects(String externalID,
+			OabaParameters op, OabaSettings os, ServerConfiguration sc)
+			throws ServerConfigurationException {
 		if (op != null && !op.isPersistent()) {
 			op = oabaParamsController.save(op);
 			logger.info("Non-persistent OabaParameters have been saved: "
 					+ op.getId());
 		}
-		return createAndPersistUrmJobAndAssociatedObjects(externalID,os,sc);
+		return createAndPersistUrmJobAndAssociatedObjects(externalID, os, sc);
 	}
 
 	protected BatchJob createAndPersistUrmJobAndTransitivityObjects(
@@ -159,23 +159,23 @@ public class BatchMatchingBean implements BatchMatching, WorkflowListener {
 			ServerConfiguration sc) throws ServerConfigurationException {
 		if (tp != null && !tp.isPersistent()) {
 			tp = transParamsController.save(tp);
-			logger.info("Non-persistent TransitivityParameters have been saved: "
-					+ tp.getId());
+			logger.info(
+					"Non-persistent TransitivityParameters have been saved: "
+							+ tp.getId());
 		}
-		return createAndPersistUrmJobAndAssociatedObjects(externalID,os,sc);
+		return createAndPersistUrmJobAndAssociatedObjects(externalID, os, sc);
 	}
 
 	protected BatchJob createAndPersistUrmJobAndAssociatedObjects(
-			String externalID, OabaSettings os,
-			ServerConfiguration sc) throws ServerConfigurationException {
+			String externalID, OabaSettings os, ServerConfiguration sc)
+			throws ServerConfigurationException {
 		BatchJob retVal = urmJobManager.createPersistentUrmJob(externalID);
 		if (os != null && !os.isPersistent()) {
 			os = oabaSettingsController.save(os);
 			logger.info("Non-persistent OabaSettings have been saved: "
 					+ os.getId());
 		}
-		if (sc != null
-				&& !sc.isPersistent()) {
+		if (sc != null && !sc.isPersistent()) {
 			sc = serverManager.save(sc);
 			logger.info("Non-persistent ServerConfiguration has been saved: "
 					+ sc.getId());
@@ -199,11 +199,11 @@ public class BatchMatchingBean implements BatchMatching, WorkflowListener {
 		final String METHOD = "startLinkageAndAnalysis";
 		logger.entering(SOURCE_CLASS, METHOD);
 
-		BatchJob urmJob = createAndPersistUrmJobAndTransitivityObjects(externalID,
-				tp, oabaSettings, serverConfiguration);
+		BatchJob urmJob = createAndPersistUrmJobAndTransitivityObjects(
+				externalID, tp, oabaSettings, serverConfiguration);
 		final long urmJobId = urmJob.getId();
-		logger.info(
-				"Offline batch linkage and analysis (job id: " + urmJobId + ")");
+		logger.info("Offline batch linkage and analysis (job id: " + urmJobId
+				+ ")");
 
 		// Mark the job as started and start processing by the StartOabaMDB EJB
 		urmJob.markAsQueued();
@@ -271,7 +271,7 @@ public class BatchMatchingBean implements BatchMatching, WorkflowListener {
 		if (bpn.getJobPercentComplete() == 0.0f) {
 			if (urmJob.getStatus() == BatchJobStatus.NEW) {
 				urmJob.markAsQueued();
-		    urmJobManager.save(urmJob);
+				urmJobManager.save(urmJob);
 			} else {
 				logger.fine("ignoring notification: " + bpn);
 			}
@@ -306,7 +306,7 @@ public class BatchMatchingBean implements BatchMatching, WorkflowListener {
 				logger.fine("URM job completed after OABA notification for job "
 						+ oabaJobId);
 				urmJob.markAsCompleted();
-		    urmJobManager.save(urmJob);
+				urmJobManager.save(urmJob);
 			}
 
 		} else {
@@ -335,7 +335,7 @@ public class BatchMatchingBean implements BatchMatching, WorkflowListener {
 		if (bpn.getJobPercentComplete() == 0.0f) {
 			if (urmJob.getStatus() == BatchJobStatus.NEW) {
 				urmJob.markAsQueued();
-		    urmJobManager.save(urmJob);
+				urmJobManager.save(urmJob);
 			} else {
 				logger.fine("ignoring notification: " + bpn);
 			}
@@ -346,7 +346,7 @@ public class BatchMatchingBean implements BatchMatching, WorkflowListener {
 				urmJob.markAsQueued();
 				urmJob.markAsStarted();
 				urmJobManager.save(urmJob);
-			} else  if (urmJob.getStatus() == BatchJobStatus.QUEUED) {
+			} else if (urmJob.getStatus() == BatchJobStatus.QUEUED) {
 				urmJob.markAsStarted();
 				urmJobManager.save(urmJob);
 			} else {
@@ -358,8 +358,8 @@ public class BatchMatchingBean implements BatchMatching, WorkflowListener {
 					"URM job completed after Transitivity notification for job "
 							+ transitivityJobId);
 			urmJob.markAsCompleted();
-		  urmJobManager.save(urmJob);
-//			notifyCompletion(bpn);
+			urmJobManager.save(urmJob);
+			// notifyCompletion(bpn);
 
 		} else {
 			// Possible failure, but usually benign
@@ -369,35 +369,35 @@ public class BatchMatchingBean implements BatchMatching, WorkflowListener {
 
 	// -- Transitivity analysis
 
-//	private void notifyCompletion(BatchProcessingNotification bpn) {
-//		assert bpn != null;
-//		assert bpn.getJobPercentComplete() >= 1.0f;
-//
-//		final long transId = bpn.getJobId();
-//		final BatchJob transJob =
-//			transJobController.findTransitivityJob(transId);
-//		if (transJob == null) {
-//			String msg = "Missing Transitivity job: " + transId;
-//			throw new IllegalStateException(msg);
-//		}
-//
-//		final long urmId = transJob.getUrmId();
-//		final BatchJob urmJob = urmJobManager.findUrmJob(urmId);
-//		if (urmJob == null) {
-//			String msg = "Missing URM job: " + urmId;
-//			throw new IllegalStateException(msg);
-//		}
-//
-//		final Date now = new Date();
-//		final String info = null;
-//		sendToUpdateStatus(urmJob, DONE, now, info);
-//	}
+	// private void notifyCompletion(BatchProcessingNotification bpn) {
+	// assert bpn != null;
+	// assert bpn.getJobPercentComplete() >= 1.0f;
+	//
+	// final long transId = bpn.getJobId();
+	// final BatchJob transJob =
+	// transJobController.findTransitivityJob(transId);
+	// if (transJob == null) {
+	// String msg = "Missing Transitivity job: " + transId;
+	// throw new IllegalStateException(msg);
+	// }
+	//
+	// final long urmId = transJob.getUrmId();
+	// final BatchJob urmJob = urmJobManager.findUrmJob(urmId);
+	// if (urmJob == null) {
+	// String msg = "Missing URM job: " + urmId;
+	// throw new IllegalStateException(msg);
+	// }
+	//
+	// final Date now = new Date();
+	// final String info = null;
+	// sendToUpdateStatus(urmJob, DONE, now, info);
+	// }
 
-//	protected void sendToUpdateStatus(BatchJob job, ProcessingEvent event,
-//			Date timestamp, String info) {
-//		// eventManager.updateStatusWithNotification(job, event,
-//		// timestamp, info);
-//	}
+	// protected void sendToUpdateStatus(BatchJob job, ProcessingEvent event,
+	// Date timestamp, String info) {
+	// // eventManager.updateStatusWithNotification(job, event,
+	// // timestamp, info);
+	// }
 
 	protected void startTransitivityInternal(BatchProcessingNotification bpn)
 			throws ServerConfigurationException {
@@ -443,8 +443,8 @@ public class BatchMatchingBean implements BatchMatching, WorkflowListener {
 			String msg = "Missing server configuration: " + serverId;
 			throw new IllegalStateException(msg);
 		}
-		startTransitivityInternal(externalId, params, oabaJob,
-				oabaSettings, serverConfig, urmJob);
+		startTransitivityInternal(externalId, params, oabaJob, oabaSettings,
+				serverConfig, urmJob);
 	}
 
 	protected void startTransitivityInternal(String externalId,
@@ -458,15 +458,15 @@ public class BatchMatchingBean implements BatchMatching, WorkflowListener {
 	}
 
 	@Override
-	public long startTransitivity(String externalID,
-			TransitivityParameters tp, BatchJob oabaJob,
-			OabaSettings oabaSettings, ServerConfiguration serverConfiguration)
+	public long startTransitivity(String externalID, TransitivityParameters tp,
+			BatchJob oabaJob, OabaSettings oabaSettings,
+			ServerConfiguration serverConfiguration)
 			throws ServerConfigurationException {
 		final String METHOD = "startDeduplicationAndAnalysis";
 		logger.entering(SOURCE_CLASS, METHOD);
 
-		BatchJob urmJob = createAndPersistUrmJobAndTransitivityObjects(externalID,
-				tp, oabaSettings, serverConfiguration);
+		BatchJob urmJob = createAndPersistUrmJobAndTransitivityObjects(
+				externalID, tp, oabaSettings, serverConfiguration);
 		final long urmJobId = urmJob.getId();
 		logger.info("Offline batch analysis (job id: " + urmJobId + ")");
 
@@ -485,16 +485,15 @@ public class BatchMatchingBean implements BatchMatching, WorkflowListener {
 	}
 
 	@Override
-	public long startTransitivity(String externalID,
-			TransitivityParameters tp, BatchJob oabaJob,
-			OabaSettings oabaSettings, ServerConfiguration serverConfiguration,
-			RecordMatchingMode mode)
+	public long startTransitivity(String externalID, TransitivityParameters tp,
+			BatchJob oabaJob, OabaSettings oabaSettings,
+			ServerConfiguration serverConfiguration, RecordMatchingMode mode)
 			throws ServerConfigurationException {
 		final String METHOD = "startDeduplicationAndAnalysis";
 		logger.entering(SOURCE_CLASS, METHOD);
 
-		BatchJob urmJob = createAndPersistUrmJobAndTransitivityObjects(externalID,
-				tp, oabaSettings, serverConfiguration);
+		BatchJob urmJob = createAndPersistUrmJobAndTransitivityObjects(
+				externalID, tp, oabaSettings, serverConfiguration);
 		final long urmJobId = urmJob.getId();
 		logger.info("Offline batch analysis (job id: " + urmJobId + ")");
 
@@ -526,11 +525,10 @@ public class BatchMatchingBean implements BatchMatching, WorkflowListener {
 		final String METHOD = "startDeduplication";
 		logger.entering(SOURCE_CLASS, METHOD);
 
-		BatchJob urmJob = createAndPersistUrmJobAndOabaObjects(externalID,
-				bp, oabaSettings, serverConfiguration);
+		BatchJob urmJob = createAndPersistUrmJobAndOabaObjects(externalID, bp,
+				oabaSettings, serverConfiguration);
 		final long urmJobId = urmJob.getId();
-		logger.info("Offline batch deduplication (job id: "
-				+ urmJobId + ")");
+		logger.info("Offline batch deduplication (job id: " + urmJobId + ")");
 
 		// Mark the job as started and start processing by the StartOabaMDB EJB
 		urmJob.markAsQueued();
@@ -556,8 +554,7 @@ public class BatchMatchingBean implements BatchMatching, WorkflowListener {
 		BatchJob urmJob = createAndPersistUrmJobAndOabaObjects(externalID,
 				batchParams, oabaSettings, serverConfiguration);
 		final long urmJobId = urmJob.getId();
-		logger.info("Offline batch linkage (job id: "
-				+ urmJobId + ")");
+		logger.info("Offline batch linkage (job id: " + urmJobId + ")");
 
 		// Mark the job as started and start processing by the StartOabaMDB EJB
 		urmJob.markAsQueued();

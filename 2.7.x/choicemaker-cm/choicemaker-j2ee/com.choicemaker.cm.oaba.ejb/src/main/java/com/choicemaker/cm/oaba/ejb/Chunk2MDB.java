@@ -58,11 +58,11 @@ public class Chunk2MDB extends AbstractOabaMDB {
 
 	private static final long serialVersionUID = 271L;
 
-	private static final Logger log = Logger.getLogger(Chunk2MDB.class
-			.getName());
+	private static final Logger log =
+		Logger.getLogger(Chunk2MDB.class.getName());
 
-	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
-			+ Chunk2MDB.class.getName());
+	private static final Logger jmsTrace =
+		Logger.getLogger("jmstrace." + Chunk2MDB.class.getName());
 
 	@Resource(lookup = "java:/choicemaker/urm/jms/matchSchedulerQueue")
 	private Queue matchSchedulerQueue;
@@ -98,16 +98,14 @@ public class Chunk2MDB extends AbstractOabaMDB {
 			getPropertyController().getJobProperty(batchJob, PN_RECORD_ID_TYPE);
 		final RECORD_ID_TYPE recordIdType =
 			RECORD_ID_TYPE.valueOf(_recordIdType);
-		final TreeTransformer tTransformer =
-			new TreeTransformer(translator,
-					OabaFileUtils.getComparisonTreeGroupFactory(batchJob,
-							recordIdType, numProcessors));
+		final TreeTransformer tTransformer = new TreeTransformer(translator,
+				OabaFileUtils.getComparisonTreeGroupFactory(batchJob,
+						recordIdType, numProcessors));
 
 		// create the transformer for over-sized blocks
 		final Transformer transformerO =
-			new Transformer(translator,
-					OabaFileUtils.getComparisonArrayGroupFactoryOS(batchJob,
-							numProcessors));
+			new Transformer(translator, OabaFileUtils
+					.getComparisonArrayGroupFactoryOS(batchJob, numProcessors));
 
 		ISerializableRecordSource staging = null;
 		ISerializableRecordSource master = null;
@@ -118,20 +116,19 @@ public class Chunk2MDB extends AbstractOabaMDB {
 			throw new BlockingException(e.toString());
 		}
 		assert staging != null;
-		
+
 		final RecordMatchingMode mode = getRecordMatchingMode(batchJob);
 
 		final BatchJobControl control =
 			new BatchJobControl(this.getJobController(), batchJob);
 
-		ChunkService3 chunkService =
-			new ChunkService3(OabaFileUtils.getTreeSetSource(batchJob), source2,
-					staging, master, model,
-					OabaFileUtils.getChunkIDFactory(batchJob),
-					OabaFileUtils.getStageDataFactory(batchJob, model),
-					OabaFileUtils.getMasterDataFactory(batchJob, model),
-					translator, tTransformer, transformerO,
-					maxChunk, maxChunkFiles, processingLog, control, mode);
+		ChunkService3 chunkService = new ChunkService3(
+				OabaFileUtils.getTreeSetSource(batchJob), source2, staging,
+				master, model, OabaFileUtils.getChunkIDFactory(batchJob),
+				OabaFileUtils.getStageDataFactory(batchJob, model),
+				OabaFileUtils.getMasterDataFactory(batchJob, model), translator,
+				tTransformer, transformerO, maxChunk, maxChunkFiles,
+				processingLog, control, mode);
 		log.info("Chunk service: " + chunkService);
 		chunkService.runService();
 		log.info("Done creating chunks " + chunkService.getTimeElapsed());

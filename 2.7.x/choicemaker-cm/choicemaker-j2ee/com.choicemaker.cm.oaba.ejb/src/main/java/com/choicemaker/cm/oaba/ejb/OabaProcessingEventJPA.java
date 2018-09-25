@@ -27,8 +27,8 @@ public interface OabaProcessingEventJPA {
 	String DISCRIMINATOR_COLUMN = "JOB_TYPE";
 
 	/**
-	 * Value of the discriminator column used to mark OabaBatchProcessingEvent types
-	 * (and not sub-types)
+	 * Value of the discriminator column used to mark OabaBatchProcessingEvent
+	 * types (and not sub-types)
 	 */
 	String DISCRIMINATOR_VALUE = "OABA";
 

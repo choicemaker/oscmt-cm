@@ -29,8 +29,8 @@ import com.choicemaker.cm.oaba.utils.ControlChecker;
  */
 public class ChunkDataStore {
 
-	private static final Logger logger = Logger.getLogger(ChunkDataStore.class
-			.getName());
+	private static final Logger logger =
+		Logger.getLogger(ChunkDataStore.class.getName());
 
 	// public static final int DEFAULT_LOOP_CONTROL = 10000;
 	public static final int DEFAULT_LOOP_CONTROL = 100;

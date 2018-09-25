@@ -10,7 +10,6 @@
  */
 package com.choicemaker.cm.args;
 
-
 /**
  * Settings for the Offline Automated Batch Algorithm (OABA) are matching
  * parameters that change relatively infrequently. Prior to version 2.7 of
@@ -54,10 +53,10 @@ public interface OabaSettings extends AbaSettings {
 	 * met, the blocking set is discarded.
 	 */
 	int getMaxOversized();
-	
+
 	/**
-	 * The maximum number of matches to package into an indexed pair-wise result file.
-	 * After the maximum is reached, a new indexed file is started with an
+	 * The maximum number of matches to package into an indexed pair-wise result
+	 * file. After the maximum is reached, a new indexed file is started with an
 	 * index incremented by 1 (one).
 	 */
 	int getMaxMatches();

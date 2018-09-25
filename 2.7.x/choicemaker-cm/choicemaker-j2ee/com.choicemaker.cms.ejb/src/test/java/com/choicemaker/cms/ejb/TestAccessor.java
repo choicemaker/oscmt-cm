@@ -8,12 +8,13 @@ import com.choicemaker.cm.core.Descriptor;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.util.Precondition;
 
-public class TestAccessor<T extends Comparable<T> & Serializable> implements Accessor {
+public class TestAccessor<T extends Comparable<T> & Serializable>
+		implements Accessor {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private TestClueSet<T> clueSet;
-	
+
 	public TestAccessor(TestModel<T> model) {
 		Precondition.assertNonNullArgument(model);
 		this.clueSet = new TestClueSet<T>(model);
@@ -57,7 +58,8 @@ public class TestAccessor<T extends Comparable<T> & Serializable> implements Acc
 	@Override
 	public Object toHolder(@SuppressWarnings("rawtypes") Record r) {
 		if (!(r instanceof TestRecord)) {
-			String msg = r == null ? "null record" : "Bad class: " + r.getClass().getName();
+			String msg = r == null ? "null record"
+					: "Bad class: " + r.getClass().getName();
 			throw new ClassCastException(msg);
 		}
 		return r;
@@ -72,10 +74,11 @@ public class TestAccessor<T extends Comparable<T> & Serializable> implements Acc
 	@Override
 	public Record toImpl(Object o) {
 		if (!(o instanceof TestRecord)) {
-			String msg = o == null ? "null record" : "Bad class: " + o.getClass().getName();
+			String msg = o == null ? "null record"
+					: "Bad class: " + o.getClass().getName();
 			throw new ClassCastException(msg);
 		}
-		return (TestRecord)o;
+		return (TestRecord) o;
 	}
 
 }

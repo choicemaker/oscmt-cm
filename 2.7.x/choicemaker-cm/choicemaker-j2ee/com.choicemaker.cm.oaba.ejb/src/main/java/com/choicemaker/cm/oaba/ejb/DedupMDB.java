@@ -47,11 +47,11 @@ public class DedupMDB extends AbstractOabaMDB {
 
 	private static final long serialVersionUID = 271L;
 
-	private static final Logger log = Logger
-			.getLogger(DedupMDB.class.getName());
+	private static final Logger log =
+		Logger.getLogger(DedupMDB.class.getName());
 
-	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
-			+ DedupMDB.class.getName());
+	private static final Logger jmsTrace =
+		Logger.getLogger("jmstrace." + DedupMDB.class.getName());
 
 	@Resource(lookup = "java:/choicemaker/urm/jms/chunkQueue")
 	private Queue chunkQueue;
@@ -65,17 +65,15 @@ public class DedupMDB extends AbstractOabaMDB {
 		// Handle regular blocking sets
 		final int maxBlock = oabaSettings.getMaxBlockSize();
 		final int interval = oabaSettings.getInterval();
-		final BlockGroup bGroup =
-			new BlockGroup(OabaFileUtils.getBlockGroupFactory(batchJob),
-					maxBlock);
+		final BlockGroup bGroup = new BlockGroup(
+				OabaFileUtils.getBlockGroupFactory(batchJob), maxBlock);
 		final BatchJobControl control =
 			new BatchJobControl(this.getJobController(), batchJob);
-		BlockDedupService4 dedupService =
-			new BlockDedupService4(bGroup,
-					OabaFileUtils.getBigBlocksSinkSourceFactory(batchJob),
-					OabaFileUtils.getTempBlocksSinkSourceFactory(batchJob),
-					OabaFileUtils.getSuffixTreeSink(batchJob), maxBlock,
-					processingLog, control, interval);
+		BlockDedupService4 dedupService = new BlockDedupService4(bGroup,
+				OabaFileUtils.getBigBlocksSinkSourceFactory(batchJob),
+				OabaFileUtils.getTempBlocksSinkSourceFactory(batchJob),
+				OabaFileUtils.getSuffixTreeSink(batchJob), maxBlock,
+				processingLog, control, interval);
 		dedupService.runService();
 		log.info("Done block dedup " + dedupService.getTimeElapsed());
 		log.info("Blocks In " + dedupService.getNumBlocksIn());

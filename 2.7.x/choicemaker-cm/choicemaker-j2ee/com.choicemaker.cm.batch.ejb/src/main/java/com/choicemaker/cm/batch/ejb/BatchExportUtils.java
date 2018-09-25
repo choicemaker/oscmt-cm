@@ -20,7 +20,7 @@ import com.choicemaker.util.StringUtils;
 public class BatchExportUtils {
 
 	private static final Logger logger =
-			Logger.getLogger(BatchExportUtils.class.getName());
+		Logger.getLogger(BatchExportUtils.class.getName());
 
 	public static final String FILE_PROTOCOL = "file";
 
@@ -49,8 +49,8 @@ public class BatchExportUtils {
 		// Use cached results for now.
 		// FIXME Use results from DB
 		// FIXME This method falls apart if there are several result files
-		final String resultFileName = propController.getJobProperty(batchJob,
-				propertyName);
+		final String resultFileName =
+			propController.getJobProperty(batchJob, propertyName);
 		logger.finer("OABA result file: " + resultFileName);
 		if (!StringUtils.nonEmptyString(resultFileName)) {
 			String msg = "Invalid result file name: '" + resultFileName + "'";

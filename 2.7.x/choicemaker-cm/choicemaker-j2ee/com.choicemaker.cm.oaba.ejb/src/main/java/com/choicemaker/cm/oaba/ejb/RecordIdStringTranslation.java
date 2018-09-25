@@ -29,13 +29,13 @@ import com.choicemaker.cm.oaba.core.RECORD_ID_TYPE;
 				query = JPQL_TRANSLATEDSTRINGID_FIND_BY_JOBID) })
 @Entity
 @DiscriminatorValue(DV_STRING)
-public class RecordIdStringTranslation extends
-		AbstractRecordIdTranslationEntity<String> {
+public class RecordIdStringTranslation
+		extends AbstractRecordIdTranslationEntity<String> {
 
 	private static final long serialVersionUID = 271L;
 
-	static final String RECORD_ID_PLACEHOLDER = ""
-			+ RecordIdIntegerTranslation.RECORD_ID_PLACEHOLDER;
+	static final String RECORD_ID_PLACEHOLDER =
+		"" + RecordIdIntegerTranslation.RECORD_ID_PLACEHOLDER;
 
 	protected RecordIdStringTranslation() {
 		super();
@@ -43,9 +43,8 @@ public class RecordIdStringTranslation extends
 
 	public RecordIdStringTranslation(BatchJob job, String recordId,
 			RECORD_SOURCE_ROLE source, int translatedId) {
-		super(job.getId(), recordId,
-				RECORD_ID_TYPE.TYPE_STRING.getCharSymbol(), source
-						.getCharSymbol(), translatedId);
+		super(job.getId(), recordId, RECORD_ID_TYPE.TYPE_STRING.getCharSymbol(),
+				source.getCharSymbol(), translatedId);
 	}
 
 	@Override

@@ -53,22 +53,20 @@ import com.choicemaker.cm.transitivity.api.TransitivityParametersController;
  *
  */
 // Singleton: maxSession = 1 (JBoss only)
-@MessageDriven(
-		activationConfig = {
-				@ActivationConfigProperty(propertyName = "maxSession",
-						propertyValue = "1"), // Singleton (JBoss only)
-				@ActivationConfigProperty(
-						propertyName = "destinationLookup",
-						propertyValue = "java:/choicemaker/urm/jms/transMatchDedupQueue"),
-				@ActivationConfigProperty(propertyName = "destinationType",
-						propertyValue = "javax.jms.Queue") })
+@MessageDriven(activationConfig = {
+		@ActivationConfigProperty(propertyName = "maxSession",
+				propertyValue = "1"), // Singleton (JBoss only)
+		@ActivationConfigProperty(propertyName = "destinationLookup",
+				propertyValue = "java:/choicemaker/urm/jms/transMatchDedupQueue"),
+		@ActivationConfigProperty(propertyName = "destinationType",
+				propertyValue = "javax.jms.Queue") })
 public class TransMatchDedupMDB extends AbstractTransitivityMDB {
 
 	private static final long serialVersionUID = 2711L;
-	private static final Logger log = Logger.getLogger(TransMatchDedupMDB.class
-			.getName());
-	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
-			+ TransMatchDedupMDB.class.getName());
+	private static final Logger log =
+		Logger.getLogger(TransMatchDedupMDB.class.getName());
+	private static final Logger jmsTrace =
+		Logger.getLogger("jmstrace." + TransMatchDedupMDB.class.getName());
 
 	@EJB
 	private TransitivityJobManager jobManager;
@@ -217,8 +215,7 @@ public class TransMatchDedupMDB extends AbstractTransitivityMDB {
 
 	protected void sendToUpdateStatus(BatchJob job, ProcessingEvent event,
 			Date timestamp, String info) {
-		eventManager.updateStatusWithNotification(job, event,
-				timestamp, info);
+		eventManager.updateStatusWithNotification(job, event, timestamp, info);
 	}
 
 	@Override

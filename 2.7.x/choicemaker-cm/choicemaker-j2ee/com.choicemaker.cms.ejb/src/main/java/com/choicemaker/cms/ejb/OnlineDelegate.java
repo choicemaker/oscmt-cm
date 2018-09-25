@@ -184,7 +184,7 @@ public class OnlineDelegate<T extends Comparable<T> & Serializable> {
 
 	public Map<T, Match> createMatchMap(List<Match> matches)
 			throws BlockingException {
-		Precondition.assertNonNullArgument("null match list",matches);
+		Precondition.assertNonNullArgument("null match list", matches);
 		Map<T, Match> retVal = new HashMap<>();
 		for (Match match : matches) {
 			@SuppressWarnings("unchecked")

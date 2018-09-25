@@ -13,11 +13,12 @@ import java.util.logging.Logger;
 /**
  * @author rphall
  */
-@SuppressWarnings({ "rawtypes" })
+@SuppressWarnings({
+		"rawtypes" })
 public class ClusteringIteratorFactory {
 
-	private static final Logger log = Logger
-			.getLogger(ClusteringIteratorFactory.class.getName());
+	private static final Logger log =
+		Logger.getLogger(ClusteringIteratorFactory.class.getName());
 
 	private static ClusteringIteratorFactory instance = null;
 	private static Object instanceSynch = new Object();

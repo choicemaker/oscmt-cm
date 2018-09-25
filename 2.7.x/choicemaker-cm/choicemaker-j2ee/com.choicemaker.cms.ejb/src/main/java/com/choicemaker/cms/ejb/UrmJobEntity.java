@@ -44,7 +44,7 @@ import com.choicemaker.cm.batch.ejb.BatchJobEntity;
 				query = JPQL_URM_FIND_ALL_BY_URM_ID) })
 @Entity
 @DiscriminatorValue(value = DISCRIMINATOR_VALUE)
-public class UrmJobEntity extends BatchJobEntity /*implements IControl*/ {
+public class UrmJobEntity extends BatchJobEntity /* implements IControl */ {
 
 	private static final long serialVersionUID = 271L;
 
@@ -56,15 +56,17 @@ public class UrmJobEntity extends BatchJobEntity /*implements IControl*/ {
 	// -- Constructors
 
 	public UrmJobEntity(String externalId) {
-		this(DISCRIMINATOR_VALUE, PersistentObject.NONPERSISTENT_ID, PersistentObject.NONPERSISTENT_ID, PersistentObject.NONPERSISTENT_ID,
-				externalId, randomTransactionId(), PersistentObject.NONPERSISTENT_ID,
+		this(DISCRIMINATOR_VALUE, PersistentObject.NONPERSISTENT_ID,
+				PersistentObject.NONPERSISTENT_ID,
+				PersistentObject.NONPERSISTENT_ID, externalId,
+				randomTransactionId(), PersistentObject.NONPERSISTENT_ID,
 				PersistentObject.NONPERSISTENT_ID, BatchJob.DEFAULT_RIGOR);
 	}
 
 	public UrmJobEntity(BatchJob o) {
-		this(DISCRIMINATOR_VALUE, o.getParametersId(), o.getSettingsId(), o
-				.getServerId(), o.getExternalId(), o.getTransactionId(), o
-				.getBatchParentId(), o.getUrmId(), o.getBatchJobRigor());
+		this(DISCRIMINATOR_VALUE, o.getParametersId(), o.getSettingsId(),
+				o.getServerId(), o.getExternalId(), o.getTransactionId(),
+				o.getBatchParentId(), o.getUrmId(), o.getBatchJobRigor());
 		this.workingDirectory = o.getWorkingDirectory().getAbsolutePath();
 	}
 
@@ -79,19 +81,16 @@ public class UrmJobEntity extends BatchJobEntity /*implements IControl*/ {
 		final String wd = workingDir == null ? "null" : workingDir.toString();
 		if (workingDir == null || !workingDir.exists()
 				|| !workingDir.isDirectory()) {
-			String msg =
-				"Working directory '" + wd
-						+ "' is null, does not exist, or is not a directory";
+			String msg = "Working directory '" + wd
+					+ "' is null, does not exist, or is not a directory";
 			throw new IllegalArgumentException(msg);
 		}
 		if (!workingDir.canRead() || !workingDir.canWrite()) {
-			String msg =
-				"Working directory '" + wd
-						+ "' is not readable or not writeable";
+			String msg = "Working directory '" + wd
+					+ "' is not readable or not writeable";
 			throw new IllegalArgumentException(msg);
 		}
 		this.workingDirectory = workingDir.getAbsolutePath();
 	}
 
 } // UrmJobEntity
-

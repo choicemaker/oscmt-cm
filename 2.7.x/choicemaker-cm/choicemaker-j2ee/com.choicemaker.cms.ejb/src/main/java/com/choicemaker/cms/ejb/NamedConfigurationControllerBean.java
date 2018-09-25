@@ -31,11 +31,11 @@ import com.choicemaker.cms.api.remote.NamedConfigurationControllerRemote;
 @Stateless
 @Local(NamedConfigurationController.class)
 @Remote(NamedConfigurationControllerRemote.class)
-public class NamedConfigurationControllerBean implements
-		NamedConfigurationController {
+public class NamedConfigurationControllerBean
+		implements NamedConfigurationController {
 
-	private static final Logger logger = Logger
-			.getLogger(NamedConfigurationControllerBean.class.getName());
+	private static final Logger logger =
+		Logger.getLogger(NamedConfigurationControllerBean.class.getName());
 
 	public static int computeAvailableProcessors() {
 		int retVal = Runtime.getRuntime().availableProcessors();
@@ -44,7 +44,7 @@ public class NamedConfigurationControllerBean implements
 
 	@PersistenceContext(unitName = "oaba")
 	private EntityManager em;
-	
+
 	@EJB
 	private ServerConfigurationController serverController;
 
@@ -61,7 +61,8 @@ public class NamedConfigurationControllerBean implements
 
 	@Override
 	public List<String> findAllServerConfigurationNames() {
-		List<ServerConfiguration> serverConfigurations = serverController.findAllServerConfigurations();
+		List<ServerConfiguration> serverConfigurations =
+			serverController.findAllServerConfigurations();
 		List<String> retVal = new ArrayList<>();
 		for (ServerConfiguration serverConfiguration : serverConfigurations) {
 			String name = serverConfiguration.getName();
@@ -80,10 +81,9 @@ public class NamedConfigurationControllerBean implements
 	@Override
 	public NamedConfigurationEntity findNamedConfigurationByName(
 			String configName) {
-		Query query =
-			em.createNamedQuery(NamedConfigurationJPA.QN_NAMEDCONFIG_FIND_BY_NAME);
-		query.setParameter(
-				NamedConfigurationJPA.PN_NAMEDCONFIG_FIND_BY_NAME_P1,
+		Query query = em.createNamedQuery(
+				NamedConfigurationJPA.QN_NAMEDCONFIG_FIND_BY_NAME);
+		query.setParameter(NamedConfigurationJPA.PN_NAMEDCONFIG_FIND_BY_NAME_P1,
 				configName);
 		@SuppressWarnings("unchecked")
 		List<NamedConfigurationEntity> beans = query.getResultList();

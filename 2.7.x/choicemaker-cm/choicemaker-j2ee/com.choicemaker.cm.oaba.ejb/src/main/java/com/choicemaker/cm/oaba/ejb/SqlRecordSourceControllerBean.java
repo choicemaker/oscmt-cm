@@ -28,10 +28,11 @@ import com.choicemaker.cm.core.ISerializableRecordSource;
 import com.choicemaker.cm.oaba.api.SqlRecordSourceController;
 
 @Stateless
-public class SqlRecordSourceControllerBean implements SqlRecordSourceController {
+public class SqlRecordSourceControllerBean
+		implements SqlRecordSourceController {
 
-	private static final Logger logger = Logger
-			.getLogger(SqlRecordSourceControllerBean.class.getName());
+	private static final Logger logger =
+		Logger.getLogger(SqlRecordSourceControllerBean.class.getName());
 
 	@PersistenceContext(unitName = "oaba")
 	private EntityManager em;
@@ -43,8 +44,8 @@ public class SqlRecordSourceControllerBean implements SqlRecordSourceController 
 			throw new IllegalArgumentException("null settings");
 		}
 		if (!(rs instanceof PersistableSqlRecordSource)) {
-			throw new IllegalArgumentException("invalid type: "
-					+ rs.getClass().getName());
+			throw new IllegalArgumentException(
+					"invalid type: " + rs.getClass().getName());
 		}
 		final String type = rs.getType();
 		assert PersistableSqlRecordSource.TYPE.equals(type);
@@ -56,17 +57,15 @@ public class SqlRecordSourceControllerBean implements SqlRecordSourceController 
 			// The record source appears to be persistent -- check the DB
 			retVal = findInternal(rsId);
 			if (retVal == null) {
-				String msg =
-					"The specified record source (" + rsId
-							+ ") is missing in the DB. "
-							+ "A new copy will be persisted.";
+				String msg = "The specified record source (" + rsId
+						+ ") is missing in the DB. "
+						+ "A new copy will be persisted.";
 				logger.warning(msg);
 				retVal = null;
 			} else if (!retVal.equals(rs)) {
-				String msg =
-					"The specified record source (" + rsId
-							+ ") is different in the DB. The DB copy will be "
-							+ "used instead of the specified record source.";
+				String msg = "The specified record source (" + rsId
+						+ ") is different in the DB. The DB copy will be "
+						+ "used instead of the specified record source.";
 				logger.warning(msg);
 			}
 		}
@@ -79,9 +78,8 @@ public class SqlRecordSourceControllerBean implements SqlRecordSourceController 
 			assert !retVal.isPersistent();
 			em.persist(retVal);
 			assert retVal.isPersistent();
-			String msg =
-				"Saved record source in the database with id = "
-						+ retVal.getId();
+			String msg = "Saved record source in the database with id = "
+					+ retVal.getId();
 			logger.info(msg);
 		}
 		assert retVal != null;
@@ -110,14 +108,12 @@ public class SqlRecordSourceControllerBean implements SqlRecordSourceController 
 			PersistableSqlRecordSource psrs = findInternal(rsId.longValue());
 			if (psrs != null) {
 				Class<?> c = Class.forName(psrs.getDatabaseReader());
-				Constructor<?> ctor =
-					c.getConstructor(String.class, String.class, String.class,
-							String.class);
-				retVal =
-					(ISerializableRecordSource) ctor.newInstance(
-							psrs.getDataSource(), psrs.getModelId(),
-							psrs.getDatabaseConfiguration(),
-							psrs.getSqlSelectStatement());
+				Constructor<?> ctor = c.getConstructor(String.class,
+						String.class, String.class, String.class);
+				retVal = (ISerializableRecordSource) ctor.newInstance(
+						psrs.getDataSource(), psrs.getModelId(),
+						psrs.getDatabaseConfiguration(),
+						psrs.getSqlSelectStatement());
 			}
 		}
 		return retVal;

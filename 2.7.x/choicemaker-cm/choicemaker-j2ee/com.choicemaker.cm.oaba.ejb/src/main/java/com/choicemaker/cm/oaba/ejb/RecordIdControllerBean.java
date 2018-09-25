@@ -48,8 +48,8 @@ import com.choicemaker.cm.oaba.core.RECORD_ID_TYPE;
 @Stateless
 public class RecordIdControllerBean implements RecordIdController {
 
-	private static final Logger logger = Logger
-			.getLogger(RecordIdControllerBean.class.getName());
+	private static final Logger logger =
+		Logger.getLogger(RecordIdControllerBean.class.getName());
 
 	public static final String BASENAME_RECORDID_TRANSLATOR = "translator";
 
@@ -103,8 +103,8 @@ public class RecordIdControllerBean implements RecordIdController {
 
 	protected <T extends Comparable<T>> List<AbstractRecordIdTranslationEntity<T>> findTranslationImpls(
 			BatchJob job) throws BlockingException {
-		Query query =
-			em.createNamedQuery(RecordIdTranslationJPA.QN_TRANSLATEDID_FIND_BY_JOBID);
+		Query query = em.createNamedQuery(
+				RecordIdTranslationJPA.QN_TRANSLATEDID_FIND_BY_JOBID);
 		query.setParameter(
 				RecordIdTranslationJPA.PN_TRANSLATEDID_FIND_BY_JOBID_JOBID,
 				job.getId());
@@ -262,8 +262,8 @@ public class RecordIdControllerBean implements RecordIdController {
 		logger.finer("Sink 2: " + sink2);
 
 		@SuppressWarnings("rawtypes")
-		MutableRecordIdTranslator retVal =
-			new MutableRecordIdTranslatorImpl(job, rFactory, sink1, sink2, keepFiles);
+		MutableRecordIdTranslator retVal = new MutableRecordIdTranslatorImpl(
+				job, rFactory, sink1, sink2, keepFiles);
 		return retVal;
 	}
 
@@ -293,7 +293,7 @@ public class RecordIdControllerBean implements RecordIdController {
 		try {
 			connection = em.unwrap(Connection.class);
 			connection.setReadOnly(true);
-//			connection.setAutoCommit(true); // 2015-04-01a EJB3 CHANGE rphall
+			// connection.setAutoCommit(true); // 2015-04-01a EJB3 CHANGE rphall
 			String query = createRecordIdTypeQuery(job);
 			logger.fine(query);
 
@@ -315,19 +315,17 @@ public class RecordIdControllerBean implements RecordIdController {
 				String msg = "No translated record identifier for job " + job;
 				throw new BlockingException(msg);
 			} else if (dataTypes.size() > 1) {
-				String msg =
-					"Inconsistent record identifiers for job " + job + "("
-							+ dataTypes + ")";
+				String msg = "Inconsistent record identifiers for job " + job
+						+ "(" + dataTypes + ")";
 				throw new BlockingException(msg);
 			}
 			assert dataTypes.size() == 1;
 			retVal = dataTypes.iterator().next();
 		} catch (SQLException e) {
 			em.getTransaction().rollback();
-			String msg =
-				this.getClass().getSimpleName()
-						+ ".getTranslatorType(BatchJob): "
-						+ "unable to get record-id type: " + e;
+			String msg = this.getClass().getSimpleName()
+					+ ".getTranslatorType(BatchJob): "
+					+ "unable to get record-id type: " + e;
 			throw new BlockingException(msg, e);
 		} finally {
 			em.getTransaction().commit();
@@ -335,10 +333,9 @@ public class RecordIdControllerBean implements RecordIdController {
 				try {
 					connection.close();
 				} catch (SQLException e) {
-					String msg =
-						this.getClass().getSimpleName()
-								+ ".getTranslatorType(BatchJob): "
-								+ "unable to close JDBC connection: " + e;
+					String msg = this.getClass().getSimpleName()
+							+ ".getTranslatorType(BatchJob): "
+							+ "unable to close JDBC connection: " + e;
 					logger.severe(msg);
 				}
 			}
@@ -348,7 +345,8 @@ public class RecordIdControllerBean implements RecordIdController {
 	}
 
 	@Override
-	public IRecordIdSinkSourceFactory getRecordIdSinkSourceFactory(BatchJob job) {
+	public IRecordIdSinkSourceFactory getRecordIdSinkSourceFactory(
+			BatchJob job) {
 		return getRecordIDFactory(job);
 	}
 
@@ -414,9 +412,8 @@ public class RecordIdControllerBean implements RecordIdController {
 			logger.fine("Returning unaltered translator: " + retVal);
 
 		} else if (impl.isEmpty()) {
-			String msg =
-				"Translator is empty. "
-						+ "(Has the translator translated any record ids?)";
+			String msg = "Translator is empty. "
+					+ "(Has the translator translated any record ids?)";
 			logger.info(msg);
 			retVal = impl;
 			logger.warning("No translations saved: " + retVal);
@@ -440,9 +437,8 @@ public class RecordIdControllerBean implements RecordIdController {
 				throw new Error("unexpected record source type: " + dataType);
 			}
 			translations = findTranslationImpls(job);
-			retVal =
-				ImmutableRecordIdTranslatorImpl.createTranslator(job, dataType,
-						translations, keepFiles);
+			retVal = ImmutableRecordIdTranslatorImpl.createTranslator(job,
+					dataType, translations, keepFiles);
 			logger.fine("Returning new translator: " + retVal);
 		}
 		assert retVal != null;

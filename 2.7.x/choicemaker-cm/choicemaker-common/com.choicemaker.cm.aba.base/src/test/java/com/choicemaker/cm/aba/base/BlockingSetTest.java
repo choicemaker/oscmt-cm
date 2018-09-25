@@ -43,8 +43,8 @@ public class BlockingSetTest {
 		final IDbTable dbfTable = new DbTable(dbtName, dbtNumber, uniqueDbtId);
 		final int defaultCount = 29;
 		final String group = null;
-		final IBlockingValue[][] base =
-				new IBlockingValue[][] { new IBlockingValue[] {} };
+		final IBlockingValue[][] base = new IBlockingValue[][] {
+				new IBlockingValue[] {} };
 		final int tableSize = 386576;
 
 		int dbfNumber = 2;
@@ -129,8 +129,8 @@ public class BlockingSetTest {
 		final IDbTable dbfTable = new DbTable(dbtName, dbtNumber, uniqueDbtId);
 		final int defaultCount = 29;
 		final String group = null;
-		final IBlockingValue[][] base =
-				new IBlockingValue[][] { new IBlockingValue[] {} };
+		final IBlockingValue[][] base = new IBlockingValue[][] {
+				new IBlockingValue[] {} };
 		final int tableSize = 386576;
 
 		int dbfNumber = 2;
@@ -160,44 +160,44 @@ public class BlockingSetTest {
 		bv.setTableSize(tableSize);
 		bvList.add(bv);
 
-//		dbfNumber = 4;
-//		dbfName = "DOB";
-//		dbfType = "String";
-//		dbField =
-//			new DbField(dbfNumber, dbfName, dbfType, dbfTable, defaultCount);
-//		bfNumber = 4;
-//		bf = new BlockingField(bfNumber, queryField, dbField, group);
-//		value = "19570720";
-//		bv = new BlockingValue(bf, value, base);
-//		bv.setCount(77);
-//		bv.setTableSize(tableSize);
-//		bvList.add(bv);
-//
-//		dbfNumber = 0;
-//		dbfName = "SURNAME";
-//		dbfType = "String";
-//		dbField =
-//			new DbField(dbfNumber, dbfName, dbfType, dbfTable, defaultCount);
-//		bfNumber = 0;
-//		bf = new BlockingField(bfNumber, queryField, dbField, group);
-//		value = "tolmie";
-//		bv = new BlockingValue(bf, value, base);
-//		bv.setCount(101);
-//		bv.setTableSize(tableSize);
-//		bvList.add(bv);
-//
-//		dbfNumber = 6;
-//		dbfName = "PCODE";
-//		dbfType = "String";
-//		dbField =
-//			new DbField(dbfNumber, dbfName, dbfType, dbfTable, defaultCount);
-//		bfNumber = 6;
-//		bf = new BlockingField(bfNumber, queryField, dbField, group);
-//		value = "2022";
-//		bv = new BlockingValue(bf, value, base);
-//		bv.setCount(4229);
-//		bv.setTableSize(tableSize);
-//		bvList.add(bv);
+		// dbfNumber = 4;
+		// dbfName = "DOB";
+		// dbfType = "String";
+		// dbField =
+		// new DbField(dbfNumber, dbfName, dbfType, dbfTable, defaultCount);
+		// bfNumber = 4;
+		// bf = new BlockingField(bfNumber, queryField, dbField, group);
+		// value = "19570720";
+		// bv = new BlockingValue(bf, value, base);
+		// bv.setCount(77);
+		// bv.setTableSize(tableSize);
+		// bvList.add(bv);
+		//
+		// dbfNumber = 0;
+		// dbfName = "SURNAME";
+		// dbfType = "String";
+		// dbField =
+		// new DbField(dbfNumber, dbfName, dbfType, dbfTable, defaultCount);
+		// bfNumber = 0;
+		// bf = new BlockingField(bfNumber, queryField, dbField, group);
+		// value = "tolmie";
+		// bv = new BlockingValue(bf, value, base);
+		// bv.setCount(101);
+		// bv.setTableSize(tableSize);
+		// bvList.add(bv);
+		//
+		// dbfNumber = 6;
+		// dbfName = "PCODE";
+		// dbfType = "String";
+		// dbField =
+		// new DbField(dbfNumber, dbfName, dbfType, dbfTable, defaultCount);
+		// bfNumber = 6;
+		// bf = new BlockingField(bfNumber, queryField, dbField, group);
+		// value = "2022";
+		// bv = new BlockingValue(bf, value, base);
+		// bv.setCount(4229);
+		// bv.setTableSize(tableSize);
+		// bvList.add(bv);
 
 		IBlockingValue[] retVal = (IBlockingValue[]) bvList.toArray();
 		return retVal;

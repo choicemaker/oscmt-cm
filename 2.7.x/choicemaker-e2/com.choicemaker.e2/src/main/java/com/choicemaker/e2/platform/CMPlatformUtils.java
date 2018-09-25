@@ -21,10 +21,10 @@ import com.choicemaker.e2.CMPluginRegistry;
 
 public class CMPlatformUtils {
 
-	private static final Logger logger = Logger.getLogger(CMPlatformUtils.class
-			.getName());
-	private static final String SIMPLE_CLASS_NAME = CMPlatformUtils.class
-			.getSimpleName();
+	private static final Logger logger =
+		Logger.getLogger(CMPlatformUtils.class.getName());
+	private static final String SIMPLE_CLASS_NAME =
+		CMPlatformUtils.class.getSimpleName();
 
 	public static CMPluginRegistry getPluginRegistry() {
 		// final String METHOD = "getPluginRegistry";
@@ -85,8 +85,8 @@ public class CMPlatformUtils {
 		List<ClassLoader> loaders = new LinkedList<>();
 		CMPluginDescriptor[] plugins = getPluginDescriptors();
 		for (CMPluginDescriptor plugin : plugins) {
-			logger.finer("Adding classloader for: "
-					+ plugin.getUniqueIdentifier());
+			logger.finer(
+					"Adding classloader for: " + plugin.getUniqueIdentifier());
 			ClassLoader loader = plugin.getPluginClassLoader();
 			loaders.add(loader);
 		}
@@ -109,8 +109,8 @@ public class CMPlatformUtils {
 					urls.add(url);
 				}
 			} else {
-				logger.warning("Skipping non-URLClassLoader: "
-						+ loader.toString());
+				logger.warning(
+						"Skipping non-URLClassLoader: " + loader.toString());
 			}
 		}
 		URL[] retVal = new URL[urls.size()];

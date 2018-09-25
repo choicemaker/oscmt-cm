@@ -81,10 +81,10 @@ import com.choicemaker.cm.oaba.services.GenericDedupService;
 public class MatchDedupMDB implements MessageListener, Serializable {
 
 	private static final long serialVersionUID = 271L;
-	private static final Logger log = Logger.getLogger(MatchDedupMDB.class
-			.getName());
-	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
-			+ MatchDedupMDB.class.getName());
+	private static final Logger log =
+		Logger.getLogger(MatchDedupMDB.class.getName());
+	private static final Logger jmsTrace =
+		Logger.getLogger("jmstrace." + MatchDedupMDB.class.getName());
 
 	@EJB
 	private OabaJobManager jobManager;
@@ -155,7 +155,8 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 					}
 
 				} else {
-					log.warning("wrong message body: " + o.getClass().getName());
+					log.warning(
+							"wrong message body: " + o.getClass().getName());
 				}
 
 			} else {
@@ -210,16 +211,15 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 					processingEntry);
 
 		} else {
-			processingEntry
-					.setCurrentProcessingEvent(OabaEventBean.MERGE_DEDUP_MATCHES);
+			processingEntry.setCurrentProcessingEvent(
+					OabaEventBean.MERGE_DEDUP_MATCHES);
 			mergeMatches(numTempResults, jobId, batchJob);
 
 			// mark as done
 			batchJob.markAsCompleted();
 			sendToUpdateStatus(batchJob, ProcessingEventBean.DONE, new Date(),
 					null);
-			processingEntry
-					.setCurrentProcessingEvent(ProcessingEventBean.DONE);
+			processingEntry.setCurrentProcessingEvent(ProcessingEventBean.DONE);
 			// publishStatus(d.jobID);
 		}
 	}
@@ -229,8 +229,8 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 	 * files.
 	 */
 	private void handleDedupEach(final OabaJobMessage data,
-			final BatchJob batchJob) throws RemoteException, 
-			BlockingException, NamingException {
+			final BatchJob batchJob)
+			throws RemoteException, BlockingException, NamingException {
 
 		final long jobId = batchJob.getId();
 		final OabaParameters params =
@@ -307,14 +307,12 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 	}
 
 	private int getMaxTempPairwiseIndex(BatchJob job) {
-		return BatchJobUtils.getMaxTempPairwiseIndex(propController,
-				job);
+		return BatchJobUtils.getMaxTempPairwiseIndex(propController, job);
 	}
 
 	private void sendToUpdateStatus(BatchJob job, ProcessingEventBean event,
 			Date timestamp, String info) {
-		eventManager.updateStatusWithNotification(job, event,
-				timestamp, info);
+		eventManager.updateStatusWithNotification(job, event, timestamp, info);
 	}
 
 	private void sendToMatchDedupEach(OabaJobMessage d) {

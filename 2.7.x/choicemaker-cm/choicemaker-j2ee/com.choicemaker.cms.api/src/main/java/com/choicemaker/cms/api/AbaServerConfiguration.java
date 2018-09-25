@@ -6,7 +6,7 @@ public interface AbaServerConfiguration extends Serializable {
 
 	/** Default id value for non-persistent settings */
 	long NONPERSISTENT_SERVER_CONFIG_ID = 0;
-	
+
 	int DEFAULT_THREAD_COUNT = 1;
 
 	/**

@@ -12,27 +12,29 @@ public interface CMMultiStatus extends CMStatus {
 	/**
 	 * Adds the given status to this multi-status.
 	 *
-	 * @param status the new child status
+	 * @param status
+	 *            the new child status
 	 */
 	void add(CMStatus status);
 
 	/**
-	 * Adds all of the children of the given status to this multi-status.
-	 * Does nothing if the given status has no children (which includes
-	 * the case where it is not a multi-status).
+	 * Adds all of the children of the given status to this multi-status. Does
+	 * nothing if the given status has no children (which includes the case
+	 * where it is not a multi-status).
 	 *
-	 * @param status the status whose children are to be added to this one
+	 * @param status
+	 *            the status whose children are to be added to this one
 	 */
 	void addAll(CMStatus status);
 
 	/**
-	 * Merges the given status into this multi-status.
-	 * Equivalent to <code>add(status)</code> if the
-	 * given status is not a multi-status. 
-	 * Equivalent to <code>addAll(status)</code> if the
-	 * given status is a multi-status. 
+	 * Merges the given status into this multi-status. Equivalent to
+	 * <code>add(status)</code> if the given status is not a multi-status.
+	 * Equivalent to <code>addAll(status)</code> if the given status is a
+	 * multi-status.
 	 *
-	 * @param status the status to merge into this one
+	 * @param status
+	 *            the status to merge into this one
 	 * @see #add
 	 * @see #addAll
 	 */

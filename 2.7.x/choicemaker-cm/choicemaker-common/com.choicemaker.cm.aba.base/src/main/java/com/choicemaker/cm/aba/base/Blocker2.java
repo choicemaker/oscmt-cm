@@ -23,14 +23,16 @@ import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.Sink;
 
 /**
- * Creates blockingSets (using a BlockingSetFactory) and provides
- * methods for retrieving blocked records from a database (the
- * {@link AutomatedBlocker} interface extends the
- * {@link com.choicemaker.cm.core.RecordSource} interface).<p>
+ * Creates blockingSets (using a BlockingSetFactory) and provides methods for
+ * retrieving blocked records from a database (the {@link AutomatedBlocker}
+ * interface extends the {@link com.choicemaker.cm.core.RecordSource}
+ * interface).
+ * <p>
  *
- * This class is a refactored version of the {@link Blocker} class. The
- * ABA algorithm has moved to a {@link BlockingSetFactory} class
- * for improved testability.
+ * This class is a refactored version of the {@link Blocker} class. The ABA
+ * algorithm has moved to a {@link BlockingSetFactory} class for improved
+ * testability.
+ * 
  * @author Martin Buechi
  * @author rphall (refactoring)
  */
@@ -50,8 +52,7 @@ public class Blocker2 implements AutomatedBlocker {
 	private static Boolean _isSanityCheckRequested = null;
 
 	/**
-	 * Checks the system property {@link #PN_SANITY_CHECK}
-	 * and caches the result
+	 * Checks the system property {@link #PN_SANITY_CHECK} and caches the result
 	 */
 	private static boolean isSanityCheckRequested() {
 		if (_isSanityCheckRequested == null) {
@@ -75,17 +76,12 @@ public class Blocker2 implements AutomatedBlocker {
 	private int numberOfRecordsRetrieved;
 	private String name;
 
-	public Blocker2(
-		DatabaseAccessor databaseAccessor,
-		ImmutableProbabilityModel model,
-		Record q,
-		int limitPerBlockingSet,
-		int singleTableBlockingSetGraceLimit,
-		int limitSingleBlockingSet,
-		AbaStatistics abaStatistics,
-		String dbConfigurationName,
-		String blockingConfigurationName) {
-		
+	public Blocker2(DatabaseAccessor databaseAccessor,
+			ImmutableProbabilityModel model, Record q, int limitPerBlockingSet,
+			int singleTableBlockingSetGraceLimit, int limitSingleBlockingSet,
+			AbaStatistics abaStatistics, String dbConfigurationName,
+			String blockingConfigurationName) {
+
 		final String METHOD = "Blocker2.<init>: ";
 		if (databaseAccessor == null) {
 			String msg = METHOD + "null database accessor";
@@ -109,13 +105,12 @@ public class Blocker2 implements AutomatedBlocker {
 			throw new IllegalArgumentException(msg);
 		}
 		if (limitPerBlockingSet <= 0 || singleTableBlockingSetGraceLimit <= 0
-				|| limitSingleBlockingSet <= 0 ) {
-			String msg =
-				"non-positive blocking limit: limitPerBlockingSet="
-						+ limitPerBlockingSet
-						+ ", singleTableBlockingSetGraceLimit="
-						+ singleTableBlockingSetGraceLimit
-						+ ", limitSingleBlockingSet=" + limitSingleBlockingSet;
+				|| limitSingleBlockingSet <= 0) {
+			String msg = "non-positive blocking limit: limitPerBlockingSet="
+					+ limitPerBlockingSet
+					+ ", singleTableBlockingSetGraceLimit="
+					+ singleTableBlockingSetGraceLimit
+					+ ", limitSingleBlockingSet=" + limitSingleBlockingSet;
 			throw new IllegalArgumentException(msg);
 		}
 		if (dbConfigurationName == null || dbConfigurationName.isEmpty()
@@ -131,8 +126,7 @@ public class Blocker2 implements AutomatedBlocker {
 		this.databaseConfiguration = dbConfigurationName;
 		this.blockingConfiguration =
 			((BlockingAccessor) model.getAccessor()).getBlockingConfiguration(
-				blockingConfigurationName,
-				dbConfigurationName);
+					blockingConfigurationName, dbConfigurationName);
 		this.q = q;
 		this.limitPerBlockingSet = limitPerBlockingSet;
 		this.singleTableBlockingSetGraceLimit =
@@ -144,33 +138,31 @@ public class Blocker2 implements AutomatedBlocker {
 	public void open() throws IOException {
 
 		this.numberOfRecordsRetrieved = 0;
-		this.blockingSets =
-			BlockingSetFactory.createBlockingSets(
-				this.blockingConfiguration,
-				this.q,
-				this.limitPerBlockingSet,
+		this.blockingSets = BlockingSetFactory.createBlockingSets(
+				this.blockingConfiguration, this.q, this.limitPerBlockingSet,
 				this.singleTableBlockingSetGraceLimit,
-				this.limitSingleBlockingSet,
-				this.abaStatistics);
-		databaseAccessor.open(this,databaseConfiguration);
+				this.limitSingleBlockingSet, this.abaStatistics);
+		databaseAccessor.open(this, databaseConfiguration);
 
-		// If processing has gotten this far, (i.e. an IncompleteBlockingSetsException
-		// was not thrown), then the results from this class should be the same as
+		// If processing has gotten this far, (i.e. an
+		// IncompleteBlockingSetsException
+		// was not thrown), then the results from this class should be the same
+		// as
 		// the ones from the original Blocker class.
 		if (Blocker2.isSanityCheckRequested()) {
 			logger.warning("SanityCheck is slowing down blocking");
 			logger.info(
-				"Comparing BlockingSets to ones from original Blocker class...");
+					"Comparing BlockingSets to ones from original Blocker class...");
 			doSanityCheck();
 			logger.info(
-				"... Finished comparing BlockingSets to ones from original Blocker class.");
+					"... Finished comparing BlockingSets to ones from original Blocker class.");
 		}
 
 	}
 
 	/**
-	 * Throws an IllegalStateException if the Blocker class
-	 * does not produce the same blocking sets as this class.
+	 * Throws an IllegalStateException if the Blocker class does not produce the
+	 * same blocking sets as this class.
 	 */
 	private void doSanityCheck() throws IOException {
 		DatabaseAccessor clone = null;
@@ -192,13 +184,11 @@ public class Blocker2 implements AutomatedBlocker {
 		}
 
 		if (clone != null) {
-			try (Blocker sanityCheck =
-				new Blocker(clone, getModel(), getQueryRecord(),
-						getLimitPerBlockingSet(),
-						getSingleTableBlockingSetGraceLimit(),
-						getLimitSingleBlockingSet(), getCountSource(),
-						databaseConfiguration,
-						getBlockingConfiguration())) {
+			try (Blocker sanityCheck = new Blocker(clone, getModel(),
+					getQueryRecord(), getLimitPerBlockingSet(),
+					getSingleTableBlockingSetGraceLimit(),
+					getLimitSingleBlockingSet(), getCountSource(),
+					databaseConfiguration, getBlockingConfiguration())) {
 				sanityCheck.open();
 				List<IBlockingSet> newBlockingSets = this.getBlockingSets();
 				@SuppressWarnings("unchecked")
@@ -209,17 +199,15 @@ public class Blocker2 implements AutomatedBlocker {
 							"Different sizes of blocking set collections");
 				}
 				for (int i = 0; i < newBlockingSets.size(); i++) {
-					IBlockingSet newBlockingSet =
-						newBlockingSets.get(i);
-					IBlockingSet oldBlockingSet =
-						oldBlockingSets.get(i);
+					IBlockingSet newBlockingSet = newBlockingSets.get(i);
+					IBlockingSet oldBlockingSet = oldBlockingSets.get(i);
 					if (newBlockingSet == null && oldBlockingSet != null) {
-						throw new IllegalStateException("Blocking sets " + i
-								+ " are different");
+						throw new IllegalStateException(
+								"Blocking sets " + i + " are different");
 					} else if (newBlockingSet != null
 							&& !newBlockingSet.equals(oldBlockingSet)) {
-						throw new IllegalStateException("Blocking sets " + i
-								+ " are different");
+						throw new IllegalStateException(
+								"Blocking sets " + i + " are different");
 					}
 				}
 				sanityCheck.close();
@@ -283,7 +271,8 @@ public class Blocker2 implements AutomatedBlocker {
 
 	@Override
 	public void setModel(ImmutableProbabilityModel m) {
-		throw new UnsupportedOperationException("can't change model after construction");
+		throw new UnsupportedOperationException(
+				"can't change model after construction");
 	}
 
 	@Override
@@ -332,4 +321,3 @@ public class Blocker2 implements AutomatedBlocker {
 	}
 
 }
-

@@ -12,16 +12,14 @@ import com.choicemaker.util.Precondition;
 
 public class EvaluatedPairAssist {
 
-	public static <T extends Comparable<T> & Serializable>
-	List<DataAccessObject<T>> extractRecordsFromPairs(
+	public static <T extends Comparable<T> & Serializable> List<DataAccessObject<T>> extractRecordsFromPairs(
 			List<? extends EvaluatedPair<T>> pairs) {
-		return extractRecordsFromPairs(pairs,null);
+		return extractRecordsFromPairs(pairs, null);
 	}
-	
-	public static <T extends Comparable<T> & Serializable>
-	List<DataAccessObject<T>> extractRecordsFromPairs(
-					List<? extends EvaluatedPair<T>> pairs,
-					DataAccessObject<T> excluded) {
+
+	public static <T extends Comparable<T> & Serializable> List<DataAccessObject<T>> extractRecordsFromPairs(
+			List<? extends EvaluatedPair<T>> pairs,
+			DataAccessObject<T> excluded) {
 		Precondition.assertNonNullArgument("null pairs", pairs);
 
 		SortedSet<IdentifiableWrapper<T>> wrappers =
@@ -32,8 +30,7 @@ public class EvaluatedPairAssist {
 		return retVal;
 	}
 
-	public static <T extends Comparable<T> & Serializable>
-	List<DataAccessObject<T>> extractRecordsFromWrappedRecords(
+	public static <T extends Comparable<T> & Serializable> List<DataAccessObject<T>> extractRecordsFromWrappedRecords(
 			SortedSet<IdentifiableWrapper<T>> wrappers) {
 		Precondition.assertNonNullArgument("null wrappers", wrappers);
 
@@ -47,10 +44,9 @@ public class EvaluatedPairAssist {
 		return retVal;
 	}
 
-	public static <T extends Comparable<T> & Serializable>
-	SortedSet<IdentifiableWrapper<T>> extractWrappedRecordsFromPairs(
-					List<? extends EvaluatedPair<T>> pairs,
-					DataAccessObject<T> excluded) {
+	public static <T extends Comparable<T> & Serializable> SortedSet<IdentifiableWrapper<T>> extractWrappedRecordsFromPairs(
+			List<? extends EvaluatedPair<T>> pairs,
+			DataAccessObject<T> excluded) {
 		Precondition.assertNonNullArgument("null pairs", pairs);
 
 		SortedSet<IdentifiableWrapper<T>> wrappers = new TreeSet<>();
@@ -63,7 +59,7 @@ public class EvaluatedPairAssist {
 		}
 		if (excluded != null) {
 			IdentifiableWrapper<T> excludedWrapper =
-					excluded == null ? null : new IdentifiableWrapper<>(excluded);
+				excluded == null ? null : new IdentifiableWrapper<>(excluded);
 			wrappers.remove(excludedWrapper);
 		}
 

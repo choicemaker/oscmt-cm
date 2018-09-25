@@ -104,9 +104,9 @@ public class TestClueSet<T extends Comparable<T> & Serializable>
 		SafeIndex<T> id1 = new SafeIndex<T>((T) q.getId());
 		@SuppressWarnings("unchecked")
 		SafeIndex<T> id2 = new SafeIndex<T>((T) m.getId());
-		SafeIndexPair<T> key = new SafeIndexPair<T>(id1,id2);
+		SafeIndexPair<T> key = new SafeIndexPair<T>(id1, id2);
 		QueryCandidatePair<T> ep = map.get(key);
-		
+
 		BooleanActiveClues retVal = new BooleanActiveClues();
 		if (Decision.MATCH.equals(ep.getMatchDecision())) {
 			retVal.add(TestClueSet.IDX_MATCH, ClueDesc.NONE);
@@ -116,7 +116,7 @@ public class TestClueSet<T extends Comparable<T> & Serializable>
 		} else {
 			retVal.add(TestClueSet.IDX_DIFFER, ClueDesc.NONE);
 		}
-		
+
 		return retVal;
 	}
 

@@ -58,21 +58,22 @@ public class OnlineUrmDelegate<T extends Comparable<T> & Serializable> {
 
 	public EvaluatedRecord[] getCompositeMatchCandidates(
 			final ISingleRecord<T> queryRecord,
-			final DbRecordCollection masterCollection, final String modelConfigurationName,
-			final float differThreshold, final float matchThreshold,
-			final int UNUSED_maxNumMatches, final LinkCriteria linkCriteria,
+			final DbRecordCollection masterCollection,
+			final String modelConfigurationName, final float differThreshold,
+			final float matchThreshold, final int UNUSED_maxNumMatches,
+			final LinkCriteria linkCriteria,
 			final EvalRecordFormat resultFormat, final String externalId,
 			final UrmConfigurationAdapter adapter,
 			final NamedConfigurationController ncController,
 			final AbaStatisticsController statsController,
-			final UrmEjbAssist<T> assist)
-			throws ConfigException, UrmIncompleteBlockingSetsException,
-			UrmUnderspecifiedQueryException, CmRuntimeException,
-			RemoteException {
+			final UrmEjbAssist<T> assist) throws ConfigException,
+			UrmIncompleteBlockingSetsException, UrmUnderspecifiedQueryException,
+			CmRuntimeException, RemoteException {
 
 		Precondition.assertNonNullArgument("null query", queryRecord);
 		Precondition.assertNonNullArgument("null references", masterCollection);
-		Precondition.assertNonEmptyString("null or empty model", modelConfigurationName);
+		Precondition.assertNonEmptyString("null or empty model",
+				modelConfigurationName);
 		Precondition.assertBoolean("invalid differ threshold",
 				differThreshold >= 0f && differThreshold <= 1f);
 		Precondition.assertBoolean("invalid match threshold",
@@ -112,7 +113,7 @@ public class OnlineUrmDelegate<T extends Comparable<T> & Serializable> {
 			 * RecordHolder
 			 */
 			final ImmutableProbabilityModel model =
-					ParameterHelper.getModel(abaParams);
+				ParameterHelper.getModel(abaParams);
 			final String modelName = model.getModelName();
 			final Accessor accessor = model.getAccessor();
 			final Record<T> q = accessor.toImpl(queryRecord);
@@ -230,8 +231,7 @@ public class OnlineUrmDelegate<T extends Comparable<T> & Serializable> {
 					if (linkCriteria.isMustIncludeQuery() && !isContainQuery) {
 						for (int n = 0; n < groupRecords.size(); n++) {
 							ISingleRecord<T> singleRecord = groupRecords.get(n);
-							MatchScore singleScore =
-								groupScores.get(n);
+							MatchScore singleScore = groupScores.get(n);
 							EvaluatedRecord er =
 								new EvaluatedRecord(singleRecord, singleScore);
 							evalRecords.add(er);
@@ -246,8 +246,8 @@ public class OnlineUrmDelegate<T extends Comparable<T> & Serializable> {
 									linkCriteria.isMustIncludeQuery());
 						LinkedRecordSet<T> lrs = new LinkedRecordSet<>(null,
 								arGroupRecords, criteria);
-						MatchScore[] scores = groupScores
-								.toArray(new MatchScore[0]);
+						MatchScore[] scores =
+							groupScores.toArray(new MatchScore[0]);
 						CompositeMatchScore compositeScore =
 							new CompositeMatchScore(scores);
 						EvaluatedRecord er =

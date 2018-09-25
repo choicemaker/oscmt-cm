@@ -23,11 +23,11 @@ import com.choicemaker.cm.batch.api.OperationalProperty;
 import com.choicemaker.cm.batch.api.OperationalPropertyController;
 
 @Stateless
-public class OperationalPropertyControllerBean implements
-		OperationalPropertyController {
+public class OperationalPropertyControllerBean
+		implements OperationalPropertyController {
 
-	private static final Logger logger = Logger
-			.getLogger(OperationalPropertyControllerBean.class.getName());
+	private static final Logger logger =
+		Logger.getLogger(OperationalPropertyControllerBean.class.getName());
 
 	@PersistenceContext(unitName = "oaba")
 	private EntityManager em;
@@ -61,18 +61,16 @@ public class OperationalPropertyControllerBean implements
 			// Settings appear to be persistent -- check them against the DB
 			retVal = findInternal(pid);
 			if (retVal == null) {
-				String msg =
-					"The specified property (" + pid
-							+ ") is missing in the DB. "
-							+ "The search will continue by job id and name.";
+				String msg = "The specified property (" + pid
+						+ ") is missing in the DB. "
+						+ "The search will continue by job id and name.";
 				logger.warning(msg);
 				retVal = null;
 			} else if (!retVal.equals(p)) {
-				String msg =
-					"The specified property (" + p
-							+ ") is different in the DB. "
-							+ "The DB value will be updated from '"
-							+ retVal.getValue() + "' to '" + p.getValue() + "'";
+				String msg = "The specified property (" + p
+						+ ") is different in the DB. "
+						+ "The DB value will be updated from '"
+						+ retVal.getValue() + "' to '" + p.getValue() + "'";
 				logger.info(msg);
 				retVal = updateInternal(p);
 			}
@@ -80,20 +78,17 @@ public class OperationalPropertyControllerBean implements
 		if (retVal == null) {
 			retVal = findInternal(p.getJobId(), p.getName());
 			if (retVal == null) {
-				String msg =
-					"The specified property (jobId: " + p.getJobId()
-							+ ", name: " + p.getName()
-							+ ") is missing in the DB. "
-							+ "A new entry will be created with the value '"
-							+ p.getValue() + "'.";
+				String msg = "The specified property (jobId: " + p.getJobId()
+						+ ", name: " + p.getName() + ") is missing in the DB. "
+						+ "A new entry will be created with the value '"
+						+ p.getValue() + "'.";
 				logger.info(msg);
 				retVal = null;
 			} else if (!retVal.equals(p)) {
-				String msg =
-					"The specified property (" + p
-							+ ") is different in the DB. "
-							+ "The DB value will be updated from '"
-							+ retVal.getValue() + "' to '" + p.getValue() + "'";
+				String msg = "The specified property (" + p
+						+ ") is different in the DB. "
+						+ "The DB value will be updated from '"
+						+ retVal.getValue() + "' to '" + p.getValue() + "'";
 				logger.info(msg);
 				retVal.updateValue(p.getValue());
 				retVal = updateInternal(retVal);
@@ -179,8 +174,8 @@ public class OperationalPropertyControllerBean implements
 	protected OperationalPropertyEntity findInternal(final long jobId,
 			final String name) {
 		if (name == null || !name.equals(name.trim()) || name.isEmpty()) {
-			throw new IllegalArgumentException("invalid property name: '"
-					+ name + "'");
+			throw new IllegalArgumentException(
+					"invalid property name: '" + name + "'");
 		}
 
 		final String stdName = name.toUpperCase();
@@ -199,10 +194,9 @@ public class OperationalPropertyControllerBean implements
 			if (beans != null && beans.size() == 1) {
 				retVal = beans.get(0);
 			} else if (beans != null && beans.size() > 1) {
-				String msg =
-					"Integrity constraint violated: "
-							+ "multiple values for the same job/property-name: "
-							+ beans;
+				String msg = "Integrity constraint violated: "
+						+ "multiple values for the same job/property-name: "
+						+ beans;
 				throw new IllegalStateException(msg);
 			}
 		}

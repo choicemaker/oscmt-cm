@@ -27,8 +27,7 @@ import com.choicemaker.e2.platform.InstallablePlatform;
 
 /**
  * An EJB implementation of CMPlatform that delegates to an Embedded platform.
- * In addition, this extension of CMPlatform initializes the
- * {@link 
+ * In addition, this extension of CMPlatform initializes the {@link
  *
  * @author rphall
  *
@@ -37,8 +36,8 @@ import com.choicemaker.e2.platform.InstallablePlatform;
 @Singleton
 public class EjbPlatformBean implements EjbPlatform {
 
-	private static final Logger logger = Logger.getLogger(EjbPlatformBean.class
-			.getName());
+	private static final Logger logger =
+		Logger.getLogger(EjbPlatformBean.class.getName());
 
 	@PostConstruct
 	public void initialize() {
@@ -58,7 +57,8 @@ public class EjbPlatformBean implements EjbPlatform {
 				logger.warning(msg);
 			}
 		} catch (ModelConfigurationException | IOException e) {
-			String msg = METHOD + "Unable to load model plugins: " + e.toString();
+			String msg =
+				METHOD + "Unable to load model plugins: " + e.toString();
 			logger.severe(msg);
 			throw new IllegalStateException(msg);
 		}
@@ -72,14 +72,14 @@ public class EjbPlatformBean implements EjbPlatform {
 
 	@Override
 	public CMPlatformRunnable loaderGetRunnable(String applicationName) {
-		return InstallablePlatform.getInstance().loaderGetRunnable(
-				applicationName);
+		return InstallablePlatform.getInstance()
+				.loaderGetRunnable(applicationName);
 	}
 
 	@Override
 	public String getPluginDirectory(String id, String version) {
-		return InstallablePlatform.getInstance()
-				.getPluginDirectory(id, version);
+		return InstallablePlatform.getInstance().getPluginDirectory(id,
+				version);
 	}
 
 	@Override

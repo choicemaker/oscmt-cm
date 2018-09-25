@@ -7,7 +7,7 @@ public class SafeIndex<T extends Comparable<T> & Serializable>
 		implements Comparable<SafeIndex<T>>, Serializable {
 
 	private static final long serialVersionUID = 271L;
-	
+
 	private final T index;
 
 	public SafeIndex(T index) {

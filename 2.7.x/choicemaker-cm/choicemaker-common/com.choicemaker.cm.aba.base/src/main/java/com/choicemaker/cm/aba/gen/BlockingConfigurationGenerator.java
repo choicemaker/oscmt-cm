@@ -583,8 +583,7 @@ public class BlockingConfigurationGenerator {
 										tbf.base = new BField[size];
 										for (int i = 0; i < size; ++i) {
 											tbf.base[i] = (BField) getField(dbC,
-													baseFields
-															.get(i));
+													baseFields.get(i));
 										}
 									}
 								}

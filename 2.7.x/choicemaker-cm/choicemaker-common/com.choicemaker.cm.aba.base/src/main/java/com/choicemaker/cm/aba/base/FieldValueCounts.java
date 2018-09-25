@@ -17,8 +17,8 @@ import com.choicemaker.cm.aba.IFieldValueCounts;
 
 /**
  *
- * @author    mbuechi (CM 2.3)
- * @author    rphall (CM 2.7 revision)
+ * @author mbuechi (CM 2.3)
+ * @author rphall (CM 2.7 revision)
  */
 public class FieldValueCounts implements Serializable, IFieldValueCounts {
 
@@ -29,9 +29,9 @@ public class FieldValueCounts implements Serializable, IFieldValueCounts {
 
 	/**
 	 * A memory optimization that works like Integer.valueOf(int), but with a
-	 * guarantee that values 0 to NUM_INTS are cached. In contrast, the API
-	 * for Integer.valueOf(int) only guarantees that values between -127 to 127
-	 * are cached (as of Java 1.8).
+	 * guarantee that values 0 to NUM_INTS are cached. In contrast, the API for
+	 * Integer.valueOf(int) only guarantees that values between -127 to 127 are
+	 * cached (as of Java 1.8).
 	 *
 	 * @param value
 	 * @return
@@ -51,7 +51,7 @@ public class FieldValueCounts implements Serializable, IFieldValueCounts {
 
 	private int defaultCount;
 	private int tableSize;
-	private Map<String,Integer> valueCountMap;
+	private Map<String, Integer> valueCountMap;
 	private String column;
 	private String view;
 	private String uniqueId;
@@ -105,7 +105,8 @@ public class FieldValueCounts implements Serializable, IFieldValueCounts {
 		this.uniqueId = ifvc.getUniqueId();
 	}
 
-	public FieldValueCounts(int mapSize, int defaultCount, int tableSize, String column, String view, String uniqueId) {
+	public FieldValueCounts(int mapSize, int defaultCount, int tableSize,
+			String column, String view, String uniqueId) {
 		if (mapSize > 1) {
 			valueCountMap = new HashMap<>(mapSize);
 
@@ -131,13 +132,14 @@ public class FieldValueCounts implements Serializable, IFieldValueCounts {
 	}
 
 	@Override
-	public void putAll(Map<String,Integer> m) {
+	public void putAll(Map<String, Integer> m) {
 		if (m != null) {
-			for (Entry<String,Integer> entry : m.entrySet()) {
+			for (Entry<String, Integer> entry : m.entrySet()) {
 				String value = entry.getKey();
 				Integer count = entry.getValue();
 				if (value != null && count != null) {
-					if (!(value instanceof String) || !(count instanceof Integer)) {
+					if (!(value instanceof String)
+							|| !(count instanceof Integer)) {
 						String msg = "Invalid entry: " + value + "/" + count;
 						throw new IllegalArgumentException(msg);
 					}
@@ -197,8 +199,8 @@ public class FieldValueCounts implements Serializable, IFieldValueCounts {
 		result = prime * result + tableSize;
 		result =
 			prime * result + ((uniqueId == null) ? 0 : uniqueId.hashCode());
-		result =
-			prime * result + ((valueCountMap == null) ? 0 : valueCountMap.hashCode());
+		result = prime * result
+				+ ((valueCountMap == null) ? 0 : valueCountMap.hashCode());
 		result = prime * result + ((view == null) ? 0 : view.hashCode());
 		return result;
 	}

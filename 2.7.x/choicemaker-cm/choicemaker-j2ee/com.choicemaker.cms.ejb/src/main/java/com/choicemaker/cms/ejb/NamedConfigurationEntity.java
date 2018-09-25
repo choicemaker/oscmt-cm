@@ -92,7 +92,6 @@ public class NamedConfigurationEntity extends AbstractPersistentObject
 	@Column(name = CN_CONF_DESCRIPTION, unique = false, nullable = true)
 	protected String configurationDescription = DEFAULT_CONFIGURATIONDESC;
 
-
 	// -- Basic matching
 
 	@Column(name = CN_MODEL)
@@ -150,8 +149,7 @@ public class NamedConfigurationEntity extends AbstractPersistentObject
 		DEFAULT_REFERENCEDATABASEACCESSOR;
 
 	@Column(name = CN_REF_DBREADER)
-	protected String referenceDatabaseReader =
-		DEFAULT_REFERENCEDATABASEREADER;
+	protected String referenceDatabaseReader = DEFAULT_REFERENCEDATABASEREADER;
 
 	// -- Transitivity analysis parameters
 
@@ -162,7 +160,7 @@ public class NamedConfigurationEntity extends AbstractPersistentObject
 	protected String transitivityGraph = DEFAULT_TRANSITIVITYGRAPH;
 
 	// -- ABA settings
-	
+
 	@Column(name = CN_ABA_MAX_MATCHES)
 	protected int abaMaxMatches = DEFAULT_ABAMAXMATCHES;
 
@@ -231,17 +229,16 @@ public class NamedConfigurationEntity extends AbstractPersistentObject
 		this.setQueryDatabaseConfiguration(nc.getQueryDatabaseConfiguration());
 		this.setQueryDeduplicated(nc.isQueryDeduplicated());
 		this.setReferenceSelection(nc.getReferenceSelection());
-		this.setReferenceDatabaseConfiguration(nc
-				.getReferenceDatabaseConfiguration());
-		this.setReferenceDatabaseAccessor(nc
-				.getReferenceDatabaseAccessor());
+		this.setReferenceDatabaseConfiguration(
+				nc.getReferenceDatabaseConfiguration());
+		this.setReferenceDatabaseAccessor(nc.getReferenceDatabaseAccessor());
 		this.setTransitivityFormat(nc.getTransitivityFormat());
 		this.setTransitivityGraph(nc.getTransitivityGraph());
 		this.setAbaMaxMatches(nc.getAbaMaxMatches());
 		this.setAbaLimitPerBlockingSet(nc.getAbaLimitPerBlockingSet());
 		this.setAbaLimitSingleBlockingSet(nc.getAbaLimitSingleBlockingSet());
-		this.setAbaSingleTableBlockingSetGraceLimit(nc
-				.getAbaSingleTableBlockingSetGraceLimit());
+		this.setAbaSingleTableBlockingSetGraceLimit(
+				nc.getAbaSingleTableBlockingSetGraceLimit());
 		this.setOabaMaxSingle(nc.getOabaMaxSingle());
 		this.setOabaMaxBlockSize(nc.getOabaMaxBlockSize());
 		this.setOabaMaxChunkSize(nc.getOabaMaxChunkSize());
@@ -484,7 +481,8 @@ public class NamedConfigurationEntity extends AbstractPersistentObject
 		this.querySelection = querySelection;
 	}
 
-	public void setQueryDatabaseConfiguration(String queryDatabaseConfiguration) {
+	public void setQueryDatabaseConfiguration(
+			String queryDatabaseConfiguration) {
 		this.queryDatabaseConfiguration = queryDatabaseConfiguration;
 	}
 
@@ -501,13 +499,11 @@ public class NamedConfigurationEntity extends AbstractPersistentObject
 		this.referenceDatabaseConfiguration = referenceDatabaseConfiguration;
 	}
 
-	public void setReferenceDatabaseAccessor(
-			String rdba) {
+	public void setReferenceDatabaseAccessor(String rdba) {
 		this.referenceDatabaseAccessor = rdba;
 	}
 
-	public void setReferenceDatabaseReader(
-			String rdbr) {
+	public void setReferenceDatabaseReader(String rdbr) {
 		this.referenceDatabaseReader = rdbr;
 	}
 
@@ -604,7 +600,8 @@ public class NamedConfigurationEntity extends AbstractPersistentObject
 			if (nc.getBlockingConfiguration() != null) {
 				return false;
 			}
-		} else if (!blockingConfiguration.equals(nc.getBlockingConfiguration())) {
+		} else if (!blockingConfiguration
+				.equals(nc.getBlockingConfiguration())) {
 			return false;
 		}
 		// if (configurationId != nc.getId()) {
@@ -624,8 +621,8 @@ public class NamedConfigurationEntity extends AbstractPersistentObject
 		} else if (!dataSource.equals(nc.getDataSource())) {
 			return false;
 		}
-		if (Float.floatToIntBits(highThreshold) != Float.floatToIntBits(nc
-				.getHighThreshold())) {
+		if (Float.floatToIntBits(highThreshold) != Float
+				.floatToIntBits(nc.getHighThreshold())) {
 			return false;
 		}
 		if (jdbcDriverClassName == null) {
@@ -635,8 +632,8 @@ public class NamedConfigurationEntity extends AbstractPersistentObject
 		} else if (!jdbcDriverClassName.equals(nc.getJdbcDriverClassName())) {
 			return false;
 		}
-		if (Float.floatToIntBits(lowThreshold) != Float.floatToIntBits(nc
-				.getLowThreshold())) {
+		if (Float.floatToIntBits(lowThreshold) != Float
+				.floatToIntBits(nc.getLowThreshold())) {
 			return false;
 		}
 		if (modelName == null) {
@@ -671,8 +668,8 @@ public class NamedConfigurationEntity extends AbstractPersistentObject
 			if (nc.getQueryDatabaseConfiguration() != null) {
 				return false;
 			}
-		} else if (!queryDatabaseConfiguration.equals(nc
-				.getQueryDatabaseConfiguration())) {
+		} else if (!queryDatabaseConfiguration
+				.equals(nc.getQueryDatabaseConfiguration())) {
 			return false;
 		}
 		if (queryIsDeduplicated != nc.isQueryDeduplicated()) {
@@ -696,16 +693,16 @@ public class NamedConfigurationEntity extends AbstractPersistentObject
 			if (nc.getReferenceDatabaseConfiguration() != null) {
 				return false;
 			}
-		} else if (!referenceDatabaseConfiguration.equals(nc
-				.getReferenceDatabaseConfiguration())) {
+		} else if (!referenceDatabaseConfiguration
+				.equals(nc.getReferenceDatabaseConfiguration())) {
 			return false;
 		}
 		if (referenceDatabaseAccessor == null) {
 			if (nc.getReferenceDatabaseAccessor() != null) {
 				return false;
 			}
-		} else if (!referenceDatabaseAccessor.equals(nc
-				.getReferenceDatabaseAccessor())) {
+		} else if (!referenceDatabaseAccessor
+				.equals(nc.getReferenceDatabaseAccessor())) {
 			return false;
 		}
 		if (referenceSelection == null) {
@@ -715,13 +712,13 @@ public class NamedConfigurationEntity extends AbstractPersistentObject
 		} else if (!referenceSelection.equals(nc.getReferenceSelection())) {
 			return false;
 		}
-//		if (rigor == null) {
-//			if (nc.getRigor() != null) {
-//				return false;
-//			}
-//		} else if (!rigor.equals(nc.getRigor())) {
-//			return false;
-//		}
+		// if (rigor == null) {
+		// if (nc.getRigor() != null) {
+		// return false;
+		// }
+		// } else if (!rigor.equals(nc.getRigor())) {
+		// return false;
+		// }
 		if (serverFileURI == null) {
 			if (nc.getServerFileURI() != null) {
 				return false;

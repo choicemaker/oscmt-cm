@@ -29,12 +29,14 @@ public interface AbaParameters extends Serializable {
 	 */
 	String getDatabaseReaderName();
 
-	/** The probability threshold above which a pair of records is scored as a MATCH
-	 * decision.
+	/**
+	 * The probability threshold above which a pair of records is scored as a
+	 * MATCH decision.
 	 */
 	float getHighThreshold();
 
-	/** The probability threshold below which a pair of records is scored as a
+	/**
+	 * The probability threshold below which a pair of records is scored as a
 	 * DIFFER decision.
 	 */
 	float getLowThreshold();
@@ -44,8 +46,9 @@ public interface AbaParameters extends Serializable {
 
 	/**
 	 * The name of a blocking configuration, defined by the model record-layout
-	 * schema, that specifies which ChoiceMaker fields are used by the ABA and OABA
-	 * matching services to retrieve record for matching from the reference database.
+	 * schema, that specifies which ChoiceMaker fields are used by the ABA and
+	 * OABA matching services to retrieve record for matching from the reference
+	 * database.
 	 */
 	String getQueryToReferenceBlockingConfiguration();
 
@@ -62,15 +65,15 @@ public interface AbaParameters extends Serializable {
 	String getReferenceDatasource();
 
 	/**
-	 * The name of a view that pulls record ids from the reference
-	 * database. Currently, the view definition may be specified by
+	 * The name of a view that pulls record ids from the reference database.
+	 * Currently, the view definition may be specified by
 	 * {@link #getReferenceSelectionViewAsSQL()}.
 	 */
 	String getReferenceSelectionView();
 
 	/**
-	 * The definition of a SQL selection statement that pulls record ids
-	 * from the reference database. The selection statement must have the form:
+	 * The definition of a SQL selection statement that pulls record ids from
+	 * the reference database. The selection statement must have the form:
 	 * 
 	 * <pre>
 	 * SELECT {column} AS ID FROM {table} WHERE {selection criteria}

@@ -144,7 +144,7 @@ public class NamedConfigurationEntityTest {
 				randomString());
 	}
 
-	//@Test
+	// @Test
 	public void testRigor() {
 		// FIXME Fails randomly because new value == exiting value
 		// int count = BatchJobRigor.values().length;
@@ -165,8 +165,8 @@ public class NamedConfigurationEntityTest {
 
 	@Test
 	public void testDataSource() {
-		testProperty(new NamedConfigurationEntity(), String.class,
-				"DataSource", randomString());
+		testProperty(new NamedConfigurationEntity(), String.class, "DataSource",
+				randomString());
 	}
 
 	@Test
@@ -253,8 +253,8 @@ public class NamedConfigurationEntityTest {
 
 	@Test
 	public void testOabaMaxSingle() {
-		testProperty(new NamedConfigurationEntity(), int.class,
-				"OabaMaxSingle", randomInt(DEFAULT_OABAMAXSINGLE));
+		testProperty(new NamedConfigurationEntity(), int.class, "OabaMaxSingle",
+				randomInt(DEFAULT_OABAMAXSINGLE));
 	}
 
 	@Test
@@ -283,8 +283,8 @@ public class NamedConfigurationEntityTest {
 
 	@Test
 	public void testOabaMinFields() {
-		testProperty(new NamedConfigurationEntity(), int.class,
-				"OabaMinFields", randomInt(DEFAULT_OABAMINFIELDS));
+		testProperty(new NamedConfigurationEntity(), int.class, "OabaMinFields",
+				randomInt(DEFAULT_OABAMINFIELDS));
 	}
 
 	@Test

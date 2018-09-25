@@ -141,8 +141,8 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 
 	@Override
 	public void onMessage(Message inMessage) {
-		getJmsTrace().info(
-				"Entering onMessage for " + this.getClass().getName());
+		getJmsTrace()
+				.info("Entering onMessage for " + this.getClass().getName());
 		ObjectMessage msg = null;
 		OabaJobMessage oabaMsg = null;
 		BatchJob batchJob = null;
@@ -154,9 +154,8 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 
 				final long jobId = oabaMsg.jobID;
 				batchJob = getJobController().findBatchJob(jobId);
-				OabaParameters oabaParams =
-					getParametersController().findOabaParametersByBatchJobId(
-							jobId);
+				OabaParameters oabaParams = getParametersController()
+						.findOabaParametersByBatchJobId(jobId);
 				OabaSettings oabaSettings =
 					getSettingsController().findOabaSettingsByJobId(jobId);
 				ProcessingEventLog processingLog =
@@ -168,9 +167,8 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 						|| oabaParams == null || oabaSettings == null
 						|| serverConfig == null) {
 					String s0 = "Null configuration info for job " + jobId;
-					String s =
-						LoggingUtils.buildDiagnostic(s0, batchJob, oabaParams,
-								oabaSettings, serverConfig);
+					String s = LoggingUtils.buildDiagnostic(s0, batchJob,
+							oabaParams, oabaSettings, serverConfig);
 					getLogger().severe(s);
 					throw new IllegalStateException(s);
 				}
@@ -186,7 +184,8 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 					throw new IllegalArgumentException(s);
 				}
 
-				if (BatchJobStatus.ABORT_REQUESTED.equals(batchJob.getStatus())) {
+				if (BatchJobStatus.ABORT_REQUESTED
+						.equals(batchJob.getStatus())) {
 					abortProcessing(batchJob, processingLog);
 				} else {
 					processOabaMessage(oabaMsg, batchJob, oabaParams,
@@ -230,8 +229,8 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 
 	protected void updateOabaProcessingStatus(BatchJob job,
 			ProcessingEventBean event, Date timestamp, String info) {
-		getEventManager().updateStatusWithNotification(job, event,
-				timestamp, info);
+		getEventManager().updateStatusWithNotification(job, event, timestamp,
+				info);
 	}
 
 	protected RecordMatchingMode getRecordMatchingMode(final BatchJob job) {

@@ -60,7 +60,8 @@ public class RecordIdSourceTest {
 
 	@Test
 	public void testLongSource() throws Exception {
-		testTypeParameter(Long.class, RecordIdTestUtils.getIdentifiersAsLongs());
+		testTypeParameter(Long.class,
+				RecordIdTestUtils.getIdentifiersAsLongs());
 	}
 
 	@Test

@@ -32,11 +32,11 @@ import com.choicemaker.cm.oaba.api.ServerConfigurationException;
 import com.choicemaker.util.SystemPropertyUtils;
 
 @Stateless
-public class ServerConfigurationControllerBean implements
-		ServerConfigurationController {
+public class ServerConfigurationControllerBean
+		implements ServerConfigurationController {
 
-	private static final Logger logger = Logger
-			.getLogger(ServerConfigurationEntity.class.getName());
+	private static final Logger logger =
+		Logger.getLogger(ServerConfigurationEntity.class.getName());
 
 	protected static final String GENERIC_NAME_PREFIX = "GENERIC_";
 
@@ -107,9 +107,10 @@ public class ServerConfigurationControllerBean implements
 	}
 
 	@Override
-	public ServerConfiguration findServerConfigurationByName(String configName) {
-		Query query =
-			em.createNamedQuery(ServerConfigurationJPA.QN_SERVERCONFIG_FIND_BY_NAME);
+	public ServerConfiguration findServerConfigurationByName(
+			String configName) {
+		Query query = em.createNamedQuery(
+				ServerConfigurationJPA.QN_SERVERCONFIG_FIND_BY_NAME);
 		query.setParameter(
 				ServerConfigurationJPA.PN_SERVERCONFIG_FIND_BY_NAME_P1,
 				configName);
@@ -118,8 +119,8 @@ public class ServerConfigurationControllerBean implements
 
 		ServerConfiguration retVal = null;
 		if (beans.size() > 1) {
-			throw new IllegalStateException("non-unique configuration name: "
-					+ configName);
+			throw new IllegalStateException(
+					"non-unique configuration name: " + configName);
 		} else if (beans.size() == 1) {
 			retVal = beans.get(0);
 		} else {
@@ -132,8 +133,8 @@ public class ServerConfigurationControllerBean implements
 
 	@Override
 	public List<ServerConfiguration> findAllServerConfigurations() {
-		Query query =
-			em.createNamedQuery(ServerConfigurationJPA.QN_SERVERCONFIG_FIND_ALL);
+		Query query = em.createNamedQuery(
+				ServerConfigurationJPA.QN_SERVERCONFIG_FIND_ALL);
 		@SuppressWarnings("unchecked")
 		List<ServerConfigurationEntity> beans = query.getResultList();
 		List<ServerConfiguration> retVal = new LinkedList<>();
@@ -163,8 +164,8 @@ public class ServerConfigurationControllerBean implements
 	protected List<ServerConfiguration> findServerConfigurationsByHostNameStrict(
 			String hostName) {
 		hostName = ServerConfigurationEntity.standardizeHostName(hostName);
-		Query query =
-			em.createNamedQuery(ServerConfigurationJPA.QN_SERVERCONFIG_FIND_BY_HOSTNAME);
+		Query query = em.createNamedQuery(
+				ServerConfigurationJPA.QN_SERVERCONFIG_FIND_BY_HOSTNAME);
 		query.setParameter(
 				ServerConfigurationJPA.PN_SERVERCONFIG_FIND_BY_HOSTNAME_P1,
 				hostName);
@@ -178,7 +179,8 @@ public class ServerConfigurationControllerBean implements
 	}
 
 	protected List<ServerConfiguration> findServerConfigurationsForAnyHost() {
-		return findServerConfigurationsByHostNameStrict(ServerConfiguration.ANY_HOST);
+		return findServerConfigurationsByHostNameStrict(
+				ServerConfiguration.ANY_HOST);
 	}
 
 	@Override
@@ -209,8 +211,8 @@ public class ServerConfigurationControllerBean implements
 			String hostName) {
 		if (hostName == null || !hostName.trim().equals(hostName)
 				|| hostName.isEmpty()) {
-			throw new IllegalArgumentException("invalid host name: '"
-					+ hostName + "'");
+			throw new IllegalArgumentException(
+					"invalid host name: '" + hostName + "'");
 		}
 		MutableServerConfiguration retVal = new ServerConfigurationEntity();
 		retVal.setConfigurationName(computeUniqueGenericName());
@@ -285,11 +287,9 @@ public class ServerConfigurationControllerBean implements
 		}
 		if (!host.equalsIgnoreCase(sc.getHostName())
 				&& !ServerConfiguration.ANY_HOST.equals(sc.getHostName())) {
-			String msg =
-				"Host name '"
-						+ host
-						+ "' is inconsistent with the configuration host name '"
-						+ sc.getHostName() + "'";
+			String msg = "Host name '" + host
+					+ "' is inconsistent with the configuration host name '"
+					+ sc.getHostName() + "'";
 			throw new IllegalArgumentException(msg);
 		}
 
@@ -306,8 +306,8 @@ public class ServerConfigurationControllerBean implements
 			retVal = sc;
 			if (ServerConfigurationEntity.isNonPersistentId(retVal.getId())) {
 				em.persist(retVal);
-				assert !ServerConfigurationEntity.isNonPersistentId(retVal
-						.getId());
+				assert !ServerConfigurationEntity
+						.isNonPersistentId(retVal.getId());
 			}
 			DefaultServerConfiguration dsc =
 				new DefaultServerConfigurationEntity(host, retVal.getId());
@@ -403,7 +403,8 @@ public class ServerConfigurationControllerBean implements
 				// so a duplicate name exception should never occur
 				new IllegalStateException(e.getMessage());
 			}
-			assert retVal.getId() != ServerConfigurationEntity.NON_PERSISTENT_ID;
+			assert retVal
+					.getId() != ServerConfigurationEntity.NON_PERSISTENT_ID;
 			setDefaultConfiguration(host, mutable);
 		}
 

@@ -44,11 +44,11 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 
 	private static final long serialVersionUID = 271L;
 
-	private static final Logger log = Logger
-			.getLogger(SingleRecordMatchMDB.class.getName());
+	private static final Logger log =
+		Logger.getLogger(SingleRecordMatchMDB.class.getName());
 
-	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
-			+ SingleRecordMatchMDB.class.getName());
+	private static final Logger jmsTrace =
+		Logger.getLogger("jmstrace." + SingleRecordMatchMDB.class.getName());
 
 	public static final String DATABASE_ACCESSOR =
 		ChoiceMakerExtensionPoint.CM_IO_BLOCKING_AUTOMATED_BASE_DATABASEACCESSOR;
@@ -65,13 +65,12 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 			ProcessingEventLog processingLog, ServerConfiguration serverConfig,
 			ImmutableProbabilityModel model) throws BlockingException {
 
-		SingleRecordProcessing srp =
-			new SingleRecordProcessing(log, jmsTrace,
-					this.getParametersController(),
-					this.getRecordSourceController(),
-					this.getSqlRecordSourceController(),
-					this.getPropertyController(),
-					this.getAbaStatisticsController());
+		SingleRecordProcessing srp = new SingleRecordProcessing(log, jmsTrace,
+				this.getParametersController(),
+				this.getRecordSourceController(),
+				this.getSqlRecordSourceController(),
+				this.getPropertyController(),
+				this.getAbaStatisticsController());
 		srp.processOabaMessage(data, batchJob, oabaParams, oabaSettings,
 				processingLog, serverConfig, model);
 	}

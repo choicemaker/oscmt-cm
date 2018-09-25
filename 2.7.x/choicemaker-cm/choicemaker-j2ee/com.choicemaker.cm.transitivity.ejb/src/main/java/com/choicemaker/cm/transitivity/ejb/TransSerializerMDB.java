@@ -57,25 +57,24 @@ import com.choicemaker.cm.transitivity.util.CompositeXMLSerializer;
 
 /**
  */
-@MessageDriven(
-		activationConfig = {
-				@ActivationConfigProperty(propertyName = "maxSession",
-						propertyValue = "1"), // Singleton (JBoss only)
-				@ActivationConfigProperty(
-						propertyName = "destinationLookup",
-						propertyValue = "java:/choicemaker/urm/jms/transSerializationQueue"),
-				@ActivationConfigProperty(propertyName = "destinationType",
-						propertyValue = "javax.jms.Queue") })
-@SuppressWarnings({ "rawtypes" })
+@MessageDriven(activationConfig = {
+		@ActivationConfigProperty(propertyName = "maxSession",
+				propertyValue = "1"), // Singleton (JBoss only)
+		@ActivationConfigProperty(propertyName = "destinationLookup",
+				propertyValue = "java:/choicemaker/urm/jms/transSerializationQueue"),
+		@ActivationConfigProperty(propertyName = "destinationType",
+				propertyValue = "javax.jms.Queue") })
+@SuppressWarnings({
+		"rawtypes" })
 public class TransSerializerMDB implements MessageListener, Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final Logger log = Logger.getLogger(TransSerializerMDB.class
-			.getName());
+	private static final Logger log =
+		Logger.getLogger(TransSerializerMDB.class.getName());
 
-	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
-			+ TransSerializerMDB.class.getName());
+	private static final Logger jmsTrace =
+		Logger.getLogger("jmstrace." + TransSerializerMDB.class.getName());
 
 	public static final int DEFAULT_MAX_RECORD_COUNT = 100000000;
 
@@ -92,7 +91,7 @@ public class TransSerializerMDB implements MessageListener, Serializable {
 	}
 
 	public static TransitivityResultCompositeSerializer getTransitivityResultSerializer(
-			AnalysisResultFormat format) /* throws ConfigException */{
+			AnalysisResultFormat format) /* throws ConfigException */ {
 		TransitivityResultCompositeSerializer retVal =
 			formatSerializer.get(format);
 		if (retVal == null) {
@@ -142,7 +141,8 @@ public class TransSerializerMDB implements MessageListener, Serializable {
 					batchJob = jobManager.findTransitivityJob(jobId);
 					processOabaMessage(batchJob);
 				} else {
-					log.warning("wrong message body: " + o.getClass().getName());
+					log.warning(
+							"wrong message body: " + o.getClass().getName());
 				}
 
 			} else {
@@ -188,7 +188,8 @@ public class TransSerializerMDB implements MessageListener, Serializable {
 				pw.println("Transitivity serialization jobId: " + jobId);
 				pw.println("Trans serialization groupProperty: '"
 						+ graph.getName() + "'");
-				pw.println("Trans serialization resultFormat: '" + format + "'");
+				pw.println(
+						"Trans serialization resultFormat: '" + format + "'");
 				String s = sw.toString();
 				log.fine(s);
 			}
@@ -202,14 +203,12 @@ public class TransSerializerMDB implements MessageListener, Serializable {
 				return;
 			}
 
-			final String cachedPairsFileName =
-				propController.getJobProperty(batchJob,
-						PN_TRANSITIVITY_CACHED_PAIRS_FILE);
+			final String cachedPairsFileName = propController.getJobProperty(
+					batchJob, PN_TRANSITIVITY_CACHED_PAIRS_FILE);
 			if (cachedPairsFileName == null
 					|| cachedPairsFileName.trim().isEmpty()) {
-				String msg =
-					"Missing pair-wise result file (property name '"
-							+ PN_TRANSITIVITY_CACHED_PAIRS_FILE + "'";
+				String msg = "Missing pair-wise result file (property name '"
+						+ PN_TRANSITIVITY_CACHED_PAIRS_FILE + "'";
 				log.severe(msg);
 				throw new IllegalStateException(msg);
 			}
@@ -262,7 +261,7 @@ public class TransSerializerMDB implements MessageListener, Serializable {
 			log.severe(e.toString());
 			if (batchJob != null) {
 				batchJob.markAsFailed();
-			  jobManager.save(batchJob);
+				jobManager.save(batchJob);
 			}
 		}
 		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
@@ -270,8 +269,7 @@ public class TransSerializerMDB implements MessageListener, Serializable {
 
 	protected void sendToUpdateStatus(BatchJob job, ProcessingEvent event,
 			Date timestamp, String info) {
-		eventManager.updateStatusWithNotification(job, event,
-				timestamp, info);
+		eventManager.updateStatusWithNotification(job, event, timestamp, info);
 	}
 
 }

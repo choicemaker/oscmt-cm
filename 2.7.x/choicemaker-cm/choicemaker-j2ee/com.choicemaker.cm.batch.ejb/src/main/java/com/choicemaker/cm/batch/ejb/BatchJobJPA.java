@@ -5,7 +5,9 @@ public interface BatchJobJPA {
 	/** Name of the table that persists batch job data */
 	String TABLE_NAME = "CMT_OABA_BATCHJOB";
 
-	/** Name of the column used to distinguish between batch jobs and sub-types */
+	/**
+	 * Name of the column used to distinguish between batch jobs and sub-types
+	 */
 	String DISCRIMINATOR_COLUMN = "TYPE";
 
 	/**
@@ -32,10 +34,14 @@ public interface BatchJobJPA {
 	/** Optional link to predecessor batch job */
 	String CN_BPARENT_ID = "BPARENT_ID";
 
-	/** Internally defined transaction id that links several related batch jobs */
+	/**
+	 * Internally defined transaction id that links several related batch jobs
+	 */
 	String CN_TRANSACTION_ID = "TRANSACTION_ID";
 
-	/** Externally defined transaction id that links several related batch jobs */
+	/**
+	 * Externally defined transaction id that links several related batch jobs
+	 */
 	String CN_EXTERNAL_ID = "EXTERNAL_ID";
 
 	/** Required link to the id of some persistent instance of parameters */
@@ -82,7 +88,8 @@ public interface BatchJobJPA {
 	 * <li>{@link com.choicemaker.cm.batch.api.BatchJobStatus#PROCESSING}</li>
 	 * <li>{@link com.choicemaker.cm.batch.api.BatchJobStatus#COMPLETED}</li>
 	 * <li>{@link com.choicemaker.cm.batch.api.BatchJobStatus#FAILED}</li>
-	 * <li>{@link com.choicemaker.cm.batch.api.BatchJobStatus#ABORT_REQUESTED}</li>
+	 * <li>{@link com.choicemaker.cm.batch.api.BatchJobStatus#ABORT_REQUESTED}
+	 * </li>
 	 * <li>{@link com.choicemaker.cm.batch.api.BatchJobStatus#ABORTED}</li>
 	 * </ul>
 	 */

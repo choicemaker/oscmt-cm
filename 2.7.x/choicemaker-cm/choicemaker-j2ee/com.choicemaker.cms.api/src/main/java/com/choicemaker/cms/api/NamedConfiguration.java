@@ -38,11 +38,11 @@ public interface NamedConfiguration {
 	public static final String DEFAULT_REFERENCEDATABASECONFIGURATION =
 		"defaultReference";
 	public static final String DEFAULT_REFERENCEDATABASEACCESSOR =
-			"defaultAccessor";
+		"defaultAccessor";
 	public static final String DEFAULT_REFERENCEDATABASEREADER =
-			"defaultReader";
-	public static final String DEFAULT_TRANSITIVITYFORMAT = SORT_BY_HOLD_GROUP
-			.name();
+		"defaultReader";
+	public static final String DEFAULT_TRANSITIVITYFORMAT =
+		SORT_BY_HOLD_GROUP.name();
 	public static final String DEFAULT_TRANSITIVITYGRAPH = GPN_SCM;
 	public static final int DEFAULT_ABAMAXMATCHES = 0;
 	public static final int DEFAULT_ABALIMITPERBLOCKINGSET = 50;

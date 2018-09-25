@@ -50,8 +50,8 @@ import com.choicemaker.cm.transitivity.api.TransitivityParametersController;
 @Stateless
 public class TransitivityJobManagerBean implements TransitivityJobManager {
 
-	private static final Logger logger = Logger
-			.getLogger(TransitivityJobManagerBean.class.getName());
+	private static final Logger logger =
+		Logger.getLogger(TransitivityJobManagerBean.class.getName());
 
 	@PersistenceContext(unitName = "oaba")
 	private EntityManager em;
@@ -152,9 +152,8 @@ public class TransitivityJobManagerBean implements TransitivityJobManager {
 		settingsController.save(settings);
 		serverManager.save(sc);
 
-		TransitivityJobEntity retVal =
-			new TransitivityJobEntity(params, settings, sc, batchJob, urmJob,
-					externalID);
+		TransitivityJobEntity retVal = new TransitivityJobEntity(params,
+				settings, sc, batchJob, urmJob, externalID);
 		em.persist(retVal);
 		assert retVal.isPersistent();
 
@@ -162,17 +161,17 @@ public class TransitivityJobManagerBean implements TransitivityJobManager {
 		// ProcessingEventLog processing =
 		// eventManager.getProcessingLog(retVal);
 		// Create a new entry in the processing log and check it
-		TransitivityEventManager.updateStatusWithNotification(em,
-				jmsContext, transStatusTopic, retVal,
-				ProcessingEventBean.INIT, new Date(), null);
+		TransitivityEventManager.updateStatusWithNotification(em, jmsContext,
+				transStatusTopic, retVal, ProcessingEventBean.INIT, new Date(),
+				null);
 		BatchProcessingEvent ope =
-			TransitivityEventManager
-					.getCurrentBatchProcessingEvent(em, retVal);
+			TransitivityEventManager.getCurrentBatchProcessingEvent(em, retVal);
 		ProcessingEvent currentProcessingEvent = ope.getProcessingEvent();
 		assert currentProcessingEvent.getEventId() == ProcessingEventBean.INIT
 				.getEventId();
-		assert currentProcessingEvent.getFractionComplete() == ProcessingEventBean.INIT
-				.getFractionComplete();
+		assert currentProcessingEvent
+				.getFractionComplete() == ProcessingEventBean.INIT
+						.getFractionComplete();
 
 		// Create the working directory
 		File workingDir = BatchJobFileUtils.createWorkingDirectory(sc, retVal);
@@ -228,8 +227,8 @@ public class TransitivityJobManagerBean implements TransitivityJobManager {
 
 	@Override
 	public List<BatchJob> findAllByOabaJobId(long batchJobId) {
-		Query query =
-			em.createNamedQuery(TransitivityJobJPA.QN_TRANSITIVITY_FIND_ALL_BY_PARENT_ID);
+		Query query = em.createNamedQuery(
+				TransitivityJobJPA.QN_TRANSITIVITY_FIND_ALL_BY_PARENT_ID);
 		query.setParameter(
 				TransitivityJobJPA.PN_TRANSITIVITY_FIND_ALL_BY_PARENT_ID_BPARENTID,
 				batchJobId);

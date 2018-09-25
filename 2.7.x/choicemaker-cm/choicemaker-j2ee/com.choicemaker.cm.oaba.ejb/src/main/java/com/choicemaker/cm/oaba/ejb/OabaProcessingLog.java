@@ -26,11 +26,11 @@ import com.choicemaker.cm.batch.api.ProcessingEventLog;
  */
 public class OabaProcessingLog implements ProcessingEventLog {
 
-	private static final Logger logger = Logger
-			.getLogger(OabaProcessingLog.class.getName());
+	private static final Logger logger =
+		Logger.getLogger(OabaProcessingLog.class.getName());
 
-	private static final String LOG_SOURCE = 
-			OabaProcessingLog.class.getSimpleName();
+	private static final String LOG_SOURCE =
+		OabaProcessingLog.class.getSimpleName();
 
 	private final EntityManager em;
 	private final BatchJob batchJob;
@@ -47,8 +47,7 @@ public class OabaProcessingLog implements ProcessingEventLog {
 	}
 
 	protected BatchProcessingEvent getCurrentOabaProcessingEvent() {
-		return OabaEventManager.getCurrentBatchProcessingEvent(em,
-				batchJob);
+		return OabaEventManager.getCurrentBatchProcessingEvent(em, batchJob);
 	}
 
 	@Override
@@ -77,10 +76,9 @@ public class OabaProcessingLog implements ProcessingEventLog {
 
 	@Override
 	public void setCurrentProcessingEvent(ProcessingEvent event, String info) {
-		logger.info(LOG_SOURCE + ".setCurrentProcessingEvent: " + event + " (job "
-				+ this.batchJob.getId() + ")");
-		OabaEventManager.updateStatus(em, batchJob, event,
-				new Date(), info);
+		logger.info(LOG_SOURCE + ".setCurrentProcessingEvent: " + event
+				+ " (job " + this.batchJob.getId() + ")");
+		OabaEventManager.updateStatus(em, batchJob, event, new Date(), info);
 	}
 
 	@Override

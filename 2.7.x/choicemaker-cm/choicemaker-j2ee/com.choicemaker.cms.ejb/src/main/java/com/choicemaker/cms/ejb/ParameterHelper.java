@@ -55,7 +55,8 @@ public class ParameterHelper {
 			throws BlockingException {
 
 		logger.info("Caching ABA statistics for reference records..");
-		logger.fine("cacheAbaStatistics: areCountsCached: " + areCountsCached.get());
+		logger.fine("cacheAbaStatistics: areCountsCached: "
+				+ areCountsCached.get());
 		logger.finer("cacheAbaStatistics: thread: "
 				+ Thread.currentThread().getName() + ": "
 				+ Thread.currentThread().getId());
@@ -73,7 +74,8 @@ public class ParameterHelper {
 			areCountsCached.set(false);
 			String msg = "Unable to cache master ABA statistics: " + e;
 			logger.severe(msg);
-			logger.fine("cacheAbaStatistics: areCountsCached: " + areCountsCached.get());
+			logger.fine("cacheAbaStatistics: areCountsCached: "
+					+ areCountsCached.get());
 			logger.finer("cacheAbaStatistics: thread: "
 					+ Thread.currentThread().getName() + ": "
 					+ Thread.currentThread().getId());
@@ -82,7 +84,8 @@ public class ParameterHelper {
 		areCountsCached.set(true);
 		logger.info(
 				"... finished caching ABA statistics for reference records.");
-		logger.fine("cacheAbaStatistics: areCountsCached: " + areCountsCached.get());
+		logger.fine("cacheAbaStatistics: areCountsCached: "
+				+ areCountsCached.get());
 		logger.finer("cacheAbaStatistics: thread: "
 				+ Thread.currentThread().getName() + ": "
 				+ Thread.currentThread().getId());

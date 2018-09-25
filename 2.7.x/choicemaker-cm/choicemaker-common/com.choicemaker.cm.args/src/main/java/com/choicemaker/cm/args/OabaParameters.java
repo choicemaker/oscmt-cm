@@ -42,15 +42,15 @@ public interface OabaParameters extends PersistentObject, Serializable {
 
 	/** The query record source (and its type) is never null */
 	String getQueryRsType();
-	
+
 	/**
 	 * A flag indicating whether records from the query record source have
 	 * already been duplicated.
 	 */
 	boolean isQueryRsDeduplicated();
-	
+
 	String getQueryRsDatabaseConfiguration();
-	
+
 	String getQueryToQueryBlockingConfiguration();
 
 	/** The reference record source (and its id) may be null */
@@ -58,9 +58,9 @@ public interface OabaParameters extends PersistentObject, Serializable {
 
 	/** The reference record source (and its type) may be null */
 	String getReferenceRsType();
-	
+
 	String getReferenceRsDatabaseConfiguration();
-	
+
 	String getQueryToReferenceBlockingConfiguration();
-	
+
 }

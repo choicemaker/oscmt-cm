@@ -1,17 +1,18 @@
 package com.choicemaker.cm.args;
 
-public class ProcessingEventBean implements ProcessingEvent, BatchProcessingConstants {
+public class ProcessingEventBean
+		implements ProcessingEvent, BatchProcessingConstants {
 
 	protected static final long serialVersionUID = 271L;
 
 	// -- Well-known instances
 
-	public static final ProcessingEventBean INIT = new ProcessingEventBean(
-			NAME_INIT, EVT_INIT, PCT_INIT);
+	public static final ProcessingEventBean INIT =
+		new ProcessingEventBean(NAME_INIT, EVT_INIT, PCT_INIT);
 
-	public static final ProcessingEventBean DONE = new ProcessingEventBean(
-			NAME_DONE, EVT_DONE, PCT_DONE);
-	
+	public static final ProcessingEventBean DONE =
+		new ProcessingEventBean(NAME_DONE, EVT_DONE, PCT_DONE);
+
 	// -- Instance data
 
 	private final String name;
@@ -25,8 +26,8 @@ public class ProcessingEventBean implements ProcessingEvent, BatchProcessingCons
 			throw new IllegalArgumentException("invalid name: '" + name + "'");
 		}
 		if (!name.equals(name.toUpperCase())) {
-			throw new IllegalArgumentException("name must be upper case: '"
-					+ name + "'");
+			throw new IllegalArgumentException(
+					"name must be upper case: '" + name + "'");
 		}
 		if (Float.isNaN(estimate) || estimate < MINIMUM_FRACTION_COMPLETE
 				|| estimate > MAXIMUM_FRACTION_COMPLETE) {

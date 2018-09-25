@@ -16,14 +16,15 @@ import com.choicemaker.cm.aba.IGroupTable;
 
 /**
  *
- * @author    mbuechi
+ * @author mbuechi
  */
 public class BlockingValue implements Comparable<IBlockingValue>, Cloneable,
 		Serializable, IBlockingValue {
-	
+
 	private static final long serialVersionUID = 271;
 
-	public final static BlockingValue[][] NULL_NULL_BV = new BlockingValue[0][0];
+	public final static BlockingValue[][] NULL_NULL_BV =
+		new BlockingValue[0][0];
 
 	private IBlockingField blockingField;
 	private IBlockingValue[][] base; // neither reflexive nor transitive
@@ -33,7 +34,8 @@ public class BlockingValue implements Comparable<IBlockingValue>, Cloneable,
 	private int tableSize;
 	private IGroupTable groupTable;
 
-	public BlockingValue(IBlockingField blockingField, String value, IBlockingValue[][] base) {
+	public BlockingValue(IBlockingField blockingField, String value,
+			IBlockingValue[][] base) {
 		this.blockingField = blockingField;
 		this.value = value;
 		this.setBase(base);
@@ -42,7 +44,7 @@ public class BlockingValue implements Comparable<IBlockingValue>, Cloneable,
 	public BlockingValue(IBlockingField blockingField, String value) {
 		this(blockingField, value, NULL_NULL_BV);
 	}
-	
+
 	public BlockingValue(IBlockingValue ibv) {
 		this.blockingField = ibv.getBlockingField();
 		this.base = ibv.getBase();
@@ -152,11 +154,11 @@ public class BlockingValue implements Comparable<IBlockingValue>, Cloneable,
 		} else if (getCount() > obv.getCount()) {
 			return +1;
 		}
-		// 	if(isBaseOf(obv)) {
-		// 	    return -1;
-		// 	} else if(obv.isBaseOf(this)) {
-		// 	    return +1;
-		// 	}
+		// if(isBaseOf(obv)) {
+		// return -1;
+		// } else if(obv.isBaseOf(this)) {
+		// return +1;
+		// }
 		return 0;
 	}
 
@@ -164,12 +166,13 @@ public class BlockingValue implements Comparable<IBlockingValue>, Cloneable,
 	public boolean equals(Object o) {
 		boolean retVal = false;
 		if (o instanceof BlockingValue) {
-			IBlockingValue b = (IBlockingValue)o;
-			retVal = b.getBlockingField() == getBlockingField() && b.getValue() == getValue();
+			IBlockingValue b = (IBlockingValue) o;
+			retVal = b.getBlockingField() == getBlockingField()
+					&& b.getValue() == getValue();
 		}
 		return retVal;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		int retVal = 0;

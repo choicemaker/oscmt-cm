@@ -19,7 +19,8 @@ import com.choicemaker.cm.oaba.core.IRecordIdSource;
  * @author pcheung
  *
  */
-@SuppressWarnings({ "rawtypes" })
+@SuppressWarnings({
+		"rawtypes" })
 class RecordIdSinkSourceFactory implements IRecordIdSinkSourceFactory {
 
 	static final EXTERNAL_DATA_FORMAT TYPE = EXTERNAL_DATA_FORMAT.STRING;
@@ -95,10 +96,8 @@ class RecordIdSinkSourceFactory implements IRecordIdSinkSourceFactory {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.choicemaker.cm.oaba.core.
-	 * IRecordIdSinkSourceFactory
-	 * #getSource(com.choicemaker.cm.aba
-	 * .offline.core.IRecordIdSink)
+	 * @see com.choicemaker.cm.oaba.core. IRecordIdSinkSourceFactory
+	 * #getSource(com.choicemaker.cm.aba .offline.core.IRecordIdSink)
 	 */
 	@Override
 	public IRecordIdSource getSource(IRecordIdSink sink)
@@ -109,10 +108,8 @@ class RecordIdSinkSourceFactory implements IRecordIdSinkSourceFactory {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.choicemaker.cm.oaba.core.
-	 * IRecordIdSinkSourceFactory
-	 * #getSink(com.choicemaker.cm.aba
-	 * .offline.core.IRecordIdSource)
+	 * @see com.choicemaker.cm.oaba.core. IRecordIdSinkSourceFactory
+	 * #getSink(com.choicemaker.cm.aba .offline.core.IRecordIdSource)
 	 */
 	@Override
 	public IRecordIdSink getSink(IRecordIdSource source)
@@ -123,10 +120,8 @@ class RecordIdSinkSourceFactory implements IRecordIdSinkSourceFactory {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.choicemaker.cm.oaba.core.
-	 * IRecordIdSinkSourceFactory
-	 * #removeSink(com.choicemaker.cm.aba
-	 * .offline.core.IRecordIdSink)
+	 * @see com.choicemaker.cm.oaba.core. IRecordIdSinkSourceFactory
+	 * #removeSink(com.choicemaker.cm.aba .offline.core.IRecordIdSink)
 	 */
 	@Override
 	public void removeSink(IRecordIdSink sink) throws BlockingException {
@@ -136,10 +131,8 @@ class RecordIdSinkSourceFactory implements IRecordIdSinkSourceFactory {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.choicemaker.cm.oaba.core.
-	 * IRecordIdSinkSourceFactory
-	 * #removeSource(com.choicemaker.cm.aba
-	 * .offline.core.IRecordIdSource)
+	 * @see com.choicemaker.cm.oaba.core. IRecordIdSinkSourceFactory
+	 * #removeSource(com.choicemaker.cm.aba .offline.core.IRecordIdSource)
 	 */
 	@Override
 	public void removeSource(IRecordIdSource source) throws BlockingException {

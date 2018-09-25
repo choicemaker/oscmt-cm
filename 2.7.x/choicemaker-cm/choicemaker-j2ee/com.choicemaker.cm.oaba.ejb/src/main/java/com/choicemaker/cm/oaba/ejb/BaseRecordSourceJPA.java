@@ -23,7 +23,9 @@ public interface BaseRecordSourceJPA {
 	/** Name of the table that persists batch job data */
 	String TABLE_NAME = "CMT_RECORD_SOURCE";
 
-	/** Name of the column used to distinguish between batch jobs and sub-types */
+	/**
+	 * Name of the column used to distinguish between batch jobs and sub-types
+	 */
 	String DISCRIMINATOR_COLUMN = "TYPE";
 
 	/**

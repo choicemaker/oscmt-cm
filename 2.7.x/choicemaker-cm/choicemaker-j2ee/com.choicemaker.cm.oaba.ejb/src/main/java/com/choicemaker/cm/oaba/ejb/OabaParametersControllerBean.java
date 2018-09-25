@@ -44,8 +44,8 @@ import com.choicemaker.cm.oaba.api.SqlRecordSourceController;
 @Stateless
 public class OabaParametersControllerBean implements OabaParametersController {
 
-	private static final Logger logger = Logger
-			.getLogger(OabaParametersControllerBean.class.getName());
+	private static final Logger logger =
+		Logger.getLogger(OabaParametersControllerBean.class.getName());
 
 	@PersistenceContext(unitName = "oaba")
 	private EntityManager em;
@@ -145,9 +145,8 @@ public class OabaParametersControllerBean implements OabaParametersController {
 			long paramsId = batchJob.getParametersId();
 			AbstractParametersEntity ape = findParameters(paramsId);
 			if (ape != null && !(ape instanceof OabaParameters)) {
-				String msg =
-					"Invalid instance: " + paramsId + ", "
-							+ ape.getClass().getName();
+				String msg = "Invalid instance: " + paramsId + ", "
+						+ ape.getClass().getName();
 				logger.severe(msg);
 				throw new IllegalStateException(msg);
 			} else {
@@ -231,7 +230,8 @@ public class OabaParametersControllerBean implements OabaParametersController {
 
 	protected String getDatabaseConfiguration(String type, Long id) {
 		String retVal = null;
-		if (!isValidSqlRecordSourceType(type) || !isValidSqlRecordSourceId(id)) {
+		if (!isValidSqlRecordSourceType(type)
+				|| !isValidSqlRecordSourceId(id)) {
 			String msg = "database configuration: null";
 			logger.warning(msg);
 			assert retVal == null;
@@ -247,7 +247,8 @@ public class OabaParametersControllerBean implements OabaParametersController {
 
 	protected String getDatabaseAccessor(String type, Long id) {
 		String retVal = null;
-		if (!isValidSqlRecordSourceType(type) || !isValidSqlRecordSourceId(id)) {
+		if (!isValidSqlRecordSourceType(type)
+				|| !isValidSqlRecordSourceId(id)) {
 			String msg = "database accessor: null";
 			logger.warning(msg);
 			assert retVal == null;

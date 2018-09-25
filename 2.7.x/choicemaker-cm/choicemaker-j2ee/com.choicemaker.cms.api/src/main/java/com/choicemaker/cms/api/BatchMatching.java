@@ -36,8 +36,10 @@ public interface BatchMatching {
 	/**
 	 * This method starts the Offline Automated Blocking Algorithm to compare a
 	 * set of records against themselves.
-	 * @param urmJob may be null
-	 * @throws ServerConfigurationException 
+	 * 
+	 * @param urmJob
+	 *            may be null
+	 * @throws ServerConfigurationException
 	 */
 	public long startDeduplication(String externalID, OabaParameters bp,
 			OabaSettings oabaSettings, ServerConfiguration serverConfiguration)
@@ -46,7 +48,9 @@ public interface BatchMatching {
 	/**
 	 * This method starts the Offline Automated Blocking Algorithm to compare
 	 * staging records against themselves or against master records.
-	 * @param urmJob may be null
+	 * 
+	 * @param urmJob
+	 *            may be null
 	 */
 	public long startLinkage(String externalID, OabaParameters batchParams,
 			OabaSettings oabaSettings, ServerConfiguration serverConfiguration)
@@ -58,8 +62,8 @@ public interface BatchMatching {
 	 * @param jobID
 	 *            - This is the unique job id created by the Choicemaker Batch
 	 *            system.
-	 * @return true means attempt to abort was successful; false means cannot abort
-	 *         either because the job is already done, already aborted, or
+	 * @return true means attempt to abort was successful; false means cannot
+	 *         abort either because the job is already done, already aborted, or
 	 *         another error.
 	 * 
 	 */
@@ -71,9 +75,9 @@ public interface BatchMatching {
 	 * @param jobID
 	 *            - This is the unique job id created by the Choicemaker Batch
 	 *            system.
-	 * @return true means attempt to suspend was successful; false means cannot suspend
-	 *         either because the job is already done, already suspended, or
-	 *         another error.
+	 * @return true means attempt to suspend was successful; false means cannot
+	 *         suspend either because the job is already done, already
+	 *         suspended, or another error.
 	 * 
 	 */
 	public boolean suspendJob(long jobID);
@@ -110,8 +114,8 @@ public interface BatchMatching {
 	 * @see #getMatchRecordSource(long)
 	 */
 	@Deprecated
-	public Object getMatchList(long jobID) throws RemoteException,
-			NamingException;
+	public Object getMatchList(long jobID)
+			throws RemoteException, NamingException;
 
 	/**
 	 * This method gets the MatchRecordSource.
@@ -127,6 +131,7 @@ public interface BatchMatching {
 	 * This method starts transitivity analysis of the specified OABA job. The
 	 * OABA job must have completed successfully. Record matching is performed
 	 * in the same mode as was used for the OABA job.
+	 * 
 	 * @oabaJob may not be null
 	 */
 	long startTransitivity(String externalID,
@@ -137,13 +142,13 @@ public interface BatchMatching {
 	/**
 	 * This method starts transitivity analysis of the specified OABA job, but
 	 * allows a different record-matching mode to be specified.
+	 * 
 	 * @oabaJob may be null
 	 */
 	long startTransitivity(String externalID,
 			TransitivityParameters batchParams, BatchJob oabaJob,
 			OabaSettings settings, ServerConfiguration serverConfiguration,
-			RecordMatchingMode mode)
-			throws ServerConfigurationException;
+			RecordMatchingMode mode) throws ServerConfigurationException;
 
 	public BatchJob getTransitivityJob(long jobId);
 

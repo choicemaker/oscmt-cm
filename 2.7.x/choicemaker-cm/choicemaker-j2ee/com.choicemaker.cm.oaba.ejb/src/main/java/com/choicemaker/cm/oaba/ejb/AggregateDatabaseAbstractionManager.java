@@ -27,14 +27,14 @@ import com.choicemaker.cm.io.db.base.DatabaseAbstractionManager;
  * @deprecated
  */
 @Deprecated
-public class AggregateDatabaseAbstractionManager implements
-		DatabaseAbstractionManager {
+public class AggregateDatabaseAbstractionManager
+		implements DatabaseAbstractionManager {
 
-	private static final Logger logger = Logger
-			.getLogger(AggregateDatabaseAbstractionManager.class.getName());
+	private static final Logger logger =
+		Logger.getLogger(AggregateDatabaseAbstractionManager.class.getName());
 
 	protected static final String JBOSS_DBA_MANAGER =
-			"com.choicemaker.cm.io.db.jboss.JBossDatabaseAbstractionManager";
+		"com.choicemaker.cm.io.db.jboss.JBossDatabaseAbstractionManager";
 
 	protected static final String ORACLE_DBA_MANAGER =
 		"com.choicemaker.cm.io.db.oracle.blocking.OraDatabaseAbstractionManager";
@@ -110,7 +110,7 @@ public class AggregateDatabaseAbstractionManager implements
 		}
 		logger.info("Looking up database abstraction for "
 				+ ds.getClass().getName());
-	
+
 		// Default value for unknown data sources
 		DatabaseAbstraction retVal = null;
 
@@ -122,16 +122,14 @@ public class AggregateDatabaseAbstractionManager implements
 
 			} catch (DatabaseException e) {
 				// Expected: e.g. when mgr handles SqlServer but ds is Oracle
-				String msg =
-					"Ignoring DatabaseException from manager '"
-							+ mgr.getClass().getName() + "' for data source '"
-							+ ds.getClass().getName() + "': " + e.getMessage();
+				String msg = "Ignoring DatabaseException from manager '"
+						+ mgr.getClass().getName() + "' for data source '"
+						+ ds.getClass().getName() + "': " + e.getMessage();
 				logger.info(msg);
 
 			} catch (Exception e) {
-				String msg =
-					"Unable to lookup database abstraction for '"
-							+ ds.getClass().getName() + "': " + e.toString();
+				String msg = "Unable to lookup database abstraction for '"
+						+ ds.getClass().getName() + "': " + e.toString();
 				throw new DatabaseException(msg, e);
 			}
 
@@ -139,17 +137,16 @@ public class AggregateDatabaseAbstractionManager implements
 			if (retVal != null && dba != null && !dba.equals(retVal)) {
 				assert retVal != null && !retVal.equals(dba);
 				final String dbaName = dba.getClass().getName();
-				final String retValName = retVal.getClass().getName() ;
-				String msg =
-					"Conflicting DatabaseAbstractions for '" + ds + "': '"
-							+ dbaName + "', '" + retValName + "'";
+				final String retValName = retVal.getClass().getName();
+				String msg = "Conflicting DatabaseAbstractions for '" + ds
+						+ "': '" + dbaName + "', '" + retValName + "'";
 				throw new DatabaseException(msg);
 
-			// Continue if no assignment is required
+				// Continue if no assignment is required
 			} else if (dba == null || dba.equals(retVal)) {
 				continue;
 			}
-			
+
 			// Assign to retVal if retVal is null and dba is not
 			assert retVal == null && dba != null;
 			retVal = dba;
@@ -157,9 +154,8 @@ public class AggregateDatabaseAbstractionManager implements
 
 		// Error if unknown
 		if (retVal == null) {
-			String msg =
-				"Unknown DataSource implementation: '"
-						+ ds.getClass().getName() + "'";
+			String msg = "Unknown DataSource implementation: '"
+					+ ds.getClass().getName() + "'";
 			throw new DatabaseException(msg);
 		}
 

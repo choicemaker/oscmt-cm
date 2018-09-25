@@ -88,16 +88,10 @@ public class DefaultSettingsPKBean implements DefaultSettingsPK {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result =
-			prime
-					* result
-					+ ((blockingConfiguration == null) ? 0
-							: blockingConfiguration.hashCode());
-		result =
-			prime
-					* result
-					+ ((databaseConfiguration == null) ? 0
-							: databaseConfiguration.hashCode());
+		result = prime * result + ((blockingConfiguration == null) ? 0
+				: blockingConfiguration.hashCode());
+		result = prime * result + ((databaseConfiguration == null) ? 0
+				: databaseConfiguration.hashCode());
 		result = prime * result + ((model == null) ? 0 : model.hashCode());
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		return result;

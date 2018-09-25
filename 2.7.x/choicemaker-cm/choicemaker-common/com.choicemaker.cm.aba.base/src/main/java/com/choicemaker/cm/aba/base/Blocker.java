@@ -31,16 +31,17 @@ import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.Sink;
 
 /**
- * @author    Martin Buechi
- * @deprecated Returns sometimes erroneous blockingSets;
- * use {@link Blocker2} instead.
+ * @author Martin Buechi
+ * @deprecated Returns sometimes erroneous blockingSets; use {@link Blocker2}
+ *             instead.
  */
 @Deprecated
 @SuppressWarnings({
 		"rawtypes", "unchecked" })
 public class Blocker implements AutomatedBlocker {
 	public static final String LIMIT_PER_BLOCKING_SET = "limitPerBlockingSet";
-	public static final String LIMIT_SINGLE_BLOCKING_SET = "limitSingleBlockingSet";
+	public static final String LIMIT_SINGLE_BLOCKING_SET =
+		"limitSingleBlockingSet";
 	private static Logger logger = Logger.getLogger(Blocker.class.getName());
 
 	private String name;
@@ -57,89 +58,85 @@ public class Blocker implements AutomatedBlocker {
 	private List blockingSets;
 	private int numberOfRecordsRetrieved;
 
-//	Blocker(DatabaseAccessor databaseAccessor, ImmutableProbabilityModel model,
-//			Record q, AbaSettings abaSettings) {
-//		this(
-//			databaseAccessor,
-//			model,
-//			q,
-//			abaSettings.getLimitPerBlockingSet(),
-//			abaSettings.getSingleTableBlockingSetGraceLimit(),
-//			abaSettings.getLimitSingleBlockingSet());
-//	}
+	// Blocker(DatabaseAccessor databaseAccessor, ImmutableProbabilityModel
+	// model,
+	// Record q, AbaSettings abaSettings) {
+	// this(
+	// databaseAccessor,
+	// model,
+	// q,
+	// abaSettings.getLimitPerBlockingSet(),
+	// abaSettings.getSingleTableBlockingSetGraceLimit(),
+	// abaSettings.getLimitSingleBlockingSet());
+	// }
 
-//	Blocker(DatabaseAccessor databaseAccessor,
-//				   ImmutableProbabilityModel model,
-//				   Record q,
-//				   AbaSettings abaSettings,
-//				   String dbConfigurationName,
-//				   String blockingConfigurationName) {
-//		this(
-//		databaseAccessor,
-//		model,
-//		q,
-//		abaSettings.getLimitPerBlockingSet(),
-//		abaSettings.getSingleTableBlockingSetGraceLimit(),
-//		abaSettings.getLimitSingleBlockingSet(),
-//		(AbaStatistics) model.getCountSource(),
-//		dbConfigurationName,
-//		blockingConfigurationName
-//		);
-//	}
+	// Blocker(DatabaseAccessor databaseAccessor,
+	// ImmutableProbabilityModel model,
+	// Record q,
+	// AbaSettings abaSettings,
+	// String dbConfigurationName,
+	// String blockingConfigurationName) {
+	// this(
+	// databaseAccessor,
+	// model,
+	// q,
+	// abaSettings.getLimitPerBlockingSet(),
+	// abaSettings.getSingleTableBlockingSetGraceLimit(),
+	// abaSettings.getLimitSingleBlockingSet(),
+	// (AbaStatistics) model.getCountSource(),
+	// dbConfigurationName,
+	// blockingConfigurationName
+	// );
+	// }
 
-//	Blocker(
-//		DatabaseAccessor databaseAccessor,
-//		ImmutableProbabilityModel model,
-//		Record q,
-//		int limitPerBlockingSet,
-//		int singleTableBlockingSetGraceLimit,
-//		int limitSingleBlockingSet) {
-//		this(
-//			databaseAccessor,
-//			model,
-//			q,
-//			limitPerBlockingSet,
-//			singleTableBlockingSetGraceLimit,
-//			limitSingleBlockingSet,
-//			(AbaStatistics) model.getCountSource(),
-//			model.getDatabaseConfigurationName(),
-//			model.getBlockingConfigurationName());
-//	}
+	// Blocker(
+	// DatabaseAccessor databaseAccessor,
+	// ImmutableProbabilityModel model,
+	// Record q,
+	// int limitPerBlockingSet,
+	// int singleTableBlockingSetGraceLimit,
+	// int limitSingleBlockingSet) {
+	// this(
+	// databaseAccessor,
+	// model,
+	// q,
+	// limitPerBlockingSet,
+	// singleTableBlockingSetGraceLimit,
+	// limitSingleBlockingSet,
+	// (AbaStatistics) model.getCountSource(),
+	// model.getDatabaseConfigurationName(),
+	// model.getBlockingConfigurationName());
+	// }
 
-//	public Blocker(
-//		DatabaseAccessor databaseAccessor,
-//		ImmutableProbabilityModel model,
-//		Record q,
-//		int limitPerBlockingSet,
-//		int singleTableBlockingSetGraceLimit,
-//		int limitSingleBlockingSet,
-//		AbaStatistics abaStatistics,
-//		String dbConfigurationName,
-//		String blockingConfigurationName) {
-//		this (
-//			databaseAccessor,
-//			model,
-//			q,
-//			limitPerBlockingSet,
-//			singleTableBlockingSetGraceLimit,
-//			limitSingleBlockingSet,
-//			abaStatistics,
-//			((BlockingAccessor) model.getAccessor()).getBlockingConfiguration(
-//				blockingConfigurationName,
-//				dbConfigurationName));
-//	}
+	// public Blocker(
+	// DatabaseAccessor databaseAccessor,
+	// ImmutableProbabilityModel model,
+	// Record q,
+	// int limitPerBlockingSet,
+	// int singleTableBlockingSetGraceLimit,
+	// int limitSingleBlockingSet,
+	// AbaStatistics abaStatistics,
+	// String dbConfigurationName,
+	// String blockingConfigurationName) {
+	// this (
+	// databaseAccessor,
+	// model,
+	// q,
+	// limitPerBlockingSet,
+	// singleTableBlockingSetGraceLimit,
+	// limitSingleBlockingSet,
+	// abaStatistics,
+	// ((BlockingAccessor) model.getAccessor()).getBlockingConfiguration(
+	// blockingConfigurationName,
+	// dbConfigurationName));
+	// }
 
 	// For testing; see doSanityCheck()
-	Blocker(
-		DatabaseAccessor databaseAccessor,
-		ImmutableProbabilityModel model,
-		Record q,
-		int limitPerBlockingSet,
-		int singleTableBlockingSetGraceLimit,
-		int limitSingleBlockingSet,
-		AbaStatistics abaStatistics,
-		String dbConfigurationName,
-		IBlockingConfiguration blockingConfiguration) {
+	Blocker(DatabaseAccessor databaseAccessor, ImmutableProbabilityModel model,
+			Record q, int limitPerBlockingSet,
+			int singleTableBlockingSetGraceLimit, int limitSingleBlockingSet,
+			AbaStatistics abaStatistics, String dbConfigurationName,
+			IBlockingConfiguration blockingConfiguration) {
 		this.databaseAccessor = databaseAccessor;
 		this.model = model;
 		this.databaseConfiguration = dbConfigurationName;
@@ -158,18 +155,23 @@ public class Blocker implements AutomatedBlocker {
 		IBlockingValue[] blockingValues =
 			blockingConfiguration.createBlockingValues(getQueryRecord());
 
-		long mainTableSize = getCountSource().computeBlockingValueCounts(blockingConfiguration, blockingValues);
+		long mainTableSize = getCountSource().computeBlockingValueCounts(
+				blockingConfiguration, blockingValues);
 
-		logger.fine("blockingValues numberOfRecordsRetrieved: " + blockingValues.length);
+		logger.fine("blockingValues numberOfRecordsRetrieved: "
+				+ blockingValues.length);
 
-		for (int i=0; i<blockingValues.length; i++) {
-			logger.fine(blockingValues[i].getValue() + " " + blockingValues[i].getCount() + " " + blockingValues[i].getBlockingField().getDbField().getName());
+		for (int i = 0; i < blockingValues.length; i++) {
+			logger.fine(blockingValues[i].getValue() + " "
+					+ blockingValues[i].getCount() + " " + blockingValues[i]
+							.getBlockingField().getDbField().getName());
 		}
 
 		Arrays.sort(blockingValues);
 		logger.fine("blockingValues size: " + blockingValues.length);
 		for (int i = 0; i < blockingValues.length; i++) {
-			PrintUtils.logBlockingValue(logger,"Blocking value " + i + " ", blockingValues[i]);
+			PrintUtils.logBlockingValue(logger, "Blocking value " + i + " ",
+					blockingValues[i]);
 		}
 
 		possibleSubsets = new ArrayList(256);
@@ -180,45 +182,49 @@ public class Blocker implements AutomatedBlocker {
 		for (int i = 0; i < blockingValues.length; ++i) {
 
 			IBlockingValue bv = blockingValues[i];
-			PrintUtils.logBlockingValue(logger,"Blocking value " + i + " ", bv);
+			PrintUtils.logBlockingValue(logger, "Blocking value " + i + " ",
+					bv);
 
 			boolean emptySet = true;
 			int size = possibleSubsets.size();
-			for (int j = 0; j < size; ++j) { // don't iterate over newly added subsets
+			for (int j = 0; j < size; ++j) { // don't iterate over newly added
+												// subsets
 				BlockingSet bs = (BlockingSet) possibleSubsets.get(j);
 
 				if (bs != null && valid(bv, bs)) {
 
 					BlockingSet nbs = new BlockingSet(bs, bv);
-					PrintUtils.logBlockingSet(logger,"Candidate blocking set ", nbs);
+					PrintUtils.logBlockingSet(logger, "Candidate blocking set ",
+							nbs);
 
-					if(!emptySet && nbs.getNumTables() > bs.getNumTables() && bs.getExpectedCount() <= getSingleTableBlockingSetGraceLimit()) {
+					if (!emptySet && nbs.getNumTables() > bs.getNumTables()
+							&& bs.getExpectedCount() <= getSingleTableBlockingSetGraceLimit()) {
 						addToBlockingSets(bs);
 						int ordinal = getBlockingSets().size() - 1;
 						String msg =
 							"Formed a grace-limit blocking set (ordinal # "
-								+ ordinal
-								+ ") ";
-						PrintUtils.logBlockingSet(logger,msg, bs);
+									+ ordinal + ") ";
+						PrintUtils.logBlockingSet(logger, msg, bs);
 
-						possibleSubsets.set(j, null); // don't consider in future
-						//TODO: check singleton blocking set numberOfRecordsRetrieved
-					} else if (nbs.getExpectedCount() <= getLimitPerBlockingSet()) {
+						possibleSubsets.set(j, null); // don't consider in
+														// future
+						// TODO: check singleton blocking set
+						// numberOfRecordsRetrieved
+					} else if (nbs
+							.getExpectedCount() <= getLimitPerBlockingSet()) {
 						addToBlockingSets(nbs);
 						int ordinal = getBlockingSets().size() - 1;
 						if (emptySet) {
 							String msg =
 								"Formed a single-value blocking set (ordinal # "
-									+ ordinal
-									+ ") ";
-							PrintUtils.logBlockingSet(logger,msg, nbs);
+										+ ordinal + ") ";
+							PrintUtils.logBlockingSet(logger, msg, nbs);
 							break;
 						}
 						String msg =
 							"Formed a compound-value blocking set (ordinal # "
-								+ ordinal
-								+ ") ";
-						PrintUtils.logBlockingSet(logger,msg, nbs);
+									+ ordinal + ") ";
+						PrintUtils.logBlockingSet(logger, msg, nbs);
 					} else {
 						possibleSubsets.add(nbs);
 						String msg =
@@ -229,13 +235,12 @@ public class Blocker implements AutomatedBlocker {
 				emptySet = false;
 			}
 		}
-		logger.fine(
-			"...Finished forming blocking sets. Blocking set size == "
+		logger.fine("...Finished forming blocking sets. Blocking set size == "
 				+ getBlockingSets().size());
 
 		if (getBlockingSets().isEmpty()) {
 			logger.fine(
-				"No blocking sets were formed yet. Looking for best possible subset of blocking values...");
+					"No blocking sets were formed yet. Looking for best possible subset of blocking values...");
 			Iterator iPossibleSubsets = possibleSubsets.iterator();
 			iPossibleSubsets.next(); // skip empty set
 			IBlockingSet best = null;
@@ -250,23 +255,24 @@ public class Blocker implements AutomatedBlocker {
 			}
 			if (best != null) {
 				PrintUtils.logBlockingSet(logger,
-					"...Found a suitable subset of blocking values. Using it as the blocking set. ",
-					best);
+						"...Found a suitable subset of blocking values. Using it as the blocking set. ",
+						best);
 				getBlockingSets().add(best);
 			} else {
 				logger.fine("...No suitable subset of blocking values.");
-				throw new UnderspecifiedQueryException("Query not specific enough; would return too many records.");
+				throw new UnderspecifiedQueryException(
+						"Query not specific enough; would return too many records.");
 			}
 		}
 
 		logger.fine("Listing final blocking sets...");
 		for (int i = 0; i < getBlockingSets().size(); i++) {
 			IBlockingSet b = (IBlockingSet) getBlockingSets().get(i);
-			PrintUtils.logBlockingSet(logger,"Blocking set " + i + " ", b);
+			PrintUtils.logBlockingSet(logger, "Blocking set " + i + " ", b);
 		}
 		logger.fine("...Finished listing final blocking sets");
 
-		getDatabaseAccessor().open(this,databaseConfiguration);
+		getDatabaseAccessor().open(this, databaseConfiguration);
 	}
 
 	private boolean valid(IBlockingValue bv, BlockingSet bs) {
@@ -279,34 +285,41 @@ public class Blocker implements AutomatedBlocker {
 			IBlockingValue cbv = bs.getBlockingValue(i);
 			IBlockingField cbf = cbv.getBlockingField();
 
-			// multiple use of same DbField (implied by multiple use of same BlockingField)
+			// multiple use of same DbField (implied by multiple use of same
+			// BlockingField)
 			if (dbf == cbf.getDbField()) {
-				logger.fine("invalid BlockingValue for BlockingSet: multiple use of same DbField");
+				logger.fine(
+						"invalid BlockingValue for BlockingSet: multiple use of same DbField");
 				return false;
 			}
 			// multiple use of same QueryField
 			if (qf == cbf.getQueryField()) {
-				logger.fine("invalid BlockingValue for BlockingSet: multiple use of same QueryField");
+				logger.fine(
+						"invalid BlockingValue for BlockingSet: multiple use of same QueryField");
 				return false;
 			}
 			// illegal combinations
 			if (illegalCombination(bs, bf.getIllegalCombinations())) {
-				logger.fine("invalid BlockingValue for BlockingSet: Illegal BlockingField combination");
+				logger.fine(
+						"invalid BlockingValue for BlockingSet: Illegal BlockingField combination");
 				return false;
 			}
 			if (illegalCombination(bs, qf.getIllegalCombinations())) {
-				logger.fine("invalid BlockingValue for BlockingSet: Illegal QueryField combination");
+				logger.fine(
+						"invalid BlockingValue for BlockingSet: Illegal QueryField combination");
 				return false;
 			}
 			if (illegalCombination(bs, dbf.getIllegalCombinations())) {
-				logger.fine("invalid BlockingValue for BlockingSet: Illegal DbField combination");
+				logger.fine(
+						"invalid BlockingValue for BlockingSet: Illegal DbField combination");
 				return false;
 			}
 		}
 		return true;
 	}
 
-	private boolean illegalCombination(BlockingSet bs, IField[][] illegalCombinations) {
+	private boolean illegalCombination(BlockingSet bs,
+			IField[][] illegalCombinations) {
 		for (int i = 0; i < illegalCombinations.length; ++i) {
 			IField[] ic = illegalCombinations[i];
 			int j = 0;
@@ -430,4 +443,3 @@ public class Blocker implements AutomatedBlocker {
 	}
 
 }
-

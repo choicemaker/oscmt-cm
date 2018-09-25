@@ -12,11 +12,12 @@ import com.choicemaker.e2.platform.CMPlatformUtils;
 import com.choicemaker.util.StringUtils;
 
 public class DatabaseAccessorUtils {
-	
-	private static final Logger logger = Logger.getLogger(DatabaseAccessorUtils.class.getName());
-	
+
+	private static final Logger logger =
+		Logger.getLogger(DatabaseAccessorUtils.class.getName());
+
 	protected static final String DATABASE_ACCESSOR =
-			ChoiceMakerExtensionPoint.CM_IO_BLOCKING_AUTOMATED_BASE_DATABASEACCESSOR;
+		ChoiceMakerExtensionPoint.CM_IO_BLOCKING_AUTOMATED_BASE_DATABASEACCESSOR;
 
 	public static DatabaseAccessor getDatabaseAccessor(String dbaName)
 			throws BlockingException {
@@ -38,9 +39,8 @@ public class DatabaseAccessorUtils {
 				logger.severe(msg);
 				throw new IllegalStateException(msg);
 			} else if (configElements.length != 1) {
-				String msg =
-					"Multiple database accessor configurations for " + dbaName
-							+ ": " + configElements.length;
+				String msg = "Multiple database accessor configurations for "
+						+ dbaName + ": " + configElements.length;
 				logger.warning(msg);
 			} else {
 				assert configElements.length == 1;
@@ -62,7 +62,8 @@ public class DatabaseAccessorUtils {
 	private DatabaseAccessorUtils() {
 	}
 
-	/** This method takes the SQL string specified in
+	/**
+	 * This method takes the SQL string specified in
 	 * <code>SubsetDbRecordCollection</code> and converts that to the condition
 	 * string as expected by <code>DatabaseAccessor</code>, particularly by
 	 * <code>OraDatabaseAccessor</code>.
@@ -70,9 +71,9 @@ public class DatabaseAccessorUtils {
 	 * For example: SQL String =
 	 * "select mci_id from tb_patient where id_stat_cd = 'A' order by mci_id"
 	 * <p>
-	 * return =
-	 * "TB_PATIENT T WHERE B.MCI_ID = T.MCI_ID AND ID_STAT_CD = 'A'"
+	 * return = "TB_PATIENT T WHERE B.MCI_ID = T.MCI_ID AND ID_STAT_CD = 'A'"
 	 * <p>
+	 * 
 	 * @author PC (3/27/2007)
 	 *
 	 * @param input
@@ -81,29 +82,29 @@ public class DatabaseAccessorUtils {
 	 */
 	public static String parseSQL(String input, String key) {
 		StringBuffer ret = new StringBuffer();
-	
+
 		// FIXME use ANTLR for more robust parsing
-	
+
 		if (!StringUtils.nonEmptyString(input)) {
-			throw new IllegalArgumentException("null or blank SQL record id selection statement");
+			throw new IllegalArgumentException(
+					"null or blank SQL record id selection statement");
 		}
 		if (!StringUtils.nonEmptyString(key)) {
 			throw new IllegalArgumentException("null or blank SQL key");
 		}
-	
-		//get "WHERE" and "FROM"
+
+		// get "WHERE" and "FROM"
 		input = input.toUpperCase();
 		key = key.toUpperCase();
 		int w = input.indexOf("WHERE");
 		int o = input.indexOf("ORDER");
-	
+
 		// Must be a FROM clause and exactly one TABLE
 		int t = input.indexOf("FROM");
 		if (t < 0) {
 			throw new IllegalArgumentException(
-				"Missing FROM clause in SQL record id selection statement: '"
-					+ input
-					+ "'");
+					"Missing FROM clause in SQL record id selection statement: '"
+							+ input + "'");
 		}
 		String str = null;
 		if (w < 0 && o < 0) {
@@ -114,9 +115,10 @@ public class DatabaseAccessorUtils {
 			str = input.substring(t + 5, o - 1);
 		}
 		if (str.indexOf(',') != -1) {
-			throw new IllegalArgumentException("cannot have more than 1 table.");
+			throw new IllegalArgumentException(
+					"cannot have more than 1 table.");
 		}
-	
+
 		// Append the (table) name which occurs after the FROM clause
 		int i = str.indexOf(' ');
 		if (i == -1) {
@@ -124,14 +126,14 @@ public class DatabaseAccessorUtils {
 		} else {
 			ret.append(str.substring(0, i));
 		}
-	
+
 		ret.append(" T ");
 		ret.append("WHERE");
 		ret.append(" B.");
 		ret.append(key);
 		ret.append(" = T.");
 		ret.append(key);
-	
+
 		if (w > 0) {
 			ret.append(" AND ");
 			if (o > 0) {
@@ -140,7 +142,7 @@ public class DatabaseAccessorUtils {
 				ret.append(input.substring(w + 6));
 			}
 		}
-	
+
 		return ret.toString();
 	}
 

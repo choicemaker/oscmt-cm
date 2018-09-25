@@ -22,7 +22,7 @@ import java.io.PrintWriter;
 public class E2Exception extends Exception {
 
 	private static final long serialVersionUID = 271L;
-	
+
 	public static class Status implements CMStatus {
 
 		public static final int SEVERITY_ERROR = CMStatus.ERROR;
@@ -30,7 +30,7 @@ public class E2Exception extends Exception {
 		public static final int UNKNOWN_CODE = Integer.MIN_VALUE;
 		public static final String UNKNOWN_MESSAGE = "no diagnostic available";
 		public static final Throwable UNKNOWN_CAUSE = null;
-		
+
 		private final int severity;
 		private final String pluginId;
 		private final int code;
@@ -57,8 +57,8 @@ public class E2Exception extends Exception {
 			this.exception = exception;
 		}
 
-		public Status(String pluginId, int code,
-				String message, Throwable exception) {
+		public Status(String pluginId, int code, String message,
+				Throwable exception) {
 			this.severity = SEVERITY_ERROR;
 			this.pluginId = pluginId;
 			this.code = code;
@@ -110,7 +110,7 @@ public class E2Exception extends Exception {
 		public boolean matches(int severityMask) {
 			return (severity & severityMask) != 0;
 		}
-		
+
 	}
 
 	/** Status object. */
@@ -174,8 +174,8 @@ public class E2Exception extends Exception {
 	public void printStackTrace(PrintStream output) {
 		synchronized (output) {
 			if (status.getException() != null) {
-				output.print(getClass().getName()
-						+ "[" + status.getCode() + "]: "); //$NON-NLS-1$ //$NON-NLS-2$
+				output.print(
+						getClass().getName() + "[" + status.getCode() + "]: "); //$NON-NLS-1$ //$NON-NLS-2$
 				status.getException().printStackTrace(output);
 			} else
 				super.printStackTrace(output);
@@ -190,8 +190,8 @@ public class E2Exception extends Exception {
 	public void printStackTrace(PrintWriter output) {
 		synchronized (output) {
 			if (status.getException() != null) {
-				output.print(getClass().getName()
-						+ "[" + status.getCode() + "]: "); //$NON-NLS-1$ //$NON-NLS-2$
+				output.print(
+						getClass().getName() + "[" + status.getCode() + "]: "); //$NON-NLS-1$ //$NON-NLS-2$
 				status.getException().printStackTrace(output);
 			} else
 				super.printStackTrace(output);

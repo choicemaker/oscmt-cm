@@ -12,8 +12,8 @@ import com.choicemaker.cm.oaba.core.RecordMatchingMode;
 
 public class BatchJobUtils {
 
-	private static final Logger log = Logger.getLogger(BatchJobUtils.class
-			.getName());
+	private static final Logger log =
+		Logger.getLogger(BatchJobUtils.class.getName());
 
 	public static void setRecordMatchingMode(
 			final OperationalPropertyController opPropController,
@@ -25,14 +25,13 @@ public class BatchJobUtils {
 			throw new IllegalArgumentException("null batch job");
 		}
 		RecordMatchingMode existing =
-				getRecordMatchingMode(opPropController, job);
+			getRecordMatchingMode(opPropController, job);
 
 		final String newValue = mode == null ? null : mode.name();
 		final String oldValue = existing == null ? null : existing.name();
 		if (mode == existing) {
-			String msg =
-				"No change to property '" + PN_RECORD_MATCHING_MODE
-						+ "', value '" + oldValue + "'";
+			String msg = "No change to property '" + PN_RECORD_MATCHING_MODE
+					+ "', value '" + oldValue + "'";
 			log.fine(msg);
 
 		} else {
@@ -42,9 +41,8 @@ public class BatchJobUtils {
 			opPropController.remove(opProp);
 			opPropController.setJobProperty(job, PN_RECORD_MATCHING_MODE,
 					newValue);
-			String msg =
-				"Property '" + PN_RECORD_MATCHING_MODE + "' changed from '"
-						+ oldValue + "' to '" + newValue + "'";
+			String msg = "Property '" + PN_RECORD_MATCHING_MODE
+					+ "' changed from '" + oldValue + "' to '" + newValue + "'";
 			log.fine(msg);
 		}
 	}

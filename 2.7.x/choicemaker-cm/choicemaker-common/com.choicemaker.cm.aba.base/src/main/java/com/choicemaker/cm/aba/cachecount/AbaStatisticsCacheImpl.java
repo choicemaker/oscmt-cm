@@ -18,8 +18,8 @@ import com.choicemaker.cm.core.ImmutableProbabilityModel;
 
 public class AbaStatisticsCacheImpl implements AbaStatisticsCache {
 
-//	private static final Logger log =
-//		Logger.getLogger(AbaStatisticsSingletonHACK.class.getName());
+	// private static final Logger log =
+	// Logger.getLogger(AbaStatisticsSingletonHACK.class.getName());
 
 	// -- Accessors
 

@@ -88,7 +88,8 @@ public class RecordIdTestUtils {
 		return Collections.unmodifiableList(retVal);
 	}
 
-	public static <T extends Comparable<T>> List<String> getFileData(List<T> ids) {
+	public static <T extends Comparable<T>> List<String> getFileData(
+			List<T> ids) {
 		if (ids == null || ids.size() == 0) {
 			throw new IllegalArgumentException("null or empty identifier list");
 		}
@@ -107,9 +108,8 @@ public class RecordIdTestUtils {
 	public static String createTempFileName() {
 		String fileName = null;
 		try {
-			File f =
-				File.createTempFile(RecordIdSinkTest.SINK_PREFIX,
-						RecordIdSinkTest.FILE_EXTENTION);
+			File f = File.createTempFile(RecordIdSinkTest.SINK_PREFIX,
+					RecordIdSinkTest.FILE_EXTENTION);
 			fileName = f.getAbsolutePath();
 			f.delete();
 		} catch (IOException e) {
@@ -120,8 +120,8 @@ public class RecordIdTestUtils {
 	}
 
 	public static <T extends Comparable<T>> RecordIdSink writeIdentifiersToFile(
-			String fileName, List<T> identifiers) throws IOException,
-			BlockingException {
+			String fileName, List<T> identifiers)
+			throws IOException, BlockingException {
 		RecordIdSink ris = new RecordIdSink(fileName);
 
 		ris.open();

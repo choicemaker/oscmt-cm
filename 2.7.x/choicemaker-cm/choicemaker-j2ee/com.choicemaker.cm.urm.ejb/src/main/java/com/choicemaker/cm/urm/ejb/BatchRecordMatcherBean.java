@@ -41,7 +41,7 @@ import com.choicemaker.cms.ejb.NamedConfigConversion;
 import com.choicemaker.util.Precondition;
 
 @Stateless
-@Remote(BatchRecordMatcher.class )
+@Remote(BatchRecordMatcher.class)
 public class BatchRecordMatcherBean implements BatchRecordMatcher {
 
 	private static final String VERSION = "2.7.1";

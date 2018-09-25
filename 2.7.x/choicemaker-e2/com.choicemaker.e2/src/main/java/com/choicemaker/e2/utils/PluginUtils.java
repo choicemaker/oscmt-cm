@@ -18,8 +18,8 @@ import com.choicemaker.e2.platform.CMPlatformUtils;
  */
 public class PluginUtils {
 
-	private static final Logger log = Logger.getLogger(PluginUtils.class
-			.getName());
+	private static final Logger log =
+		Logger.getLogger(PluginUtils.class.getName());
 
 	public static void debugPlugins() {
 		CMPluginDescriptor[] plugins = CMPlatformUtils.getPluginDescriptors();

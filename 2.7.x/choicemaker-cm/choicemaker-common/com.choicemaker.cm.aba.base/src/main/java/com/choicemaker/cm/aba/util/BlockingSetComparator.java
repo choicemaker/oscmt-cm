@@ -15,15 +15,17 @@ import com.choicemaker.cm.aba.IBlockingValue;
 import com.choicemaker.cm.aba.base.BlockingSet;
 
 /**
- * Compares two BlockingSets. The BlockingSet with the fewest BlockingValues
- * is ordered first. If both BlockingSets have the same number of BlockingValues,
- * then the BlockingValues from both sets are retrieved to a SortedList
- * (using the comparator defined by the BlockingValue class) and the lists
- * are compared.
+ * Compares two BlockingSets. The BlockingSet with the fewest BlockingValues is
+ * ordered first. If both BlockingSets have the same number of BlockingValues,
+ * then the BlockingValues from both sets are retrieved to a SortedList (using
+ * the comparator defined by the BlockingValue class) and the lists are
+ * compared.
  */
 public class BlockingSetComparator implements Comparator<BlockingSet> {
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
 	 */
 	@Override
@@ -39,7 +41,7 @@ public class BlockingSetComparator implements Comparator<BlockingSet> {
 			} else {
 				Arrays.sort(b1);
 				Arrays.sort(b2);
-				for (int i=0; retVal == 0 && i<b1.length; i++) {
+				for (int i = 0; retVal == 0 && i < b1.length; i++) {
 					retVal = b1[i].compareTo(b2[i]);
 				}
 			}
@@ -48,9 +50,8 @@ public class BlockingSetComparator implements Comparator<BlockingSet> {
 		} else if (o2 != null) {
 			retVal = 1;
 		}
-		
+
 		return retVal;
 	}
 
 }
-

@@ -1,6 +1,5 @@
 package com.choicemaker.cm.urm.ejb;
 
-
 import com.choicemaker.cm.batch.ejb.AbstractPersistentObjectJPA;
 
 public interface UrmConfigurationJPA {

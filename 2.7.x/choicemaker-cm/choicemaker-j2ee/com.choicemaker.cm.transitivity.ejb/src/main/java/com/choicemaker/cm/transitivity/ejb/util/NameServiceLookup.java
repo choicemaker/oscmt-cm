@@ -14,33 +14,35 @@ import javax.naming.NamingException;
 /**
  * Comment
  *
- * @author   Martin Buechi
+ * @author Martin Buechi
  */
 public class NameServiceLookup {
 	private transient Context initialContext;
-	
+
 	private synchronized void initContext() throws NamingException {
 		if (initialContext == null) {
 			initialContext = new InitialContext();
 		}
 	}
-	
-	public synchronized Object lookup(String name, Class<?> clazz) throws NamingException {
+
+	public synchronized Object lookup(String name, Class<?> clazz)
+			throws NamingException {
 		initContext();
 		Object objref = initialContext.lookup(name);
 		return objref;
 	}
 
 	// Not used
-//	public synchronized Object lookupRemote(String name, Class<?> clazz) throws NamingException {
-//		initContext();
-//		Object objref = initialContext.lookup(name);
-//		if (objref != null) {
-//			System.err.println("Class: " + objref.getClass());
-//			return PortableRemoteObject.narrow(name, clazz);
-//		} else {
-//			return null;
-//		}
-//	}
+	// public synchronized Object lookupRemote(String name, Class<?> clazz)
+	// throws NamingException {
+	// initContext();
+	// Object objref = initialContext.lookup(name);
+	// if (objref != null) {
+	// System.err.println("Class: " + objref.getClass());
+	// return PortableRemoteObject.narrow(name, clazz);
+	// } else {
+	// return null;
+	// }
+	// }
 
 }

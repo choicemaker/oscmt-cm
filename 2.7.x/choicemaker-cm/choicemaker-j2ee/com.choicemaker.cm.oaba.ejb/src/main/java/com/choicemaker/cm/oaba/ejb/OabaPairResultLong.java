@@ -51,7 +51,8 @@ public class OabaPairResultLong extends AbstractPairResultEntity<Long> {
 	}
 
 	public OabaPairResultLong(BatchJob job, Long record1Id, Long record2Id,
-			RECORD_SOURCE_ROLE record2Role, float p, Decision d, String[] notes) {
+			RECORD_SOURCE_ROLE record2Role, float p, Decision d,
+			String[] notes) {
 		super(job.getId(), RECORD_ID_TYPE.TYPE_INTEGER.getCharSymbol(),
 				exportIdToString(record1Id), exportIdToString(record2Id),
 				record2Role.getCharSymbol(), p, d.toSingleChar(), notes, null);

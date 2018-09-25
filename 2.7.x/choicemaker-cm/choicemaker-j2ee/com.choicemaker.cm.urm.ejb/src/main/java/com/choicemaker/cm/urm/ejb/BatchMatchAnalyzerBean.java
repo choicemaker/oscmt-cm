@@ -138,9 +138,8 @@ public class BatchMatchAnalyzerBean implements BatchMatchAnalyzer {
 	@Override
 	public long startAnalysis(long jobId, LinkCriteria c,
 			AnalysisResultFormat serializationFormat, String trackingId,
-			BatchJobRigor rigor)
-			throws ModelException, ConfigException, ArgumentException,
-			CmRuntimeException, RemoteException {
+			BatchJobRigor rigor) throws ModelException, ConfigException,
+			ArgumentException, CmRuntimeException, RemoteException {
 		throw new Error("never implemented");
 	}
 
@@ -191,8 +190,8 @@ public class BatchMatchAnalyzerBean implements BatchMatchAnalyzer {
 				retVal = delegate.startLinkageAndAnalysis(trackingId, tp,
 						oabaSettings, serverConfig);
 			} else {
-				retVal = delegate.startDeduplicationAndAnalysis(trackingId,
-						tp, oabaSettings, serverConfig);
+				retVal = delegate.startDeduplicationAndAnalysis(trackingId, tp,
+						oabaSettings, serverConfig);
 			}
 		} catch (NamingException | ServerConfigurationException
 				| URISyntaxException e) {

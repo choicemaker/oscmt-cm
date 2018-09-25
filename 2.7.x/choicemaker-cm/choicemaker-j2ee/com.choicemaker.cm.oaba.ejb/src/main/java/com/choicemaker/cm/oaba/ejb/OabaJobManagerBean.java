@@ -51,8 +51,8 @@ import com.choicemaker.cm.oaba.api.ServerConfigurationException;
 @Stateless
 public class OabaJobManagerBean implements OabaJobManager {
 
-	private static final Logger logger = Logger
-			.getLogger(OabaJobManagerBean.class.getName());
+	private static final Logger logger =
+		Logger.getLogger(OabaJobManagerBean.class.getName());
 
 	@PersistenceContext(unitName = "oaba")
 	private EntityManager em;
@@ -101,8 +101,8 @@ public class OabaJobManagerBean implements OabaJobManager {
 	@Override
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	public BatchJob createPersistentOabaJob(String externalID,
-			OabaParameters params, OabaSettings settings, ServerConfiguration sc)
-			throws ServerConfigurationException {
+			OabaParameters params, OabaSettings settings,
+			ServerConfiguration sc) throws ServerConfigurationException {
 		return createPersistentOabaJob(externalID, params, settings, sc, null);
 	}
 
@@ -116,15 +116,18 @@ public class OabaJobManagerBean implements OabaJobManager {
 		}
 		if (params != null && !params.isPersistent()) {
 			params = paramsController.save(params);
-			logger.info("Non-persistent OabaParameters have been saved: " + params.getId());
+			logger.info("Non-persistent OabaParameters have been saved: "
+					+ params.getId());
 		}
 		if (settings != null && !settings.isPersistent()) {
 			settings = oabaSettingsController.save(settings);
-			logger.info("Non-persistent OabaSettings have been saved: " + settings.getId());
+			logger.info("Non-persistent OabaSettings have been saved: "
+					+ settings.getId());
 		}
 		if (sc != null && !sc.isPersistent()) {
 			sc = serverManager.save(sc);
-			logger.info("Non-persistent ServerConfiguration has been saved: " + sc.getId());
+			logger.info("Non-persistent ServerConfiguration has been saved: "
+					+ sc.getId());
 		}
 		if (urmJob != null && !urmJob.isPersistent()) {
 			logger.warning("Non-persistent URM job");
@@ -138,17 +141,17 @@ public class OabaJobManagerBean implements OabaJobManager {
 		assert retVal.isPersistent();
 
 		// Create a new entry in the processing log and check it
-		OabaEventManager.updateStatusWithNotification(em,
-				jmsContext, oabaStatusTopic, retVal, ProcessingEventBean.INIT,
-				new Date(), null);
+		OabaEventManager.updateStatusWithNotification(em, jmsContext,
+				oabaStatusTopic, retVal, ProcessingEventBean.INIT, new Date(),
+				null);
 		BatchProcessingEvent ope =
-			OabaEventManager.getCurrentBatchProcessingEvent(em,
-					retVal);
+			OabaEventManager.getCurrentBatchProcessingEvent(em, retVal);
 		ProcessingEvent currentProcessingEvent = ope.getProcessingEvent();
 		assert currentProcessingEvent.getEventId() == ProcessingEventBean.INIT
 				.getEventId();
-		assert currentProcessingEvent.getFractionComplete() == ProcessingEventBean.INIT
-				.getFractionComplete();
+		assert currentProcessingEvent
+				.getFractionComplete() == ProcessingEventBean.INIT
+						.getFractionComplete();
 
 		// Create the working directory
 		File workingDir = BatchJobFileUtils.createWorkingDirectory(sc, retVal);

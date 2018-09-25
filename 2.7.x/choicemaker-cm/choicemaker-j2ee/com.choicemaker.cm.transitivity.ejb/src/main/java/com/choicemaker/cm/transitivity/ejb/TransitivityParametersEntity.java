@@ -130,8 +130,8 @@ public class TransitivityParametersEntity extends AbstractParametersEntity
 				break;
 
 			default:
-				throw new IllegalArgumentException("unexpected task type: "
-						+ task);
+				throw new IllegalArgumentException(
+						"unexpected task type: " + task);
 			}
 		}
 		String retVal = sw.toString();
@@ -160,12 +160,12 @@ public class TransitivityParametersEntity extends AbstractParametersEntity
 			String queryRsDbConfig, PersistableRecordSource master,
 			String refRsDbConfig, OabaLinkageType linkageType,
 			AnalysisResultFormat format, String graphPropertyName) {
-		super(DV_TRANS, modelConfigurationName, differThreshold,
-				matchThreshold, blocking, stage.getId(), stage.getType(),
-				isQueryRsDeduped, queryRsDbConfig, master == null ? null
-						: master.getId(), master == null ? null : master
-						.getType(), refRsDbConfig, linkageType,
-				format == null ? null : format.name(), graphPropertyName);
+		super(DV_TRANS, modelConfigurationName, differThreshold, matchThreshold,
+				blocking, stage.getId(), stage.getType(), isQueryRsDeduped,
+				queryRsDbConfig, master == null ? null : master.getId(),
+				master == null ? null : master.getType(), refRsDbConfig,
+				linkageType, format == null ? null : format.name(),
+				graphPropertyName);
 		if (format == null) {
 			throw new IllegalArgumentException("null analysis-result format");
 		}
@@ -176,14 +176,14 @@ public class TransitivityParametersEntity extends AbstractParametersEntity
 
 	public TransitivityParametersEntity(TransitivityParameters tp) {
 		super(DV_TRANS, tp.getModelConfigurationName(), tp.getLowThreshold(),
-				tp.getHighThreshold(), tp.getBlockingConfiguration(), tp
-						.getQueryRsId(), tp.getQueryRsType(), tp
-						.isQueryRsDeduplicated(), tp
-						.getQueryRsDatabaseConfiguration(), tp
-						.getReferenceRsId(), tp.getReferenceRsType(), tp
-						.getReferenceRsDatabaseConfiguration(), tp
-						.getOabaLinkageType(), tp.getAnalysisResultFormat()
-						.name(), tp.getGraphProperty().getName());
+				tp.getHighThreshold(), tp.getBlockingConfiguration(),
+				tp.getQueryRsId(), tp.getQueryRsType(),
+				tp.isQueryRsDeduplicated(),
+				tp.getQueryRsDatabaseConfiguration(), tp.getReferenceRsId(),
+				tp.getReferenceRsType(),
+				tp.getReferenceRsDatabaseConfiguration(),
+				tp.getOabaLinkageType(), tp.getAnalysisResultFormat().name(),
+				tp.getGraphProperty().getName());
 		if (tp.getGraphProperty() == null) {
 			throw new IllegalArgumentException("null graph-property");
 		}
@@ -191,14 +191,13 @@ public class TransitivityParametersEntity extends AbstractParametersEntity
 
 	public TransitivityParametersEntity(OabaParameters p,
 			AnalysisResultFormat format, String graphPropertyName) {
-		super(DV_TRANS, p.getModelConfigurationName(), p.getLowThreshold(), p
-				.getHighThreshold(), p.getBlockingConfiguration(), p
-				.getQueryRsId(), p.getQueryRsType(), p.isQueryRsDeduplicated(),
-				p.getQueryRsDatabaseConfiguration(), p.getReferenceRsId(), p
-						.getReferenceRsType(), p
-						.getReferenceRsDatabaseConfiguration(), OabaLinkageType
-						.transitivityAnalysis(p.getOabaLinkageType()), format
-						.name(), graphPropertyName);
+		super(DV_TRANS, p.getModelConfigurationName(), p.getLowThreshold(),
+				p.getHighThreshold(), p.getBlockingConfiguration(),
+				p.getQueryRsId(), p.getQueryRsType(), p.isQueryRsDeduplicated(),
+				p.getQueryRsDatabaseConfiguration(), p.getReferenceRsId(),
+				p.getReferenceRsType(), p.getReferenceRsDatabaseConfiguration(),
+				OabaLinkageType.transitivityAnalysis(p.getOabaLinkageType()),
+				format.name(), graphPropertyName);
 		if (graphPropertyName == null) {
 			throw new IllegalArgumentException("null graph-property");
 		}
@@ -275,8 +274,8 @@ public class TransitivityParametersEntity extends AbstractParametersEntity
 	public String toString() {
 		return "TransitivityParametersEntity [id=" + id + ", uuid=" + getUUID()
 				+ ", modelId=" + modelConfigName + ", lowThreshold="
-				+ lowThreshold + ", highThreshold=" + highThreshold
-				+ ", graph=" + graph + "]";
+				+ lowThreshold + ", highThreshold=" + highThreshold + ", graph="
+				+ graph + "]";
 	}
 
 }

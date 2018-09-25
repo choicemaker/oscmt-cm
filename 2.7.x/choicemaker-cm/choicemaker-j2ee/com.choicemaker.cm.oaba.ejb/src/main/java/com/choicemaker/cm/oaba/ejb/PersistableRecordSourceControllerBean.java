@@ -28,11 +28,11 @@ import com.choicemaker.cm.oaba.api.RecordSourceController;
 import com.choicemaker.cm.oaba.api.SqlRecordSourceController;
 
 @Stateless
-public class PersistableRecordSourceControllerBean implements
-		RecordSourceController {
+public class PersistableRecordSourceControllerBean
+		implements RecordSourceController {
 
-	private static final Logger logger = Logger
-			.getLogger(PersistableRecordSourceControllerBean.class.getName());
+	private static final Logger logger =
+		Logger.getLogger(PersistableRecordSourceControllerBean.class.getName());
 
 	@PersistenceContext(unitName = "oaba")
 	private EntityManager em;
@@ -62,9 +62,8 @@ public class PersistableRecordSourceControllerBean implements
 			throws Exception {
 		ISerializableRecordSource retVal = null;
 		if (params != null) {
-			retVal =
-				getRecordSource(params.getReferenceRsId(),
-						params.getReferenceRsType());
+			retVal = getRecordSource(params.getReferenceRsId(),
+					params.getReferenceRsType());
 		}
 		return retVal;
 	}
@@ -90,8 +89,8 @@ public class PersistableRecordSourceControllerBean implements
 			throw new Error("not yet implemented for record source type: '"
 					+ type + "'");
 		} else {
-			throw new IllegalStateException("unknown record source type: '"
-					+ type + "'");
+			throw new IllegalStateException(
+					"unknown record source type: '" + type + "'");
 		}
 		assert retVal != null;
 		return retVal;
@@ -120,8 +119,8 @@ public class PersistableRecordSourceControllerBean implements
 		ISerializableRecordSource retVal;
 		if (id != null) {
 			if (type == null) {
-				throw new IllegalArgumentException("null type for id '" + id
-						+ "'");
+				throw new IllegalArgumentException(
+						"null type for id '" + id + "'");
 			}
 			// FIXME replace hard-coded decision tree with plugins
 			//

@@ -26,13 +26,14 @@ public class AbaStatisticsImpl implements AbaStatistics {
 	private int mainTableSize;
 	private FieldValueCounts[] counts;
 
-	public AbaStatisticsImpl(int mainTableSize, final IFieldValueCounts[] arIFVC) {
+	public AbaStatisticsImpl(int mainTableSize,
+			final IFieldValueCounts[] arIFVC) {
 		this.mainTableSize = mainTableSize;
 		if (arIFVC == null) {
-			this.counts= null;
+			this.counts = null;
 		} else {
 			this.counts = new FieldValueCounts[arIFVC.length];
-			for (int i = 0 ; i<arIFVC.length; i++) {
+			for (int i = 0; i < arIFVC.length; i++) {
 				IFieldValueCounts ifvc = arIFVC[i];
 				if (ifvc == null) {
 					counts[i] = null;

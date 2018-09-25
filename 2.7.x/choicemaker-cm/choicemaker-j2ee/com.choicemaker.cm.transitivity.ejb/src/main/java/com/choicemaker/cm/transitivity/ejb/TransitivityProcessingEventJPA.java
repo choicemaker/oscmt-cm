@@ -21,8 +21,8 @@ package com.choicemaker.cm.transitivity.ejb;
 public interface TransitivityProcessingEventJPA {
 
 	/**
-	 * Value of the discriminator column used to mark TransitivityBatchProcessingEvent types
-	 * (and not sub-types)
+	 * Value of the discriminator column used to mark
+	 * TransitivityBatchProcessingEvent types (and not sub-types)
 	 */
 	String DISCRIMINATOR_VALUE = "TRANS";
 

@@ -16,10 +16,10 @@ import com.choicemaker.cm.aba.IField;
 /**
  * A field on a master record, against which query record are compared.
  * 
- * @author    mbuechi
+ * @author mbuechi
  */
 public class DbField extends Field implements IDbField {
-	
+
 	private static final long serialVersionUID = 271;
 
 	private final int number;
@@ -28,17 +28,13 @@ public class DbField extends Field implements IDbField {
 	private final IDbTable table;
 	private final int defaultCount;
 
-	public DbField(int number, String name, String type, IDbTable table, int defaultCount) {
+	public DbField(int number, String name, String type, IDbTable table,
+			int defaultCount) {
 		this(number, name, type, table, defaultCount, NN_FIELD);
 	}
 
-	public DbField(
-		int number,
-		String name,
-		String type,
-		IDbTable table,
-		int defaultCount,
-		IField[][] illegalCombinations) {
+	public DbField(int number, String name, String type, IDbTable table,
+			int defaultCount, IField[][] illegalCombinations) {
 		super(illegalCombinations);
 		this.number = number;
 		this.name = name;
@@ -46,7 +42,7 @@ public class DbField extends Field implements IDbField {
 		this.table = table;
 		this.defaultCount = defaultCount;
 	}
-	
+
 	@Override
 	public int getNumber() {
 		return number;
@@ -96,7 +92,7 @@ public class DbField extends Field implements IDbField {
 		}
 		return retVal;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		int retVal = getNumber();
@@ -114,10 +110,10 @@ public class DbField extends Field implements IDbField {
 
 	@Override
 	public String toString() {
-		return "DbField [number=" + number + ", name=" + name + ", type="
-				+ type + ", table=" + table + ", defaultCount=" + defaultCount
+		return "DbField [number=" + number + ", name=" + name + ", type=" + type
+				+ ", table=" + table + ", defaultCount=" + defaultCount
 				+ ", illegalCombinations="
-						+ Arrays.toString(getIllegalCombinations()) + "]";
+				+ Arrays.toString(getIllegalCombinations()) + "]";
 	}
-	
+
 }

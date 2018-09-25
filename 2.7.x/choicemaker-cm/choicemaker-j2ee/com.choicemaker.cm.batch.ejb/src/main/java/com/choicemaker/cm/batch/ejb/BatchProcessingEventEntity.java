@@ -45,7 +45,8 @@ import com.choicemaker.cm.batch.api.BatchProcessingEvent;
 		discriminatorType = DiscriminatorType.STRING)
 @DiscriminatorValue(DISCRIMINATOR_VALUE)
 public class BatchProcessingEventEntity extends AbstractPersistentObject
-		implements BatchProcessingConstants, BatchProcessingEvent, Serializable {
+		implements BatchProcessingConstants, BatchProcessingEvent,
+		Serializable {
 
 	private static final long serialVersionUID = 271L;
 
@@ -106,8 +107,9 @@ public class BatchProcessingEventEntity extends AbstractPersistentObject
 		this.eventTimestamp = INVALID_TIMESTAMP;
 	}
 
-	protected BatchProcessingEventEntity(long jobId, String type, String evtName,
-			int eventSeqNum, float fractionComplete, String info) {
+	protected BatchProcessingEventEntity(long jobId, String type,
+			String evtName, int eventSeqNum, float fractionComplete,
+			String info) {
 		if (jobId == PersistentObject.NONPERSISTENT_ID) {
 			throw new IllegalArgumentException("invalid jobId: " + jobId);
 		}
@@ -116,18 +118,18 @@ public class BatchProcessingEventEntity extends AbstractPersistentObject
 		}
 		if (evtName == null || !evtName.equals(evtName.trim())
 				|| evtName.isEmpty()) {
-			throw new IllegalArgumentException("invalid event name: '"
-					+ evtName + "'");
+			throw new IllegalArgumentException(
+					"invalid event name: '" + evtName + "'");
 		}
 		if (eventSeqNum == INVALID_EVENT_SEQNUM) {
-			throw new IllegalArgumentException("invalid eventSequenceNumber: "
-					+ eventSeqNum);
+			throw new IllegalArgumentException(
+					"invalid eventSequenceNumber: " + eventSeqNum);
 		}
 		if (Float.isNaN(fractionComplete)
 				|| fractionComplete < MINIMUM_FRACTION_COMPLETE
 				|| fractionComplete > MAXIMUM_FRACTION_COMPLETE) {
-			throw new IllegalArgumentException("invalid fraction complete: "
-					+ fractionComplete);
+			throw new IllegalArgumentException(
+					"invalid fraction complete: " + fractionComplete);
 		}
 		this.jobId = jobId;
 		this.type = type;
@@ -177,7 +179,9 @@ public class BatchProcessingEventEntity extends AbstractPersistentObject
 		return fractionComplete;
 	}
 
-	/** Returns optional, additional information about this event (may be null) */
+	/**
+	 * Returns optional, additional information about this event (may be null)
+	 */
 	@Override
 	public String getEventInfo() {
 		return eventInfo;
@@ -191,9 +195,8 @@ public class BatchProcessingEventEntity extends AbstractPersistentObject
 
 	@Override
 	public ProcessingEvent getProcessingEvent() {
-		ProcessingEvent retVal =
-			new ProcessingEventBean(getEventName(), getEventSequenceNumber(),
-					getFractionComplete());
+		ProcessingEvent retVal = new ProcessingEventBean(getEventName(),
+				getEventSequenceNumber(), getFractionComplete());
 		return retVal;
 	}
 

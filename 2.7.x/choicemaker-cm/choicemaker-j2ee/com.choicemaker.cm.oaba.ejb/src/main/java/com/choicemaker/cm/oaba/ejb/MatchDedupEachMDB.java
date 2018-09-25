@@ -47,22 +47,20 @@ import com.choicemaker.cm.oaba.services.GenericDedupService;
  */
 @SuppressWarnings({
 		"rawtypes", "unchecked" })
-@MessageDriven(
-		activationConfig = {
-				@ActivationConfigProperty(
-						propertyName = "destinationLookup",
-						propertyValue = "java:/choicemaker/urm/jms/matchDedupEachQueue"),
-				@ActivationConfigProperty(propertyName = "destinationType",
-						propertyValue = "javax.jms.Queue") })
+@MessageDriven(activationConfig = {
+		@ActivationConfigProperty(propertyName = "destinationLookup",
+				propertyValue = "java:/choicemaker/urm/jms/matchDedupEachQueue"),
+		@ActivationConfigProperty(propertyName = "destinationType",
+				propertyValue = "javax.jms.Queue") })
 public class MatchDedupEachMDB extends AbstractOabaMDB {
 
 	private static final long serialVersionUID = 271L;
 
-	private static final Logger log = Logger.getLogger(MatchDedupEachMDB.class
-			.getName());
+	private static final Logger log =
+		Logger.getLogger(MatchDedupEachMDB.class.getName());
 
-	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
-			+ MatchDedupEachMDB.class.getName());
+	private static final Logger jmsTrace =
+		Logger.getLogger("jmstrace." + MatchDedupEachMDB.class.getName());
 
 	@Resource(lookup = "java:/choicemaker/urm/jms/matchDedupQueue")
 	private Queue matchDedupQueue;
@@ -73,7 +71,8 @@ public class MatchDedupEachMDB extends AbstractOabaMDB {
 			ProcessingEventLog processingLog, ServerConfiguration serverConfig,
 			ImmutableProbabilityModel model) throws BlockingException {
 
-		if (processingLog.getCurrentProcessingEventId() != OabaProcessingConstants.EVT_MERGE_DEDUP_MATCHES) {
+		if (processingLog
+				.getCurrentProcessingEventId() != OabaProcessingConstants.EVT_MERGE_DEDUP_MATCHES) {
 			int maxMatches = oabaSettings.getMaxMatches();
 			dedupEach(data.processingIndex, maxMatches, batchJob);
 		}
@@ -110,10 +109,9 @@ public class MatchDedupEachMDB extends AbstractOabaMDB {
 
 		if (source.exists()) {
 			final BatchJobControl control =
-					new BatchJobControl(this.getJobController(), batchJob);
-			GenericDedupService service =
-				new GenericDedupService(source, sink, mFactory, maxMatches,
-						control);
+				new BatchJobControl(this.getJobController(), batchJob);
+			GenericDedupService service = new GenericDedupService(source, sink,
+					mFactory, maxMatches, control);
 			service.runDedup();
 			int before = service.getNumBefore();
 			int after = service.getNumAfter();
@@ -147,8 +145,8 @@ public class MatchDedupEachMDB extends AbstractOabaMDB {
 	}
 
 	@Override
-	protected void updateOabaProcessingStatus(BatchJob job, ProcessingEventBean event,
-			Date timestamp, String info) {
+	protected void updateOabaProcessingStatus(BatchJob job,
+			ProcessingEventBean event, Date timestamp, String info) {
 		assert event == null;
 	}
 

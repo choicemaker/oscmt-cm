@@ -38,7 +38,7 @@ import com.choicemaker.cms.beans.AbaSettingsBean;
 import com.choicemaker.util.Precondition;
 
 public class NamedConfigConversion {
-	
+
 	// Implementation note: Persistent NamedConfiguration entities are
 	// currently immutable; the API does not provide a way to change the
 	// any field of an NamedConfiguration once it has been persisted to

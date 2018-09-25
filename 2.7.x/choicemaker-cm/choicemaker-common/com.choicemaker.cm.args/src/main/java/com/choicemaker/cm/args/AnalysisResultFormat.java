@@ -70,11 +70,11 @@ public enum AnalysisResultFormat {
 			ext = ext.trim();
 			if (XML.getFileExtension().equalsIgnoreCase(ext)) {
 				retVal = XML;
-			} else if (SORT_BY_HOLD_GROUP.getFileExtension().equalsIgnoreCase(
-					ext)) {
+			} else if (SORT_BY_HOLD_GROUP.getFileExtension()
+					.equalsIgnoreCase(ext)) {
 				retVal = SORT_BY_HOLD_GROUP;
-			} else if (SORT_BY_RECORD_ID.getFileExtension().equalsIgnoreCase(
-					ext)) {
+			} else if (SORT_BY_RECORD_ID.getFileExtension()
+					.equalsIgnoreCase(ext)) {
 				retVal = SORT_BY_RECORD_ID;
 			} else {
 				String msg = "invalid argument: '" + ext + "'";

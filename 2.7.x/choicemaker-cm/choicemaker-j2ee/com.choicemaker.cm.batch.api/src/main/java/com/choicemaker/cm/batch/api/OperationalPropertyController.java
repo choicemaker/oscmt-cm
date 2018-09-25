@@ -9,7 +9,7 @@ import java.util.List;
  * 
  * @author rphall
  */
-//@Local
+// @Local
 public interface OperationalPropertyController {
 
 	void setJobProperty(BatchJob job, String pn, String pv);

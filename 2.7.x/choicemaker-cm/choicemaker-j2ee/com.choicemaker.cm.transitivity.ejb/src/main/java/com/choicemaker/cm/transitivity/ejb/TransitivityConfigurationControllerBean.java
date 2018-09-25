@@ -20,9 +20,8 @@ import com.choicemaker.cm.transitivity.api.TransitivityJobManager;
 
 @Stateless
 public class TransitivityConfigurationControllerBean
-	extends ServerConfigurationControllerBean
-	implements
-	TransitivityConfigurationController {
+		extends ServerConfigurationControllerBean
+		implements TransitivityConfigurationController {
 
 	@PersistenceContext(unitName = "oaba")
 	private EntityManager em;

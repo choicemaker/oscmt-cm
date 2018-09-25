@@ -7,8 +7,8 @@ import com.choicemaker.cm.args.PersistentObject;
 import com.choicemaker.cm.args.ProcessingEvent;
 
 /**
- * Batch processing events are persistent, read-only markers of the progress
- * of a batch job. They are essentially persistent versions of ProcessingEvents
+ * Batch processing events are persistent, read-only markers of the progress of
+ * a batch job. They are essentially persistent versions of ProcessingEvents
  * that are associated with a particular BatchJob.
  */
 public interface BatchProcessingEvent extends PersistentObject, Serializable {
@@ -40,7 +40,9 @@ public interface BatchProcessingEvent extends PersistentObject, Serializable {
 	/** Returns the event sequence number for this entry */
 	int getEventSequenceNumber();
 
-	/** Returns optional, additional information about this event (may be null) */
+	/**
+	 * Returns optional, additional information about this event (may be null)
+	 */
 	String getEventInfo();
 
 	/** Returns the event timestamp for this entry */

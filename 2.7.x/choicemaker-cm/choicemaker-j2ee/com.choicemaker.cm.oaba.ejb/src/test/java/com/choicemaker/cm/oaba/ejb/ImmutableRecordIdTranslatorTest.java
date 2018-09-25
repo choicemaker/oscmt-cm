@@ -30,7 +30,7 @@ public class ImmutableRecordIdTranslatorTest {
 		assertTrue(retVal != null);
 		return retVal;
 	}
-	
+
 	public static void cleanupFile(String fileName) {
 		File f = new File(fileName);
 		if (f.exists()) {
@@ -40,7 +40,7 @@ public class ImmutableRecordIdTranslatorTest {
 
 	private String fileName1;
 	private String fileName2;
-	
+
 	@Before
 	public void setUp() throws Exception {
 		fileName1 = RecordIdTestUtils.createTempFileName();
@@ -64,9 +64,8 @@ public class ImmutableRecordIdTranslatorTest {
 		RecordIdSource<String> ridSrc1 = createRecordIdSource(fileName1);
 		RecordIdSource<String> ridSrc2 = createRecordIdSource(fileName2);
 		try {
-			irit =
-				new ImmutableRecordIdTranslatorImpl(stub, ridSrc1, ridSrc2,
-						keepFiles);
+			irit = new ImmutableRecordIdTranslatorImpl(stub, ridSrc1, ridSrc2,
+					keepFiles);
 			ridSrc1.close();
 			ridSrc2.close();
 		} catch (Exception e) {
@@ -86,7 +85,7 @@ public class ImmutableRecordIdTranslatorTest {
 		} catch (Exception e) {
 			fail(e.toString());
 		}
-		
+
 		try {
 			ridSrc2.open();
 			while (ridSrc2.hasNext()) {

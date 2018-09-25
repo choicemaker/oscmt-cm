@@ -15,10 +15,11 @@ import com.choicemaker.cm.aba.IQueryField;
 /**
  * A field on a query record, which is compared against {@link DbField master}
  * records to find matches.
- * @author    mbuechi
+ * 
+ * @author mbuechi
  */
 public class QueryField extends Field implements IQueryField {
-	
+
 	private static final long serialVersionUID = 271;
 
 	public QueryField() {

@@ -41,7 +41,8 @@ public class TransitiveGroupBean<T extends Comparable<T> & Serializable>
 	 *            be a member of some pair in the <code>pairs</code> list
 	 */
 	public TransitiveGroupBean(DataAccessObject<T> q,
-			List<QueryCandidatePair<T>> pairs, List<MergeGroup<T>> mergeGroups) {
+			List<QueryCandidatePair<T>> pairs,
+			List<MergeGroup<T>> mergeGroups) {
 		super(q, pairs);
 
 		List<MergeGroup<T>> list1;

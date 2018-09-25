@@ -19,7 +19,8 @@ import com.choicemaker.cm.oaba.api.ServerConfigurationController;
  *
  */
 @Local
-public interface TransitivityConfigurationController extends ServerConfigurationController {
+public interface TransitivityConfigurationController
+		extends ServerConfigurationController {
 
 	ServerConfiguration findConfigurationByTransitivityJobId(long jobId);
 

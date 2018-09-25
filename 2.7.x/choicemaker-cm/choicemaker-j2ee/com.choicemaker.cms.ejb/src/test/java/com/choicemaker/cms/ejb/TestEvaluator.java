@@ -6,7 +6,7 @@ import com.choicemaker.cm.core.ActiveClues;
 import com.choicemaker.cm.core.Evaluator;
 
 public class TestEvaluator extends Evaluator {
-	
+
 	public <T extends Comparable<T> & Serializable> TestEvaluator(
 			TestModel<T> model) {
 		super(model);

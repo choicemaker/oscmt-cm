@@ -22,7 +22,9 @@ public interface MutableServerConfiguration extends ServerConfiguration {
 	/** The host machine or logical domain to which a configuration applies */
 	void setHostName(String hostName);
 
-	/** The maximum number of ChoiceMaker tasks that should be run in parallel */
+	/**
+	 * The maximum number of ChoiceMaker tasks that should be run in parallel
+	 */
 	void setMaxChoiceMakerThreads(int maxThreadCount);
 
 	/** The maximum number of records in an OABA chunk file */

@@ -40,8 +40,8 @@ public class TransitivityBatchControllerBean
 			TransitivityParameters params, BatchJob batchJob,
 			OabaSettings settings, ServerConfiguration sc)
 			throws ServerConfigurationException {
-		return transitivityJobManager.createPersistentTransitivityJob(externalID,
-				params, batchJob, settings, sc);
+		return transitivityJobManager.createPersistentTransitivityJob(
+				externalID, params, batchJob, settings, sc);
 	}
 
 	@Override
@@ -49,8 +49,9 @@ public class TransitivityBatchControllerBean
 			TransitivityParameters batchParams, BatchJob batchJob,
 			OabaSettings settings, ServerConfiguration serverConfiguration,
 			BatchJob urmJob) throws ServerConfigurationException {
-		return transitivityJobManager.createPersistentTransitivityJob(externalID,
-				batchParams, batchJob, settings, serverConfiguration, urmJob);
+		return transitivityJobManager.createPersistentTransitivityJob(
+				externalID, batchParams, batchJob, settings,
+				serverConfiguration, urmJob);
 	}
 
 	@Override

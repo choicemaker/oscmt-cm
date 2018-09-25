@@ -287,8 +287,8 @@ public class DbbCountsCreatorSQL {
 				+ "VALUES(?, ?, null, ?, null, null)";
 
 	/**
-	 * Binds a fieldId, view and column parameters to a prepared
-	 * statement for {@link #sqlInsertTableCountFields}
+	 * Binds a fieldId, view and column parameters to a prepared statement for
+	 * {@link #sqlInsertTableCountFields}
 	 */
 	static void bindSqlInsertTableCountFields(PreparedStatement stmt2,
 			int fieldId, String[] entry) throws SQLException {
@@ -473,8 +473,8 @@ public class DbbCountsCreatorSQL {
 			String query = onlyUncomputed ? query15 : query17;
 			logger.info(
 					"SQL to select entries from TB_CMT_COUNT_FIELDS: " + query);
-//			int rowsSelected = stmt.executeUpdate(query);
-//			logger.fine("TB_CMT_COUNT_FIELDS selected: " + rowsSelected);
+			// int rowsSelected = stmt.executeUpdate(query);
+			// logger.fine("TB_CMT_COUNT_FIELDS selected: " + rowsSelected);
 			rs = stmt.executeQuery(query);
 			while (rs.next()) {
 				String[] entry = new String[5];
@@ -617,7 +617,8 @@ public class DbbCountsCreatorSQL {
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
-			logger.info("SQL to select tables sizes: " + sqlSelectTableSizesCountFields);
+			logger.info("SQL to select tables sizes: "
+					+ sqlSelectTableSizesCountFields);
 			stmt = c.createStatement();
 			rs = stmt.executeQuery(sqlSelectTableSizesCountFields);
 			while (rs.next()) {
@@ -626,7 +627,7 @@ public class DbbCountsCreatorSQL {
 				final int count = rs.getInt(3);
 				final int safeMin = Math.max(1, count);
 				DbTable dbt = new DbTable(view, 0, uniqueId);
-				retVal.put(dbt,safeMin);
+				retVal.put(dbt, safeMin);
 			}
 			logger.fine("Number of table sizes: " + retVal.size());
 			logger.fine("Table sizes: " + elideString(retVal.toString()));
@@ -833,13 +834,13 @@ public class DbbCountsCreatorSQL {
 			}
 		}
 	}
-	
+
 	public static final int DEFAULT_ELISON_LENGTH = 50;
-	
+
 	static String elideString(String s) {
-		return elideString(s,DEFAULT_ELISON_LENGTH);
+		return elideString(s, DEFAULT_ELISON_LENGTH);
 	}
-	
+
 	static String elideString(String s, final int maxLength) {
 		String retVal;
 		if (s != null && maxLength >= 0 && s.length() > maxLength) {

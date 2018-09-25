@@ -26,11 +26,11 @@ import com.choicemaker.cm.batch.api.ProcessingEventLog;
  */
 public class TransitivityProcessingLog implements ProcessingEventLog {
 
-	private static final Logger logger = Logger
-			.getLogger(TransitivityProcessingLog.class.getName());
+	private static final Logger logger =
+		Logger.getLogger(TransitivityProcessingLog.class.getName());
 
-	private static final String LOG_SOURCE = 
-			TransitivityProcessingLog.class.getSimpleName();
+	private static final String LOG_SOURCE =
+		TransitivityProcessingLog.class.getSimpleName();
 
 	private final EntityManager em;
 	private final BatchJob batchJob;
@@ -47,14 +47,13 @@ public class TransitivityProcessingLog implements ProcessingEventLog {
 	}
 
 	protected BatchProcessingEvent getCurrentTransitivityProcessingEvent() {
-		return TransitivityEventManager
-				.getCurrentBatchProcessingEvent(em, batchJob);
+		return TransitivityEventManager.getCurrentBatchProcessingEvent(em,
+				batchJob);
 	}
 
 	@Override
 	public ProcessingEvent getCurrentProcessingEvent() {
-		BatchProcessingEvent ope =
-			getCurrentTransitivityProcessingEvent();
+		BatchProcessingEvent ope = getCurrentTransitivityProcessingEvent();
 		ProcessingEvent retVal = ope.getProcessingEvent();
 		return retVal;
 	}
@@ -66,8 +65,7 @@ public class TransitivityProcessingLog implements ProcessingEventLog {
 
 	@Override
 	public String getCurrentProcessingEventInfo() {
-		BatchProcessingEvent ope =
-			getCurrentTransitivityProcessingEvent();
+		BatchProcessingEvent ope = getCurrentTransitivityProcessingEvent();
 		String retVal = ope.getEventInfo();
 		return retVal;
 	}
@@ -79,10 +77,10 @@ public class TransitivityProcessingLog implements ProcessingEventLog {
 
 	@Override
 	public void setCurrentProcessingEvent(ProcessingEvent event, String info) {
-		logger.info(LOG_SOURCE + ".setCurrentProcessingEvent: " + event + " (job "
-				+ this.batchJob.getId() + ")");
-		TransitivityEventManager.updateStatus(em, batchJob, event,
-				new Date(), info);
+		logger.info(LOG_SOURCE + ".setCurrentProcessingEvent: " + event
+				+ " (job " + this.batchJob.getId() + ")");
+		TransitivityEventManager.updateStatus(em, batchJob, event, new Date(),
+				info);
 	}
 
 	@Override

@@ -88,9 +88,9 @@ public class OnlineUrmBean<T extends Comparable<T> & Serializable>
 	@Override
 	public EvaluatedRecord[] getMatchCandidates(ISingleRecord<T> queryRecord,
 			DbRecordCollection masterCollection, String modelName,
-			float differThreshold, float matchThreshold, int UNUSED_maxNumMatches,
-			EvalRecordFormat resultFormat, String externalId)
-			throws ModelException, ArgumentException,
+			float differThreshold, float matchThreshold,
+			int UNUSED_maxNumMatches, EvalRecordFormat resultFormat,
+			String externalId) throws ModelException, ArgumentException,
 			UrmIncompleteBlockingSetsException, UrmUnderspecifiedQueryException,
 			RecordException, RecordCollectionException, ConfigException,
 			CmRuntimeException, RemoteException {

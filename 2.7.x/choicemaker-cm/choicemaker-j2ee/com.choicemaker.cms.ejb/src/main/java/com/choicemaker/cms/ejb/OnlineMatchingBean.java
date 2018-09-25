@@ -36,9 +36,8 @@ public class OnlineMatchingBean<T extends Comparable<T> & Serializable>
 	private AbaStatisticsController statsController;
 
 	@Override
-	public MatchGroup<T> getMatchGroup(
-			final DataAccessObject<T> query, final AbaParameters parameters,
-			final AbaSettings settings,
+	public MatchGroup<T> getMatchGroup(final DataAccessObject<T> query,
+			final AbaParameters parameters, final AbaSettings settings,
 			final AbaServerConfiguration configuration)
 			throws IOException, BlockingException {
 
@@ -59,9 +58,9 @@ public class OnlineMatchingBean<T extends Comparable<T> & Serializable>
 	}
 
 	@Override
-	public TransitiveGroup<T> getTransitiveGroup(
-			DataAccessObject<T> query, AbaParameters parameters,
-			AbaSettings settings, AbaServerConfiguration configuration,
+	public TransitiveGroup<T> getTransitiveGroup(DataAccessObject<T> query,
+			AbaParameters parameters, AbaSettings settings,
+			AbaServerConfiguration configuration,
 			IGraphProperty mergeConnectivity, boolean mustIncludeQuery)
 			throws IOException, BlockingException, TransitivityException {
 
@@ -71,8 +70,8 @@ public class OnlineMatchingBean<T extends Comparable<T> & Serializable>
 		List<Match> matches = delegate.getMatchList(query, parameters, settings,
 				configuration, statsController);
 
-		TransitiveGroup<T> retVal = delegate.getTransitiveGroup(query,
-				matches, parameters, mergeConnectivity, mustIncludeQuery);
+		TransitiveGroup<T> retVal = delegate.getTransitiveGroup(query, matches,
+				parameters, mergeConnectivity, mustIncludeQuery);
 
 		return retVal;
 	}

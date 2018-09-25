@@ -38,11 +38,11 @@ import com.choicemaker.cm.oaba.core.RECORD_ID_TYPE;
  */
 @SuppressWarnings({
 		"rawtypes", "unchecked" })
-class ImmutableRecordIdTranslatorImpl implements
-		ImmutableRecordIdTranslatorLocal {
+class ImmutableRecordIdTranslatorImpl
+		implements ImmutableRecordIdTranslatorLocal {
 
-	private static final Logger log = Logger
-			.getLogger(ImmutableRecordIdTranslatorImpl.class.getName());
+	private static final Logger log =
+		Logger.getLogger(ImmutableRecordIdTranslatorImpl.class.getName());
 
 	/** An initialization helper class */
 	protected static class INITIALIZATION_RETURN_VALUE {
@@ -75,10 +75,9 @@ class ImmutableRecordIdTranslatorImpl implements
 				Integer key = (Integer) i.next();
 				int keyValue = key.intValue();
 				if (keyValue != expectedKeyValue) {
-					String msg =
-						"Record index '" + keyValue
-								+ "' does not match the expected value '"
-								+ expectedKeyValue + "'";
+					String msg = "Record index '" + keyValue
+							+ "' does not match the expected value '"
+							+ expectedKeyValue + "'";
 					log.severe(msg);
 					throw new IllegalStateException(msg);
 				}
@@ -96,8 +95,7 @@ class ImmutableRecordIdTranslatorImpl implements
 	static <T extends Comparable<T>> ImmutableRecordIdTranslatorImpl createTranslator(
 			final BatchJob job, final RECORD_ID_TYPE expectedRecordIdType,
 			List<AbstractRecordIdTranslationEntity<T>> translations,
-			boolean doKeepFiles)
-			throws BlockingException {
+			boolean doKeepFiles) throws BlockingException {
 
 		if (job == null || !job.isPersistent()) {
 			String msg = "invalid job: " + job;
@@ -132,11 +130,10 @@ class ImmutableRecordIdTranslatorImpl implements
 				log.info("record-id type: " + recordIdType);
 			} else {
 				if (recordIdType != rid) {
-					String msg =
-						"inconsistent record-id types: " + recordIdType
-								+ " and " + rid + " (count1 == " + count1
-								+ ", count2 == " + count2
-								+ ", translation id == " + rt.getId() + ")";
+					String msg = "inconsistent record-id types: " + recordIdType
+							+ " and " + rid + " (count1 == " + count1
+							+ ", count2 == " + count2 + ", translation id == "
+							+ rt.getId() + ")";
 					log.severe(msg);
 					throw new BlockingException(msg);
 				}
@@ -176,9 +173,8 @@ class ImmutableRecordIdTranslatorImpl implements
 						&& splitIndex == RecordIdTranslation.INVALID_TRANSLATED_ID) {
 					splitIndex = rt.getTranslatedId();
 				} else if (si != RecordIdTranslation.INVALID_TRANSLATED_ID) {
-					String msg =
-						"Multiple entries for split index: " + splitIndex
-								+ ", " + si;
+					String msg = "Multiple entries for split index: "
+							+ splitIndex + ", " + si;
 					log.severe(msg);
 					throw new BlockingException(msg);
 				} else {
@@ -192,9 +188,8 @@ class ImmutableRecordIdTranslatorImpl implements
 		log.info("source2 translations: " + count2);
 		log.info("split index: " + splitIndex);
 		if (count1 == 0 && count2 == 0) {
-			String msg =
-				"UNEXPECTED (should be caught by preconditions): "
-						+ "no record-id translations for job " + job.getId();
+			String msg = "UNEXPECTED (should be caught by preconditions): "
+					+ "no record-id translations for job " + job.getId();
 			log.severe(msg);
 			throw new Error(msg);
 		}
@@ -257,8 +252,7 @@ class ImmutableRecordIdTranslatorImpl implements
 			final Map<?, Integer> ids2_To_Indices,
 			final SortedMap<Integer, ?> indices_To_Ids1,
 			final SortedMap<Integer, ?> indices_To_Ids2, int splitIndex,
-			boolean doKeepFiles)
-			throws BlockingException {
+			boolean doKeepFiles) throws BlockingException {
 		if (job == null) {
 			String msg = "null batch job";
 			throw new IllegalArgumentException(msg);
@@ -506,15 +500,17 @@ class ImmutableRecordIdTranslatorImpl implements
 				Integer key = new Integer(internalID);
 				retVal = (Comparable) this.indices_To_Ids1.get(key);
 				if (retVal == null) {
-					log.warning("translating internal, staging index (before split) '"
-							+ internalID + "' to a null record id");
+					log.warning(
+							"translating internal, staging index (before split) '"
+									+ internalID + "' to a null record id");
 				}
 			} else {
 				Integer key = new Integer(internalID - getSplitIndex());
 				retVal = (Comparable) this.indices_To_Ids2.get(key);
 				if (retVal == null) {
-					log.warning("translating internal, master index (after split) '"
-							+ internalID + "' to a null record id");
+					log.warning(
+							"translating internal, master index (after split) '"
+									+ internalID + "' to a null record id");
 				}
 			}
 		}
@@ -536,9 +532,8 @@ class ImmutableRecordIdTranslatorImpl implements
 			Class<?> c = id.getClass();
 			RECORD_ID_TYPE rit2 = RECORD_ID_TYPE.fromClass(c);
 			if (recordIdType != rit2) {
-				String msg =
-					"Inconsistent record id types: " + recordIdType + " and "
-							+ c.getSimpleName();
+				String msg = "Inconsistent record id types: " + recordIdType
+						+ " and " + c.getSimpleName();
 				log.severe(msg);
 				throw new IllegalArgumentException(msg);
 			}

@@ -38,7 +38,6 @@ import com.choicemaker.cm.batch.api.EventPersistenceManager;
 import com.choicemaker.cm.oaba.ejb.util.MessageBeanUtils;
 import com.choicemaker.cm.transitivity.api.TransitivityProcessingEvent;
 
-
 /**
  * This stateless EJB provides Transitivity, job-specific processing logs and
  * stand-alone methods for creating and finding log entries.
@@ -49,8 +48,8 @@ import com.choicemaker.cm.transitivity.api.TransitivityProcessingEvent;
 @Stateless
 public class TransitivityEventManager implements EventPersistenceManager {
 
-	private static final Logger logger = Logger
-			.getLogger(TransitivityEventManager.class.getName());
+	private static final Logger logger =
+		Logger.getLogger(TransitivityEventManager.class.getName());
 
 	// Don't use this directly; use isOrderByDebuggingRequested() instead
 	static Boolean _isOrderByDebuggingRequested = null;
@@ -85,8 +84,8 @@ public class TransitivityEventManager implements EventPersistenceManager {
 		return deletedCount;
 	}
 
-	static TransitivityProcessingEvent updateStatus(EntityManager em, BatchJob job,
-			ProcessingEvent event, Date timestamp, String info) {
+	static TransitivityProcessingEvent updateStatus(EntityManager em,
+			BatchJob job, ProcessingEvent event, Date timestamp, String info) {
 		if (em == null) {
 			throw new IllegalArgumentException("null EntityManager");
 		}
@@ -119,8 +118,7 @@ public class TransitivityEventManager implements EventPersistenceManager {
 		TransitivityNotification data = new TransitivityNotification(ope);
 		ObjectMessage message = jmsContext.createObjectMessage(data);
 		JMSProducer sender = jmsContext.createProducer();
-		logger.info(MessageBeanUtils
-				.topicInfo("Sending", statusTopic, data));
+		logger.info(MessageBeanUtils.topicInfo("Sending", statusTopic, data));
 		sender.send(statusTopic, message);
 		logger.info(MessageBeanUtils.topicInfo("Sent", statusTopic, data));
 	}
@@ -130,7 +128,8 @@ public class TransitivityEventManager implements EventPersistenceManager {
 	 */
 	static boolean isOrderByDebuggingRequested() {
 		if (_isOrderByDebuggingRequested == null) {
-			String pn = EventPersistenceManager.PN_PROCESSINGEVENT_ORDERBY_DEBUGGING;
+			String pn =
+				EventPersistenceManager.PN_PROCESSINGEVENT_ORDERBY_DEBUGGING;
 			String defaultValue = Boolean.FALSE.toString();
 			String value = System.getProperty(pn, defaultValue);
 			_isOrderByDebuggingRequested = Boolean.valueOf(value);
@@ -144,9 +143,8 @@ public class TransitivityEventManager implements EventPersistenceManager {
 
 	static BatchProcessingEvent getCurrentBatchProcessingEvent(EntityManager em,
 			BatchJob batchJob) {
-		List<BatchProcessingEvent> entries =
-			TransitivityEventManager.findProcessingLogEntriesByJobId(em,
-					batchJob.getId());
+		List<BatchProcessingEvent> entries = TransitivityEventManager
+				.findProcessingLogEntriesByJobId(em, batchJob.getId());
 		final BatchProcessingEvent retVal;
 		if (entries == null || entries.isEmpty()) {
 			retVal = null;
@@ -161,10 +159,9 @@ public class TransitivityEventManager implements EventPersistenceManager {
 						if (mostRecent.compareTo(d2) < 0) {
 							String summary =
 								"Invalid BatchProcessingEvent ordering";
-							String msg =
-								TransitivityEventManager
-										.createOrderingDetailMesssage(summary,
-												retVal, e2);
+							String msg = TransitivityEventManager
+									.createOrderingDetailMesssage(summary,
+											retVal, e2);
 							logger.severe(msg);
 							throw new IllegalStateException(summary);
 
@@ -174,10 +171,9 @@ public class TransitivityEventManager implements EventPersistenceManager {
 							// may be disambiguated by ordering of ids
 							String summary =
 								"Ambiguous BatchProcessingEvent timestamps";
-							String msg =
-								TransitivityEventManager
-										.createOrderingDetailMesssage(summary,
-												retVal, e2);
+							String msg = TransitivityEventManager
+									.createOrderingDetailMesssage(summary,
+											retVal, e2);
 							logger.fine(msg);
 						}
 					}
@@ -208,8 +204,7 @@ public class TransitivityEventManager implements EventPersistenceManager {
 	private Topic transStatusTopic;
 
 	@Override
-	public List<BatchProcessingEvent> findProcessingEventsByJobId(
-			long id) {
+	public List<BatchProcessingEvent> findProcessingEventsByJobId(long id) {
 		return findProcessingLogEntriesByJobId(em, id);
 	}
 
@@ -229,8 +224,8 @@ public class TransitivityEventManager implements EventPersistenceManager {
 	}
 
 	@Override
-	public void updateStatusWithNotification(BatchJob job, ProcessingEvent event,
-			Date timestamp, String info) {
+	public void updateStatusWithNotification(BatchJob job,
+			ProcessingEvent event, Date timestamp, String info) {
 		updateStatusWithNotification(em, jmsContext, transStatusTopic, job,
 				event, timestamp, info);
 	}

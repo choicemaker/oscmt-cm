@@ -27,7 +27,7 @@ import com.choicemaker.cm.core.Record;
 
 /**
  *
- * @author    
+ * @author
  * @deprecated Write a JUnit test instead of trying to use this one
  */
 @Deprecated
@@ -37,7 +37,7 @@ public class TestDatabaseAccessor implements DatabaseAccessor {
 	@Override
 	public void setDataSource(DataSource dataSource) {
 	}
-	
+
 	@Override
 	public void setCondition(Object condition) {
 	}
@@ -48,7 +48,7 @@ public class TestDatabaseAccessor implements DatabaseAccessor {
 
 	@Override
 	public DatabaseAccessor cloneWithNewConnection()
-		throws CloneNotSupportedException {
+			throws CloneNotSupportedException {
 		throw new CloneNotSupportedException("not yet implemented");
 	}
 
@@ -62,7 +62,7 @@ public class TestDatabaseAccessor implements DatabaseAccessor {
 			String join = null;
 			String uniqueId = null;
 			int numTables = bs.getNumTables();
-			for(int i = 0; i < numTables; ++i) {
+			for (int i = 0; i < numTables; ++i) {
 				IGroupTable gt = bs.getTable(i);
 				String alias = " v" + gt.getTable().getNum() + gt.getGroup();
 				if (join == null) {
@@ -72,21 +72,24 @@ public class TestDatabaseAccessor implements DatabaseAccessor {
 					from.append(", ");
 					if (where.length() > 0)
 						where.append(" and ");
-					where.append(join + "." + uniqueId + " = " + alias + "." + uniqueId);
+					where.append(join + "." + uniqueId + " = " + alias + "."
+							+ uniqueId);
 				}
 				from.append(gt.getTable().getName() + alias);
 			}
 			int numValues = bs.numFields();
-			for(int i = 0; i < numValues; ++i) {
+			for (int i = 0; i < numValues; ++i) {
 				IBlockingValue bv = bs.getBlockingValue(i);
 				IBlockingField bf = bv.getBlockingField();
 				IDbField dbf = bf.getDbField();
 				IDbTable dbt = dbf.getTable();
 				if (where.length() > 0)
 					where.append(" and ");
-				where.append("v" + dbt.getNum() + bf.getGroup() + "." + dbf.getName() + " = '" + bv.getValue() + "'");
+				where.append("v" + dbt.getNum() + bf.getGroup() + "."
+						+ dbf.getName() + " = '" + bv.getValue() + "'");
 			}
-			String query = "SELECT COUNT(DISTINCT " + join + "." + uniqueId + ") FROM " + from + " where " + where;
+			String query = "SELECT COUNT(DISTINCT " + join + "." + uniqueId
+					+ ") FROM " + from + " where " + where;
 			Statement stmt = connection.createStatement();
 			ResultSet rs = stmt.executeQuery(query);
 			rs.next();
@@ -103,35 +106,28 @@ public class TestDatabaseAccessor implements DatabaseAccessor {
 	public void open(AutomatedBlocker blocker, String databaseConfiguration)
 			throws IOException {
 		System.out.println("=============== open");
-		Iterator<IBlockingSet> iBlockingSets = blocker.getBlockingSets().iterator();
+		Iterator<IBlockingSet> iBlockingSets =
+			blocker.getBlockingSets().iterator();
 		int i = 0;
 		while (iBlockingSets.hasNext()) {
 			IBlockingSet bs = iBlockingSets.next();
 
-			System.out.println(
-				"------------- Blocking Set " + i + ": " + bs.getExpectedCount() + " : " + getActualCount(bs));
+			System.out.println("------------- Blocking Set " + i + ": "
+					+ bs.getExpectedCount() + " : " + getActualCount(bs));
 			int numValues = bs.numFields();
-			for(int j = 0; j < numValues; ++j) {
+			for (int j = 0; j < numValues; ++j) {
 				IBlockingValue bv = bs.getBlockingValue(i);
 				IBlockingField bf = bv.getBlockingField();
 				IDbField dbf = bf.getDbField();
-				System.out.println(
-					"bf: "
-						+ bf.getNumber()
-						+ ", table: "
-						+ dbf.getTable().getName()
-						+ ", field: "
-						+ dbf.getName()
-						+ ", val: "
-						+ bv.getValue()
-						+ ", count: "
-						+ bv.getCount()
-						+ ", table size: "
-						+ bv.getTableSize());
+				System.out.println("bf: " + bf.getNumber() + ", table: "
+						+ dbf.getTable().getName() + ", field: " + dbf.getName()
+						+ ", val: " + bv.getValue() + ", count: "
+						+ bv.getCount() + ", table size: " + bv.getTableSize());
 			}
 			++i;
 		}
 	}
+
 	@Override
 	public void close() {
 		System.out.println("close");
@@ -141,11 +137,13 @@ public class TestDatabaseAccessor implements DatabaseAccessor {
 			ex.printStackTrace();
 		}
 	}
+
 	@Override
 	public boolean hasNext() {
 		System.out.println("hasNext");
 		return false;
 	}
+
 	@Override
 	public Record getNext() {
 		return null;

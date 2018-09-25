@@ -23,14 +23,14 @@ import com.choicemaker.cm.batch.api.WorkflowListener;
 /**
  * Base class for UrmOabaListenerMDB and UrmTransitivityListenerMDB
  */
-public abstract class AbstractStatusListener implements MessageListener,
-		Serializable {
+public abstract class AbstractStatusListener
+		implements MessageListener, Serializable {
 
 	private static final long serialVersionUID = 271L;
-	private static final Logger log = Logger
-			.getLogger(AbstractStatusListener.class.getName());
-	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
-			+ AbstractStatusListener.class.getName());
+	private static final Logger log =
+		Logger.getLogger(AbstractStatusListener.class.getName());
+	private static final Logger jmsTrace =
+		Logger.getLogger("jmstrace." + AbstractStatusListener.class.getName());
 
 	protected abstract WorkflowListener getWorkFlowManager();
 

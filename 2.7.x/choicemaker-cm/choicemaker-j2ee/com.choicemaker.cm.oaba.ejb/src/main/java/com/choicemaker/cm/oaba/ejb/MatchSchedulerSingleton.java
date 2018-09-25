@@ -59,10 +59,10 @@ import com.choicemaker.cm.oaba.services.ChunkService3;
 public class MatchSchedulerSingleton extends AbstractSchedulerSingleton {
 
 	private static final long serialVersionUID = 271L;
-	private static final Logger log = Logger
-			.getLogger(MatchSchedulerSingleton.class.getName());
-	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
-			+ MatchSchedulerSingleton.class.getName());
+	private static final Logger log =
+		Logger.getLogger(MatchSchedulerSingleton.class.getName());
+	private static final Logger jmsTrace =
+		Logger.getLogger("jmstrace." + MatchSchedulerSingleton.class.getName());
 
 	// -- Injected data
 
@@ -160,7 +160,8 @@ public class MatchSchedulerSingleton extends AbstractSchedulerSingleton {
 		ServerConfiguration serverConfig =
 			getServerController().findServerConfigurationByJobId(jobId);
 		final String modelConfigId = params.getModelConfigurationName();
-		ImmutableProbabilityModel model = PMManager.getModelInstance(modelConfigId);
+		ImmutableProbabilityModel model =
+			PMManager.getModelInstance(modelConfigId);
 		if (model == null) {
 			String s = "No modelId corresponding to '" + modelConfigId + "'";
 			log.severe(s);
@@ -170,14 +171,12 @@ public class MatchSchedulerSingleton extends AbstractSchedulerSingleton {
 		int numProcessors = serverConfig.getMaxChoiceMakerThreads();
 
 		// remove the data
-		final String _numChunks =
-			getPropertyController()
-					.getJobProperty(batchJob, PN_CHUNK_FILE_COUNT);
+		final String _numChunks = getPropertyController()
+				.getJobProperty(batchJob, PN_CHUNK_FILE_COUNT);
 		final int numChunks = Integer.valueOf(_numChunks);
 
-		final String _numRegularChunks =
-			getPropertyController().getJobProperty(batchJob,
-					PN_REGULAR_CHUNK_FILE_COUNT);
+		final String _numRegularChunks = getPropertyController()
+				.getJobProperty(batchJob, PN_REGULAR_CHUNK_FILE_COUNT);
 		final int numRegularChunks = Integer.valueOf(_numRegularChunks);
 
 		IChunkDataSinkSourceFactory stageFactory =
@@ -206,9 +205,8 @@ public class MatchSchedulerSingleton extends AbstractSchedulerSingleton {
 		final int numOS = numChunks - numRegularChunks;
 
 		// remove the oversized array files
-		ComparisonArrayGroupSinkSourceFactory factoryOS =
-			OabaFileUtils.getComparisonArrayGroupFactoryOS(batchJob,
-					numProcessors);
+		ComparisonArrayGroupSinkSourceFactory factoryOS = OabaFileUtils
+				.getComparisonArrayGroupFactoryOS(batchJob, numProcessors);
 		for (int i = 0; i < numOS; i++) {
 			for (int j = 1; j <= numProcessors; j++) {
 				@SuppressWarnings("rawtypes")
@@ -226,13 +224,14 @@ public class MatchSchedulerSingleton extends AbstractSchedulerSingleton {
 	@Override
 	protected void sendToUpdateStatus(BatchJob job, ProcessingEvent event,
 			Date timestamp, String info) {
-		getEventManager().updateStatusWithNotification(job, event,
-				timestamp, info);
+		getEventManager().updateStatusWithNotification(job, event, timestamp,
+				info);
 	}
 
 	@Override
 	protected void sendToMatchDebup(BatchJob job, OabaJobMessage sd) {
-		MessageBeanUtils.sendStartData(sd, getJmsContext(), matchDedupQueue, log);
+		MessageBeanUtils.sendStartData(sd, getJmsContext(), matchDedupQueue,
+				log);
 	}
 
 	@Override

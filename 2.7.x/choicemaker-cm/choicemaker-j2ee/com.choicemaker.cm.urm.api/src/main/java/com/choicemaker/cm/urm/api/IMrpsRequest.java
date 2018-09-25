@@ -25,7 +25,8 @@ import com.choicemaker.cm.urm.exceptions.ConfigException;
  * An MrpsRequest contains the information necessary to start the back-end
  * processing of an MRPS job.
  */
-@SuppressWarnings({ "rawtypes" })
+@SuppressWarnings({
+		"rawtypes" })
 public interface IMrpsRequest extends Serializable, Cloneable {
 
 	MarkedRecordPairSink getMarkedRecordPairSink(EntityManager em)

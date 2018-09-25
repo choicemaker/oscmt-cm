@@ -25,7 +25,8 @@ import java.util.Iterator;
  *
  *         ChoiceMaker Technologies, Inc.
  */
-@SuppressWarnings({ "rawtypes" })
+@SuppressWarnings({
+		"rawtypes" })
 public class MatchBiMatchHoldFullyConnectedIterator implements Iterator {
 
 	public static final String NAME = "BCM_FCMH";

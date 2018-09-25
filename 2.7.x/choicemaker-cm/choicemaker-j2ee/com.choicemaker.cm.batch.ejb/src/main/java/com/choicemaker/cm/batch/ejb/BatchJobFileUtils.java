@@ -27,8 +27,8 @@ public class BatchJobFileUtils {
 
 	public static final String DEFAULT_PREFIX = "job";
 
-	public static final String FILE_SEPARATOR = System
-			.getProperty(SystemPropertyUtils.PN_FILE_SEPARATOR);
+	public static final String FILE_SEPARATOR =
+		System.getProperty(SystemPropertyUtils.PN_FILE_SEPARATOR);
 
 	public static final String FMT = "00000";
 
@@ -51,7 +51,8 @@ public class BatchJobFileUtils {
 		return computeWorkingDirectoryName(DEFAULT_PREFIX, job);
 	}
 
-	public static String computeWorkingDirectoryName(String stem, BatchJob job) {
+	public static String computeWorkingDirectoryName(String stem,
+			BatchJob job) {
 		if (job == null) {
 			throw new IllegalArgumentException("null job");
 		}
@@ -81,7 +82,8 @@ public class BatchJobFileUtils {
 		// FileAttribute<Set<PosixFilePermission>> attrs =
 		// PosixFilePermissions.asFileAttribute(permissions);
 		try {
-			String userHome = System.getProperty(SystemPropertyUtils.PN_USER_HOME);
+			String userHome =
+				System.getProperty(SystemPropertyUtils.PN_USER_HOME);
 			Path userPath = Paths.get(userHome);
 			retVal =
 				Files.createTempDirectory(userPath, TEMP_WORKING_DIR_PREFIX)
@@ -151,10 +153,9 @@ public class BatchJobFileUtils {
 		if (!parentDir.exists() || !parentDir.isDirectory()
 				|| !parentDir.canWrite() || !parentDir.canRead()) {
 			final String pd = parentDir.getAbsolutePath();
-			String msg =
-				"Location '" + pd + "'"
-						+ " does not exist, or is not a directory"
-						+ ", cannot be read or cannot be written";
+			String msg = "Location '" + pd + "'"
+					+ " does not exist, or is not a directory"
+					+ ", cannot be read or cannot be written";
 			throw new IllegalArgumentException(msg);
 		}
 

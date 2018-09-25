@@ -5,7 +5,9 @@ public interface BatchProcessingEventJPA {
 	/** Name of the table that persists batch job data */
 	String TABLE_NAME = "CMT_OABA_BATCH_PROCESSING";
 
-	/** Name of the column used to distinguish between batch jobs and sub-types */
+	/**
+	 * Name of the column used to distinguish between batch jobs and sub-types
+	 */
 	String DISCRIMINATOR_COLUMN = "EVENT_TYPE";
 
 	/**
@@ -35,7 +37,9 @@ public interface BatchProcessingEventJPA {
 	/** The name of an event */
 	String CN_EVENT_NAME = "EVENT_NAME";
 
-	/** An ordinal indicating the order of an event with respect to other events */
+	/**
+	 * An ordinal indicating the order of an event with respect to other events
+	 */
 	String CN_EVENT_SEQNUM = "EVENT_SEQNUM";
 
 	/**
@@ -44,7 +48,9 @@ public interface BatchProcessingEventJPA {
 	 */
 	String CN_FRACTION_COMPLETE = "FRACTION_COMPLETE";
 
-	/** Internally defined transaction id that links several related batch jobs */
+	/**
+	 * Internally defined transaction id that links several related batch jobs
+	 */
 	String CN_EVENT_INFO = "EVENT_INFO";
 
 	/** Timestamp column of the audit table */

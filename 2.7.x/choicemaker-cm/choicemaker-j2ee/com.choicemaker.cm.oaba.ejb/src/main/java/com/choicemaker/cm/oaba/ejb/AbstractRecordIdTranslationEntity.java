@@ -71,8 +71,8 @@ public abstract class AbstractRecordIdTranslationEntity<T extends Comparable<T>>
 
 	private static final long serialVersionUID = 271;
 
-	private static final Logger logger = Logger
-			.getLogger(AbstractRecordIdTranslationEntity.class.getName());
+	private static final Logger logger =
+		Logger.getLogger(AbstractRecordIdTranslationEntity.class.getName());
 
 	/** Magic values to indicate an non-initialized record id */
 	public static final String INVALID_RECORD_ID = null;
@@ -319,7 +319,8 @@ public abstract class AbstractRecordIdTranslationEntity<T extends Comparable<T>>
 					return retVal;
 				}
 			}
-			assert (this.getRecordIdType() == null && trid.getRecordIdType() == null)
+			assert (this.getRecordIdType() == null
+					&& trid.getRecordIdType() == null)
 					|| this.getRecordIdType().equals(trid.getRecordIdType());
 
 			if (this.getRecordSourceRole() == null
@@ -330,18 +331,17 @@ public abstract class AbstractRecordIdTranslationEntity<T extends Comparable<T>>
 				return LESS_THAN;
 			else if (this.getRecordSourceRole() != null
 					&& trid.getRecordSourceRole() != null) {
-				int retVal =
-					this.getRecordSourceRole().compareTo(
-							trid.getRecordSourceRole());
+				int retVal = this.getRecordSourceRole()
+						.compareTo(trid.getRecordSourceRole());
 				if (retVal != 0) {
 					inconsistentRecordSources(this, trid);
 					return retVal;
 				}
 			}
-			assert (this.getRecordSourceRole() == null && trid
-					.getRecordSourceRole() == null)
-					|| this.getRecordSourceRole().equals(
-							trid.getRecordSourceRole());
+			assert (this.getRecordSourceRole() == null
+					&& trid.getRecordSourceRole() == null)
+					|| this.getRecordSourceRole()
+							.equals(trid.getRecordSourceRole());
 
 		}
 
@@ -350,35 +350,34 @@ public abstract class AbstractRecordIdTranslationEntity<T extends Comparable<T>>
 	}
 
 	protected static void inconsistentRecordSources(
-			AbstractRecordIdTranslationEntity<?> o1, RecordIdTranslation<?> o2) {
+			AbstractRecordIdTranslationEntity<?> o1,
+			RecordIdTranslation<?> o2) {
 		assert o1 != null && o2 != null;
-		String msg =
-			"Inconsistent record sources: same job id (" + o1.getJobId()
-					+ "), same translated id (" + o1.getTranslatedId()
-					+ ") but different record sources (" + o1.getRecordId()
-					+ ", " + o2.getRecordId() + ")";
+		String msg = "Inconsistent record sources: same job id ("
+				+ o1.getJobId() + "), same translated id ("
+				+ o1.getTranslatedId() + ") but different record sources ("
+				+ o1.getRecordId() + ", " + o2.getRecordId() + ")";
 		logger.warning(msg);
 	}
 
 	protected static void inconsistentRecordTypes(
-			AbstractRecordIdTranslationEntity<?> o1, RecordIdTranslation<?> o2) {
+			AbstractRecordIdTranslationEntity<?> o1,
+			RecordIdTranslation<?> o2) {
 		assert o1 != null && o2 != null;
-		String msg =
-			"Inconsistent record-id translations: same job id ("
-					+ o1.getJobId() + "), same translated id ("
-					+ o1.getTranslatedId() + ") but different record types ("
-					+ o1.getRecordId() + ", " + o2.getRecordId() + ")";
+		String msg = "Inconsistent record-id translations: same job id ("
+				+ o1.getJobId() + "), same translated id ("
+				+ o1.getTranslatedId() + ") but different record types ("
+				+ o1.getRecordId() + ", " + o2.getRecordId() + ")";
 		logger.warning(msg);
 	}
 
 	protected static void inconsistentRecordIds(RecordIdTranslation<?> o1,
 			RecordIdTranslation<?> o2) {
 		assert o1 != null && o2 != null;
-		String msg =
-			"Inconsistent record-id translations: same job id ("
-					+ o1.getJobId() + "), same translated id ("
-					+ o1.getTranslatedId() + ") but different record ids ("
-					+ o1.getRecordId() + ", " + o2.getRecordId() + ")";
+		String msg = "Inconsistent record-id translations: same job id ("
+				+ o1.getJobId() + "), same translated id ("
+				+ o1.getTranslatedId() + ") but different record ids ("
+				+ o1.getRecordId() + ", " + o2.getRecordId() + ")";
 		logger.warning(msg);
 	}
 

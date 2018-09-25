@@ -56,8 +56,8 @@ import com.choicemaker.cm.oaba.api.MutableServerConfiguration;
 				query = JPQL_SERVERCONFIG_FIND_BY_HOSTNAME),
 		@NamedQuery(name = QN_SERVERCONFIG_FIND_BY_NAME,
 				query = JPQL_SERVERCONFIG_FIND_BY_NAME),
-// @NamedQuery(name = QN_SERVERCONFIG_FIND_ANY_HOST,
-// query = JPQL_SERVERCONFIG_FIND_ANY_HOST)
+		// @NamedQuery(name = QN_SERVERCONFIG_FIND_ANY_HOST,
+		// query = JPQL_SERVERCONFIG_FIND_ANY_HOST)
 })
 @Entity
 @Table(/* schema = "CHOICEMAKER", */name = TABLE_NAME)
@@ -65,8 +65,8 @@ public class ServerConfigurationEntity implements MutableServerConfiguration {
 
 	private static final long serialVersionUID = 271L;
 
-	private static final Logger logger = Logger
-			.getLogger(ServerConfigurationEntity.class.getName());
+	private static final Logger logger =
+		Logger.getLogger(ServerConfigurationEntity.class.getName());
 
 	public static long NON_PERSISTENT_ID = 0;
 
@@ -273,8 +273,8 @@ public class ServerConfigurationEntity implements MutableServerConfiguration {
 				if (sc2.getWorkingDirectoryLocationUriString() != null) {
 					break check;
 				}
-			} else if (!sc1.getWorkingDirectoryLocationUriString().equals(
-					sc2.getWorkingDirectoryLocationUriString())) {
+			} else if (!sc1.getWorkingDirectoryLocationUriString()
+					.equals(sc2.getWorkingDirectoryLocationUriString())) {
 				break check;
 			}
 			if (sc1.getMaxOabaChunkFileCount() != sc2
@@ -350,20 +350,20 @@ public class ServerConfigurationEntity implements MutableServerConfiguration {
 			throw new IllegalArgumentException("null location");
 		}
 		if (!location.exists()) {
-			throw new IllegalArgumentException("location does not exist: "
-					+ location);
+			throw new IllegalArgumentException(
+					"location does not exist: " + location);
 		}
 		if (!location.isDirectory()) {
-			throw new IllegalArgumentException("location is not a directory: "
-					+ location);
+			throw new IllegalArgumentException(
+					"location is not a directory: " + location);
 		}
 		if (!location.canWrite()) {
-			throw new IllegalArgumentException("location can not be written: "
-					+ location);
+			throw new IllegalArgumentException(
+					"location can not be written: " + location);
 		}
 		if (!location.canRead()) {
-			throw new IllegalArgumentException("location can not be read: "
-					+ location);
+			throw new IllegalArgumentException(
+					"location can not be read: " + location);
 		}
 		this.fileURI = location.toURI().toString();
 	}

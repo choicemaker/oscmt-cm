@@ -37,8 +37,8 @@ import com.choicemaker.util.Precondition;
  */
 public class MessageBeanUtils {
 
-	private static final Logger log0 = Logger.getLogger(MessageBeanUtils.class
-			.getName());
+	private static final Logger log0 =
+		Logger.getLogger(MessageBeanUtils.class.getName());
 
 	public static final String DEFAULT_TAG = "UNKNOWN SOURCE";
 	public static final String UNKNOWN_QUEUE = "unknown queue";
@@ -49,12 +49,14 @@ public class MessageBeanUtils {
 	 * removes the temporary directory for the job.
 	 */
 	public static void stopJob(BatchJob batchJob, BatchJobManager jobManager,
-			OperationalPropertyController propController, ProcessingEventLog status) {
+			OperationalPropertyController propController,
+			ProcessingEventLog status) {
 
-    Precondition.assertNonNullArgument("null batchJob", batchJob);
-    Precondition.assertNonNullArgument("null jobManager", jobManager);
-    Precondition.assertNonNullArgument("null propController", propController);
-    Precondition.assertNonNullArgument("null status", status);
+		Precondition.assertNonNullArgument("null batchJob", batchJob);
+		Precondition.assertNonNullArgument("null jobManager", jobManager);
+		Precondition.assertNonNullArgument("null propController",
+				propController);
+		Precondition.assertNonNullArgument("null status", status);
 
 		batchJob.markAsAborted();
 		jobManager.save(batchJob);

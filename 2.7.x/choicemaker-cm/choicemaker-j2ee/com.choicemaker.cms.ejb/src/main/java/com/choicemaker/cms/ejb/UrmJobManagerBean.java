@@ -26,8 +26,8 @@ import com.choicemaker.cms.api.UrmJobManager;
 @Stateless
 public class UrmJobManagerBean implements UrmJobManager {
 
-	private static final Logger logger = Logger
-			.getLogger(UrmJobManagerBean.class.getName());
+	private static final Logger logger =
+		Logger.getLogger(UrmJobManagerBean.class.getName());
 
 	@PersistenceContext(unitName = "oaba")
 	private EntityManager em;
@@ -102,10 +102,8 @@ public class UrmJobManagerBean implements UrmJobManager {
 
 	@Override
 	public List<BatchJob> findAllLinkedByUrmId(long urmId) {
-		Query query =
-			em.createNamedQuery(UrmJobJPA.QN_URM_FIND_ALL_BY_URM_ID);
-		query.setParameter(UrmJobJPA.PN_URM_FIND_ALL_BY_URM_ID_URMID,
-				urmId);
+		Query query = em.createNamedQuery(UrmJobJPA.QN_URM_FIND_ALL_BY_URM_ID);
+		query.setParameter(UrmJobJPA.PN_URM_FIND_ALL_BY_URM_ID_URMID, urmId);
 		@SuppressWarnings("unchecked")
 		List<BatchJob> retVal = query.getResultList();
 		if (retVal == null) {
@@ -117,8 +115,7 @@ public class UrmJobManagerBean implements UrmJobManager {
 	@Override
 	public void delete(BatchJob urmJob) {
 		if (urmJob.isPersistent()) {
-			UrmJobEntity bean =
-				em.find(UrmJobEntity.class, urmJob.getId());
+			UrmJobEntity bean = em.find(UrmJobEntity.class, urmJob.getId());
 			delete(bean);
 		}
 	}

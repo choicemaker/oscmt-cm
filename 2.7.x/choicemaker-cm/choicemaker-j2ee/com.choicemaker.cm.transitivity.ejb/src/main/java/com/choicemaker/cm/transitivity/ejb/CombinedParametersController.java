@@ -15,8 +15,7 @@ import com.choicemaker.cm.oaba.api.AbstractParameters;
 import com.choicemaker.cm.oaba.api.OabaParametersController;
 import com.choicemaker.cm.transitivity.api.TransitivityParametersController;
 
-public class CombinedParametersController implements
-		OabaParametersController {
+public class CombinedParametersController implements OabaParametersController {
 
 	private final OabaParametersController o;
 	private final TransitivityParametersController t;
@@ -50,8 +49,7 @@ public class CombinedParametersController implements
 
 	@Override
 	public List<OabaParameters> findAllOabaParameters() {
-		List<TransitivityParameters> tps =
-			t.findAllTransitivityParameters();
+		List<TransitivityParameters> tps = t.findAllTransitivityParameters();
 		List<OabaParameters> ops = o.findAllOabaParameters();
 		ops.addAll(tps);
 		return ops;

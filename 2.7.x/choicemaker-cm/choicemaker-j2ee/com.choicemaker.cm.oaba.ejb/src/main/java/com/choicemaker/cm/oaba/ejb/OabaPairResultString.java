@@ -35,7 +35,8 @@ public class OabaPairResultString extends AbstractPairResultEntity<String> {
 	private static final long serialVersionUID = 271L;
 
 	public OabaPairResultString(BatchJob job, String id1, String id2,
-			RECORD_SOURCE_ROLE record2Role, float p, Decision d, String[] notes) {
+			RECORD_SOURCE_ROLE record2Role, float p, Decision d,
+			String[] notes) {
 		super(job.getId(), RECORD_ID_TYPE.TYPE_INTEGER.getCharSymbol(), id1,
 				id2, record2Role.getCharSymbol(), p, d.toSingleChar(), notes,
 				null);

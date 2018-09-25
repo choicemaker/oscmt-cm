@@ -58,11 +58,11 @@ public class OabaServiceBean implements OabaService {
 
 	// private static final long serialVersionUID = 271L;
 
-	private static final String SOURCE_CLASS = OabaServiceBean.class
-			.getSimpleName();
+	private static final String SOURCE_CLASS =
+		OabaServiceBean.class.getSimpleName();
 
-	private static final Logger logger = Logger.getLogger(OabaServiceBean.class
-			.getName());
+	private static final Logger logger =
+		Logger.getLogger(OabaServiceBean.class.getName());
 
 	@EJB
 	private OabaJobManager jobManager;
@@ -130,12 +130,13 @@ public class OabaServiceBean implements OabaService {
 				if (bp.getReferenceRsId() == null
 						|| bp.getReferenceRsType() == null) {
 					validityErrors
-							.add("null master source parameter for linkage type: " + type);
+							.add("null master source parameter for linkage type: "
+									+ type);
 				}
 			}
 			if (bp.getLowThreshold() < 0f || bp.getLowThreshold() > 1.0f) {
-				validityErrors.add("invalid DIFFER threshold: "
-						+ bp.getLowThreshold());
+				validityErrors.add(
+						"invalid DIFFER threshold: " + bp.getLowThreshold());
 			}
 			if (bp.getHighThreshold() < bp.getLowThreshold()) {
 				validityErrors.add("MATCH threshold (" + bp.getHighThreshold()
@@ -143,8 +144,8 @@ public class OabaServiceBean implements OabaService {
 						+ bp.getLowThreshold() + ")");
 			}
 			if (bp.getHighThreshold() > 1.0f) {
-				validityErrors.add("invalid MATCH threshold: "
-						+ bp.getHighThreshold());
+				validityErrors.add(
+						"invalid MATCH threshold: " + bp.getHighThreshold());
 			}
 			if (bp.getModelConfigurationName() == null
 					|| bp.getModelConfigurationName().trim().isEmpty()) {
@@ -171,9 +172,8 @@ public class OabaServiceBean implements OabaService {
 		}
 
 		if (!validityErrors.isEmpty()) {
-			String msg =
-				"Invalid parameters to OabaService.startOABA: "
-						+ validityErrors.toString();
+			String msg = "Invalid parameters to OabaService.startOABA: "
+					+ validityErrors.toString();
 			logger.severe(msg);
 			throw new IllegalArgumentException(msg);
 		}
@@ -183,8 +183,8 @@ public class OabaServiceBean implements OabaService {
 	public long startDeduplication(String externalID, OabaParameters bp,
 			OabaSettings oabaSettings, ServerConfiguration serverConfiguration,
 			BatchJob urmJob) throws ServerConfigurationException {
-		return startLinkage(externalID, bp, oabaSettings,
-				serverConfiguration, urmJob);
+		return startLinkage(externalID, bp, oabaSettings, serverConfiguration,
+				urmJob);
 	}
 
 	@Override
@@ -201,9 +201,8 @@ public class OabaServiceBean implements OabaService {
 				serverConfiguration);
 
 		// Create and persist the job and its associated objects
-		BatchJob oabaJob =
-			jobManager.createPersistentOabaJob(externalID, batchParams,
-					oabaSettings, serverConfiguration, urmJob);
+		BatchJob oabaJob = jobManager.createPersistentOabaJob(externalID,
+				batchParams, oabaSettings, serverConfiguration, urmJob);
 		final long retVal = oabaJob.getId();
 		assert oabaJob.isPersistent();
 		logger.info("Started offline matching (job id: " + retVal + ")");
@@ -243,7 +242,7 @@ public class OabaServiceBean implements OabaService {
 			logger.warning(msg);
 		} else {
 			batchJob.markAsAbortRequested();
-		  jobManager.save(batchJob);
+			jobManager.save(batchJob);
 			propController.setJobProperty(batchJob, PN_CLEAR_RESOURCES,
 					String.valueOf(cleanStatus));
 		}
@@ -262,8 +261,8 @@ public class OabaServiceBean implements OabaService {
 		return oabaJob.getStatus().name();
 	}
 
-	public boolean removeWorkingDirectory(long jobID) throws RemoteException,
-			NamingException {
+	public boolean removeWorkingDirectory(long jobID)
+			throws RemoteException, NamingException {
 		BatchJob job = jobManager.findBatchJob(jobID);
 		return BatchJobFileUtils.removeTempDir(job);
 	}
@@ -293,7 +292,7 @@ public class OabaServiceBean implements OabaService {
 			// that the job is queued.
 			logger.info("Resuming job " + jobID);
 			job.markAsReStarted();
-		  jobManager.save(job);
+			jobManager.save(job);
 			sendToStartOABA(jobID);
 			eventManager.updateStatusWithNotification(job, OabaEventBean.QUEUED,
 					new Date(), null);
@@ -319,8 +318,8 @@ public class OabaServiceBean implements OabaService {
 	 */
 	@Override
 	@Deprecated
-	public Object getMatchList(long jobID) throws RemoteException,
-			NamingException {
+	public Object getMatchList(long jobID)
+			throws RemoteException, NamingException {
 		throw new Error("no longer implemented");
 	}
 
@@ -335,13 +334,11 @@ public class OabaServiceBean implements OabaService {
 		if (!batchJob.getStatus().equals(BatchJobStatus.COMPLETED)) {
 			throw new IllegalStateException("The job has not completed.");
 		} else {
-			final String cachedResultsFileName =
-				propController.getJobProperty(batchJob,
-						PN_OABA_CACHED_RESULTS_FILE);
+			final String cachedResultsFileName = propController
+					.getJobProperty(batchJob, PN_OABA_CACHED_RESULTS_FILE);
 			logger.info("Cached OABA results file: " + cachedResultsFileName);
-			mrs =
-				new MatchRecord2Source(cachedResultsFileName,
-						EXTERNAL_DATA_FORMAT.STRING);
+			mrs = new MatchRecord2Source(cachedResultsFileName,
+					EXTERNAL_DATA_FORMAT.STRING);
 		}
 
 		return mrs;

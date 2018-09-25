@@ -63,11 +63,11 @@ public class StartOabaMDB extends AbstractOabaMDB {
 
 	private static final long serialVersionUID = 271L;
 
-	private static final Logger log = Logger.getLogger(StartOabaMDB.class
-			.getName());
+	private static final Logger log =
+		Logger.getLogger(StartOabaMDB.class.getName());
 
-	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
-			+ StartOabaMDB.class.getName());
+	private static final Logger jmsTrace =
+		Logger.getLogger("jmstrace." + StartOabaMDB.class.getName());
 
 	@Resource(lookup = "java:/choicemaker/urm/jms/blockQueue")
 	private Queue blockQueue;
@@ -90,21 +90,22 @@ public class StartOabaMDB extends AbstractOabaMDB {
 				final long jobId = data.jobID;
 				batchJob = getJobController().findBatchJob(jobId);
 
-				OabaParameters oabaParams =
-					getParametersController().findOabaParametersByBatchJobId(
-							jobId);
+				OabaParameters oabaParams = getParametersController()
+						.findOabaParametersByBatchJobId(jobId);
 				OabaSettings oabaSettings =
 					getSettingsController().findOabaSettingsByJobId(jobId);
 				ProcessingEventLog processingEntry =
 					getEventManager().getProcessingLog(batchJob);
-				if (batchJob == null || oabaParams == null || oabaSettings == null) {
+				if (batchJob == null || oabaParams == null
+						|| oabaSettings == null) {
 					String s =
 						"Unable to find a job, parameters or settings for "
 								+ jobId;
 					getLogger().severe(s);
 					throw new IllegalArgumentException(s);
 				}
-				final String modelConfigId = oabaParams.getModelConfigurationName();
+				final String modelConfigId =
+					oabaParams.getModelConfigurationName();
 				ImmutableProbabilityModel model =
 					PMManager.getModelInstance(modelConfigId);
 				if (model == null) {
@@ -116,43 +117,40 @@ public class StartOabaMDB extends AbstractOabaMDB {
 
 				// update status to mark as start
 				batchJob.markAsStarted();
-		    getJobController().save(batchJob);
+				getJobController().save(batchJob);
 
 				getLogger().info("Job id: " + jobId);
-				getLogger().info(
-						"Model configuration: "
-								+ oabaParams.getModelConfigurationName());
+				getLogger().info("Model configuration: "
+						+ oabaParams.getModelConfigurationName());
 				getLogger().info(
 						"Differ threshold: " + oabaParams.getLowThreshold());
 				getLogger().info(
 						"Match threshold: " + oabaParams.getHighThreshold());
+				getLogger().info("Staging record source id: "
+						+ oabaParams.getQueryRsId());
+				getLogger().info("Staging record source type: "
+						+ oabaParams.getQueryRsType());
+				getLogger().info("Master record source id: "
+						+ oabaParams.getReferenceRsId());
+				getLogger().info("Master record source type: "
+						+ oabaParams.getReferenceRsType());
 				getLogger().info(
-						"Staging record source id: " + oabaParams.getQueryRsId());
-				getLogger().info(
-						"Staging record source type: "
-								+ oabaParams.getQueryRsType());
-				getLogger()
-						.info("Master record source id: "
-								+ oabaParams.getReferenceRsId());
-				getLogger().info(
-						"Master record source type: "
-								+ oabaParams.getReferenceRsType());
-				getLogger()
-						.info("Linkage type: " + oabaParams.getOabaLinkageType());
+						"Linkage type: " + oabaParams.getOabaLinkageType());
 
 				// check to see if there are a lot of records in stage.
 				// if not use single record matching instead of batch.
-				getLogger()
-						.info("Checking whether to use single- or batched-record blocking...");
 				getLogger().info(
-						"OabaSettings maxSingle: "
-								+ oabaSettings.getMaxSingle());
+						"Checking whether to use single- or batched-record blocking...");
+				getLogger().info("OabaSettings maxSingle: "
+						+ oabaSettings.getMaxSingle());
 
 				ISerializableRecordSource staging = null;
 				ISerializableRecordSource master = null;
 				try {
-					staging = getRecordSourceController().getStageRs(oabaParams);
-					master = getRecordSourceController().getMasterRs(oabaParams);
+					staging =
+						getRecordSourceController().getStageRs(oabaParams);
+					master =
+						getRecordSourceController().getMasterRs(oabaParams);
 				} catch (Exception e) {
 					throw new BlockingException(e.toString());
 				}
@@ -171,34 +169,28 @@ public class StartOabaMDB extends AbstractOabaMDB {
 					configureRecordMatchingMode(batchJob, mode);
 				}
 
-				final RecordIdController ric =getRecordIdController();
+				final RecordIdController ric = getRecordIdController();
 				MutableRecordIdTranslator<?> translator =
-					ric.createMutableRecordIdTranslator(
-							batchJob);
+					ric.createMutableRecordIdTranslator(batchJob);
 
 				// create rec_id, val_id files
 				String blockingConfiguration =
 					oabaParams.getBlockingConfiguration();
-				String queryConfiguration =
-					this.getParametersController()
-							.getQueryDatabaseConfiguration(oabaParams);
-				String referenceConfiguration =
-					this.getParametersController()
-							.getReferenceDatabaseConfiguration(oabaParams);
+				String queryConfiguration = this.getParametersController()
+						.getQueryDatabaseConfiguration(oabaParams);
+				String referenceConfiguration = this.getParametersController()
+						.getReferenceDatabaseConfiguration(oabaParams);
 				RecValSinkSourceFactory recvalFactory =
 					OabaFileUtils.getRecValFactory(batchJob);
 				final BatchJobControl control =
-						new BatchJobControl(this.getJobController(), batchJob);
-				RecValService3 rvService =
-					new RecValService3(staging, master, model,
-							blockingConfiguration, queryConfiguration,
-							referenceConfiguration, recvalFactory,
-							ric, translator,
-							processingEntry, control, mode);
+					new BatchJobControl(this.getJobController(), batchJob);
+				RecValService3 rvService = new RecValService3(staging, master,
+						model, blockingConfiguration, queryConfiguration,
+						referenceConfiguration, recvalFactory, ric, translator,
+						processingEntry, control, mode);
 				rvService.runService();
-				getLogger().info(
-						"Done creating rec_id, val_id files: "
-								+ rvService.getTimeElapsed());
+				getLogger().info("Done creating rec_id, val_id files: "
+						+ rvService.getTimeElapsed());
 
 				@SuppressWarnings("rawtypes")
 				ImmutableRecordIdTranslator immutableTranslator =
@@ -209,9 +201,9 @@ public class StartOabaMDB extends AbstractOabaMDB {
 						PN_RECORD_ID_TYPE, recordIdType.name());
 
 				final int numBlockFields = rvService.getNumBlockingFields();
-				getPropertyController()
-						.setJobProperty(batchJob, PN_BLOCKING_FIELD_COUNT,
-								String.valueOf(numBlockFields));
+				getPropertyController().setJobProperty(batchJob,
+						PN_BLOCKING_FIELD_COUNT,
+						String.valueOf(numBlockFields));
 
 				// create the validator after rvService
 				// Validator validator = new Validator (true, translator);
@@ -221,8 +213,8 @@ public class StartOabaMDB extends AbstractOabaMDB {
 				// object
 				data.validator = validator;
 
-				updateOabaProcessingStatus(batchJob,
-						OabaEventBean.DONE_REC_VAL, new Date(), null);
+				updateOabaProcessingStatus(batchJob, OabaEventBean.DONE_REC_VAL,
+						new Date(), null);
 				sendToBlocking(data);
 
 			} else {
@@ -235,13 +227,14 @@ public class StartOabaMDB extends AbstractOabaMDB {
 			log.severe(msg0);
 			if (batchJob != null) {
 				batchJob.markAsFailed();
-		    getJobController().save(batchJob);
+				getJobController().save(batchJob);
 			}
 		}
 		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
 	}
 
-	protected void configureRecordMatchingMode(BatchJob batchJob, RecordMatchingMode mode) {
+	protected void configureRecordMatchingMode(BatchJob batchJob,
+			RecordMatchingMode mode) {
 		getPropertyController().setJobProperty(batchJob,
 				PN_RECORD_MATCHING_MODE, mode.name());
 	}
@@ -286,8 +279,8 @@ public class StartOabaMDB extends AbstractOabaMDB {
 		}
 
 		boolean retVal = false;
-		getLogger().info(
-				"Checking if the number of records is more than the maxSingle threshold: "
+		getLogger()
+				.info("Checking if the number of records is more than the maxSingle threshold: "
 						+ threshold);
 		if (threshold <= 0) {
 			getLogger().info("The threshold shortcuts further checking");

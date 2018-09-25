@@ -46,7 +46,7 @@ import com.choicemaker.cm.batch.ejb.BatchJobEntity;
 @Entity
 @DiscriminatorValue(value = DISCRIMINATOR_VALUE)
 public class TransitivityJobEntity extends BatchJobEntity
-	/* implements IControl*/ {
+/* implements IControl */ {
 
 	private static final long serialVersionUID = 271L;
 
@@ -61,8 +61,9 @@ public class TransitivityJobEntity extends BatchJobEntity
 			OabaSettings settings, ServerConfiguration sc, BatchJob parent,
 			BatchJob urmJob, String externalId) {
 		this(DISCRIMINATOR_VALUE, params.getId(), settings.getId(), sc.getId(),
-				externalId, randomTransactionId(), parent.getId(),
-				urmJob == null ? PersistentObject.NONPERSISTENT_ID : urmJob.getId(),
+				externalId, randomTransactionId(),
+				parent.getId(), urmJob == null
+						? PersistentObject.NONPERSISTENT_ID : urmJob.getId(),
 				BatchJob.DEFAULT_RIGOR);
 	}
 
@@ -70,20 +71,22 @@ public class TransitivityJobEntity extends BatchJobEntity
 			OabaSettings settings, ServerConfiguration sc, BatchJob parent,
 			BatchJob urmJob, String externalId, BatchJobRigor bjr) {
 		this(DISCRIMINATOR_VALUE, params.getId(), settings.getId(), sc.getId(),
-				externalId, randomTransactionId(), parent.getId(),
-				urmJob == null ? PersistentObject.NONPERSISTENT_ID : urmJob.getId(), bjr);
+				externalId, randomTransactionId(),
+				parent.getId(), urmJob == null
+						? PersistentObject.NONPERSISTENT_ID : urmJob.getId(),
+				bjr);
 	}
 
 	public TransitivityJobEntity(BatchJob o) {
-		this(DISCRIMINATOR_VALUE, o.getParametersId(), o.getSettingsId(), o
-				.getServerId(), o.getExternalId(), o.getTransactionId(), o
-				.getBatchParentId(), o.getUrmId(), o.getBatchJobRigor());
+		this(DISCRIMINATOR_VALUE, o.getParametersId(), o.getSettingsId(),
+				o.getServerId(), o.getExternalId(), o.getTransactionId(),
+				o.getBatchParentId(), o.getUrmId(), o.getBatchJobRigor());
 		this.workingDirectory = o.getWorkingDirectory().getAbsolutePath();
 	}
 
-	protected TransitivityJobEntity(String type, long paramsId,
-			long settingsId, long serverId, String externalId, long tid,
-			long parentId, long urmid, BatchJobRigor bjr) {
+	protected TransitivityJobEntity(String type, long paramsId, long settingsId,
+			long serverId, String externalId, long tid, long parentId,
+			long urmid, BatchJobRigor bjr) {
 		super(type, paramsId, settingsId, serverId, externalId, tid, parentId,
 				urmid, bjr);
 	}
@@ -92,19 +95,16 @@ public class TransitivityJobEntity extends BatchJobEntity
 		final String wd = workingDir == null ? "null" : workingDir.toString();
 		if (workingDir == null || !workingDir.exists()
 				|| !workingDir.isDirectory()) {
-			String msg =
-				"Working directory '" + wd
-						+ "' is null, does not exist, or is not a directory";
+			String msg = "Working directory '" + wd
+					+ "' is null, does not exist, or is not a directory";
 			throw new IllegalArgumentException(msg);
 		}
 		if (!workingDir.canRead() || !workingDir.canWrite()) {
-			String msg =
-				"Working directory '" + wd
-						+ "' is not readable or not writeable";
+			String msg = "Working directory '" + wd
+					+ "' is not readable or not writeable";
 			throw new IllegalArgumentException(msg);
 		}
 		this.workingDirectory = workingDir.getAbsolutePath();
 	}
 
 } // TransitivityJobEntity
-

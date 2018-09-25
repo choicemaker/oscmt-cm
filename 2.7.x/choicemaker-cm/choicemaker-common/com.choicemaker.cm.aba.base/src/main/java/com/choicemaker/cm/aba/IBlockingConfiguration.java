@@ -14,9 +14,9 @@ public interface IBlockingConfiguration {
 	/**
 	 * A unique identifier for a a blocking configuration. When ABA statistics
 	 * are stored in a database, they are stored per blocking configuration,
-	 * where blocking configurations are identified by their ids. Currently,
-	 * the id of a blocking configuration is generated automatically from the
-	 * schema of a model and consists of four parts, separated by colons:
+	 * where blocking configurations are identified by their ids. Currently, the
+	 * id of a blocking configuration is generated automatically from the schema
+	 * of a model and consists of four parts, separated by colons:
 	 * <ol>
 	 * <li>the name of the model schema</li>
 	 * <li>the literal character <code>b</coded> (for <em>blocking</em>)</li>
@@ -34,8 +34,8 @@ public interface IBlockingConfiguration {
 	 * could be id collisions among ABA statistics persisted to a database. In
 	 * practice, this has yet to happen.
 	 *
-	 * @return a &quot;unique&quot; id that unambiguously identifies a
-	 *         blocking configuration.
+	 * @return a &quot;unique&quot; id that unambiguously identifies a blocking
+	 *         configuration.
 	 */
 	String getBlockingConfiguationId();
 
@@ -52,8 +52,8 @@ public interface IBlockingConfiguration {
 	 * equal.
 	 * <p>
 	 * Equality should not be based in part or in whole on the implementing
-	 * class, since the id alone is used for identifying distinct ABA
-	 * statistics in a database.
+	 * class, since the id alone is used for identifying distinct ABA statistics
+	 * in a database.
 	 * <p>
 	 * Equality should not be based on the values returned by the other
 	 * accessors, particularly <code>getBlockingFields()</code>. Because of the

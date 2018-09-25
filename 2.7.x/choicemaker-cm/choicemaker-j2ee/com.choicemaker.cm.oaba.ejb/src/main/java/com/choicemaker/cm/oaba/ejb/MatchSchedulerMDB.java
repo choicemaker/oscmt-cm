@@ -19,15 +19,13 @@ import javax.jms.MessageListener;
  * 
  * @author rphall
  */
-@MessageDriven(
-		activationConfig = {
-				@ActivationConfigProperty(propertyName = "maxSession",
-						propertyValue = "1"), // Singleton (JBoss only)
-				@ActivationConfigProperty(
-						propertyName = "destinationLookup",
-						propertyValue = "java:/choicemaker/urm/jms/matchSchedulerQueue"),
-				@ActivationConfigProperty(propertyName = "destinationType",
-						propertyValue = "javax.jms.Queue") })
+@MessageDriven(activationConfig = {
+		@ActivationConfigProperty(propertyName = "maxSession",
+				propertyValue = "1"), // Singleton (JBoss only)
+		@ActivationConfigProperty(propertyName = "destinationLookup",
+				propertyValue = "java:/choicemaker/urm/jms/matchSchedulerQueue"),
+		@ActivationConfigProperty(propertyName = "destinationType",
+				propertyValue = "javax.jms.Queue") })
 public class MatchSchedulerMDB implements MessageListener {
 
 	@EJB

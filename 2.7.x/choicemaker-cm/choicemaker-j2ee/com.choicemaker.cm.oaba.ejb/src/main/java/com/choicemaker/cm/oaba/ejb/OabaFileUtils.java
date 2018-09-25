@@ -115,7 +115,8 @@ public class OabaFileUtils {
 				BASENAME_COMPAREGROUP_STORE, BINARY_SUFFIX);
 	}
 
-	public static ChunkRecordIdSinkSourceFactory getChunkIDFactory(BatchJob job) {
+	public static ChunkRecordIdSinkSourceFactory getChunkIDFactory(
+			BatchJob job) {
 		String wd = BatchJobFileUtils.getWorkingDir(job);
 		return new ChunkRecordIdSinkSourceFactory(wd, BASENAME_CHUNKROW_STORE,
 				BINARY_SUFFIX);
@@ -176,7 +177,8 @@ public class OabaFileUtils {
 	@SuppressWarnings("rawtypes")
 	public static IMatchRecord2Sink getCompositeMatchSink(BatchJob job) {
 		String fileName = getCompositeMatchFileName(job);
-		return new MatchRecord2CompositeSink(fileName, TEXT_SUFFIX, MAX_FILE_SIZE);
+		return new MatchRecord2CompositeSink(fileName, TEXT_SUFFIX,
+				MAX_FILE_SIZE);
 	}
 
 	/**
@@ -209,7 +211,8 @@ public class OabaFileUtils {
 				"txt");
 	}
 
-	public static MatchRecord2SinkSourceFactory getMatchTempFactory(BatchJob job) {
+	public static MatchRecord2SinkSourceFactory getMatchTempFactory(
+			BatchJob job) {
 		String wd = BatchJobFileUtils.getWorkingDir(job);
 		return new MatchRecord2SinkSourceFactory(wd, BASENAME_MATCH_TEMP_STORE,
 				"txt");
@@ -229,7 +232,8 @@ public class OabaFileUtils {
 				BINARY_SUFFIX);
 	}
 
-	public static BlockSinkSourceFactory getOversizedGroupFactory(BatchJob job) {
+	public static BlockSinkSourceFactory getOversizedGroupFactory(
+			BatchJob job) {
 		String wd = BatchJobFileUtils.getWorkingDir(job);
 		return new BlockSinkSourceFactory(wd, BASENAME_OVERSIZED_GROUP_STORE,
 				BINARY_SUFFIX);
@@ -247,7 +251,8 @@ public class OabaFileUtils {
 				BINARY_SUFFIX);
 	}
 
-	public static MatchRecord2SinkSourceFactory getSet2MatchFactory(BatchJob job) {
+	public static MatchRecord2SinkSourceFactory getSet2MatchFactory(
+			BatchJob job) {
 		String wd = BatchJobFileUtils.getWorkingDir(job);
 		return new MatchRecord2SinkSourceFactory(wd, BASENAME_TWOMATCH_STORE,
 				TEXT_SUFFIX);
@@ -259,8 +264,8 @@ public class OabaFileUtils {
 			throw new IllegalArgumentException("null modelId");
 		}
 		String wd = BatchJobFileUtils.getWorkingDir(job);
-		return new ChunkDataSinkSourceFactory(wd,
-				BASENAME_CHUNKSTAGE_ROW_STORE, model);
+		return new ChunkDataSinkSourceFactory(wd, BASENAME_CHUNKSTAGE_ROW_STORE,
+				model);
 	}
 
 	public static SuffixTreeSink getSuffixTreeSink(BatchJob job) {

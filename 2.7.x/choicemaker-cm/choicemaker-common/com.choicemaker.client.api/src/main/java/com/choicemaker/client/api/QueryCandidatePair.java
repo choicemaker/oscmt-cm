@@ -10,15 +10,15 @@ import java.io.Serializable;
  * <p>
  * This class also defines equality and hashCode methods that are only
  * appropriate for OnlineMatching, because they assume that in a given
- * collection of records, only the query might have a null identifier; the
- * match candidate is assumed to be drawn from a database where the
- * identifier is non-null.
+ * collection of records, only the query might have a null identifier; the match
+ * candidate is assumed to be drawn from a database where the identifier is
+ * non-null.
  * 
  * @author rphall
  *
  * @param <T>
  */
-public /*final*/ class QueryCandidatePair<T extends Comparable<T> & Serializable>
+public /* final */ class QueryCandidatePair<T extends Comparable<T> & Serializable>
 		extends EvaluatedPair<T> {
 
 	private static final long serialVersionUID = 271L;

@@ -12,8 +12,8 @@ import java.io.Serializable;
 import com.choicemaker.cm.core.base.RECORD_SOURCE_ROLE;
 import com.choicemaker.cm.oaba.core.RECORD_ID_TYPE;
 
-public interface RecordIdTranslation<T extends Comparable<T>> extends
-		Serializable, Comparable<RecordIdTranslation<T>> {
+public interface RecordIdTranslation<T extends Comparable<T>>
+		extends Serializable, Comparable<RecordIdTranslation<T>> {
 
 	/** Translated identifiers are non-negative */
 	int INVALID_TRANSLATED_ID = -1;

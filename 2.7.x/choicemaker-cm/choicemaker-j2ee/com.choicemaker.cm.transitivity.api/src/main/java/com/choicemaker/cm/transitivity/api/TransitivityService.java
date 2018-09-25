@@ -33,6 +33,7 @@ public interface TransitivityService {
 	 * This method starts transitivity analysis of the specified OABA job. The
 	 * OABA job must have completed successfully. Record matching is performed
 	 * in the same mode as was used for the OABA job.
+	 * 
 	 * @oabaJob may not be null
 	 */
 	long startTransitivity(String externalID,
@@ -43,6 +44,7 @@ public interface TransitivityService {
 	/**
 	 * This method starts transitivity analysis of the specified OABA job, but
 	 * allows a different record-matching mode to be specified.
+	 * 
 	 * @oabaJob may not be null
 	 */
 	long startTransitivity(String externalID,

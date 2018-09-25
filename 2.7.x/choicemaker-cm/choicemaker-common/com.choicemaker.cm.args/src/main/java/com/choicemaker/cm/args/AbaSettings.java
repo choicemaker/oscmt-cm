@@ -51,9 +51,9 @@ public interface AbaSettings extends Serializable {
 	boolean isPersistent();
 
 	/**
-	 * The maximum number of matches returned by Online matching. The value
-	 * 0 (zero) indicates no maximum; that is, no limit to the number of
-	 * matches returned.
+	 * The maximum number of matches returned by Online matching. The value 0
+	 * (zero) indicates no maximum; that is, no limit to the number of matches
+	 * returned.
 	 */
 	int getAbaMaxMatches();
 

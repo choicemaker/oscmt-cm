@@ -199,8 +199,8 @@ public class AbstractParametersEntity extends AbstractPersistentObject
 		}
 		ImmutableThresholds.validate(lowThreshold, highThreshold);
 		if (sType == null || !sType.equals(sType.trim()) || sType.isEmpty()) {
-			throw new IllegalArgumentException("invalid stage RS type: "
-					+ sType);
+			throw new IllegalArgumentException(
+					"invalid stage RS type: " + sType);
 		}
 		if (taskType == null) {
 			throw new IllegalArgumentException("null task type");
@@ -218,15 +218,13 @@ public class AbstractParametersEntity extends AbstractPersistentObject
 		case STAGING_DEDUPLICATION:
 		case TA_STAGING_DEDUPLICATION:
 			if (mId != null) {
-				String msg =
-					"non-null master source id '" + mId + "' (taskType is '"
-							+ taskType + "')";
+				String msg = "non-null master source id '" + mId
+						+ "' (taskType is '" + taskType + "')";
 				throw new IllegalArgumentException(msg);
 			}
 			if (mType != null) {
-				String msg =
-					"non-null master source type '" + mType
-							+ "' (taskType is '" + taskType + "')";
+				String msg = "non-null master source type '" + mType
+						+ "' (taskType is '" + taskType + "')";
 				throw new IllegalArgumentException(msg);
 			}
 			break;
@@ -236,15 +234,14 @@ public class AbstractParametersEntity extends AbstractPersistentObject
 		case TA_STAGING_TO_MASTER_LINKAGE:
 		case TA_MASTER_TO_MASTER_LINKAGE:
 			if (mId == null) {
-				String msg =
-					"null master source id '" + mId + "' (taskType is '"
-							+ taskType + "')";
+				String msg = "null master source id '" + mId
+						+ "' (taskType is '" + taskType + "')";
 				throw new IllegalArgumentException(msg);
 			}
-			if (mType == null || !mType.equals(mType.trim()) || mType.isEmpty()) {
-				String msg =
-					"invalid master source type '" + mType + "' (taskType is '"
-							+ taskType + "')";
+			if (mType == null || !mType.equals(mType.trim())
+					|| mType.isEmpty()) {
+				String msg = "invalid master source type '" + mType
+						+ "' (taskType is '" + taskType + "')";
 				throw new IllegalArgumentException(msg);
 			}
 			break;
@@ -287,8 +284,8 @@ public class AbstractParametersEntity extends AbstractPersistentObject
 		}
 		ImmutableThresholds.validate(lowThreshold, highThreshold);
 		if (sType == null || !sType.equals(sType.trim()) || sType.isEmpty()) {
-			throw new IllegalArgumentException("invalid stage RS type: "
-					+ sType);
+			throw new IllegalArgumentException(
+					"invalid stage RS type: " + sType);
 		}
 		if (taskType == null) {
 			throw new IllegalArgumentException("null task type");
@@ -306,15 +303,13 @@ public class AbstractParametersEntity extends AbstractPersistentObject
 		case STAGING_DEDUPLICATION:
 		case TA_STAGING_DEDUPLICATION:
 			if (mId != null) {
-				String msg =
-					"non-null master source id '" + mId + "' (taskType is '"
-							+ taskType + "')";
+				String msg = "non-null master source id '" + mId
+						+ "' (taskType is '" + taskType + "')";
 				throw new IllegalArgumentException(msg);
 			}
 			if (mType != null) {
-				String msg =
-					"non-null master source type '" + mType
-							+ "' (taskType is '" + taskType + "')";
+				String msg = "non-null master source type '" + mType
+						+ "' (taskType is '" + taskType + "')";
 				throw new IllegalArgumentException(msg);
 			}
 			break;
@@ -324,15 +319,14 @@ public class AbstractParametersEntity extends AbstractPersistentObject
 		case TA_STAGING_TO_MASTER_LINKAGE:
 		case TA_MASTER_TO_MASTER_LINKAGE:
 			if (mId == null) {
-				String msg =
-					"null master source id '" + mId + "' (taskType is '"
-							+ taskType + "')";
+				String msg = "null master source id '" + mId
+						+ "' (taskType is '" + taskType + "')";
 				throw new IllegalArgumentException(msg);
 			}
-			if (mType == null || !mType.equals(mType.trim()) || mType.isEmpty()) {
-				String msg =
-					"invalid master source type '" + mType + "' (taskType is '"
-							+ taskType + "')";
+			if (mType == null || !mType.equals(mType.trim())
+					|| mType.isEmpty()) {
+				String msg = "invalid master source type '" + mType
+						+ "' (taskType is '" + taskType + "')";
 				throw new IllegalArgumentException(msg);
 			}
 			break;
@@ -361,7 +355,9 @@ public class AbstractParametersEntity extends AbstractPersistentObject
 
 	// END HACK FIXME REMOVEME
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.choicemaker.cm.oaba.ejb.AbstractParameters#getId()
 	 */
 	@Override
@@ -369,7 +365,9 @@ public class AbstractParametersEntity extends AbstractPersistentObject
 		return id;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.choicemaker.cm.oaba.ejb.AbstractParameters#getLowThreshold()
 	 */
 	@Override
@@ -377,7 +375,9 @@ public class AbstractParametersEntity extends AbstractPersistentObject
 		return lowThreshold;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.choicemaker.cm.oaba.ejb.AbstractParameters#getHighThreshold()
 	 */
 	@Override
@@ -385,7 +385,9 @@ public class AbstractParametersEntity extends AbstractPersistentObject
 		return highThreshold;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.choicemaker.cm.oaba.ejb.AbstractParameters#getOabaLinkageType()
 	 */
 	@Override
@@ -393,7 +395,9 @@ public class AbstractParametersEntity extends AbstractPersistentObject
 		return OabaLinkageType.valueOf(this.task);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.choicemaker.cm.oaba.ejb.AbstractParameters#getType()
 	 */
 	@Override
@@ -401,7 +405,9 @@ public class AbstractParametersEntity extends AbstractPersistentObject
 		return type;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.choicemaker.cm.oaba.ejb.AbstractParameters#getModelConfigName()
 	 */
 	@Override
@@ -409,15 +415,20 @@ public class AbstractParametersEntity extends AbstractPersistentObject
 		return modelConfigName;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.oaba.ejb.AbstractParameters#getBlockingConfiguration()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.oaba.ejb.AbstractParameters#getBlockingConfiguration()
 	 */
 	@Override
 	public String getBlockingConfiguration() {
 		return blockingConfiguration;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.choicemaker.cm.oaba.ejb.AbstractParameters#getQueryRsId()
 	 */
 	@Override
@@ -425,7 +436,9 @@ public class AbstractParametersEntity extends AbstractPersistentObject
 		return queryRsId;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.choicemaker.cm.oaba.ejb.AbstractParameters#getQueryRsType()
 	 */
 	@Override
@@ -433,23 +446,31 @@ public class AbstractParametersEntity extends AbstractPersistentObject
 		return queryRsType;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.oaba.ejb.AbstractParameters#isQueryRsIsDeduplicated()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.oaba.ejb.AbstractParameters#isQueryRsIsDeduplicated()
 	 */
 	@Override
 	public boolean isQueryRsIsDeduplicated() {
 		return queryRsIsDeduplicated;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.oaba.ejb.AbstractParameters#getQueryRsDatabaseConfiguration()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.choicemaker.cm.oaba.ejb.AbstractParameters#
+	 * getQueryRsDatabaseConfiguration()
 	 */
 	@Override
 	public String getQueryRsDatabaseConfiguration() {
 		return queryRsDatabaseConfiguration;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.choicemaker.cm.oaba.ejb.AbstractParameters#getReferenceRsId()
 	 */
 	@Override
@@ -457,7 +478,9 @@ public class AbstractParametersEntity extends AbstractPersistentObject
 		return referenceRsId;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.choicemaker.cm.oaba.ejb.AbstractParameters#getReferenceRsType()
 	 */
 	@Override
@@ -465,15 +488,20 @@ public class AbstractParametersEntity extends AbstractPersistentObject
 		return referenceRsType;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.oaba.ejb.AbstractParameters#getReferenceRsDatabaseConfiguration()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.choicemaker.cm.oaba.ejb.AbstractParameters#
+	 * getReferenceRsDatabaseConfiguration()
 	 */
 	@Override
 	public String getReferenceRsDatabaseConfiguration() {
 		return referenceRsDatabaseConfiguration;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.choicemaker.cm.oaba.ejb.AbstractParameters#getTask()
 	 */
 	@Override
@@ -481,7 +509,9 @@ public class AbstractParametersEntity extends AbstractPersistentObject
 		return task;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.choicemaker.cm.oaba.ejb.AbstractParameters#getFormat()
 	 */
 	@Override
@@ -489,7 +519,9 @@ public class AbstractParametersEntity extends AbstractPersistentObject
 		return format;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.choicemaker.cm.oaba.ejb.AbstractParameters#getGraph()
 	 */
 	@Override

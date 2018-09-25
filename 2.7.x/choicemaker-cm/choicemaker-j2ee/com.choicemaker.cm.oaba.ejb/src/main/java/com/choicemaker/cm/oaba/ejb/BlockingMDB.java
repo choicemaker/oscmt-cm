@@ -50,11 +50,11 @@ public class BlockingMDB extends AbstractOabaMDB {
 
 	private static final long serialVersionUID = 271L;
 
-	private static final Logger log = Logger.getLogger(BlockingMDB.class
-			.getName());
+	private static final Logger log =
+		Logger.getLogger(BlockingMDB.class.getName());
 
-	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
-			+ BlockingMDB.class.getName());
+	private static final Logger jmsTrace =
+		Logger.getLogger("jmstrace." + BlockingMDB.class.getName());
 
 	@Resource(lookup = "java:/choicemaker/urm/jms/dedupQueue")
 	private Queue dedupQueue;
@@ -69,26 +69,22 @@ public class BlockingMDB extends AbstractOabaMDB {
 		final int maxBlock = oabaSettings.getMaxBlockSize();
 		final int maxOversized = oabaSettings.getMaxOversized();
 		final int minFields = oabaSettings.getMinFields();
-		final BlockGroup bGroup =
-			new BlockGroup(OabaFileUtils.getBlockGroupFactory(batchJob),
-					maxBlock);
+		final BlockGroup bGroup = new BlockGroup(
+				OabaFileUtils.getBlockGroupFactory(batchJob), maxBlock);
 		final IBlockSink osSpecial =
 			OabaFileUtils.getOversizedFactory(batchJob).getNextSink();
 		OABABlockingService blockingService;
 		try {
-			final String _numBlockFields =
-				getPropertyController().getJobProperty(batchJob,
-						PN_BLOCKING_FIELD_COUNT);
+			final String _numBlockFields = getPropertyController()
+					.getJobProperty(batchJob, PN_BLOCKING_FIELD_COUNT);
 			final int numBlockFields = Integer.valueOf(_numBlockFields);
 			final BatchJobControl control =
-					new BatchJobControl(this.getJobController(), batchJob);
-			blockingService =
-				new OABABlockingService(maxBlock, bGroup,
-						OabaFileUtils.getOversizedGroupFactory(batchJob),
-						osSpecial, null,
-						OabaFileUtils.getRecValFactory(batchJob),
-						numBlockFields, data.validator, processingLog, control,
-						minFields, maxOversized);
+				new BatchJobControl(this.getJobController(), batchJob);
+			blockingService = new OABABlockingService(maxBlock, bGroup,
+					OabaFileUtils.getOversizedGroupFactory(batchJob), osSpecial,
+					null, OabaFileUtils.getRecValFactory(batchJob),
+					numBlockFields, data.validator, processingLog, control,
+					minFields, maxOversized);
 		} catch (IOException e) {
 			throw new BlockingException(e.getMessage(), e);
 		}
@@ -101,9 +97,8 @@ public class BlockingMDB extends AbstractOabaMDB {
 		log.info("num OS " + numOS);
 		log.info("num Invalid: " + numInvalid);
 		if (numInvalid > numBlocks) {
-			String msg =
-				"Number of invalid blocks (" + numInvalid + ") > "
-						+ "number of valid blocks (" + numBlocks + ")";
+			String msg = "Number of invalid blocks (" + numInvalid + ") > "
+					+ "number of valid blocks (" + numBlocks + ")";
 			log.warning(msg);
 		}
 		log.info("Done Blocking: " + blockingService.getTimeElapsed());

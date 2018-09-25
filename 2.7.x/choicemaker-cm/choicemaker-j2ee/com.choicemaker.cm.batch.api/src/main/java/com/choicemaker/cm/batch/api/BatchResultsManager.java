@@ -17,8 +17,9 @@ public interface BatchResultsManager {
 	 *            a location in which the results file should be created.
 	 * @throws IOException
 	 *             if file can not be read or written.
-	 * @throws URISyntaxException 
+	 * @throws URISyntaxException
 	 */
-	void exportResults(BatchJob batchJob, URI container) throws IOException, URISyntaxException;
+	void exportResults(BatchJob batchJob, URI container)
+			throws IOException, URISyntaxException;
 
 }

@@ -47,19 +47,20 @@ import com.choicemaker.cm.transitivity.api.TransitivityParametersController;
  *
  */
 @SuppressWarnings({
-	"rawtypes", "unchecked" })
+		"rawtypes", "unchecked" })
 @MessageDriven(activationConfig = {
 		@ActivationConfigProperty(propertyName = "destinationLookup",
 				propertyValue = "java:/choicemaker/urm/jms/transMatcherQueue"),
 		@ActivationConfigProperty(propertyName = "destinationType",
 				propertyValue = "javax.jms.Queue") })
-public class TransMatcherMDB extends AbstractMatcher implements MessageListener {
+public class TransMatcherMDB extends AbstractMatcher
+		implements MessageListener {
 
 	private static final long serialVersionUID = 271L;
-	private static final Logger log = Logger.getLogger(TransMatcherMDB.class
-			.getName());
-	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
-			+ TransMatcherMDB.class.getName());
+	private static final Logger log =
+		Logger.getLogger(TransMatcherMDB.class.getName());
+	private static final Logger jmsTrace =
+		Logger.getLogger("jmstrace." + TransMatcherMDB.class.getName());
 
 	// -- Injected instance data
 
@@ -149,9 +150,8 @@ public class TransMatcherMDB extends AbstractMatcher implements MessageListener 
 			// first figure out the correct file for this processor
 			final long jobId = data.jobID;
 			BatchJob batchJob = getOabaJobManager().findBatchJob(jobId);
-			IMatchRecord2Sink mSink =
-				OabaFileUtils.getMatchChunkFactory(batchJob).getSink(
-						data.treeIndex);
+			IMatchRecord2Sink mSink = OabaFileUtils
+					.getMatchChunkFactory(batchJob).getSink(data.treeIndex);
 			IComparableSink sink = new ComparableMRSink(mSink);
 
 			// write matches to this file.

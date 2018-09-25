@@ -7,5 +7,5 @@ import java.io.Serializable;
  * serializable and identifiable (with serializable identifiers).
  */
 public interface DataAccessObject<T extends Comparable<T> & Serializable>
-	extends Identifiable<T>, Serializable {
+		extends Identifiable<T>, Serializable {
 }

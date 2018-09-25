@@ -30,7 +30,9 @@ public interface ServerConfiguration extends Serializable {
 	/** The host machine or logical domain to which a configuration applies */
 	String getHostName();
 
-	/** The maximum number of ChoiceMaker tasks that should be run in parallel */
+	/**
+	 * The maximum number of ChoiceMaker tasks that should be run in parallel
+	 */
 	int getMaxChoiceMakerThreads();
 
 	/** The maximum number of records in an OABA chunk file */

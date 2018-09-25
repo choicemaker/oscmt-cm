@@ -9,25 +9,27 @@ import com.choicemaker.util.Precondition;
 
 public class BatchJobControl implements IControl {
 
-	private static final Logger logger = Logger.getLogger(BatchJobControl.class.getName());
-	
+	private static final Logger logger =
+		Logger.getLogger(BatchJobControl.class.getName());
+
 	private static final boolean DEFAULT_STOP = true;
-	
+
 	private final BatchJobManager batchJobManager;
 	private final long batchJobId;
 	private final boolean defaultStop;
-	
+
 	public BatchJobControl(BatchJobManager batchJobManager, BatchJob batchJob) {
-		this(batchJobManager,batchJob.getId(),DEFAULT_STOP);
+		this(batchJobManager, batchJob.getId(), DEFAULT_STOP);
 	}
 
 	public BatchJobControl(BatchJobManager batchJobManager, long batchJobId) {
-		this(batchJobManager,batchJobId,DEFAULT_STOP);
+		this(batchJobManager, batchJobId, DEFAULT_STOP);
 	}
 
 	public BatchJobControl(BatchJobManager batchJobManager, long batchJobId,
 			boolean defaultStop) {
-		Precondition.assertNonNullArgument("null batch job manager", batchJobManager);
+		Precondition.assertNonNullArgument("null batch job manager",
+				batchJobManager);
 		this.batchJobManager = batchJobManager;
 		this.batchJobId = batchJobId;
 		this.defaultStop = defaultStop;

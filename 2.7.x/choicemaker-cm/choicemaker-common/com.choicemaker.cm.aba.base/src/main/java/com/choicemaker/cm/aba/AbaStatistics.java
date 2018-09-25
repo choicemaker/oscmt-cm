@@ -16,13 +16,15 @@ import java.io.IOException;
 public interface AbaStatistics {
 
 	/**
-	 * API BUG. Blocking values are tied to a particular
-	 * blocking configuration. Stats are implicitly tied to a particular
-	 * blocking configuration. Hence, the parameter for blocking configuration
-	 * is never used by any implementation
-	 * @param configuration unused and unnecessary
-	 * @param blockingValues non-null array of blocking values to be used
-	 * to compute counts
+	 * API BUG. Blocking values are tied to a particular blocking configuration.
+	 * Stats are implicitly tied to a particular blocking configuration. Hence,
+	 * the parameter for blocking configuration is never used by any
+	 * implementation
+	 * 
+	 * @param configuration
+	 *            unused and unnecessary
+	 * @param blockingValues
+	 *            non-null array of blocking values to be used to compute counts
 	 * @return ?
 	 * @throws IOException
 	 * @deprecated
@@ -32,9 +34,10 @@ public interface AbaStatistics {
 			IBlockingValue[] blockingValues) throws IOException;
 
 	/**
-	 * @param configuration unused and unnecessary
-	 * @param blockingValues non-null array of blocking values to be used
-	 * to compute counts
+	 * @param configuration
+	 *            unused and unnecessary
+	 * @param blockingValues
+	 *            non-null array of blocking values to be used to compute counts
 	 * @return ?
 	 */
 	long computeBlockingValueCounts(IBlockingValue[] blockingValues);

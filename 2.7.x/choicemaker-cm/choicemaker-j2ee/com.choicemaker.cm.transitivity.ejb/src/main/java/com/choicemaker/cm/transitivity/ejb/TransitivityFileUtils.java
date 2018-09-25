@@ -51,7 +51,8 @@ public class TransitivityFileUtils {
 	}
 
 	@SuppressWarnings("rawtypes")
-	public static IMatchRecord2Source getCompositeTransMatchSource(BatchJob job) {
+	public static IMatchRecord2Source getCompositeTransMatchSource(
+			BatchJob job) {
 		String fileName = getCompositeTransMatchFileName(job);
 		return new MatchRecord2CompositeSource(fileName, TEXT_SUFFIX);
 	}
@@ -69,9 +70,8 @@ public class TransitivityFileUtils {
 		String wd = getWorkingDir(job);
 		assert wd.endsWith(FILE_SEPARATOR);
 		String id = formatJobId(job.getId());
-		String retVal =
-			wd + BASENAME_TRANSMATCH_STORE_INDEXED + id
-					+ NAMESTEM_TRANSANALYSIS;
+		String retVal = wd + BASENAME_TRANSMATCH_STORE_INDEXED + id
+				+ NAMESTEM_TRANSANALYSIS;
 		return retVal;
 	}
 

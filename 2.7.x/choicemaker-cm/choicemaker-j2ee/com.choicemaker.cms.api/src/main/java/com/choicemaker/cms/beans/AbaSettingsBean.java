@@ -20,7 +20,8 @@ public class AbaSettingsBean implements AbaSettings {
 	public AbaSettingsBean(AbaSettings template) {
 		this.limitPerBlockingSet = template.getLimitPerBlockingSet();
 		this.limitSingleBlockingSet = template.getLimitSingleBlockingSet();
-		this.singleTableBlockingSetGraceLimit = template.getSingleTableBlockingSetGraceLimit();
+		this.singleTableBlockingSetGraceLimit =
+			template.getSingleTableBlockingSetGraceLimit();
 	}
 
 	@Override

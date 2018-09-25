@@ -48,8 +48,8 @@ import com.choicemaker.cm.batch.ejb.AbstractPersistentObject;
 @DiscriminatorColumn(name = DISCRIMINATOR_COLUMN,
 		discriminatorType = DiscriminatorType.STRING)
 @DiscriminatorValue(DISCRIMINATOR_VALUE)
-public class AbaSettingsEntity extends AbstractPersistentObject implements
-		AbaSettings {
+public class AbaSettingsEntity extends AbstractPersistentObject
+		implements AbaSettings {
 
 	private static final long serialVersionUID = 271L;
 
@@ -104,8 +104,8 @@ public class AbaSettingsEntity extends AbstractPersistentObject implements
 	}
 
 	public AbaSettingsEntity(AbaSettings aba) {
-		this(aba.getLimitPerBlockingSet(), aba.getLimitSingleBlockingSet(), aba
-				.getSingleTableBlockingSetGraceLimit());
+		this(aba.getLimitPerBlockingSet(), aba.getLimitSingleBlockingSet(),
+				aba.getSingleTableBlockingSetGraceLimit());
 	}
 
 	public AbaSettingsEntity(int limPerBlockingSet, int limSingleBlockingSet,
@@ -114,8 +114,8 @@ public class AbaSettingsEntity extends AbstractPersistentObject implements
 				DISCRIMINATOR_VALUE);
 	}
 
-	protected AbaSettingsEntity(int limPerBlockingSet,
-			int limSingleBlockingSet, int singleTableGraceLimit, String type) {
+	protected AbaSettingsEntity(int limPerBlockingSet, int limSingleBlockingSet,
+			int singleTableGraceLimit, String type) {
 		if (type == null) {
 			throw new IllegalArgumentException("null type");
 		}
@@ -124,12 +124,12 @@ public class AbaSettingsEntity extends AbstractPersistentObject implements
 			throw new IllegalArgumentException("blank type");
 		}
 		if (limPerBlockingSet < 0) {
-			throw new IllegalArgumentException("invalid limitPerBlockingSet"
-					+ limPerBlockingSet);
+			throw new IllegalArgumentException(
+					"invalid limitPerBlockingSet" + limPerBlockingSet);
 		}
 		if (limSingleBlockingSet < 0) {
-			throw new IllegalArgumentException("invalid limitSingleBlockingSet"
-					+ limSingleBlockingSet);
+			throw new IllegalArgumentException(
+					"invalid limitSingleBlockingSet" + limSingleBlockingSet);
 		}
 		if (singleTableGraceLimit < 0) {
 			throw new IllegalArgumentException(

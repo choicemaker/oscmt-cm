@@ -50,7 +50,7 @@ import com.choicemaker.cm.batch.ejb.BatchJobEntity;
 @NamedQuery(name = QN_OABAJOB_FIND_ALL, query = JPQL_OABAJOB_FIND_ALL)
 @Entity
 @DiscriminatorValue(DISCRIMINATOR_VALUE)
-public class OabaJobEntity extends BatchJobEntity /*implements IControl*/ {
+public class OabaJobEntity extends BatchJobEntity /* implements IControl */ {
 
 	private static final long serialVersionUID = 271L;
 
@@ -86,11 +86,13 @@ public class OabaJobEntity extends BatchJobEntity /*implements IControl*/ {
 	 *            optional; may be null
 	 */
 	public OabaJobEntity(OabaParameters params, OabaSettings settings,
-			ServerConfiguration serverConfig, BatchJob urmJob, String externalId) {
+			ServerConfiguration serverConfig, BatchJob urmJob,
+			String externalId) {
 		this(OabaJobJPA.DISCRIMINATOR_VALUE, params.getId(), settings.getId(),
 				serverConfig.getId(), externalId, randomTransactionId(),
-				PersistentObject.NONPERSISTENT_ID, urmJob == null ? PersistentObject.NONPERSISTENT_ID : urmJob
-						.getId(), DEFAULT_RIGOR);
+				PersistentObject.NONPERSISTENT_ID, urmJob == null
+						? PersistentObject.NONPERSISTENT_ID : urmJob.getId(),
+				DEFAULT_RIGOR);
 	}
 
 	/**
@@ -108,19 +110,20 @@ public class OabaJobEntity extends BatchJobEntity /*implements IControl*/ {
 	 *            required; must not be null
 	 */
 	public OabaJobEntity(OabaParameters params, OabaSettings settings,
-			ServerConfiguration serverConfig, BatchJob urmJob, String externalId,
-			BatchJobRigor bjr) {
+			ServerConfiguration serverConfig, BatchJob urmJob,
+			String externalId, BatchJobRigor bjr) {
 		this(OabaJobJPA.DISCRIMINATOR_VALUE, params.getId(), settings.getId(),
 				serverConfig.getId(), externalId, randomTransactionId(),
-				urmJob == null ? PersistentObject.NONPERSISTENT_ID : urmJob
-						.getId(), PersistentObject.NONPERSISTENT_ID, bjr);
+				urmJob == null ? PersistentObject.NONPERSISTENT_ID
+						: urmJob.getId(),
+				PersistentObject.NONPERSISTENT_ID, bjr);
 	}
 
 	public OabaJobEntity(BatchJob o) {
-		this(OabaJobJPA.DISCRIMINATOR_VALUE, o.getParametersId(), o
-				.getSettingsId(), o.getServerId(), o.getExternalId(), o
-				.getTransactionId(), o.getBatchParentId(), o.getUrmId(), o
-				.getBatchJobRigor());
+		this(OabaJobJPA.DISCRIMINATOR_VALUE, o.getParametersId(),
+				o.getSettingsId(), o.getServerId(), o.getExternalId(),
+				o.getTransactionId(), o.getBatchParentId(), o.getUrmId(),
+				o.getBatchJobRigor());
 		File owd = o.getWorkingDirectory();
 		this.workingDirectory = owd == null ? null : owd.getAbsolutePath();
 	}
@@ -136,15 +139,13 @@ public class OabaJobEntity extends BatchJobEntity /*implements IControl*/ {
 		final String wd = workingDir == null ? "null" : workingDir.toString();
 		if (workingDir == null || !workingDir.exists()
 				|| !workingDir.isDirectory()) {
-			String msg =
-				"Working directory '" + wd
-						+ "' is null, does not exist, or is not a directory";
+			String msg = "Working directory '" + wd
+					+ "' is null, does not exist, or is not a directory";
 			throw new IllegalArgumentException(msg);
 		}
 		if (!workingDir.canRead() || !workingDir.canWrite()) {
-			String msg =
-				"Working directory '" + wd
-						+ "' is not readable or not writeable";
+			String msg = "Working directory '" + wd
+					+ "' is not readable or not writeable";
 			throw new IllegalArgumentException(msg);
 		}
 		this.workingDirectory = workingDir.getAbsolutePath();

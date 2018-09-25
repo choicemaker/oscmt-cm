@@ -35,7 +35,8 @@ import com.choicemaker.cm.oaba.core.RECORD_ID_TYPE;
  */
 @SuppressWarnings({
 		"rawtypes", "unchecked" })
-public class MutableRecordIdTranslatorImpl implements MutableRecordIdTranslatorLocal {
+public class MutableRecordIdTranslatorImpl
+		implements MutableRecordIdTranslatorLocal {
 
 	/**
 	 * For testing purposes only. Returns a list of map value in the order of
@@ -67,8 +68,8 @@ public class MutableRecordIdTranslatorImpl implements MutableRecordIdTranslatorL
 		return retVal;
 	}
 
-	private static final Logger log = Logger
-			.getLogger(MutableRecordIdTranslatorImpl.class.getName());
+	private static final Logger log =
+		Logger.getLogger(MutableRecordIdTranslatorImpl.class.getName());
 
 	/** A magic value indicating that the split() method has not been invoked */
 	private static final int NOT_SPLIT = 0;
@@ -88,7 +89,8 @@ public class MutableRecordIdTranslatorImpl implements MutableRecordIdTranslatorL
 	 * immutable state. In the immutable state, it can only be used for reverse
 	 * lookups, not for forward translations. A translator also switches to the
 	 * immutable state when it is
-	 * {@link #save(BatchJob, MutableRecordIdTranslator) saved} to a database</li>
+	 * {@link #save(BatchJob, MutableRecordIdTranslator) saved} to a database
+	 * </li>
 	 * <li><em><strong>INCONSISTENT</strong></em><br/>
 	 * If a forward translation is attempted after the initialization of reverse
 	 * lookups, the translator state is marked as inconsistent and an
@@ -238,9 +240,8 @@ public class MutableRecordIdTranslatorImpl implements MutableRecordIdTranslatorL
 			log.warning("translator is already closed");
 		}
 
-		String msg =
-			"close(): " + isClosed() + ", translatorState == "
-					+ translatorState;
+		String msg = "close(): " + isClosed() + ", translatorState == "
+				+ translatorState;
 		if (!isClosed()) {
 			log.severe(msg);
 		} else {
@@ -252,8 +253,8 @@ public class MutableRecordIdTranslatorImpl implements MutableRecordIdTranslatorL
 	@Override
 	public void open() throws BlockingException {
 		if (isClosed()) {
-			throw new IllegalStateException("invalid translator state: "
-					+ translatorState);
+			throw new IllegalStateException(
+					"invalid translator state: " + translatorState);
 		}
 		currentIndex = MINIMUM_VALID_INDEX - 1;
 		log.info("Opening sink1: " + getSink1());
@@ -277,7 +278,8 @@ public class MutableRecordIdTranslatorImpl implements MutableRecordIdTranslatorL
 			getSink2().open();
 			sink2State = SINK_STATE.OPEN;
 		} else {
-			log.warning("Split method invoked on a previously split translator");
+			log.warning(
+					"Split method invoked on a previously split translator");
 		}
 	}
 
@@ -289,8 +291,9 @@ public class MutableRecordIdTranslatorImpl implements MutableRecordIdTranslatorL
 		int retVal;
 		if (o == null) {
 			retVal = INVALID_INDEX;
-			log.warning("translating null record id to an invalid internal index ("
-					+ retVal + ")");
+			log.warning(
+					"translating null record id to an invalid internal index ("
+							+ retVal + ")");
 
 		} else {
 			Integer i = seen.get(o);

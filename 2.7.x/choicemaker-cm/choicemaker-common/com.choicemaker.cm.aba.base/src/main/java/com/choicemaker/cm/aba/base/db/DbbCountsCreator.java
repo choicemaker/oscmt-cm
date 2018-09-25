@@ -162,11 +162,11 @@ public class DbbCountsCreator {
 
 	static Logger logger = Logger.getLogger(DbbCountsCreator.class.getName());
 
-//	private static final DbbCountsCreator instance = new DbbCountsCreator();
-//
-//	public static DbbCountsCreator getInstance() {
-//		return instance;
-//	}
+	// private static final DbbCountsCreator instance = new DbbCountsCreator();
+	//
+	// public static DbbCountsCreator getInstance() {
+	// return instance;
+	// }
 
 	static FieldValueCounts find(List<FieldValueCounts> countFields,
 			IDbField dbf) {

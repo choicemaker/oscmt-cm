@@ -14,8 +14,8 @@ package com.choicemaker.cm.aba;
  * collection. This exception extends UnderspecifiedQueryException because this
  * error is caused by an under-specified query.
  */
-public class IncompleteBlockingSetsException extends
-		UnderspecifiedQueryException {
+public class IncompleteBlockingSetsException
+		extends UnderspecifiedQueryException {
 
 	private static final long serialVersionUID = 1L;
 

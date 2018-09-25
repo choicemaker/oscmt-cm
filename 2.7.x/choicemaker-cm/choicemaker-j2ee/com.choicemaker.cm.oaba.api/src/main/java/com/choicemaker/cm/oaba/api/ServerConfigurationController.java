@@ -50,7 +50,8 @@ public interface ServerConfigurationController {
 	 * 
 	 * @return a non-null list, never empty
 	 */
-	List<ServerConfiguration> findServerConfigurationsByHostName(String hostName);
+	List<ServerConfiguration> findServerConfigurationsByHostName(
+			String hostName);
 
 	/**
 	 * Finds all persistent server configurations for a given host name. If the
