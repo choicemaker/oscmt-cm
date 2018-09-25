@@ -45,6 +45,7 @@ public class SqlDatabaseAccessor implements DatabaseAccessor {
 	private Connection connection;
 	private DbReaderSequential dbr;
 	private Statement stmt;
+	private ResultSet _rs;
 	private String condition;
 
 	/**
@@ -140,12 +141,17 @@ public class SqlDatabaseAccessor implements DatabaseAccessor {
 			// How to Retrieve Multiple Result Sets from a Stored Procedure in
 			// JDBC
 			// http://links.rph.cx/m9jJav
-			ResultSet rs = null;
+			if (_rs != null) {
+				logger.warning("result set let open");
+				_rs.close();
+				_rs = null;
+			}
+			assert _rs == null;
 			boolean isResultSet = stmt.execute(query);
 			int count = 0;
 			do {
 				if (isResultSet) {
-					rs = stmt.getResultSet();
+					_rs = stmt.getResultSet();
 					break;
 				} else {
 					count = stmt.getUpdateCount();
@@ -163,8 +169,8 @@ public class SqlDatabaseAccessor implements DatabaseAccessor {
 				isResultSet = stmt.getMoreResults();
 			} while (isResultSet || count != -1);
 			// END BUGFIX
-			rs.setFetchSize(100);
-			dbr.open(rs, stmt);
+			_rs.setFetchSize(100);
+			dbr.open(_rs, stmt);
 		} catch (SQLException ex) {
 			logger.severe(
 					"Opening blocking data: " + query + ": " + ex.toString());
@@ -175,7 +181,17 @@ public class SqlDatabaseAccessor implements DatabaseAccessor {
 	public void close() throws IOException {
 		Exception ex = null;
 		try {
+			if (_rs != null) {
+				_rs.close();
+				_rs = null;
+			}
+		} catch (java.sql.SQLException e) {
+			ex = e;
+			logger.severe("Closing result set: " + e.toString());
+		}
+		try {
 			if (stmt != null) {
+				stmt.getMoreResults(Statement.CLOSE_ALL_RESULTS);
 				stmt.close();
 				stmt = null;
 			}
