@@ -41,6 +41,7 @@
     <module>com.choicemaker.cm.urm.ejb</module>
     <module>com.choicemaker.cms.api</module>
     <module>com.choicemaker.cms.ejb</module>
+    <module>com.choicemaker.cms.webui</module>
   </modules>
 
   <build>

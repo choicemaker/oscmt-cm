@@ -20,12 +20,12 @@ public interface CmServerAdmin {
 
 	String getVersion(Object context) throws RemoteException;
 
-	void updateAllDerivedFields(String probabilityModel, DbRecordCollection rc)
+	void updateCounts(String probabilityModel, String urlString)
 			throws ArgumentException, RecordCollectionException,
 			ConfigException, ModelException, CmRuntimeException,
 			RemoteException;
 
-	void updateCounts(String probabilityMode, String urlString)
+	void updateAllDerivedFields(String probabilityModel, DbRecordCollection rc)
 			throws ArgumentException, RecordCollectionException,
 			ConfigException, ModelException, CmRuntimeException,
 			RemoteException;
