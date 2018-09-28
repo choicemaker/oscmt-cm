@@ -75,6 +75,8 @@ class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 	private static final Logger logger =
 		Logger.getLogger(UrmEjbAssist.class.getName());
 
+	public static final int DEFAULT_FRACTION_COMPLETE = 0;
+
 	public static final MatchScore PERFECT_SCORE =
 		new MatchScore(1.0f, Decision3.MATCH, "");
 
@@ -84,33 +86,28 @@ class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 	}
 	public static final boolean assertsEnabled = _assertsEnabled;
 
-	public UrmEjbAssist() {
+	public static JobStatus getJobStatus(BatchJob urmJob)
+			throws ArgumentException, ConfigException, CmRuntimeException,
+			RemoteException {
+		JobStatus retVal = null;
+		if (urmJob != null) {
+			retVal = new JobStatus();
+			retVal.setStepDescription(urmJob.getDescription());
+			retVal.setFinishDate(urmJob.getCompleted());
+			retVal.setJobId(urmJob.getId());
+			retVal.setStartDate(urmJob.getStarted());
+			retVal.setStatus(urmJob.getStatus().toString());
+			retVal.setAbortRequestDate(urmJob.getAborted());
+			// retVal.setErrorDescription(null);
+			// retVal.setStepId(0)
+			// retVal.setStepStartDate(null)
+			retVal.setFractionComplete(DEFAULT_FRACTION_COMPLETE);
+			retVal.setTrackingId(urmJob.getExternalId());
+		}
+		return retVal;
 	}
 
-	public URI extractLocationURI(TextRefRecordCollection resRc)
-			throws URISyntaxException {
-		Precondition.assertNonNullArgument("null record collection", resRc);
-
-		// target files or urls
-		String urlBeginingPart = null;
-		String urlEndingPart = null;
-
-		String urlString = resRc.getUrl();
-		final int lastPeriod = urlString.lastIndexOf(".");
-		final int lastSlash = urlString.lastIndexOf("/");
-		final int lastBkSlash = urlString.lastIndexOf("\\");
-		if (lastPeriod == -1 || lastPeriod < lastSlash
-				|| lastPeriod < lastBkSlash) {
-			urlBeginingPart = urlString;
-			urlEndingPart = "";
-		} else {
-			urlBeginingPart = urlString.substring(0, lastPeriod);
-			urlEndingPart = urlString.substring(lastPeriod);
-		}
-		String url = urlBeginingPart + urlEndingPart;
-		logger.fine("BatchMatchAnalyzer.extractLocationURI: '" + url + "'");
-		URI retVal = new URI(url);
-		return retVal;
+	public UrmEjbAssist() {
 	}
 
 	public void assertValid(List<EvaluatedRecord> records) {
@@ -137,35 +134,6 @@ class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 				}
 			}
 			assert isValid;
-		}
-	}
-
-	public void copyResult(UrmBatchController urmBatchController, long jobID,
-			RefRecordCollection resRc)
-			throws ModelException, RecordCollectionException, ConfigException,
-			ArgumentException, CmRuntimeException, RemoteException {
-		// Precondition
-		if (!(resRc instanceof TextRefRecordCollection)) {
-			String msg = "BatchMatchAnalyzer.copyResult: "
-					+ "this method supports only text record collection copying";
-			throw new ArgumentException(msg);
-		}
-		TextRefRecordCollection textRefRc = (TextRefRecordCollection) resRc;
-
-		// Extract URM batch job
-		BatchJob urmJob = urmBatchController.findUrmJob(jobID);
-		if (urmJob == null) {
-			logger.warning(
-					"BatchMatchAnalyzer.copyResult: no such URM job: " + jobID);
-		} else {
-			try {
-				URI container = extractLocationURI(textRefRc);
-				urmBatchController.exportResults(urmJob, container);
-			} catch (IOException | URISyntaxException e) {
-				String msg = "BatchMatchAnalyzer.copyResult: "
-						+ "unable to copy result: " + e.toString();
-				throw new RecordCollectionException(msg);
-			}
 		}
 	}
 
@@ -354,37 +322,34 @@ class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 		return retVal;
 	}
 
-	public JobStatus createJobStatus(BatchJob batchJob) {
-		JobStatus retVal = new JobStatus();
-		retVal.setStartDate(batchJob.getStarted());
-		retVal.setAbortRequestDate(batchJob.getAbortRequested());
-		BatchJobStatus batchJobStatus = batchJob.getStatus();
-		switch (batchJobStatus) {
-		case COMPLETED:
-			retVal.setFinishDate(batchJob.getCompleted());
-			break;
-		case FAILED:
-			retVal.setFinishDate(batchJob.getFailed());
-			break;
-		case ABORTED:
-			retVal.setFinishDate(batchJob.getAborted());
-			break;
-		default:
-			assert retVal.getFinishDate() == null;
+	public void copyResult(UrmBatchController urmBatchController, long jobID,
+			RefRecordCollection resRc)
+			throws ModelException, RecordCollectionException, ConfigException,
+			ArgumentException, CmRuntimeException, RemoteException {
+		// Precondition
+		if (!(resRc instanceof TextRefRecordCollection)) {
+			String msg = "BatchMatchAnalyzer.copyResult: "
+					+ "this method supports only text record collection copying";
+			throw new ArgumentException(msg);
 		}
-		return retVal;
-	}
+		TextRefRecordCollection textRefRc = (TextRefRecordCollection) resRc;
 
-	// public CompositeMatchScore createCompositeMatchScoreFromMergeGroup(
-	// MergeGroup<T> mergeGroup) {
-	// List<MatchScore> list = new ArrayList<>();
-	// for (EvaluatedPair<T> er : mergeGroup.getGroupPairs()) {
-	// MatchScore matchScore = createMatchScore(er);
-	// list.add(matchScore);
-	// }
-	// CompositeMatchScore retVal = new CompositeMatchScore(list);
-	// return retVal;
-	// }
+		// Extract URM batch job
+		BatchJob urmJob = urmBatchController.findUrmJob(jobID);
+		if (urmJob == null) {
+			logger.warning(
+					"BatchMatchAnalyzer.copyResult: no such URM job: " + jobID);
+		} else {
+			try {
+				URI container = extractLocationURI(textRefRc);
+				urmBatchController.exportResults(urmJob, container);
+			} catch (IOException | URISyntaxException e) {
+				String msg = "BatchMatchAnalyzer.copyResult: "
+						+ "unable to copy result: " + e.toString();
+				throw new RecordCollectionException(msg);
+			}
+		}
+	}
 
 	/**
 	 * Create a composite score from scores of candidate records against the
@@ -424,6 +389,17 @@ class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 				matchThreshold, FIXME_oabaMaxSingle);
 		return retVal;
 	}
+
+	// public CompositeMatchScore createCompositeMatchScoreFromMergeGroup(
+	// MergeGroup<T> mergeGroup) {
+	// List<MatchScore> list = new ArrayList<>();
+	// for (EvaluatedPair<T> er : mergeGroup.getGroupPairs()) {
+	// MatchScore matchScore = createMatchScore(er);
+	// list.add(matchScore);
+	// }
+	// CompositeMatchScore retVal = new CompositeMatchScore(list);
+	// return retVal;
+	// }
 
 	public NamedConfiguration createCustomizedConfiguration(
 			UrmConfigurationAdapter adapter,
@@ -510,24 +486,26 @@ class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 		return retVal;
 	}
 
-	// public LinkedRecordSet<T> createLinkedRecordSetFromMergeGroup(
-	// MergeGroup<T> mergeGroup, LinkCriteria linkCriteria) {
-	// Precondition.assertNonNullArgument("null merge group", mergeGroup);
-	// Precondition.assertNonNullArgument("null link criteria", linkCriteria);
-	// Precondition.assertBoolean("inconsistent graph property",
-	// linkCriteria.getGraphPropType().getName()
-	// .equals(linkCriteria.getGraphPropType().getName()));
-	//
-	// List<IRecordHolder<T>> list = new ArrayList<>();
-	// for (DataAccessObject<T> record : mergeGroup.getGroupRecords()) {
-	// IRecordHolder<T> irh = (IRecordHolder<T>) record;
-	// list.add(irh);
-	// }
-	// LinkedRecordSet<T> retVal =
-	// new LinkedRecordSet<T>(null, list, linkCriteria);
-	//
-	// return retVal;
-	// }
+	public JobStatus createJobStatus(BatchJob batchJob) {
+		JobStatus retVal = new JobStatus();
+		retVal.setStartDate(batchJob.getStarted());
+		retVal.setAbortRequestDate(batchJob.getAbortRequested());
+		BatchJobStatus batchJobStatus = batchJob.getStatus();
+		switch (batchJobStatus) {
+		case COMPLETED:
+			retVal.setFinishDate(batchJob.getCompleted());
+			break;
+		case FAILED:
+			retVal.setFinishDate(batchJob.getFailed());
+			break;
+		case ABORTED:
+			retVal.setFinishDate(batchJob.getAborted());
+			break;
+		default:
+			assert retVal.getFinishDate() == null;
+		}
+		return retVal;
+	}
 
 	/**
 	 * Create a linked record set from candidate records, excluding the query
@@ -556,6 +534,25 @@ class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 		return retVal;
 	}
 
+	// public LinkedRecordSet<T> createLinkedRecordSetFromMergeGroup(
+	// MergeGroup<T> mergeGroup, LinkCriteria linkCriteria) {
+	// Precondition.assertNonNullArgument("null merge group", mergeGroup);
+	// Precondition.assertNonNullArgument("null link criteria", linkCriteria);
+	// Precondition.assertBoolean("inconsistent graph property",
+	// linkCriteria.getGraphPropType().getName()
+	// .equals(linkCriteria.getGraphPropType().getName()));
+	//
+	// List<IRecordHolder<T>> list = new ArrayList<>();
+	// for (DataAccessObject<T> record : mergeGroup.getGroupRecords()) {
+	// IRecordHolder<T> irh = (IRecordHolder<T>) record;
+	// list.add(irh);
+	// }
+	// LinkedRecordSet<T> retVal =
+	// new LinkedRecordSet<T>(null, list, linkCriteria);
+	//
+	// return retVal;
+	// }
+
 	public MatchScore createMatchScore(EvaluatedPair<T> qcp) {
 		Precondition.assertNonNullArgument("null pair", qcp);
 		float probability = qcp.getMatchProbability();
@@ -563,56 +560,6 @@ class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 		Decision3 d3 = Decision3.valueOf(d.getName());
 		String note = qcp.getNotesAsDelimitedString();
 		MatchScore retVal = new MatchScore(probability, d3, note);
-		return retVal;
-	}
-
-	public void removeLinkedRecordsFromSingleRecords(LinkedRecordSet<T> lrs,
-			SortedSet<IdentifiableWrapper<T>> singleRecords) {
-		Precondition.assertNonNullArgument("null linked record set", lrs);
-		Precondition.assertNonNullArgument("null set", singleRecords);
-		logger.finer("LinkedRecordSet size: " + lrs.getRecords().length);
-		logger.finer("Single record count: " + singleRecords.size());
-		for (DataAccessObject<T> record : lrs.getRecords()) {
-			IdentifiableWrapper<T> wrapper = new IdentifiableWrapper<>(record);
-			boolean isRemoved = singleRecords.remove(wrapper);
-			if (logger.isLoggable(Level.FINER)) {
-				String msg =
-					(isRemoved ? "Removed " : "Did not remove ") + record;
-				logger.finer(msg);
-			}
-		}
-		logger.finer("Single record count: " + singleRecords.size());
-	}
-
-	public boolean equalRecordAndScoreCount(EvaluatedRecord evaluatedRecord) {
-		boolean retVal;
-		IRecord<?> r = evaluatedRecord.getRecord();
-		if (r instanceof ISingleRecord<?>) {
-			retVal = true;
-		} else if (r instanceof CompositeRecord<?>) {
-			CompositeRecord<?> cr = (CompositeRecord<?>) r;
-			IRecord<?>[] records = cr.getRecords();
-			CompositeMatchScore cms =
-				(CompositeMatchScore) evaluatedRecord.getScore();
-			MatchScore[] scores = cms.getInnerScores();
-			retVal = records.length == scores.length;
-		} else {
-			logger.warning("Unexpected record type: " + r.getClass().getName());
-			retVal = false;
-		}
-		return retVal;
-	}
-
-	public boolean equalRecordAndScoreCount(
-			EvaluatedRecord[] evaluatedRecords) {
-		Precondition.assertNonNullArgument("null records", evaluatedRecords);
-		boolean retVal = true;
-		for (int i = 0; i < evaluatedRecords.length; i++) {
-			EvaluatedRecord er = evaluatedRecords[i];
-			if (!equalRecordAndScoreCount(er)) {
-				retVal = false;
-			}
-		}
 		return retVal;
 	}
 
@@ -662,6 +609,82 @@ class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 		}
 		String reVal = sw.toString();
 		return reVal;
+	}
+
+	public boolean equalRecordAndScoreCount(EvaluatedRecord evaluatedRecord) {
+		boolean retVal;
+		IRecord<?> r = evaluatedRecord.getRecord();
+		if (r instanceof ISingleRecord<?>) {
+			retVal = true;
+		} else if (r instanceof CompositeRecord<?>) {
+			CompositeRecord<?> cr = (CompositeRecord<?>) r;
+			IRecord<?>[] records = cr.getRecords();
+			CompositeMatchScore cms =
+				(CompositeMatchScore) evaluatedRecord.getScore();
+			MatchScore[] scores = cms.getInnerScores();
+			retVal = records.length == scores.length;
+		} else {
+			logger.warning("Unexpected record type: " + r.getClass().getName());
+			retVal = false;
+		}
+		return retVal;
+	}
+
+	public boolean equalRecordAndScoreCount(
+			EvaluatedRecord[] evaluatedRecords) {
+		Precondition.assertNonNullArgument("null records", evaluatedRecords);
+		boolean retVal = true;
+		for (int i = 0; i < evaluatedRecords.length; i++) {
+			EvaluatedRecord er = evaluatedRecords[i];
+			if (!equalRecordAndScoreCount(er)) {
+				retVal = false;
+			}
+		}
+		return retVal;
+	}
+
+	public URI extractLocationURI(TextRefRecordCollection resRc)
+			throws URISyntaxException {
+		Precondition.assertNonNullArgument("null record collection", resRc);
+
+		// target files or urls
+		String urlBeginingPart = null;
+		String urlEndingPart = null;
+
+		String urlString = resRc.getUrl();
+		final int lastPeriod = urlString.lastIndexOf(".");
+		final int lastSlash = urlString.lastIndexOf("/");
+		final int lastBkSlash = urlString.lastIndexOf("\\");
+		if (lastPeriod == -1 || lastPeriod < lastSlash
+				|| lastPeriod < lastBkSlash) {
+			urlBeginingPart = urlString;
+			urlEndingPart = "";
+		} else {
+			urlBeginingPart = urlString.substring(0, lastPeriod);
+			urlEndingPart = urlString.substring(lastPeriod);
+		}
+		String url = urlBeginingPart + urlEndingPart;
+		logger.fine("BatchMatchAnalyzer.extractLocationURI: '" + url + "'");
+		URI retVal = new URI(url);
+		return retVal;
+	}
+
+	public void removeLinkedRecordsFromSingleRecords(LinkedRecordSet<T> lrs,
+			SortedSet<IdentifiableWrapper<T>> singleRecords) {
+		Precondition.assertNonNullArgument("null linked record set", lrs);
+		Precondition.assertNonNullArgument("null set", singleRecords);
+		logger.finer("LinkedRecordSet size: " + lrs.getRecords().length);
+		logger.finer("Single record count: " + singleRecords.size());
+		for (DataAccessObject<T> record : lrs.getRecords()) {
+			IdentifiableWrapper<T> wrapper = new IdentifiableWrapper<>(record);
+			boolean isRemoved = singleRecords.remove(wrapper);
+			if (logger.isLoggable(Level.FINER)) {
+				String msg =
+					(isRemoved ? "Removed " : "Did not remove ") + record;
+				logger.finer(msg);
+			}
+		}
+		logger.finer("Single record count: " + singleRecords.size());
 	}
 
 	// public MergeGroup<T> stripQueryRecordFromMergeGroup(

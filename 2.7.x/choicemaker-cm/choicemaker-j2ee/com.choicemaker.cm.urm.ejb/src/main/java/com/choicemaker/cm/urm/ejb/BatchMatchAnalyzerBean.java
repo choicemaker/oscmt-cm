@@ -23,6 +23,7 @@ import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
+import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.BatchJobRigor;
 import com.choicemaker.cm.oaba.api.ServerConfigurationException;
 import com.choicemaker.cm.urm.api.BatchMatchAnalyzer;
@@ -94,8 +95,9 @@ public class BatchMatchAnalyzerBean implements BatchMatchAnalyzer {
 	@Override
 	public JobStatus getJobStatus(long jobID) throws ArgumentException,
 			ConfigException, CmRuntimeException, RemoteException {
-		// HERE
-		throw new Error("not yet implemented");
+		BatchJob urmJob = urmBatchController.findUrmJob(jobID);
+		JobStatus retVal = UrmEjbAssist.getJobStatus(urmJob);
+		return retVal;
 	}
 
 	@Override
