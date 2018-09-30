@@ -25,12 +25,13 @@ import com.choicemaker.cm.oaba.core.IMatchRecord2Source;
  * @author pcheung
  *
  */
-@SuppressWarnings({ "rawtypes" })
-public class MatchRecord2CompositeSource<T extends Comparable<T>> implements
-		IMatchRecord2Source<T> {
+@SuppressWarnings({
+		"rawtypes" })
+public class MatchRecord2CompositeSource<T extends Comparable<T>>
+		implements IMatchRecord2Source<T> {
 
-	private static final Logger log = Logger
-			.getLogger(MatchRecord2CompositeSource.class.getName());
+	private static final Logger log =
+		Logger.getLogger(MatchRecord2CompositeSource.class.getName());
 
 	private String fileBase;
 	private String fileExt;
@@ -91,8 +92,8 @@ public class MatchRecord2CompositeSource<T extends Comparable<T>> implements
 			File f = new File(fileName);
 
 			if (!f.exists())
-				throw new IllegalArgumentException("No files found for "
-						+ fileBase + " " + fileExt);
+				throw new IllegalArgumentException(
+						"No files found for " + fileBase + " " + fileExt);
 
 			numFiles = 1;
 			currentInd = 1;
@@ -101,9 +102,8 @@ public class MatchRecord2CompositeSource<T extends Comparable<T>> implements
 			info = fileBase + "." + fileExt;
 		} else {
 			currentInd = 1;
-			currentSource =
-				new MatchRecord2Source(getFileName(currentInd),
-						EXTERNAL_DATA_FORMAT.STRING);
+			currentSource = new MatchRecord2Source(getFileName(currentInd),
+					EXTERNAL_DATA_FORMAT.STRING);
 			info = fileBase + "." + fileExt;
 		}
 	}
@@ -115,11 +115,20 @@ public class MatchRecord2CompositeSource<T extends Comparable<T>> implements
 	private int countFiles() {
 		int i = 1;
 		File f = new File(getFileName(i));
+		log.fine(String.format("countFiles, checking if file '%s' exists ...",
+				f.getAbsolutePath()));
 		while (f.exists()) {
+			log.fine(String.format("countFiles, ... file '%s' exists",
+					f.getAbsolutePath()));
 			i++;
 			f = new File(getFileName(i));
+			log.fine(String.format(
+					"countFiles, checking if file '%s' exists ...",
+					f.getAbsolutePath()));
 		}
-		return i - 1;
+		int retVal = i - 1;
+		log.fine(String.format("countFiles returns %d", retVal));
+		return retVal;
 	}
 
 	/**
@@ -130,7 +139,10 @@ public class MatchRecord2CompositeSource<T extends Comparable<T>> implements
 	 * @return String - fileName
 	 */
 	private String getFileName(int fileNum) {
-		return fileBase + "_" + fileNum + "." + fileExt;
+		String retVal = fileBase + "_" + fileNum + "." + fileExt;
+		log.finer(
+				String.format("getFilename(%d) returns '%s'", fileNum, retVal));
+		return retVal;
 	}
 
 	@Override
@@ -173,9 +185,8 @@ public class MatchRecord2CompositeSource<T extends Comparable<T>> implements
 				currentSource.close();
 
 				currentInd++;
-				currentSource =
-					new MatchRecord2Source(getFileName(currentInd),
-							EXTERNAL_DATA_FORMAT.STRING);
+				currentSource = new MatchRecord2Source(getFileName(currentInd),
+						EXTERNAL_DATA_FORMAT.STRING);
 				currentSource.open();
 
 				if (currentSource.hasNext())
@@ -199,9 +210,8 @@ public class MatchRecord2CompositeSource<T extends Comparable<T>> implements
 	@Override
 	public void delete() throws BlockingException {
 		for (int i = 1; i <= numFiles; i++) {
-			MatchRecord2Source mrs =
-				new MatchRecord2Source(getFileName(i),
-						EXTERNAL_DATA_FORMAT.STRING);
+			MatchRecord2Source mrs = new MatchRecord2Source(getFileName(i),
+					EXTERNAL_DATA_FORMAT.STRING);
 			mrs.delete();
 			log.fine("removing " + mrs.getInfo());
 		}
