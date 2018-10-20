@@ -25,6 +25,8 @@ import java.util.logging.Logger;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
@@ -66,6 +68,7 @@ import com.choicemaker.cm.transitivity.util.CompositeXMLSerializer;
 				propertyValue = "javax.jms.Queue") })
 @SuppressWarnings({
 		"rawtypes" })
+@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 public class TransSerializerMDB implements MessageListener, Serializable {
 
 	private static final long serialVersionUID = 1L;

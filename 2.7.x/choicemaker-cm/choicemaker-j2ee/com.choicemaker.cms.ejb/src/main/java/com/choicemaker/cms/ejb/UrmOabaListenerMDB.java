@@ -13,6 +13,8 @@ package com.choicemaker.cms.ejb;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 
 import com.choicemaker.cm.batch.api.WorkflowListener;
 

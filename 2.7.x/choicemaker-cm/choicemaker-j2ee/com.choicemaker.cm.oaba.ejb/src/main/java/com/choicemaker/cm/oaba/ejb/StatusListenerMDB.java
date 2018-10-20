@@ -14,6 +14,8 @@ import java.util.logging.Logger;
 
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
@@ -25,6 +27,7 @@ import com.choicemaker.cm.batch.api.BatchProcessingNotification;
 				propertyValue = "java:/choicemaker/urm/jms/statusTopic"),
 		@ActivationConfigProperty(propertyName = "destinationType",
 				propertyValue = "javax.jms.Topic") })
+//@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 public class StatusListenerMDB implements MessageListener, Serializable {
 
 	private static final long serialVersionUID = 271L;

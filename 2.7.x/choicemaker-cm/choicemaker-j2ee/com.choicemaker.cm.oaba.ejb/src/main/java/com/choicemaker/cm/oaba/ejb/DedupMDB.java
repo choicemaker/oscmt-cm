@@ -12,6 +12,8 @@ import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.jms.Queue;
 
 import com.choicemaker.cm.args.OabaParameters;
@@ -43,6 +45,7 @@ import com.choicemaker.cm.oaba.services.OversizedDedupService;
 				propertyValue = "java:/choicemaker/urm/jms/dedupQueue"),
 		@ActivationConfigProperty(propertyName = "destinationType",
 				propertyValue = "javax.jms.Queue") })
+@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 public class DedupMDB extends AbstractOabaMDB {
 
 	private static final long serialVersionUID = 271L;

@@ -10,6 +10,8 @@ package com.choicemaker.cm.oaba.ejb;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 
@@ -26,6 +28,7 @@ import javax.jms.MessageListener;
 				propertyValue = "java:/choicemaker/urm/jms/matchSchedulerQueue"),
 		@ActivationConfigProperty(propertyName = "destinationType",
 				propertyValue = "javax.jms.Queue") })
+@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 public class MatchSchedulerMDB implements MessageListener {
 
 	@EJB
