@@ -46,9 +46,9 @@ public class SqlServerParallelRecordSource implements RecordSource {
 
 	private final String fileName;
 	private final String dbConfiguration;
+	private ImmutableProbabilityModel model;
 	private final String idsQuery;
 
-	private ImmutableProbabilityModel model;
 	private String dsName;
 	private DataSource ds;
 	private Connection connection;

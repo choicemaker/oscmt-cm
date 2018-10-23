@@ -48,6 +48,7 @@ public class SqlServerRecordSource implements RecordSource {
 	private DataSource ds;
 	private Connection connection;
 	private Statement stmt;
+
 	private DbReaderSequential dbr;
 	
 	public SqlServerRecordSource() {
