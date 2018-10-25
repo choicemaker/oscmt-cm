@@ -2,6 +2,7 @@ package com.choicemaker.cmit.io.db.sqlserver;
 
 import static com.choicemaker.cmit.io.db.oracle.JdbcTestUtils.loadProperties;
 import static com.choicemaker.cmit.io.db.oracle.JdbcTestUtils.logProperty;
+import static com.choicemaker.cmit.io.db.sqlserver.C3P0_DataSource.PN_POOLNAME;
 import static com.choicemaker.cmit.io.db.sqlserver.C3P0_DataSource.configureDatasource;
 import static com.choicemaker.cmit.io.db.sqlserver.SqlServerTestProperties.PN_DATABASE_CONFIGURATION;
 import static com.choicemaker.cmit.io.db.sqlserver.SqlServerTestProperties.PN_MODEL_NAME;
@@ -53,16 +54,17 @@ public class SqlServerRecordSourceApp {
 		FileReader fr = new FileReader(propertyFileName);
 		Properties p = loadProperties(fr);
 
-		final String dsName = p.getProperty(PN_MODEL_NAME);
+		final String dsName = p.getProperty(PN_POOLNAME);
 		Precondition.assertNonEmptyString("missing name for data source",
 				propertyFileName);
 		logProperty(PN_MODEL_NAME, dsName);
 
-		DataSource ds = configureDatasource(p);
+		final DataSource ds = configureDatasource(p);
 		assert ds != null;
+		final DataSource ds2 = DataSources.getDataSource(dsName);
 		Precondition.assertBoolean(
 				String.format("misconfigured data source '%s'", dsName),
-				ds == DataSources.getDataSource(dsName));
+				ds == ds2);
 
 		String modelName = p.getProperty(PN_MODEL_NAME);
 		Precondition.assertNonEmptyString("missing name for model", modelName);
@@ -98,7 +100,7 @@ public class SqlServerRecordSourceApp {
 		final float rate = duration == 0 ? 0f : count / seconds;
 
 		String msg = String.format(
-				"Records: %d, duration: %f (sec), rate: %d (recs/sec)", count,
+				"Records: %d, duration: %f (sec), rate: %f (recs/sec)", count,
 				seconds, rate);
 		log.info(msg);
 		System.out.println(msg);
