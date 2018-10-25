@@ -32,6 +32,7 @@ import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.Sink;
+import com.choicemaker.cm.io.db.base.DataSources;
 import com.choicemaker.cm.io.db.base.DbAccessor;
 import com.choicemaker.cm.io.db.base.DbReaderParallel;
 import com.choicemaker.cm.io.db.base.DbView;
@@ -41,8 +42,8 @@ import com.choicemaker.cm.io.db.base.DbView;
  */
 public class SqlServerParallelRecordSource implements RecordSource {
 
-	private static Logger logger = Logger
-			.getLogger(SqlServerParallelRecordSource.class.getName());
+	private static Logger logger =
+		Logger.getLogger(SqlServerParallelRecordSource.class.getName());
 
 	private final String fileName;
 	private final String dbConfiguration;
@@ -70,10 +71,12 @@ public class SqlServerParallelRecordSource implements RecordSource {
 			logger.fine("Null file name for SqlServerParallelRecordSource");
 		}
 		if (dbConfiguration == null || dbConfiguration.trim().isEmpty()) {
-			throw new IllegalArgumentException("null or blank database configuration name");
+			throw new IllegalArgumentException(
+					"null or blank database configuration name");
 		}
 		if (!isValidQuery(idsQuery)) {
-			throw new IllegalArgumentException("idsQuery must contain ' AS ID '.");
+			throw new IllegalArgumentException(
+					"idsQuery must contain ' AS ID '.");
 		}
 
 		// Don't use public modifiers here -- preconditions may not apply
@@ -217,7 +220,7 @@ public class SqlServerParallelRecordSource implements RecordSource {
 		return r;
 	}
 
-	public void close() /* throws IOException */{
+	public void close() /* throws IOException */ {
 
 		List exceptionMessages = new ArrayList();
 		if (selects != null) {
@@ -227,9 +230,8 @@ public class SqlServerParallelRecordSource implements RecordSource {
 					try {
 						selects[i].close();
 					} catch (SQLException e) {
-						String msg =
-							"Problem closing statement [" + i + "]:"
-									+ e.toString();
+						String msg = "Problem closing statement [" + i + "]:"
+								+ e.toString();
 						exceptionMessages.add(msg);
 					}
 				}
@@ -245,9 +247,8 @@ public class SqlServerParallelRecordSource implements RecordSource {
 					try {
 						results[i].close();
 					} catch (SQLException e) {
-						String msg =
-							"Problem closing result set [" + i + "]:"
-									+ e.toString();
+						String msg = "Problem closing result set [" + i + "]:"
+								+ e.toString();
 						exceptionMessages.add(msg);
 					}
 				}
@@ -280,7 +281,7 @@ public class SqlServerParallelRecordSource implements RecordSource {
 			PrintWriter pw = new PrintWriter(sw);
 			String msg = "Problem(s) closing SqlServerParallelReader: " + count;
 			pw.println(msg);
-			for (int i=0; i<count; i++) {
+			for (int i = 0; i < count; i++) {
 				msg = (String) exceptionMessages.get(i);
 				pw.println(msg);
 			}
@@ -293,7 +294,7 @@ public class SqlServerParallelRecordSource implements RecordSource {
 		assert results == null;
 		assert getConnection() == null;
 	}
-	
+
 	protected void finalize() {
 		close();
 	}
@@ -320,6 +321,17 @@ public class SqlServerParallelRecordSource implements RecordSource {
 	}
 
 	public DataSource getDataSource() {
+		if (ds == null) {
+			final String name = getDataSourceName();
+			String msg = String.format("Looking up JDBC datasource '%s'", name);
+			logger.fine(msg);
+			ds = DataSources.getDataSource(name);
+			if (ds == null) {
+				msg = String.format("No datasource registered for name '%s'",
+						name);
+				logger.warning(msg);
+			}
+		}
 		if (ds == null) {
 			throw new IllegalStateException("null data source");
 		}
@@ -377,8 +389,9 @@ public class SqlServerParallelRecordSource implements RecordSource {
 
 	public String toString() {
 		return "SqlServerParallelRecordSource [fileName=" + getFileName()
-				+ ", model=" + getModel() + ", dbConfiguration=" + getDbConfiguration()
-				+ ", idsQuery=" + getIdsQuery() + ", dsName=" + getDataSourceName() + "]";
+				+ ", model=" + getModel() + ", dbConfiguration="
+				+ getDbConfiguration() + ", idsQuery=" + getIdsQuery()
+				+ ", dsName=" + getDataSourceName() + "]";
 	}
 
 }
