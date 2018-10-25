@@ -6,7 +6,7 @@
 # Earlier JVMs won't work, and later JVMs haven't been tested.
 #
 APP_DIR="`dirname "$0"`"
-APP="com.choicemaker.cmit.io.db.oracle.RecordSourceSnapshotApp"
+APP="com.choicemaker.cmit.io.db.sqlserver.SqlServerRecordSourceApp"
 LIB="$APP_DIR/lib"
 
 # Java command
@@ -29,8 +29,8 @@ for f in $LIB/* ; do
 done
 
 # Uncomment the following line to specify the logging configuration
-JAVA_OPTS="$JAVA_OPTS -Djava.util.logging.config.file=logging.properties"
-JAVA_OPTS="$JAVA_OPTS -DpropertyFile=src/test/resources/oracle_jdbc_test_local.properties"
+JAVA_OPTS="$JAVA_OPTS -Djava.util.logging.config.file=logging_local.properties"
+JAVA_OPTS="$JAVA_OPTS -DpropertyFile=sqlserver_jdbc_local.properties"
 
 # Uncomment the following line to enable assertions
 JAVA_OPTS="$JAVA_OPTS -ea"
@@ -44,8 +44,9 @@ JAVA_OPTS="$JAVA_OPTS -ea"
 
 CMD="$JAVA $JAVA_OPTS -cp $CP $APP $*"
 
-echo
-echo "$CMD"
+#echo
+#echo "$CMD"
 echo
 eval "$CMD"
+echo
 
