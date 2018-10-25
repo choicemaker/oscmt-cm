@@ -12,6 +12,7 @@ import static com.choicemaker.cm.io.db.oracle.OracleJdbcProperties.PN_JDBC_POOL_
 import static com.choicemaker.cm.io.db.oracle.OracleJdbcProperties.PN_JDBC_URL;
 import static com.choicemaker.cm.io.db.oracle.OracleJdbcProperties.PN_JDBC_USER;
 import static com.choicemaker.cmit.io.db.oracle.OracleTestProperties.DEFAULT_JDBC_URL;
+import static com.choicemaker.cmit.io.db.oracle.JdbcTestUtils.*;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -25,10 +26,10 @@ import oracle.jdbc.OracleConnection;
 import oracle.ucp.jdbc.PoolDataSource;
 import oracle.ucp.jdbc.PoolDataSourceFactory;
 
-public class OracleTestUtils {
+public class Oracle_DataSource {
 
 	public static final Logger logger =
-		Logger.getLogger(OracleTestUtils.class.getName());
+		Logger.getLogger(Oracle_DataSource.class.getName());
 
 	public static DataSource configureDatasource(Properties p)
 			throws SQLException {
@@ -76,73 +77,7 @@ public class OracleTestUtils {
 		return retVal;
 	}
 
-	public static String createPasswordHint(String password) {
-		final int PASSWORD_HINT_LENGTH = 3;
-		final String ELLIPSIS = "...";
-
-		final String retVal;
-		if (password == null) {
-			retVal = "null";
-		} else if (password.length() < PASSWORD_HINT_LENGTH) {
-			retVal = ELLIPSIS;
-		} else {
-			retVal = password.substring(0, PASSWORD_HINT_LENGTH) + ELLIPSIS;
-		}
-		return retVal;
-	}
-
-	public static int getPropertyIntValue(Properties p, String key,
-			String defaultValue) {
-		assert p != null;
-		assert key != null;
-		assert defaultValue != null;
-		String s = p.getProperty(key, defaultValue);
-		int retVal;
-		try {
-			retVal = Integer.valueOf(s);
-		} catch (NumberFormatException x) {
-			String msg = "Invalid value ('" + s + "') for property '" + key
-					+ "': " + x.toString();
-			logger.severe(msg);
-			throw new IllegalArgumentException(msg);
-		}
-		return retVal;
-	}
-
-	public static Properties loadProperties(Reader r) throws IOException {
-		Properties p = new Properties();
-		p.load(r);
-		return p;
-	}
-
-	public static void logProperty(String key, String value) {
-		String msg = "Key '" + key + "': value '" + value + "'";
-		logger.info(msg);
-	}
-
-	public static void logSecurityCredential(String key, String value) {
-		value = createPasswordHint(value);
-		String msg = "Key '" + key + "': value '" + value + "'";
-		logger.info(msg);
-	}
-
-	/**
-	 * Checks that the specified properties are not null or empty and that they
-	 * contain values for user name and password.
-	 */
-	public static void validateProperties(Properties p) {
-		if (p == null || p.isEmpty()) {
-			throw new IllegalArgumentException("null or empty properties");
-		}
-		if (null == p.getProperty(PN_JDBC_USER)) {
-			throw new IllegalArgumentException("null user name");
-		}
-		if (null == p.getProperty(PN_JDBC_PASSWORD)) {
-			throw new IllegalArgumentException("null password");
-		}
-	}
-
-	private OracleTestUtils() {
+	private Oracle_DataSource() {
 	}
 
 }

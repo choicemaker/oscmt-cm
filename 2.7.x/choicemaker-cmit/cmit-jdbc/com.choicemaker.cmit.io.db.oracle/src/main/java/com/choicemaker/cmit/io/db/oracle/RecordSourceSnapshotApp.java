@@ -16,9 +16,9 @@ import static com.choicemaker.cmit.io.db.oracle.OracleTestProperties.PN_DATABASE
 import static com.choicemaker.cmit.io.db.oracle.OracleTestProperties.PN_MODEL_NAME;
 import static com.choicemaker.cmit.io.db.oracle.OracleTestProperties.PN_PROPERTY_FILE;
 import static com.choicemaker.cmit.io.db.oracle.OracleTestProperties.PN_SQL_RECORD_SELECTION;
-import static com.choicemaker.cmit.io.db.oracle.OracleTestUtils.configureDatasource;
-import static com.choicemaker.cmit.io.db.oracle.OracleTestUtils.loadProperties;
-import static com.choicemaker.cmit.io.db.oracle.OracleTestUtils.logProperty;
+import static com.choicemaker.cmit.io.db.oracle.Oracle_DataSource.configureDatasource;
+import static com.choicemaker.cmit.io.db.oracle.JdbcTestUtils.loadProperties;
+import static com.choicemaker.cmit.io.db.oracle.JdbcTestUtils.logProperty;
 import static com.choicemaker.e2.platform.InstallablePlatform.INSTALLABLE_PLATFORM;
 
 import java.io.FileReader;
