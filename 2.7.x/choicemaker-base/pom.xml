@@ -930,6 +930,11 @@
         <version>${choicemaker.release.version}</version>
       </dependency>
       <dependency>
+        <groupId>com.choicemaker.cmit</groupId>
+        <artifactId>com.choicemaker.cmit.io.db.sqlserver</artifactId>
+        <version>${choicemaker.release.version}</version>
+      </dependency>
+      <dependency>
         <groupId>com.choicemaker.e2</groupId>
         <artifactId>com.choicemaker.e2</artifactId>
         <version>${choicemaker.release.version}</version>

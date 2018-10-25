@@ -61,6 +61,7 @@ public class SqlServerRecordSource implements RecordSource {
 		setDataSourceName(dsName);
 		this.dbConfiguration = dbConfiguration;
 		this.idsQuery = idsQuery;
+		setFileName(fileName);
 	}
 
 	public void open() throws IOException {
