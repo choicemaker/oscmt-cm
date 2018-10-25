@@ -156,10 +156,7 @@ public class SqlServerRecordSourceApp {
 
 	public static <T extends Comparable<T>> void logRecord(int count,
 			Record<T> r) {
-		if (log.isLoggable(Level.FINEST)) {
-			String sid = r == null ? null : r.getId().toString();
-			System.err.println(String.format("%8d: %s", count, sid));
-		}
+		SqlServerParallelRecordSourceApp.logRecord(count, r, log.isLoggable(Level.FINEST));
 	}
 
 }
