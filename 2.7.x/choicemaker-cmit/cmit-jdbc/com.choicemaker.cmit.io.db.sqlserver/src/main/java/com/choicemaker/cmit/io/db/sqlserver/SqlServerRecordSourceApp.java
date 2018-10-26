@@ -36,8 +36,9 @@ public class SqlServerRecordSourceApp<T extends Comparable<T>>
 		SqlServerRecordSourceApp<T> app =
 			new SqlServerRecordSourceApp<>(propertyFileName);
 
-		String stats = app.doDownloadReportStats();
-		System.out.println(stats);
+		DownloadStats stats = app.doDownloadReportStats();
+		System.err.println(stats.toString());
+		System.out.println(stats.toCSV());
 
 		log.exiting(SOURCE, METHOD);
 	}

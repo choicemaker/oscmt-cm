@@ -36,8 +36,9 @@ public class SqlServerParallelRecordSourceApp<T extends Comparable<T>>
 		SqlServerParallelRecordSourceApp<T> app =
 			new SqlServerParallelRecordSourceApp<>(propertyFileName);
 
-		String stats = app.doDownloadReportStats();
-		System.out.println(stats);
+		DownloadStats stats = app.doDownloadReportStats();
+		System.err.println(stats.toString());
+		System.out.println(stats.toCSV());
 
 		log.exiting(SOURCE, METHOD);
 	}

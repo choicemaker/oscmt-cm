@@ -131,30 +131,23 @@ public abstract class AbstractSqlServerRecordSourceApp<T extends Comparable<T>> 
 	// return rs;
 	// }
 
-	public String doDownloadReportStats()
+	public DownloadStats doDownloadReportStats()
 			throws BlockingException, ModelConfigurationException, IOException {
 		final String modelName = this.getModelName();
 		final ImmutableProbabilityModel model =
 			lookupProbabilityModel(modelName);
 		final RecordSource rs = this.createRecordSource(model);
 
-		final long start = System.currentTimeMillis();
-		int count = this.downloadRecords(rs, model);
+		DownloadStats retVal = this.downloadRecords(rs, model);
+		log.info(retVal.toString());
 
-		final long duration = System.currentTimeMillis() - start;
-		final float seconds = duration / 1000f;
-		final float rate = duration == 0 ? 0f : count / seconds;
-
-		final String appName = this.getClass().getSimpleName();
-		String msg = String.format(
-				"App: %s, Records: %d, duration: %f (sec), rate: %f (recs/sec)",
-				appName, count, seconds, rate);
-		log.info(msg);
-		return msg;
+		return retVal;
 	}
 
-	public int downloadRecords(RecordSource rs, ImmutableProbabilityModel model)
-			throws BlockingException {
+	public DownloadStats downloadRecords(RecordSource rs,
+			ImmutableProbabilityModel model) throws BlockingException {
+
+		final String appName = this.getClass().getSimpleName();
 
 		final String METHOD = "downloadRecords";
 		log.entering(SOURCE, METHOD, new Object[] {
@@ -162,31 +155,43 @@ public abstract class AbstractSqlServerRecordSourceApp<T extends Comparable<T>> 
 		assert rs != null;
 		assert model != null;
 
-		int retVal = 0;
+		DownloadStats retVal = null;
+		int count = 0;
 		try {
 			rs.setModel(model);
+			final long start_0 = System.currentTimeMillis();
 			rs.open();
+			final long acquireMsecs = System.currentTimeMillis() - start_0;
+			log.fine(String.format("Connection acquisition (msecs): %d",
+					acquireMsecs));
 
+			final long start_1 = System.currentTimeMillis();
 			while (rs.hasNext()) {
 				@SuppressWarnings("unchecked")
 				Record<T> r = rs.getNext();
 				Comparable<T> id = r.getId();
-				boolean isCheckpoint = (retVal
+				boolean isCheckpoint = (count
 						% AbstractSqlServerRecordSourceApp.COUNT_RECORDS_BETWEEN_DEBUG_PRINTS == 0)
-						|| (retVal
+						|| (count
 								% AbstractSqlServerRecordSourceApp.COUNT_RECORDS_BETWEEN_INFO_PRINTS == 0);
 				if (isCheckpoint) {
 					String msg =
-						String.format("Record %s / count %d", id, retVal);
+						String.format("Record %s / count %d", id, count);
 					if (log.isLoggable(Level.INFO)) {
 						log.info(msg);
 					} else if (log.isLoggable(Level.FINE)) {
 						log.fine(msg);
 					}
 				}
-				logRecord(retVal, r);
-				retVal++;
+				logRecord(count, r);
+				count++;
 			}
+			final long downloadMsecs = System.currentTimeMillis() - start_1;
+			log.fine(String.format("Download duration (msecs): %d",
+					downloadMsecs));
+
+			retVal =
+				new DownloadStats(appName, acquireMsecs, count, downloadMsecs);
 
 		} catch (Exception ex) {
 			throw new BlockingException(ex.toString());
