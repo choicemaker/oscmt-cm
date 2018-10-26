@@ -35,18 +35,13 @@ public abstract class AbstractSqlServerRecordSourceApp<T extends Comparable<T>> 
 
 	/** Number of records between when debug print of the current record id */
 	public static final int COUNT_RECORDS_BETWEEN_DEBUG_PRINTS = 5000;
+
 	/** Number of records between when info print of the current record id */
 	public static final int COUNT_RECORDS_BETWEEN_INFO_PRINTS = 50000;
 
 	public static <T extends Comparable<T>> void logRecord(int count,
 			Record<T> r) {
-		AbstractSqlServerRecordSourceApp.logRecord(count, r,
-				log.isLoggable(Level.FINEST));
-	}
-
-	public static <T extends Comparable<T>> void logRecord(int count,
-			Record<T> r, boolean isLoggable) {
-		if (isLoggable) {
+		if (log.isLoggable(Level.FINEST)) {
 			String sid = r == null ? null : r.getId().toString();
 			System.err.println(String.format("%8d: %s", count, sid));
 		}
