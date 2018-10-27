@@ -72,5 +72,5 @@ rem echo.
 rem echo CMD = %CMD%
 rem echo.
 
-%CMD%
+%CMD% 2>NUL
 rem echo.
