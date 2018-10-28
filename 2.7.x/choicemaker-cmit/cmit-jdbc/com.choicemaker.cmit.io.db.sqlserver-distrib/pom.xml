@@ -41,6 +41,7 @@
             <configuration>
               <outputDirectory>
                 ${eclipse.application.lib.dir}</outputDirectory>
+              <stripVersion>true</stripVersion>
             </configuration>
           </execution>
         </executions>

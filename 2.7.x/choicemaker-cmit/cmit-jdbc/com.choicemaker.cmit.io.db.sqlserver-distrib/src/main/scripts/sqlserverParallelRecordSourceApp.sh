@@ -46,7 +46,7 @@ CMD="$JAVA $JAVA_OPTS -cp $CP $APP $*"
 
 #echo
 #echo "$CMD"
-echo
-eval "$CMD"
-echo
+#echo
+eval "$CMD" 2>/dev/null
+#echo
 

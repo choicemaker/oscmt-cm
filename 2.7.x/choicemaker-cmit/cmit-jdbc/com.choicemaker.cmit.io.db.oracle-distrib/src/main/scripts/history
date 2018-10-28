@@ -1,6 +1,0 @@
-echo ; APP="$(echo src/main/java/com/choicemaker/cmit/io/db/oracle/RecordSourceSnapshotApp.java | sed -e "s%src/main/java/%%" -e "s%\.java$%%" -e "s%/%.%g")" ; echo "APP: $APP" ; echo
-
-echo ; CP="" ; for f in lib/* ; do if [ "x$CP" == "x" ] ; then CP="$f" ; else CP="$CP:$f" ; fi ; done ; echo ; echo "CP: $CP" ; echo
-
-echo ; cmd="java -ea -cp target/com.choicemaker.cmit.io.db.oracle-2.7.1-SNAPSHOT.jar:$CP -DpropertyFile=src/test/resources/oracle_jdbc_test_local.properties $APP" -Djava.util.logging.config.file=src/main/resources/logging.properties ; echo $cmd ; echo ; eval "$cmd" ; echo
-
