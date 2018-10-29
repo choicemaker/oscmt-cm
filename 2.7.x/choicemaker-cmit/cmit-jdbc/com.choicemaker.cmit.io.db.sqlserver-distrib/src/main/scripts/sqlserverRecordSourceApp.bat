@@ -1,6 +1,6 @@
 echo off
 rem  2018-10-24 rphall
-rem  Batch script to start the command-line Oracle RecordSourceSnapshot application.
+rem  Batch script to start the command-line SqlServer RecordSourceSnapshot application.
 rem  Requuires a 1.8 JRE or JDK in the PATH.  Earlier JVMs won't work, and
 rem  later JVMs haven't been tested.
 
@@ -29,15 +29,15 @@ set "CP=%CP%;%LIB%\com.choicemaker.cm.io.composite.base.jar"
 set "CP=%CP%;%LIB%\com.choicemaker.cm.io.db.base.jar"
 set "CP=%CP%;%LIB%\com.choicemaker.cm.io.db.oracle.jar"
 set "CP=%CP%;%LIB%\com.choicemaker.cm.io.db.sqlserver.jar"
+set "CP=%CP%;%LIB%\com.choicemaker.cm.matching.gen.jar"
 set "CP=%CP%;%LIB%\com.choicemaker.cm.ml.me.base.jar"
 set "CP=%CP%;%LIB%\com.choicemaker.e2.embed.jar"
 set "CP=%CP%;%LIB%\com.choicemaker.e2.jar"
 set "CP=%CP%;%LIB%\jasypt-1.9.2-lite.jar"
 set "CP=%CP%;%LIB%\jdom2.jar"
 set "CP=%CP%;%LIB%\mchange-commons-java.jar"
-set "CP=%CP%;%LIB%\ojdbc6.jar"
-set "CP=%CP%;%LIB%\ucp.jar"
 set "CP=%CP%;%LIB%\sqljdbc4.jar"
+set "CP=%CP%;%LIB%\simple-person-plugin.jar"
 
 rem echo.
 rem echo CP = %CP%
@@ -48,14 +48,11 @@ rem  Recommended memory allocations
 rem set "JAVA_OPTS=-Xms584M -Xmx512M"
 
 rem  Uncomment the following line to specify the logging configuration
-set "JAVA_OPTS=%JAVA_OPTS% -Djava.util.logging.config.file=logging_local.properties"
-set "JAVA_OPTS=%JAVA_OPTS% -DpropertyFile=sqlserver_jdbc_local.properties"
+set "JAVA_OPTS=%JAVA_OPTS% -Djava.util.logging.config.file=logging.properties"
+set "JAVA_OPTS=%JAVA_OPTS% -DpropertyFile=sqlserver_jdbc.properties"
 
 rem  Uncomment the following line to enable assertions
 set "JAVA_OPTS=%JAVA_OPTS% -ea"
-
-rem  Uncomment the following line to enable Oracle remote debugging
-rem set "JAVA_OPTS=%JAVA_OPTS% -DchoicemakerOracleDebugging=true"
 
 rem  Uncomment the following line to enable remote debugging
 rem set "JAVA_OPTS=%JAVA_OPTS% -debug"
