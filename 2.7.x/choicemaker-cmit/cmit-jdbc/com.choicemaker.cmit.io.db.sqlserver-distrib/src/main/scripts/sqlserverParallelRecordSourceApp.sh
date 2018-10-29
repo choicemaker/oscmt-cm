@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # 2018-10-24 rphall
-# Bash script to start the command-line Oracle RecordSourceSnapshot application.
+# Bash script to start the command-line Sqlserver RecordSourceSnapshot application.
 # Tweak the JAVA variable to point at a 1.8 JRE or JDK.
 # Earlier JVMs won't work, and later JVMs haven't been tested.
 #
@@ -34,9 +34,6 @@ JAVA_OPTS="$JAVA_OPTS -DpropertyFile=sqlserver_jdbc_local.properties"
 
 # Uncomment the following line to enable assertions
 JAVA_OPTS="$JAVA_OPTS -ea"
-
-# Uncomment the following line to enable Oracle remote debugging
-#JAVA_OPTS="$JAVA_OPTS -DchoicemakerOracleDebugging=true"
 
 # Uncomment the following line to enable remote debugging
 #JAVA_OPTS="$JAVA_OPTS -debug"

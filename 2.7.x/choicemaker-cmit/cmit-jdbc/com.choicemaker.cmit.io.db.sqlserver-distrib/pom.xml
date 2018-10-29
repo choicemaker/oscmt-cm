@@ -41,6 +41,7 @@
             <configuration>
               <outputDirectory>
                 ${eclipse.application.lib.dir}</outputDirectory>
+              <excludeArtifactIds>ojdbc6,ucp</excludeArtifactIds>
               <stripVersion>true</stripVersion>
             </configuration>
           </execution>
@@ -70,6 +71,18 @@
     <dependency>
       <groupId>com.choicemaker.cmit</groupId>
       <artifactId>com.choicemaker.cmit.io.db.sqlserver</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.microsoft.sqlserver</groupId>
+      <artifactId>sqljdbc4</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.matching.gen</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>simple-person-plugin</artifactId>
     </dependency>
   </dependencies>
 
