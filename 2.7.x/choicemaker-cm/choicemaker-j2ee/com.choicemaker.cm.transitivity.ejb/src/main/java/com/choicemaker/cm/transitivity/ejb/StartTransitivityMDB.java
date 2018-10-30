@@ -62,7 +62,7 @@ import com.choicemaker.cm.transitivity.core.TransitivityEventBean;
 				propertyValue = "java:/choicemaker/urm/jms/transitivityQueue"),
 		@ActivationConfigProperty(propertyName = "destinationType",
 				propertyValue = "javax.jms.Queue") })
-@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+//@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 public class StartTransitivityMDB extends AbstractTransitivityMDB {
 
 	private static final long serialVersionUID = 1L;

@@ -42,7 +42,7 @@ import com.choicemaker.cm.oaba.ejb.util.MessageBeanUtils;
 				propertyValue = "java:/choicemaker/urm/jms/singleMatchQueue"),
 		@ActivationConfigProperty(propertyName = "destinationType",
 				propertyValue = "javax.jms.Queue") })
-@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+//@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 public class SingleRecordMatchMDB extends AbstractOabaMDB {
 
 	private static final long serialVersionUID = 271L;

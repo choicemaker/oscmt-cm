@@ -80,7 +80,7 @@ import com.choicemaker.cm.oaba.services.GenericDedupService;
 				propertyValue = "java:/choicemaker/urm/jms/matchDedupQueue"),
 		@ActivationConfigProperty(propertyName = "destinationType",
 				propertyValue = "javax.jms.Queue") })
-@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+//@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 public class MatchDedupMDB implements MessageListener, Serializable {
 
 	private static final long serialVersionUID = 271L;

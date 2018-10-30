@@ -55,7 +55,7 @@ import com.choicemaker.cm.transitivity.api.TransitivityParametersController;
 				propertyValue = "java:/choicemaker/urm/jms/transMatcherQueue"),
 		@ActivationConfigProperty(propertyName = "destinationType",
 				propertyValue = "javax.jms.Queue") })
-@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+//@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 public class TransMatcherMDB extends AbstractMatcher
 		implements MessageListener {
 

@@ -62,7 +62,7 @@ import com.choicemaker.cm.transitivity.api.TransitivityParametersController;
 				propertyValue = "java:/choicemaker/urm/jms/transMatchDedupQueue"),
 		@ActivationConfigProperty(propertyName = "destinationType",
 				propertyValue = "javax.jms.Queue") })
-@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+//@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 public class TransMatchDedupMDB extends AbstractTransitivityMDB {
 
 	private static final long serialVersionUID = 2711L;

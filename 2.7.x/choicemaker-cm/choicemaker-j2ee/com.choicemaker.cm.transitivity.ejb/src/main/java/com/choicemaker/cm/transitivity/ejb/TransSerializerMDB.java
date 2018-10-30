@@ -68,7 +68,7 @@ import com.choicemaker.cm.transitivity.util.CompositeXMLSerializer;
 				propertyValue = "javax.jms.Queue") })
 @SuppressWarnings({
 		"rawtypes" })
-@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+//@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 public class TransSerializerMDB implements MessageListener, Serializable {
 
 	private static final long serialVersionUID = 1L;
