@@ -1,6 +1,6 @@
 echo off
 rem  2018-10-24 rphall
-rem  Batch script to start the command-line Sqlserver RecordSourceSnapshot application.
+rem  Batch script to start the command-line SqlServer RecordSourceSnapshot application.
 rem  Requuires a 1.8 JRE or JDK in the PATH.  Earlier JVMs won't work, and
 rem  later JVMs haven't been tested.
 
@@ -48,8 +48,8 @@ rem  Recommended memory allocations
 rem set "JAVA_OPTS=-Xms584M -Xmx512M"
 
 rem  Uncomment the following line to specify the logging configuration
-set "JAVA_OPTS=%JAVA_OPTS% -Djava.util.logging.config.file=logging_local.properties"
-set "JAVA_OPTS=%JAVA_OPTS% -DpropertyFile=sqlserver_jdbc_local.properties"
+set "JAVA_OPTS=%JAVA_OPTS% -Djava.util.logging.config.file=logging.properties"
+set "JAVA_OPTS=%JAVA_OPTS% -DpropertyFile=sqlserver_jdbc.properties"
 
 rem  Uncomment the following line to enable assertions
 set "JAVA_OPTS=%JAVA_OPTS% -ea"

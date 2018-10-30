@@ -29,6 +29,7 @@ set "CP=%CP%;%LIB%\com.choicemaker.cm.io.composite.base.jar"
 set "CP=%CP%;%LIB%\com.choicemaker.cm.io.db.base.jar"
 set "CP=%CP%;%LIB%\com.choicemaker.cm.io.db.oracle.jar"
 set "CP=%CP%;%LIB%\com.choicemaker.cm.io.db.sqlserver.jar"
+set "CP=%CP%;%LIB%\com.choicemaker.cm.matching.gen.jar"
 set "CP=%CP%;%LIB%\com.choicemaker.cm.ml.me.base.jar"
 set "CP=%CP%;%LIB%\com.choicemaker.e2.embed.jar"
 set "CP=%CP%;%LIB%\com.choicemaker.e2.jar"
@@ -47,8 +48,8 @@ rem  Recommended memory allocations
 rem set "JAVA_OPTS=-Xms584M -Xmx512M"
 
 rem  Uncomment the following line to specify the logging configuration
-set "JAVA_OPTS=%JAVA_OPTS% -Djava.util.logging.config.file=logging_local.properties"
-set "JAVA_OPTS=%JAVA_OPTS% -DpropertyFile=sqlserver_jdbc_local.properties"
+set "JAVA_OPTS=%JAVA_OPTS% -Djava.util.logging.config.file=logging.properties"
+set "JAVA_OPTS=%JAVA_OPTS% -DpropertyFile=sqlserver_jdbc.properties"
 
 rem  Uncomment the following line to enable assertions
 set "JAVA_OPTS=%JAVA_OPTS% -ea"
