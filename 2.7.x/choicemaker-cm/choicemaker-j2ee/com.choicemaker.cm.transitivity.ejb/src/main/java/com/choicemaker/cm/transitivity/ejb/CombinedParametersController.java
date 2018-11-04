@@ -8,6 +8,7 @@
 package com.choicemaker.cm.transitivity.ejb;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.TransitivityParameters;
@@ -16,6 +17,11 @@ import com.choicemaker.cm.oaba.api.OabaParametersController;
 import com.choicemaker.cm.transitivity.api.TransitivityParametersController;
 
 public class CombinedParametersController implements OabaParametersController {
+
+	private static final Logger logger =
+		Logger.getLogger(CombinedParametersController.class.getName());
+	private static final String SOURCE =
+		CombinedParametersController.class.getSimpleName();
 
 	private final OabaParametersController o;
 	private final TransitivityParametersController t;
@@ -57,22 +63,35 @@ public class CombinedParametersController implements OabaParametersController {
 
 	@Override
 	public OabaParameters findOabaParameters(long id) {
+		final String METHOD = "findOabaParameters(long)";
 		OabaParameters retVal = o.findOabaParameters(id);
 		if (retVal == null) {
 			retVal = t.findTransitivityParameters(id);
 		} else {
-			assert t.findTransitivityParameters(id) == null;
+			// Check that transitivity parameters don't exist with same id
+			String msg = String.format(
+					"%s.%s:  transivity parameters share id '%d' with OABA parameters",
+					SOURCE, METHOD, id);
+			logger.warning(msg);
+			assert t.findTransitivityParameters(id) == null : msg;
 		}
 		return retVal;
 	}
 
 	@Override
 	public OabaParameters findOabaParametersByBatchJobId(long jobId) {
+		final String METHOD = "findOabaParametersByBatchJobId(long)";
 		OabaParameters retVal = o.findOabaParametersByBatchJobId(jobId);
 		if (retVal == null) {
 			retVal = t.findTransitivityParametersByBatchJobId(jobId);
 		} else {
-			assert t.findTransitivityParametersByBatchJobId(jobId) == null;
+			// Check that transitivity parameters don't exist for an OABA job
+			String msg = String.format(
+					"%s.%s:  transivity parameters found for OABA job %d",
+					SOURCE, METHOD, jobId);
+			logger.warning(msg);
+			assert t.findTransitivityParametersByBatchJobId(
+					jobId) == null : msg;
 		}
 		return retVal;
 	}
