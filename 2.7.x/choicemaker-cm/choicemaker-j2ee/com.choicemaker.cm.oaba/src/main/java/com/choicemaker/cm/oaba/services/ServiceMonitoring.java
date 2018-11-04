@@ -53,9 +53,9 @@ public class ServiceMonitoring {
 	public static final String FS1 = "%s Staging record '%s' / count '%d'";
 	public static final String FM1 = "%s Master record '%s' / count '%d'";
 
-	public static final String FS2 = "% Staging records: %d, msecs: %d, recs/msec: %2.1f";
-	public static final String FM2 = "% Master fecords: %d, msecs: %d, recs/msec: %2.1f";
-	public static final String FT2 = "% Total records: %d, msecs: %d, recs/msec: %2.1f";
+	public static final String FS2 = "%s Staging records: %d, msecs: %d, recs/msec: %2.1f";
+	public static final String FM2 = "%s Master fecords: %d, msecs: %d, recs/msec: %2.1f";
+	public static final String FT2 = "%s Total records: %d, msecs: %d, recs/msec: %2.1f";
 
 	public static void logConnectionAcquisition(Logger log, String fmt, String tag,
 			long acquireMsecs) {
