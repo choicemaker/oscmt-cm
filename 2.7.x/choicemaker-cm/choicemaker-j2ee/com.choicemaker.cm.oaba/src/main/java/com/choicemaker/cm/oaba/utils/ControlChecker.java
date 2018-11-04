@@ -7,6 +7,8 @@
  *******************************************************************************/
 package com.choicemaker.cm.oaba.utils;
 
+import static com.choicemaker.cm.oaba.services.ServiceMonitoring.CONTROL_INTERVAL;
+
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.IControl;
 
@@ -16,8 +18,6 @@ import com.choicemaker.cm.core.IControl;
  * @author pcheung
  */
 public class ControlChecker {
-
-	public static final int CONTROL_INTERVAL = 10000;
 
 	/**
 	 * This method check to see if the process should be stopped for every

@@ -211,7 +211,7 @@ public class BlockDedupService4 {
 
 			stop =
 				ControlChecker.checkStop(control,
-						ControlChecker.CONTROL_INTERVAL);
+						ServiceMonitoring.CONTROL_INTERVAL);
 
 			log.fine("pair " + pair[0] + " " + pair[1]);
 
@@ -237,7 +237,7 @@ public class BlockDedupService4 {
 
 				stop =
 					ControlChecker.checkStop(control,
-							ControlChecker.CONTROL_INTERVAL);
+							ServiceMonitoring.CONTROL_INTERVAL);
 
 				// save the tree to a temp file
 				IBlockSink tempSink = biFactory.getNextSink();
@@ -280,7 +280,7 @@ public class BlockDedupService4 {
 			for (int i = stack.size() - 1; i >= 0 && !stop; i--) {
 				stop =
 					ControlChecker.checkStop(control,
-							ControlChecker.CONTROL_INTERVAL);
+							ServiceMonitoring.CONTROL_INTERVAL);
 
 				IBlockSource source =
 					biFactory.getSource((IBlockSink) stack.get(i));

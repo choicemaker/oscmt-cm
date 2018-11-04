@@ -256,7 +256,7 @@ public class OABABlockingService {
 		for (int i = 0; i < numBlockingFields && !stop; i++) {
 			stop =
 				ControlChecker.checkStop(control,
-						ControlChecker.CONTROL_INTERVAL);
+						ServiceMonitoring.CONTROL_INTERVAL);
 
 			IRecValSource rvSource = rvSources[i];
 			numBlocks += blockByField(i, rvSource, bSink, osGroup);
@@ -306,7 +306,7 @@ public class OABABlockingService {
 		for (int i = currentCol; i < numBlockingFields && !stop; i++) {
 			stop =
 				ControlChecker.checkStop(control,
-						ControlChecker.CONTROL_INTERVAL);
+						ServiceMonitoring.CONTROL_INTERVAL);
 
 			IRecValSource rvSource = rvSources[i];
 			numBlocks += blockByField(i, rvSource, bSink, osGroup);

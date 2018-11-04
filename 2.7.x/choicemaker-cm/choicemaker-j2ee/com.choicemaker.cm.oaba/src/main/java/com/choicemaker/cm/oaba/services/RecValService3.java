@@ -7,6 +7,9 @@
  *******************************************************************************/
 package com.choicemaker.cm.oaba.services;
 
+import static com.choicemaker.cm.oaba.services.ServiceMonitoring.*;
+import static com.choicemaker.cm.oaba.services.ServiceMonitoring.OUTPUT_INTERVAL;
+import static com.choicemaker.cm.oaba.services.ServiceMonitoring.logRecordIdCount;
 import static com.choicemaker.util.SystemPropertyUtils.PV_LINE_SEPARATOR;
 
 import java.io.IOException;
@@ -14,7 +17,6 @@ import java.io.LineNumberReader;
 import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.util.Enumeration;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -36,8 +38,8 @@ import com.choicemaker.cm.oaba.core.IRecValSinkSourceFactory;
 import com.choicemaker.cm.oaba.core.IRecordIdFactory;
 import com.choicemaker.cm.oaba.core.ImmutableRecordIdTranslator;
 import com.choicemaker.cm.oaba.core.MutableRecordIdTranslator;
-import com.choicemaker.cm.oaba.core.OabaProcessingConstants;
 import com.choicemaker.cm.oaba.core.OabaEventBean;
+import com.choicemaker.cm.oaba.core.OabaProcessingConstants;
 import com.choicemaker.cm.oaba.core.RECORD_ID_TYPE;
 import com.choicemaker.cm.oaba.core.RecordMatchingMode;
 import com.choicemaker.cm.oaba.utils.ControlChecker;
@@ -69,10 +71,8 @@ public class RecValService3 {
 	private static final Logger log = Logger.getLogger(RecValService3.class
 			.getName());
 
-	private static final int OUTPUT_INTERVAL = 100000;
-
-	private static final int DEBUG_INTERVAL = 1000;
-
+	private final String SOURCE = this.getClass().getSimpleName();
+	
 	private final RecordSource master;
 	private final RecordSource stage;
 	private final ImmutableProbabilityModel model;
@@ -290,9 +290,8 @@ public class RecValService3 {
 	 *
 	 */
 	private void createFiles() throws BlockingException {
- 		final String METHOD = "createFiles()";
- 		final String CLASS = this.getClass().getSimpleName();
- 		final String TAG = CLASS + "." + METHOD + ": ";
+		final String METHOD = "createFiles()";
+		final String TAG = SOURCE + "." + METHOD + ": ";
 
 		sinks = new IRecValSink[numBlockFields];
 		for (int i = 0; i < numBlockFields; i++) {
@@ -308,7 +307,8 @@ public class RecValService3 {
 
 		try {
 			int count = 0;
-			Record r = null;
+			long totalAcquireMsecs = 0;
+			long totalDownloadMsecs = 0;
 			boolean stop = this.control.shouldStop();
 			log.finest(TAG + "shouldStop: " + this.control.shouldStop());
 
@@ -316,23 +316,33 @@ public class RecValService3 {
 			if (stage != null) {
 				stage.setModel(model);
 				try {
+
 					log.finest(TAG + "opening stage");
+					final long startAcquire = System.currentTimeMillis();
 					stage.open();
+					final long acquireMsecs =
+						System.currentTimeMillis() - startAcquire;
 					log.finest(TAG + "stage opened");
+					logConnectionAcquisition(log, FS0, TAG, acquireMsecs);
+					totalAcquireMsecs += acquireMsecs;
+
 					BlockingAccessor ba =
 						(BlockingAccessor) model.getAccessor();
 					IBlockingConfiguration bc =
 						ba.getBlockingConfiguration(blockingConfiguration,
 								queryConfiguration);
 
+					final long startStaging = System.currentTimeMillis();
 					while (stage.hasNext() && !stop) {
 						count++;
+						final Record r = stage.getNext();
+
 						if (count % OUTPUT_INTERVAL == 0) {
 							log.finest(TAG + "count: " + count);
 							MemoryEstimator.writeMem();
 						}
+						logRecordIdCount(log, FS1, TAG, r.getId(), count);
 
-						r = stage.getNext();
 						writeRecord(bc, r, model);
 						if (firstStage) {
 							log.finest(TAG + "count: " + count);
@@ -346,6 +356,10 @@ public class RecValService3 {
 						stop = ControlChecker.checkStop(control, count);
 						log.finest(TAG + "shouldStop: " + this.control.shouldStop());
 					}
+					final long downloadMsecs =
+						System.currentTimeMillis() - startStaging;
+					logRecordTransferRate(log, FS2, TAG, count, downloadMsecs);
+					totalDownloadMsecs += downloadMsecs;
 
 				} finally {
 					log.finest(TAG + "closing stage");
@@ -376,24 +390,33 @@ public class RecValService3 {
 
 				try {
 					log.finest(TAG + "opening master");
+					final long startAcquire = System.currentTimeMillis();
 					master.open();
+					final long acquireMsecs =
+						System.currentTimeMillis() - startAcquire;
 					log.finest(TAG + "master opened");
+					logConnectionAcquisition(log, FM0, TAG, acquireMsecs);
+					totalAcquireMsecs += acquireMsecs;
+
 					BlockingAccessor ba =
 						(BlockingAccessor) model.getAccessor();
 					IBlockingConfiguration bc =
 						ba.getBlockingConfiguration(blockingConfiguration,
 								referenceConfiguration);
 
+					final long startMaster = System.currentTimeMillis();
 					while (master.hasNext() && !stop) {
 						masterCount++;
 						count++;
+						final Record r = master.getNext();
+
 						if (count % OUTPUT_INTERVAL == 0) {
 							log.finest(TAG + "masterCount: " + masterCount);
 							log.finest(TAG + "count: " + count);
 							MemoryEstimator.writeMem();
 						}
+						logRecordIdCount(log, FM1, TAG, r.getId(), count);
 
-						r = master.getNext();
 						writeRecord(bc, r, model);
 						if (firstMaster) {
 							log.finest(TAG + "masterCount: " + masterCount);
@@ -409,6 +432,10 @@ public class RecValService3 {
 						stop = ControlChecker.checkStop(control, count);
 						log.finest(TAG + "shouldStop: " + this.control.shouldStop());
 					}
+					final long downloadMsecs =
+						System.currentTimeMillis() - startMaster;
+					logRecordTransferRate(log, FM2, TAG, count, downloadMsecs);
+					totalDownloadMsecs += downloadMsecs;
 
 				} finally {
 					master.close();
@@ -417,6 +444,8 @@ public class RecValService3 {
 
 			log.info(masterCount + " master records read");
 			log.info(count + " total records read");
+			logConnectionAcquisition(log, FT0, TAG, totalAcquireMsecs);
+			logRecordTransferRate(log, FT2, TAG, count, totalDownloadMsecs);
 		} catch (IOException ex) {
 			throw new BlockingException(ex.toString());
 		}
@@ -441,31 +470,29 @@ public class RecValService3 {
 	private void writeRecord(IBlockingConfiguration bc, Record r,
 			ImmutableProbabilityModel model) throws BlockingException {
 
- 		final String METHOD = "writeRecord(..)";
- 		final String CLASS = this.getClass().getSimpleName();
- 		final String TAG = CLASS + "." + METHOD + ": ";
+		final String METHOD = "writeRecord(..)";
+		final String CLASS = this.getClass().getSimpleName();
+		final String TAG = CLASS + "." + METHOD + ": ";
 
-		assert r != null : "null database record" ;
-    final Object recordId = r.getId();
-		assert recordId != null : "null database record id" ;
+		assert r != null : "null database record";
+		final Object recordId = r.getId();
+		assert recordId != null : "null database record id";
 		final int internal = mutableTranslator.translate((Comparable) recordId);
 
 		HashSet seen = new HashSet(); // stores field value it has seen
 		Hashtable values = new Hashtable(); // stores values per field
 
-    int blockingValueIdx = -1;
-    int blockingFieldIdx = -1;
-    try {
+		int blockingValueIdx = -1;
+		try {
 			IBlockingValue[] bvs = bc.createBlockingValues(r);
 
 			// loop over the blocking value for this record
 			for (int j = 0; j < bvs.length; j++) {
-        blockingValueIdx = j;
+				blockingValueIdx = j;
 				IBlockingValue bv = bvs[j];
 				IBlockingField bf = bv.getBlockingField();
 
-				Integer C = new Integer(bf.getDbField().getNumber());
-				blockingFieldIdx = C;
+				final Integer C = new Integer(bf.getDbField().getNumber());
 
 				String val = new String(bv.getValue());
 				String key = bf.getDbField().getNumber() + val;
@@ -478,7 +505,7 @@ public class RecValService3 {
 						list = new IntArrayList(1);
 					}
 
-					list.add(val.hashCode()); // use hashcode of the string
+					list.add(val.hashCode());
 					values.put(C, list);
 				}
 
@@ -491,11 +518,13 @@ public class RecValService3 {
 						(IntArrayList) values.get(C));
 
 				if (internal % DEBUG_INTERVAL == 0) {
-					log.fine("id " + internal + " C " + C + " " + values.get(C));
+					log.fine(
+							"id " + internal + " C " + C + " " + values.get(C));
 				}
 			}
 		} catch (RuntimeException | Error | BlockingException x) {
-			final String CONTEXT = "[BlockingValue index: " + blockingValueIdx + ", BlockingField index: " + blockingValueIdx + "]: ";
+			final String CONTEXT = "[BlockingValue index: " + blockingValueIdx
+					+ ", BlockingField index: " + blockingValueIdx + "]: ";
 			StringWriter sw = new StringWriter();
 			PrintWriter pw = new PrintWriter(sw);
 			x.printStackTrace(pw);
@@ -505,19 +534,20 @@ public class RecValService3 {
 			pw = new PrintWriter(sw);
 			StringReader sr = new StringReader(s);
 			LineNumberReader lnr = new LineNumberReader(sr);
-      String STACK = null;
+			String STACK = null;
 			try {
-				while ( (s=lnr.readLine()) != null ) {
+				while ((s = lnr.readLine()) != null) {
 					if (s.contains("choicemaker")) {
 						pw.println(s);
 					}
 				}
-        STACK = sw.toString();
+				STACK = sw.toString();
 			} catch (IOException x2) {
 				STACK = "<no stack>: " + x.toString();
 			}
 
-			String msg = TAG + CONTEXT + x.toString() + PV_LINE_SEPARATOR + STACK;
+			String msg =
+				TAG + CONTEXT + x.toString() + PV_LINE_SEPARATOR + STACK;
 			log.severe(msg);
 			throw x;
 		}

@@ -25,8 +25,8 @@ import com.choicemaker.cm.core.RecordSource;
 		"rawtypes", "unchecked" })
 public class MemoryEstimator {
 
-	private static final Logger log = Logger.getLogger(MemoryEstimator.class
-			.getName());
+	private static final Logger log =
+		Logger.getLogger(MemoryEstimator.class.getName());
 
 	private static int INTERVAL = 100;
 
@@ -35,6 +35,7 @@ public class MemoryEstimator {
 	 * memory.
 	 *
 	 * @param rs
+	 *            a record source, used to pull one record as a sample
 	 * @return int - the maximum size of hashmap that can fit into memory.
 	 */
 	public static int estimate(RecordSource rs, ImmutableProbabilityModel model,
@@ -86,17 +87,12 @@ public class MemoryEstimator {
 	 * @param rs
 	 * @return float - returns the percentage of memory used up.
 	 */
-	public static float estimate2(RecordSource rs, ImmutableProbabilityModel model,
-			int count) {
-		// 2014-04-24 rphall: Commented out unused local variable.
-		// float f;
-
+	public static float estimate2(RecordSource rs,
+			ImmutableProbabilityModel model, int count) {
 		Runtime.getRuntime().gc();
-
 		HashMap map = new HashMap();
 
 		int i = 0;
-
 		try {
 			rs.setModel(model);
 			rs.open();
@@ -160,15 +156,15 @@ public class MemoryEstimator {
 		return pct;
 	}
 
-	public static void writeMem() {
-		// Runtime.getRuntime().gc();
+	private static final String msg0 =
+		"Max %dB, total %dB, free %dB, fraction %3.2f";
 
+	public static void writeMem() {
 		long max = Runtime.getRuntime().maxMemory();
 		long total = Runtime.getRuntime().totalMemory();
 		long free = Runtime.getRuntime().freeMemory();
 		float pct = ((1.0f * total - free) / max);
-		log.info("Max " + max + " total " + total + " free " + free + " pct "
-				+ pct);
+		log.info(String.format(msg0, max, total, free, pct));
 	}
 
 }

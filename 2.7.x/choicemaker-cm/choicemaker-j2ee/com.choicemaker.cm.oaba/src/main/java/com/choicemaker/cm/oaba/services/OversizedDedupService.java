@@ -244,7 +244,7 @@ public class OversizedDedupService {
 		for (int i = startPoint; i < s && !stop; i++) {
 			stop =
 				ControlChecker.checkStop(control,
-						ControlChecker.CONTROL_INTERVAL);
+						ServiceMonitoring.CONTROL_INTERVAL);
 
 			// hashmap containing sum and block
 			HashMap sumMap = new HashMap();
