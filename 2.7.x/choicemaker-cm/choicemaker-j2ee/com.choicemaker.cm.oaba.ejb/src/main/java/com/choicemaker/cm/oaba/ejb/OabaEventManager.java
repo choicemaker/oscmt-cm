@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.jms.DeliveryMode;
 import javax.jms.JMSContext;
 import javax.jms.JMSProducer;
 import javax.jms.ObjectMessage;
@@ -120,6 +121,7 @@ public class OabaEventManager implements EventPersistenceManager {
 		OabaNotification data = new OabaNotification(ope);
 		ObjectMessage message = jmsContext.createObjectMessage(data);
 		JMSProducer sender = jmsContext.createProducer();
+		sender.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
 		logger.info(
 				MessageBeanUtils.topicInfo("Sending", oabaStatusTopic, data));
 		sender.send(oabaStatusTopic, message);

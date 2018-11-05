@@ -8,7 +8,6 @@
 package com.choicemaker.cm.oaba.services;
 
 import static com.choicemaker.cm.oaba.services.ServiceMonitoring.*;
-import static com.choicemaker.cm.oaba.services.ServiceMonitoring.OUTPUT_INTERVAL;
 import static com.choicemaker.cm.oaba.services.ServiceMonitoring.logRecordIdCount;
 import static com.choicemaker.util.SystemPropertyUtils.PV_LINE_SEPARATOR;
 
@@ -332,14 +331,23 @@ public class RecValService3 {
 						ba.getBlockingConfiguration(blockingConfiguration,
 								queryConfiguration);
 
+					int incrementalCount = 0;
 					final long startStaging = System.currentTimeMillis();
+					long incrementalStart = startStaging;
 					while (stage.hasNext() && !stop) {
 						count++;
+						++incrementalCount;
 						final Record r = stage.getNext();
 
-						if (count % OUTPUT_INTERVAL == 0) {
+						if (count % CONTROL_INTERVAL == 0) {
 							log.finest(TAG + "count: " + count);
 							MemoryEstimator.writeMem();
+							final long incrementalMsecs =
+								System.currentTimeMillis() - incrementalStart;
+							logRecordTransferRate(log, FS2, TAG,
+									incrementalCount, incrementalMsecs);
+							incrementalCount = 0;
+							incrementalStart = System.currentTimeMillis();
 						}
 						logRecordIdCount(log, FS1, TAG, r.getId(), count);
 
@@ -389,6 +397,7 @@ public class RecValService3 {
 				log.finest(TAG + "translator split");
 
 				try {
+
 					log.finest(TAG + "opening master");
 					final long startAcquire = System.currentTimeMillis();
 					master.open();
@@ -404,16 +413,25 @@ public class RecValService3 {
 						ba.getBlockingConfiguration(blockingConfiguration,
 								referenceConfiguration);
 
+					int incrementalCount = 0;
 					final long startMaster = System.currentTimeMillis();
+					long incrementalStart = startMaster;
 					while (master.hasNext() && !stop) {
-						masterCount++;
-						count++;
+						++masterCount;
+						++count;
+						++incrementalCount;
 						final Record r = master.getNext();
 
-						if (count % OUTPUT_INTERVAL == 0) {
+						if (count % CONTROL_INTERVAL == 0) {
 							log.finest(TAG + "masterCount: " + masterCount);
 							log.finest(TAG + "count: " + count);
 							MemoryEstimator.writeMem();
+							final long incrementalMsecs =
+									System.currentTimeMillis() - incrementalStart;
+								logRecordTransferRate(log, FM2, TAG,
+										incrementalCount, incrementalMsecs);
+								incrementalCount = 0;
+								incrementalStart = System.currentTimeMillis();
 						}
 						logRecordIdCount(log, FM1, TAG, r.getId(), count);
 

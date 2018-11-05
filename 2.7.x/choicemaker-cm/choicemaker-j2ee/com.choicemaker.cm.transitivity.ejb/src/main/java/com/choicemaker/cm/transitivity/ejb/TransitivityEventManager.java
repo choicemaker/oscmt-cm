@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.jms.DeliveryMode;
 import javax.jms.JMSContext;
 import javax.jms.JMSProducer;
 import javax.jms.ObjectMessage;
@@ -118,6 +119,7 @@ public class TransitivityEventManager implements EventPersistenceManager {
 		TransitivityNotification data = new TransitivityNotification(ope);
 		ObjectMessage message = jmsContext.createObjectMessage(data);
 		JMSProducer sender = jmsContext.createProducer();
+		sender.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
 		logger.info(MessageBeanUtils.topicInfo("Sending", statusTopic, data));
 		sender.send(statusTopic, message);
 		logger.info(MessageBeanUtils.topicInfo("Sent", statusTopic, data));

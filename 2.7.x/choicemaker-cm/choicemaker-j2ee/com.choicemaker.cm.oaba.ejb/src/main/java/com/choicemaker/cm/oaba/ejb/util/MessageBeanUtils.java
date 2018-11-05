@@ -11,6 +11,7 @@ import static com.choicemaker.cm.args.OperationalPropertyNames.PN_CLEAR_RESOURCE
 
 import java.util.logging.Logger;
 
+import javax.jms.DeliveryMode;
 import javax.jms.JMSContext;
 import javax.jms.JMSException;
 import javax.jms.JMSProducer;
@@ -82,6 +83,7 @@ public class MessageBeanUtils {
 		}
 		ObjectMessage message = jmsCtx.createObjectMessage(data);
 		JMSProducer sender = jmsCtx.createProducer();
+		sender.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
 		log.info(MessageBeanUtils.queueInfo("Sending", q, data));
 		sender.send(q, message);
 		log.info(MessageBeanUtils.queueInfo("Sent", q, data));
@@ -94,6 +96,7 @@ public class MessageBeanUtils {
 		}
 		ObjectMessage message = jmsCtx.createObjectMessage(data);
 		JMSProducer sender = jmsCtx.createProducer();
+		sender.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
 		log.info(MessageBeanUtils.queueInfo("Sending", q, data));
 		sender.send(q, message);
 		log.info(MessageBeanUtils.queueInfo("Sent", q, data));
