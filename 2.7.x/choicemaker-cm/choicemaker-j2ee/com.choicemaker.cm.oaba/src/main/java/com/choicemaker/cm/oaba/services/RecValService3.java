@@ -71,7 +71,7 @@ public class RecValService3 {
 			.getName());
 
 	private final String SOURCE = this.getClass().getSimpleName();
-	
+
 	private final RecordSource master;
 	private final RecordSource stage;
 	private final ImmutableProbabilityModel model;
@@ -89,7 +89,7 @@ public class RecValService3 {
 	private final ProcessingEventLog status;
 
 	private final IControl control;
-	
+
 	private final RecordMatchingMode mode;
 
 	private IRecValSink[] sinks;
@@ -344,7 +344,7 @@ public class RecValService3 {
 							MemoryEstimator.writeMem();
 							final long incrementalMsecs =
 								System.currentTimeMillis() - incrementalStart;
-							logRecordTransferRate(log, FS2, TAG,
+							logTransferRate(log, FS2, TAG,
 									incrementalCount, incrementalMsecs);
 							incrementalCount = 0;
 							incrementalStart = System.currentTimeMillis();
@@ -366,7 +366,7 @@ public class RecValService3 {
 					}
 					final long downloadMsecs =
 						System.currentTimeMillis() - startStaging;
-					logRecordTransferRate(log, FS2, TAG, count, downloadMsecs);
+					logTransferRate(log, FS2, TAG, count, downloadMsecs);
 					totalDownloadMsecs += downloadMsecs;
 
 				} finally {
@@ -428,7 +428,7 @@ public class RecValService3 {
 							MemoryEstimator.writeMem();
 							final long incrementalMsecs =
 									System.currentTimeMillis() - incrementalStart;
-								logRecordTransferRate(log, FM2, TAG,
+								logTransferRate(log, FM2, TAG,
 										incrementalCount, incrementalMsecs);
 								incrementalCount = 0;
 								incrementalStart = System.currentTimeMillis();
@@ -452,7 +452,7 @@ public class RecValService3 {
 					}
 					final long downloadMsecs =
 						System.currentTimeMillis() - startMaster;
-					logRecordTransferRate(log, FM2, TAG, count, downloadMsecs);
+					logTransferRate(log, FM2, TAG, count, downloadMsecs);
 					totalDownloadMsecs += downloadMsecs;
 
 				} finally {
@@ -463,7 +463,7 @@ public class RecValService3 {
 			log.info(masterCount + " master records read");
 			log.info(count + " total records read");
 			logConnectionAcquisition(log, FT0, TAG, totalAcquireMsecs);
-			logRecordTransferRate(log, FT2, TAG, count, totalDownloadMsecs);
+			logTransferRate(log, FT2, TAG, count, totalDownloadMsecs);
 		} catch (IOException ex) {
 			throw new BlockingException(ex.toString());
 		}

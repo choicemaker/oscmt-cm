@@ -30,7 +30,7 @@ public class ServiceMonitoringTest {
 
 	@Test
 	public void testLogRecordTransferRate() {
-		logRecordTransferRate(log, FS2, TAG, 5, 99);
+		logTransferRate(log, FS2, TAG, 5, 99);
 	}
 
 }

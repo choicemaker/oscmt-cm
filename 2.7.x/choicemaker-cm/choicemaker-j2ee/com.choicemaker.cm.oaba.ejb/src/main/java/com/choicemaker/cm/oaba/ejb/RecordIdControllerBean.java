@@ -7,6 +7,7 @@
  *******************************************************************************/
 package com.choicemaker.cm.oaba.ejb;
 
+import static com.choicemaker.cm.oaba.services.ServiceMonitoring.logTransferRate;
 import static com.choicemaker.cm.oaba.ejb.RecordIdTranslationJPA.PN_TRANSLATEDID_DELETE_BY_JOBID_JOBID;
 import static com.choicemaker.cm.oaba.ejb.RecordIdTranslationJPA.QN_TRANSLATEDID_DELETE_BY_JOBID;
 import static com.choicemaker.cm.oaba.ejb.RecordIdTranslationJPA.QN_TRANSLATEDID_FIND_ALL;
@@ -50,6 +51,8 @@ public class RecordIdControllerBean implements RecordIdController {
 
 	private static final Logger logger =
 		Logger.getLogger(RecordIdControllerBean.class.getName());
+
+	public static final String SOURCE = RecordIdController.class.getSimpleName();
 
 	public static final String BASENAME_RECORDID_TRANSLATOR = "translator";
 
@@ -103,14 +106,27 @@ public class RecordIdControllerBean implements RecordIdController {
 
 	protected <T extends Comparable<T>> List<AbstractRecordIdTranslationEntity<T>> findTranslationImpls(
 			BatchJob job) throws BlockingException {
+
+		final String METHOD = "findTranslationImpls(BatchJob)";
+		final String TAG = String.format("%s.%s:", SOURCE, METHOD);
+
 		Query query = em.createNamedQuery(
 				RecordIdTranslationJPA.QN_TRANSLATEDID_FIND_BY_JOBID);
 		query.setParameter(
 				RecordIdTranslationJPA.PN_TRANSLATEDID_FIND_BY_JOBID_JOBID,
 				job.getId());
+
+		final long startQuery = System.currentTimeMillis();
 		@SuppressWarnings("unchecked")
 		List<AbstractRecordIdTranslationEntity<T>> retVal =
 			query.getResultList();
+
+		final long durationMsecs = System.currentTimeMillis() - startQuery;
+		final int count = retVal.size();
+		final String msg0 =
+			"%s translations: %d, msecs: %d, translations/msec: %2.1f";
+		logTransferRate(logger, msg0, TAG, count, durationMsecs);
+
 		return retVal;
 	}
 
@@ -152,7 +168,7 @@ public class RecordIdControllerBean implements RecordIdController {
 	 * Implements
 	 * {@link RecordIdController#toImmutableTranslator(BatchJob, MutableRecordIdTranslator)
 	 * save} for instances of {@link MutableRecordIdTranslatorImpl}.
-	 * 
+	 *
 	 * @throws ClassCastException
 	 *             if the specified translator is not an instance of
 	 *             <code>MutableRecordIdTranslatorImpl</code>
@@ -368,7 +384,7 @@ public class RecordIdControllerBean implements RecordIdController {
 	 * presumed to be stored already. The translations are restored to an
 	 * immutable translator which is then returned. If the translations are not
 	 * found or can not be restored, an exception is thrown.
-	 * 
+	 *
 	 * @throws ClassCastException
 	 *             if the specified translator is not an instance of
 	 *             <code>MutableRecordIdTranslatorImpl</code>

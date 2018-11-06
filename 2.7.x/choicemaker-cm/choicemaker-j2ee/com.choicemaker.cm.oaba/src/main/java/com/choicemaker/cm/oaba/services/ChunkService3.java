@@ -44,17 +44,17 @@ import com.choicemaker.util.Precondition;
 /**
  * This version takes in blocks that contains internal id instead of the record
  * id.
- * 
+ *
  * This service creates does the following: 1. Read in blocks and/or oversized
  * blocks to create chunk id files in internal ids. 2. Read in the record
  * source, translator and chunk id files to create chunk data files. 3. Create
  * comparing block groups.
- * 
+ *
  * This version is more abstracted. It takes in IISSetSource instead of
  * IBlockSource. It also uses transformers to write internal id arrays/trees to
  * record id arrays/trees.
- * 
- * 
+ *
+ *
  * @author pcheung
  *
  */
@@ -124,11 +124,11 @@ public class ChunkService3 {
 
 	/**
 	 * There are two types of chunks, regular and oversized.
-	 * 
+	 *
 	 * <pre>
 	 * numOS = numChunks - numRegularChunks;
 	 * </pre>
-	 * 
+	 *
 	 */
 	private int numRegularChunks = 0;
 
@@ -137,7 +137,7 @@ public class ChunkService3 {
 	/**
 	 * This version of the constructor takes in a block source and oversized
 	 * block source.
-	 * 
+	 *
 	 * @param bSource
 	 *            - block source
 	 * @param osSource
@@ -220,7 +220,7 @@ public class ChunkService3 {
 
 	/**
 	 * This method returns the time it takes to run the runService method.
-	 * 
+	 *
 	 * @return long - returns the time (in milliseconds) it took to run this
 	 *         service.
 	 */
@@ -230,7 +230,7 @@ public class ChunkService3 {
 
 	/**
 	 * This method runs the service.
-	 * 
+	 *
 	 * @throws IOException
 	 */
 	public void runService() throws BlockingException {
@@ -274,7 +274,7 @@ public class ChunkService3 {
 			 * OabaProcessing.EVT_DONE_CREATE_CHUNK_IDS ||
 			 * status.getCurrentProcessingEventId() ==
 			 * OabaProcessing.EVT_CREATE_CHUNK_OVERSIZED_IDS) {
-			 * 
+			 *
 			 */
 		} else if (status
 				.getCurrentProcessingEventId() == OabaProcessingConstants.EVT_DONE_CREATE_CHUNK_IDS
@@ -328,7 +328,7 @@ public class ChunkService3 {
 	/**
 	 * This method creates the chunk data files for stage and master record
 	 * sources.
-	 * 
+	 *
 	 * @throws IOException
 	 * @throws XmlConfException
 	 */
@@ -418,7 +418,7 @@ public class ChunkService3 {
 	/**
 	 * This method just opens the sink so that a empty file will be created for
 	 * the master sink. This is necessary because matching requires empty files.
-	 * 
+	 *
 	 * @param masterRecordSinks
 	 * @throws IOException
 	 */
@@ -434,7 +434,7 @@ public class ChunkService3 {
 	/**
 	 * This method write out chunk data for elements in the arrays from start to
 	 * end.
-	 * 
+	 *
 	 * @param start
 	 *            - The location in the array to start writing. Inclusive.
 	 * @param end
@@ -533,7 +533,7 @@ public class ChunkService3 {
 	/**
 	 * This method creates the chunk data files from the chunk id files in the
 	 * range.
-	 * 
+	 *
 	 * @param rs
 	 *            - the record source
 	 * @param accessProvider
@@ -615,7 +615,7 @@ public class ChunkService3 {
 			} // end while rs next
 			final long downloadMsecs =
 				System.currentTimeMillis() - startDownload;
-			logRecordTransferRate(log, FS2, TAG, count, downloadMsecs);
+			logTransferRate(log, FS2, TAG, count, downloadMsecs);
 
 		} catch (Exception ex) {
 			throw new BlockingException(ex.toString());
@@ -634,7 +634,7 @@ public class ChunkService3 {
 	/**
 	 * This method creates the smaller block sink files and rec id files. These
 	 * files correspond to a single chunk.
-	 * 
+	 *
 	 * @param source
 	 *            - block source
 	 * @param isOS
@@ -774,7 +774,7 @@ public class ChunkService3 {
 	/**
 	 * This method writes the ids in the tree set to the sink. The ids are
 	 * written in ascending order.
-	 * 
+	 *
 	 * @param recSink
 	 *            - chunk record id sink
 	 * @param rows

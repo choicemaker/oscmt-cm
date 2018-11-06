@@ -53,7 +53,7 @@ public class ServiceMonitoring {
 	public static final String FS2 =
 		"%s Staging records: %d, msecs: %d, recs/msec: %2.1f";
 	public static final String FM2 =
-		"%s Master fecords: %d, msecs: %d, recs/msec: %2.1f";
+		"%s Master records: %d, msecs: %d, recs/msec: %2.1f";
 	public static final String FT2 =
 		"%s Total records: %d, msecs: %d, recs/msec: %2.1f";
 
@@ -63,7 +63,7 @@ public class ServiceMonitoring {
 		log.info(msg);
 	}
 
-	public static void logRecordTransferRate(Logger log, String fmt, String tag,
+	public static void logTransferRate(Logger log, String fmt, String tag,
 			int count, long msecs) {
 		final float rate;
 		if (msecs == 0) {
