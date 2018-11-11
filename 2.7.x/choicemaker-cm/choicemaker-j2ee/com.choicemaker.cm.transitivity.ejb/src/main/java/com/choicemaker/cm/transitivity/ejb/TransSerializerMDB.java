@@ -25,8 +25,8 @@ import java.util.logging.Logger;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
+//import javax.ejb.TransactionAttribute;
+//import javax.ejb.TransactionAttributeType;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
@@ -249,6 +249,7 @@ public class TransSerializerMDB implements MessageListener, Serializable {
 				getTransitivityResultSerializer(format);
 			sr.serialize(tr, analysisResultFileName, DEFAULT_MAX_RECORD_COUNT);
 			String resultFile = sr.getCurrentFileName();
+			ces.close();
 			propController.setJobProperty(batchJob,
 					PN_TRANSITIVITY_CACHED_GROUPS_FILE, resultFile);
 
