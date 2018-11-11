@@ -20,11 +20,14 @@ import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
+import javax.ejb.MessageDrivenContext;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 import javax.jms.Message;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
+import javax.transaction.Status;
+import javax.transaction.UserTransaction;
 
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
@@ -54,14 +57,18 @@ import com.choicemaker.cm.oaba.services.RecValService3;
  * files using internal id translation.
  *
  * @author pcheung
+ * @author rphall (EJB 3)
  *
  */
 @MessageDriven(activationConfig = {
 		@ActivationConfigProperty(propertyName = "destinationLookup",
 				propertyValue = "java:/choicemaker/urm/jms/startQueue"),
 		@ActivationConfigProperty(propertyName = "destinationType",
-				propertyValue = "javax.jms.Queue") })
-//@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+				propertyValue = "javax.jms.Queue"),
+		@ActivationConfigProperty(propertyName = "acknowledgeMode",
+				propertyValue = "Dups-ok-acknowledge") })
+// @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+@TransactionManagement(value = TransactionManagementType.BEAN)
 public class StartOabaMDB extends AbstractOabaMDB {
 
 	private static final long serialVersionUID = 271L;
@@ -72,33 +79,70 @@ public class StartOabaMDB extends AbstractOabaMDB {
 	private static final Logger jmsTrace =
 		Logger.getLogger("jmstrace." + StartOabaMDB.class.getName());
 
+	// @Inject
+	//// @JMSConnectionFactory("java:comp/DefaultJMSConnectionFactory")
+	// private ConnectionFactory jmxConnFactory;
+
+	@Resource
+	MessageDrivenContext jmsCtx;
+
+	@Resource
+	private UserTransaction userTx;
+
 	@Resource(lookup = "java:/choicemaker/urm/jms/blockQueue")
 	private Queue blockQueue;
 
 	@Override
 	public void onMessage(Message inMessage) {
+		final String SOURCE = StartOabaMDB.class.getSimpleName();
+		final String METHOD = "onMessage(Message)";
 		jmsTrace.info("Entering onMessage for " + this.getClass().getName());
 		ObjectMessage msg = null;
 		OabaJobMessage data = null;
 		BatchJob batchJob = null;
 
-		getLogger().info("StartOabaMDB In onMessage");
+		getLogger().info("StartOabaMDB in onMessage");
 
+		UserTransaction jmsTx = null;
 		try {
+
+			// Commit the JMS transaction to acknowledge receipt of the message
+			jmsTx = jmsCtx.getUserTransaction();
+			int jmsTxStatus = jmsTx == null ? Status.STATUS_NO_TRANSACTION
+					: jmsTx.getStatus();
+			if (jmsTxStatus != Status.STATUS_NO_TRANSACTION) {
+				log.fine(String.format("%s.%s: committing JMS transaction",
+						SOURCE, METHOD));
+				jmsTx.commit();
+				log.finer(String.format("%s.%s: committed JMS transaction",
+						SOURCE, METHOD));
+				jmsTx = null;
+			} else {
+				log.fine(
+						String.format("%s.%s: no JMS transaction",
+								SOURCE, METHOD));
+			}
 
 			if (inMessage instanceof ObjectMessage) {
 				msg = (ObjectMessage) inMessage;
 				data = (OabaJobMessage) msg.getObject();
 
+				// BatchJob tends to lock up, so keep tx short
+				userTx.begin();
 				final long jobId = data.jobID;
 				batchJob = getJobController().findBatchJob(jobId);
+				userTx.commit();
+				// FIXME END experiment
 
+				userTx.begin();
 				OabaParameters oabaParams = getParametersController()
 						.findOabaParametersByBatchJobId(jobId);
 				OabaSettings oabaSettings =
 					getSettingsController().findOabaSettingsByJobId(jobId);
 				ProcessingEventLog processingEntry =
 					getEventManager().getProcessingLog(batchJob);
+				userTx.commit();
+
 				if (batchJob == null || oabaParams == null
 						|| oabaSettings == null) {
 					String s =
@@ -119,8 +163,10 @@ public class StartOabaMDB extends AbstractOabaMDB {
 				}
 
 				// update status to mark as start
+				userTx.begin();
 				batchJob.markAsStarted();
 				getJobController().save(batchJob);
+				userTx.commit();
 
 				getLogger().info("Job id: " + jobId);
 				getLogger().info("Model configuration: "
@@ -149,18 +195,15 @@ public class StartOabaMDB extends AbstractOabaMDB {
 
 				ISerializableRecordSource staging = null;
 				ISerializableRecordSource master = null;
-				try {
-					staging =
-						getRecordSourceController().getStageRs(oabaParams);
-					master =
-						getRecordSourceController().getMasterRs(oabaParams);
-				} catch (Exception e) {
-					throw new BlockingException(e.toString());
-				}
+				userTx.begin();
+				staging = getRecordSourceController().getStageRs(oabaParams);
+				master = getRecordSourceController().getMasterRs(oabaParams);
+				userTx.commit();
 				assert staging != null;
 
 				RecordMatchingMode mode;
 				final int maxSingle = oabaSettings.getMaxSingle();
+//				userTx.begin();
 				if (!isMoreThanThreshold(staging, model, maxSingle)) {
 					getLogger().info("Using single record matching");
 					mode = RecordMatchingMode.SRM;
@@ -171,12 +214,16 @@ public class StartOabaMDB extends AbstractOabaMDB {
 					mode = RecordMatchingMode.BRM;
 					configureRecordMatchingMode(batchJob, mode);
 				}
+//				userTx.commit();
 
+				userTx.begin();
 				final RecordIdController ric = getRecordIdController();
 				MutableRecordIdTranslator<?> translator =
 					ric.createMutableRecordIdTranslator(batchJob);
+				userTx.commit();
 
 				// create rec_id, val_id files
+				userTx.begin();
 				String blockingConfiguration =
 					oabaParams.getBlockingConfiguration();
 				String queryConfiguration = this.getParametersController()
@@ -191,15 +238,22 @@ public class StartOabaMDB extends AbstractOabaMDB {
 						model, blockingConfiguration, queryConfiguration,
 						referenceConfiguration, recvalFactory, ric, translator,
 						processingEntry, control, mode);
+				userTx.commit();
+				userTx.begin();
 				rvService.runService();
+				userTx.commit();
 				getLogger().info("Done creating rec_id, val_id files: "
 						+ rvService.getTimeElapsed());
 
+				userTx.begin();
 				@SuppressWarnings("rawtypes")
 				ImmutableRecordIdTranslator immutableTranslator =
 					ric.toImmutableTranslator(translator);
 				final RECORD_ID_TYPE recordIdType =
 					immutableTranslator.getRecordIdType();
+				userTx.commit();
+
+//				userTx.begin();
 				getPropertyController().setJobProperty(batchJob,
 						PN_RECORD_ID_TYPE, recordIdType.name());
 
@@ -218,7 +272,10 @@ public class StartOabaMDB extends AbstractOabaMDB {
 
 				updateOabaProcessingStatus(batchJob, OabaEventBean.DONE_REC_VAL,
 						new Date(), null);
+//				userTx.commit();
+				userTx.begin();
 				sendToBlocking(data);
+				userTx.commit();
 
 			} else {
 				getLogger().warning(
@@ -228,9 +285,30 @@ public class StartOabaMDB extends AbstractOabaMDB {
 		} catch (Exception e) {
 			String msg0 = throwableToString(e);
 			log.severe(msg0);
-			if (batchJob != null) {
-				batchJob.markAsFailed();
-				getJobController().save(batchJob);
+			try {
+				int status = jmsTx == null ? Status.STATUS_NO_TRANSACTION
+						: jmsTx.getStatus();
+				if (status != Status.STATUS_NO_TRANSACTION) {
+					jmsTx.setRollbackOnly();
+					jmsTx = null;
+				}
+			} catch (Exception e1) {
+				String msg1 = throwableToString(e);
+				log.severe(msg1);
+			}
+			try {
+				int status = userTx == null ? Status.STATUS_NO_TRANSACTION
+						: userTx.getStatus();
+				if (status != Status.STATUS_NO_TRANSACTION) {
+					if (batchJob != null) {
+						batchJob.markAsFailed();
+						getJobController().save(batchJob);
+					}
+					userTx.setRollbackOnly();
+				}
+			} catch (Exception e1) {
+				String msg1 = throwableToString(e);
+				log.severe(msg1);
 			}
 		}
 		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
