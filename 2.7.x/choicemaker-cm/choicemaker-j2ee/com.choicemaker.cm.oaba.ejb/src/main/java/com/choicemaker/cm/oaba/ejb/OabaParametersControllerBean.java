@@ -201,10 +201,10 @@ public class OabaParametersControllerBean implements OabaParametersController {
 	public static boolean isValidSqlRecordSourceType(String type) {
 		boolean retVal = true;
 		if (type == null) {
-			logger.warning("null SQL record source type");
+			logger.fine("null SQL record source type");
 			retVal = false;
 		} else if (!TYPE.equals(type)) {
-			logger.warning("invalid SQL record source type: '" + type + "'");
+			logger.fine("invalid SQL record source type: '" + type + "'");
 			retVal = false;
 		} else {
 			assert TYPE.equals(type);
@@ -233,7 +233,7 @@ public class OabaParametersControllerBean implements OabaParametersController {
 		if (!isValidSqlRecordSourceType(type)
 				|| !isValidSqlRecordSourceId(id)) {
 			String msg = "database configuration: null";
-			logger.warning(msg);
+			logger.fine(msg);
 			assert retVal == null;
 		} else {
 			PersistableSqlRecordSource psrs = sqlController.find(id, type);

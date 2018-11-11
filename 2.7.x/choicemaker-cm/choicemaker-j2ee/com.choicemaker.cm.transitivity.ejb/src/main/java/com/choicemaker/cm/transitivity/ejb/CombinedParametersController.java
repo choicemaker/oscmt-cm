@@ -65,15 +65,25 @@ public class CombinedParametersController implements OabaParametersController {
 	public OabaParameters findOabaParameters(long id) {
 		final String METHOD = "findOabaParameters(long)";
 		OabaParameters retVal = o.findOabaParameters(id);
-		if (retVal == null) {
-			retVal = t.findTransitivityParameters(id);
-		} else {
-			// Check that transitivity parameters don't exist with same id
+		if (retVal != null) {
 			String msg = String.format(
-					"%s.%s:  transivity parameters share id '%d' with OABA parameters",
+					"%s.%s: OABA parameters found for parameter id %d",
+					SOURCE, METHOD, id);
+			logger.fine(msg);
+		} else {
+			retVal = t.findTransitivityParametersByBatchJobId(id);
+			if (retVal != null) {
+				String msg = String.format(
+						"%s.%s: transivity parameters found for parameter id %d",
+						SOURCE, METHOD, id);
+				logger.fine(msg);
+			}
+		}
+		if (retVal == null) {
+			String msg = String.format(
+					"%s.%s: no OABA parameters found for parameter id %d",
 					SOURCE, METHOD, id);
 			logger.warning(msg);
-			assert t.findTransitivityParameters(id) == null : msg;
 		}
 		return retVal;
 	}
@@ -82,16 +92,25 @@ public class CombinedParametersController implements OabaParametersController {
 	public OabaParameters findOabaParametersByBatchJobId(long jobId) {
 		final String METHOD = "findOabaParametersByBatchJobId(long)";
 		OabaParameters retVal = o.findOabaParametersByBatchJobId(jobId);
-		if (retVal == null) {
-			retVal = t.findTransitivityParametersByBatchJobId(jobId);
-		} else {
-			// Check that transitivity parameters don't exist for an OABA job
+		if (retVal != null) {
 			String msg = String.format(
-					"%s.%s:  transivity parameters found for OABA job %d",
+					"%s.%s: OABA parameters found for job %d",
+					SOURCE, METHOD, jobId);
+			logger.fine(msg);
+		} else {
+			retVal = t.findTransitivityParametersByBatchJobId(jobId);
+			if (retVal != null) {
+				String msg = String.format(
+						"%s.%s: transivity parameters found for job %d",
+						SOURCE, METHOD, jobId);
+				logger.fine(msg);
+			}
+		}
+		if (retVal == null) {
+			String msg = String.format(
+					"%s.%s: no OABA parameters found for job %d",
 					SOURCE, METHOD, jobId);
 			logger.warning(msg);
-			assert t.findTransitivityParametersByBatchJobId(
-					jobId) == null : msg;
 		}
 		return retVal;
 	}
