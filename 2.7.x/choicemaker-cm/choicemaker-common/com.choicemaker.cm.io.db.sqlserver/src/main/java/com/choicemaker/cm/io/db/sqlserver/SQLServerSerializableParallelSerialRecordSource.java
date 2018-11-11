@@ -161,6 +161,7 @@ public class SQLServerSerializableParallelSerialRecordSource implements
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.RecordSource#getNext()
 	 */
+	@SuppressWarnings("rawtypes")
 	public Record getNext() throws IOException {
 		return getRS().getNext();
 	}

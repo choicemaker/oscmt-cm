@@ -210,6 +210,7 @@ public class SqlServerParallelRecordSource implements RecordSource {
 		return getDatabaseReader().hasNext();
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Record getNext() throws IOException {
 		Record r = null;
 		try {
@@ -222,7 +223,7 @@ public class SqlServerParallelRecordSource implements RecordSource {
 
 	public void close() /* throws IOException */ {
 
-		List exceptionMessages = new ArrayList();
+		List<String> exceptionMessages = new ArrayList<>();
 		if (selects != null) {
 			int s = selects.length;
 			for (int i = 0; i < s; i++) {
