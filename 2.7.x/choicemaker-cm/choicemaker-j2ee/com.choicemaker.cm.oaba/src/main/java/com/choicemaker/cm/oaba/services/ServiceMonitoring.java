@@ -7,39 +7,45 @@ import com.choicemaker.util.Precondition;
 
 public class ServiceMonitoring {
 
-	// FIXME make these manifest constants JMX properties
-
 	/** Interval for checks of whether a job should stop */
-	public static final int CONTROL_INTERVAL = 10000;
-
-	/** Number of records between when checks of whether a job should stop */
-	public static final int COUNT_RECORDS_BETWEEN_STOP_CHECKS =
-		CONTROL_INTERVAL;
-
-	/** Number of records between when info print of the current record id */
-	public static final int COUNT_RECORDS_BETWEEN_INFO_PRINTS = 50000;
-
-	/** Number of records between when debug print of the current record id */
-	public static final int COUNT_RECORDS_BETWEEN_DEBUG_PRINTS = 5000;
+	public static final int CONTROL_INTERVAL = 50000;
 
 	/** Local alias for {@link #COUNT_RECORDS_BETWEEN_DEBUG_PRINTS} */
-	static final int DEBUG_INTERVAL = COUNT_RECORDS_BETWEEN_DEBUG_PRINTS;
-
-	// END FIXME
+	static final int DEBUG_INTERVAL = CONTROL_INTERVAL / 10;
 
 	public static void logRecordIdCount(Logger log, String fmt, String tag,
-			Comparable<?> id, int count) {
+			Comparable<?> id, final int count, final int countInfo,
+			final int countDebug) {
 		Precondition.assertNonEmptyString(fmt);
-		if ((count % COUNT_RECORDS_BETWEEN_INFO_PRINTS == 0
-				&& log.isLoggable(Level.INFO))
-				|| (count % COUNT_RECORDS_BETWEEN_DEBUG_PRINTS == 0
-						&& log.isLoggable(Level.FINE))) {
+		assert countInfo > 0;
+		assert countDebug > 0;
+		assert countInfo >= countDebug;
+		if ((count % countInfo == 0 && log.isLoggable(Level.INFO))
+				|| (count % countDebug == 0 && log.isLoggable(Level.FINE))) {
 			String msg = String.format(fmt, tag, id, count);
 			if (log.isLoggable(Level.INFO)) {
 				log.info(msg);
 			} else {
 				log.fine(msg);
 			}
+		}
+	}
+
+	public static void logRecordIdCount(Logger log, String fmt, String tag,
+			Comparable<?> id, final int count, final int countInfo) {
+		logRecordIdCount(log, fmt, tag, id, count, countInfo,
+				countInfo);
+	}
+
+	public static void logRecordIdCount(Logger log, String fmt, String tag,
+			Comparable<?> id, int count) {
+		Precondition.assertNonEmptyString(fmt);
+		if (log.isLoggable(Level.INFO)) {
+			String msg = String.format(fmt, tag, id, count);
+			log.info(msg);
+		} else if (log.isLoggable(Level.FINE)) {
+			String msg = String.format(fmt, tag, id, count);
+			log.fine(msg);
 		}
 	}
 

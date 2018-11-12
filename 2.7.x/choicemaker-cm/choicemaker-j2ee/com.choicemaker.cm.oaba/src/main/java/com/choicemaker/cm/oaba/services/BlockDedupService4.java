@@ -7,6 +7,8 @@
  *******************************************************************************/
 package com.choicemaker.cm.oaba.services;
 
+import static com.choicemaker.cm.oaba.services.ServiceMonitoring.*;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,8 +53,8 @@ import com.choicemaker.util.LongArrayList;
 		"rawtypes", "unchecked" })
 public class BlockDedupService4 {
 
-	private static final Logger log = Logger.getLogger(BlockDedupService4.class
-			.getName());
+	private static final Logger log =
+		Logger.getLogger(BlockDedupService4.class.getName());
 
 	public final static float FULL = .6f;
 
@@ -105,10 +107,9 @@ public class BlockDedupService4 {
 	 *            - maximum size of the blocks
 	 */
 	public BlockDedupService4(BlockGroup bGroup,
-			IBlockSinkSourceFactory bFactory,
-			IBlockSinkSourceFactory biFactory, ISuffixTreeSink sSink,
-			int maxBlockSize, ProcessingEventLog status, IControl control,
-			int interval) {
+			IBlockSinkSourceFactory bFactory, IBlockSinkSourceFactory biFactory,
+			ISuffixTreeSink sSink, int maxBlockSize, ProcessingEventLog status,
+			IControl control, int interval) {
 
 		this.bGroup = bGroup;
 		this.bFactory = bFactory;
@@ -144,10 +145,12 @@ public class BlockDedupService4 {
 
 		time = System.currentTimeMillis();
 
-		if (status.getCurrentProcessingEventId() >= OabaProcessingConstants.EVT_DONE_DEDUP_BLOCKS) {
+		if (status
+				.getCurrentProcessingEventId() >= OabaProcessingConstants.EVT_DONE_DEDUP_BLOCKS) {
 			// do nothing here
 
-		} else if (status.getCurrentProcessingEventId() == OabaProcessingConstants.EVT_DONE_OVERSIZED_TRIMMING) {
+		} else if (status
+				.getCurrentProcessingEventId() == OabaProcessingConstants.EVT_DONE_OVERSIZED_TRIMMING) {
 			// start deduping the blocks
 			log.info("starting to dedup blocks");
 
@@ -156,9 +159,11 @@ public class BlockDedupService4 {
 			startDedup2(0);
 			sSink.close();
 
-		} else if (status.getCurrentProcessingEventId() == OabaProcessingConstants.EVT_DEDUP_BLOCKS) {
+		} else if (status
+				.getCurrentProcessingEventId() == OabaProcessingConstants.EVT_DEDUP_BLOCKS) {
 			// the +1 is needed because we need to start with the next file
-			int startPoint = Integer.parseInt(status.getCurrentProcessingEventInfo());
+			int startPoint =
+				Integer.parseInt(status.getCurrentProcessingEventInfo());
 
 			// start recovery
 			log.info("starting dedup recovery, starting point: " + startPoint);
@@ -209,9 +214,7 @@ public class BlockDedupService4 {
 		int[] pair = bgw.getNextPair();
 		while (pair[0] > 0 && !stop) {
 
-			stop =
-				ControlChecker.checkStop(control,
-						ServiceMonitoring.CONTROL_INTERVAL);
+			stop = control.shouldStop();
 
 			log.fine("pair " + pair[0] + " " + pair[1]);
 
@@ -228,16 +231,13 @@ public class BlockDedupService4 {
 			// this is needed for writing out distint blocks
 			ArrayList sources = new ArrayList();
 
-			int ret =
-				runDedup(parts, pair[0], pair[1], sources, blockSetId,
-						subsumedBlockSets, root);
+			int ret = runDedup(parts, pair[0], pair[1], sources, blockSetId,
+					subsumedBlockSets, root);
 
 			while (ret < pair[1] - 1 && !stop) {
 				// this happens when there is a reset within an interval
 
-				stop =
-					ControlChecker.checkStop(control,
-							ServiceMonitoring.CONTROL_INTERVAL);
+				stop = control.shouldStop();
 
 				// save the tree to a temp file
 				IBlockSink tempSink = biFactory.getNextSink();
@@ -253,9 +253,8 @@ public class BlockDedupService4 {
 				subsumedBlockSets = new IntArrayList();
 				sources = new ArrayList();
 
-				ret =
-					runDedup(parts, ret + 2, pair[1], sources, blockSetId,
-							subsumedBlockSets, root);
+				ret = runDedup(parts, ret + 2, pair[1], sources, blockSetId,
+						subsumedBlockSets, root);
 			} // end while ret
 
 			// compare to bigger deduped blocks
@@ -278,9 +277,7 @@ public class BlockDedupService4 {
 			// dedup the temp files created from resets within the interval
 			subsumedBlockSets = new IntArrayList();
 			for (int i = stack.size() - 1; i >= 0 && !stop; i--) {
-				stop =
-					ControlChecker.checkStop(control,
-							ServiceMonitoring.CONTROL_INTERVAL);
+				stop = control.shouldStop();
 
 				IBlockSource source =
 					biFactory.getSource((IBlockSink) stack.get(i));
@@ -337,7 +334,7 @@ public class BlockDedupService4 {
 			subsumedBlockSets = null;
 			sources = null;
 
-		}// end while pair
+		} // end while pair
 
 		if (!stop) {
 			status.setCurrentProcessingEvent(OabaEventBean.DONE_DEDUP_BLOCKS);
@@ -384,7 +381,8 @@ public class BlockDedupService4 {
 				source.open();
 
 				while (source.hasNext() && !stop) {
-					stop = ControlChecker.checkStop(control, ++c);
+					stop = ControlChecker.checkStop(control, ++c,
+							CONTROL_INTERVAL);
 
 					numBlocksIn++;
 
@@ -411,7 +409,7 @@ public class BlockDedupService4 {
 			} // end if
 
 			ret++;
-		}// end while
+		} // end while
 
 		return ret;
 	}
@@ -431,7 +429,7 @@ public class BlockDedupService4 {
 
 		int count = 0;
 		while (bSource.hasNext() && !stop) {
-			stop = ControlChecker.checkStop(control, ++c);
+			stop = ControlChecker.checkStop(control, ++c, CONTROL_INTERVAL);
 
 			BlockSet blockSet = bSource.next();
 			LongArrayList recordIds = blockSet.getRecordIDs();
@@ -467,7 +465,7 @@ public class BlockDedupService4 {
 			bigSource.open();
 
 			while (bigSource.hasNext() && !stop) {
-				stop = ControlChecker.checkStop(control, ++c);
+				stop = ControlChecker.checkStop(control, ++c, CONTROL_INTERVAL);
 
 				BlockSet bs = bigSource.next();
 
@@ -510,7 +508,8 @@ public class BlockDedupService4 {
 				srcI.open();
 
 				while (srcI.hasNext() && !stop) {
-					stop = ControlChecker.checkStop(control, ++c);
+					stop = ControlChecker.checkStop(control, ++c,
+							CONTROL_INTERVAL);
 
 					BlockSet bs = srcI.next();
 
@@ -552,7 +551,8 @@ public class BlockDedupService4 {
 	private void writeTree(SuffixTreeNode root, ISuffixTreeSink sink2)
 			throws BlockingException {
 		if (root.getRecordId() != -1) {
-			throw new BlockingException("Invalid root id " + root.getRecordId());
+			throw new BlockingException(
+					"Invalid root id " + root.getRecordId());
 		}
 
 		List branches = root.getAllChildren();

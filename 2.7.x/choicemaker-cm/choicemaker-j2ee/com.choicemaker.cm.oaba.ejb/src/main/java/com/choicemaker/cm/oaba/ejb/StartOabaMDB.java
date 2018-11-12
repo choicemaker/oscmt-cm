@@ -118,9 +118,8 @@ public class StartOabaMDB extends AbstractOabaMDB {
 						SOURCE, METHOD));
 				jmsTx = null;
 			} else {
-				log.fine(
-						String.format("%s.%s: no JMS transaction",
-								SOURCE, METHOD));
+				log.fine(String.format("%s.%s: no JMS transaction", SOURCE,
+						METHOD));
 			}
 
 			if (inMessage instanceof ObjectMessage) {
@@ -132,7 +131,6 @@ public class StartOabaMDB extends AbstractOabaMDB {
 				final long jobId = data.jobID;
 				batchJob = getJobController().findBatchJob(jobId);
 				userTx.commit();
-				// FIXME END experiment
 
 				userTx.begin();
 				OabaParameters oabaParams = getParametersController()
@@ -203,7 +201,7 @@ public class StartOabaMDB extends AbstractOabaMDB {
 
 				RecordMatchingMode mode;
 				final int maxSingle = oabaSettings.getMaxSingle();
-//				userTx.begin();
+				userTx.begin();
 				if (!isMoreThanThreshold(staging, model, maxSingle)) {
 					getLogger().info("Using single record matching");
 					mode = RecordMatchingMode.SRM;
@@ -214,7 +212,7 @@ public class StartOabaMDB extends AbstractOabaMDB {
 					mode = RecordMatchingMode.BRM;
 					configureRecordMatchingMode(batchJob, mode);
 				}
-//				userTx.commit();
+				userTx.commit();
 
 				userTx.begin();
 				final RecordIdController ric = getRecordIdController();
@@ -237,11 +235,13 @@ public class StartOabaMDB extends AbstractOabaMDB {
 				RecValService3 rvService = new RecValService3(staging, master,
 						model, blockingConfiguration, queryConfiguration,
 						referenceConfiguration, recvalFactory, ric, translator,
-						processingEntry, control, mode);
+						processingEntry, control, mode, userTx);
 				userTx.commit();
-				userTx.begin();
+//				userTx.begin();
+				
+				// Manages its own user transactions
 				rvService.runService();
-				userTx.commit();
+//				userTx.commit();
 				getLogger().info("Done creating rec_id, val_id files: "
 						+ rvService.getTimeElapsed());
 
@@ -253,7 +253,7 @@ public class StartOabaMDB extends AbstractOabaMDB {
 					immutableTranslator.getRecordIdType();
 				userTx.commit();
 
-//				userTx.begin();
+				userTx.begin();
 				getPropertyController().setJobProperty(batchJob,
 						PN_RECORD_ID_TYPE, recordIdType.name());
 
@@ -272,7 +272,7 @@ public class StartOabaMDB extends AbstractOabaMDB {
 
 				updateOabaProcessingStatus(batchJob, OabaEventBean.DONE_REC_VAL,
 						new Date(), null);
-//				userTx.commit();
+				userTx.commit();
 				userTx.begin();
 				sendToBlocking(data);
 				userTx.commit();

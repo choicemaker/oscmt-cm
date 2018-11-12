@@ -7,6 +7,8 @@
  *******************************************************************************/
 package com.choicemaker.cm.oaba.services;
 
+import static com.choicemaker.cm.oaba.services.ServiceMonitoring.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeSet;
@@ -146,7 +148,7 @@ public class GenericDedupService {
 			Comparable<?> c = (Comparable<?>) cSource.next();
 			numBefore++;
 
-			stop = ControlChecker.checkStop(control, numBefore);
+			stop = ControlChecker.checkStop(control, numBefore, CONTROL_INTERVAL);
 
 			if (!matches.contains(c)) {
 				matches.add(c);

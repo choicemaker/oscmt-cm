@@ -7,6 +7,8 @@
  *******************************************************************************/
 package com.choicemaker.cm.oaba.services;
 
+import static com.choicemaker.cm.oaba.services.ServiceMonitoring.*;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -43,8 +45,8 @@ import com.choicemaker.util.LongArrayList;
 		"rawtypes", "unchecked" })
 public class OversizedDedupService {
 
-	private static final Logger log = Logger
-			.getLogger(OversizedDedupService.class.getName());
+	private static final Logger log =
+		Logger.getLogger(OversizedDedupService.class.getName());
 
 	// these two variables are used to stop the program in the middle
 	private IControl control;
@@ -117,10 +119,12 @@ public class OversizedDedupService {
 	public void runService() throws BlockingException {
 		time = System.currentTimeMillis();
 
-		if (status.getCurrentProcessingEventId() >= OabaProcessingConstants.EVT_DONE_DEDUP_OVERSIZED) {
+		if (status
+				.getCurrentProcessingEventId() >= OabaProcessingConstants.EVT_DONE_DEDUP_OVERSIZED) {
 			// do nothing here
 
-		} else if (status.getCurrentProcessingEventId() == OabaProcessingConstants.EVT_DONE_DEDUP_BLOCKS) {
+		} else if (status
+				.getCurrentProcessingEventId() == OabaProcessingConstants.EVT_DONE_DEDUP_BLOCKS) {
 			// start from beginning
 			splitOversized();
 
@@ -128,7 +132,8 @@ public class OversizedDedupService {
 
 			removeSubsumed(0);
 
-		} else if (status.getCurrentProcessingEventId() == OabaProcessingConstants.EVT_DEDUP_OVERSIZED_EXACT) {
+		} else if (status
+				.getCurrentProcessingEventId() == OabaProcessingConstants.EVT_DEDUP_OVERSIZED_EXACT) {
 			// recovering dedup oversized exact
 			String temp = status.getCurrentProcessingEventInfo();
 			int ind = temp.indexOf(OabaProcessingConstants.DELIMIT);
@@ -142,7 +147,8 @@ public class OversizedDedupService {
 
 			removeSubsumed(0);
 
-		} else if (status.getCurrentProcessingEventId() == OabaProcessingConstants.EVT_DONE_DEDUP_OVERSIZED_EXACT) {
+		} else if (status
+				.getCurrentProcessingEventId() == OabaProcessingConstants.EVT_DONE_DEDUP_OVERSIZED_EXACT) {
 			// start from dedup subsumed
 			int s = Integer.parseInt(status.getCurrentProcessingEventInfo());
 
@@ -151,7 +157,8 @@ public class OversizedDedupService {
 
 			removeSubsumed(0);
 
-		} else if (status.getCurrentProcessingEventId() == OabaProcessingConstants.EVT_DEDUP_OVERSIZED) {
+		} else if (status
+				.getCurrentProcessingEventId() == OabaProcessingConstants.EVT_DEDUP_OVERSIZED) {
 			// recovering dedup subsumed oversized
 			int s = Integer.parseInt(status.getCurrentProcessingEventInfo());
 
@@ -201,7 +208,7 @@ public class OversizedDedupService {
 			sArray[i] = I.intValue();
 			i++;
 
-			stop = ControlChecker.checkStop(control, i);
+			stop = ControlChecker.checkStop(control, i, CONTROL_INTERVAL);
 		}
 		Arrays.sort(sArray);
 
@@ -225,7 +232,8 @@ public class OversizedDedupService {
 
 			numBlocksIn++;
 
-			stop = ControlChecker.checkStop(control, numBlocksIn);
+			stop = ControlChecker.checkStop(control, numBlocksIn,
+					CONTROL_INTERVAL);
 		}
 
 		osSource.close();
@@ -242,19 +250,17 @@ public class OversizedDedupService {
 		int s = sources.length;
 
 		for (int i = startPoint; i < s && !stop; i++) {
-			stop =
-				ControlChecker.checkStop(control,
-						ServiceMonitoring.CONTROL_INTERVAL);
+			stop = control.shouldStop();
 
 			// hashmap containing sum and block
 			HashMap sumMap = new HashMap();
 
 			// System.out.println (i + " " + sources[i].getInfo());
 
-			String temp =
-				Integer.toString(s) + OabaProcessingConstants.DELIMIT
-						+ Integer.toString(i);
-			status.setCurrentProcessingEvent(OabaEventBean.DEDUP_OVERSIZED_EXACT, temp);
+			String temp = Integer.toString(s) + OabaProcessingConstants.DELIMIT
+					+ Integer.toString(i);
+			status.setCurrentProcessingEvent(
+					OabaEventBean.DEDUP_OVERSIZED_EXACT, temp);
 
 			if (sources[i].exists()) {
 				sources[i].open();
@@ -301,8 +307,8 @@ public class OversizedDedupService {
 
 		} // end for i
 
-		status.setCurrentProcessingEvent(OabaEventBean.DONE_DEDUP_OVERSIZED_EXACT,
-				Integer.toString(s));
+		status.setCurrentProcessingEvent(
+				OabaEventBean.DONE_DEDUP_OVERSIZED_EXACT, Integer.toString(s));
 
 		status.setCurrentProcessingEvent(OabaEventBean.DEDUP_OVERSIZED,
 				Integer.toString(s));
@@ -341,7 +347,8 @@ public class OversizedDedupService {
 
 					blockSetId++;
 
-					stop = ControlChecker.checkStop(control, blockSetId);
+					stop = ControlChecker.checkStop(control, blockSetId,
+							CONTROL_INTERVAL);
 				}
 
 				sources[i].close();
@@ -402,7 +409,8 @@ public class OversizedDedupService {
 
 				counter++;
 
-				stop = ControlChecker.checkStop(control, counter);
+				stop = ControlChecker.checkStop(control, counter,
+						CONTROL_INTERVAL);
 			}
 
 			srcI.close();

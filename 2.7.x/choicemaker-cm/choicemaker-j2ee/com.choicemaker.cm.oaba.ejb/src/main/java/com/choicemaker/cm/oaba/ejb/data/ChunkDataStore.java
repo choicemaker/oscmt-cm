@@ -7,6 +7,8 @@
  *******************************************************************************/
 package com.choicemaker.cm.oaba.ejb.data;
 
+import static com.choicemaker.cm.oaba.services.ServiceMonitoring.*;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -124,7 +126,7 @@ public class ChunkDataStore {
 								+ (O == null ? null : O.getClass().getName())
 								+ ")");
 					}
-					ControlChecker.checkStop(control, c);
+					ControlChecker.checkStop(control, c, CONTROL_INTERVAL);
 				}
 				logger.fine(tag + ": total record count: " + c);
 

@@ -7,6 +7,8 @@
  *******************************************************************************/
 package com.choicemaker.cm.oaba.services;
 
+import static com.choicemaker.cm.oaba.services.ServiceMonitoring.*;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -48,7 +50,8 @@ public class OABABlockingService {
 	 * used in intermediate computations. By default, intermediate files are
 	 * removed once the record-value service has run.
 	 */
-	public static final String PN_KEEP_FILES = "oaba.OABABlockingService.keepFiles";
+	public static final String PN_KEEP_FILES =
+		"oaba.OABABlockingService.keepFiles";
 
 	/** Checks the system property {@link #PN_KEEP_FILES} */
 	public static boolean isKeepFilesRequested() {
@@ -60,8 +63,8 @@ public class OABABlockingService {
 
 	private boolean keepFiles = isKeepFilesRequested();
 
-	private static final Logger log = Logger
-			.getLogger(OABABlockingService.class.getName());
+	private static final Logger log =
+		Logger.getLogger(OABABlockingService.class.getName());
 
 	private int maxBlockSize;
 
@@ -190,10 +193,12 @@ public class OABABlockingService {
 	public void runService() throws BlockingException {
 		time = System.currentTimeMillis();
 
-		if (status.getCurrentProcessingEventId() >= OabaProcessingConstants.EVT_DONE_OVERSIZED_TRIMMING) {
+		if (status
+				.getCurrentProcessingEventId() >= OabaProcessingConstants.EVT_DONE_OVERSIZED_TRIMMING) {
 			// do nothing here
 
-		} else if (status.getCurrentProcessingEventId() < OabaProcessingConstants.EVT_BLOCK_BY_ONE_COLUMN) {
+		} else if (status
+				.getCurrentProcessingEventId() < OabaProcessingConstants.EVT_BLOCK_BY_ONE_COLUMN) {
 			log.info("Blocking By 1 column ");
 
 			init();
@@ -203,7 +208,8 @@ public class OABABlockingService {
 			if (!stop)
 				trimOversized();
 
-		} else if (status.getCurrentProcessingEventId() == OabaProcessingConstants.EVT_BLOCK_BY_ONE_COLUMN) {
+		} else if (status
+				.getCurrentProcessingEventId() == OabaProcessingConstants.EVT_BLOCK_BY_ONE_COLUMN) {
 			log.info("Trying to recover blocking by one column");
 			init();
 
@@ -213,13 +219,15 @@ public class OABABlockingService {
 			if (!stop)
 				trimOversized();
 
-		} else if (status.getCurrentProcessingEventId() == OabaProcessingConstants.EVT_DONE_BLOCK_BY_ONE_COLUMN) {
+		} else if (status
+				.getCurrentProcessingEventId() == OabaProcessingConstants.EVT_DONE_BLOCK_BY_ONE_COLUMN) {
 			log.info("Starting from trimOversized");
 			init();
 
 			trimOversized();
 
-		} else if (status.getCurrentProcessingEventId() == OabaProcessingConstants.EVT_OVERSIZED_TRIMMING) {
+		} else if (status
+				.getCurrentProcessingEventId() == OabaProcessingConstants.EVT_OVERSIZED_TRIMMING) {
 			log.info("Trying to recover oversized trimming");
 			init();
 
@@ -254,16 +262,15 @@ public class OABABlockingService {
 
 		// block one column at a time.
 		for (int i = 0; i < numBlockingFields && !stop; i++) {
-			stop =
-				ControlChecker.checkStop(control,
-						ServiceMonitoring.CONTROL_INTERVAL);
+			stop = control.shouldStop();
 
 			IRecValSource rvSource = rvSources[i];
 			numBlocks += blockByField(i, rvSource, bSink, osGroup);
 
 			if (!stop)
-				status.setCurrentProcessingEvent(OabaEventBean.BLOCK_BY_ONE_COLUMN,
-						Integer.toString(i) + "|" + Integer.toString(numBlocks));
+				status.setCurrentProcessingEvent(
+						OabaEventBean.BLOCK_BY_ONE_COLUMN, Integer.toString(i)
+								+ "|" + Integer.toString(numBlocks));
 		}
 
 		bSink.close();
@@ -272,7 +279,8 @@ public class OABABlockingService {
 			osDump.close();
 
 		if (!stop)
-			status.setCurrentProcessingEvent(OabaEventBean.DONE_BLOCK_BY_ONE_COLUMN);
+			status.setCurrentProcessingEvent(
+					OabaEventBean.DONE_BLOCK_BY_ONE_COLUMN);
 	}
 
 	/**
@@ -304,16 +312,15 @@ public class OABABlockingService {
 
 		// block one column at a time starting from the last incomplete.
 		for (int i = currentCol; i < numBlockingFields && !stop; i++) {
-			stop =
-				ControlChecker.checkStop(control,
-						ServiceMonitoring.CONTROL_INTERVAL);
+			stop = control.shouldStop();
 
 			IRecValSource rvSource = rvSources[i];
 			numBlocks += blockByField(i, rvSource, bSink, osGroup);
 
 			if (!stop)
-				status.setCurrentProcessingEvent(OabaEventBean.BLOCK_BY_ONE_COLUMN,
-						Integer.toString(i) + "|" + Integer.toString(numBlocks));
+				status.setCurrentProcessingEvent(
+						OabaEventBean.BLOCK_BY_ONE_COLUMN, Integer.toString(i)
+								+ "|" + Integer.toString(numBlocks));
 		}
 
 		osGroup.closeAllSinks();
@@ -322,7 +329,8 @@ public class OABABlockingService {
 			osDump.close();
 
 		if (!stop)
-			status.setCurrentProcessingEvent(OabaEventBean.DONE_BLOCK_BY_ONE_COLUMN);
+			status.setCurrentProcessingEvent(
+					OabaEventBean.DONE_BLOCK_BY_ONE_COLUMN);
 
 	}
 
@@ -372,7 +380,8 @@ public class OABABlockingService {
 				osGroupNew.openAllSinks();
 
 				String info = Integer.toString(numFields);
-				status.setCurrentProcessingEvent(OabaEventBean.OVERSIZED_TRIMMING, info);
+				status.setCurrentProcessingEvent(
+						OabaEventBean.OVERSIZED_TRIMMING, info);
 			}
 
 			numFields++;
@@ -392,7 +401,8 @@ public class OABABlockingService {
 			// clean up rec,val files
 			cleanUp();
 
-			status.setCurrentProcessingEvent(OabaEventBean.DONE_OVERSIZED_TRIMMING);
+			status.setCurrentProcessingEvent(
+					OabaEventBean.DONE_OVERSIZED_TRIMMING);
 		}
 
 		t1 = System.currentTimeMillis() - t1;
@@ -407,7 +417,8 @@ public class OABABlockingService {
 	 */
 	private void recoverTrimOversized() throws BlockingException {
 		// recover info first
-		int numFields = Integer.parseInt(status.getCurrentProcessingEventInfo()) + 1;
+		int numFields =
+			Integer.parseInt(status.getCurrentProcessingEventInfo()) + 1;
 
 		log.info("recovering starting at " + numFields);
 
@@ -442,7 +453,8 @@ public class OABABlockingService {
 
 		while (totalOversized > 0) {
 			String info = Integer.toString(numFields);
-			status.setCurrentProcessingEvent(OabaEventBean.OVERSIZED_TRIMMING, info);
+			status.setCurrentProcessingEvent(OabaEventBean.OVERSIZED_TRIMMING,
+					info);
 
 			log.info(totalOversized + " Oversized blocks, blocking with "
 					+ numFields + " field");
@@ -462,7 +474,8 @@ public class OABABlockingService {
 			numFields++;
 
 			info = Integer.toString(numFields);
-			status.setCurrentProcessingEvent(OabaEventBean.OVERSIZED_TRIMMING, info);
+			status.setCurrentProcessingEvent(OabaEventBean.OVERSIZED_TRIMMING,
+					info);
 
 		}
 
@@ -480,7 +493,8 @@ public class OABABlockingService {
 			// clean up rec,val files
 			cleanUp();
 
-			status.setCurrentProcessingEvent(OabaEventBean.DONE_OVERSIZED_TRIMMING);
+			status.setCurrentProcessingEvent(
+					OabaEventBean.DONE_OVERSIZED_TRIMMING);
 		}
 
 		t1 = System.currentTimeMillis() - t1;
@@ -610,7 +624,7 @@ public class OABABlockingService {
 		List<IntArrayList> recordList = rvMap.getIndexedValues();
 
 		for (int j = 0; j < recordList.size() && !stop; j++) {
-			stop = ControlChecker.checkStop(control, j);
+			stop = ControlChecker.checkStop(control, j, CONTROL_INTERVAL);
 			recID = j;
 			IntArrayList values = (IntArrayList) recordList.get(j);
 
@@ -618,15 +632,13 @@ public class OABABlockingService {
 				if (values.size() == 0) {
 					// Typically an invalid value in a non-stacked
 					// field, or all invalid values in a stacked field
-					String msg =
-						"No values for column " + col + ", record id " + j
-								+ ", source " + rvSource;
+					String msg = "No values for column " + col + ", record id "
+							+ j + ", source " + rvSource;
 					log.fine(msg);
 				} else {
 					// Also usually boring or non-informative
-					String msg =
-						values.size() + " values for column " + col
-								+ ", record id " + j + ", source " + rvSource;
+					String msg = values.size() + " values for column " + col
+							+ ", record id " + j + ", source " + rvSource;
 					log.fine(msg);
 				}
 				for (int i = 0; i < values.size(); i++) {
@@ -647,9 +659,8 @@ public class OABABlockingService {
 			} else {
 				// Typically boring: an invalid value in a non-stacked
 				// field, or all invalid values in a stacked field
-				String msg =
-					"Null values for column " + col + ", record id " + j
-							+ ", source " + rvSource;
+				String msg = "Null values for column " + col + ", record id "
+						+ j + ", source " + rvSource;
 				log.fine(msg);
 			}
 
@@ -832,7 +843,8 @@ public class OABABlockingService {
 
 				while (osSource.hasNext() && !stop) {
 
-					stop = ControlChecker.checkStop(control, ++c);
+					stop = ControlChecker.checkStop(control, ++c,
+							CONTROL_INTERVAL);
 
 					BlockSet bs = osSource.next();
 

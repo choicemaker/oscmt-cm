@@ -589,10 +589,12 @@ public class ChunkService3 {
 				int index;
 				if (isStaging) {
 					index = translator.lookupStagingIndex(id);
-					logRecordIdCount(log, TAG, FS1, id, index);
+					logRecordIdCount(log, FS1, TAG, id, count, CONTROL_INTERVAL,
+							DEBUG_INTERVAL);
 				} else {
 					index = translator.lookupMasterIndex(id);
-					logRecordIdCount(log, TAG, FM1, id, index);
+					logRecordIdCount(log, FM1, TAG, id, count, CONTROL_INTERVAL,
+							DEBUG_INTERVAL);
 				}
 
 				if (index == ImmutableRecordIdTranslator.INVALID_INDEX) {
@@ -610,7 +612,7 @@ public class ChunkService3 {
 				}
 				count++;
 				stop = ControlChecker.checkStop(control, count,
-						COUNT_RECORDS_BETWEEN_STOP_CHECKS);
+						CONTROL_INTERVAL);
 
 			} // end while rs next
 			final long downloadMsecs =
@@ -670,7 +672,7 @@ public class ChunkService3 {
 			count++;
 			countAll++;
 
-			stop = ControlChecker.checkStop(control, countAll);
+			stop = ControlChecker.checkStop(control, countAll, CONTROL_INTERVAL);
 
 			IIDSet bs = source.next();
 			LongArrayList block = bs.getRecordIDs();

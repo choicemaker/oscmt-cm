@@ -7,8 +7,19 @@
  *******************************************************************************/
 package com.choicemaker.cm.oaba.services;
 
-import static com.choicemaker.cm.oaba.services.ServiceMonitoring.*;
+import static com.choicemaker.cm.oaba.services.ServiceMonitoring.CONTROL_INTERVAL;
+import static com.choicemaker.cm.oaba.services.ServiceMonitoring.DEBUG_INTERVAL;
+import static com.choicemaker.cm.oaba.services.ServiceMonitoring.FM0;
+import static com.choicemaker.cm.oaba.services.ServiceMonitoring.FM1;
+import static com.choicemaker.cm.oaba.services.ServiceMonitoring.FM2;
+import static com.choicemaker.cm.oaba.services.ServiceMonitoring.FS0;
+import static com.choicemaker.cm.oaba.services.ServiceMonitoring.FS1;
+import static com.choicemaker.cm.oaba.services.ServiceMonitoring.FS2;
+import static com.choicemaker.cm.oaba.services.ServiceMonitoring.FT0;
+import static com.choicemaker.cm.oaba.services.ServiceMonitoring.FT2;
+import static com.choicemaker.cm.oaba.services.ServiceMonitoring.logConnectionAcquisition;
 import static com.choicemaker.cm.oaba.services.ServiceMonitoring.logRecordIdCount;
+import static com.choicemaker.cm.oaba.services.ServiceMonitoring.logTransferRate;
 import static com.choicemaker.util.SystemPropertyUtils.PV_LINE_SEPARATOR;
 
 import java.io.IOException;
@@ -20,6 +31,15 @@ import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.logging.Logger;
+
+import javax.inject.Inject;
+import javax.transaction.HeuristicMixedException;
+import javax.transaction.HeuristicRollbackException;
+import javax.transaction.NotSupportedException;
+import javax.transaction.RollbackException;
+import javax.transaction.Status;
+import javax.transaction.SystemException;
+import javax.transaction.UserTransaction;
 
 import com.choicemaker.cm.aba.BlockingAccessor;
 import com.choicemaker.cm.aba.IBlockingConfiguration;
@@ -41,9 +61,9 @@ import com.choicemaker.cm.oaba.core.OabaEventBean;
 import com.choicemaker.cm.oaba.core.OabaProcessingConstants;
 import com.choicemaker.cm.oaba.core.RECORD_ID_TYPE;
 import com.choicemaker.cm.oaba.core.RecordMatchingMode;
-import com.choicemaker.cm.oaba.utils.ControlChecker;
 import com.choicemaker.cm.oaba.utils.MemoryEstimator;
 import com.choicemaker.util.IntArrayList;
+import com.choicemaker.util.Precondition;
 
 /**
  * This object performs the creation of rec_id, val_id pairs.
@@ -67,10 +87,12 @@ import com.choicemaker.util.IntArrayList;
 		"rawtypes", "unchecked" })
 public class RecValService3 {
 
-	private static final Logger log = Logger.getLogger(RecValService3.class
-			.getName());
+	private static final Logger log =
+		Logger.getLogger(RecValService3.class.getName());
 
-	private final String SOURCE = this.getClass().getSimpleName();
+	private static final String SOURCE = RecValService3.class.getSimpleName();
+	private static final String TX_FAILURE_MSG =
+		"%s.%s: transaction failed: %s";
 
 	private final RecordSource master;
 	private final RecordSource stage;
@@ -94,18 +116,13 @@ public class RecValService3 {
 
 	private IRecValSink[] sinks;
 
-	/** A flag indicating whether any staging record has been read */
-	private boolean firstStage = true;
+	private final UserTransaction userTx;
 
 	private RECORD_ID_TYPE recordIdType = null;
 
-	/** A flag indicating whether any master record has been read */
-	private boolean firstMaster = true;
-
 	/**
-	 * Tracks the time spent per invocation of {@link #runService()}.
-	 * (Assumes that {@link #runService()} is invoked only once per service
-	 * instance.)
+	 * Tracks the time spent per invocation of {@link #runService()}. (Assumes
+	 * that {@link #runService()} is invoked only once per service instance.)
 	 */
 	private long time;
 
@@ -114,6 +131,7 @@ public class RecValService3 {
 	 * to files, one file per field. Records are represented by translated,
 	 * int-valued identifiers. Values are represented by their hashed values.
 	 * Fields may be stacked (i.e. multi-valued).
+	 * 
 	 * <pre>
 	 * File 1: Blocking field 1
 	 *   Translated id 356: value hash, value hash
@@ -140,11 +158,13 @@ public class RecValService3 {
 	 *            a controller for this service
 	 */
 	public RecValService3(RecordSource queryRS, RecordSource refRS,
-			ImmutableProbabilityModel model, String blockName,
-			String queryConf, String refConf,
-			IRecValSinkSourceFactory rvFactory, IRecordIdFactory recidFactory,
-			MutableRecordIdTranslator translator, ProcessingEventLog status,
-			IControl control, RecordMatchingMode mode) {
+			ImmutableProbabilityModel model, String blockName, String queryConf,
+			String refConf, IRecValSinkSourceFactory rvFactory,
+			IRecordIdFactory recidFactory, MutableRecordIdTranslator translator,
+			ProcessingEventLog status, IControl control,
+			RecordMatchingMode mode, UserTransaction tx) {
+		
+		Precondition.assertNonNullArgument("null user transaction", tx);
 
 		this.stage = queryRS;
 		this.master = refRS;
@@ -158,12 +178,12 @@ public class RecValService3 {
 		this.status = status;
 		this.control = control;
 		this.mode = mode;
+		this.userTx = tx;
 
 		BlockingAccessor ba0 = (BlockingAccessor) model.getAccessor();
 
-		IBlockingConfiguration bc0 =
-			ba0.getBlockingConfiguration(blockingConfiguration,
-					queryConfiguration);
+		IBlockingConfiguration bc0 = ba0.getBlockingConfiguration(
+				blockingConfiguration, queryConfiguration);
 		IBlockingField[] bfs0 = bc0.getBlockingFields();
 
 		// log blocking info
@@ -178,32 +198,28 @@ public class RecValService3 {
 		// Check for consistency if a master record source is specified
 		if (master != null) {
 			BlockingAccessor ba1 = (BlockingAccessor) model.getAccessor();
-			IBlockingConfiguration bc1 =
-				ba1.getBlockingConfiguration(blockingConfiguration,
-						referenceConfiguration);
+			IBlockingConfiguration bc1 = ba1.getBlockingConfiguration(
+					blockingConfiguration, referenceConfiguration);
 			IBlockingField[] bfs1 = bc1.getBlockingFields();
 			if (bfs1.length != bfs0.length) {
-				String msg =
-					"Different number of blocking fields for query ("
-							+ bfs0.length + ") and reference (" + bfs1.length
-							+ ") database configurations";
+				String msg = "Different number of blocking fields for query ("
+						+ bfs0.length + ") and reference (" + bfs1.length
+						+ ") database configurations";
 				throw new IllegalArgumentException(msg);
 			}
 			for (int i = 0; i < bfs0.length; i++) {
 				IDbField field0 = bfs0[i].getDbField();
 				IDbField field1 = bfs1[i].getDbField();
 				if (field0.getNumber() != field1.getNumber()) {
-					String msg =
-						"Different field numbers at index " + i + ": field0: "
-								+ field0.getNumber() + ", field1: "
-								+ field1.getNumber();
+					String msg = "Different field numbers at index " + i
+							+ ": field0: " + field0.getNumber() + ", field1: "
+							+ field1.getNumber();
 					throw new IllegalArgumentException(msg);
 				}
 				if (!field0.getName().equals(field1.getName())) {
-					String msg =
-						"Different field names at index " + i + ": field0: '"
-								+ field0.getName() + "', field1: '"
-								+ field1.getName() + "'";
+					String msg = "Different field names at index " + i
+							+ ": field0: '" + field0.getName() + "', field1: '"
+							+ field1.getName() + "'";
 					throw new IllegalArgumentException(msg);
 				}
 			}
@@ -240,22 +256,61 @@ public class RecValService3 {
 	 *
 	 */
 	public void runService() throws BlockingException {
+		final String METHOD = "runService()";
+		final String TAG = SOURCE + "." + METHOD + ": ";
 		time = System.currentTimeMillis();
 
-		if (status.getCurrentProcessingEventId() >= OabaProcessingConstants.EVT_DONE_REC_VAL) {
+		if (status
+				.getCurrentProcessingEventId() >= OabaProcessingConstants.EVT_DONE_REC_VAL) {
 			// need to initialize
 			log.info("recover rec,val files and mutableTranslator");
 			recover();
 
-		} else if (status.getCurrentProcessingEventId() < OabaProcessingConstants.EVT_DONE_REC_VAL) {
+		} else if (status
+				.getCurrentProcessingEventId() < OabaProcessingConstants.EVT_DONE_REC_VAL) {
 			// create the rec_id, val_id files
 			log.info("Creating new rec,val files");
-			status.setCurrentProcessingEvent(OabaEventBean.CREATE_REC_VAL);
+			try {
+				userTx.begin();
+				status.setCurrentProcessingEvent(OabaEventBean.CREATE_REC_VAL);
+				userTx.commit();
+			} catch (Exception e) {
+				String msg =
+					String.format(TX_FAILURE_MSG, SOURCE, METHOD, e.toString());
+				log.severe(msg);
+				try {
+					userTx.setRollbackOnly();
+				} catch (Exception e1) {
+					final String msg1 = TAG + "unable to rollback transaction: "
+							+ e1.toString();
+					log.severe(msg1);
+				}
+				throw new BlockingException(msg);
+			}
+
 			createFiles();
 
 			boolean stop = this.control.shouldStop();
 			if (!stop) {
-				status.setCurrentProcessingEvent(OabaEventBean.DONE_REC_VAL);
+				try {
+					userTx.begin();
+					status.setCurrentProcessingEvent(
+							OabaEventBean.DONE_REC_VAL);
+					userTx.commit();
+				} catch (Exception e) {
+					String msg = String.format(TX_FAILURE_MSG, SOURCE, METHOD,
+							e.toString());
+					log.severe(msg);
+					try {
+						userTx.setRollbackOnly();
+					} catch (Exception e1) {
+						final String msg1 =
+							TAG + "unable to rollback transaction: "
+									+ e1.toString();
+						log.severe(msg1);
+					}
+					throw new BlockingException(msg);
+				}
 			}
 
 		} else {
@@ -271,115 +326,256 @@ public class RecValService3 {
 	 * up the sinks array for future use.
 	 */
 	protected void recover() throws BlockingException {
+		final String METHOD = "recover()";
 
 		sinks = new IRecValSink[numBlockFields];
 		for (int i = 0; i < numBlockFields; i++) {
 			sinks[i] = rvFactory.getNextSink();
 		}
 
-		ImmutableRecordIdTranslator immutableTranslator =
-			recidFactory.toImmutableTranslator(mutableTranslator);
-		this.recordIdType = immutableTranslator.getRecordIdType();
+		try {
+			userTx.begin();
+			ImmutableRecordIdTranslator immutableTranslator =
+				recidFactory.toImmutableTranslator(mutableTranslator);
+			this.recordIdType = immutableTranslator.getRecordIdType();
+			userTx.commit();
+		} catch (SecurityException | IllegalStateException | RollbackException
+				| HeuristicMixedException | HeuristicRollbackException
+				| NotSupportedException | SystemException e) {
+			String msg =
+				String.format(TX_FAILURE_MSG, SOURCE, METHOD, e.toString());
+			log.severe(msg);
+			throw new BlockingException(msg);
+		}
 		assert this.recordIdType != null;
 
 	}
 
+	private void acquireStaging() throws Exception {
+		assert this.stage != null;
+		final String METHOD = "acquireStaging()";
+		final String TAG = SOURCE + "." + METHOD + ": ";
+
+		log.finest(TAG + "opening stage");
+		final long startAcquire = System.currentTimeMillis();
+		userTx.begin();
+		stage.open();
+		userTx.commit();
+		final long acquireMsecs = System.currentTimeMillis() - startAcquire;
+		log.finest(TAG + "stage opened");
+		logConnectionAcquisition(log, FS0, TAG, acquireMsecs);
+	}
+
+	private void acquireMaster() throws Exception {
+		assert this.master != null;
+		final String METHOD = "acquireMaster()";
+		final String TAG = SOURCE + "." + METHOD + ": ";
+
+		log.finest(TAG + "opening master");
+		final long startAcquire = System.currentTimeMillis();
+		userTx.begin();
+		master.open();
+		userTx.commit();
+		final long acquireMsecs = System.currentTimeMillis() - startAcquire;
+		log.finest(TAG + "master opened");
+		logConnectionAcquisition(log, FM0, TAG, acquireMsecs);
+	}
+
+	private RECORD_ID_TYPE computeRecordIdType(Record r) {
+		assert r != null;
+		Object O = r.getId();
+		RECORD_ID_TYPE retVal = RECORD_ID_TYPE.fromInstance((Comparable) O);
+		return retVal;
+	}
+
+	private int createStagingFiles() throws Exception {
+		assert this.stage != null;
+		final String METHOD = "createStagingFiles()";
+		final String TAG = SOURCE + "." + METHOD + ": ";
+
+		boolean stop = false;
+		userTx.begin();
+		stop = this.control.shouldStop();
+		userTx.commit();
+		log.finest(TAG + "shouldStop: " + this.control.shouldStop());
+
+		int count = 0;
+		try {
+
+			BlockingAccessor ba = (BlockingAccessor) model.getAccessor();
+			IBlockingConfiguration bc = ba.getBlockingConfiguration(
+					blockingConfiguration, queryConfiguration);
+
+			int incrementalCount = 0;
+			final long startStaging = System.currentTimeMillis();
+			long incrementalStart = startStaging;
+			boolean firstStage = true;
+			userTx.begin();
+			while (stage.hasNext() && !stop) {
+
+				count++;
+				++incrementalCount;
+				final Record r = stage.getNext();
+				writeRecord(bc, r, model);
+				if (firstStage) {
+					recordIdType = computeRecordIdType(r);
+					firstStage = false;
+				}
+
+				if (count % CONTROL_INTERVAL == 0) {
+					userTx.commit();
+
+					log.finest(TAG + "count: " + count);
+
+					stop = control.shouldStop();
+					log.finest(
+							TAG + "shouldStop: " + this.control.shouldStop());
+
+					MemoryEstimator.writeMem();
+
+					logRecordIdCount(log, FS1, TAG, r.getId(), count);
+					final long incrementalMsecs =
+						System.currentTimeMillis() - incrementalStart;
+					logTransferRate(log, FS2, TAG, incrementalCount,
+							incrementalMsecs);
+					incrementalCount = 0;
+					incrementalStart = System.currentTimeMillis();
+
+					userTx.begin();
+				}
+
+			}
+			if (userTx.getStatus() == Status.STATUS_ACTIVE) {
+				userTx.commit();
+			}
+			final long downloadMsecs =
+				System.currentTimeMillis() - startStaging;
+			logTransferRate(log, FS2, TAG, count, downloadMsecs);
+
+		} finally {
+			log.finest(TAG + "closing stage");
+			stage.close();
+			log.finest(TAG + "stage closed");
+		}
+
+		return count;
+	}
+
+	private int createMasterFiles() throws Exception {
+		assert this.master != null;
+		final String METHOD = "createMasterFiles()";
+		final String TAG = SOURCE + "." + METHOD + ": ";
+
+		boolean stop = false;
+		userTx.begin();
+		stop = this.control.shouldStop();
+		userTx.commit();
+		log.finest(TAG + "shouldStop: " + this.control.shouldStop());
+
+		int count = 0;
+		try {
+
+			BlockingAccessor ba = (BlockingAccessor) model.getAccessor();
+			IBlockingConfiguration bc = ba.getBlockingConfiguration(
+					blockingConfiguration, referenceConfiguration);
+
+			int incrementalCount = 0;
+			final long startMaster = System.currentTimeMillis();
+			long incrementalStart = startMaster;
+			boolean firstMaster = true;
+			userTx.begin();
+			while (master.hasNext() && !stop) {
+
+				++count;
+				++incrementalCount;
+				final Record r = master.getNext();
+				writeRecord(bc, r, model);
+				if (firstMaster) {
+					assert this.recordIdType == computeRecordIdType(r);
+					firstMaster = false;
+				}
+
+				if (count % CONTROL_INTERVAL == 0) {
+					userTx.commit();
+
+					log.finest(TAG + "count: " + count);
+
+					stop = control.shouldStop();
+					log.finest(
+							TAG + "shouldStop: " + this.control.shouldStop());
+
+					MemoryEstimator.writeMem();
+
+					logRecordIdCount(log, FM1, TAG, r.getId(), count);
+					final long incrementalMsecs =
+						System.currentTimeMillis() - incrementalStart;
+					logTransferRate(log, FM2, TAG, incrementalCount,
+							incrementalMsecs);
+					incrementalCount = 0;
+					incrementalStart = System.currentTimeMillis();
+
+					userTx.begin();
+				}
+
+			}
+			if (userTx.getStatus() == Status.STATUS_ACTIVE) {
+				userTx.commit();
+			}
+			final long downloadMsecs = System.currentTimeMillis() - startMaster;
+			logTransferRate(log, FM2, TAG, count, downloadMsecs);
+
+		} finally {
+			log.finest(TAG + "closing master");
+			master.close();
+			log.finest(TAG + "master closed");
+		}
+
+		return count;
+	}
+
 	/**
-	 * This method creates the files from scratch.
-	 *
+	 * This method creates per-field files ('btemp') that hold record-value
+	 * lists
 	 */
 	private void createFiles() throws BlockingException {
 		final String METHOD = "createFiles()";
 		final String TAG = SOURCE + "." + METHOD + ": ";
 
-		sinks = new IRecValSink[numBlockFields];
-		for (int i = 0; i < numBlockFields; i++) {
-			sinks[i] = rvFactory.getNextSink();
-			log.finest(TAG + "opening sink #" + i);
-			sinks[i].open();
-		}
-		log.finest(TAG + "sinks opened: " + numBlockFields);
-
-		log.finest(TAG + "opening translator");
-		mutableTranslator.open();
-		log.finest(TAG + "translator opened");
-
 		try {
-			int count = 0;
+			sinks = new IRecValSink[numBlockFields];
+			for (int i = 0; i < numBlockFields; i++) {
+				sinks[i] = rvFactory.getNextSink();
+				log.finest(TAG + "opening sink #" + i);
+				sinks[i].open();
+			}
+			log.finest(TAG + "sinks opened: " + numBlockFields);
+
+			log.finest(TAG + "opening translator");
+			userTx.begin();
+			mutableTranslator.open();
+			userTx.commit();
+			log.finest(TAG + "translator opened");
+
 			long totalAcquireMsecs = 0;
 			long totalDownloadMsecs = 0;
-			boolean stop = this.control.shouldStop();
-			log.finest(TAG + "shouldStop: " + this.control.shouldStop());
 
-			// write the stage record source
+			int count = 0;
 			if (stage != null) {
 				stage.setModel(model);
-				try {
 
-					log.finest(TAG + "opening stage");
-					final long startAcquire = System.currentTimeMillis();
-					stage.open();
-					final long acquireMsecs =
-						System.currentTimeMillis() - startAcquire;
-					log.finest(TAG + "stage opened");
-					logConnectionAcquisition(log, FS0, TAG, acquireMsecs);
-					totalAcquireMsecs += acquireMsecs;
+				final long startAcquire = System.currentTimeMillis();
+				acquireStaging();
+				totalAcquireMsecs += System.currentTimeMillis() - startAcquire;
 
-					BlockingAccessor ba =
-						(BlockingAccessor) model.getAccessor();
-					IBlockingConfiguration bc =
-						ba.getBlockingConfiguration(blockingConfiguration,
-								queryConfiguration);
-
-					int incrementalCount = 0;
-					final long startStaging = System.currentTimeMillis();
-					long incrementalStart = startStaging;
-					while (stage.hasNext() && !stop) {
-						count++;
-						++incrementalCount;
-						final Record r = stage.getNext();
-
-						if (count % CONTROL_INTERVAL == 0) {
-							log.finest(TAG + "count: " + count);
-							MemoryEstimator.writeMem();
-							final long incrementalMsecs =
-								System.currentTimeMillis() - incrementalStart;
-							logTransferRate(log, FS2, TAG,
-									incrementalCount, incrementalMsecs);
-							incrementalCount = 0;
-							incrementalStart = System.currentTimeMillis();
-						}
-						logRecordIdCount(log, FS1, TAG, r.getId(), count);
-
-						writeRecord(bc, r, model);
-						if (firstStage) {
-							log.finest(TAG + "count: " + count);
-							Object O = r.getId();
-							recordIdType =
-								RECORD_ID_TYPE.fromInstance((Comparable) O);
-							firstStage = false;
-							log.finest(TAG + "firstStage: " + firstStage);
-						}
-
-						stop = ControlChecker.checkStop(control, count);
-						log.finest(TAG + "shouldStop: " + this.control.shouldStop());
-					}
-					final long downloadMsecs =
-						System.currentTimeMillis() - startStaging;
-					logTransferRate(log, FS2, TAG, count, downloadMsecs);
-					totalDownloadMsecs += downloadMsecs;
-
-				} finally {
-					log.finest(TAG + "closing stage");
-					stage.close();
-					log.finest(TAG + "stage closed");
-				}
+				final long startTransfer = System.currentTimeMillis();
+				count += createStagingFiles();
+				totalDownloadMsecs +=
+					System.currentTimeMillis() - startTransfer;
 			}
 
 			log.info(count + " stage records read");
 			int masterCount = 0;
 
-			// Conditionally write the master record source
 			if (master == null) {
 				log.fine("Skipping master records (no master record source)");
 			} else if (mode != RecordMatchingMode.BRM) {
@@ -390,99 +586,64 @@ public class RecValService3 {
 			} else {
 				assert master != null;
 				assert mode == RecordMatchingMode.BRM;
-				log.fine("Reading master records (mode: '" + mode.name() + "')");
 
 				log.finest(TAG + "spliting translator");
+				userTx.begin();
 				mutableTranslator.split();
+				userTx.commit();
 				log.finest(TAG + "translator split");
 
-				try {
+				master.setModel(model);
 
-					log.finest(TAG + "opening master");
-					final long startAcquire = System.currentTimeMillis();
-					master.open();
-					final long acquireMsecs =
-						System.currentTimeMillis() - startAcquire;
-					log.finest(TAG + "master opened");
-					logConnectionAcquisition(log, FM0, TAG, acquireMsecs);
-					totalAcquireMsecs += acquireMsecs;
+				final long startAcquire = System.currentTimeMillis();
+				acquireMaster();
+				totalAcquireMsecs += System.currentTimeMillis() - startAcquire;
 
-					BlockingAccessor ba =
-						(BlockingAccessor) model.getAccessor();
-					IBlockingConfiguration bc =
-						ba.getBlockingConfiguration(blockingConfiguration,
-								referenceConfiguration);
-
-					int incrementalCount = 0;
-					final long startMaster = System.currentTimeMillis();
-					long incrementalStart = startMaster;
-					while (master.hasNext() && !stop) {
-						++masterCount;
-						++count;
-						++incrementalCount;
-						final Record r = master.getNext();
-
-						if (count % CONTROL_INTERVAL == 0) {
-							log.finest(TAG + "masterCount: " + masterCount);
-							log.finest(TAG + "count: " + count);
-							MemoryEstimator.writeMem();
-							final long incrementalMsecs =
-									System.currentTimeMillis() - incrementalStart;
-								logTransferRate(log, FM2, TAG,
-										incrementalCount, incrementalMsecs);
-								incrementalCount = 0;
-								incrementalStart = System.currentTimeMillis();
-						}
-						logRecordIdCount(log, FM1, TAG, r.getId(), count);
-
-						writeRecord(bc, r, model);
-						if (firstMaster) {
-							log.finest(TAG + "masterCount: " + masterCount);
-							log.finest(TAG + "count: " + count);
-							Object O = r.getId();
-							RECORD_ID_TYPE rit =
-								RECORD_ID_TYPE.fromInstance((Comparable) O);
-							assert rit == recordIdType;
-							firstMaster = false;
-							log.finest(TAG + "firstStage: " + firstStage);
-						}
-
-						stop = ControlChecker.checkStop(control, count);
-						log.finest(TAG + "shouldStop: " + this.control.shouldStop());
-					}
-					final long downloadMsecs =
-						System.currentTimeMillis() - startMaster;
-					logTransferRate(log, FM2, TAG, count, downloadMsecs);
-					totalDownloadMsecs += downloadMsecs;
-
-				} finally {
-					master.close();
-				}
+				final long startTransfer = System.currentTimeMillis();
+				masterCount += createMasterFiles();
+				count += masterCount;
+				totalDownloadMsecs +=
+					System.currentTimeMillis() - startTransfer;
 			}
 
 			log.info(masterCount + " master records read");
 			log.info(count + " total records read");
 			logConnectionAcquisition(log, FT0, TAG, totalAcquireMsecs);
 			logTransferRate(log, FT2, TAG, count, totalDownloadMsecs);
-		} catch (IOException ex) {
-			throw new BlockingException(ex.toString());
-		}
 
-		// close rec val sinks
-		for (int i = 0; i < sinks.length; i++) {
-			log.finest(TAG + "closing sink #" + i);
-			sinks[i].close();
-		}
-		log.finest(TAG + "sinks closed: " + sinks.length);
+			// close rec val sinks
+			for (int i = 0; i < sinks.length; i++) {
+				log.finest(TAG + "closing sink #" + i);
+				sinks[i].close();
+			}
+			log.finest(TAG + "sinks closed: " + sinks.length);
 
-		log.finest(TAG + "converting translator to immutable");
-		ImmutableRecordIdTranslator usedLater =
-			recidFactory.toImmutableTranslator(mutableTranslator);
-		log.info("Converted record-id translator to immutable: " + usedLater);
+			log.finest(TAG + "converting translator to immutable");
+			ImmutableRecordIdTranslator usedLater = null;
+			userTx.begin();
+			usedLater = recidFactory.toImmutableTranslator(mutableTranslator);
+			userTx.commit();
+			log.info("Converted record-id translator to immutable: "
+					+ usedLater);
+
+		} catch (Exception e) {
+			final String msg =
+				String.format(TX_FAILURE_MSG, SOURCE, METHOD, e.toString());
+			log.severe(msg);
+			try {
+				userTx.setRollbackOnly();
+			} catch (Exception e1) {
+				final String msg1 =
+					TAG + "unable to rollback transaction: " + e1.toString();
+				log.severe(msg1);
+			}
+			throw new BlockingException(msg);
+		}
 	}
 
 	/**
-	 * This method writes 1 record's rec_id and val_id.
+	 * This method writes the record id and value ids of a record to the
+	 * per-field record-value ('btemp') files.
 	 *
 	 */
 	private void writeRecord(IBlockingConfiguration bc, Record r,
