@@ -7,7 +7,6 @@
  *******************************************************************************/
 package com.choicemaker.cm.ml.me.xmlconf;
 
-import java.util.Iterator;
 import java.util.List;
 
 import org.jdom2.Element;
@@ -28,21 +27,23 @@ public class MeModelConf implements MlModelConf {
 		this.ml = ml;
 	}
 
-	public MachineLearner readMachineLearner(Element e, Accessor acc, List<?> clues, int[] oldClueNums) {
+	public MachineLearner readMachineLearner(Element e, Accessor acc,
+			List<?> clues, int[] unusedOldClueNums) {
 		MaximumEntropy me = new MaximumEntropy();
-		me.setTrainingIterations(Integer.parseInt(e.getAttributeValue("trainingIterations")));
+		me.setTrainingIterations(
+				Integer.parseInt(e.getAttributeValue("trainingIterations")));
 		float[] weights = ArrayHelper.getOneArray(acc.getClueSet().size());
-		@SuppressWarnings("unchecked")
-		Iterator<Element> iClues = (Iterator<Element>) clues.iterator();
-		int i = 0;
-		while (iClues.hasNext()) {
-			int clueNum = oldClueNums[i];
-			Element cl = (Element) iClues.next();
-			if (clueNum != -1) {
-				weights[clueNum] = Float.parseFloat(cl.getAttributeValue("weight"));
-			}
-			++i;
-		}
+		// @SuppressWarnings("unchecked")
+		// Iterator<Element> iClues = (Iterator<Element>) clues.iterator();
+		// int i = 0;
+		// while (iClues.hasNext()) {
+		// int clueNum = oldClueNums[i];
+		// Element cl = (Element) iClues.next();
+		// if (clueNum != -1) {
+		// weights[clueNum] = Float.parseFloat(cl.getAttributeValue("weight"));
+		// }
+		// ++i;
+		// }
 		me.setWeights(weights);
 		return me;
 	}

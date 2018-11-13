@@ -269,34 +269,33 @@ public class ProbabilityModelsXmlConf {
 			boolean[] cluesToEvaluate =
 				ArrayHelper.getTrueArray(clueDesc.length);
 			List<Element> cl = m.getChildren("clue");
-			int[] oldClueNums = new int[cl.size()];
-			int i = 0;
+			int[] unusedOldClueNums = new int[cl.size()];
+			// int i = 0;
 			Iterator<Element> iCl = cl.iterator();
 			while (iCl.hasNext()) {
 				Element c = (Element) iCl.next();
 				String name = c.getAttributeValue("name");
 				Object o = cm.get(name);
-				if (o == null) {
-					o = getByOldName(clueDesc, name);
-				}
+				// if (o == null) {
+				// o = getByOldName(clueDesc, name);
+				// }
 				if (o != null) {
 					int index = ((Integer) o).intValue();
-					oldClueNums[i] = index;
+					// oldClueNums[i] = index;
 					cluesToEvaluate[index] =
 						Boolean.valueOf(c.getAttributeValue("evaluate"))
 								.booleanValue();
-				} else {
-					oldClueNums[i] = -1;
+					// } else {
+					// oldClueNums[i] = -1;
 				}
-				++i;
+				// ++i;
 			}
 			Element mle = m.getChild("machineLearner");
 			MachineLearner ml = null;
 			String name = mle.getAttributeValue("class");
-			MlModelConf mc =
-				(MlModelConf) ExtensionPointMapper.getInstance(
-						ChoiceMakerExtensionPoint.CM_CORE_MACHINELEARNER, name);
-			ml = mc.readMachineLearner(mle, accessor, cl, oldClueNums);
+			MlModelConf mc = (MlModelConf) ExtensionPointMapper.getInstance(
+					ChoiceMakerExtensionPoint.CM_CORE_MACHINELEARNER, name);
+			ml = mc.readMachineLearner(mle, accessor, cl, unusedOldClueNums);
 			retVal =
 				new MutableProbabilityModel(fileName, clueFileName, accessor, ml,
 						cluesToEvaluate, trainingSource, trainedWithHolds,
@@ -312,28 +311,28 @@ public class ProbabilityModelsXmlConf {
 		return retVal;
 	}
 
-	private static Integer getByOldName(ClueDesc[] clueDescs, String name) {
-		int u = name.lastIndexOf('_');
-		if (u != -1 && u < name.length() - 1) {
-			try {
-				int num = Integer.parseInt(name.substring(u + 1));
-				String prefix = name.substring(0, u) + "[";
-				int i = 0;
-				while (i < clueDescs.length
-					&& !clueDescs[i].name.startsWith(prefix)) {
-					++i;
-				}
-				i += num;
-				if (i < clueDescs.length
-					&& clueDescs[i].name.startsWith(prefix)) {
-					return new Integer(i);
-				}
-			} catch (NumberFormatException ex) {
-				logger.info("Caught NumberFormatException: " + ex);
-			}
-		}
-		return null;
-	}
+//	private static Integer getByOldName(ClueDesc[] clueDescs, String name) {
+//		int u = name.lastIndexOf('_');
+//		if (u != -1 && u < name.length() - 1) {
+//			try {
+//				int num = Integer.parseInt(name.substring(u + 1));
+//				String prefix = name.substring(0, u) + "[";
+//				int i = 0;
+//				while (i < clueDescs.length
+//					&& !clueDescs[i].name.startsWith(prefix)) {
+//					++i;
+//				}
+//				i += num;
+//				if (i < clueDescs.length
+//					&& clueDescs[i].name.startsWith(prefix)) {
+//					return new Integer(i);
+//				}
+//			} catch (NumberFormatException ex) {
+//				logger.info("Caught NumberFormatException: " + ex);
+//			}
+//		}
+//		return null;
+//	}
 
 	public static void loadProductionProbabilityModels(ICompiler compiler,
 			boolean fromResource) throws ModelConfigurationException {
