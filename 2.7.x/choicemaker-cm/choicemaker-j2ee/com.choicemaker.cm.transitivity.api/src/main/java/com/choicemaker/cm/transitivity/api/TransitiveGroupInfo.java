@@ -1,7 +1,8 @@
-package com.choicemaker.cms.api;
+package com.choicemaker.cm.transitivity.api;
 
 import java.util.List;
 
+import com.choicemaker.cm.batch.api.BATCH_RESULTS_PERSISTENCE_SCHEME;
 import com.choicemaker.cm.oaba.core.RECORD_ID_TYPE;
 
 public interface TransitiveGroupInfo {
@@ -12,7 +13,7 @@ public interface TransitiveGroupInfo {
 	
 	int getMergeGroupCount();
 	
-	PERSISTENCE_SCHEME getPersistenceScheme();
+	BATCH_RESULTS_PERSISTENCE_SCHEME getPersistenceScheme();
 
 	RECORD_ID_TYPE getRecordIdType();
 

@@ -1,7 +1,8 @@
-package com.choicemaker.cms.api;
+package com.choicemaker.cm.oaba.api;
 
 import java.util.List;
 
+import com.choicemaker.cm.batch.api.BATCH_RESULTS_PERSISTENCE_SCHEME;
 import com.choicemaker.cm.oaba.core.RECORD_ID_TYPE;
 
 public interface MatchPairInfo {
@@ -16,7 +17,7 @@ public interface MatchPairInfo {
 	
 	List<String> getPairFileURIs();
 
-	PERSISTENCE_SCHEME getPersistenceScheme();
+	BATCH_RESULTS_PERSISTENCE_SCHEME getPersistenceScheme();
 	
 	RECORD_ID_TYPE getRecordIdType();
 

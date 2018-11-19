@@ -1,6 +1,4 @@
-package com.choicemaker.cms.api;
-
-import com.choicemaker.cm.batch.api.BatchJobStatus;
+package com.choicemaker.cm.batch.api;
 
 public interface BatchJobInfo {
 

@@ -1,8 +1,9 @@
-package com.choicemaker.cms.beans;
+package com.choicemaker.cms.ejb;
 
 import com.choicemaker.cm.batch.api.BatchJobStatus;
-import com.choicemaker.cms.api.OabaJobInfo;
-import com.choicemaker.cms.api.TransitivityJobInfo;
+import com.choicemaker.cm.batch.ejb.BatchJobInfoBean;
+import com.choicemaker.cm.oaba.api.OabaJobInfo;
+import com.choicemaker.cm.transitivity.api.TransitivityJobInfo;
 import com.choicemaker.cms.api.UrmJobInfo;
 
 public class UrmJobInfoBean extends BatchJobInfoBean implements UrmJobInfo {

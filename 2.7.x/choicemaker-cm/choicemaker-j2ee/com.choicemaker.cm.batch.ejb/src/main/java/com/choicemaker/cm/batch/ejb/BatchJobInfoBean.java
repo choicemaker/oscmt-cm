@@ -1,7 +1,7 @@
-package com.choicemaker.cms.beans;
+package com.choicemaker.cm.batch.ejb;
 
+import com.choicemaker.cm.batch.api.BatchJobInfo;
 import com.choicemaker.cm.batch.api.BatchJobStatus;
-import com.choicemaker.cms.api.BatchJobInfo;
 import com.choicemaker.util.Precondition;
 
 public class BatchJobInfoBean implements BatchJobInfo {
