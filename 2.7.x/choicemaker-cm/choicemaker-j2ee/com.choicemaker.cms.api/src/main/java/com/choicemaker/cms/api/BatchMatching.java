@@ -88,10 +88,10 @@ public interface BatchMatching {
 	 * @param jobId
 	 *            This is the unique job id created by the ChoiceMaker Batch
 	 *            system.
-	 * @return a com.choicemaker.cm.custom.nysed.server.generic.BatchJobStatus
-	 *         object. This object has getStatus (), getStartDate (), and
-	 *         getFinishDate () methods.
+	 * @return a BatchJobStatus object. This object has getStatus (),
+	 *         getStartDate (), and getFinishDate () methods.
 	 */
+	@Deprecated
 	public BatchJob getOabaJob(long jobId);
 
 	/**
@@ -99,10 +99,11 @@ public interface BatchMatching {
 	 * status as an int.
 	 * 
 	 * @param jobID
-	 *            - This is the unique job id created by the Choicemaker Batch
+	 *            - This is the unique job id created by the ChoiceMaker Batch
 	 *            system.
 	 * @return status.
 	 */
+	@Deprecated
 	public String checkStatus(long jobID);
 
 	/**
@@ -124,6 +125,7 @@ public interface BatchMatching {
 	 * @return IMatchRecordSource - returns a source from which to read
 	 *         MatchRecord.
 	 */
+	@Deprecated
 	public IMatchRecord2Source<?> getMatchRecordSource(long jobID)
 			throws RemoteException, NamingException;
 
@@ -150,6 +152,7 @@ public interface BatchMatching {
 			OabaSettings settings, ServerConfiguration serverConfiguration,
 			RecordMatchingMode mode) throws ServerConfigurationException;
 
+	@Deprecated
 	public BatchJob getTransitivityJob(long jobId);
 
 	/**
