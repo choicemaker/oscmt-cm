@@ -1,17 +1,17 @@
-package com.choicemaker.cm.oaba.services;
+package com.choicemaker.cm.oaba.utils;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.choicemaker.util.Precondition;
 
-public class ServiceMonitoring {
+public class RecordTransferLogging {
 
 	/** Interval for checks of whether a job should stop */
 	public static final int CONTROL_INTERVAL = 50000;
 
-	/** Local alias for {@link #COUNT_RECORDS_BETWEEN_DEBUG_PRINTS} */
-	static final int DEBUG_INTERVAL = CONTROL_INTERVAL / 10;
+	/** Finer grained interval for debugging */
+	public static final int DEBUG_INTERVAL = CONTROL_INTERVAL / 10;
 
 	public static void logRecordIdCount(Logger log, String fmt, String tag,
 			Comparable<?> id, final int count, final int countInfo,

@@ -1,20 +1,19 @@
-package com.choicemaker.cm.oaba.services;
+package com.choicemaker.cm.oaba.utils;
 
-import static com.choicemaker.cm.oaba.services.ServiceMonitoring.*;
-
-import static org.junit.Assert.*;
+import static com.choicemaker.cm.oaba.utils.RecordTransferLogging.*;
+//import static org.junit.Assert.*;
 
 import java.util.logging.Logger;
 
 import org.junit.Test;
 
-public class ServiceMonitoringTest {
+public class RecordTransferLoggingTest {
 
 	private static final Logger log =
-		Logger.getLogger(ServiceMonitoringTest.class.getName());
+		Logger.getLogger(RecordTransferLoggingTest.class.getName());
 
 	private static final String SOURCE =
-		ServiceMonitoringTest.class.getSimpleName();
+		RecordTransferLoggingTest.class.getSimpleName();
 	private static final String METHOD = "aMethod:";
 	private static final String TAG = SOURCE + "." + METHOD + ": ";
 

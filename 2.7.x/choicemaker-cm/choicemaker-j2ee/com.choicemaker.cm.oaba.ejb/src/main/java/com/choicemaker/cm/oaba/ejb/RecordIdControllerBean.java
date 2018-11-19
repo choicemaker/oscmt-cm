@@ -7,10 +7,10 @@
  *******************************************************************************/
 package com.choicemaker.cm.oaba.ejb;
 
-import static com.choicemaker.cm.oaba.services.ServiceMonitoring.logTransferRate;
 import static com.choicemaker.cm.oaba.ejb.RecordIdTranslationJPA.PN_TRANSLATEDID_DELETE_BY_JOBID_JOBID;
 import static com.choicemaker.cm.oaba.ejb.RecordIdTranslationJPA.QN_TRANSLATEDID_DELETE_BY_JOBID;
 import static com.choicemaker.cm.oaba.ejb.RecordIdTranslationJPA.QN_TRANSLATEDID_FIND_ALL;
+import static com.choicemaker.cm.oaba.utils.RecordTransferLogging.logTransferRate;
 
 import java.io.File;
 import java.sql.Connection;

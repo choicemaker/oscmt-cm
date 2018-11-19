@@ -7,7 +7,7 @@
  *******************************************************************************/
 package com.choicemaker.cm.oaba.services;
 
-import static com.choicemaker.cm.oaba.services.ServiceMonitoring.*;
+import static com.choicemaker.cm.oaba.utils.RecordTransferLogging.*;
 
 import java.util.ArrayList;
 import java.util.List;

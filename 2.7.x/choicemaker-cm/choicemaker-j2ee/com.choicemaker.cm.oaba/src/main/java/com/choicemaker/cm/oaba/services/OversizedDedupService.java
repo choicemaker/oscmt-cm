@@ -7,7 +7,7 @@
  *******************************************************************************/
 package com.choicemaker.cm.oaba.services;
 
-import static com.choicemaker.cm.oaba.services.ServiceMonitoring.*;
+import static com.choicemaker.cm.oaba.utils.RecordTransferLogging.*;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

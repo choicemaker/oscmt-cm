@@ -7,19 +7,19 @@
  *******************************************************************************/
 package com.choicemaker.cm.oaba.services;
 
-import static com.choicemaker.cm.oaba.services.ServiceMonitoring.CONTROL_INTERVAL;
-import static com.choicemaker.cm.oaba.services.ServiceMonitoring.DEBUG_INTERVAL;
-import static com.choicemaker.cm.oaba.services.ServiceMonitoring.FM0;
-import static com.choicemaker.cm.oaba.services.ServiceMonitoring.FM1;
-import static com.choicemaker.cm.oaba.services.ServiceMonitoring.FM2;
-import static com.choicemaker.cm.oaba.services.ServiceMonitoring.FS0;
-import static com.choicemaker.cm.oaba.services.ServiceMonitoring.FS1;
-import static com.choicemaker.cm.oaba.services.ServiceMonitoring.FS2;
-import static com.choicemaker.cm.oaba.services.ServiceMonitoring.FT0;
-import static com.choicemaker.cm.oaba.services.ServiceMonitoring.FT2;
-import static com.choicemaker.cm.oaba.services.ServiceMonitoring.logConnectionAcquisition;
-import static com.choicemaker.cm.oaba.services.ServiceMonitoring.logRecordIdCount;
-import static com.choicemaker.cm.oaba.services.ServiceMonitoring.logTransferRate;
+import static com.choicemaker.cm.oaba.utils.RecordTransferLogging.CONTROL_INTERVAL;
+import static com.choicemaker.cm.oaba.utils.RecordTransferLogging.DEBUG_INTERVAL;
+import static com.choicemaker.cm.oaba.utils.RecordTransferLogging.FM0;
+import static com.choicemaker.cm.oaba.utils.RecordTransferLogging.FM1;
+import static com.choicemaker.cm.oaba.utils.RecordTransferLogging.FM2;
+import static com.choicemaker.cm.oaba.utils.RecordTransferLogging.FS0;
+import static com.choicemaker.cm.oaba.utils.RecordTransferLogging.FS1;
+import static com.choicemaker.cm.oaba.utils.RecordTransferLogging.FS2;
+import static com.choicemaker.cm.oaba.utils.RecordTransferLogging.FT0;
+import static com.choicemaker.cm.oaba.utils.RecordTransferLogging.FT2;
+import static com.choicemaker.cm.oaba.utils.RecordTransferLogging.logConnectionAcquisition;
+import static com.choicemaker.cm.oaba.utils.RecordTransferLogging.logRecordIdCount;
+import static com.choicemaker.cm.oaba.utils.RecordTransferLogging.logTransferRate;
 import static com.choicemaker.util.SystemPropertyUtils.PV_LINE_SEPARATOR;
 
 import java.io.IOException;
