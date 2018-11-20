@@ -29,6 +29,7 @@ import static com.choicemaker.util.DebugUtils.printStackTrace;
 
 import java.io.File;
 import java.io.Serializable;
+import java.lang.annotation.Annotation;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -44,6 +45,7 @@ import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -205,6 +207,14 @@ public abstract class BatchJobEntity extends AbstractPersistentObject
 	@Override
 	public long getId() {
 		return id;
+	}
+
+	@Override
+	public String getBatchJobType() {
+		Class<?> c = this.getClass();
+		DiscriminatorValue dv = c.getAnnotation(DiscriminatorValue.class);
+		String retVal = dv == null ? DISCRIMINATOR_VALUE : dv.value();
+		return retVal;
 	}
 
 	@Override

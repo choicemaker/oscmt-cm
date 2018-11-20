@@ -29,6 +29,9 @@ class BatchJobStub implements BatchJob {
 
 	public static final String TEMP_DIR_PREFIX = "BatchJobTestUtils_";
 
+	public static final String DISCRIMINATOR_VALUE =
+		BatchJobStub.class.getName();
+
 	@Override
 	public long getId() {
 		return NONPERSISTENT_ID;
@@ -193,6 +196,11 @@ class BatchJobStub implements BatchJob {
 	@Override
 	public boolean stopProcessing() {
 		return false;
+	}
+
+	@Override
+	public String getBatchJobType() {
+		return DISCRIMINATOR_VALUE;
 	}
 
 }

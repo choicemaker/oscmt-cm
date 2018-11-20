@@ -8,8 +8,6 @@ package com.choicemaker.cm.batch.api;
 // @Local
 public interface BatchJobMonitor {
 
-	BatchJobInfo getBatchJobInf(BatchJob batchJob);
-
-	BatchJobInfo getBatchJobInf(long jobId);
+	BatchJobInfo getBatchJobInfo(BatchJob batchJob);
 
 }

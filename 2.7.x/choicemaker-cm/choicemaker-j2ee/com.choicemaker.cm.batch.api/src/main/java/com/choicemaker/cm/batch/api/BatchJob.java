@@ -18,6 +18,9 @@ public interface BatchJob extends PersistentObject, Serializable {
 
 	long getBatchParentId();
 
+	/** Returns type code used for persistence */
+	String getBatchJobType();
+
 	long getUrmId();
 
 	long getTransactionId();
