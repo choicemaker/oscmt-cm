@@ -51,7 +51,7 @@ import com.choicemaker.cm.oaba.services.OABABlockingService;
 		@ActivationConfigProperty(propertyName = "destinationType",
 				propertyValue = "javax.jms.Queue") })
 //@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-public class BlockingMDB extends AbstractOabaMDB {
+public class BlockingMDB extends AbstractOabaMDB2 {
 
 	private static final long serialVersionUID = 271L;
 
