@@ -1,5 +1,6 @@
 package com.choicemaker.cm.batch.ejb;
 
+import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.BatchJobInfo;
 import com.choicemaker.cm.batch.api.BatchJobStatus;
 import com.choicemaker.util.Precondition;
@@ -10,6 +11,14 @@ public class BatchJobInfoBean implements BatchJobInfo {
 	private final String externalId;
 	private final String description;
 	private final BatchJobStatus jobStatus;
+
+	public BatchJobInfoBean(BatchJob batchJob) {
+		Precondition.assertNonNullArgument("Must be non-null", batchJob);
+		this.jobId = batchJob.getId();
+		this.externalId = batchJob.getExternalId();
+		this.description = batchJob.getDescription();
+		this.jobStatus = batchJob.getStatus();
+	}
 
 	public BatchJobInfoBean(long jobId, String externalId, String description,
 			BatchJobStatus jobStatus) {

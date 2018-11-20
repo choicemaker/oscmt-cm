@@ -7,11 +7,21 @@
  *******************************************************************************/
 package com.choicemaker.cm.oaba.ejb.util;
 
-/** @deprecated unused */
-@Deprecated
+import static com.choicemaker.cm.oaba.ejb.OabaJobJPA.DISCRIMINATOR_VALUE;
+
+import com.choicemaker.cm.batch.api.BatchJob;
+
 public class OabaUtils {
 
 	private OabaUtils() {
+	}
+
+	public static boolean isOabaJob(BatchJob batchJob) {
+		boolean retVal = false;
+		if (batchJob != null) {
+			retVal = DISCRIMINATOR_VALUE.equals(batchJob.getBatchJobType());
+		}
+		return retVal;
 	}
 
 	// /**
