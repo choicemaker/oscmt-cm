@@ -13,11 +13,8 @@ import java.io.StringWriter;
 import java.util.Date;
 import java.util.logging.Logger;
 
-import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.MessageDrivenContext;
-import javax.ejb.TransactionManagement;
-import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
 import javax.jms.JMSContext;
 import javax.jms.Message;
@@ -58,7 +55,8 @@ import com.choicemaker.cm.oaba.ejb.util.MessageBeanUtils;
  * @author rphall
  *
  */
-public abstract class AbstractOabaMDB2 implements MessageListener, Serializable {
+public abstract class AbstractOabaMDB2
+		implements MessageListener, Serializable {
 
 	private static final long serialVersionUID = 271L;
 
@@ -161,14 +159,14 @@ public abstract class AbstractOabaMDB2 implements MessageListener, Serializable 
 			int jmsTxStatus = getUserTx() == null ? Status.STATUS_NO_TRANSACTION
 					: getUserTx().getStatus();
 			if (jmsTxStatus != Status.STATUS_NO_TRANSACTION) {
-				getLogger().fine(String.format("%s.%s: committing JMS transaction",
-						SOURCE, METHOD));
+				getLogger().fine(String.format(
+						"%s.%s: committing JMS transaction", SOURCE, METHOD));
 				getUserTx().commit();
-				getLogger().finer(String.format("%s.%s: committed JMS transaction",
-						SOURCE, METHOD));
+				getLogger().finer(String.format(
+						"%s.%s: committed JMS transaction", SOURCE, METHOD));
 			} else {
-				getLogger().fine(String.format("%s.%s: no JMS transaction", SOURCE,
-						METHOD));
+				getLogger().fine(String.format("%s.%s: no JMS transaction",
+						SOURCE, METHOD));
 			}
 
 			if (inMessage instanceof ObjectMessage) {
@@ -234,42 +232,34 @@ public abstract class AbstractOabaMDB2 implements MessageListener, Serializable 
 						"wrong type: " + inMessage.getClass().getName());
 			}
 
-//		} catch (Exception e) {
-//			String msg0 = throwableToString(e);
-//			getLogger().severe(msg0);
-//			if (batchJob != null) {
-//				batchJob.markAsFailed();
-//				jobManager.save(batchJob);
-//			}
-//		}
-	} catch (Exception e) {
-		String msg0 = throwableToString(e);
+		} catch (Exception e) {
+			String msg0 = throwableToString(e);
 			getLogger().severe(msg0);
-		try {
-			int status = getUserTx() == null ? Status.STATUS_NO_TRANSACTION
-					: getUserTx().getStatus();
-			if (status != Status.STATUS_NO_TRANSACTION) {
-				getUserTx().setRollbackOnly();
-			}
-		} catch (Exception e1) {
-			String msg1 = throwableToString(e);
-			getLogger().severe(msg1);
-		}
-		try {
-			int status = getUserTx() == null ? Status.STATUS_NO_TRANSACTION
-					: getUserTx().getStatus();
-			if (status != Status.STATUS_NO_TRANSACTION) {
-				if (batchJob != null) {
-					batchJob.markAsFailed();
-					getJobController().save(batchJob);
+			try {
+				int status = getUserTx() == null ? Status.STATUS_NO_TRANSACTION
+						: getUserTx().getStatus();
+				if (status != Status.STATUS_NO_TRANSACTION) {
+					getUserTx().setRollbackOnly();
 				}
-				getUserTx().setRollbackOnly();
+			} catch (Exception e1) {
+				String msg1 = throwableToString(e);
+				getLogger().severe(msg1);
 			}
-		} catch (Exception e1) {
-			String msg1 = throwableToString(e);
-			getLogger().severe(msg1);
+			try {
+				int status = getUserTx() == null ? Status.STATUS_NO_TRANSACTION
+						: getUserTx().getStatus();
+				if (status != Status.STATUS_NO_TRANSACTION) {
+					if (batchJob != null) {
+						batchJob.markAsFailed();
+						getJobController().save(batchJob);
+					}
+					getUserTx().setRollbackOnly();
+				}
+			} catch (Exception e1) {
+				String msg1 = throwableToString(e);
+				getLogger().severe(msg1);
+			}
 		}
-	}
 		getJmsTrace()
 				.info("Exiting onMessage for " + this.getClass().getName());
 	}
@@ -314,7 +304,7 @@ public abstract class AbstractOabaMDB2 implements MessageListener, Serializable 
 
 	protected abstract MessageDrivenContext getJmsCtx();
 
-	protected abstract UserTransaction getUserTx ();
+	protected abstract UserTransaction getUserTx();
 
 	protected abstract void processOabaMessage(OabaJobMessage data,
 			BatchJob batchJob, OabaParameters oabaParams,
