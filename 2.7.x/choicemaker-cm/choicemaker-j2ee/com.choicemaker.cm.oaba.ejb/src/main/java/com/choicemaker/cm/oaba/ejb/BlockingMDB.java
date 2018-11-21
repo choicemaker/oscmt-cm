@@ -15,11 +15,11 @@ import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
+import javax.ejb.MessageDrivenContext;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 import javax.jms.Queue;
+import javax.transaction.UserTransaction;
 
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
@@ -49,8 +49,11 @@ import com.choicemaker.cm.oaba.services.OABABlockingService;
 		@ActivationConfigProperty(propertyName = "destinationLookup",
 				propertyValue = "java:/choicemaker/urm/jms/blockQueue"),
 		@ActivationConfigProperty(propertyName = "destinationType",
-				propertyValue = "javax.jms.Queue") })
+				propertyValue = "javax.jms.Queue"),
+		@ActivationConfigProperty(propertyName = "acknowledgeMode",
+		propertyValue = "Dups-ok-acknowledge") })
 //@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+@TransactionManagement(value = TransactionManagementType.BEAN)
 public class BlockingMDB extends AbstractOabaMDB2 {
 
 	private static final long serialVersionUID = 271L;
@@ -61,6 +64,14 @@ public class BlockingMDB extends AbstractOabaMDB2 {
 	private static final Logger jmsTrace =
 		Logger.getLogger("jmstrace." + BlockingMDB.class.getName());
 
+	private static final String SOURCE = StartOabaMDB.class.getSimpleName();
+
+	@Resource
+	private MessageDrivenContext jmsCtx;
+
+	@Resource
+	private UserTransaction userTx;
+
 	@Resource(lookup = "java:/choicemaker/urm/jms/dedupQueue")
 	private Queue dedupQueue;
 
@@ -69,6 +80,7 @@ public class BlockingMDB extends AbstractOabaMDB2 {
 			OabaParameters oabaParams, OabaSettings oabaSettings,
 			ProcessingEventLog processingLog, ServerConfiguration serverConfig,
 			ImmutableProbabilityModel model) throws BlockingException {
+		final String METHOD = "processOabaMessage";
 
 		// Start blocking
 		final int maxBlock = oabaSettings.getMaxBlockSize();
@@ -121,6 +133,16 @@ public class BlockingMDB extends AbstractOabaMDB2 {
 	@Override
 	protected Logger getJmsTrace() {
 		return jmsTrace;
+	}
+
+	@Override
+	protected MessageDrivenContext getJmsCtx() {
+		return jmsCtx;
+	}
+
+	@Override
+	protected UserTransaction getUserTx () {
+		return getJmsCtx().getUserTransaction();
 	}
 
 	@Override

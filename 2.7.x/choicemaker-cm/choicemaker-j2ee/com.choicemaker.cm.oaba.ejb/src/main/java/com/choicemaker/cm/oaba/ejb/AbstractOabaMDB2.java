@@ -13,12 +13,18 @@ import java.io.StringWriter;
 import java.util.Date;
 import java.util.logging.Logger;
 
+import javax.annotation.Resource;
 import javax.ejb.EJB;
+import javax.ejb.MessageDrivenContext;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
 import javax.jms.JMSContext;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
+import javax.transaction.Status;
+import javax.transaction.UserTransaction;
 
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
@@ -55,6 +61,8 @@ import com.choicemaker.cm.oaba.ejb.util.MessageBeanUtils;
 public abstract class AbstractOabaMDB2 implements MessageListener, Serializable {
 
 	private static final long serialVersionUID = 271L;
+
+	private static final String SOURCE = AbstractOabaMDB2.class.getSimpleName();
 
 	// -- Instance data
 
@@ -141,6 +149,7 @@ public abstract class AbstractOabaMDB2 implements MessageListener, Serializable 
 
 	@Override
 	public void onMessage(Message inMessage) {
+		final String METHOD = "onMessage";
 		getJmsTrace()
 				.info("Entering onMessage for " + this.getClass().getName());
 		ObjectMessage msg = null;
@@ -148,12 +157,31 @@ public abstract class AbstractOabaMDB2 implements MessageListener, Serializable 
 		BatchJob batchJob = null;
 
 		try {
+			// Commit the JMS transaction to acknowledge receipt of the message
+			int jmsTxStatus = getUserTx() == null ? Status.STATUS_NO_TRANSACTION
+					: getUserTx().getStatus();
+			if (jmsTxStatus != Status.STATUS_NO_TRANSACTION) {
+				getLogger().fine(String.format("%s.%s: committing JMS transaction",
+						SOURCE, METHOD));
+				getUserTx().commit();
+				getLogger().finer(String.format("%s.%s: committed JMS transaction",
+						SOURCE, METHOD));
+			} else {
+				getLogger().fine(String.format("%s.%s: no JMS transaction", SOURCE,
+						METHOD));
+			}
+
 			if (inMessage instanceof ObjectMessage) {
 				msg = (ObjectMessage) inMessage;
 				oabaMsg = (OabaJobMessage) msg.getObject();
 
+				// BatchJob tends to lock up, so keep tx short
+				getUserTx().begin();
 				final long jobId = oabaMsg.jobID;
 				batchJob = getJobController().findBatchJob(jobId);
+				getUserTx().commit();
+
+				getUserTx().begin();
 				OabaParameters oabaParams = getParametersController()
 						.findOabaParametersByBatchJobId(jobId);
 				OabaSettings oabaSettings =
@@ -162,6 +190,7 @@ public abstract class AbstractOabaMDB2 implements MessageListener, Serializable 
 					getEventManager().getProcessingLog(batchJob);
 				ServerConfiguration serverConfig =
 					getServerController().findServerConfigurationByJobId(jobId);
+				getUserTx().commit();
 
 				if (batchJob == null /* FIXME || dbParams == null */
 						|| oabaParams == null || oabaSettings == null
@@ -173,10 +202,13 @@ public abstract class AbstractOabaMDB2 implements MessageListener, Serializable 
 					throw new IllegalStateException(s);
 				}
 
+				getUserTx().begin();
 				final String modelConfigId =
 					oabaParams.getModelConfigurationName();
 				ImmutableProbabilityModel model =
 					PMManager.getModelInstance(modelConfigId);
+				getUserTx().commit();
+
 				if (model == null) {
 					String s =
 						"No modelId corresponding to '" + modelConfigId + "'";
@@ -184,6 +216,7 @@ public abstract class AbstractOabaMDB2 implements MessageListener, Serializable 
 					throw new IllegalArgumentException(s);
 				}
 
+				getUserTx().begin();
 				if (BatchJobStatus.ABORT_REQUESTED
 						.equals(batchJob.getStatus())) {
 					abortProcessing(batchJob, processingLog);
@@ -194,20 +227,49 @@ public abstract class AbstractOabaMDB2 implements MessageListener, Serializable 
 							new Date(), null);
 					notifyProcessingCompleted(oabaMsg);
 				}
+				getUserTx().commit();
 
 			} else {
 				getLogger().warning(
 						"wrong type: " + inMessage.getClass().getName());
 			}
 
-		} catch (Exception e) {
-			String msg0 = throwableToString(e);
+//		} catch (Exception e) {
+//			String msg0 = throwableToString(e);
+//			getLogger().severe(msg0);
+//			if (batchJob != null) {
+//				batchJob.markAsFailed();
+//				jobManager.save(batchJob);
+//			}
+//		}
+	} catch (Exception e) {
+		String msg0 = throwableToString(e);
 			getLogger().severe(msg0);
-			if (batchJob != null) {
-				batchJob.markAsFailed();
-				jobManager.save(batchJob);
+		try {
+			int status = getUserTx() == null ? Status.STATUS_NO_TRANSACTION
+					: getUserTx().getStatus();
+			if (status != Status.STATUS_NO_TRANSACTION) {
+				getUserTx().setRollbackOnly();
 			}
+		} catch (Exception e1) {
+			String msg1 = throwableToString(e);
+			getLogger().severe(msg1);
 		}
+		try {
+			int status = getUserTx() == null ? Status.STATUS_NO_TRANSACTION
+					: getUserTx().getStatus();
+			if (status != Status.STATUS_NO_TRANSACTION) {
+				if (batchJob != null) {
+					batchJob.markAsFailed();
+					getJobController().save(batchJob);
+				}
+				getUserTx().setRollbackOnly();
+			}
+		} catch (Exception e1) {
+			String msg1 = throwableToString(e);
+			getLogger().severe(msg1);
+		}
+	}
 		getJmsTrace()
 				.info("Exiting onMessage for " + this.getClass().getName());
 	}
@@ -249,6 +311,10 @@ public abstract class AbstractOabaMDB2 implements MessageListener, Serializable 
 	protected abstract Logger getLogger();
 
 	protected abstract Logger getJmsTrace();
+
+	protected abstract MessageDrivenContext getJmsCtx();
+
+	protected abstract UserTransaction getUserTx ();
 
 	protected abstract void processOabaMessage(OabaJobMessage data,
 			BatchJob batchJob, OabaParameters oabaParams,
