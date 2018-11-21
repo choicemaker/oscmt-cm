@@ -16,9 +16,11 @@ import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
+import javax.ejb.MessageDrivenContext;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 import javax.jms.Queue;
+import javax.transaction.UserTransaction;
 
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
@@ -55,9 +57,12 @@ import com.choicemaker.cm.oaba.utils.TreeTransformer;
 		@ActivationConfigProperty(propertyName = "destinationLookup",
 				propertyValue = "java:/choicemaker/urm/jms/chunkQueue"),
 		@ActivationConfigProperty(propertyName = "destinationType",
-				propertyValue = "javax.jms.Queue") })
-//@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-public class Chunk2MDB extends AbstractOabaMDB {
+				propertyValue = "javax.jms.Queue"),
+		@ActivationConfigProperty(propertyName = "acknowledgeMode",
+				propertyValue = "Dups-ok-acknowledge") })
+// @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+@TransactionManagement(value = TransactionManagementType.BEAN)
+public class Chunk2MDB extends AbstractOabaMDB2 {
 
 	private static final long serialVersionUID = 271L;
 
@@ -67,6 +72,14 @@ public class Chunk2MDB extends AbstractOabaMDB {
 	private static final Logger jmsTrace =
 		Logger.getLogger("jmstrace." + Chunk2MDB.class.getName());
 
+	private static final String SOURCE = StartOabaMDB.class.getSimpleName();
+
+	@Resource
+	private MessageDrivenContext jmsCtx;
+
+	@Resource
+	private UserTransaction userTx;
+
 	@Resource(lookup = "java:/choicemaker/urm/jms/matchSchedulerQueue")
 	private Queue matchSchedulerQueue;
 
@@ -75,6 +88,7 @@ public class Chunk2MDB extends AbstractOabaMDB {
 			OabaParameters oabaParams, OabaSettings oabaSettings,
 			ProcessingEventLog processingLog, ServerConfiguration serverConfig,
 			ImmutableProbabilityModel model) throws BlockingException {
+		final String METHOD = "processOabaMessage";
 
 		final int maxChunk = oabaSettings.getMaxChunkSize();
 		final int numProcessors = serverConfig.getMaxChoiceMakerThreads();
@@ -163,6 +177,16 @@ public class Chunk2MDB extends AbstractOabaMDB {
 	@Override
 	protected OabaEventBean getCompletionEvent() {
 		return OabaEventBean.DONE_CREATE_CHUNK_DATA;
+	}
+
+	@Override
+	protected MessageDrivenContext getJmsCtx() {
+		return jmsCtx;
+	}
+
+	@Override
+	protected UserTransaction getUserTx () {
+		return getJmsCtx().getUserTransaction();
 	}
 
 	@Override
