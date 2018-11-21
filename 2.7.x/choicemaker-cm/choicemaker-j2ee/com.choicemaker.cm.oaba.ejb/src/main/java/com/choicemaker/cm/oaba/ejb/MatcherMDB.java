@@ -56,7 +56,7 @@ import com.choicemaker.cm.oaba.impl.ComparableMRSink;
 		@ActivationConfigProperty(propertyName = "destinationType",
 				propertyValue = "javax.jms.Queue") })
 //@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-public class MatcherMDB extends AbstractMatcher {
+public class MatcherMDB extends AbstractMatcher2 {
 
 	private static final long serialVersionUID = 271L;
 	private static final Logger log =
