@@ -302,7 +302,7 @@ public abstract class AbstractOabaMDB2
 
 	protected abstract Logger getJmsTrace();
 
-	protected abstract MessageDrivenContext getJmsCtx();
+	protected abstract MessageDrivenContext getMdcCtx();
 
 	protected abstract UserTransaction getUserTx();
 

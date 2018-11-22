@@ -132,13 +132,13 @@ public class DedupMDB extends AbstractOabaMDB2 {
 	}
 
 	@Override
-	protected MessageDrivenContext getJmsCtx() {
+	protected MessageDrivenContext getMdcCtx() {
 		return jmsCtx;
 	}
 
 	@Override
 	protected UserTransaction getUserTx () {
-		return getJmsCtx().getUserTransaction();
+		return getMdcCtx().getUserTransaction();
 	}
 
 	@Override
