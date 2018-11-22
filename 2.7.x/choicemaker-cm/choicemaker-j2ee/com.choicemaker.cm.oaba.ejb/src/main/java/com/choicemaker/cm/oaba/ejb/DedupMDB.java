@@ -51,7 +51,7 @@ import com.choicemaker.cm.oaba.services.OversizedDedupService;
 		propertyValue = "Dups-ok-acknowledge") })
 //@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 @TransactionManagement(value = TransactionManagementType.BEAN)
-public class DedupMDB extends AbstractOabaMDB2 {
+public class DedupMDB extends AbstractOabaBmtMDB {
 
 	private static final long serialVersionUID = 271L;
 

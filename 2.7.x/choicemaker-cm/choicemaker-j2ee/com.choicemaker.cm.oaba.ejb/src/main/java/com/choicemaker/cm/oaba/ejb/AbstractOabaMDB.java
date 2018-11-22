@@ -50,7 +50,7 @@ import com.choicemaker.cm.oaba.ejb.util.MessageBeanUtils;
 
 /**
  * Common functionality of message driven beans that perform OABA processing
- * steps.
+ * steps. Container-managed transactions.
  *
  * @author rphall
  *

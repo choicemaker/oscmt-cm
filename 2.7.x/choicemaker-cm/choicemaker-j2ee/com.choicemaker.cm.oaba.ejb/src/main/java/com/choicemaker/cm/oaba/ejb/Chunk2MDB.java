@@ -62,7 +62,7 @@ import com.choicemaker.cm.oaba.utils.TreeTransformer;
 				propertyValue = "Dups-ok-acknowledge") })
 // @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 @TransactionManagement(value = TransactionManagementType.BEAN)
-public class Chunk2MDB extends AbstractOabaMDB2 {
+public class Chunk2MDB extends AbstractOabaBmtMDB {
 
 	private static final long serialVersionUID = 271L;
 

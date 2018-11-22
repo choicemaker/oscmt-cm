@@ -54,7 +54,7 @@ import com.choicemaker.cm.oaba.services.OABABlockingService;
 		propertyValue = "Dups-ok-acknowledge") })
 //@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 @TransactionManagement(value = TransactionManagementType.BEAN)
-public class BlockingMDB extends AbstractOabaMDB2 {
+public class BlockingMDB extends AbstractOabaBmtMDB {
 
 	private static final long serialVersionUID = 271L;
 

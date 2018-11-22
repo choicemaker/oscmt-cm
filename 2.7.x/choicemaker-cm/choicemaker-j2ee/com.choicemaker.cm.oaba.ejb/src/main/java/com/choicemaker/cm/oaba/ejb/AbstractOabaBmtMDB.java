@@ -50,17 +50,17 @@ import com.choicemaker.cm.oaba.ejb.util.MessageBeanUtils;
 
 /**
  * Common functionality of message driven beans that perform OABA processing
- * steps.
+ * steps. Bean-managed transactions.
  *
  * @author rphall
  *
  */
-public abstract class AbstractOabaMDB2
+public abstract class AbstractOabaBmtMDB
 		implements MessageListener, Serializable {
 
 	private static final long serialVersionUID = 271L;
 
-	private static final String SOURCE = AbstractOabaMDB2.class.getSimpleName();
+	private static final String SOURCE = AbstractOabaBmtMDB.class.getSimpleName();
 
 	// -- Instance data
 
