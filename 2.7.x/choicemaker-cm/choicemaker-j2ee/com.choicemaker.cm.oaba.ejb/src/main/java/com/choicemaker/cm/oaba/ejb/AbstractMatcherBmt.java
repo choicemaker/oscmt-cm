@@ -20,12 +20,15 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.ejb.MessageDrivenContext;
 import javax.jms.JMSContext;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.naming.NamingException;
+import javax.transaction.Status;
+import javax.transaction.UserTransaction;
 
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
@@ -67,11 +70,15 @@ import com.choicemaker.cm.oaba.utils.ControlChecker;
 
 /**
  * Common functionality of {@link MatcherMDB} and {@link TransMatcher}.
+ * Bean-managed transactions.
  */
 @SuppressWarnings("rawtypes")
-public abstract class AbstractMatcher2 implements MessageListener, Serializable {
+public abstract class AbstractMatcherBmt
+		implements MessageListener, Serializable {
 
 	private static final long serialVersionUID = 271L;
+
+	private static final String SOURCE = AbstractOabaBmtMDB.class.getSimpleName();
 
 	protected static final int INTERVAL = 50000;
 
@@ -107,16 +114,35 @@ public abstract class AbstractMatcher2 implements MessageListener, Serializable 
 
 	protected abstract JMSContext getJMSContext();
 
+	protected abstract MessageDrivenContext getMdcCtx();
+
+	protected abstract UserTransaction getUserTx();
+
 	// -- Template methods
 
 	@Override
 	public void onMessage(Message inMessage) {
 		getJMSTrace()
 				.info("Entering onMessage for " + this.getClass().getName());
+		final String METHOD = "onMessage";
 		ObjectMessage msg = null;
 		BatchJob batchJob = null;
 
 		try {
+			// Commit the JMS transaction to acknowledge receipt of the message
+			int jmsTxStatus = getUserTx() == null ? Status.STATUS_NO_TRANSACTION
+					: getUserTx().getStatus();
+			if (jmsTxStatus != Status.STATUS_NO_TRANSACTION) {
+				getLogger().fine(String.format(
+						"%s.%s: committing JMS transaction", SOURCE, METHOD));
+				getUserTx().commit();
+				getLogger().finer(String.format(
+						"%s.%s: committed JMS transaction", SOURCE, METHOD));
+			} else {
+				getLogger().fine(String.format("%s.%s: no JMS transaction",
+						SOURCE, METHOD));
+			}
+
 			if (inMessage instanceof ObjectMessage) {
 				msg = (ObjectMessage) inMessage;
 				Object o = msg.getObject();
@@ -126,7 +152,12 @@ public abstract class AbstractMatcher2 implements MessageListener, Serializable 
 					OabaJobMessage data = ((OabaJobMessage) o);
 					final long jobId = data.jobID;
 
+					// BatchJob tends to lock up, so keep tx short
+					getUserTx().begin();
 					batchJob = getOabaJobManager().findBatchJob(jobId);
+					getUserTx().commit();
+
+					getUserTx().begin();
 					final OabaParameters params = getOabaParametersController()
 							.findOabaParametersByBatchJobId(jobId);
 					final ProcessingEventLog processingLog =
@@ -136,6 +167,7 @@ public abstract class AbstractMatcher2 implements MessageListener, Serializable 
 					final ServerConfiguration serverConfig =
 						getServerController()
 								.findServerConfigurationByJobId(jobId);
+					getUserTx().commit();
 
 					if (batchJob == null || params == null
 							|| oabaSettings == null || serverConfig == null) {
@@ -146,10 +178,13 @@ public abstract class AbstractMatcher2 implements MessageListener, Serializable 
 						throw new IllegalStateException(s);
 					}
 
+					getUserTx().begin();
 					final String modelConfigId =
 						params.getModelConfigurationName();
 					ImmutableProbabilityModel model =
 						PMManager.getModelInstance(modelConfigId);
+					getUserTx().commit();
+
 					if (model == null) {
 						String s = "No modelId corresponding to '"
 								+ modelConfigId + "'";
@@ -157,12 +192,15 @@ public abstract class AbstractMatcher2 implements MessageListener, Serializable 
 						throw new IllegalArgumentException(s);
 					}
 
+					getUserTx().begin();
 					final String _currentChunk = getPropertyController()
 							.getJobProperty(batchJob, PN_CURRENT_CHUNK_INDEX);
+					getUserTx().commit();
 					final int currentChunk = Integer.valueOf(_currentChunk);
 					getLogger().fine("MatcherMDB In onMessage " + data.jobID
 							+ " " + currentChunk + " " + data.treeIndex);
 
+					getUserTx().begin();
 					if (BatchJobStatus.ABORT_REQUESTED == batchJob
 							.getStatus()) {
 						MessageBeanUtils.stopJob(batchJob, getOabaJobManager(),
@@ -172,6 +210,7 @@ public abstract class AbstractMatcher2 implements MessageListener, Serializable 
 						handleMatching(data, batchJob, params, oabaSettings,
 								serverConfig, currentChunk);
 					}
+					getUserTx().commit();
 
 				} else {
 					getLogger().warning(
