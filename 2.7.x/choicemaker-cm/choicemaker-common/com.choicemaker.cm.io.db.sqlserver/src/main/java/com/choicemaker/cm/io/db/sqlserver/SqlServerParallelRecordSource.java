@@ -23,6 +23,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 import javax.sql.DataSource;
@@ -44,6 +45,14 @@ public class SqlServerParallelRecordSource implements RecordSource {
 
 	private static Logger logger =
 		Logger.getLogger(SqlServerParallelRecordSource.class.getName());
+	
+	private static final String SOURCE = SqlServerParallelRecordSource.class.getSimpleName();
+	
+	public static String createDataViewName() {
+		String s = "CMT_DATAVIEW_" + UUID.randomUUID().toString();
+		String retVal = s.replace('-', '_');
+		return retVal;
+	}
 
 	private final String fileName;
 	private final String dbConfiguration;
@@ -58,7 +67,7 @@ public class SqlServerParallelRecordSource implements RecordSource {
 	private Statement[] selects;
 	private ResultSet[] results;
 
-	private static final String DATA_VIEW = "DATAVIEW_1001";
+	private final String dataViewName;
 
 	public SqlServerParallelRecordSource(String fileName,
 			ImmutableProbabilityModel model, String dsName,
@@ -68,7 +77,7 @@ public class SqlServerParallelRecordSource implements RecordSource {
 				+ " " + dbConfiguration + " " + idsQuery);
 
 		if (fileName == null) {
-			logger.fine("Null file name for SqlServerParallelRecordSource");
+			logger.fine("Null file name for " + getSource());
 		}
 		if (dbConfiguration == null || dbConfiguration.trim().isEmpty()) {
 			throw new IllegalArgumentException(
@@ -85,6 +94,7 @@ public class SqlServerParallelRecordSource implements RecordSource {
 		this.dsName = dsName;
 		this.dbConfiguration = dbConfiguration;
 		this.idsQuery = idsQuery;
+		this.dataViewName = createDataViewName();
 	}
 
 	public void open() throws IOException {
@@ -117,11 +127,11 @@ public class SqlServerParallelRecordSource implements RecordSource {
 		Statement view = conn.createStatement();
 		String s =
 			"IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = '"
-					+ DATA_VIEW + "') DROP VIEW " + DATA_VIEW;
+					+ getDataView() + "') DROP VIEW " + getDataView();
 		logger.fine(s);
 		view.execute(s);
 
-		s = "create view " + DATA_VIEW + " as " + getIdsQuery();
+		s = "create view " + getDataView() + " as " + getIdsQuery();
 		logger.fine(s);
 		view.execute(s);
 		view.close();
@@ -131,7 +141,7 @@ public class SqlServerParallelRecordSource implements RecordSource {
 		Statement view = conn.createStatement();
 		String s =
 			"IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = '"
-					+ DATA_VIEW + "') DROP VIEW " + DATA_VIEW;
+					+ getDataView() + "') DROP VIEW " + getDataView();
 		logger.fine(s);
 		view.execute(s);
 		view.close();
@@ -175,7 +185,7 @@ public class SqlServerParallelRecordSource implements RecordSource {
 			sb.append(" where ");
 			sb.append(masterId);
 			sb.append(" in (select id from ");
-			sb.append(DATA_VIEW);
+			sb.append(getDataView());
 			sb.append(")");
 
 			if (v.orderBy.length > 0) {
@@ -350,6 +360,14 @@ public class SqlServerParallelRecordSource implements RecordSource {
 		this.ds = ds;
 	}
 
+	public String getDataView() {
+		return dataViewName;
+	}
+
+	protected String getSource() {
+		return SOURCE;
+	}
+	
 	private Connection getConnection() {
 		return connection;
 	}
@@ -389,10 +407,11 @@ public class SqlServerParallelRecordSource implements RecordSource {
 	}
 
 	public String toString() {
-		return "SqlServerParallelRecordSource [fileName=" + getFileName()
+		return getSource() + " [fileName=" + getFileName()
 				+ ", model=" + getModel() + ", dbConfiguration="
 				+ getDbConfiguration() + ", idsQuery=" + getIdsQuery()
-				+ ", dsName=" + getDataSourceName() + "]";
+				+ ", dsName=" + getDataSourceName()
+				+ ", dataView=" + getDataView() + "]";
 	}
 
 }
