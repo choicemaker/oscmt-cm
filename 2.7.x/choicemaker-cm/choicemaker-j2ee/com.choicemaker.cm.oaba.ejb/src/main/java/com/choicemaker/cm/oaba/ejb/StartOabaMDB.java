@@ -79,10 +79,6 @@ public class StartOabaMDB extends AbstractOabaMDB {
 	private static final Logger jmsTrace =
 		Logger.getLogger("jmstrace." + StartOabaMDB.class.getName());
 
-	// @Inject
-	//// @JMSConnectionFactory("java:comp/DefaultJMSConnectionFactory")
-	// private ConnectionFactory jmxConnFactory;
-
 	@Resource
 	MessageDrivenContext jmsCtx;
 
