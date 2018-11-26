@@ -34,7 +34,7 @@
         <module>cmit-oaba</module>
         <module>cmit-transitivity</module>
         <module>cmit-cms</module>
-  </modules>
+      </modules>
     </profile>
     <profile>
       <id>with_gui</id>
