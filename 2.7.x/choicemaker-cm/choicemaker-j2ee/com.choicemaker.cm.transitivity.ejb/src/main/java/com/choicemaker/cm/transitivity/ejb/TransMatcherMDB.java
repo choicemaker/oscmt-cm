@@ -14,12 +14,14 @@ import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
+import javax.ejb.MessageDrivenContext;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
 import javax.jms.JMSContext;
 import javax.jms.MessageListener;
 import javax.jms.Queue;
+import javax.transaction.UserTransaction;
 
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.EventPersistenceManager;
@@ -33,7 +35,7 @@ import com.choicemaker.cm.oaba.api.ServerConfigurationController;
 import com.choicemaker.cm.oaba.core.IComparableSink;
 import com.choicemaker.cm.oaba.core.IMatchRecord2Sink;
 import com.choicemaker.cm.oaba.data.MatchRecord2Factory;
-import com.choicemaker.cm.oaba.ejb.AbstractMatcher;
+import com.choicemaker.cm.oaba.ejb.AbstractMatcherBmt;
 import com.choicemaker.cm.oaba.ejb.OabaFileUtils;
 import com.choicemaker.cm.oaba.ejb.data.MatchWriterMessage;
 import com.choicemaker.cm.oaba.ejb.data.OabaJobMessage;
@@ -54,9 +56,12 @@ import com.choicemaker.cm.transitivity.api.TransitivityParametersController;
 		@ActivationConfigProperty(propertyName = "destinationLookup",
 				propertyValue = "java:/choicemaker/urm/jms/transMatcherQueue"),
 		@ActivationConfigProperty(propertyName = "destinationType",
-				propertyValue = "javax.jms.Queue") })
+				propertyValue = "javax.jms.Queue"),
+		@ActivationConfigProperty(propertyName = "acknowledgeMode",
+		propertyValue = "Dups-ok-acknowledge") })
 //@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-public class TransMatcherMDB extends AbstractMatcher
+@TransactionManagement(value = TransactionManagementType.BEAN)
+public class TransMatcherMDB extends AbstractMatcherBmt
 		implements MessageListener {
 
 	private static final long serialVersionUID = 271L;
@@ -64,6 +69,7 @@ public class TransMatcherMDB extends AbstractMatcher
 		Logger.getLogger(TransMatcherMDB.class.getName());
 	private static final Logger jmsTrace =
 		Logger.getLogger("jmstrace." + TransMatcherMDB.class.getName());
+	private static final String SOURCE = TransMatcherMDB.class.getSimpleName();
 
 	// -- Injected instance data
 
@@ -90,6 +96,12 @@ public class TransMatcherMDB extends AbstractMatcher
 
 	@Inject
 	private JMSContext jmsContext;
+
+	@Resource
+	private MessageDrivenContext jmsCtx;
+
+	@Resource
+	private UserTransaction userTx;
 
 	@Resource(lookup = "java:/choicemaker/urm/jms/transMatchSchedulerQueue")
 	private Queue transMatchSchedulerQueue;
@@ -140,6 +152,16 @@ public class TransMatcherMDB extends AbstractMatcher
 	@Override
 	protected Logger getJMSTrace() {
 		return jmsTrace;
+	}
+
+	@Override
+	protected MessageDrivenContext getMdcCtx() {
+		return jmsCtx;
+	}
+
+	@Override
+	protected UserTransaction getUserTx() {
+		return getMdcCtx().getUserTransaction();
 	}
 
 	@Override
