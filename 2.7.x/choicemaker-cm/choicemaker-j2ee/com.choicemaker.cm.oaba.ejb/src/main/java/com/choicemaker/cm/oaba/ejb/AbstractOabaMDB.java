@@ -13,15 +13,12 @@ import java.io.StringWriter;
 import java.util.Date;
 import java.util.logging.Logger;
 
-import javax.annotation.Resource;
 import javax.ejb.EJB;
-import javax.ejb.MessageDrivenContext;
 import javax.inject.Inject;
 import javax.jms.JMSContext;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
-import javax.transaction.UserTransaction;
 
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
@@ -55,7 +52,8 @@ import com.choicemaker.cm.oaba.ejb.util.MessageBeanUtils;
  * @author rphall
  *
  */
-public abstract class AbstractOabaMDB implements MessageListener, Serializable {
+public abstract class AbstractOabaMDB
+		implements MessageListener, Serializable {
 
 	private static final long serialVersionUID = 271L;
 

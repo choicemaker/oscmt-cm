@@ -218,6 +218,7 @@ public abstract class AbstractOabaBmtMDB
 				if (BatchJobStatus.ABORT_REQUESTED
 						.equals(batchJob.getStatus())) {
 					abortProcessing(batchJob, processingLog);
+
 				} else {
 					processOabaMessage(oabaMsg, batchJob, oabaParams,
 							oabaSettings, processingLog, serverConfig, model);
