@@ -19,9 +19,11 @@ import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
+import javax.ejb.MessageDrivenContext;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 import javax.jms.Queue;
+import javax.transaction.UserTransaction;
 
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
@@ -63,7 +65,8 @@ import com.choicemaker.cm.transitivity.core.TransitivityEventBean;
 		@ActivationConfigProperty(propertyName = "destinationType",
 				propertyValue = "javax.jms.Queue") })
 //@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-public class StartTransitivityMDB extends AbstractTransitivityMDB {
+@TransactionManagement(value = TransactionManagementType.BEAN)
+public class StartTransitivityMDB extends AbstractTransitivityBmtMDB {
 
 	private static final long serialVersionUID = 1L;
 
@@ -102,6 +105,12 @@ public class StartTransitivityMDB extends AbstractTransitivityMDB {
 
 	private boolean isBrmTranslatorReuseRequested =
 		isBrmTranslatorReuseRequested();
+
+	@Resource
+	private MessageDrivenContext jmsCtx;
+
+	@Resource
+	private UserTransaction userTx;
 
 	@Resource(lookup = "java:/choicemaker/urm/jms/transMatchSchedulerQueue")
 	private Queue transMatchSchedulerQueue;
@@ -362,6 +371,16 @@ public class StartTransitivityMDB extends AbstractTransitivityMDB {
 	@Override
 	protected Logger getJmsTrace() {
 		return jmsTrace;
+	}
+
+	@Override
+	protected MessageDrivenContext getMdcCtx() {
+		return jmsCtx;
+	}
+
+	@Override
+	protected UserTransaction getUserTx() {
+		return userTx;
 	}
 
 	@Override
