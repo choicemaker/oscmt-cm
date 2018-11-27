@@ -33,6 +33,7 @@ import com.choicemaker.cm.oaba.impl.MatchRecord2SinkSourceFactory;
 import com.choicemaker.cm.oaba.impl.RecValSinkSourceFactory;
 import com.choicemaker.cm.oaba.impl.SuffixTreeSink;
 import com.choicemaker.cm.oaba.impl.SuffixTreeSource;
+import com.choicemaker.util.Precondition;
 
 /**
  * This object configures factory objects for Batch jobs.
@@ -168,17 +169,30 @@ public class OabaFileUtils {
 
 	/**
 	 * This returns the final sink in which to store the result of the OABA.
-	 * Since this file could be big, we limit the file size to MAX_FILE_SIZE.
-	 * This is mainly for Windows 32 systems where the max file size if 2 GB.
+	 * The file size is limited to <code>MAX_FILE_SIZE</code>.
 	 * The file name is [file dir]/match_[job id]_*.txt.
-	 * 
+	 *
 	 * @return IMatchRecord2Sink - the sink to store the OABA output.
 	 */
 	@SuppressWarnings("rawtypes")
 	public static IMatchRecord2Sink getCompositeMatchSink(BatchJob job) {
+		return getCompositeMatchSink(job,MAX_FILE_SIZE);
+	}
+
+	/**
+	 * This returns the final sink in which to store the result of the OABA.
+	 * The file size is limited to <code>maxFileSize</code>.
+	 * The file name is [file dir]/match_[job id]_*.txt.
+	 *
+	 * @return IMatchRecord2Sink - the sink to store the OABA output.
+	 */
+	@SuppressWarnings("rawtypes")
+	public static IMatchRecord2Sink getCompositeMatchSink(BatchJob job,
+			int maxFileSize) {
+		Precondition.assertBoolean(maxFileSize > 0);
 		String fileName = getCompositeMatchFileName(job);
 		return new MatchRecord2CompositeSink(fileName, TEXT_SUFFIX,
-				MAX_FILE_SIZE);
+				maxFileSize);
 	}
 
 	/**

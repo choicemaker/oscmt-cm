@@ -32,7 +32,7 @@ public class BatchJobFileUtils {
 
 	public static final String FMT = "00000";
 
-	public static final long MAX_FILE_SIZE = 1500000000;
+	public static final int MAX_FILE_SIZE = 1500000000;
 
 	public static final int ROLLOVER = 100000;
 

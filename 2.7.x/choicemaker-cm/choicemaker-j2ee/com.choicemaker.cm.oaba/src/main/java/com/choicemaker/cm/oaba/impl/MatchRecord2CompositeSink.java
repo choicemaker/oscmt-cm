@@ -16,6 +16,7 @@ import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.base.MatchRecord2;
 import com.choicemaker.cm.oaba.core.EXTERNAL_DATA_FORMAT;
 import com.choicemaker.cm.oaba.core.IMatchRecord2Sink;
+import com.choicemaker.util.Precondition;
 
 /**
  * This is a more intelligent version of MatchRecord2Sink. It allows the user to
@@ -37,10 +38,23 @@ import com.choicemaker.cm.oaba.core.IMatchRecord2Sink;
 		"rawtypes", "unchecked" })
 public class MatchRecord2CompositeSink implements IMatchRecord2Sink {
 
-	private String fileBase;
-	private String fileExt;
-	private long maxFileSize;
-	private int interval = 100000;
+	public static final int DEFAULT_INTERVAL = 100000;
+
+	/** Returns the minimum of maxFileSize and DEFAULT_INTERVAL */
+	public static int computeInterval(final long maxFileSize) {
+		Precondition.assertBoolean(maxFileSize > 0);
+		int retVal = DEFAULT_INTERVAL;
+		if (maxFileSize < DEFAULT_INTERVAL) {
+			retVal = (int) maxFileSize;
+		}
+		assert retVal <= DEFAULT_INTERVAL;
+		return retVal;
+	}
+
+	private final String fileBase;
+	private final String fileExt;
+	private final long maxFileSize;
+	private final int interval;
 
 	private IMatchRecord2Sink currentFile;
 	private int numberOfFiles = 0;
@@ -50,8 +64,11 @@ public class MatchRecord2CompositeSink implements IMatchRecord2Sink {
 	private boolean isAppend = false;
 
 	/**
-	 * This constructor takes these arguments.
-	 * 
+	 * Equivalent to invoking the 4-arg constructor with the interval set
+	 * to the maxFileSize or DEFAULT_INTERVAL, whichever is less:<pre>
+	 * MatchRecord2CompositeSink(
+	 *     fileBase, fileExt, maxFileSize, computeInterval(maxFileSize))
+	 * </pre>
 	 * @param fileBase
 	 *            - the base name of the MatchRecord2 sink files.
 	 * @param fileExt
@@ -62,9 +79,7 @@ public class MatchRecord2CompositeSink implements IMatchRecord2Sink {
 	 */
 	public MatchRecord2CompositeSink(String fileBase, String fileExt,
 			long maxFileSize) {
-		this.fileBase = fileBase;
-		this.fileExt = fileExt;
-		this.maxFileSize = maxFileSize;
+		this(fileBase,fileExt,maxFileSize,computeInterval(maxFileSize));
 	}
 
 	/**
@@ -79,14 +94,18 @@ public class MatchRecord2CompositeSink implements IMatchRecord2Sink {
 	 *            above this threshold, a new file is created.
 	 * @param interval
 	 *            - This controls how often to check the size of the size.
+	 *            If the interval is greater than the maxFileSize, it is
+	 *            truncated to the maxFileSize
 	 */
 	public MatchRecord2CompositeSink(String fileBase, String fileExt,
 			long maxFileSize, int interval) {
+		Precondition.assertBoolean(maxFileSize > 0);
+		Precondition.assertBoolean(interval > 0);
 
 		this.fileBase = fileBase;
 		this.fileExt = fileExt;
 		this.maxFileSize = maxFileSize;
-		this.interval = interval;
+		this.interval = Math.min((int)maxFileSize,interval);
 	}
 
 	/*

@@ -22,8 +22,6 @@ import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import javax.jms.JMSContext;
 import javax.jms.Message;
@@ -33,6 +31,7 @@ import javax.jms.Queue;
 import javax.naming.NamingException;
 
 import com.choicemaker.cm.args.OabaParameters;
+import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ProcessingEventBean;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.BatchJobStatus;
@@ -289,9 +288,12 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 			log.info("merging file " + sink.getInfo());
 		}
 
+		OabaSettings oabaSettings =
+			oabaSettingsController.findOabaSettingsByJobId(jobId);
+		final int maxMatches = oabaSettings.getMaxMatches();
 		@SuppressWarnings("unchecked")
 		IMatchRecord2Sink<T> mSink =
-			OabaFileUtils.getCompositeMatchSink(oabaJob);
+			OabaFileUtils.getCompositeMatchSink(oabaJob,maxMatches);
 		IComparableSink<MatchRecord2<T>> sink = new ComparableMRSink<T>(mSink);
 
 		IComparableSinkSourceFactory<MatchRecord2<T>> mFactory =
