@@ -20,12 +20,11 @@ import com.choicemaker.cm.core.XmlConfException;
 
 public interface MlModelConf {
 
-	public MachineLearner readMachineLearner(Element e, Accessor acc,
-			List<?> clues, int[] unusedOldClueNums) throws XmlConfException;
+	public MachineLearner readMachineLearner(Element e, Accessor acc, List<?> clues, int[] oldClueNums) throws XmlConfException;
 
 	public void saveMachineLearner(Element e) throws XmlConfException;
 
 	public void saveClue(Element e, int clueNum);
-
+	
 	public String getExtensionPointId();
 }

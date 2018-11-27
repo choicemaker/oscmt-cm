@@ -21,17 +21,15 @@ import com.choicemaker.cm.core.xmlconf.MlModelConf;
 /**
  * Description
  * 
- * @author Martin Buechi
+ * @author  Martin Buechi
  */
 public class DoNothingMachineLearningPersistance implements MlModelConf {
-	public static DoNothingMachineLearningPersistance instance =
-		new DoNothingMachineLearningPersistance();
+	public static DoNothingMachineLearningPersistance instance = new DoNothingMachineLearningPersistance();
 
 	public DoNothingMachineLearningPersistance() {
 	}
 
-	public MachineLearner readMachineLearner(Element e, Accessor acc,
-			List<?> clues, int[] unusedOldClueNums) {
+	public MachineLearner readMachineLearner(Element e, Accessor acc, List<?> clues, int[] oldClueNums) {
 		return new DoNothingMachineLearning();
 	}
 
