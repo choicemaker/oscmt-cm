@@ -18,8 +18,6 @@ import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 import javax.jms.Queue;
 
 import com.choicemaker.cm.args.OabaSettings;
@@ -34,7 +32,6 @@ import com.choicemaker.cm.batch.api.ProcessingEventLog;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.MatchRecord2;
-import com.choicemaker.cm.oaba.api.OabaSettingsController;
 import com.choicemaker.cm.oaba.api.ServerConfigurationController;
 import com.choicemaker.cm.oaba.core.IMatchRecord2Sink;
 import com.choicemaker.cm.oaba.core.IMatchRecord2SinkSourceFactory;
@@ -46,6 +43,7 @@ import com.choicemaker.cm.oaba.ejb.data.OabaJobMessage;
 import com.choicemaker.cm.oaba.ejb.util.MessageBeanUtils;
 import com.choicemaker.cm.transitivity.api.TransitivityJobManager;
 import com.choicemaker.cm.transitivity.api.TransitivityParametersController;
+import com.choicemaker.cm.transitivity.api.TransitivitySettingsController;
 
 /**
  * This match dedup bean is used by the Transitivity Engine. It dedups the
@@ -62,7 +60,7 @@ import com.choicemaker.cm.transitivity.api.TransitivityParametersController;
 				propertyValue = "java:/choicemaker/urm/jms/transMatchDedupQueue"),
 		@ActivationConfigProperty(propertyName = "destinationType",
 				propertyValue = "javax.jms.Queue") })
-//@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+// @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 public class TransMatchDedupMDB extends AbstractTransitivityMDB {
 
 	private static final long serialVersionUID = 2711L;
@@ -75,7 +73,7 @@ public class TransMatchDedupMDB extends AbstractTransitivityMDB {
 	private TransitivityJobManager jobManager;
 
 	@EJB
-	private OabaSettingsController oabaSettingsController;
+	private TransitivitySettingsController transSettingsController;
 
 	@EJB
 	private TransitivityParametersController paramsController;
@@ -134,9 +132,13 @@ public class TransMatchDedupMDB extends AbstractTransitivityMDB {
 	protected void mergeMatches(final int num, final BatchJob transJob)
 			throws BlockingException {
 
+		final long jobId = transJob.getId();
+		OabaSettings oabaSettings =
+			transSettingsController.findSettingsByTransitivityJobId(jobId);
+		final int maxMatches = oabaSettings.getMaxMatches();
 		// final sink
-		IMatchRecord2Sink finalSink =
-			TransitivityFileUtils.getCompositeTransMatchSink(transJob);
+		IMatchRecord2Sink finalSink = TransitivityFileUtils
+				.getCompositeTransMatchSink(transJob, maxMatches);
 
 		IMatchRecord2SinkSourceFactory factory =
 			OabaFileUtils.getMatchChunkFactory(transJob);

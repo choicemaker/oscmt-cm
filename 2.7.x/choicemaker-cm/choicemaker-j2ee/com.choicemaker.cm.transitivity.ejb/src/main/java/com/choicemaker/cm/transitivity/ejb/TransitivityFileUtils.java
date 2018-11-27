@@ -19,6 +19,7 @@ import com.choicemaker.cm.oaba.core.IMatchRecord2Source;
 import com.choicemaker.cm.oaba.impl.BlockSinkSourceFactory;
 import com.choicemaker.cm.oaba.impl.MatchRecord2CompositeSink;
 import com.choicemaker.cm.oaba.impl.MatchRecord2CompositeSource;
+import com.choicemaker.util.Precondition;
 
 /**
  * This object configures factory objects for Batch jobs.
@@ -45,9 +46,17 @@ public class TransitivityFileUtils {
 
 	@SuppressWarnings("rawtypes")
 	public static IMatchRecord2Sink getCompositeTransMatchSink(BatchJob job) {
+		return getCompositeTransMatchSink(job, MAX_FILE_SIZE);
+	}
+
+	@SuppressWarnings("rawtypes")
+	public static IMatchRecord2Sink getCompositeTransMatchSink(BatchJob job,
+			int maxFileSize) {
+		Precondition.assertNonNullArgument(job);
+		Precondition.assertBoolean(maxFileSize > 0);
 		String fileName = getCompositeTransMatchFileName(job);
 		return new MatchRecord2CompositeSink(fileName, TEXT_SUFFIX,
-				MAX_FILE_SIZE);
+				maxFileSize);
 	}
 
 	@SuppressWarnings("rawtypes")

@@ -35,6 +35,7 @@ import javax.persistence.PersistenceContext;
 
 import com.choicemaker.client.api.IGraphProperty;
 import com.choicemaker.cm.args.AnalysisResultFormat;
+import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ProcessingEvent;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.api.BatchJob;
@@ -42,12 +43,12 @@ import com.choicemaker.cm.batch.api.BatchJobStatus;
 import com.choicemaker.cm.batch.api.EventPersistenceManager;
 import com.choicemaker.cm.batch.api.OperationalPropertyController;
 import com.choicemaker.cm.batch.api.ProcessingEventLog;
-import com.choicemaker.cm.oaba.api.OabaSettingsController;
 import com.choicemaker.cm.oaba.api.ServerConfigurationController;
 import com.choicemaker.cm.oaba.ejb.data.OabaJobMessage;
 import com.choicemaker.cm.oaba.impl.MatchRecord2CompositeSource;
 import com.choicemaker.cm.transitivity.api.TransitivityJobManager;
 import com.choicemaker.cm.transitivity.api.TransitivityParametersController;
+import com.choicemaker.cm.transitivity.api.TransitivitySettingsController;
 import com.choicemaker.cm.transitivity.core.TransitivityResult;
 import com.choicemaker.cm.transitivity.core.TransitivityResultCompositeSerializer;
 import com.choicemaker.cm.transitivity.core.TransitivitySortType;
@@ -68,7 +69,7 @@ import com.choicemaker.cm.transitivity.util.CompositeXMLSerializer;
 				propertyValue = "javax.jms.Queue") })
 @SuppressWarnings({
 		"rawtypes" })
-//@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+// @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 public class TransSerializerMDB implements MessageListener, Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -79,7 +80,7 @@ public class TransSerializerMDB implements MessageListener, Serializable {
 	private static final Logger jmsTrace =
 		Logger.getLogger("jmstrace." + TransSerializerMDB.class.getName());
 
-	public static final int DEFAULT_MAX_RECORD_COUNT = 100000000;
+	// UNUSED public static final int DEFAULT_MAX_RECORD_COUNT = 100000000;
 
 	private static Map<AnalysisResultFormat, TransitivityResultCompositeSerializer> formatSerializer =
 		new HashMap<>();
@@ -111,7 +112,7 @@ public class TransSerializerMDB implements MessageListener, Serializable {
 	private TransitivityJobManager jobManager;
 
 	@EJB
-	private OabaSettingsController oabaSettingsController;
+	private TransitivitySettingsController transSettingsController;
 
 	@EJB
 	private TransitivityParametersController paramsController;
@@ -247,7 +248,12 @@ public class TransSerializerMDB implements MessageListener, Serializable {
 
 			TransitivityResultCompositeSerializer sr =
 				getTransitivityResultSerializer(format);
-			sr.serialize(tr, analysisResultFileName, DEFAULT_MAX_RECORD_COUNT);
+
+			OabaSettings oabaSettings =
+				transSettingsController.findSettingsByTransitivityJobId(jobId);
+			final int recordCount = oabaSettings.getMaxMatches();
+			sr.serialize(tr, analysisResultFileName, recordCount);
+
 			String resultFile = sr.getCurrentFileName();
 			ces.close();
 			propController.setJobProperty(batchJob,
