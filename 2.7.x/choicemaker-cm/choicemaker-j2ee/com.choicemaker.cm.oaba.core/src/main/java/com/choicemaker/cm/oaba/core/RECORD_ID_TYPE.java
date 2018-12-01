@@ -54,7 +54,7 @@ public enum RECORD_ID_TYPE {
 
 	/**
 	 * Note the return value is an ASCII symbol: 0x31, 0x32 or 0x33. It is not
-	 * equal to getIntSymbol()
+	 * equal to getIntValue()
 	 */
 	public char getCharSymbol() {
 		return charSymbol;
