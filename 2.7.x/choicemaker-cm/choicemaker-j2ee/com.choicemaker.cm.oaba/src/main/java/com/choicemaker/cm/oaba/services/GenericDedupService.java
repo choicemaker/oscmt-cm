@@ -37,10 +37,14 @@ import com.choicemaker.cm.oaba.utils.MemoryEstimator;
 		"rawtypes", "unchecked" })
 public class GenericDedupService {
 
-	private static final Logger log = Logger
-			.getLogger(GenericDedupService.class.getName());
+	private static final Logger log =
+		Logger.getLogger(GenericDedupService.class.getName());
 
 	private static final int INTERVAL = 1000;
+
+	public static interface SinkObserver {
+		void sinkAdded(String sinkInfo);
+	}
 
 	private IComparableSource cSource;
 	private IComparableSink cSink;
@@ -58,21 +62,29 @@ public class GenericDedupService {
 	private IControl control;
 	private boolean stop;
 
+	private final SinkObserver sinkObserver;
+
 	/**
 	 * This constructor takes in the source with dups, a sink to store the dedup
 	 * Comparables, and a factory to generate temp sinks. maxMatches is the
 	 * maximum size of the TreeSet.
 	 */
-	public GenericDedupService(IComparableSource cSource,
-			IComparableSink cSink, IComparableSinkSourceFactory cFactory,
-			int max, IControl control) {
+	public GenericDedupService(IComparableSource cSource, IComparableSink cSink,
+			IComparableSinkSourceFactory cFactory, int max, IControl control) {
+		this(cSource, cSink, cFactory, max, control, null);
+	}
+
+	public GenericDedupService(IComparableSource cSource, IComparableSink cSink,
+			IComparableSinkSourceFactory cFactory, int max, IControl control,
+			SinkObserver sinkObserver) {
 
 		this.cSource = cSource;
 		this.cSink = cSink;
 		this.cFactory = cFactory;
 		this.maxMatches = max;
 		this.control = control;
-		stop = false;
+		this.stop = false;
+		this.sinkObserver = sinkObserver;
 	}
 
 	public int getNumBefore() {
@@ -111,10 +123,11 @@ public class GenericDedupService {
 			// create a blank output file
 			log.fine("creating " + cSink.getInfo());
 			cSink.open();
+			notify(sinkObserver, cSink.getInfo());
 			cSink.close();
 
 		} else {
-			int i = mergeFiles(tempSinks, cSink, cFactory, true);
+			int i = mergeFiles(tempSinks, cSink, cFactory, true, sinkObserver);
 			if (i > 0)
 				numAfter = i;
 
@@ -123,6 +136,12 @@ public class GenericDedupService {
 		}
 
 		time = System.currentTimeMillis() - time;
+	}
+
+	protected static void notify(SinkObserver sinkObserver, String sinkInfo) {
+		if (sinkObserver != null) {
+			sinkObserver.sinkAdded(sinkInfo);
+		}
 	}
 
 	/**
@@ -148,7 +167,8 @@ public class GenericDedupService {
 			Comparable<?> c = (Comparable<?>) cSource.next();
 			numBefore++;
 
-			stop = ControlChecker.checkStop(control, numBefore, CONTROL_INTERVAL);
+			stop =
+				ControlChecker.checkStop(control, numBefore, CONTROL_INTERVAL);
 
 			if (!matches.contains(c)) {
 				matches.add(c);
@@ -202,8 +222,8 @@ public class GenericDedupService {
 	 * @throws BlockingException
 	 */
 	public static int mergeFiles(List tempSinks, IComparableSink cSink,
-			IComparableSinkSourceFactory cFactory, boolean delete)
-			throws BlockingException {
+			IComparableSinkSourceFactory cFactory, boolean delete,
+			SinkObserver sinkObserver) throws BlockingException {
 
 		int numFiles = tempSinks.size();
 
@@ -212,6 +232,7 @@ public class GenericDedupService {
 			IComparableSink snk = (IComparableSink) tempSinks.get(0);
 			int i = count(snk, cFactory);
 			cFactory.move(snk, cSink);
+			notify(sinkObserver, cSink.getInfo());
 
 			return i;
 		}
@@ -233,6 +254,7 @@ public class GenericDedupService {
 		} // end for
 
 		cSink.open();
+		notify(sinkObserver, cSink.getInfo());
 
 		Comparable previous = null;
 		int num = 0;
@@ -246,11 +268,11 @@ public class GenericDedupService {
 				final Comparable current = comps[idx];
 				if (current == null) {
 					log.severe("Current comparable is null");
-				} else if (previous != null && current.compareTo(previous) == 0) {
-					String msg =
-						"Current comparable (" + current.toString()
-								+ ") is equivalent to previous ("
-								+ previous.toString() + ")";
+				} else if (previous != null
+						&& current.compareTo(previous) == 0) {
+					String msg = "Current comparable (" + current.toString()
+							+ ") is equivalent to previous ("
+							+ previous.toString() + ")";
 					log.warning(msg);
 				}
 				cSink.writeComparable(current);
