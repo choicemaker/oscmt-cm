@@ -64,14 +64,14 @@ public class OperationalPropertyControllerBean
 				String msg = "The specified property (" + pid
 						+ ") is missing in the DB. "
 						+ "The search will continue by job id and name.";
-				logger.warning(msg);
+				logger.fine(msg);
 				retVal = null;
 			} else if (!retVal.equals(p)) {
 				String msg = "The specified property (" + p
 						+ ") is different in the DB. "
 						+ "The DB value will be updated from '"
 						+ retVal.getValue() + "' to '" + p.getValue() + "'";
-				logger.info(msg);
+				logger.fine(msg);
 				retVal = updateInternal(p);
 			}
 		}
@@ -82,14 +82,14 @@ public class OperationalPropertyControllerBean
 						+ ", name: " + p.getName() + ") is missing in the DB. "
 						+ "A new entry will be created with the value '"
 						+ p.getValue() + "'.";
-				logger.info(msg);
+				logger.fine(msg);
 				retVal = null;
 			} else if (!retVal.equals(p)) {
 				String msg = "The specified property (" + p
 						+ ") is different in the DB. "
 						+ "The DB value will be updated from '"
 						+ retVal.getValue() + "' to '" + p.getValue() + "'";
-				logger.info(msg);
+				logger.fine(msg);
 				retVal.updateValue(p.getValue());
 				retVal = updateInternal(retVal);
 			}
@@ -119,7 +119,7 @@ public class OperationalPropertyControllerBean
 		em.persist(retVal);
 		assert retVal.isPersistent();
 		String msg = "Persistent: " + retVal;
-		logger.info(msg);
+		logger.fine(msg);
 		return retVal;
 	}
 
@@ -180,7 +180,7 @@ public class OperationalPropertyControllerBean
 
 		final String stdName = name.toUpperCase();
 		if (!name.equals(stdName)) {
-			logger.warning("Converting property name '" + name
+			logger.fine("Converting property name '" + name
 					+ "' to upper-case '" + stdName + "'");
 		}
 
