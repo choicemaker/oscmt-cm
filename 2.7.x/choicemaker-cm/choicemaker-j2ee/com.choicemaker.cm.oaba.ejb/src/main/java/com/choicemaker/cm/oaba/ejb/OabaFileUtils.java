@@ -9,7 +9,6 @@ package com.choicemaker.cm.oaba.ejb;
 
 import static com.choicemaker.cm.batch.ejb.BatchJobFileUtils.BINARY_SUFFIX;
 import static com.choicemaker.cm.batch.ejb.BatchJobFileUtils.FILE_SEPARATOR;
-import static com.choicemaker.cm.batch.ejb.BatchJobFileUtils.MAX_FILE_SIZE;
 import static com.choicemaker.cm.batch.ejb.BatchJobFileUtils.TEXT_SUFFIX;
 import static com.choicemaker.cm.batch.ejb.BatchJobFileUtils.formatJobId;
 
@@ -18,6 +17,7 @@ import com.choicemaker.cm.batch.ejb.BatchJobFileUtils;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.oaba.core.IMatchRecord2Sink;
 import com.choicemaker.cm.oaba.core.IMatchRecord2Source;
+import com.choicemaker.cm.oaba.core.IndexedFileObserver;
 import com.choicemaker.cm.oaba.core.RECORD_ID_TYPE;
 import com.choicemaker.cm.oaba.impl.BlockSinkSourceFactory;
 import com.choicemaker.cm.oaba.impl.ChunkDataSinkSourceFactory;
@@ -167,17 +167,18 @@ public class OabaFileUtils {
 		return retVal;
 	}
 
-	/**
-	 * This returns the final sink in which to store the result of the OABA.
-	 * The file size is limited to <code>MAX_FILE_SIZE</code>.
-	 * The file name is [file dir]/match_[job id]_*.txt.
-	 *
-	 * @return IMatchRecord2Sink - the sink to store the OABA output.
-	 */
-	@SuppressWarnings("rawtypes")
-	public static IMatchRecord2Sink getCompositeMatchSink(BatchJob job) {
-		return getCompositeMatchSink(job,MAX_FILE_SIZE);
-	}
+	// Unused
+	// /**
+	// * This returns the final sink in which to store the result of the OABA.
+	// * The file size is limited to <code>MAX_FILE_SIZE</code>.
+	// * The file name is [file dir]/match_[job id]_*.txt.
+	// *
+	// * @return IMatchRecord2Sink - the sink to store the OABA output.
+	// */
+	// @SuppressWarnings("rawtypes")
+	// public static IMatchRecord2Sink getCompositeMatchSink(BatchJob job) {
+	// return getCompositeMatchSink(job,MAX_FILE_SIZE, null);
+	// }
 
 	/**
 	 * This returns the final sink in which to store the result of the OABA.
@@ -188,11 +189,11 @@ public class OabaFileUtils {
 	 */
 	@SuppressWarnings("rawtypes")
 	public static IMatchRecord2Sink getCompositeMatchSink(BatchJob job,
-			int maxFileSize) {
+			int maxFileSize, IndexedFileObserver ifo) {
 		Precondition.assertBoolean(maxFileSize > 0);
 		String fileName = getCompositeMatchFileName(job);
 		return new MatchRecord2CompositeSink(fileName, TEXT_SUFFIX,
-				maxFileSize);
+				maxFileSize, ifo);
 	}
 
 	/**

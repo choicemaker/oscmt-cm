@@ -8,7 +8,6 @@
 package com.choicemaker.cm.transitivity.ejb;
 
 import static com.choicemaker.cm.batch.ejb.BatchJobFileUtils.FILE_SEPARATOR;
-import static com.choicemaker.cm.batch.ejb.BatchJobFileUtils.MAX_FILE_SIZE;
 import static com.choicemaker.cm.batch.ejb.BatchJobFileUtils.TEXT_SUFFIX;
 import static com.choicemaker.cm.batch.ejb.BatchJobFileUtils.formatJobId;
 import static com.choicemaker.cm.batch.ejb.BatchJobFileUtils.getWorkingDir;

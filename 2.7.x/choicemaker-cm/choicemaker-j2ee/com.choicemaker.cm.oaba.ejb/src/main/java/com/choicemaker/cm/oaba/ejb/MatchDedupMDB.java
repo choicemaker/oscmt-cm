@@ -36,12 +36,14 @@ import com.choicemaker.cm.args.ProcessingEventBean;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.BatchJobStatus;
 import com.choicemaker.cm.batch.api.EventPersistenceManager;
+import com.choicemaker.cm.batch.api.IndexedPropertyController;
 import com.choicemaker.cm.batch.api.OperationalPropertyController;
 import com.choicemaker.cm.batch.api.ProcessingEventLog;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.MatchRecord2;
 import com.choicemaker.cm.core.base.PMManager;
+import com.choicemaker.cm.oaba.api.MatchPairInfoBean;
 import com.choicemaker.cm.oaba.api.OabaJobManager;
 import com.choicemaker.cm.oaba.api.OabaParametersController;
 import com.choicemaker.cm.oaba.api.OabaSettingsController;
@@ -50,6 +52,7 @@ import com.choicemaker.cm.oaba.core.IComparableSink;
 import com.choicemaker.cm.oaba.core.IComparableSinkSourceFactory;
 import com.choicemaker.cm.oaba.core.IMatchRecord2Sink;
 import com.choicemaker.cm.oaba.core.IMatchRecord2SinkSourceFactory;
+import com.choicemaker.cm.oaba.core.IndexedFileObserver;
 import com.choicemaker.cm.oaba.core.OabaEventBean;
 import com.choicemaker.cm.oaba.ejb.data.MatchWriterMessage;
 import com.choicemaker.cm.oaba.ejb.data.OabaJobMessage;
@@ -105,6 +108,9 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 
 	@EJB
 	private OperationalPropertyController propController;
+	
+	@EJB
+	private IndexedPropertyController idxPropController;
 
 	@Resource(lookup = "java:/choicemaker/urm/jms/matchDedupEachQueue")
 	private Queue matchDedupEachQueue;
@@ -291,9 +297,21 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 		OabaSettings oabaSettings =
 			oabaSettingsController.findOabaSettingsByJobId(jobId);
 		final int maxMatches = oabaSettings.getMaxMatches();
+
+		IndexedFileObserver ifo = new IndexedFileObserver() {
+
+			@Override
+			public void fileCreated(int index, String fileName) {
+				idxPropController.setIndexedPropertyValue(oabaJob,
+						MatchPairInfoBean.PN_OABA_MATCH_RESULT_FILE, index,
+						fileName);
+			}
+
+		};
+
 		@SuppressWarnings("unchecked")
 		IMatchRecord2Sink<T> mSink =
-			OabaFileUtils.getCompositeMatchSink(oabaJob,maxMatches);
+			OabaFileUtils.getCompositeMatchSink(oabaJob, maxMatches, ifo);
 		IComparableSink<MatchRecord2<T>> sink = new ComparableMRSink<T>(mSink);
 
 		IComparableSinkSourceFactory<MatchRecord2<T>> mFactory =
