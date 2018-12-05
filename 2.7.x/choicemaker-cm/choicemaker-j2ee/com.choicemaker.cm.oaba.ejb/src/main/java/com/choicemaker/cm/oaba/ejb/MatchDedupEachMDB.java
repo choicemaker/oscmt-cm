@@ -13,8 +13,6 @@ import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 import javax.jms.Queue;
 
 import com.choicemaker.cm.args.OabaParameters;
@@ -26,6 +24,7 @@ import com.choicemaker.cm.batch.api.ProcessingEventLog;
 import com.choicemaker.cm.batch.ejb.BatchJobControl;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
+import com.choicemaker.cm.oaba.api.MatchPairInfoBean;
 import com.choicemaker.cm.oaba.core.IComparableSink;
 import com.choicemaker.cm.oaba.core.IMatchRecord2Sink;
 import com.choicemaker.cm.oaba.core.IMatchRecord2SinkSourceFactory;
@@ -54,7 +53,7 @@ import com.choicemaker.cm.oaba.services.GenericDedupService;
 				propertyValue = "java:/choicemaker/urm/jms/matchDedupEachQueue"),
 		@ActivationConfigProperty(propertyName = "destinationType",
 				propertyValue = "javax.jms.Queue") })
-//@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+// @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 public class MatchDedupEachMDB extends AbstractOabaMDB {
 
 	private static final long serialVersionUID = 271L;
@@ -102,6 +101,9 @@ public class MatchDedupEachMDB extends AbstractOabaMDB {
 
 		mSink = OabaFileUtils.getMatchTempFactory(batchJob).getSink(num);
 		IComparableSink sink = new ComparableMRSink(mSink);
+		getIndexedPropertyController().setIndexedPropertyValue(batchJob,
+				MatchPairInfoBean.PN_OABA_MATCH_RESULT_FILE, num,
+				sink.getInfo());
 
 		log.info("source " + mSource.getInfo() + " sink " + mSink.getInfo());
 

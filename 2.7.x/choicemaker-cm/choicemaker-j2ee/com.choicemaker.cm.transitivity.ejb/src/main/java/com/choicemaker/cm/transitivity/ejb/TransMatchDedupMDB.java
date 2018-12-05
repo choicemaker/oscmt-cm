@@ -16,7 +16,6 @@ import java.util.logging.Logger;
 
 import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
-import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
 import javax.jms.Queue;
 
@@ -26,24 +25,19 @@ import com.choicemaker.cm.args.ProcessingEventBean;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.api.BatchJob;
-import com.choicemaker.cm.batch.api.EventPersistenceManager;
-import com.choicemaker.cm.batch.api.OperationalPropertyController;
 import com.choicemaker.cm.batch.api.ProcessingEventLog;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.MatchRecord2;
-import com.choicemaker.cm.oaba.api.ServerConfigurationController;
 import com.choicemaker.cm.oaba.core.IMatchRecord2Sink;
 import com.choicemaker.cm.oaba.core.IMatchRecord2SinkSourceFactory;
 import com.choicemaker.cm.oaba.core.IMatchRecord2Source;
+import com.choicemaker.cm.oaba.core.IndexedFileObserver;
 import com.choicemaker.cm.oaba.data.MatchRecord2Factory;
 import com.choicemaker.cm.oaba.ejb.BatchJobUtils;
 import com.choicemaker.cm.oaba.ejb.OabaFileUtils;
 import com.choicemaker.cm.oaba.ejb.data.OabaJobMessage;
 import com.choicemaker.cm.oaba.ejb.util.MessageBeanUtils;
-import com.choicemaker.cm.transitivity.api.TransitivityJobManager;
-import com.choicemaker.cm.transitivity.api.TransitivityParametersController;
-import com.choicemaker.cm.transitivity.api.TransitivitySettingsController;
 
 /**
  * This match dedup bean is used by the Transitivity Engine. It dedups the
@@ -69,24 +63,6 @@ public class TransMatchDedupMDB extends AbstractTransitivityMDB {
 	private static final Logger jmsTrace =
 		Logger.getLogger("jmstrace." + TransMatchDedupMDB.class.getName());
 
-	@EJB
-	private TransitivityJobManager jobManager;
-
-	@EJB
-	private TransitivitySettingsController transSettingsController;
-
-	@EJB
-	private TransitivityParametersController paramsController;
-
-	@EJB
-	private EventPersistenceManager eventManager;
-
-	@EJB
-	private ServerConfigurationController serverController;
-
-	@EJB
-	private OperationalPropertyController propController;
-
 	@Resource(lookup = "java:/choicemaker/urm/jms/transSerializationQueue")
 	private Queue transSerializationQueue;
 
@@ -105,8 +81,8 @@ public class TransMatchDedupMDB extends AbstractTransitivityMDB {
 		log.fine("in handleMerge");
 
 		// get the number of intermediate files
-		final int numTempResults =
-			BatchJobUtils.getMaxTempPairwiseIndex(propController, transJob);
+		final int numTempResults = BatchJobUtils
+				.getMaxTempPairwiseIndex(getPropertyController(), transJob);
 
 		// now merge them all together
 		mergeMatches(numTempResults, transJob);
@@ -134,11 +110,23 @@ public class TransMatchDedupMDB extends AbstractTransitivityMDB {
 
 		final long jobId = transJob.getId();
 		OabaSettings oabaSettings =
-			transSettingsController.findSettingsByTransitivityJobId(jobId);
+			getSettingsController().findSettingsByTransitivityJobId(jobId);
 		final int maxMatches = oabaSettings.getMaxMatches();
+
+		IndexedFileObserver ifo = new IndexedFileObserver() {
+
+			@Override
+			public void fileCreated(int index, String fileName) {
+				getIndexedPropertyController().setIndexedPropertyValue(transJob,
+						TransitiveGroupInfoBean.PN_TRANSMATCH_PAIR_FILE, index,
+						fileName);
+			}
+
+		};
+
 		// final sink
 		IMatchRecord2Sink finalSink = TransitivityFileUtils
-				.getCompositeTransMatchSink(transJob, maxMatches);
+				.getCompositeTransMatchSink(transJob, maxMatches, ifo);
 
 		IMatchRecord2SinkSourceFactory factory =
 			OabaFileUtils.getMatchChunkFactory(transJob);
@@ -211,7 +199,7 @@ public class TransMatchDedupMDB extends AbstractTransitivityMDB {
 		try {
 			String cachedFileName = finalSink.getInfo();
 			log.info("Cached results file: " + cachedFileName);
-			propController.setJobProperty(transJob,
+			getPropertyController().setJobProperty(transJob,
 					PN_TRANSITIVITY_CACHED_PAIRS_FILE, cachedFileName);
 		} catch (Exception e) {
 			log.severe(e.toString());
@@ -220,7 +208,8 @@ public class TransMatchDedupMDB extends AbstractTransitivityMDB {
 
 	protected void sendToUpdateStatus(BatchJob job, ProcessingEvent event,
 			Date timestamp, String info) {
-		eventManager.updateStatusWithNotification(job, event, timestamp, info);
+		getEventManager().updateStatusWithNotification(job, event, timestamp,
+				info);
 	}
 
 	@Override

@@ -1,8 +1,18 @@
 package com.choicemaker.cm.batch.ejb;
 
-import static com.choicemaker.cm.batch.ejb.IndexedPropertyJPA.*;
+import static com.choicemaker.cm.batch.ejb.IndexedPropertyJPA.PN_IDXPROP_DELETE_BY_JOB_PNAME_P1;
+import static com.choicemaker.cm.batch.ejb.IndexedPropertyJPA.PN_IDXPROP_DELETE_BY_JOB_PNAME_P2;
+import static com.choicemaker.cm.batch.ejb.IndexedPropertyJPA.PN_IDXPROP_FIND_BY_JOB_PNAME_INDEX_P1;
+import static com.choicemaker.cm.batch.ejb.IndexedPropertyJPA.PN_IDXPROP_FIND_BY_JOB_PNAME_INDEX_P2;
+import static com.choicemaker.cm.batch.ejb.IndexedPropertyJPA.PN_IDXPROP_FIND_BY_JOB_PNAME_INDEX_P3;
+import static com.choicemaker.cm.batch.ejb.IndexedPropertyJPA.QN_IDXPROP_DELETE_BY_JOB_PNAME;
+import static com.choicemaker.cm.batch.ejb.IndexedPropertyJPA.QN_IDXPROP_FIND_BY_JOB_PNAME_INDEX;
 
-import java.util.LinkedList;
+import static com.choicemaker.cm.batch.ejb.IndexedPropertyJPA.PN_IDXPROP_FIND_BY_JOB_PNAME_P1;
+import static com.choicemaker.cm.batch.ejb.IndexedPropertyJPA.PN_IDXPROP_FIND_BY_JOB_PNAME_P2;
+import static com.choicemaker.cm.batch.ejb.IndexedPropertyJPA.QN_IDXPROP_FIND_BY_JOB_PNAME;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -15,6 +25,7 @@ import javax.persistence.Query;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.IndexedProperty;
 import com.choicemaker.cm.batch.api.IndexedPropertyController;
+import com.choicemaker.util.Precondition;
 
 @Stateless
 public class IndexedPropertyControllerBean
@@ -27,11 +38,13 @@ public class IndexedPropertyControllerBean
 	private EntityManager em;
 
 	@Override
-	public int deleteOperationalPropertiesByJobId(long jobId) {
+	public int deleteIndexedPropertiesByJobIdName(long jobId, String name) {
+		Precondition.assertNonEmptyString(name);
 		int retVal = 0;
 		if (AbstractPersistentObject.isPersistentId(jobId)) {
-			Query query = em.createNamedQuery(QN_OPPROP_DELETE_BY_JOB);
-			query.setParameter(PN_OPPROP_DELETE_BY_JOB_P1, jobId);
+			Query query = em.createNamedQuery(QN_IDXPROP_DELETE_BY_JOB_PNAME);
+			query.setParameter(PN_IDXPROP_DELETE_BY_JOB_PNAME_P1, jobId);
+			query.setParameter(PN_IDXPROP_DELETE_BY_JOB_PNAME_P2, name);
 			int deletedCount = query.executeUpdate();
 			return deletedCount;
 		}
@@ -39,64 +52,44 @@ public class IndexedPropertyControllerBean
 	}
 
 	@Override
-	public int deleteOperationalPropertiesByJobId(long jobId, String name) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public IndexedProperty find(final BatchJob job, final String name) {
+	public IndexedProperty find(BatchJob job, String name, int index) {
 		if (job == null || !job.isPersistent()) {
 			throw new IllegalArgumentException("invalid job: " + job);
 		}
-		return findInternal(job.getId(), name);
+		return findInternal(job.getId(), name, index);
 	}
 
 	@Override
 	public Map<Integer, String> find(BatchJob job, String name) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public IndexedProperty find(BatchJob job, String name, int index) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public IndexedProperty find(long propertyId) {
-		return findInternal(propertyId);
-	}
-
-	@Override
-	public List<IndexedProperty> findAllByJob(BatchJob job) {
-		List<IndexedProperty> retVal = new LinkedList<>();
+		if (job == null || !job.isPersistent()) {
+			throw new IllegalArgumentException("invalid job: " + job);
+		}
+		Precondition.assertNonEmptyString(name);
+		Map<Integer, String> retVal = new HashMap<>();
 		final long jobId = job.getId();
-		if (job.isPersistent()) {
-			Query query = em.createNamedQuery(QN_OPPROP_FINDALL_BY_JOB);
-			query.setParameter(PN_OPPROP_FINDALL_BY_JOB_P1, jobId);
-			@SuppressWarnings("unchecked")
-			final List<IndexedPropertyEntity> beans = query.getResultList();
-			assert beans != null;
-			for (IndexedPropertyEntity bean : beans) {
-				retVal.add(bean);
+		Query query = em.createNamedQuery(QN_IDXPROP_FIND_BY_JOB_PNAME);
+		query.setParameter(PN_IDXPROP_FIND_BY_JOB_PNAME_P1, jobId);
+		query.setParameter(PN_IDXPROP_FIND_BY_JOB_PNAME_P2, name);
+		@SuppressWarnings("unchecked")
+		final List<IndexedPropertyEntity> beans = query.getResultList();
+		assert beans != null;
+		for (IndexedPropertyEntity bean : beans) {
+			String previous = retVal.put(bean.getIndex(), bean.getValue());
+			if (previous != null) {
+				String msg0 = "Multiple values for Indexed property [jobId=%d, "
+						+ "name=%s, index=%d]: %s, %s";
+				String msg =
+					String.format(msg0, bean.getJobId(), bean.getName(),
+							bean.getIndex(), previous, bean.getValue());
+				logger.warning(msg);
 			}
 		}
 		return retVal;
 	}
 
 	@Override
-	public List<IndexedProperty> findAllOperationalProperties() {
-		List<IndexedProperty> retVal = new LinkedList<>();
-		Query query = em.createNamedQuery(QN_OPPROP_FINDALL);
-		@SuppressWarnings("unchecked")
-		final List<IndexedPropertyEntity> beans = query.getResultList();
-		assert beans != null;
-		for (IndexedProperty bean : beans) {
-			retVal.add(bean);
-		}
-		return retVal;
+	public IndexedProperty find(long propertyId) {
+		return findInternal(propertyId);
 	}
 
 	protected IndexedPropertyEntity findInternal(long propertyId) {
@@ -108,7 +101,7 @@ public class IndexedPropertyControllerBean
 	}
 
 	protected IndexedPropertyEntity findInternal(final long jobId,
-			final String name) {
+			final String name, int index) {
 		if (name == null || !name.equals(name.trim()) || name.isEmpty()) {
 			throw new IllegalArgumentException(
 					"invalid property name: '" + name + "'");
@@ -116,15 +109,17 @@ public class IndexedPropertyControllerBean
 
 		final String stdName = name.toUpperCase();
 		if (!name.equals(stdName)) {
-			logger.warning("Converting property name '" + name
+			logger.fine("Converting property name '" + name
 					+ "' to upper-case '" + stdName + "'");
 		}
 
 		IndexedPropertyEntity retVal = null;
 		if (AbstractPersistentObject.isPersistentId(jobId)) {
-			Query query = em.createNamedQuery(QN_OPPROP_FIND_BY_JOB_PNAME);
-			query.setParameter(PN_OPPROP_FIND_BY_JOB_PNAME_P1, jobId);
-			query.setParameter(PN_OPPROP_FIND_BY_JOB_PNAME_P2, stdName);
+			Query query =
+				em.createNamedQuery(QN_IDXPROP_FIND_BY_JOB_PNAME_INDEX);
+			query.setParameter(PN_IDXPROP_FIND_BY_JOB_PNAME_INDEX_P1, jobId);
+			query.setParameter(PN_IDXPROP_FIND_BY_JOB_PNAME_INDEX_P2, stdName);
+			query.setParameter(PN_IDXPROP_FIND_BY_JOB_PNAME_INDEX_P3, index);
 			@SuppressWarnings("unchecked")
 			final List<IndexedPropertyEntity> beans = query.getResultList();
 			if (beans != null && beans.size() == 1) {
@@ -142,8 +137,8 @@ public class IndexedPropertyControllerBean
 	}
 
 	@Override
-	public String getJobProperty(BatchJob job, String pn) {
-		IndexedProperty op = find(job, pn);
+	public String getIndexedPropertyValue(BatchJob job, String pn, int index) {
+		IndexedProperty op = find(job, pn, index);
 		String retVal = op == null ? null : op.getValue();
 		return retVal;
 	}
@@ -151,9 +146,9 @@ public class IndexedPropertyControllerBean
 	@Override
 	public void remove(IndexedProperty property) {
 		if (property != null) {
-			IndexedPropertyEntity ope = findInternal(property.getId());
-			if (ope != null) {
-				em.remove(ope);
+			IndexedPropertyEntity p = findInternal(property.getId());
+			if (p != null) {
+				em.remove(p);
 			}
 		}
 	}
@@ -162,7 +157,7 @@ public class IndexedPropertyControllerBean
 	public IndexedProperty save(IndexedProperty p) {
 		logger.fine("Saving " + p);
 		if (p == null) {
-			throw new IllegalArgumentException("null settings");
+			throw new IllegalArgumentException("null property");
 		}
 		// Have the settings already been persisted?
 		final long pid = p.getId();
@@ -173,33 +168,34 @@ public class IndexedPropertyControllerBean
 			if (retVal == null) {
 				String msg = "The specified property (" + pid
 						+ ") is missing in the DB. "
-						+ "The search will continue by job id and name.";
-				logger.warning(msg);
+						+ "The search will continue by job id, property name "
+						+ "and index.";
+				logger.fine(msg);
 				retVal = null;
 			} else if (!retVal.equals(p)) {
 				String msg = "The specified property (" + p
 						+ ") is different in the DB. "
 						+ "The DB value will be updated from '"
 						+ retVal.getValue() + "' to '" + p.getValue() + "'";
-				logger.info(msg);
+				logger.fine(msg);
 				retVal = updateInternal(p);
 			}
 		}
 		if (retVal == null) {
-			retVal = findInternal(p.getJobId(), p.getName());
+			retVal = findInternal(p.getJobId(), p.getName(), p.getIndex());
 			if (retVal == null) {
 				String msg = "The specified property (jobId: " + p.getJobId()
 						+ ", name: " + p.getName() + ") is missing in the DB. "
 						+ "A new entry will be created with the value '"
 						+ p.getValue() + "'.";
-				logger.info(msg);
+				logger.fine(msg);
 				retVal = null;
 			} else if (!retVal.equals(p)) {
 				String msg = "The specified property (" + p
 						+ ") is different in the DB. "
 						+ "The DB value will be updated from '"
 						+ retVal.getValue() + "' to '" + p.getValue() + "'";
-				logger.info(msg);
+				logger.fine(msg);
 				retVal.updateValue(p.getValue());
 				retVal = updateInternal(retVal);
 			}
@@ -229,17 +225,18 @@ public class IndexedPropertyControllerBean
 		em.persist(retVal);
 		assert retVal.isPersistent();
 		String msg = "Persistent: " + retVal;
-		logger.info(msg);
+		logger.fine(msg);
 		return retVal;
 	}
 
 	@Override
-	public void setJobProperty(BatchJob job, String pn, String pv) {
+	public void setIndexedPropertyValue(BatchJob job, String pn, int index,
+			String pv) {
 		if (job == null || pn == null || pv == null) {
 			throw new IllegalArgumentException("null argument");
 		}
-		IndexedProperty op = new IndexedPropertyEntity(job, pn, pv);
-		save(op);
+		IndexedProperty ip = new IndexedPropertyEntity(job, pn, index, pv);
+		save(ip);
 	}
 
 	protected IndexedPropertyEntity updateInternal(IndexedProperty p) {
@@ -247,16 +244,15 @@ public class IndexedPropertyControllerBean
 		assert p.isPersistent();
 
 		final long pid = p.getId();
-		IndexedPropertyEntity ope =
-			em.find(IndexedPropertyEntity.class, pid);
-		logger.finer("DB version before update: " + ope);
-		ope.updateValue(p.getValue());
-		logger.finer("DB version before merge: " + ope);
-		em.merge(ope);
-		logger.finer("DB version after merge: " + ope);
+		IndexedPropertyEntity ipe = em.find(IndexedPropertyEntity.class, pid);
+		logger.finer("DB version before update: " + ipe);
+		ipe.updateValue(p.getValue());
+		logger.finer("DB version before merge: " + ipe);
+		em.merge(ipe);
+		logger.finer("DB version after merge: " + ipe);
 		em.flush();
-		logger.finer("DB version after flush: " + ope);
-		return ope;
+		logger.finer("DB version after flush: " + ipe);
+		return ipe;
 	}
 
 }

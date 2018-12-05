@@ -73,6 +73,7 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 				this.getRecordSourceController(),
 				this.getSqlRecordSourceController(),
 				this.getPropertyController(),
+				this.getIndexedPropertyController(),
 				this.getAbaStatisticsController());
 		srp.processOabaMessage(data, batchJob, oabaParams, oabaSettings,
 				processingLog, serverConfig, model);

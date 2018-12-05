@@ -8,15 +8,19 @@ import com.choicemaker.cm.transitivity.api.TransitiveGroupInfo;
 
 public class TransitiveGroupInfoBean implements TransitiveGroupInfo {
 
+	public static final String PN_TRANSMATCH_PAIR_FILE = "TRANSMATCH_PAIR";
+	public static final String PN_TRANSMATCH_GROUP_FILE = "TRANSMATCH_GROUP";
+
 	private final List<String> groupFileURIs;
 	private final int holdGroupCount;
 	private final int mergeGroupCount;
 	private final BATCH_RESULTS_PERSISTENCE_SCHEME persistenceScheme;
 	private final RECORD_ID_TYPE recordIdType;
-	
+
 	public TransitiveGroupInfoBean(List<String> groupFileURIs,
 			int holdGroupCount, int mergeGroupCount,
-			BATCH_RESULTS_PERSISTENCE_SCHEME persistenceScheme, RECORD_ID_TYPE recordIdType) {
+			BATCH_RESULTS_PERSISTENCE_SCHEME persistenceScheme,
+			RECORD_ID_TYPE recordIdType) {
 		super();
 		this.groupFileURIs = groupFileURIs;
 		this.holdGroupCount = holdGroupCount;

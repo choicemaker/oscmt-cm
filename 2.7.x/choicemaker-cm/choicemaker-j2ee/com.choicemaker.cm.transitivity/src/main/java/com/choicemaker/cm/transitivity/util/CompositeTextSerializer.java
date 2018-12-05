@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.choicemaker.cm.oaba.core.IndexedFileObserver;
 import com.choicemaker.cm.transitivity.core.CompositeEntity;
 import com.choicemaker.cm.transitivity.core.TransitivityResult;
 import com.choicemaker.cm.transitivity.core.TransitivityResultCompositeSerializer;
@@ -28,17 +29,27 @@ import com.choicemaker.cm.transitivity.core.TransitivitySortType;
  * @author pcheung
  *
  */
-@SuppressWarnings({ "rawtypes" })
-public class CompositeTextSerializer extends TextSerializer implements
-		TransitivityResultCompositeSerializer {
+@SuppressWarnings({
+		"rawtypes" })
+public class CompositeTextSerializer extends TextSerializer
+		implements TransitivityResultCompositeSerializer {
 
 	private static final long serialVersionUID = 271L;
 
 	/** Defines the output file size is checked */
 	private static final int INTERVAL = 2000;
 
+	public static void notify(IndexedFileObserver ifo, int index,
+			String fileName) {
+		if (ifo != null && fileName != null) {
+			ifo.fileCreated(index, fileName);
+		}
+	}
+
 	/** An extension appended to the base name of the output file */
 	private final String fileExt;
+
+	private final IndexedFileObserver indexedFileObserver;
 
 	/** The one-based index of the current output file */
 	private int currentIndex;
@@ -47,8 +58,14 @@ public class CompositeTextSerializer extends TextSerializer implements
 	private String currentFileName;
 
 	public CompositeTextSerializer(TransitivitySortType transitivitySortType) {
+		this(transitivitySortType, null);
+	}
+
+	public CompositeTextSerializer(TransitivitySortType transitivitySortType,
+			IndexedFileObserver ifo) {
 		super(transitivitySortType.getComparator());
 		assert transitivitySortType != null;
+		this.indexedFileObserver = ifo;
 		fileExt = transitivitySortType.getFileExtension();
 		currentIndex = 1;
 	}
@@ -84,6 +101,7 @@ public class CompositeTextSerializer extends TextSerializer implements
 		final String fn =
 			FileUtils.getFileName(fileBase, fileExt, currentIndex);
 		setCurrentFileName(fn);
+		notify(indexedFileObserver,currentIndex,fn);
 		Writer writer = new FileWriter(getCurrentFileName(), false);
 
 		// first get all the record IDs from the clusters.
@@ -112,9 +130,11 @@ public class CompositeTextSerializer extends TextSerializer implements
 						maxFileSize)) {
 					writer.close();
 					currentIndex++;
-					writer =
-						new FileWriter(FileUtils.getFileName(fileBase, fileExt,
-								currentIndex), false);
+					final String fn2 =
+						FileUtils.getFileName(fileBase, fileExt, currentIndex);
+					setCurrentFileName(fn2);
+					notify(indexedFileObserver,currentIndex,fn2);
+					writer = new FileWriter(getCurrentFileName(), false);
 				}
 			}
 		} // end for

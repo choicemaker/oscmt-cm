@@ -31,6 +31,7 @@ import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.api.BatchJob;
+import com.choicemaker.cm.batch.api.IndexedPropertyController;
 import com.choicemaker.cm.batch.api.OperationalPropertyController;
 import com.choicemaker.cm.batch.api.ProcessingEventLog;
 import com.choicemaker.cm.core.BlockingException;
@@ -48,6 +49,7 @@ import com.choicemaker.cm.core.util.MatchUtils;
 import com.choicemaker.cm.io.db.base.DatabaseAbstraction;
 import com.choicemaker.cm.io.db.base.DatabaseAbstractionManager;
 import com.choicemaker.cm.oaba.api.AbaStatisticsController;
+import com.choicemaker.cm.oaba.api.MatchPairInfoBean;
 import com.choicemaker.cm.oaba.api.OabaParametersController;
 import com.choicemaker.cm.oaba.api.RecordSourceController;
 import com.choicemaker.cm.oaba.api.SqlRecordSourceController;
@@ -89,6 +91,7 @@ public class SingleRecordProcessing implements Serializable {
 	private final RecordSourceController rsController;
 	private final SqlRecordSourceController sqlRsController;
 	private final OperationalPropertyController opPropController;
+	private final IndexedPropertyController idxPropController;
 	private final AbaStatisticsController abaStatsController;
 
 	// -- Constructor
@@ -98,6 +101,7 @@ public class SingleRecordProcessing implements Serializable {
 			RecordSourceController rsController,
 			SqlRecordSourceController sqlRsController,
 			OperationalPropertyController opPropController,
+			IndexedPropertyController idxPropController,
 			AbaStatisticsController abaStatsController) {
 		assertNonNullArgument("null logger", logger);
 		assertNonNullArgument("null jmsTrace", jmsTrace);
@@ -105,6 +109,7 @@ public class SingleRecordProcessing implements Serializable {
 		assertNonNullArgument("null rsController", rsController);
 		assertNonNullArgument("null sqlRsController", sqlRsController);
 		assertNonNullArgument("null opPropController", opPropController);
+		assertNonNullArgument("null idxPropController", idxPropController);
 		assertNonNullArgument("null abaStatsController", abaStatsController);
 
 		this.logger = logger;
@@ -113,6 +118,7 @@ public class SingleRecordProcessing implements Serializable {
 		this.rsController = rsController;
 		this.sqlRsController = sqlRsController;
 		this.opPropController = opPropController;
+		this.idxPropController = idxPropController;
 		this.abaStatsController = abaStatsController;
 	}
 
@@ -140,6 +146,10 @@ public class SingleRecordProcessing implements Serializable {
 
 	protected OperationalPropertyController getPropertyController() {
 		return opPropController;
+	}
+
+	protected IndexedPropertyController getIndexedPropertyController() {
+		return idxPropController;
 	}
 
 	protected AbaStatisticsController getAbaStatisticsController() {
@@ -201,7 +211,7 @@ public class SingleRecordProcessing implements Serializable {
 	 * @throws Exception
 	 */
 	protected int handleSingleMatching(DataSource stageDS, DataSource masterDS,
-			IMatchRecord2SinkSourceFactory<?> factory, BatchJob batchJob,
+			IMatchRecord2SinkSourceFactory<?> factory, final BatchJob batchJob,
 			OabaParameters oabaParams, OabaSettings oabaSettings,
 			final int previousIndex, final int maxMatches)
 			throws BlockingException {
@@ -277,6 +287,10 @@ public class SingleRecordProcessing implements Serializable {
 			getLogger()
 					.fine("Current pairwise sink index: " + currentSinkIndex);
 			currentSink = factory.getSink(currentSinkIndex);
+			getIndexedPropertyController().setIndexedPropertyValue(
+					batchJob,
+					MatchPairInfoBean.PN_OABA_MATCH_RESULT_FILE,
+					currentSinkIndex, currentSink.getInfo());
 			currentSink.open();
 
 			int currentSinkSize = 0;
@@ -321,6 +335,10 @@ public class SingleRecordProcessing implements Serializable {
 						currentSink.close();
 						++currentSinkIndex;
 						currentSink = factory.getSink(currentSinkIndex);
+						getIndexedPropertyController().setIndexedPropertyValue(
+								batchJob,
+								MatchPairInfoBean.PN_OABA_MATCH_RESULT_FILE,
+								currentSinkIndex, currentSink.getInfo());
 						currentSinkSize = 0;
 					}
 				}

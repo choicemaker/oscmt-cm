@@ -7,6 +7,8 @@ import com.choicemaker.cm.oaba.core.RECORD_ID_TYPE;
 
 public class MatchPairInfoBean implements MatchPairInfo {
 
+	public static final String PN_OABA_MATCH_RESULT_FILE = "MATCH_PAIR";
+
 	private final int holdCount;
 	private final int matchCount;
 	private final int pairCount;
@@ -18,7 +20,8 @@ public class MatchPairInfoBean implements MatchPairInfo {
 
 	public MatchPairInfoBean(int differCount, int holdCount, int matchCount,
 			int pairCount, List<String> pairFileURIs,
-			BATCH_RESULTS_PERSISTENCE_SCHEME persistenceScheme, RECORD_ID_TYPE recordIdType) {
+			BATCH_RESULTS_PERSISTENCE_SCHEME persistenceScheme,
+			RECORD_ID_TYPE recordIdType) {
 		super();
 		this.differCount = differCount;
 		this.holdCount = holdCount;

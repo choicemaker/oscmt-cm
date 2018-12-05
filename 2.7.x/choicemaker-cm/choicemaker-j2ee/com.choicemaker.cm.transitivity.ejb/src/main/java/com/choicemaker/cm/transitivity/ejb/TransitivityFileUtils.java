@@ -16,6 +16,7 @@ import static com.choicemaker.cm.batch.ejb.BatchJobFileUtils.getWorkingDir;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.oaba.core.IMatchRecord2Sink;
 import com.choicemaker.cm.oaba.core.IMatchRecord2Source;
+import com.choicemaker.cm.oaba.core.IndexedFileObserver;
 import com.choicemaker.cm.oaba.impl.BlockSinkSourceFactory;
 import com.choicemaker.cm.oaba.impl.MatchRecord2CompositeSink;
 import com.choicemaker.cm.oaba.impl.MatchRecord2CompositeSource;
@@ -44,19 +45,22 @@ public class TransitivityFileUtils {
 		return retVal;
 	}
 
-	@SuppressWarnings("rawtypes")
-	public static IMatchRecord2Sink getCompositeTransMatchSink(BatchJob job) {
-		return getCompositeTransMatchSink(job, MAX_FILE_SIZE);
-	}
+	// Unused
+	// @SuppressWarnings("rawtypes")
+	// public static IMatchRecord2Sink getCompositeTransMatchSink(BatchJob job,
+	// IndexedFileObserver ifo) {
+	// return getCompositeTransMatchSink(job, MAX_FILE_SIZE, ifo);
+	// }
 
 	@SuppressWarnings("rawtypes")
 	public static IMatchRecord2Sink getCompositeTransMatchSink(BatchJob job,
-			int maxFileSize) {
+			int maxFileSize, IndexedFileObserver ifo) {
 		Precondition.assertNonNullArgument(job);
 		Precondition.assertBoolean(maxFileSize > 0);
 		String fileName = getCompositeTransMatchFileName(job);
-		return new MatchRecord2CompositeSink(fileName, TEXT_SUFFIX,
-				maxFileSize);
+		IMatchRecord2Sink retVal = new MatchRecord2CompositeSink(fileName,
+				TEXT_SUFFIX, maxFileSize, ifo);
+		return retVal;
 	}
 
 	@SuppressWarnings("rawtypes")

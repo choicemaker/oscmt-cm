@@ -19,13 +19,14 @@ import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.IndexedProperty;
 
 @NamedQueries({
-		@NamedQuery(name = QN_IDXPROP_FINDALL, query = JPQL_IDXPROP_FINDALL),
+		@NamedQuery(name = QN_IDXPROP_FIND_BY_JOB_PNAME_INDEX,
+				query = JPQL_IDXPROP_FIND_BY_JOB_PNAME_INDEX),
 		@NamedQuery(name = QN_IDXPROP_FIND_BY_JOB_PNAME,
 				query = JPQL_IDXPROP_FIND_BY_JOB_PNAME),
-		@NamedQuery(name = QN_IDXPROP_FINDALL_BY_JOB,
-				query = JPQL_IDXPROP_FINDALL_BY_JOB),
-		@NamedQuery(name = QN_IDXPROP_DELETE_BY_JOB,
-				query = JPQL_IDXPROP_DELETE_BY_JOB) })
+		@NamedQuery(name = QN_IDXPROP_FIND_BY_JOB,
+				query = JPQL_IDXPROP_FIND_BY_JOB),
+		@NamedQuery(name = QN_IDXPROP_DELETE_BY_JOB_PNAME,
+				query = JPQL_IDXPROP_DELETE_BY_JOB_PNAME) })
 @Entity
 @Table(/* schema = "CHOICEMAKER", */name = TABLE_NAME)
 public class IndexedPropertyEntity extends AbstractPersistentObject
@@ -38,6 +39,7 @@ public class IndexedPropertyEntity extends AbstractPersistentObject
 
 	public static final String INVALID_NAME = null;
 	public static final String INVALID_VALUE = null;
+	public static final int INVALID_INDEX = Integer.MIN_VALUE;
 
 	// -- Instance data
 
@@ -57,6 +59,9 @@ public class IndexedPropertyEntity extends AbstractPersistentObject
 	@Column(name = CN_NAME)
 	private final String name;
 
+	@Column(name = CN_INDEX)
+	private final int index;
+
 	@Column(name = CN_VALUE)
 	private String value;
 
@@ -66,10 +71,11 @@ public class IndexedPropertyEntity extends AbstractPersistentObject
 		this.id = PersistentObject.NONPERSISTENT_ID;
 		this.jobId = PersistentObject.NONPERSISTENT_ID;
 		this.name = INVALID_NAME;
+		this.index = INVALID_INDEX;
 		this.value = INVALID_VALUE;
 	}
 
-	public IndexedPropertyEntity(BatchJob job, final String pn,
+	public IndexedPropertyEntity(BatchJob job, final String pn, final int index,
 			final String pv) {
 		if (job == null || !job.isPersistent()) {
 			throw new IllegalArgumentException("invalid job: " + job);
@@ -77,6 +83,11 @@ public class IndexedPropertyEntity extends AbstractPersistentObject
 		if (pn == null || !pn.equals(pn.trim()) || pn.isEmpty()) {
 			throw new IllegalArgumentException(
 					"invalid property name: '" + pn + "'");
+		}
+		if (index == INVALID_INDEX) {
+			throw new IllegalArgumentException(
+					"invalid property index: '" + index + "'");
+
 		}
 		final String stdName = pn.toUpperCase();
 		if (!pn.equals(stdName)) {
@@ -86,35 +97,28 @@ public class IndexedPropertyEntity extends AbstractPersistentObject
 
 		this.jobId = job.getId();
 		this.name = stdName;
+		this.index = index;
 		updateValue(pv);
 	}
-
-	// -- Modifiers
-
-	@Override
-	public void updateValue(String s) {
-		if (s == null) {
-			throw new IllegalArgumentException(
-					"invalid property value: '" + s + "'");
-		}
-		if (s.trim().isEmpty()) {
-			logger.warning("Blank value for '" + name + "'");
-		}
-		this.value = s;
-	}
-
-	// -- Accessors
 
 	public IndexedPropertyEntity(IndexedProperty p) {
 		this.id = p.getId();
 		this.jobId = p.getJobId();
 		this.name = p.getName();
+		this.index = p.getIndex();
 		this.value = p.getValue();
 	}
+
+	// -- Accessors
 
 	@Override
 	public long getId() {
 		return id;
+	}
+
+	@Override
+	public int getIndex() {
+		return index;
 	}
 
 	@Override
@@ -134,9 +138,21 @@ public class IndexedPropertyEntity extends AbstractPersistentObject
 
 	@Override
 	public String toString() {
-		return "IndexedPropertyEntity [id=" + getId() + ", jobId="
-				+ getJobId() + ", name=" + getName() + ", value=" + getValue()
-				+ "]";
+		return "IndexedPropertyEntity [id=" + getId() + ", jobId=" + getJobId()
+				+ ", name=" + getName() + ", index=" + getIndex() + ", value="
+				+ getValue() + "]";
+	}
+
+	@Override
+	public void updateValue(String s) {
+		if (s == null) {
+			throw new IllegalArgumentException(
+					"invalid property value: '" + s + "'");
+		}
+		if (s.trim().isEmpty()) {
+			logger.warning("Blank value for '" + name + "'");
+		}
+		this.value = s;
 	}
 
 }

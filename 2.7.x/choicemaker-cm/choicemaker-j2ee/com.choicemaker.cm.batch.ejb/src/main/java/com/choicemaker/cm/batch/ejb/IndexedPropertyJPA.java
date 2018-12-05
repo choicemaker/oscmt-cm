@@ -18,18 +18,51 @@ public interface IndexedPropertyJPA {
 	/** Name of the property */
 	String CN_NAME = "NAME";
 
+	/** Index of the property */
+	String CN_INDEX = "INDEX";
+
 	/** Value of the property */
 	String CN_VALUE = "VALUE";
 
-	String ID_GENERATOR_NAME = "OPERATIONAL_PROPERTY";
+	String ID_GENERATOR_NAME = "INDEXED_PROPERTY";
 	String ID_GENERATOR_TABLE = "CMT_SEQUENCE";
 	String ID_GENERATOR_PK_COLUMN_NAME = "SEQ_NAME";
 	String ID_GENERATOR_PK_COLUMN_VALUE = "IDX_PROP";
 	String ID_GENERATOR_VALUE_COLUMN_NAME = "SEQ_COUNT";
 
 	/**
-	 * Name of a query that selects operational properties by job id and
-	 * property name
+	 * Name of a query that selects indexed properties by job id and property
+	 * name
+	 */
+	String QN_IDXPROP_FIND_BY_JOB_PNAME_INDEX = "idxPropFindByJobPnameIndex";
+
+	/** JPQL used to implement {@link #QN_IDXPROP_FIND_BY_JOB_PNAME_INDEX} */
+	String JPQL_IDXPROP_FIND_BY_JOB_PNAME_INDEX =
+		"Select ipe from IndexedPropertyEntity ipe "
+				+ "where ipe.jobId = :jobId and ipe.name = :name "
+				+ "and ipe.index = :index";
+
+	/**
+	 * Name of the parameter used to specify the jobId of
+	 * {@link #JPQL_IDXPROP_FIND_BY_JOB_PNAME_INDEX}
+	 */
+	String PN_IDXPROP_FIND_BY_JOB_PNAME_INDEX_P1 = "jobId";
+
+	/**
+	 * Name of the parameter used to specify the property name of
+	 * {@link #JPQL_IDXPROP_FIND_BY_JOB_PNAME_INDEX}
+	 */
+	String PN_IDXPROP_FIND_BY_JOB_PNAME_INDEX_P2 = "name";
+
+	/**
+	 * Name of the parameter used to specify the index of
+	 * {@link #JPQL_IDXPROP_FIND_BY_JOB_PNAME_INDEX}
+	 */
+	String PN_IDXPROP_FIND_BY_JOB_PNAME_INDEX_P3 = "index";
+
+	/**
+	 * Name of a query that selects indexed properties by job id and property
+	 * name
 	 */
 	String QN_IDXPROP_FIND_BY_JOB_PNAME = "idxPropFindByJobPname";
 
@@ -51,44 +84,41 @@ public interface IndexedPropertyJPA {
 	String PN_IDXPROP_FIND_BY_JOB_PNAME_P2 = "name";
 
 	/**
-	 * Name of a query that selects operational properties by job id and
-	 * property name
+	 * Name of a query that selects operational properties by job id
 	 */
-	String QN_IDXPROP_FINDALL_BY_JOB = "idxPropFindAllByJob";
+	String QN_IDXPROP_FIND_BY_JOB = "idxPropFindByJob";
 
-	/** JPQL used to implement {@link #QN_IDXPROP_FINDALL_BY_JOB} */
-	String JPQL_IDXPROP_FINDALL_BY_JOB =
+	/** JPQL used to implement {@link #QN_IDXPROP_FIND_BY_JOB} */
+	String JPQL_IDXPROP_FIND_BY_JOB =
 		"Select ipe from IndexedPropertyEntity ipe where ipe.jobId = :jobId";
 
 	/**
 	 * Name of the parameter used to specify the jobId of
-	 * {@link #JPQL_IDXPROP_FINDALL_BY_JOB}
+	 * {@link #JPQL_IDXPROP_FIND_BY_JOB}
 	 */
-	String PN_IDXPROP_FINDALL_BY_JOB_P1 = "jobId";
+	String PN_IDXPROP_FIND_BY_JOB_P1 = "jobId";
 
 	/**
-	 * Name of a query that deletes operational properties by job id
+	 * Name of a query that deletes indexed properties by job id and property
+	 * name
 	 */
-	String QN_IDXPROP_DELETE_BY_JOB = "idxPropDeleteByJob";
+	String QN_IDXPROP_DELETE_BY_JOB_PNAME = "idxPropDeleteByJobPname";
 
-	/** JPQL used to implement {@link #QN_IDXPROP_DELETE_BY_JOB} */
-	String JPQL_IDXPROP_DELETE_BY_JOB =
-		"Delete from IndexedPropertyEntity ipe where ipe.jobId = :jobId";
+	/** JPQL used to implement {@link #QN_IDXPROP_DELETE_BY_JOB_PNAME} */
+	String JPQL_IDXPROP_DELETE_BY_JOB_PNAME =
+		"Delete from IndexedPropertyEntity ipe where ipe.jobId = :jobId "
+		+ "and ipe.name = :name";
 
 	/**
 	 * Name of the parameter used to specify the jobId of
-	 * {@link #JPQL_IDXPROP_DELETE_BY_JOB}
+	 * {@link #JPQL_IDXPROP_DELETE_BY_JOB_NAME_PNAME}
 	 */
-	String PN_IDXPROP_DELETE_BY_JOB_P1 = "jobId";
+	String PN_IDXPROP_DELETE_BY_JOB_PNAME_P1 = "jobId";
 
 	/**
-	 * Name of a query that selects operational properties by job id and
-	 * property name
+	 * Name of the parameter used to specify the indexed property of
+	 * {@link #JPQL_IDXPROP_DELETE_BY_JOB_PNAME}
 	 */
-	String QN_IDXPROP_FINDALL = "idxPropFindAll";
-
-	/** JPQL used to implement {@link #QN_IDXPROP_FINDALL} */
-	String JPQL_IDXPROP_FINDALL =
-		"Select ipe from IndexedPropertyEntity ipe";
+	String PN_IDXPROP_DELETE_BY_JOB_PNAME_P2 = "name";
 
 }

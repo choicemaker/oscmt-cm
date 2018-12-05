@@ -16,9 +16,7 @@ import java.io.PrintWriter;
 import java.io.Serializable;
 import java.io.StringWriter;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -41,9 +39,11 @@ import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.BatchJobStatus;
 import com.choicemaker.cm.batch.api.EventPersistenceManager;
+import com.choicemaker.cm.batch.api.IndexedPropertyController;
 import com.choicemaker.cm.batch.api.OperationalPropertyController;
 import com.choicemaker.cm.batch.api.ProcessingEventLog;
 import com.choicemaker.cm.oaba.api.ServerConfigurationController;
+import com.choicemaker.cm.oaba.core.IndexedFileObserver;
 import com.choicemaker.cm.oaba.ejb.data.OabaJobMessage;
 import com.choicemaker.cm.oaba.impl.MatchRecord2CompositeSource;
 import com.choicemaker.cm.transitivity.api.TransitivityJobManager;
@@ -57,8 +57,11 @@ import com.choicemaker.cm.transitivity.util.CompositeEntityIterator;
 import com.choicemaker.cm.transitivity.util.CompositeEntitySource;
 import com.choicemaker.cm.transitivity.util.CompositeTextSerializer;
 import com.choicemaker.cm.transitivity.util.CompositeXMLSerializer;
+import com.choicemaker.util.Precondition;
 
 /**
+ * NOTE: Class must be a singleton (maxSession == 1), because otherwise indexed
+ * result files might have overlapping indices. Class is not thread-safe.
  */
 @MessageDriven(activationConfig = {
 		@ActivationConfigProperty(propertyName = "maxSession",
@@ -80,31 +83,6 @@ public class TransSerializerMDB implements MessageListener, Serializable {
 	private static final Logger jmsTrace =
 		Logger.getLogger("jmstrace." + TransSerializerMDB.class.getName());
 
-	// UNUSED public static final int DEFAULT_MAX_RECORD_COUNT = 100000000;
-
-	private static Map<AnalysisResultFormat, TransitivityResultCompositeSerializer> formatSerializer =
-		new HashMap<>();
-	static {
-		formatSerializer.put(AnalysisResultFormat.SORT_BY_HOLD_GROUP,
-				new CompositeTextSerializer(
-						TransitivitySortType.SORT_BY_HOLD_MERGE_ID));
-		formatSerializer.put(AnalysisResultFormat.SORT_BY_RECORD_ID,
-				new CompositeTextSerializer(TransitivitySortType.SORT_BY_ID));
-		formatSerializer.put(AnalysisResultFormat.XML,
-				new CompositeXMLSerializer());
-	}
-
-	public static TransitivityResultCompositeSerializer getTransitivityResultSerializer(
-			AnalysisResultFormat format) /* throws ConfigException */ {
-		TransitivityResultCompositeSerializer retVal =
-			formatSerializer.get(format);
-		if (retVal == null) {
-			String msg = "No serializer for analysis format '" + format + "'";
-			throw new IllegalStateException(msg);
-		}
-		return retVal;
-	}
-
 	@PersistenceContext(unitName = "oaba")
 	private EntityManager em;
 
@@ -125,6 +103,9 @@ public class TransSerializerMDB implements MessageListener, Serializable {
 
 	@EJB
 	private OperationalPropertyController propController;
+
+	@EJB
+	private IndexedPropertyController idxPropController;
 
 	@Override
 	public void onMessage(Message inMessage) {
@@ -246,8 +227,19 @@ public class TransSerializerMDB implements MessageListener, Serializable {
 
 			log.fine("serialize to " + format + "format");
 
+			IndexedFileObserver ifo = new IndexedFileObserver() {
+
+				@Override
+				public void fileCreated(int index, String fileName) {
+					idxPropController.setIndexedPropertyValue(batchJob,
+							TransitiveGroupInfoBean.PN_TRANSMATCH_GROUP_FILE,
+							index, fileName);
+				}
+
+			};
+
 			TransitivityResultCompositeSerializer sr =
-				getTransitivityResultSerializer(format);
+				getTransitivityResultSerializer(format, ifo);
 
 			OabaSettings oabaSettings =
 				transSettingsController.findSettingsByTransitivityJobId(jobId);
@@ -275,6 +267,31 @@ public class TransSerializerMDB implements MessageListener, Serializable {
 			}
 		}
 		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
+	}
+
+	protected TransitivityResultCompositeSerializer getTransitivityResultSerializer(
+			AnalysisResultFormat format,
+			IndexedFileObserver ifo) /* throws ConfigException */ {
+		Precondition.assertNonNullArgument("Analysis format must not be null",
+				format);
+		TransitivityResultCompositeSerializer retVal;
+		switch (format) {
+		case SORT_BY_HOLD_GROUP:
+			retVal = new CompositeTextSerializer(
+					TransitivitySortType.SORT_BY_HOLD_MERGE_ID, ifo);
+			break;
+		case SORT_BY_RECORD_ID:
+			retVal = new CompositeTextSerializer(
+					TransitivitySortType.SORT_BY_ID, ifo);
+			break;
+		case XML:
+			retVal = new CompositeXMLSerializer(ifo);
+			break;
+		default:
+			throw new Error(
+					String.format("Unexpected analysis format: %s", format));
+		}
+		return retVal;
 	}
 
 	protected void sendToUpdateStatus(BatchJob job, ProcessingEvent event,
