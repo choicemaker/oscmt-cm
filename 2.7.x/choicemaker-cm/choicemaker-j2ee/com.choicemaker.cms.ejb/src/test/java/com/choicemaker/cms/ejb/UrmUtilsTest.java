@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import com.choicemaker.cm.batch.api.BatchJob;
 
 public class UrmUtilsTest {
