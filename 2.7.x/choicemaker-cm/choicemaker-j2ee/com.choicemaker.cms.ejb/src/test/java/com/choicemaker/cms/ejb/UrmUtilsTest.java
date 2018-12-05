@@ -1,3 +1,7 @@
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Test;
+
 import com.choicemaker.cm.batch.api.BatchJob;
 
 public class UrmUtilsTest {
