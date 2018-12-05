@@ -26,19 +26,22 @@ public interface TransitivityResultSerializer extends Serializable {
 	public static class Record {
 		public static final int MINIMUM_MERGE_GROUP_ID = 0;
 		public static final int MINIMUM_MERGE_HOLD_ID = 1;
-		
+
 		public final Comparable id;
 		public final int mergeGroupId;
 		public final int holdGroupId;
+
 		public Record(Comparable id, int mgid, int hgid) {
 			if (id == null) {
 				throw new IllegalArgumentException("null id");
 			}
 			if (mgid < MINIMUM_MERGE_GROUP_ID) {
-				throw new IllegalArgumentException("invalid merge group id: " + mgid);
+				throw new IllegalArgumentException(
+						"invalid merge group id: " + mgid);
 			}
 			if (hgid < MINIMUM_MERGE_HOLD_ID) {
-				throw new IllegalArgumentException("invalid hold group id: " + hgid);
+				throw new IllegalArgumentException(
+						"invalid hold group id: " + hgid);
 			}
 			this.id = id;
 			this.mergeGroupId = mgid;
