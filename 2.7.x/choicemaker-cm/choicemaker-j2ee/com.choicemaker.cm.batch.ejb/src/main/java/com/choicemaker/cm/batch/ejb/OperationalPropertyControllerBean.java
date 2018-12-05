@@ -5,7 +5,6 @@ import static com.choicemaker.cm.batch.ejb.OperationalPropertyJPA.PN_OPPROP_FIND
 import static com.choicemaker.cm.batch.ejb.OperationalPropertyJPA.PN_OPPROP_FIND_BY_JOB_PNAME_P1;
 import static com.choicemaker.cm.batch.ejb.OperationalPropertyJPA.PN_OPPROP_FIND_BY_JOB_PNAME_P2;
 import static com.choicemaker.cm.batch.ejb.OperationalPropertyJPA.QN_OPPROP_DELETE_BY_JOB;
-import static com.choicemaker.cm.batch.ejb.OperationalPropertyJPA.QN_OPPROP_FINDALL;
 import static com.choicemaker.cm.batch.ejb.OperationalPropertyJPA.QN_OPPROP_FINDALL_BY_JOB;
 import static com.choicemaker.cm.batch.ejb.OperationalPropertyJPA.QN_OPPROP_FIND_BY_JOB_PNAME;
 
@@ -64,14 +63,14 @@ public class OperationalPropertyControllerBean
 				String msg = "The specified property (" + pid
 						+ ") is missing in the DB. "
 						+ "The search will continue by job id and name.";
-				logger.warning(msg);
+				logger.fine(msg);
 				retVal = null;
 			} else if (!retVal.equals(p)) {
 				String msg = "The specified property (" + p
 						+ ") is different in the DB. "
 						+ "The DB value will be updated from '"
 						+ retVal.getValue() + "' to '" + p.getValue() + "'";
-				logger.info(msg);
+				logger.fine(msg);
 				retVal = updateInternal(p);
 			}
 		}
@@ -82,14 +81,14 @@ public class OperationalPropertyControllerBean
 						+ ", name: " + p.getName() + ") is missing in the DB. "
 						+ "A new entry will be created with the value '"
 						+ p.getValue() + "'.";
-				logger.info(msg);
+				logger.fine(msg);
 				retVal = null;
 			} else if (!retVal.equals(p)) {
 				String msg = "The specified property (" + p
 						+ ") is different in the DB. "
 						+ "The DB value will be updated from '"
 						+ retVal.getValue() + "' to '" + p.getValue() + "'";
-				logger.info(msg);
+				logger.fine(msg);
 				retVal.updateValue(p.getValue());
 				retVal = updateInternal(retVal);
 			}
@@ -119,7 +118,7 @@ public class OperationalPropertyControllerBean
 		em.persist(retVal);
 		assert retVal.isPersistent();
 		String msg = "Persistent: " + retVal;
-		logger.info(msg);
+		logger.fine(msg);
 		return retVal;
 	}
 
@@ -180,7 +179,7 @@ public class OperationalPropertyControllerBean
 
 		final String stdName = name.toUpperCase();
 		if (!name.equals(stdName)) {
-			logger.warning("Converting property name '" + name
+			logger.fine("Converting property name '" + name
 					+ "' to upper-case '" + stdName + "'");
 		}
 
@@ -230,19 +229,6 @@ public class OperationalPropertyControllerBean
 			query.setParameter(PN_OPPROP_DELETE_BY_JOB_P1, jobId);
 			int deletedCount = query.executeUpdate();
 			return deletedCount;
-		}
-		return retVal;
-	}
-
-	@Override
-	public List<OperationalProperty> findAllOperationalProperties() {
-		List<OperationalProperty> retVal = new LinkedList<>();
-		Query query = em.createNamedQuery(QN_OPPROP_FINDALL);
-		@SuppressWarnings("unchecked")
-		final List<OperationalPropertyEntity> beans = query.getResultList();
-		assert beans != null;
-		for (OperationalProperty bean : beans) {
-			retVal.add(bean);
 		}
 		return retVal;
 	}
