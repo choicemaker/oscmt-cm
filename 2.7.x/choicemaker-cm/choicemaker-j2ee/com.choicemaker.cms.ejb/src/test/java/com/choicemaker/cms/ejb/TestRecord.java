@@ -56,7 +56,7 @@ public class TestRecord<T extends Comparable<T> & Serializable>
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		TestRecord other = (TestRecord) obj;
+		TestRecord<?> other = (TestRecord<?>) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
