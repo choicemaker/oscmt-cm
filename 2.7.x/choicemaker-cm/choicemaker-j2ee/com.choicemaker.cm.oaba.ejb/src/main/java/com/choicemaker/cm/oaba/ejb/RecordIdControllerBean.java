@@ -326,10 +326,8 @@ public class RecordIdControllerBean implements RecordIdController {
 			ResultSet rs = stmt.executeQuery(query);
 			while (rs.next()) {
 				Integer i = rs.getInt(QUERY_INDEX_RECORD_ID_TYPE);
-				if (i == null) {
-					String msg = "null record-id type";
-					throw new IllegalStateException(msg);
-				}
+				// JDBC: getInt(..) is 0 if the field is null
+				assert i != null;
 				RECORD_ID_TYPE rit = RECORD_ID_TYPE.fromValue(i);
 				assert rit != null;
 				dataTypes.add(rit);
