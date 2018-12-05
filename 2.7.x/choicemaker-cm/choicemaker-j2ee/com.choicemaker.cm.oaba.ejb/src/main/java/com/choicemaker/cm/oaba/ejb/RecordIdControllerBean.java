@@ -34,6 +34,7 @@ import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.ejb.BatchJobFileUtils;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.base.RECORD_SOURCE_ROLE;
+import com.choicemaker.cm.oaba.api.DbRecordIdTranslator;
 import com.choicemaker.cm.oaba.api.ImmutableRecordIdTranslatorLocal;
 import com.choicemaker.cm.oaba.api.OabaJobManager;
 import com.choicemaker.cm.oaba.api.RecordIdController;
@@ -241,6 +242,12 @@ public class RecordIdControllerBean implements RecordIdController {
 	@Override
 	public MutableRecordIdTranslator<?> createMutableRecordIdTranslator(
 			BatchJob job) throws BlockingException {
+		return createMutableRecordIdTranslator(job, null);
+	}
+
+	@Override
+	public MutableRecordIdTranslator<?> createMutableRecordIdTranslator(
+			BatchJob job, DbRecordIdTranslator dbrit) throws BlockingException {
 
 		logger.entering("createMutableRecordIdTranslator", job.toString());
 
