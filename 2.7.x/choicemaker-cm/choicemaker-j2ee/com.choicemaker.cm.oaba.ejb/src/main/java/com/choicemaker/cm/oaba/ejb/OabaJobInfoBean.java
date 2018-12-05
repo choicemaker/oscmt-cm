@@ -1,5 +1,7 @@
 package com.choicemaker.cm.oaba.ejb;
 
+import static com.choicemaker.cm.batch.ejb.BatchJobEntity.*;
+
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
@@ -23,29 +25,27 @@ public class OabaJobInfoBean extends BatchJobInfoBean implements OabaJobInfo {
 	public OabaJobInfoBean(BatchJob batchJob, OabaParameters oabaParameters,
 			OabaSettings oabaSettings, ServerConfiguration serverConfiguration,
 			MatchPairInfo matchPairInfo) {
-		super(batchJob);
+		this(batchJob.getId(), batchJob.getExternalId(),
+				batchJob.getDescription(), batchJob.getStatus(),
+				batchJob.getUrmId(), oabaParameters, oabaSettings,
+				serverConfiguration, matchPairInfo);
 		Precondition.assertBoolean("Must be an OabaJob",
 				OabaUtils.isOabaJob(batchJob));
-		this.urmJobid = batchJob.getUrmId();
-		this.oabaParameters = oabaParameters;
-		this.oabaSettings = oabaSettings;
-		this.serverConfiguration = serverConfiguration;
-		this.workingDirectory = serverConfiguration == null ? null
-				: serverConfiguration.getWorkingDirectoryLocationUriString();
-		this.matchPairInfo = matchPairInfo;
 	}
 
 	public OabaJobInfoBean(long jobId, String externalId, String description,
 			BatchJobStatus jobStatus, long urmJobId,
 			OabaParameters oabaParameters, OabaSettings oabaSettings,
-			ServerConfiguration serverConfiguration, String workingDirectory,
+			ServerConfiguration serverConfiguration,
 			MatchPairInfo matchPairInfo) {
-		super(jobId, externalId, description, jobStatus);
+		super(jobId, externalId, getBatchJobType(OabaJobEntity.class),
+				description, jobStatus);
 		this.urmJobid = urmJobId;
 		this.oabaParameters = oabaParameters;
 		this.oabaSettings = oabaSettings;
 		this.serverConfiguration = serverConfiguration;
-		this.workingDirectory = workingDirectory;
+		this.workingDirectory = serverConfiguration == null ? null
+				: serverConfiguration.getWorkingDirectoryLocationUriString();
 		this.matchPairInfo = matchPairInfo;
 	}
 

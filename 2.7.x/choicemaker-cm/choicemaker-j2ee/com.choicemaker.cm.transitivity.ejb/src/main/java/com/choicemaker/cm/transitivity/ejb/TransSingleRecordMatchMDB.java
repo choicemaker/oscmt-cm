@@ -13,8 +13,6 @@ import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 import javax.jms.Queue;
 
 import com.choicemaker.cm.args.OabaSettings;
@@ -96,6 +94,7 @@ public class TransSingleRecordMatchMDB extends AbstractTransitivityMDB {
 				this.getRecordSourceController(),
 				this.getSqlRecordSourceController(),
 				this.getPropertyController(),
+				this.getIndexedPropertyController(),
 				this.getAbaStatisticsController());
 		srp.processOabaMessage(data, batchJob, params, oabaSettings,
 				processingLog, serverConfig, model);

@@ -1,21 +1,20 @@
 package com.choicemaker.cm.batch.api;
 
-import java.util.List;
 import java.util.Map;
 
 //import javax.ejb.Local;
 
 /**
- * Manages persistent, indexed properties.
+ * Manages persistent, indexed properties associated with a batch job.
  * 
  * @author rphall
  */
 // @Local
 public interface IndexedPropertyController {
 
-	void setJobProperty(BatchJob job, String pn, String pv);
+	void setIndexedPropertyValue(BatchJob job, String pn, int index, String pv);
 
-	String getJobProperty(BatchJob job, String pn);
+	String getIndexedPropertyValue(BatchJob job, String pn, int index);
 
 	IndexedProperty save(IndexedProperty property);
 
@@ -28,6 +27,6 @@ public interface IndexedPropertyController {
 	Map<Integer, String> find(BatchJob job, String name);
 
 	/** Returns a count of the number of properties deleted */
-	int deleteOperationalPropertiesByJobId(long jobId, String name);
+	int deleteIndexedPropertiesByJobIdName(long jobId, String name);
 
 }

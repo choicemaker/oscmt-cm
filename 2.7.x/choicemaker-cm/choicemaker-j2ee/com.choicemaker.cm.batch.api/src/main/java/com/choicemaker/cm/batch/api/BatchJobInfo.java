@@ -6,8 +6,10 @@ public interface BatchJobInfo {
 
 	String getExternalId();
 	
+	String getType();
+	
 	String getDescription();
 	
 	BatchJobStatus getJobStatus();
-		
+
 }

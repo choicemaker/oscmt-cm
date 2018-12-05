@@ -29,7 +29,6 @@ import static com.choicemaker.util.DebugUtils.printStackTrace;
 
 import java.io.File;
 import java.io.Serializable;
-import java.lang.annotation.Annotation;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -123,6 +122,13 @@ public abstract class BatchJobEntity extends AbstractPersistentObject
 		return retVal;
 	}
 
+	public static <T extends BatchJobEntity> String getBatchJobType(
+			Class<T> c) {
+		DiscriminatorValue dv = c.getAnnotation(DiscriminatorValue.class);
+		String retVal = dv == null ? DISCRIMINATOR_VALUE : dv.value();
+		return retVal;
+	}
+
 	public static long randomTransactionId() {
 		String uuid = UUID.randomUUID().toString();
 		return uuid.hashCode();
@@ -211,9 +217,7 @@ public abstract class BatchJobEntity extends AbstractPersistentObject
 
 	@Override
 	public String getBatchJobType() {
-		Class<?> c = this.getClass();
-		DiscriminatorValue dv = c.getAnnotation(DiscriminatorValue.class);
-		String retVal = dv == null ? DISCRIMINATOR_VALUE : dv.value();
+		String retVal = getBatchJobType(this.getClass());
 		return retVal;
 	}
 

@@ -28,6 +28,7 @@ import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.BatchJobManager;
 import com.choicemaker.cm.batch.api.BatchJobStatus;
 import com.choicemaker.cm.batch.api.EventPersistenceManager;
+import com.choicemaker.cm.batch.api.IndexedPropertyController;
 import com.choicemaker.cm.batch.api.OperationalPropertyController;
 import com.choicemaker.cm.batch.api.ProcessingEventLog;
 import com.choicemaker.cm.core.BlockingException;
@@ -91,6 +92,9 @@ public abstract class AbstractTransitivityMDB
 	@EJB
 	private OperationalPropertyController propController;
 
+	@EJB
+	private IndexedPropertyController idxPropController;
+
 	@Inject
 	private JMSContext jmsContext;
 
@@ -138,6 +142,10 @@ public abstract class AbstractTransitivityMDB
 
 	protected final OperationalPropertyController getPropertyController() {
 		return propController;
+	}
+
+	protected final IndexedPropertyController getIndexedPropertyController() {
+		return idxPropController;
 	}
 
 	// -- Template methods

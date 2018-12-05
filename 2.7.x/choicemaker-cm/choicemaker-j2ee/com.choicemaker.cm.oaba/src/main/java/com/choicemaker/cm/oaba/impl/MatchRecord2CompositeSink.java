@@ -16,6 +16,7 @@ import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.base.MatchRecord2;
 import com.choicemaker.cm.oaba.core.EXTERNAL_DATA_FORMAT;
 import com.choicemaker.cm.oaba.core.IMatchRecord2Sink;
+import com.choicemaker.cm.oaba.core.IndexedFileObserver;
 import com.choicemaker.util.Precondition;
 
 /**
@@ -51,10 +52,18 @@ public class MatchRecord2CompositeSink implements IMatchRecord2Sink {
 		return retVal;
 	}
 
+	public static void notify(IndexedFileObserver ifo, int index,
+			String fileName) {
+		if (ifo != null && fileName != null) {
+			ifo.fileCreated(index, fileName);
+		}
+	}
+
 	private final String fileBase;
 	private final String fileExt;
 	private final long maxFileSize;
 	private final int interval;
+	private final IndexedFileObserver indexedFileObserver;
 
 	private IMatchRecord2Sink currentFile;
 	private int numberOfFiles = 0;
@@ -79,7 +88,14 @@ public class MatchRecord2CompositeSink implements IMatchRecord2Sink {
 	 */
 	public MatchRecord2CompositeSink(String fileBase, String fileExt,
 			long maxFileSize) {
-		this(fileBase,fileExt,maxFileSize,computeInterval(maxFileSize));
+		this(fileBase, fileExt, maxFileSize, computeInterval(maxFileSize),
+				null);
+	}
+
+	public MatchRecord2CompositeSink(String fileBase, String fileExt,
+			long maxFileSize, IndexedFileObserver ifo) {
+		this(fileBase, fileExt, maxFileSize, computeInterval(maxFileSize),
+				ifo);
 	}
 
 	/**
@@ -93,12 +109,18 @@ public class MatchRecord2CompositeSink implements IMatchRecord2Sink {
 	 *            - The maximum size of each sink file. When the file size gets
 	 *            above this threshold, a new file is created.
 	 * @param interval
-	 *            - This controls how often to check the size of the size.
-	 *            If the interval is greater than the maxFileSize, it is
-	 *            truncated to the maxFileSize
+	 *            - This controls how often to check the size of the size. If
+	 *            the interval is greater than the maxFileSize, it is truncated
+	 *            to the maxFileSize
 	 */
 	public MatchRecord2CompositeSink(String fileBase, String fileExt,
 			long maxFileSize, int interval) {
+		this(fileBase, fileExt, maxFileSize, interval, null);
+	}
+
+	public MatchRecord2CompositeSink(String fileBase, String fileExt,
+			long maxFileSize, int interval, IndexedFileObserver ifo) {
+
 		Precondition.assertBoolean(maxFileSize > 0);
 		Precondition.assertBoolean(interval > 0);
 
@@ -106,6 +128,7 @@ public class MatchRecord2CompositeSink implements IMatchRecord2Sink {
 		this.fileExt = fileExt;
 		this.maxFileSize = maxFileSize;
 		this.interval = Math.min((int)maxFileSize,interval);
+		this.indexedFileObserver = ifo;
 	}
 
 	/*
@@ -201,9 +224,10 @@ public class MatchRecord2CompositeSink implements IMatchRecord2Sink {
 	@Override
 	public void open() throws BlockingException {
 		numberOfFiles = 1;
+		final String fileName = getFileName(numberOfFiles);
 		currentFile =
-			new MatchRecord2Sink(getFileName(numberOfFiles),
-					EXTERNAL_DATA_FORMAT.STRING);
+			new MatchRecord2Sink(fileName, EXTERNAL_DATA_FORMAT.STRING);
+		notify(indexedFileObserver, numberOfFiles, fileName);
 		currentFile.open();
 	}
 

@@ -27,6 +27,7 @@ import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.BatchJobStatus;
 import com.choicemaker.cm.batch.api.EventPersistenceManager;
+import com.choicemaker.cm.batch.api.IndexedPropertyController;
 import com.choicemaker.cm.batch.api.OperationalPropertyController;
 import com.choicemaker.cm.batch.api.ProcessingEventLog;
 import com.choicemaker.cm.core.BlockingException;
@@ -87,6 +88,9 @@ public abstract class AbstractOabaMDB
 	private OperationalPropertyController propController;
 
 	@EJB
+	private IndexedPropertyController idxPropController;
+
+	@EJB
 	private AbaStatisticsController statsController;
 
 	@Inject
@@ -132,6 +136,10 @@ public abstract class AbstractOabaMDB
 
 	protected final OperationalPropertyController getPropertyController() {
 		return propController;
+	}
+
+	protected final IndexedPropertyController getIndexedPropertyController() {
+		return idxPropController;
 	}
 
 	protected final AbaStatisticsController getAbaStatisticsController() {

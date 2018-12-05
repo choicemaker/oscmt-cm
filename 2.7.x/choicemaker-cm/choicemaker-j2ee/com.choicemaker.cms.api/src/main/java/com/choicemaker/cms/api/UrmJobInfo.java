@@ -1,22 +1,13 @@
 package com.choicemaker.cms.api;
 
-import com.choicemaker.cm.args.OabaParameters;
-import com.choicemaker.cm.args.OabaSettings;
-import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.api.BatchJobInfo;
+import com.choicemaker.cm.oaba.api.OabaJobInfo;
+import com.choicemaker.cm.transitivity.api.TransitivityJobInfo;
 
 public interface UrmJobInfo extends BatchJobInfo {
 	
-	long getUrmJobId();
+	OabaJobInfo getOabaJobInfo();
 
-//	OabaParameters getOabaParameters();
-//	
-//	OabaSettings getOabaSettings();
-//
-//	ServerConfiguration getServerConfiguration();
-//	
-//	String getWorkingDirectory();
-//	
-//	MatchPairInfo getMatchPairInfo();
+	TransitivityJobInfo getTransitivityJobInfo();
 
 }
