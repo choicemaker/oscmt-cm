@@ -21,6 +21,9 @@ public interface IndexedPropertyJPA {
 	/** Index of the property */
 	String CN_INDEX = "PINDEX";
 
+	/** Index of the property */
+	String CN_INDEX = "INDEX";
+
 	/** Value of the property */
 	String CN_VALUE = "PVALUE";
 
