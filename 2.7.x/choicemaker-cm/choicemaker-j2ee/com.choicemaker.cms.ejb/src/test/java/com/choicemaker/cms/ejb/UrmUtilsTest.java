@@ -1,3 +1,5 @@
+package com.choicemaker.cms.ejb;
+
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;

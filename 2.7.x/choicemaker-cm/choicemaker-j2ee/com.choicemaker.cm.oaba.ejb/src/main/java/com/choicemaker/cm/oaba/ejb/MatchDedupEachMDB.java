@@ -101,9 +101,6 @@ public class MatchDedupEachMDB extends AbstractOabaMDB {
 
 		mSink = OabaFileUtils.getMatchTempFactory(batchJob).getSink(num);
 		IComparableSink sink = new ComparableMRSink(mSink);
-		getIndexedPropertyController().setIndexedPropertyValue(batchJob,
-				MatchPairInfoBean.PN_OABA_MATCH_RESULT_FILE, num,
-				sink.getInfo());
 
 		log.info("source " + mSource.getInfo() + " sink " + mSink.getInfo());
 
