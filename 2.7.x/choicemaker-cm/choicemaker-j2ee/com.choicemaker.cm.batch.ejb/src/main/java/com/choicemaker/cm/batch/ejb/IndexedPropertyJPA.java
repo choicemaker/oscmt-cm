@@ -3,7 +3,7 @@ package com.choicemaker.cm.batch.ejb;
 public interface IndexedPropertyJPA {
 
 	/** Name of the table that persists batch job data */
-	String TABLE_NAME = "CMT_OPERATION_PROPERTY";
+	String TABLE_NAME = "CMT_INDEXED_PROPERTY";
 
 	/**
 	 * Generated persistence key.
@@ -16,13 +16,13 @@ public interface IndexedPropertyJPA {
 	String CN_JOB_ID = "JOB_ID";
 
 	/** Name of the property */
-	String CN_NAME = "NAME";
+	String CN_NAME = "PNAME";
 
 	/** Index of the property */
-	String CN_INDEX = "INDEX";
+	String CN_INDEX = "PINDEX";
 
 	/** Value of the property */
-	String CN_VALUE = "VALUE";
+	String CN_VALUE = "PVALUE";
 
 	String ID_GENERATOR_NAME = "INDEXED_PROPERTY";
 	String ID_GENERATOR_TABLE = "CMT_SEQUENCE";
