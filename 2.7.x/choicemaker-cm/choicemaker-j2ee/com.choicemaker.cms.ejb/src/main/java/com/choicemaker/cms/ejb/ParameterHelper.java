@@ -126,7 +126,7 @@ public class ParameterHelper {
 	// Cached values
 	// FIXME: not thread safe. Use Atomic values.
 	private ImmutableProbabilityModel model;
-	private DatabaseAccessor databaseAccessor;
+	private DatabaseAccessor<?> databaseAccessor;
 	private DbReaderParallel dbReaderParallel;
 	private DataSource dataSource;
 	private AbaStatistics abaStatistics;
@@ -190,7 +190,7 @@ public class ParameterHelper {
 		return blockingConfigurationId;
 	}
 
-	public DatabaseAccessor getDatabaseAccessor() throws BlockingException {
+	public DatabaseAccessor<?> getDatabaseAccessor() throws BlockingException {
 		if (databaseAccessor == null) {
 			// Get an accessor
 			String dbaName = parameters.getDatabaseAccessorName();
