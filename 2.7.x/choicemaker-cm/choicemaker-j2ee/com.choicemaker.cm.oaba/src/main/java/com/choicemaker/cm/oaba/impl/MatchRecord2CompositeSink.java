@@ -187,9 +187,11 @@ public class MatchRecord2CompositeSink implements IMatchRecord2Sink {
 		if (count % interval == 0 && isFull()) {
 			currentFile.close();
 			numberOfFiles++;
+			final String fileName = getFileName(numberOfFiles);
 			currentFile =
-				new MatchRecord2Sink(getFileName(numberOfFiles),
+				new MatchRecord2Sink(fileName,
 						EXTERNAL_DATA_FORMAT.STRING);
+			notify(indexedFileObserver, numberOfFiles, fileName);
 
 			if (isAppend)
 				currentFile.append();
@@ -245,9 +247,10 @@ public class MatchRecord2CompositeSink implements IMatchRecord2Sink {
 	@Override
 	public void append() throws BlockingException {
 		numberOfFiles = 1;
+		final String fileName = getFileName(numberOfFiles);
 		currentFile =
-			new MatchRecord2Sink(getFileName(numberOfFiles),
-					EXTERNAL_DATA_FORMAT.STRING);
+			new MatchRecord2Sink(fileName, EXTERNAL_DATA_FORMAT.STRING);
+		notify(indexedFileObserver, numberOfFiles, fileName);
 		currentFile.append();
 		isAppend = true;
 	}
