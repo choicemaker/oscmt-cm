@@ -7,6 +7,8 @@
  *******************************************************************************/
 package com.choicemaker.cm.oaba.services;
 
+import static javax.transaction.Status.*;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.*;
 import static com.choicemaker.cm.oaba.utils.RecordTransferLogging.*;
 
 import java.io.IOException;
@@ -16,6 +18,9 @@ import java.util.SortedSet;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
 import java.util.logging.Logger;
+
+import javax.transaction.SystemException;
+import javax.transaction.UserTransaction;
 
 import com.choicemaker.cm.batch.api.ProcessingEventLog;
 import com.choicemaker.cm.core.BlockingException;
@@ -35,7 +40,6 @@ import com.choicemaker.cm.oaba.core.IIDSetSource;
 import com.choicemaker.cm.oaba.core.ITransformer;
 import com.choicemaker.cm.oaba.core.ImmutableRecordIdTranslator;
 import com.choicemaker.cm.oaba.core.OabaEventBean;
-import com.choicemaker.cm.oaba.core.OabaProcessingConstants;
 import com.choicemaker.cm.oaba.core.RecordMatchingMode;
 import com.choicemaker.cm.oaba.utils.ControlChecker;
 import com.choicemaker.util.LongArrayList;
@@ -228,90 +232,109 @@ public class ChunkService3 {
 		return time;
 	}
 
+	@Deprecated
+	public void runService() throws BlockingException {
+		runService(null);
+	}
+
 	/**
 	 * This method runs the service.
+	 * 
+	 * @throws SystemException
 	 *
 	 * @throws IOException
 	 */
-	public void runService() throws BlockingException {
+	public void runService(final UserTransaction userTx)
+			throws BlockingException {
 
 		final String METHOD = "runService()";
 		log.entering(SOURCE, METHOD);
 		time = System.currentTimeMillis();
 
-		if (status
-				.getCurrentProcessingEventId() == OabaProcessingConstants.EVT_DONE_CREATE_CHUNK_DATA) {
-			// just need to recover numChunks for the matching step
-			StringTokenizer temp = new StringTokenizer(
-					status.getCurrentProcessingEventInfo(), DELIM);
-			numChunks = Integer.parseInt(temp.nextToken());
-			numRegularChunks = Integer.parseInt(temp.nextToken());
-			log.info("Recovery, numChunks " + numChunks + " numRegularChunks "
-					+ numRegularChunks);
+		try {
+			log.fine(String.format("%s.%s: %s", SOURCE, METHOD,
+					userTx == null ? userTx
+							: (userTx.toString() + ": " + userTx.getStatus())));
 
-		} else if (status
-				.getCurrentProcessingEventId() == OabaProcessingConstants.EVT_DONE_DEDUP_OVERSIZED) {
-			// create ids
-			log.info("Creating ids for block source " + bSource.getInfo());
-			createIDs(bSource, false, 0, transformer);
-			numRegularChunks = numChunks;
+			final int processingEventId = status.getCurrentProcessingEventId();
+			if (processingEventId == EVT_DONE_CREATE_CHUNK_DATA) {
+				// just need to recover numChunks for the matching step
+				StringTokenizer temp = new StringTokenizer(
+						status.getCurrentProcessingEventInfo(), DELIM);
+				numChunks = Integer.parseInt(temp.nextToken());
+				numRegularChunks = Integer.parseInt(temp.nextToken());
+				log.info("Recovery, numChunks " + numChunks
+						+ " numRegularChunks " + numRegularChunks);
 
-			if (osSource != null && osSource.exists()) {
-				log.info("Creating ids for oversized block source "
-						+ osSource.getInfo());
-				int count = createIDs(osSource, true, 0, transformerO);
-				if (count == 0) {
-					transformerO.cleanUp();
+			} else if (processingEventId == EVT_DONE_DEDUP_OVERSIZED) {
+				// create ids
+				log.info("Creating ids for block source " + bSource.getInfo());
+				createIDs(bSource, false, 0, transformer);
+				numRegularChunks = numChunks;
+
+				if (osSource != null && osSource.exists()) {
+					log.info("Creating ids for oversized block source "
+							+ osSource.getInfo());
+					int count = createIDs(osSource, true, 0, transformerO);
+					if (count == 0) {
+						transformerO.cleanUp();
+					}
 				}
-			}
 
-			if (!stop) {
-				createDataFiles();
-			}
-
-			/*
-			 * REMOVEME } else if (status.getCurrentProcessingEventId() ==
-			 * OabaProcessing.EVT_DONE_CREATE_CHUNK_IDS ||
-			 * status.getCurrentProcessingEventId() ==
-			 * OabaProcessing.EVT_CREATE_CHUNK_OVERSIZED_IDS) {
-			 *
-			 */
-		} else if (status
-				.getCurrentProcessingEventId() == OabaProcessingConstants.EVT_DONE_CREATE_CHUNK_IDS
-				|| status
-						.getCurrentProcessingEventId() == OabaProcessingConstants.EVT_CREATE_CHUNK_OVERSIZED_IDS) {
-
-			// create the chunk data files
-			StringTokenizer temp = new StringTokenizer(
-					status.getCurrentProcessingEventInfo(), DELIM);
-			numChunks = Integer.parseInt(temp.nextToken());
-			numRegularChunks = Integer.parseInt(temp.nextToken());
-			log.info("Recovery, numChunks " + numChunks + " numRegularChunks "
-					+ numRegularChunks);
-
-			recoverCreateIDs(numChunks);
-
-			createDataFiles();
-
-		} else if (status
-				.getCurrentProcessingEventId() == OabaProcessingConstants.EVT_CREATE_CHUNK_IDS) {
-			// time to create Oversized ID files
-			if (osSource != null && osSource.exists()) {
-				log.info("Creating ids for oversized block source "
-						+ osSource.getInfo());
-				int count = createIDs(osSource, true, 0, transformerO);
-				if (count == 0) {
-					transformerO.cleanUp();
+				if (!stop) {
+					createDataFiles(userTx);
 				}
+
+			} else if (processingEventId == EVT_DONE_CREATE_CHUNK_IDS
+					|| processingEventId == EVT_CREATE_CHUNK_OVERSIZED_IDS) {
+
+				// create the chunk data files
+				StringTokenizer temp = new StringTokenizer(
+						status.getCurrentProcessingEventInfo(), DELIM);
+				numChunks = Integer.parseInt(temp.nextToken());
+				numRegularChunks = Integer.parseInt(temp.nextToken());
+				log.info("Recovery, numChunks " + numChunks
+						+ " numRegularChunks " + numRegularChunks);
+
+				recoverCreateIDs(numChunks);
+
+				createDataFiles(userTx);
+
+			} else if (processingEventId == EVT_CREATE_CHUNK_IDS) {
+				// time to create Oversized ID files
+				if (osSource != null && osSource.exists()) {
+					log.info("Creating ids for oversized block source "
+							+ osSource.getInfo());
+					int count = createIDs(osSource, true, 0, transformerO);
+					if (count == 0) {
+						transformerO.cleanUp();
+					}
+				}
+
+				if (!stop) {
+					createDataFiles(userTx);
+				}
+
 			}
 
-			if (!stop) {
-				createDataFiles();
+			time = System.currentTimeMillis() - time;
+		} catch (BlockingException | SystemException e) {
+			final String msg = e.toString();
+			log.severe(msg);
+			try {
+				if (userTx != null && userTx.getStatus() == STATUS_ACTIVE) {
+					userTx.rollback();
+				}
+			} catch (IllegalStateException | SecurityException
+					| SystemException e1) {
+				log.severe(e1.toString());
 			}
-
+			if (e instanceof BlockingException) {
+				throw (BlockingException) e;
+			} else {
+				throw new BlockingException(msg);
+			}
 		}
-
-		time = System.currentTimeMillis() - time;
 	}
 
 	/**
@@ -328,11 +351,14 @@ public class ChunkService3 {
 	/**
 	 * This method creates the chunk data files for stage and master record
 	 * sources.
+	 * 
+	 * @param userTx
 	 *
 	 * @throws IOException
 	 * @throws XmlConfException
 	 */
-	private void createDataFiles() throws BlockingException {
+	private void createDataFiles(final UserTransaction userTx)
+			throws BlockingException {
 		try {
 			// Index sets for each chunk data file
 			IChunkRecordIndexSet[] crSets = new IChunkRecordIndexSet[numChunks];
@@ -359,12 +385,12 @@ public class ChunkService3 {
 				end = numChunks;
 				boolean isStaging = true;
 				createDataFiles(start, end, crSets, stageRecordSinks, isStaging,
-						stage, model);
+						stage, model, userTx);
 
 				if (mode == RecordMatchingMode.BRM && master != null) {
 					isStaging = false;
 					createDataFiles(start, end, crSets, masterRecordSinks,
-							isStaging, master, model);
+							isStaging, master, model, userTx);
 				} else {
 					createEmptySinks(masterRecordSinks);
 				}
@@ -373,12 +399,12 @@ public class ChunkService3 {
 				while (start < numChunks) {
 					boolean isStaging = true;
 					createDataFiles(start, end, crSets, stageRecordSinks,
-							isStaging, stage, model);
+							isStaging, stage, model, userTx);
 
 					if (mode == RecordMatchingMode.BRM && master != null) {
 						isStaging = false;
 						createDataFiles(start, end, crSets, masterRecordSinks,
-								isStaging, master, model);
+								isStaging, master, model, userTx);
 					} else {
 						createEmptySinks(masterRecordSinks);
 					}
@@ -455,10 +481,8 @@ public class ChunkService3 {
 	 */
 	private void createDataFiles(int start, int end,
 			IChunkRecordIndexSet[] crSets, RecordSink[] recordSinks,
-			boolean isStaging,
-			/* int splitIndex, */
-			RecordSource rs, ImmutableProbabilityModel model)
-			throws BlockingException {
+			boolean isStaging, RecordSource rs, ImmutableProbabilityModel model,
+			UserTransaction userTx) throws BlockingException {
 
 		log.fine("starting " + start + " ending " + end);
 
@@ -472,7 +496,8 @@ public class ChunkService3 {
 			}
 		} // end for
 
-		createDataFile(rs, model, start, end, isStaging, crSets, recordSinks);
+		createDataFile(rs, model, start, end, isStaging, crSets, recordSinks,
+				userTx);
 
 		// close sinks and sources
 		for (int i = start; i < end; i++) {
@@ -557,7 +582,8 @@ public class ChunkService3 {
 	private void createDataFile(RecordSource rs,
 			ImmutableProbabilityModel model, int start, int end,
 			boolean isStaging, IChunkRecordIndexSet[] crSets,
-			RecordSink[] recordSinks) throws BlockingException {
+			RecordSink[] recordSinks,
+			UserTransaction userTx) throws BlockingException {
 
 		final String METHOD = "createDataFile(..)";
 		final String TAG = SOURCE + "." + METHOD + ": ";
@@ -611,8 +637,8 @@ public class ChunkService3 {
 					}
 				}
 				count++;
-				stop = ControlChecker.checkStop(control, count,
-						CONTROL_INTERVAL);
+				stop =
+					ControlChecker.checkStop(control, count, CONTROL_INTERVAL);
 
 			} // end while rs next
 			final long downloadMsecs =
@@ -672,7 +698,8 @@ public class ChunkService3 {
 			count++;
 			countAll++;
 
-			stop = ControlChecker.checkStop(control, countAll, CONTROL_INTERVAL);
+			stop =
+				ControlChecker.checkStop(control, countAll, CONTROL_INTERVAL);
 
 			IIDSet bs = source.next();
 			LongArrayList block = bs.getRecordIDs();
@@ -718,8 +745,7 @@ public class ChunkService3 {
 
 				// write status
 				numChunks++;
-				String temp = Integer.toString(numChunks)
-						+ OabaProcessingConstants.DELIMIT
+				String temp = Integer.toString(numChunks) + DELIMIT
 						+ Integer.toString(skip + countAll);
 				if (isOS)
 					status.setCurrentProcessingEvent(

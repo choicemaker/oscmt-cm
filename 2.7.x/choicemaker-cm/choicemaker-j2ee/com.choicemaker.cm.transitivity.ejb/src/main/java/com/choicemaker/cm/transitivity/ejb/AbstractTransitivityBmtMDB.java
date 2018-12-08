@@ -62,7 +62,8 @@ public abstract class AbstractTransitivityBmtMDB
 
 	private static final long serialVersionUID = 271L;
 
-	private static final String SOURCE = AbstractTransitivityBmtMDB.class.getSimpleName();
+	private static final String SOURCE =
+		AbstractTransitivityBmtMDB.class.getSimpleName();
 
 	// -- Instance data
 
@@ -179,7 +180,7 @@ public abstract class AbstractTransitivityBmtMDB
 				getUserTx().begin();
 				final long jobId = oabaMsg.jobID;
 				batchJob =
-						getTransitivityJobController().findTransitivityJob(jobId);
+					getTransitivityJobController().findTransitivityJob(jobId);
 				getUserTx().commit();
 
 				getUserTx().begin();
@@ -218,19 +219,22 @@ public abstract class AbstractTransitivityBmtMDB
 					throw new IllegalArgumentException(s);
 				}
 
-				getUserTx().begin();
 				if (BatchJobStatus.ABORT_REQUESTED
 						.equals(batchJob.getStatus())) {
+					getUserTx().begin();
 					abortProcessing(batchJob, processingLog);
+					getUserTx().commit();
 
 				} else {
 					processOabaMessage(oabaMsg, batchJob, transParams, settings,
 							processingLog, serverConfig, model);
+
+					getUserTx().begin();
 					updateTransivitityProcessingStatus(batchJob,
 							getCompletionEvent(), new Date(), null);
 					notifyProcessingCompleted(oabaMsg);
+					getUserTx().commit();
 				}
-				getUserTx().commit();
 
 			} else {
 				getLogger().warning(
@@ -244,7 +248,7 @@ public abstract class AbstractTransitivityBmtMDB
 				int status = getUserTx() == null ? Status.STATUS_NO_TRANSACTION
 						: getUserTx().getStatus();
 				if (status != Status.STATUS_NO_TRANSACTION) {
-					getUserTx().setRollbackOnly();
+					getUserTx().rollback();
 				}
 			} catch (Exception e1) {
 				String msg1 = throwableToString(e);
@@ -258,7 +262,7 @@ public abstract class AbstractTransitivityBmtMDB
 						batchJob.markAsFailed();
 						getTransitivityJobController().save(batchJob);
 					}
-					getUserTx().setRollbackOnly();
+					getUserTx().rollback();
 				}
 			} catch (Exception e1) {
 				String msg1 = throwableToString(e);

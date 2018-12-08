@@ -23,6 +23,11 @@ import javax.ejb.MessageDrivenContext;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.jms.Queue;
+import javax.transaction.HeuristicMixedException;
+import javax.transaction.HeuristicRollbackException;
+import javax.transaction.NotSupportedException;
+import javax.transaction.RollbackException;
+import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 
 import com.choicemaker.cm.args.OabaSettings;
@@ -64,7 +69,7 @@ import com.choicemaker.cm.transitivity.core.TransitivityEventBean;
 				propertyValue = "java:/choicemaker/urm/jms/transitivityQueue"),
 		@ActivationConfigProperty(propertyName = "destinationType",
 				propertyValue = "javax.jms.Queue") })
-//@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+// @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 @TransactionManagement(value = TransactionManagementType.BEAN)
 public class StartTransitivityMDB extends AbstractTransitivityBmtMDB {
 
@@ -109,9 +114,6 @@ public class StartTransitivityMDB extends AbstractTransitivityBmtMDB {
 	@Resource
 	private MessageDrivenContext jmsCtx;
 
-	@Resource
-	private UserTransaction userTx;
-
 	@Resource(lookup = "java:/choicemaker/urm/jms/transMatchSchedulerQueue")
 	private Queue transMatchSchedulerQueue;
 
@@ -121,10 +123,32 @@ public class StartTransitivityMDB extends AbstractTransitivityBmtMDB {
 			ProcessingEventLog processingLog, ServerConfiguration serverConfig,
 			ImmutableProbabilityModel model) throws BlockingException {
 
-		batchJob.markAsStarted();
-		getTransitivityJobController().save(batchJob);
-		removeOldFiles(batchJob);
-		createChunks(batchJob, params, oabaSettings, serverConfig);
+		try {
+			getUserTx().begin();
+			batchJob.markAsStarted();
+			getTransitivityJobController().save(batchJob);
+			getUserTx().commit();
+			removeOldFiles(batchJob);
+			createChunks(batchJob, params, oabaSettings, serverConfig);
+		} catch (Exception x) {
+			try {
+				int txStatus = getUserTx().getStatus();
+				if (javax.transaction.Status.STATUS_ACTIVE == txStatus) {
+					try {
+						getUserTx().rollback();
+					} catch (Exception e) {
+						String msg = e.toString();
+						log.severe(msg);
+					}
+				}
+			} catch (Exception e1) {
+				String msg1 = throwableToString(e1);
+				getLogger().severe(msg1);
+			}
+			String msg = x.toString();
+			log.severe(msg);
+			throw new BlockingException(msg);
+		}
 	}
 
 	/*
@@ -135,142 +159,199 @@ public class StartTransitivityMDB extends AbstractTransitivityBmtMDB {
 			OabaSettings oabaSettings, ServerConfiguration serverConfig)
 			throws BlockingException {
 
-		// Get the parent/predecessor OABA job
-		final long oabaJobId = transJob.getBatchParentId();
-		final BatchJob oabaJob =
-			this.getOabaJobController().findBatchJob(oabaJobId);
+		try {
+			getUserTx().begin();
+			// Get the parent/predecessor OABA job
+			final long oabaJobId = transJob.getBatchParentId();
+			final BatchJob oabaJob =
+				this.getOabaJobController().findBatchJob(oabaJobId);
 
-		// Get the match record source from the OABA job
-		IMatchRecord2Source mSource =
-			OabaFileUtils.getCompositeMatchSource(oabaJob);
-		assert mSource != null;
+			// Get the match record source from the OABA job
+			IMatchRecord2Source mSource =
+				OabaFileUtils.getCompositeMatchSource(oabaJob);
+			assert mSource != null;
 
-		// Create a translator for this job
-		RecordMatchingMode oabaMode = BatchJobUtils
-				.getRecordMatchingMode(getPropertyController(), oabaJob);
-		ImmutableRecordIdTranslator currentTranslator = null;
-		if (isBrmTranslatorReuseRequested && oabaMode == BRM) {
-			currentTranslator =
-				this.getRecordIdController().findRecordIdTranslator(oabaJob);
-		} else {
-			assert oabaMode == SRM || !isBrmTranslatorReuseRequested;
-			// SRM mode is not working yet, nor is translator creation
-			// currentTranslator = createTranslator(transJob, mSource);
-			String msg;
-			if (oabaMode == SRM) {
-				msg = "SRM mode is not yet supported transitivity analysis";
+			// Create a translator for this job
+			RecordMatchingMode oabaMode = BatchJobUtils
+					.getRecordMatchingMode(getPropertyController(), oabaJob);
+			getUserTx().commit();
+
+			// Finding a translator can take awhile, so start a separate tx
+			getUserTx().begin();
+			ImmutableRecordIdTranslator currentTranslator = null;
+			if (isBrmTranslatorReuseRequested && oabaMode == BRM) {
+				currentTranslator = this.getRecordIdController()
+						.findRecordIdTranslator(oabaJob);
 			} else {
-				msg = "Translator reuse is currently required "
-						+ "during transitivity analysis in BRM mode";
+				assert oabaMode == SRM || !isBrmTranslatorReuseRequested;
+				// SRM mode is not working yet, nor is translator creation
+				// currentTranslator = createTranslator(transJob, mSource);
+				String msg;
+				if (oabaMode == SRM) {
+					msg = "SRM mode is not yet supported transitivity analysis";
+				} else {
+					msg = "Translator reuse is currently required "
+							+ "during transitivity analysis in BRM mode";
+				}
+				log.severe(msg);
+				throw new BlockingException(msg);
 			}
-			log.severe(msg);
-			throw new BlockingException(msg);
-		}
+			getUserTx().commit();
 
-		// Create a block sink for the Transitivity job
-		IBlockSink bSink = TransitivityFileUtils
-				.getTransitivityBlockFactory(transJob).getNextSink();
+			// Create a block sink for the Transitivity job
+			IBlockSink bSink = TransitivityFileUtils
+					.getTransitivityBlockFactory(transJob).getNextSink();
 
-		// Create blocks for the Transitivity job
-		IMatchRecord2SinkSourceFactory mFactory =
-			OabaFileUtils.getMatchTempFactory(transJob);
-		IRecordIdSinkSourceFactory idFactory =
-			this.getRecordIdController().getRecordIdSinkSourceFactory(transJob);
-		IRecordIdSink idSink = idFactory.getNextSink();
-		MatchToBlockTransformer2 transformer = new MatchToBlockTransformer2(
-				mSource, mFactory, currentTranslator, bSink, idSink);
-		int numRecords = transformer.process();
-		log.fine("Number of records: " + numRecords);
+			// Create blocks for the Transitivity job
+			IMatchRecord2SinkSourceFactory mFactory =
+				OabaFileUtils.getMatchTempFactory(transJob);
+			IRecordIdSinkSourceFactory idFactory = this.getRecordIdController()
+					.getRecordIdSinkSourceFactory(transJob);
+			IRecordIdSink idSink = idFactory.getNextSink();
+			MatchToBlockTransformer2 transformer = new MatchToBlockTransformer2(
+					mSource, mFactory, currentTranslator, bSink, idSink);
+			int numRecords = transformer.process();
+			log.fine("Number of records: " + numRecords);
 
-		// build a MatchRecord2Sink for all pairs belonging to the size 2 sets.
-		Size2MatchProducer producer =
-			new Size2MatchProducer(mSource, idFactory.getSource(idSink),
+			// build a MatchRecord2Sink for all pairs belonging to the size 2
+			// sets.
+			Size2MatchProducer producer = new Size2MatchProducer(mSource,
+					idFactory.getSource(idSink),
 					OabaFileUtils.getSet2MatchFactory(transJob).getNextSink());
-		int twos = producer.process();
-		log.info("number of size 2 EC: " + twos);
+			int twos = producer.process();
+			log.info("number of size 2 EC: " + twos);
 
-		// Clean up the Transitivity job
-		idSink.remove();
+			// Clean up the Transitivity job
+			idSink.remove();
 
-		IBlockSource bSource = TransitivityFileUtils
-				.getTransitivityBlockFactory(transJob).getSource(bSink);
-		IDSetSource source2 = new IDSetSource(bSource);
+			IBlockSource bSource = TransitivityFileUtils
+					.getTransitivityBlockFactory(transJob).getSource(bSink);
+			IDSetSource source2 = new IDSetSource(bSource);
 
-		final String modelConfigId = params.getModelConfigurationName();
-		ImmutableProbabilityModel model =
-			PMManager.getModelInstance(modelConfigId);
+			final String modelConfigId = params.getModelConfigurationName();
+			ImmutableProbabilityModel model =
+				PMManager.getModelInstance(modelConfigId);
 
-		int maxChunk = oabaSettings.getMaxChunkSize();
-		if (transformer.getMaxEC() > maxChunk)
-			throw new RuntimeException("There is an equivalence class of size "
-					+ transformer.getMaxEC()
-					+ ", which is bigger than the max chunk size of " + maxChunk
-					+ ".");
+			int maxChunk = oabaSettings.getMaxChunkSize();
+			if (transformer.getMaxEC() > maxChunk)
+				throw new RuntimeException(
+						"There is an equivalence class of size "
+								+ transformer.getMaxEC()
+								+ ", which is bigger than the max chunk size of "
+								+ maxChunk + ".");
 
-		// get the number of processors
-		int numProcessors = serverConfig.getMaxChoiceMakerThreads();
+			// get the number of processors
+			int numProcessors = serverConfig.getMaxChoiceMakerThreads();
 
-		// get the number of chunk files
-		int numFiles = serverConfig.getMaxOabaChunkFileCount();
+			// get the number of chunk files
+			int numFiles = serverConfig.getMaxOabaChunkFileCount();
 
-		// create the oversized block transformer
-		Transformer transformerO =
-			new Transformer(currentTranslator, OabaFileUtils
-					.getComparisonArrayGroupFactoryOS(transJob, numProcessors));
+			// create the oversized block transformer
+			Transformer transformerO = new Transformer(currentTranslator,
+					OabaFileUtils.getComparisonArrayGroupFactoryOS(transJob,
+							numProcessors));
 
-		// Set the source for the staging records
-		ISerializableRecordSource staging = null;
-		try {
-			staging = this.getRecordSourceController().getStageRs(params);
-		} catch (Exception e) {
-			String msg = "Unable to staging record source: " + e.toString();
-			getLogger().severe(msg);
-			throw new BlockingException(msg, e);
+			// Set the source for the staging records
+			ISerializableRecordSource staging = null;
+			try {
+				staging = this.getRecordSourceController().getStageRs(params);
+			} catch (Exception e) {
+				String msg = "Unable to staging record source: " + e.toString();
+				getLogger().severe(msg);
+				throw new BlockingException(msg, e);
+			}
+
+			// Set the source for the master records
+			ISerializableRecordSource master = null;
+			try {
+				master = this.getRecordSourceController().getMasterRs(params);
+			} catch (Exception e) {
+				String msg = "Unable to master record source: " + e.toString();
+				getLogger().severe(msg);
+				throw new BlockingException(msg, e);
+			}
+
+			// Set the correct processing status prior to chunk creation.
+			// (This is a potential, but unlikely, race condition. A cleaner
+			// approach would be to use a local stack implementation of
+			// ProcessingEventLog, and then set the persistent value after the
+			// chunk service completes.)
+			getUserTx().begin();
+			ProcessingEventLog status =
+				this.getEventManager().getProcessingLog(transJob);
+			status.setCurrentProcessingEvent(DONE_TRANS_DEDUP_OVERSIZED);
+
+			final RecordMatchingMode mode = getRecordMatchingMode(transJob);
+
+			final BatchJobControl control = new BatchJobControl(
+					this.getTransitivityJobController(), transJob);
+			getUserTx().commit();
+
+			ChunkService3 chunkService =
+				new ChunkService3(source2, null, staging, master, model,
+						OabaFileUtils.getChunkIDFactory(transJob),
+						OabaFileUtils.getStageDataFactory(transJob, model),
+						OabaFileUtils.getMasterDataFactory(transJob, model),
+						currentTranslator, transformerO, null, maxChunk,
+						numFiles, status, control, mode);
+			chunkService.runService(getUserTx());
+			log.info("Done creating chunks " + chunkService.getTimeElapsed());
+
+			getUserTx().begin();
+			final int numChunks = chunkService.getNumChunks();
+			log.info("Number of chunks " + numChunks);
+			this.getPropertyController().setJobProperty(transJob,
+					PN_CHUNK_FILE_COUNT, String.valueOf(numChunks));
+
+			// this is important because in transitivity, there are only OS
+			// chunks.
+			final int numRegularChunks = 0;
+			log.info("Number of regular chunks " + numChunks);
+			this.getPropertyController().setJobProperty(transJob,
+					PN_REGULAR_CHUNK_FILE_COUNT,
+					String.valueOf(numRegularChunks));
+			getUserTx().commit();
+
+		} catch (BlockingException x) {
+			try {
+				int txStatus = getUserTx().getStatus();
+				if (javax.transaction.Status.STATUS_ACTIVE == txStatus) {
+					try {
+						getUserTx().rollback();
+					} catch (Exception e) {
+						String msg = e.toString();
+						log.severe(msg);
+					}
+				}
+			} catch (Exception e1) {
+				String msg1 = throwableToString(e1);
+				getLogger().severe(msg1);
+			}
+			log.severe(x.toString());
+			throw x;
+		} catch (NotSupportedException | SystemException | SecurityException
+				| IllegalStateException | RollbackException
+				| HeuristicMixedException | HeuristicRollbackException x) {
+			// Probably arrived here because of a transaction exception
+			// so rolling back the transaction is probably hopeless.
+			// But try it anyway...
+			try {
+				int txStatus = getUserTx().getStatus();
+				if (javax.transaction.Status.STATUS_ACTIVE == txStatus) {
+					try {
+						getUserTx().rollback();
+					} catch (Exception e) {
+						String msg = e.toString();
+						log.severe(msg);
+					}
+				}
+			} catch (Exception e1) {
+				String msg1 = throwableToString(e1);
+				getLogger().severe(msg1);
+			}
+			log.severe(x.toString());
+			throw new BlockingException(x.toString());
 		}
-
-		// Set the source for the master records
-		ISerializableRecordSource master = null;
-		try {
-			master = this.getRecordSourceController().getMasterRs(params);
-		} catch (Exception e) {
-			String msg = "Unable to master record source: " + e.toString();
-			getLogger().severe(msg);
-			throw new BlockingException(msg, e);
-		}
-
-		// Set the correct processing status prior to chunk creation.
-		// (This is a potential, but unlikely, race condition. A cleaner
-		// approach would be to use a local stack implementation of
-		// ProcessingEventLog, and then set the persistent value after the
-		// chunk service completes.)
-		ProcessingEventLog status =
-			this.getEventManager().getProcessingLog(transJob);
-		status.setCurrentProcessingEvent(DONE_TRANS_DEDUP_OVERSIZED);
-
-		final RecordMatchingMode mode = getRecordMatchingMode(transJob);
-
-		final BatchJobControl control =
-			new BatchJobControl(this.getTransitivityJobController(), transJob);
-
-		ChunkService3 chunkService = new ChunkService3(source2, null, staging,
-				master, model, OabaFileUtils.getChunkIDFactory(transJob),
-				OabaFileUtils.getStageDataFactory(transJob, model),
-				OabaFileUtils.getMasterDataFactory(transJob, model),
-				currentTranslator, transformerO, null, maxChunk, numFiles,
-				status, control, mode);
-		chunkService.runService();
-		log.info("Done creating chunks " + chunkService.getTimeElapsed());
-
-		final int numChunks = chunkService.getNumChunks();
-		log.info("Number of chunks " + numChunks);
-		this.getPropertyController().setJobProperty(transJob,
-				PN_CHUNK_FILE_COUNT, String.valueOf(numChunks));
-
-		// this is important because in transitivity, there are only OS chunks.
-		final int numRegularChunks = 0;
-		log.info("Number of regular chunks " + numChunks);
-		this.getPropertyController().setJobProperty(transJob,
-				PN_REGULAR_CHUNK_FILE_COUNT, String.valueOf(numRegularChunks));
 	}
 
 	// @SuppressWarnings("unused")
@@ -380,7 +461,7 @@ public class StartTransitivityMDB extends AbstractTransitivityBmtMDB {
 
 	@Override
 	protected UserTransaction getUserTx() {
-		return userTx;
+		return getMdcCtx().getUserTransaction();
 	}
 
 	@Override

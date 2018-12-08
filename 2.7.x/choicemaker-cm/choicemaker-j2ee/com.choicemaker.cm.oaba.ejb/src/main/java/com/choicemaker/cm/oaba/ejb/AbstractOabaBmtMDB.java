@@ -240,7 +240,7 @@ public abstract class AbstractOabaBmtMDB
 				int status = getUserTx() == null ? Status.STATUS_NO_TRANSACTION
 						: getUserTx().getStatus();
 				if (status != Status.STATUS_NO_TRANSACTION) {
-					getUserTx().setRollbackOnly();
+					getUserTx().rollback();
 				}
 			} catch (Exception e1) {
 				String msg1 = throwableToString(e);
@@ -254,7 +254,7 @@ public abstract class AbstractOabaBmtMDB
 						batchJob.markAsFailed();
 						getJobController().save(batchJob);
 					}
-					getUserTx().setRollbackOnly();
+					getUserTx().rollback();
 				}
 			} catch (Exception e1) {
 				String msg1 = throwableToString(e);

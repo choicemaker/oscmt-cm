@@ -72,13 +72,10 @@ public class Chunk2MDB extends AbstractOabaBmtMDB {
 	private static final Logger jmsTrace =
 		Logger.getLogger("jmstrace." + Chunk2MDB.class.getName());
 
-	private static final String SOURCE = StartOabaMDB.class.getSimpleName();
+	// private static final String SOURCE = StartOabaMDB.class.getSimpleName();
 
 	@Resource
 	private MessageDrivenContext jmsCtx;
-
-	@Resource
-	private UserTransaction userTx;
 
 	@Resource(lookup = "java:/choicemaker/urm/jms/matchSchedulerQueue")
 	private Queue matchSchedulerQueue;
@@ -88,7 +85,7 @@ public class Chunk2MDB extends AbstractOabaBmtMDB {
 			OabaParameters oabaParams, OabaSettings oabaSettings,
 			ProcessingEventLog processingLog, ServerConfiguration serverConfig,
 			ImmutableProbabilityModel model) throws BlockingException {
-		final String METHOD = "processOabaMessage";
+		// final String METHOD = "processOabaMessage";
 
 		final int maxChunk = oabaSettings.getMaxChunkSize();
 		final int numProcessors = serverConfig.getMaxChoiceMakerThreads();
@@ -185,7 +182,7 @@ public class Chunk2MDB extends AbstractOabaBmtMDB {
 	}
 
 	@Override
-	protected UserTransaction getUserTx () {
+	protected UserTransaction getUserTx() {
 		return getMdcCtx().getUserTransaction();
 	}
 

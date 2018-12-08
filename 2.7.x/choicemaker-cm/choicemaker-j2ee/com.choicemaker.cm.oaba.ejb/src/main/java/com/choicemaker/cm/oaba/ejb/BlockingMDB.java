@@ -51,8 +51,8 @@ import com.choicemaker.cm.oaba.services.OABABlockingService;
 		@ActivationConfigProperty(propertyName = "destinationType",
 				propertyValue = "javax.jms.Queue"),
 		@ActivationConfigProperty(propertyName = "acknowledgeMode",
-		propertyValue = "Dups-ok-acknowledge") })
-//@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+				propertyValue = "Dups-ok-acknowledge") })
+// @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 @TransactionManagement(value = TransactionManagementType.BEAN)
 public class BlockingMDB extends AbstractOabaBmtMDB {
 
@@ -64,13 +64,10 @@ public class BlockingMDB extends AbstractOabaBmtMDB {
 	private static final Logger jmsTrace =
 		Logger.getLogger("jmstrace." + BlockingMDB.class.getName());
 
-	private static final String SOURCE = StartOabaMDB.class.getSimpleName();
+	// private static final String SOURCE = StartOabaMDB.class.getSimpleName();
 
 	@Resource
 	private MessageDrivenContext jmsCtx;
-
-	@Resource
-	private UserTransaction userTx;
 
 	@Resource(lookup = "java:/choicemaker/urm/jms/dedupQueue")
 	private Queue dedupQueue;
@@ -80,7 +77,7 @@ public class BlockingMDB extends AbstractOabaBmtMDB {
 			OabaParameters oabaParams, OabaSettings oabaSettings,
 			ProcessingEventLog processingLog, ServerConfiguration serverConfig,
 			ImmutableProbabilityModel model) throws BlockingException {
-		final String METHOD = "processOabaMessage";
+		// final String METHOD = "processOabaMessage";
 
 		// Start blocking
 		final int maxBlock = oabaSettings.getMaxBlockSize();
@@ -141,7 +138,7 @@ public class BlockingMDB extends AbstractOabaBmtMDB {
 	}
 
 	@Override
-	protected UserTransaction getUserTx () {
+	protected UserTransaction getUserTx() {
 		return getMdcCtx().getUserTransaction();
 	}
 
