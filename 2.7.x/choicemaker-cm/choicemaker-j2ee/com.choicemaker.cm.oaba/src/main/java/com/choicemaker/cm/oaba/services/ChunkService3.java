@@ -19,6 +19,10 @@ import java.util.StringTokenizer;
 import java.util.TreeSet;
 import java.util.logging.Logger;
 
+import javax.transaction.HeuristicMixedException;
+import javax.transaction.HeuristicRollbackException;
+import javax.transaction.NotSupportedException;
+import javax.transaction.RollbackException;
 import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 
@@ -269,13 +273,14 @@ public class ChunkService3 {
 			} else if (processingEventId == EVT_DONE_DEDUP_OVERSIZED) {
 				// create ids
 				log.info("Creating ids for block source " + bSource.getInfo());
-				createIDs(bSource, false, 0, transformer);
+				createIDs(bSource, false, 0, transformer, userTx);
 				numRegularChunks = numChunks;
 
 				if (osSource != null && osSource.exists()) {
 					log.info("Creating ids for oversized block source "
 							+ osSource.getInfo());
-					int count = createIDs(osSource, true, 0, transformerO);
+					int count =
+						createIDs(osSource, true, 0, transformerO, userTx);
 					if (count == 0) {
 						transformerO.cleanUp();
 					}
@@ -305,7 +310,8 @@ public class ChunkService3 {
 				if (osSource != null && osSource.exists()) {
 					log.info("Creating ids for oversized block source "
 							+ osSource.getInfo());
-					int count = createIDs(osSource, true, 0, transformerO);
+					int count =
+						createIDs(osSource, true, 0, transformerO, userTx);
 					if (count == 0) {
 						transformerO.cleanUp();
 					}
@@ -318,7 +324,10 @@ public class ChunkService3 {
 			}
 
 			time = System.currentTimeMillis() - time;
-		} catch (BlockingException | SystemException e) {
+		} catch (BlockingException | SystemException | SecurityException
+				| IllegalStateException | RollbackException
+				| HeuristicMixedException | HeuristicRollbackException
+				| NotSupportedException e) {
 			final String msg = e.toString();
 			log.severe(msg);
 			try {
@@ -582,8 +591,8 @@ public class ChunkService3 {
 	private void createDataFile(RecordSource rs,
 			ImmutableProbabilityModel model, int start, int end,
 			boolean isStaging, IChunkRecordIndexSet[] crSets,
-			RecordSink[] recordSinks,
-			UserTransaction userTx) throws BlockingException {
+			RecordSink[] recordSinks, UserTransaction userTx)
+			throws BlockingException {
 
 		final String METHOD = "createDataFile(..)";
 		final String TAG = SOURCE + "." + METHOD + ": ";
@@ -669,10 +678,20 @@ public class ChunkService3 {
 	 *            - true if we are processing the oversized file
 	 * @param skip
 	 *            - number of blocks to skip
-	 * @throws IOException
 	 */
+	// * @throws SystemException
+	// * @throws HeuristicRollbackException
+	// * @throws HeuristicMixedException
+	// * @throws RollbackException
+	// * @throws IllegalStateException
+	// * @throws SecurityException
+	// * @throws NotSupportedException
+	// * @throws IOException
 	private int createIDs(IIDSetSource source, boolean isOS, int skip,
-			ITransformer transformer) throws BlockingException {
+			ITransformer transformer, UserTransaction userTx)
+			throws BlockingException, SecurityException, IllegalStateException,
+			RollbackException, HeuristicMixedException,
+			HeuristicRollbackException, SystemException, NotSupportedException {
 		// initialize the translator
 		transformer.init();
 
@@ -785,8 +804,10 @@ public class ChunkService3 {
 						OabaEventBean.CREATE_CHUNK_OVERSIZED_IDS, temp);
 			} else {
 				String temp = Integer.toString(numChunks);
+				userTx.begin();
 				status.setCurrentProcessingEvent(OabaEventBean.CREATE_CHUNK_IDS,
 						temp);
+				userTx.commit();
 			}
 		}
 

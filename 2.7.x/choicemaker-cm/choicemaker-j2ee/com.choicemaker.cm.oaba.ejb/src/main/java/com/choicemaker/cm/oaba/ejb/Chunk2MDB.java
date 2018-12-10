@@ -144,7 +144,7 @@ public class Chunk2MDB extends AbstractOabaBmtMDB {
 				tTransformer, transformerO, maxChunk, maxChunkFiles,
 				processingLog, control, mode);
 		log.info("Chunk service: " + chunkService);
-		chunkService.runService();
+		chunkService.runService(getUserTx());
 		log.info("Done creating chunks " + chunkService.getTimeElapsed());
 
 		// transitivity needs the translator
