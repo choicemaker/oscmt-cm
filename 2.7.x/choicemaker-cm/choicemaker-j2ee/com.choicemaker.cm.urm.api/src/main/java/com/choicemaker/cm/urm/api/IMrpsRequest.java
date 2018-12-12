@@ -11,7 +11,7 @@ import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.Properties;
 
-import javax.persistence.EntityManager;
+// import javax.persistence.EntityManager;
 
 import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
@@ -29,7 +29,7 @@ import com.choicemaker.cm.urm.exceptions.ConfigException;
 		"rawtypes" })
 public interface IMrpsRequest extends Serializable, Cloneable {
 
-	MarkedRecordPairSink getMarkedRecordPairSink(EntityManager em)
+	MarkedRecordPairSink getMarkedRecordPairSink(/*EntityManager em*/)
 			throws CmRuntimeException, ConfigException, RemoteException;
 
 	String getExternalId();
@@ -38,18 +38,18 @@ public interface IMrpsRequest extends Serializable, Cloneable {
 
 	Long getOabaJobId();
 
-	IMatchRecord2Source getMatchPairs(EntityManager em)
+	IMatchRecord2Source getMatchPairs(/*EntityManager em*/)
 			throws CmRuntimeException, ConfigException, RemoteException;
 
-	PersistableRecordSource getRsMaster(EntityManager em,
+	PersistableRecordSource getRsMaster(/*EntityManager em,*/
 			RecordSourceController prsc)
 			throws CmRuntimeException, ConfigException, RemoteException;
 
-	PersistableRecordSource getRsStage(EntityManager em,
+	PersistableRecordSource getRsStage(/*EntityManager em,*/
 			RecordSourceController prsc)
 			throws CmRuntimeException, ConfigException, RemoteException;
 
-	ImmutableProbabilityModel getStagingModel(EntityManager em)
+	ImmutableProbabilityModel getStagingModel(/*EntityManager em*/)
 			throws CmRuntimeException, ConfigException, RemoteException;
 
 	// From the Configurable interface
