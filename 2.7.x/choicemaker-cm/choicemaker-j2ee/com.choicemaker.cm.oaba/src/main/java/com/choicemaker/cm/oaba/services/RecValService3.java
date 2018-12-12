@@ -270,47 +270,14 @@ public class RecValService3 {
 				.getCurrentProcessingEventId() < OabaProcessingConstants.EVT_DONE_REC_VAL) {
 			// create the rec_id, val_id files
 			log.info("Creating new rec,val files");
-			try {
-				userTx.begin();
 				status.setCurrentProcessingEvent(OabaEventBean.CREATE_REC_VAL);
-				userTx.commit();
-			} catch (Exception e) {
-				String msg =
-					String.format(TX_FAILURE_MSG, SOURCE, METHOD, e.toString());
-				log.severe(msg);
-				try {
-					userTx.setRollbackOnly();
-				} catch (Exception e1) {
-					final String msg1 = TAG + "unable to rollback transaction: "
-							+ e1.toString();
-					log.severe(msg1);
-				}
-				throw new BlockingException(msg);
-			}
 
 			createFiles();
 
 			boolean stop = this.control.shouldStop();
 			if (!stop) {
-				try {
-					userTx.begin();
 					status.setCurrentProcessingEvent(
 							OabaEventBean.DONE_REC_VAL);
-					userTx.commit();
-				} catch (Exception e) {
-					String msg = String.format(TX_FAILURE_MSG, SOURCE, METHOD,
-							e.toString());
-					log.severe(msg);
-					try {
-						userTx.setRollbackOnly();
-					} catch (Exception e1) {
-						final String msg1 =
-							TAG + "unable to rollback transaction: "
-									+ e1.toString();
-						log.severe(msg1);
-					}
-					throw new BlockingException(msg);
-				}
 			}
 
 		} else {
@@ -333,20 +300,9 @@ public class RecValService3 {
 			sinks[i] = rvFactory.getNextSink();
 		}
 
-		try {
-			userTx.begin();
 			ImmutableRecordIdTranslator immutableTranslator =
 				recidFactory.toImmutableTranslator(mutableTranslator);
 			this.recordIdType = immutableTranslator.getRecordIdType();
-			userTx.commit();
-		} catch (SecurityException | IllegalStateException | RollbackException
-				| HeuristicMixedException | HeuristicRollbackException
-				| NotSupportedException | SystemException e) {
-			String msg =
-				String.format(TX_FAILURE_MSG, SOURCE, METHOD, e.toString());
-			log.severe(msg);
-			throw new BlockingException(msg);
-		}
 		assert this.recordIdType != null;
 
 	}
@@ -358,9 +314,7 @@ public class RecValService3 {
 
 		log.finest(TAG + "opening stage");
 		final long startAcquire = System.currentTimeMillis();
-		userTx.begin();
 		stage.open();
-		userTx.commit();
 		final long acquireMsecs = System.currentTimeMillis() - startAcquire;
 		log.finest(TAG + "stage opened");
 		logConnectionAcquisition(log, FS0, TAG, acquireMsecs);
@@ -373,9 +327,7 @@ public class RecValService3 {
 
 		log.finest(TAG + "opening master");
 		final long startAcquire = System.currentTimeMillis();
-		userTx.begin();
 		master.open();
-		userTx.commit();
 		final long acquireMsecs = System.currentTimeMillis() - startAcquire;
 		log.finest(TAG + "master opened");
 		logConnectionAcquisition(log, FM0, TAG, acquireMsecs);
@@ -394,9 +346,7 @@ public class RecValService3 {
 		final String TAG = SOURCE + "." + METHOD + ": ";
 
 		boolean stop = false;
-		userTx.begin();
 		stop = this.control.shouldStop();
-		userTx.commit();
 		log.finest(TAG + "shouldStop: " + this.control.shouldStop());
 
 		int count = 0;
@@ -410,7 +360,6 @@ public class RecValService3 {
 			final long startStaging = System.currentTimeMillis();
 			long incrementalStart = startStaging;
 			boolean firstStage = true;
-			userTx.begin();
 			while (stage.hasNext() && !stop) {
 
 				count++;
@@ -423,8 +372,6 @@ public class RecValService3 {
 				}
 
 				if (count % CONTROL_INTERVAL == 0) {
-					userTx.commit();
-
 					log.finest(TAG + "count: " + count);
 
 					stop = control.shouldStop();
@@ -440,13 +387,8 @@ public class RecValService3 {
 							incrementalMsecs);
 					incrementalCount = 0;
 					incrementalStart = System.currentTimeMillis();
-
-					userTx.begin();
 				}
 
-			}
-			if (userTx.getStatus() == Status.STATUS_ACTIVE) {
-				userTx.commit();
 			}
 			final long downloadMsecs =
 				System.currentTimeMillis() - startStaging;
@@ -467,9 +409,7 @@ public class RecValService3 {
 		final String TAG = SOURCE + "." + METHOD + ": ";
 
 		boolean stop = false;
-		userTx.begin();
 		stop = this.control.shouldStop();
-		userTx.commit();
 		log.finest(TAG + "shouldStop: " + this.control.shouldStop());
 
 		int count = 0;
@@ -483,7 +423,6 @@ public class RecValService3 {
 			final long startMaster = System.currentTimeMillis();
 			long incrementalStart = startMaster;
 			boolean firstMaster = true;
-			userTx.begin();
 			while (master.hasNext() && !stop) {
 
 				++count;
@@ -496,8 +435,6 @@ public class RecValService3 {
 				}
 
 				if (count % CONTROL_INTERVAL == 0) {
-					userTx.commit();
-
 					log.finest(TAG + "count: " + count);
 
 					stop = control.shouldStop();
@@ -513,13 +450,8 @@ public class RecValService3 {
 							incrementalMsecs);
 					incrementalCount = 0;
 					incrementalStart = System.currentTimeMillis();
-
-					userTx.begin();
 				}
 
-			}
-			if (userTx.getStatus() == Status.STATUS_ACTIVE) {
-				userTx.commit();
 			}
 			final long downloadMsecs = System.currentTimeMillis() - startMaster;
 			logTransferRate(log, FM2, TAG, count, downloadMsecs);
@@ -551,9 +483,7 @@ public class RecValService3 {
 			log.finest(TAG + "sinks opened: " + numBlockFields);
 
 			log.finest(TAG + "opening translator");
-			userTx.begin();
 			mutableTranslator.open();
-			userTx.commit();
 			log.finest(TAG + "translator opened");
 
 			long totalAcquireMsecs = 0;
@@ -588,9 +518,7 @@ public class RecValService3 {
 				assert mode == RecordMatchingMode.BRM;
 
 				log.finest(TAG + "spliting translator");
-				userTx.begin();
 				mutableTranslator.split();
-				userTx.commit();
 				log.finest(TAG + "translator split");
 
 				master.setModel(model);
@@ -620,9 +548,7 @@ public class RecValService3 {
 
 			log.finest(TAG + "converting translator to immutable");
 			ImmutableRecordIdTranslator usedLater = null;
-			userTx.begin();
 			usedLater = recidFactory.toImmutableTranslator(mutableTranslator);
-			userTx.commit();
 			log.info("Converted record-id translator to immutable: "
 					+ usedLater);
 
@@ -630,13 +556,7 @@ public class RecValService3 {
 			final String msg =
 				String.format(TX_FAILURE_MSG, SOURCE, METHOD, e.toString());
 			log.severe(msg);
-			try {
-				userTx.setRollbackOnly();
-			} catch (Exception e1) {
-				final String msg1 =
-					TAG + "unable to rollback transaction: " + e1.toString();
-				log.severe(msg1);
-			}
+			//	userTx.setRollbackOnly();
 			throw new BlockingException(msg);
 		}
 	}
