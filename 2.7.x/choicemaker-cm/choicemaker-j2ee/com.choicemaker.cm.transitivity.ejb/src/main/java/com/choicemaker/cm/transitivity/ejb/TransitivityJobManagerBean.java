@@ -7,6 +7,8 @@
  *******************************************************************************/
 package com.choicemaker.cm.transitivity.ejb;
 
+import static javax.ejb.TransactionAttributeType.REQUIRED;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
@@ -48,6 +50,7 @@ import com.choicemaker.cm.transitivity.api.TransitivityParametersController;
  * @author rphall
  */
 @Stateless
+@TransactionAttribute(REQUIRED)
 public class TransitivityJobManagerBean implements TransitivityJobManager {
 
 	private static final Logger logger =
@@ -98,7 +101,6 @@ public class TransitivityJobManagerBean implements TransitivityJobManager {
 	}
 
 	@Override
-	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	public BatchJob createPersistentTransitivityJob(String externalID,
 			TransitivityParameters params, BatchJob batchJob,
 			OabaSettings settings, ServerConfiguration sc)

@@ -7,8 +7,11 @@
  *******************************************************************************/
 package com.choicemaker.cm.transitivity.ejb;
 
+import static javax.ejb.TransactionAttributeType.REQUIRED;
+
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -19,6 +22,7 @@ import com.choicemaker.cm.transitivity.api.TransitivityConfigurationController;
 import com.choicemaker.cm.transitivity.api.TransitivityJobManager;
 
 @Stateless
+@TransactionAttribute(REQUIRED)
 public class TransitivityConfigurationControllerBean
 		extends ServerConfigurationControllerBean
 		implements TransitivityConfigurationController {

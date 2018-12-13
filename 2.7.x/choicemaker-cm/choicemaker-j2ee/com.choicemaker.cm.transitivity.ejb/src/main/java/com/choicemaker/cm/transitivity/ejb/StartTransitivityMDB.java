@@ -31,6 +31,7 @@ import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 
 import com.choicemaker.cm.args.OabaSettings;
+import com.choicemaker.cm.args.ProcessingEvent;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.api.BatchJob;
@@ -124,10 +125,8 @@ public class StartTransitivityMDB extends AbstractTransitivityBmtMDB {
 			ImmutableProbabilityModel model) throws BlockingException {
 
 		try {
-			getUserTx().begin();
 			batchJob.markAsStarted();
-			getTransitivityJobController().save(batchJob);
-			getUserTx().commit();
+			saveBatchJob(batchJob);
 			removeOldFiles(batchJob);
 			createChunks(batchJob, params, oabaSettings, serverConfig);
 		} catch (Exception x) {
@@ -160,7 +159,6 @@ public class StartTransitivityMDB extends AbstractTransitivityBmtMDB {
 			throws BlockingException {
 
 		try {
-			getUserTx().begin();
 			// Get the parent/predecessor OABA job
 			final long oabaJobId = transJob.getBatchParentId();
 			final BatchJob oabaJob =
@@ -174,10 +172,8 @@ public class StartTransitivityMDB extends AbstractTransitivityBmtMDB {
 			// Create a translator for this job
 			RecordMatchingMode oabaMode = BatchJobUtils
 					.getRecordMatchingMode(getPropertyController(), oabaJob);
-			getUserTx().commit();
 
 			// Finding a translator can take awhile, so start a separate tx
-			getUserTx().begin();
 			ImmutableRecordIdTranslator currentTranslator = null;
 			if (isBrmTranslatorReuseRequested && oabaMode == BRM) {
 				currentTranslator = this.getRecordIdController()
@@ -196,7 +192,6 @@ public class StartTransitivityMDB extends AbstractTransitivityBmtMDB {
 				log.severe(msg);
 				throw new BlockingException(msg);
 			}
-			getUserTx().commit();
 
 			// Create a block sink for the Transitivity job
 			IBlockSink bSink = TransitivityFileUtils
@@ -276,16 +271,14 @@ public class StartTransitivityMDB extends AbstractTransitivityBmtMDB {
 			// approach would be to use a local stack implementation of
 			// ProcessingEventLog, and then set the persistent value after the
 			// chunk service completes.)
-			getUserTx().begin();
-			ProcessingEventLog status =
+			final ProcessingEventLog status =
 				this.getEventManager().getProcessingLog(transJob);
-			status.setCurrentProcessingEvent(DONE_TRANS_DEDUP_OVERSIZED);
+			setStatusEvent(status, DONE_TRANS_DEDUP_OVERSIZED);
 
 			final RecordMatchingMode mode = getRecordMatchingMode(transJob);
 
 			final BatchJobControl control = new BatchJobControl(
 					this.getTransitivityJobController(), transJob);
-			getUserTx().commit();
 
 			ChunkService3 chunkService =
 				new ChunkService3(source2, null, staging, master, model,
@@ -293,11 +286,10 @@ public class StartTransitivityMDB extends AbstractTransitivityBmtMDB {
 						OabaFileUtils.getStageDataFactory(transJob, model),
 						OabaFileUtils.getMasterDataFactory(transJob, model),
 						currentTranslator, transformerO, null, maxChunk,
-						numFiles, status, control, mode);
-			chunkService.runService(getUserTx());
+						numFiles, status, control, mode, getUserTx());
+			chunkService.runService();
 			log.info("Done creating chunks " + chunkService.getTimeElapsed());
 
-			getUserTx().begin();
 			final int numChunks = chunkService.getNumChunks();
 			log.info("Number of chunks " + numChunks);
 			this.getPropertyController().setJobProperty(transJob,
@@ -310,9 +302,9 @@ public class StartTransitivityMDB extends AbstractTransitivityBmtMDB {
 			this.getPropertyController().setJobProperty(transJob,
 					PN_REGULAR_CHUNK_FILE_COUNT,
 					String.valueOf(numRegularChunks));
-			getUserTx().commit();
 
 		} catch (BlockingException x) {
+			// FIXME
 			try {
 				int txStatus = getUserTx().getStatus();
 				if (javax.transaction.Status.STATUS_ACTIVE == txStatus) {
@@ -329,9 +321,7 @@ public class StartTransitivityMDB extends AbstractTransitivityBmtMDB {
 			}
 			log.severe(x.toString());
 			throw x;
-		} catch (NotSupportedException | SystemException | SecurityException
-				| IllegalStateException | RollbackException
-				| HeuristicMixedException | HeuristicRollbackException x) {
+		} catch (SecurityException | IllegalStateException x) {
 			// Probably arrived here because of a transaction exception
 			// so rolling back the transaction is probably hopeless.
 			// But try it anyway...
@@ -473,6 +463,48 @@ public class StartTransitivityMDB extends AbstractTransitivityBmtMDB {
 	protected void notifyProcessingCompleted(OabaJobMessage data) {
 		MessageBeanUtils.sendStartData(data, getJmsContext(),
 				transMatchSchedulerQueue, getLogger());
+	}
+
+	private void saveBatchJob(BatchJob batchJob) throws BlockingException {
+		assert batchJob != null;
+		try {
+			getUserTx().begin();
+			getTransitivityJobController().save(batchJob);
+			getUserTx().commit();
+		} catch (NotSupportedException | SystemException | SecurityException
+				| IllegalStateException | RollbackException
+				| HeuristicMixedException | HeuristicRollbackException e) {
+			String msg0 = "Failed to save %s. Cause: %s";
+			String msg = String.format(msg0, batchJob.toString(), e.toString());
+			log.severe(msg);
+			throw new BlockingException(msg);
+		}
+
+	}
+
+	private void setStatusEvent(ProcessingEventLog status, ProcessingEvent evt)
+			throws BlockingException {
+		setStatusEvent(status, evt, null);
+	}
+
+	private void setStatusEvent(ProcessingEventLog status, ProcessingEvent evt,
+			String info) throws BlockingException {
+		assert status != null;
+		assert evt != null;
+		try {
+			getUserTx().begin();
+			status.setCurrentProcessingEvent(evt, info);
+			getUserTx().commit();
+		} catch (NotSupportedException | SystemException | SecurityException
+				| IllegalStateException | RollbackException
+				| HeuristicMixedException | HeuristicRollbackException e) {
+			String msg0 =
+				"Failed to log processing status [evt[%s], info[%s]]. "
+						+ "Cause: %s";
+			String msg = String.format(msg0, evt, info, e.toString());
+			log.severe(msg);
+			throw new BlockingException(msg);
+		}
 	}
 
 }

@@ -1,5 +1,7 @@
 package com.choicemaker.cms.ejb;
 
+import static javax.ejb.TransactionAttributeType.REQUIRED;
+
 import static com.choicemaker.cm.batch.ejb.BatchJobJPA.PN_BATCHJOB_FIND_BY_JOBID_P1;
 import static com.choicemaker.cm.batch.ejb.BatchJobJPA.QN_BATCHJOB_FIND_BY_JOBID;
 
@@ -24,6 +26,7 @@ import com.choicemaker.cms.api.UrmJobManager;
  * @author rphall
  */
 @Stateless
+@TransactionAttribute(REQUIRED)
 public class UrmJobManagerBean implements UrmJobManager {
 
 	private static final Logger logger =
@@ -56,7 +59,6 @@ public class UrmJobManagerBean implements UrmJobManager {
 	}
 
 	@Override
-	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	public BatchJob createPersistentUrmJob(String externalID) {
 
 		UrmJobEntity retVal = new UrmJobEntity(externalID);

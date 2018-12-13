@@ -7,6 +7,8 @@
  *******************************************************************************/
 package com.choicemaker.cm.transitivity.ejb;
 
+import static javax.ejb.TransactionAttributeType.REQUIRED;
+
 import static com.choicemaker.cm.transitivity.ejb.TransitivityProcessingEventJPA.PN_TRANSPROCESSING_DELETE_BY_JOBID_JOBID;
 import static com.choicemaker.cm.transitivity.ejb.TransitivityProcessingEventJPA.PN_TRANSPROCESSING_FIND_BY_JOBID_JOBID;
 import static com.choicemaker.cm.transitivity.ejb.TransitivityProcessingEventJPA.QN_TRANSPROCESSING_DELETE_BY_JOBID;
@@ -22,6 +24,7 @@ import java.util.logging.Logger;
 
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
 import javax.inject.Inject;
 import javax.jms.DeliveryMode;
 import javax.jms.JMSContext;
@@ -47,6 +50,7 @@ import com.choicemaker.cm.transitivity.api.TransitivityProcessingEvent;
  * @author rphall (migration to EJB3)
  */
 @Stateless
+@TransactionAttribute(REQUIRED)
 public class TransitivityEventManager implements EventPersistenceManager {
 
 	private static final Logger logger =

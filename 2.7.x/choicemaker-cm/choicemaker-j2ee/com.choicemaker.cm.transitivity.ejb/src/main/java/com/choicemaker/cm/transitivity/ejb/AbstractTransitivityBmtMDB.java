@@ -176,14 +176,9 @@ public abstract class AbstractTransitivityBmtMDB
 				msg = (ObjectMessage) inMessage;
 				oabaMsg = (OabaJobMessage) msg.getObject();
 
-				// BatchJob tends to lock up, so keep tx short
-				getUserTx().begin();
 				final long jobId = oabaMsg.jobID;
 				batchJob =
 					getTransitivityJobController().findTransitivityJob(jobId);
-				getUserTx().commit();
-
-				getUserTx().begin();
 				TransitivityParameters transParams = getParametersController()
 						.findTransitivityParametersByBatchJobId(jobId);
 				OabaSettings settings = getSettingsController()
@@ -192,7 +187,6 @@ public abstract class AbstractTransitivityBmtMDB
 					getEventManager().getProcessingLog(batchJob);
 				ServerConfiguration serverConfig = getServerController()
 						.findConfigurationByTransitivityJobId(jobId);
-				getUserTx().commit();
 
 				if (batchJob == null || transParams == null || settings == null
 						|| serverConfig == null) {
@@ -205,12 +199,10 @@ public abstract class AbstractTransitivityBmtMDB
 					throw new IllegalStateException(s);
 				}
 
-				getUserTx().begin();
 				final String modelConfigId =
 					transParams.getModelConfigurationName();
 				ImmutableProbabilityModel model =
 					PMManager.getModelInstance(modelConfigId);
-				getUserTx().commit();
 
 				if (model == null) {
 					String s =
@@ -221,19 +213,14 @@ public abstract class AbstractTransitivityBmtMDB
 
 				if (BatchJobStatus.ABORT_REQUESTED
 						.equals(batchJob.getStatus())) {
-					getUserTx().begin();
 					abortProcessing(batchJob, processingLog);
-					getUserTx().commit();
 
 				} else {
 					processOabaMessage(oabaMsg, batchJob, transParams, settings,
 							processingLog, serverConfig, model);
-
-					getUserTx().begin();
 					updateTransivitityProcessingStatus(batchJob,
 							getCompletionEvent(), new Date(), null);
 					notifyProcessingCompleted(oabaMsg);
-					getUserTx().commit();
 				}
 
 			} else {
@@ -244,6 +231,7 @@ public abstract class AbstractTransitivityBmtMDB
 		} catch (Exception e) {
 			String msg0 = throwableToString(e);
 			getLogger().severe(msg0);
+			// FIXME weird rollback
 			try {
 				int status = getUserTx() == null ? Status.STATUS_NO_TRANSACTION
 						: getUserTx().getStatus();

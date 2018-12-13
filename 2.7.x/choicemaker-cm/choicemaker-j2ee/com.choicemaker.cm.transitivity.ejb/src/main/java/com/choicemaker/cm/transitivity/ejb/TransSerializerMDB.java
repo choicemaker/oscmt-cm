@@ -7,6 +7,8 @@
  *******************************************************************************/
 package com.choicemaker.cm.transitivity.ejb;
 
+import static javax.ejb.TransactionAttributeType.REQUIRED;
+
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_TRANSITIVITY_CACHED_GROUPS_FILE;
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_TRANSITIVITY_CACHED_PAIRS_FILE;
 import static com.choicemaker.cm.args.ProcessingEventBean.DONE;
@@ -23,8 +25,7 @@ import java.util.logging.Logger;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
-//import javax.ejb.TransactionAttribute;
-//import javax.ejb.TransactionAttributeType;
+import javax.ejb.TransactionAttribute;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
@@ -72,7 +73,7 @@ import com.choicemaker.util.Precondition;
 				propertyValue = "javax.jms.Queue") })
 @SuppressWarnings({
 		"rawtypes" })
-// @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+@TransactionAttribute(REQUIRED)
 public class TransSerializerMDB implements MessageListener, Serializable {
 
 	private static final long serialVersionUID = 1L;

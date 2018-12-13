@@ -1,5 +1,7 @@
 package com.choicemaker.cms.ejb;
 
+import static javax.ejb.TransactionAttributeType.REQUIRED;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -8,6 +10,7 @@ import javax.ejb.EJB;
 import javax.ejb.Local;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -31,6 +34,7 @@ import com.choicemaker.cms.api.remote.NamedConfigurationControllerRemote;
 @Stateless
 @Local(NamedConfigurationController.class)
 @Remote(NamedConfigurationControllerRemote.class)
+@TransactionAttribute(REQUIRED)
 public class NamedConfigurationControllerBean
 		implements NamedConfigurationController {
 

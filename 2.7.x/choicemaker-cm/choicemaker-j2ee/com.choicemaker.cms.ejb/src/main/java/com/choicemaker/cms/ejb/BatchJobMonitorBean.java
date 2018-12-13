@@ -1,5 +1,7 @@
 package com.choicemaker.cms.ejb;
 
+import static javax.ejb.TransactionAttributeType.REQUIRED;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -10,6 +12,7 @@ import java.util.logging.Logger;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -44,6 +47,7 @@ import com.choicemaker.cms.api.UrmJobInfo;
 import com.choicemaker.util.Precondition;
 
 @Stateless
+@TransactionAttribute(REQUIRED)
 public class BatchJobMonitorBean implements BatchJobMonitor {
 
 	private static final Logger logger =

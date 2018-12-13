@@ -7,11 +7,14 @@
  *******************************************************************************/
 package com.choicemaker.cm.urm.ejb;
 
+import static javax.ejb.TransactionAttributeType.REQUIRED;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
 import javax.ejb.Singleton;
+import javax.ejb.TransactionAttribute;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -22,6 +25,7 @@ import com.choicemaker.cm.urm.api.UrmConfigurationAdapter;
 import com.choicemaker.cm.urm.exceptions.ConfigException;
 
 @Singleton
+@TransactionAttribute(REQUIRED)
 public class UrmConfigurationSingleton implements UrmConfigurationAdapter {
 
 	private static final Logger logger =

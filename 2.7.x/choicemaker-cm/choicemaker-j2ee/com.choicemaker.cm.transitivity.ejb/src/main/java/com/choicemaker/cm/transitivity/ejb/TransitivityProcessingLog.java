@@ -7,9 +7,12 @@
  *******************************************************************************/
 package com.choicemaker.cm.transitivity.ejb;
 
+import static javax.ejb.TransactionAttributeType.REQUIRED;
+
 import java.util.Date;
 import java.util.logging.Logger;
 
+import javax.ejb.TransactionAttribute;
 import javax.persistence.EntityManager;
 
 import com.choicemaker.cm.args.ProcessingEvent;
@@ -24,6 +27,7 @@ import com.choicemaker.cm.batch.api.ProcessingEventLog;
  *
  * @author rphall
  */
+@TransactionAttribute(REQUIRED)
 public class TransitivityProcessingLog implements ProcessingEventLog {
 
 	private static final Logger logger =
