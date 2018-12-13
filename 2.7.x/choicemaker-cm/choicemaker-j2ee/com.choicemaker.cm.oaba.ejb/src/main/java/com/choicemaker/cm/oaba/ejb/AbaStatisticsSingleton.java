@@ -7,7 +7,7 @@
  *******************************************************************************/
 package com.choicemaker.cm.oaba.ejb;
 
-import static javax.ejb.TransactionAttributeType.REQUIRES_NEW;
+import static javax.ejb.TransactionAttributeType.REQUIRED;
 
 import java.sql.SQLException;
 import java.util.Hashtable;
@@ -36,6 +36,7 @@ import com.choicemaker.cm.oaba.api.AbaStatisticsController;
 import com.choicemaker.cm.oaba.api.SqlRecordSourceController;
 
 @Singleton
+@TransactionAttribute(REQUIRED)
 public class AbaStatisticsSingleton implements AbaStatisticsController {
 
 	private static final Logger log =
@@ -67,7 +68,6 @@ public class AbaStatisticsSingleton implements AbaStatisticsController {
 	}
 
 	@Override
-	@TransactionAttribute(REQUIRES_NEW)
 	public void updateReferenceStatistics(String urlString)
 			throws DatabaseException {
 		DataSource ds = null;

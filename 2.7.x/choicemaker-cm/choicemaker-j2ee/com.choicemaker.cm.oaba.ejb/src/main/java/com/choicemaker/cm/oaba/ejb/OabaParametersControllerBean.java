@@ -7,6 +7,8 @@
  *******************************************************************************/
 package com.choicemaker.cm.oaba.ejb;
 
+import static javax.ejb.TransactionAttributeType.REQUIRED;
+
 import static com.choicemaker.cm.args.PersistableSqlRecordSource.TYPE;
 import static com.choicemaker.cm.batch.ejb.BatchJobJPA.PN_BATCHJOB_FIND_BY_JOBID_P1;
 import static com.choicemaker.cm.batch.ejb.BatchJobJPA.QN_BATCHJOB_FIND_BY_JOBID;
@@ -21,6 +23,7 @@ import java.util.logging.Logger;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -42,6 +45,7 @@ import com.choicemaker.cm.oaba.api.SqlRecordSourceController;
  * @author rphall
  */
 @Stateless
+@TransactionAttribute(REQUIRED)
 public class OabaParametersControllerBean implements OabaParametersController {
 
 	private static final Logger logger =

@@ -7,6 +7,8 @@
  *******************************************************************************/
 package com.choicemaker.cm.oaba.ejb;
 
+import static javax.ejb.TransactionAttributeType.REQUIRED;
+
 import java.io.File;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -18,6 +20,7 @@ import java.util.logging.Logger;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -32,6 +35,7 @@ import com.choicemaker.cm.oaba.api.ServerConfigurationException;
 import com.choicemaker.util.SystemPropertyUtils;
 
 @Stateless
+@TransactionAttribute(REQUIRED)
 public class ServerConfigurationControllerBean
 		implements ServerConfigurationController {
 

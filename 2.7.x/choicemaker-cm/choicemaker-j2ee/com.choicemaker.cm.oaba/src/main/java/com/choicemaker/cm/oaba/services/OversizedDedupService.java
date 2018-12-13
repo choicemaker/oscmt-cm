@@ -7,7 +7,7 @@
  *******************************************************************************/
 package com.choicemaker.cm.oaba.services;
 
-import static com.choicemaker.cm.oaba.utils.RecordTransferLogging.*;
+import static com.choicemaker.cm.oaba.utils.RecordTransferLogging.CONTROL_INTERVAL;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -18,14 +18,22 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.logging.Logger;
 
+import javax.transaction.HeuristicMixedException;
+import javax.transaction.HeuristicRollbackException;
+import javax.transaction.NotSupportedException;
+import javax.transaction.RollbackException;
+import javax.transaction.SystemException;
+import javax.transaction.UserTransaction;
+
+import com.choicemaker.cm.args.ProcessingEvent;
 import com.choicemaker.cm.batch.api.ProcessingEventLog;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.IControl;
 import com.choicemaker.cm.oaba.core.BlockSet;
 import com.choicemaker.cm.oaba.core.IBlockSink;
 import com.choicemaker.cm.oaba.core.IBlockSource;
-import com.choicemaker.cm.oaba.core.OabaProcessingConstants;
 import com.choicemaker.cm.oaba.core.OabaEventBean;
+import com.choicemaker.cm.oaba.core.OabaProcessingConstants;
 import com.choicemaker.cm.oaba.core.SuffixTreeNode;
 import com.choicemaker.cm.oaba.impl.BlockSinkSourceFactory;
 import com.choicemaker.cm.oaba.utils.BlocksSplitterMap;
@@ -49,16 +57,17 @@ public class OversizedDedupService {
 		Logger.getLogger(OversizedDedupService.class.getName());
 
 	// these two variables are used to stop the program in the middle
-	private IControl control;
-	private boolean stop;
+	private final IControl control;
 
-	private IBlockSource osSource;
+	private final IBlockSource osSource;
 
-	private IBlockSink osSink;
+	private final IBlockSink osSink;
 
-	private BlockSinkSourceFactory osFactory;
+	private final BlockSinkSourceFactory osFactory;
 
-	private ProcessingEventLog status;
+	private final ProcessingEventLog status;
+
+	private final UserTransaction userTx;
 
 	// this splitter has 1 file for a range of block sizes
 	private BlocksSplitterMap splitter;
@@ -68,6 +77,8 @@ public class OversizedDedupService {
 	private int numBlocksOut = 0;
 
 	private long time; // this keeps track of time
+
+	private boolean stop;
 
 	/**
 	 * This constructor takes these parameters
@@ -80,17 +91,19 @@ public class OversizedDedupService {
 	 *            - IBlockSinkSourceFactory to store temporary files
 	 * @param status
 	 *            - status of the system.
+	 * @param userTransaction
 	 */
 	public OversizedDedupService(IBlockSource osSource, IBlockSink osSink,
 			BlockSinkSourceFactory osFactory, ProcessingEventLog status,
-			IControl control) {
+			IControl control, UserTransaction tx) {
 
 		this.osFactory = osFactory;
 		this.osSink = osSink;
 		this.osSource = osSource;
 		this.status = status;
-
 		this.control = control;
+		this.userTx = tx;
+
 		this.stop = false;
 	}
 
@@ -259,7 +272,7 @@ public class OversizedDedupService {
 
 			String temp = Integer.toString(s) + OabaProcessingConstants.DELIMIT
 					+ Integer.toString(i);
-			status.setCurrentProcessingEvent(
+			setStatusEvent(
 					OabaEventBean.DEDUP_OVERSIZED_EXACT, temp);
 
 			if (sources[i].exists()) {
@@ -307,10 +320,10 @@ public class OversizedDedupService {
 
 		} // end for i
 
-		status.setCurrentProcessingEvent(
+		setStatusEvent(
 				OabaEventBean.DONE_DEDUP_OVERSIZED_EXACT, Integer.toString(s));
 
-		status.setCurrentProcessingEvent(OabaEventBean.DEDUP_OVERSIZED,
+		setStatusEvent(OabaEventBean.DEDUP_OVERSIZED,
 				Integer.toString(s));
 
 		// if (true) throw new RuntimeException ("test fail");
@@ -363,7 +376,7 @@ public class OversizedDedupService {
 		splitter.removeAll();
 		osSource.delete();
 
-		status.setCurrentProcessingEvent(OabaEventBean.DONE_DEDUP_OVERSIZED);
+		setStatusEvent(OabaEventBean.DONE_DEDUP_OVERSIZED);
 	}
 
 	/**
@@ -524,6 +537,29 @@ public class OversizedDedupService {
 
 		// the leaf node.
 		cur.putChild(recordIds.get(last), blockSetId);
+	}
+
+	private void setStatusEvent(ProcessingEvent evt) throws BlockingException {
+		setStatusEvent(evt, null);
+	}
+
+	private void setStatusEvent(ProcessingEvent evt, String info)
+			throws BlockingException {
+		assert evt != null;
+		try {
+			userTx.begin();
+			status.setCurrentProcessingEvent(evt, info);
+			userTx.commit();
+		} catch (NotSupportedException | SystemException | SecurityException
+				| IllegalStateException | RollbackException
+				| HeuristicMixedException | HeuristicRollbackException e) {
+			String msg0 =
+				"Failed to log processing status [evt[%s], info[%s]]. "
+						+ "Cause: %s";
+			String msg = String.format(msg0, evt, info, e.toString());
+			log.severe(msg);
+			throw new BlockingException(msg);
+		}
 	}
 
 }

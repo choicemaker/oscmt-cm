@@ -1,5 +1,7 @@
 package com.choicemaker.cm.batch.ejb;
 
+import static javax.ejb.TransactionAttributeType.REQUIRED;
+
 import static com.choicemaker.cm.batch.ejb.IndexedPropertyJPA.PN_IDXPROP_DELETE_BY_JOB_PNAME_P1;
 import static com.choicemaker.cm.batch.ejb.IndexedPropertyJPA.PN_IDXPROP_DELETE_BY_JOB_PNAME_P2;
 import static com.choicemaker.cm.batch.ejb.IndexedPropertyJPA.PN_IDXPROP_FIND_BY_JOB_PNAME_INDEX_P1;
@@ -18,6 +20,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -28,6 +31,7 @@ import com.choicemaker.cm.batch.api.IndexedPropertyController;
 import com.choicemaker.util.Precondition;
 
 @Stateless
+@TransactionAttribute(REQUIRED)
 public class IndexedPropertyControllerBean
 		implements IndexedPropertyController {
 

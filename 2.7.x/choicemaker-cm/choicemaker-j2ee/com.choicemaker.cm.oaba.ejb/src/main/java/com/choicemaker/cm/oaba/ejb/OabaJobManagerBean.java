@@ -7,6 +7,8 @@
  *******************************************************************************/
 package com.choicemaker.cm.oaba.ejb;
 
+import static javax.ejb.TransactionAttributeType.REQUIRED;
+
 import static com.choicemaker.cm.batch.ejb.BatchJobJPA.PN_BATCHJOB_FIND_BY_JOBID_P1;
 import static com.choicemaker.cm.batch.ejb.BatchJobJPA.QN_BATCHJOB_FIND_BY_JOBID;
 
@@ -19,6 +21,7 @@ import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
@@ -49,6 +52,7 @@ import com.choicemaker.cm.oaba.api.ServerConfigurationException;
  * @author rphall
  */
 @Stateless
+@TransactionAttribute(REQUIRED)
 public class OabaJobManagerBean implements OabaJobManager {
 
 	private static final Logger logger =
@@ -99,7 +103,6 @@ public class OabaJobManagerBean implements OabaJobManager {
 	}
 
 	@Override
-	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	public BatchJob createPersistentOabaJob(String externalID,
 			OabaParameters params, OabaSettings settings,
 			ServerConfiguration sc) throws ServerConfigurationException {

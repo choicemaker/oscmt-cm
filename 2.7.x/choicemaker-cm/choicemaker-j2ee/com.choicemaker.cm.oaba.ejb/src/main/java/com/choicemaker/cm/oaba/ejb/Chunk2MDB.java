@@ -142,9 +142,9 @@ public class Chunk2MDB extends AbstractOabaBmtMDB {
 				OabaFileUtils.getStageDataFactory(batchJob, model),
 				OabaFileUtils.getMasterDataFactory(batchJob, model), translator,
 				tTransformer, transformerO, maxChunk, maxChunkFiles,
-				processingLog, control, mode);
+				processingLog, control, mode, getUserTx());
 		log.info("Chunk service: " + chunkService);
-		chunkService.runService(getUserTx());
+		chunkService.runService();
 		log.info("Done creating chunks " + chunkService.getTimeElapsed());
 
 		// transitivity needs the translator

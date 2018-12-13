@@ -1,5 +1,7 @@
 package com.choicemaker.cm.batch.ejb;
 
+import static javax.ejb.TransactionAttributeType.REQUIRED;
+
 import static com.choicemaker.cm.batch.ejb.OperationalPropertyJPA.PN_OPPROP_DELETE_BY_JOB_P1;
 import static com.choicemaker.cm.batch.ejb.OperationalPropertyJPA.PN_OPPROP_FINDALL_BY_JOB_P1;
 import static com.choicemaker.cm.batch.ejb.OperationalPropertyJPA.PN_OPPROP_FIND_BY_JOB_PNAME_P1;
@@ -14,6 +16,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -23,6 +26,7 @@ import com.choicemaker.cm.batch.api.OperationalProperty;
 import com.choicemaker.cm.batch.api.OperationalPropertyController;
 
 @Stateless
+@TransactionAttribute(REQUIRED)
 public class OperationalPropertyControllerBean
 		implements OperationalPropertyController {
 

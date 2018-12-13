@@ -14,6 +14,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import javax.transaction.HeuristicMixedException;
+import javax.transaction.HeuristicRollbackException;
+import javax.transaction.NotSupportedException;
+import javax.transaction.RollbackException;
+import javax.transaction.SystemException;
+import javax.transaction.UserTransaction;
+
+import com.choicemaker.cm.args.ProcessingEvent;
 import com.choicemaker.cm.batch.api.ProcessingEventLog;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.IControl;
@@ -65,26 +73,27 @@ public class BlockDedupService4 {
 	private boolean removeFiles = true;
 
 	// this object tells the program when to stop
-	private IControl control;
-	private boolean stop = false;
+	private final IControl control;
 
 	// BlockGroup that contains duplicate blocks
-	private BlockGroup bGroup;
+	private final BlockGroup bGroup;
 
 	// Factory to produce temporary sinks
-	private IBlockSinkSourceFactory bFactory;
+	private final IBlockSinkSourceFactory bFactory;
 
 	// Factory to produce temporary block sinks to store resets within an
 	// interval
-	private IBlockSinkSourceFactory biFactory;
+	private final IBlockSinkSourceFactory biFactory;
 
 	// Output suffix tree sink that stores dedup-blocks
-	private ISuffixTreeSink sSink;
+	private final ISuffixTreeSink sSink;
 
 	// maximum block size
-	// private int maxBlockSize;
+	// private final int maxBlockSize;
 
-	private ProcessingEventLog status;
+	private final ProcessingEventLog status;
+
+	private final UserTransaction userTx;
 
 	private int numBlocksIn = 0;
 	private int numBlocksOut = 0;
@@ -92,6 +101,8 @@ public class BlockDedupService4 {
 	private int numReset = 0;
 
 	private long time; // this keeps track of time
+
+	private boolean stop = false;
 
 	/**
 	 * This constructor takes these parameters
@@ -109,17 +120,16 @@ public class BlockDedupService4 {
 	public BlockDedupService4(BlockGroup bGroup,
 			IBlockSinkSourceFactory bFactory, IBlockSinkSourceFactory biFactory,
 			ISuffixTreeSink sSink, int maxBlockSize, ProcessingEventLog status,
-			IControl control, int interval) {
+			IControl control, int interval, UserTransaction tx) {
 
 		this.bGroup = bGroup;
 		this.bFactory = bFactory;
 		this.biFactory = biFactory;
 		this.sSink = sSink;
-		// this.maxBlockSize = maxBlockSize;
 		this.status = status;
 		this.control = control;
-
 		this.INTERVAL = interval;
+		this.userTx = tx;
 
 		this.stop = false;
 	}
@@ -325,7 +335,7 @@ public class BlockDedupService4 {
 
 			pair = bgw.getNextPair();
 
-			status.setCurrentProcessingEvent(OabaEventBean.DEDUP_BLOCKS,
+			setStatusEvent(OabaEventBean.DEDUP_BLOCKS,
 					Integer.toString(count));
 			count++;
 
@@ -337,7 +347,7 @@ public class BlockDedupService4 {
 		} // end while pair
 
 		if (!stop) {
-			status.setCurrentProcessingEvent(OabaEventBean.DONE_DEDUP_BLOCKS);
+			setStatusEvent(OabaEventBean.DONE_DEDUP_BLOCKS);
 			log.info("Number of reset " + numReset);
 
 			bGroup.remove();
@@ -594,6 +604,29 @@ public class BlockDedupService4 {
 					checkForSubsets(kid, recordIds, i + 1, subsumedSets);
 				}
 			}
+		}
+	}
+
+	private void setStatusEvent(ProcessingEvent evt) throws BlockingException {
+		setStatusEvent(evt, null);
+	}
+
+	private void setStatusEvent(ProcessingEvent evt, String info)
+			throws BlockingException {
+		assert evt != null;
+		try {
+			userTx.begin();
+			status.setCurrentProcessingEvent(evt, info);
+			userTx.commit();
+		} catch (NotSupportedException | SystemException | SecurityException
+				| IllegalStateException | RollbackException
+				| HeuristicMixedException | HeuristicRollbackException e) {
+			String msg0 =
+				"Failed to log processing status [evt[%s], info[%s]]. "
+						+ "Cause: %s";
+			String msg = String.format(msg0, evt, info, e.toString());
+			log.severe(msg);
+			throw new BlockingException(msg);
 		}
 	}
 

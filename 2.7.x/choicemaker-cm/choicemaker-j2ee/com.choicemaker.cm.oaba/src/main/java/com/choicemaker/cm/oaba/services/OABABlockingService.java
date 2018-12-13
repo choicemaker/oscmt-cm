@@ -7,7 +7,7 @@
  *******************************************************************************/
 package com.choicemaker.cm.oaba.services;
 
-import static com.choicemaker.cm.oaba.utils.RecordTransferLogging.*;
+import static com.choicemaker.cm.oaba.utils.RecordTransferLogging.CONTROL_INTERVAL;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -16,6 +16,14 @@ import java.util.List;
 import java.util.StringTokenizer;
 import java.util.logging.Logger;
 
+import javax.transaction.HeuristicMixedException;
+import javax.transaction.HeuristicRollbackException;
+import javax.transaction.NotSupportedException;
+import javax.transaction.RollbackException;
+import javax.transaction.SystemException;
+import javax.transaction.UserTransaction;
+
+import com.choicemaker.cm.args.ProcessingEvent;
 import com.choicemaker.cm.batch.api.ProcessingEventLog;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.IControl;
@@ -27,14 +35,15 @@ import com.choicemaker.cm.oaba.core.IOversizedGroup;
 import com.choicemaker.cm.oaba.core.IRecValSink;
 import com.choicemaker.cm.oaba.core.IRecValSource;
 import com.choicemaker.cm.oaba.core.IValidatorBase;
-import com.choicemaker.cm.oaba.core.OabaProcessingConstants;
 import com.choicemaker.cm.oaba.core.OabaEventBean;
+import com.choicemaker.cm.oaba.core.OabaProcessingConstants;
 import com.choicemaker.cm.oaba.impl.OversizedGroup;
 import com.choicemaker.cm.oaba.impl.RecValSinkSourceFactory;
 import com.choicemaker.cm.oaba.utils.ControlChecker;
 import com.choicemaker.cm.oaba.utils.RecordValuesMap;
 import com.choicemaker.util.IntArrayList;
 import com.choicemaker.util.LongArrayList;
+import com.choicemaker.util.Precondition;
 
 /**
  * @author pcheung
@@ -61,44 +70,45 @@ public class OABABlockingService {
 		return retVal;
 	}
 
-	private boolean keepFiles = isKeepFilesRequested();
+	private final boolean keepFiles = isKeepFilesRequested();
 
 	private static final Logger log =
 		Logger.getLogger(OABABlockingService.class.getName());
 
-	private int maxBlockSize;
+	private final int maxBlockSize;
 
-	private IBlockSink bSink;
+	private final IBlockSink bSink;
 
 	// these two variables are used to stop the program in the middle
-	private IControl control;
-	private boolean stop = false;
+	private final IControl control;
 
-	private IBlockSinkSourceFactory osFactory;
-	private IValidatorBase validator;
+	private final IBlockSinkSourceFactory osFactory;
+	private final IValidatorBase validator;
 
-	private int totalOversized = 0;
-
-	private int numBlockingFields; // number of database blocking fields.
-
-	// This contains a list of record ID's that show up in oversized blocks
-	// this is used to remove small sets from rec_id, val_id pairs file
-	private LongArrayList osIDs;
-
-	private RecValSinkSourceFactory rvFactory;
+	private final RecValSinkSourceFactory rvFactory;
 
 	// this is used to stored special oversized blocks that cannot be trimmed
 	// further
-	private IBlockSink osSpecial;
-	private IBlockSink osDump;
+	private final IBlockSink osSpecial;
+	private final IBlockSink osDump;
 
 	// this is the minimun number of blocking fields an oversized blocks needs
 	// to have in order to be saved
 	// in the special oversized blocks file.
-	private int minFields;
-	private int maxOversized;
+	private final int minFields;
+	private final int maxOversized;
 
-	private ProcessingEventLog status;
+	private final UserTransaction userTx;
+
+	private final ProcessingEventLog status;
+
+	private int totalOversized = 0;
+
+	private final int numBlockingFields; // number of database blocking fields.
+
+	// This contains a list of record ID's that show up in oversized blocks
+	// this is used to remove small sets from rec_id, val_id pairs file
+	private LongArrayList osIDs;
 
 	private IRecValSource[] rvSources;
 
@@ -112,6 +122,8 @@ public class OABABlockingService {
 								// validator
 
 	private long time; // this keeps track of time
+
+	private boolean stop = false;
 
 	/**
 	 * This constructor takes the following parameters
@@ -137,6 +149,9 @@ public class OABABlockingService {
 	 *            to have in order to be considered "good".
 	 * @param maxOversized
 	 *            - maximum number of elements a "good" oversized block can have
+	 * @param tx
+	 *            - a non-null user transaction
+	 * 
 	 * @throws IOException
 	 */
 	public OABABlockingService(int maxSize, IBlockSink bSink,
@@ -144,7 +159,9 @@ public class OABABlockingService {
 			IBlockSink osDump, RecValSinkSourceFactory rvFactory,
 			int numBlockingFields, IValidatorBase validator,
 			ProcessingEventLog status, IControl control, int minFields,
-			int maxOversized) throws IOException {
+			int maxOversized, UserTransaction tx) throws IOException {
+
+		Precondition.assertNonNullArgument("null user transaction", tx);
 
 		this.validator = validator;
 		this.maxBlockSize = maxSize;
@@ -161,6 +178,8 @@ public class OABABlockingService {
 		this.status = status;
 		this.control = control;
 		this.stop = false;
+		
+		this.userTx = tx;
 	}
 
 	public int getNumBlocks() {
@@ -245,8 +264,7 @@ public class OABABlockingService {
 
 	/**
 	 * This method blocks one blocking field at a time.
-	 *
-	 * @throws IOException
+	 * @throws BlockingException 
 	 */
 	private void blockByOneColumn() throws BlockingException {
 		log.info("blockByOneColumn");
@@ -268,8 +286,7 @@ public class OABABlockingService {
 			numBlocks += blockByField(i, rvSource, bSink, osGroup);
 
 			if (!stop)
-				status.setCurrentProcessingEvent(
-						OabaEventBean.BLOCK_BY_ONE_COLUMN, Integer.toString(i)
+				setStatusEvent(OabaEventBean.BLOCK_BY_ONE_COLUMN, Integer.toString(i)
 								+ "|" + Integer.toString(numBlocks));
 		}
 
@@ -279,8 +296,31 @@ public class OABABlockingService {
 			osDump.close();
 
 		if (!stop)
-			status.setCurrentProcessingEvent(
+			setStatusEvent(
 					OabaEventBean.DONE_BLOCK_BY_ONE_COLUMN);
+	}
+
+	private void setStatusEvent(ProcessingEvent evt) throws BlockingException {
+		setStatusEvent(evt, null);
+	}
+
+	private void setStatusEvent(ProcessingEvent evt, String info)
+			throws BlockingException {
+		assert evt != null;
+		try {
+			userTx.begin();
+			status.setCurrentProcessingEvent(evt, info);
+			userTx.commit();
+		} catch (NotSupportedException | SystemException | SecurityException
+				| IllegalStateException | RollbackException
+				| HeuristicMixedException | HeuristicRollbackException e) {
+			String msg0 =
+				"Failed to log processing status [evt[%s], info[%s]]. "
+						+ "Cause: %s";
+			String msg = String.format(msg0, evt, info, e.toString());
+			log.severe(msg);
+			throw new BlockingException(msg);
+		}
 	}
 
 	/**
@@ -318,7 +358,7 @@ public class OABABlockingService {
 			numBlocks += blockByField(i, rvSource, bSink, osGroup);
 
 			if (!stop)
-				status.setCurrentProcessingEvent(
+				setStatusEvent(
 						OabaEventBean.BLOCK_BY_ONE_COLUMN, Integer.toString(i)
 								+ "|" + Integer.toString(numBlocks));
 		}
@@ -329,7 +369,7 @@ public class OABABlockingService {
 			osDump.close();
 
 		if (!stop)
-			status.setCurrentProcessingEvent(
+			setStatusEvent(
 					OabaEventBean.DONE_BLOCK_BY_ONE_COLUMN);
 
 	}
@@ -380,7 +420,7 @@ public class OABABlockingService {
 				osGroupNew.openAllSinks();
 
 				String info = Integer.toString(numFields);
-				status.setCurrentProcessingEvent(
+				setStatusEvent(
 						OabaEventBean.OVERSIZED_TRIMMING, info);
 			}
 
@@ -401,7 +441,7 @@ public class OABABlockingService {
 			// clean up rec,val files
 			cleanUp();
 
-			status.setCurrentProcessingEvent(
+			setStatusEvent(
 					OabaEventBean.DONE_OVERSIZED_TRIMMING);
 		}
 
@@ -453,7 +493,7 @@ public class OABABlockingService {
 
 		while (totalOversized > 0) {
 			String info = Integer.toString(numFields);
-			status.setCurrentProcessingEvent(OabaEventBean.OVERSIZED_TRIMMING,
+			setStatusEvent(OabaEventBean.OVERSIZED_TRIMMING,
 					info);
 
 			log.info(totalOversized + " Oversized blocks, blocking with "
@@ -474,7 +514,7 @@ public class OABABlockingService {
 			numFields++;
 
 			info = Integer.toString(numFields);
-			status.setCurrentProcessingEvent(OabaEventBean.OVERSIZED_TRIMMING,
+			setStatusEvent(OabaEventBean.OVERSIZED_TRIMMING,
 					info);
 
 		}
@@ -493,7 +533,7 @@ public class OABABlockingService {
 			// clean up rec,val files
 			cleanUp();
 
-			status.setCurrentProcessingEvent(
+			setStatusEvent(
 					OabaEventBean.DONE_OVERSIZED_TRIMMING);
 		}
 

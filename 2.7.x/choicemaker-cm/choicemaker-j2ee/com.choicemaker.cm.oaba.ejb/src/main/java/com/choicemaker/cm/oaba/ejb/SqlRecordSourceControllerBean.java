@@ -7,11 +7,14 @@
  *******************************************************************************/
 package com.choicemaker.cm.oaba.ejb;
 
+import static javax.ejb.TransactionAttributeType.REQUIRED;
+
 import java.lang.reflect.Constructor;
 import java.util.List;
 import java.util.logging.Logger;
 
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -28,6 +31,7 @@ import com.choicemaker.cm.core.ISerializableRecordSource;
 import com.choicemaker.cm.oaba.api.SqlRecordSourceController;
 
 @Stateless
+@TransactionAttribute(REQUIRED)
 public class SqlRecordSourceControllerBean
 		implements SqlRecordSourceController {
 

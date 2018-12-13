@@ -122,20 +122,14 @@ public class StartOabaMDB extends AbstractOabaMDB {
 				msg = (ObjectMessage) inMessage;
 				data = (OabaJobMessage) msg.getObject();
 
-				// BatchJob tends to lock up, so keep tx short
-				userTx.begin();
 				final long jobId = data.jobID;
 				batchJob = getJobController().findBatchJob(jobId);
-				userTx.commit();
-
-				userTx.begin();
 				OabaParameters oabaParams = getParametersController()
 						.findOabaParametersByBatchJobId(jobId);
 				OabaSettings oabaSettings =
 					getSettingsController().findOabaSettingsByJobId(jobId);
 				ProcessingEventLog processingEntry =
 					getEventManager().getProcessingLog(batchJob);
-				userTx.commit();
 
 				if (batchJob == null || oabaParams == null
 						|| oabaSettings == null) {
@@ -157,10 +151,8 @@ public class StartOabaMDB extends AbstractOabaMDB {
 				}
 
 				// update status to mark as start
-				userTx.begin();
 				batchJob.markAsStarted();
 				getJobController().save(batchJob);
-				userTx.commit();
 
 				getLogger().info("Job id: " + jobId);
 				getLogger().info("Model configuration: "
@@ -189,15 +181,12 @@ public class StartOabaMDB extends AbstractOabaMDB {
 
 				ISerializableRecordSource staging = null;
 				ISerializableRecordSource master = null;
-				userTx.begin();
 				staging = getRecordSourceController().getStageRs(oabaParams);
 				master = getRecordSourceController().getMasterRs(oabaParams);
-				userTx.commit();
 				assert staging != null;
 
 				RecordMatchingMode mode;
 				final int maxSingle = oabaSettings.getMaxSingle();
-				userTx.begin();
 				if (!isMoreThanThreshold(staging, model, maxSingle)) {
 					getLogger().info("Using single record matching");
 					mode = RecordMatchingMode.SRM;
@@ -208,16 +197,12 @@ public class StartOabaMDB extends AbstractOabaMDB {
 					mode = RecordMatchingMode.BRM;
 					configureRecordMatchingMode(batchJob, mode);
 				}
-				userTx.commit();
 
-				userTx.begin();
 				final RecordIdController ric = getRecordIdController();
 				MutableRecordIdTranslator<?> translator =
 					ric.createMutableRecordIdTranslator(batchJob);
-				userTx.commit();
 
 				// create rec_id, val_id files
-				userTx.begin();
 				String blockingConfiguration =
 					oabaParams.getBlockingConfiguration();
 				String queryConfiguration = this.getParametersController()
@@ -232,24 +217,18 @@ public class StartOabaMDB extends AbstractOabaMDB {
 						model, blockingConfiguration, queryConfiguration,
 						referenceConfiguration, recvalFactory, ric, translator,
 						processingEntry, control, mode, userTx);
-				userTx.commit();
-//				userTx.begin();
 				
 				// Manages its own user transactions
 				rvService.runService();
-//				userTx.commit();
 				getLogger().info("Done creating rec_id, val_id files: "
 						+ rvService.getTimeElapsed());
 
-				userTx.begin();
 				@SuppressWarnings("rawtypes")
 				ImmutableRecordIdTranslator immutableTranslator =
 					ric.toImmutableTranslator(translator);
 				final RECORD_ID_TYPE recordIdType =
 					immutableTranslator.getRecordIdType();
-				userTx.commit();
 
-				userTx.begin();
 				getPropertyController().setJobProperty(batchJob,
 						PN_RECORD_ID_TYPE, recordIdType.name());
 
@@ -268,10 +247,7 @@ public class StartOabaMDB extends AbstractOabaMDB {
 
 				updateOabaProcessingStatus(batchJob, OabaEventBean.DONE_REC_VAL,
 						new Date(), null);
-				userTx.commit();
-				userTx.begin();
 				sendToBlocking(data);
-				userTx.commit();
 
 			} else {
 				getLogger().warning(

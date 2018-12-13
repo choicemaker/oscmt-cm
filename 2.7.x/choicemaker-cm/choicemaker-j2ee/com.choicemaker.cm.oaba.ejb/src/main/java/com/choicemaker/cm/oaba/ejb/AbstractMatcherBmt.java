@@ -152,12 +152,7 @@ public abstract class AbstractMatcherBmt
 					OabaJobMessage data = ((OabaJobMessage) o);
 					final long jobId = data.jobID;
 
-					// BatchJob tends to lock up, so keep tx short
-					getUserTx().begin();
 					batchJob = getOabaJobManager().findBatchJob(jobId);
-					getUserTx().commit();
-
-					getUserTx().begin();
 					final OabaParameters params = getOabaParametersController()
 							.findOabaParametersByBatchJobId(jobId);
 					final ProcessingEventLog processingLog =
@@ -167,7 +162,6 @@ public abstract class AbstractMatcherBmt
 					final ServerConfiguration serverConfig =
 						getServerController()
 								.findServerConfigurationByJobId(jobId);
-					getUserTx().commit();
 
 					if (batchJob == null || params == null
 							|| oabaSettings == null || serverConfig == null) {
@@ -178,12 +172,10 @@ public abstract class AbstractMatcherBmt
 						throw new IllegalStateException(s);
 					}
 
-					getUserTx().begin();
 					final String modelConfigId =
 						params.getModelConfigurationName();
 					ImmutableProbabilityModel model =
 						PMManager.getModelInstance(modelConfigId);
-					getUserTx().commit();
 
 					if (model == null) {
 						String s = "No modelId corresponding to '"
@@ -192,15 +184,12 @@ public abstract class AbstractMatcherBmt
 						throw new IllegalArgumentException(s);
 					}
 
-					getUserTx().begin();
 					final String _currentChunk = getPropertyController()
 							.getJobProperty(batchJob, PN_CURRENT_CHUNK_INDEX);
-					getUserTx().commit();
 					final int currentChunk = Integer.valueOf(_currentChunk);
 					getLogger().fine("MatcherMDB In onMessage " + data.jobID
 							+ " " + currentChunk + " " + data.treeIndex);
 
-					getUserTx().begin();
 					if (BatchJobStatus.ABORT_REQUESTED == batchJob
 							.getStatus()) {
 						MessageBeanUtils.stopJob(batchJob, getOabaJobManager(),
@@ -210,7 +199,6 @@ public abstract class AbstractMatcherBmt
 						handleMatching(data, batchJob, params, oabaSettings,
 								serverConfig, currentChunk);
 					}
-					getUserTx().commit();
 
 				} else {
 					getLogger().warning(
@@ -223,6 +211,7 @@ public abstract class AbstractMatcherBmt
 			}
 
 		} catch (Exception e) {
+			// FIXME rollback
 			String msg0 = throwableToString(e);
 			getLogger().severe(msg0);
 			if (batchJob != null) {

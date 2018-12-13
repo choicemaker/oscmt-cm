@@ -87,7 +87,7 @@ public class DedupMDB extends AbstractOabaBmtMDB {
 				OabaFileUtils.getBigBlocksSinkSourceFactory(batchJob),
 				OabaFileUtils.getTempBlocksSinkSourceFactory(batchJob),
 				OabaFileUtils.getSuffixTreeSink(batchJob), maxBlock,
-				processingLog, control, interval);
+				processingLog, control, interval, getUserTx());
 		dedupService.runService();
 		log.info("Done block dedup " + dedupService.getTimeElapsed());
 		log.info("Blocks In " + dedupService.getNumBlocksIn());
@@ -105,7 +105,7 @@ public class DedupMDB extends AbstractOabaBmtMDB {
 		OversizedDedupService osDedupService =
 			new OversizedDedupService(osSource, osDedup,
 					OabaFileUtils.getOversizedTempFactory(batchJob),
-					processingLog, control);
+					processingLog, control, getUserTx());
 		osDedupService.runService();
 		log.info("Done oversized dedup " + osDedupService.getTimeElapsed());
 		log.info("Num OS Before " + osDedupService.getNumBlocksIn());

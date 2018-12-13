@@ -7,6 +7,8 @@
  *******************************************************************************/
 package com.choicemaker.cm.oaba.ejb;
 
+import static javax.ejb.TransactionAttributeType.REQUIRED;
+
 import static com.choicemaker.cm.oaba.ejb.RecordIdTranslationJPA.PN_TRANSLATEDID_DELETE_BY_JOBID_JOBID;
 import static com.choicemaker.cm.oaba.ejb.RecordIdTranslationJPA.QN_TRANSLATEDID_DELETE_BY_JOBID;
 import static com.choicemaker.cm.oaba.ejb.RecordIdTranslationJPA.QN_TRANSLATEDID_FIND_ALL;
@@ -26,6 +28,7 @@ import java.util.logging.Logger;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -48,6 +51,7 @@ import com.choicemaker.cm.oaba.core.MutableRecordIdTranslator;
 import com.choicemaker.cm.oaba.core.RECORD_ID_TYPE;
 
 @Stateless
+@TransactionAttribute(REQUIRED)
 public class RecordIdControllerBean implements RecordIdController {
 
 	private static final Logger logger =

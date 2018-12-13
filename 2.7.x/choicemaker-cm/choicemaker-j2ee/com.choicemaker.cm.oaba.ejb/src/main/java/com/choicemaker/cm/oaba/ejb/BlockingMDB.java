@@ -98,7 +98,7 @@ public class BlockingMDB extends AbstractOabaBmtMDB {
 					OabaFileUtils.getOversizedGroupFactory(batchJob), osSpecial,
 					null, OabaFileUtils.getRecValFactory(batchJob),
 					numBlockFields, data.validator, processingLog, control,
-					minFields, maxOversized);
+					minFields, maxOversized, getUserTx());
 		} catch (IOException e) {
 			throw new BlockingException(e.getMessage(), e);
 		}

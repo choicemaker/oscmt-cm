@@ -7,6 +7,8 @@
  *******************************************************************************/
 package com.choicemaker.cm.oaba.ejb;
 
+import static javax.ejb.TransactionAttributeType.REQUIRED;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,6 +20,7 @@ import java.util.logging.Logger;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -32,6 +35,7 @@ import com.choicemaker.cm.oaba.core.IMatchRecord2Source;
 import com.choicemaker.cm.oaba.core.RECORD_ID_TYPE;
 
 @Stateless
+@TransactionAttribute(REQUIRED)
 public class OabaPairResultControllerBean implements OabaPairResultController {
 
 	private static final Logger logger =

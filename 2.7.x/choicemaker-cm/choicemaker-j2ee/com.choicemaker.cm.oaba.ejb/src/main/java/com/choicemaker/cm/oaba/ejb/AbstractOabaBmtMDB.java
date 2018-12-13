@@ -173,13 +173,8 @@ public abstract class AbstractOabaBmtMDB
 				msg = (ObjectMessage) inMessage;
 				oabaMsg = (OabaJobMessage) msg.getObject();
 
-				// BatchJob tends to lock up, so keep tx short
-				getUserTx().begin();
 				final long jobId = oabaMsg.jobID;
 				batchJob = getJobController().findBatchJob(jobId);
-				getUserTx().commit();
-
-				getUserTx().begin();
 				OabaParameters oabaParams = getParametersController()
 						.findOabaParametersByBatchJobId(jobId);
 				OabaSettings oabaSettings =
@@ -188,7 +183,6 @@ public abstract class AbstractOabaBmtMDB
 					getEventManager().getProcessingLog(batchJob);
 				ServerConfiguration serverConfig =
 					getServerController().findServerConfigurationByJobId(jobId);
-				getUserTx().commit();
 
 				if (batchJob == null /* FIXME || dbParams == null */
 						|| oabaParams == null || oabaSettings == null
@@ -200,12 +194,10 @@ public abstract class AbstractOabaBmtMDB
 					throw new IllegalStateException(s);
 				}
 
-				getUserTx().begin();
 				final String modelConfigId =
 					oabaParams.getModelConfigurationName();
 				ImmutableProbabilityModel model =
 					PMManager.getModelInstance(modelConfigId);
-				getUserTx().commit();
 
 				if (model == null) {
 					String s =
@@ -214,7 +206,6 @@ public abstract class AbstractOabaBmtMDB
 					throw new IllegalArgumentException(s);
 				}
 
-				getUserTx().begin();
 				if (BatchJobStatus.ABORT_REQUESTED
 						.equals(batchJob.getStatus())) {
 					abortProcessing(batchJob, processingLog);
@@ -226,7 +217,6 @@ public abstract class AbstractOabaBmtMDB
 							new Date(), null);
 					notifyProcessingCompleted(oabaMsg);
 				}
-				getUserTx().commit();
 
 			} else {
 				getLogger().warning(
@@ -236,6 +226,7 @@ public abstract class AbstractOabaBmtMDB
 		} catch (Exception e) {
 			String msg0 = throwableToString(e);
 			getLogger().severe(msg0);
+			// FIXME weird rollback
 			try {
 				int status = getUserTx() == null ? Status.STATUS_NO_TRANSACTION
 						: getUserTx().getStatus();

@@ -1,7 +1,10 @@
 package com.choicemaker.cm.oaba.ejb;
 
+import static javax.ejb.TransactionAttributeType.REQUIRED;
+
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -18,6 +21,7 @@ import com.choicemaker.cm.oaba.api.ServerConfigurationController;
 import com.choicemaker.cm.oaba.ejb.util.OabaUtils;
 
 @Stateless
+@TransactionAttribute(REQUIRED)
 public class OabaJobMonitorBean implements OabaJobMonitor {
 
 	// private static final Logger logger =
