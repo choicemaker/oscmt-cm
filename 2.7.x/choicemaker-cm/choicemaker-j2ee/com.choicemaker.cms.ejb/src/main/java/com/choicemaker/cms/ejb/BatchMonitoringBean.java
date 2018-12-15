@@ -11,6 +11,8 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 import javax.ejb.EJB;
+import javax.ejb.Local;
+import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.persistence.EntityManager;
@@ -24,7 +26,8 @@ import com.choicemaker.cm.batch.api.BATCH_RESULTS_PERSISTENCE_SCHEME;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.BatchJobInfo;
 import com.choicemaker.cm.batch.api.BatchJobManager;
-import com.choicemaker.cm.batch.api.BatchJobMonitor;
+import com.choicemaker.cm.batch.api.BatchMonitoring;
+import com.choicemaker.cm.batch.api.BatchMonitoringRemote;
 import com.choicemaker.cm.batch.api.IndexedPropertyController;
 import com.choicemaker.cm.batch.ejb.BatchJobInfoBean;
 import com.choicemaker.cm.oaba.api.MatchPairInfo;
@@ -46,12 +49,15 @@ import com.choicemaker.cm.transitivity.ejb.util.TransitivityUtils;
 import com.choicemaker.cms.api.UrmJobInfo;
 import com.choicemaker.util.Precondition;
 
+//@Singleton
 @Stateless
 @TransactionAttribute(REQUIRED)
-public class BatchJobMonitorBean implements BatchJobMonitor {
+@Local(BatchMonitoring.class)
+@Remote(BatchMonitoringRemote.class)
+public class BatchMonitoringBean implements BatchMonitoring {
 
 	private static final Logger logger =
-		Logger.getLogger(BatchJobMonitorBean.class.getName());
+		Logger.getLogger(BatchMonitoringBean.class.getName());
 
 	public static List<String> mapToValueSortedList(Map<Integer, String> map) {
 		Precondition.assertNonNullArgument(map);

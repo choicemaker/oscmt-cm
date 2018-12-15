@@ -6,7 +6,7 @@ package com.choicemaker.cm.batch.api;
  * @author rphall
  */
 // @Local
-public interface BatchJobMonitor {
+public interface BatchMonitoring {
 
 	BatchJobInfo getBatchJobInfo(BatchJob batchJob);
 
