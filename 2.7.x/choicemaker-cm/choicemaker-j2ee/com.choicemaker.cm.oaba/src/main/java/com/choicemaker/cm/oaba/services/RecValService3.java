@@ -32,12 +32,10 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.logging.Logger;
 
-import javax.inject.Inject;
 import javax.transaction.HeuristicMixedException;
 import javax.transaction.HeuristicRollbackException;
 import javax.transaction.NotSupportedException;
 import javax.transaction.RollbackException;
-import javax.transaction.Status;
 import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 
@@ -46,6 +44,7 @@ import com.choicemaker.cm.aba.IBlockingConfiguration;
 import com.choicemaker.cm.aba.IBlockingField;
 import com.choicemaker.cm.aba.IBlockingValue;
 import com.choicemaker.cm.aba.IDbField;
+import com.choicemaker.cm.args.ProcessingEvent;
 import com.choicemaker.cm.batch.api.ProcessingEventLog;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.IControl;
@@ -163,7 +162,7 @@ public class RecValService3 {
 			IRecordIdFactory recidFactory, MutableRecordIdTranslator translator,
 			ProcessingEventLog status, IControl control,
 			RecordMatchingMode mode, UserTransaction tx) {
-		
+
 		Precondition.assertNonNullArgument("null user transaction", tx);
 
 		this.stage = queryRS;
@@ -256,8 +255,8 @@ public class RecValService3 {
 	 *
 	 */
 	public void runService() throws BlockingException {
-		final String METHOD = "runService()";
-		final String TAG = SOURCE + "." + METHOD + ": ";
+		// final String METHOD = "runService()";
+		// final String TAG = SOURCE + "." + METHOD + ": ";
 		time = System.currentTimeMillis();
 
 		if (status
@@ -270,48 +269,9 @@ public class RecValService3 {
 				.getCurrentProcessingEventId() < OabaProcessingConstants.EVT_DONE_REC_VAL) {
 			// create the rec_id, val_id files
 			log.info("Creating new rec,val files");
-			try {
-				userTx.begin();
-				status.setCurrentProcessingEvent(OabaEventBean.CREATE_REC_VAL);
-				userTx.commit();
-			} catch (Exception e) {
-				String msg =
-					String.format(TX_FAILURE_MSG, SOURCE, METHOD, e.toString());
-				log.severe(msg);
-				try {
-					userTx.setRollbackOnly();
-				} catch (Exception e1) {
-					final String msg1 = TAG + "unable to rollback transaction: "
-							+ e1.toString();
-					log.severe(msg1);
-				}
-				throw new BlockingException(msg);
-			}
-
+			setStatusEvent(OabaEventBean.CREATE_REC_VAL);
 			createFiles();
-
-			boolean stop = this.control.shouldStop();
-			if (!stop) {
-				try {
-					userTx.begin();
-					status.setCurrentProcessingEvent(
-							OabaEventBean.DONE_REC_VAL);
-					userTx.commit();
-				} catch (Exception e) {
-					String msg = String.format(TX_FAILURE_MSG, SOURCE, METHOD,
-							e.toString());
-					log.severe(msg);
-					try {
-						userTx.setRollbackOnly();
-					} catch (Exception e1) {
-						final String msg1 =
-							TAG + "unable to rollback transaction: "
-									+ e1.toString();
-						log.severe(msg1);
-					}
-					throw new BlockingException(msg);
-				}
-			}
+			setStatusEvent(OabaEventBean.DONE_REC_VAL);
 
 		} else {
 			log.info("Skipping RecValService3.runService()");
@@ -358,9 +318,9 @@ public class RecValService3 {
 
 		log.finest(TAG + "opening stage");
 		final long startAcquire = System.currentTimeMillis();
-		userTx.begin();
+		// userTx.begin();
 		stage.open();
-		userTx.commit();
+		// userTx.commit();
 		final long acquireMsecs = System.currentTimeMillis() - startAcquire;
 		log.finest(TAG + "stage opened");
 		logConnectionAcquisition(log, FS0, TAG, acquireMsecs);
@@ -373,9 +333,9 @@ public class RecValService3 {
 
 		log.finest(TAG + "opening master");
 		final long startAcquire = System.currentTimeMillis();
-		userTx.begin();
+		// userTx.begin();
 		master.open();
-		userTx.commit();
+		// userTx.commit();
 		final long acquireMsecs = System.currentTimeMillis() - startAcquire;
 		log.finest(TAG + "master opened");
 		logConnectionAcquisition(log, FM0, TAG, acquireMsecs);
@@ -388,17 +348,12 @@ public class RecValService3 {
 		return retVal;
 	}
 
-	private int createStagingFiles() throws Exception {
+	private int createStagingFiles() throws BlockingException, IOException {
 		assert this.stage != null;
 		final String METHOD = "createStagingFiles()";
 		final String TAG = SOURCE + "." + METHOD + ": ";
 
-		boolean stop = false;
-		userTx.begin();
-		stop = this.control.shouldStop();
-		userTx.commit();
-		log.finest(TAG + "shouldStop: " + this.control.shouldStop());
-
+		boolean stop = shouldStop(TAG);
 		int count = 0;
 		try {
 
@@ -410,7 +365,7 @@ public class RecValService3 {
 			final long startStaging = System.currentTimeMillis();
 			long incrementalStart = startStaging;
 			boolean firstStage = true;
-			userTx.begin();
+			// userTx.begin();
 			while (stage.hasNext() && !stop) {
 
 				count++;
@@ -423,14 +378,10 @@ public class RecValService3 {
 				}
 
 				if (count % CONTROL_INTERVAL == 0) {
-					userTx.commit();
+					// userTx.commit();
 
 					log.finest(TAG + "count: " + count);
-
-					stop = control.shouldStop();
-					log.finest(
-							TAG + "shouldStop: " + this.control.shouldStop());
-
+					stop = shouldStop(TAG);
 					MemoryEstimator.writeMem();
 
 					logRecordIdCount(log, FS1, TAG, r.getId(), count);
@@ -441,13 +392,13 @@ public class RecValService3 {
 					incrementalCount = 0;
 					incrementalStart = System.currentTimeMillis();
 
-					userTx.begin();
+					// userTx.begin();
 				}
 
 			}
-			if (userTx.getStatus() == Status.STATUS_ACTIVE) {
-				userTx.commit();
-			}
+			// if (userTx.getStatus() == Status.STATUS_ACTIVE) {
+			// userTx.commit();
+			// }
 			final long downloadMsecs =
 				System.currentTimeMillis() - startStaging;
 			logTransferRate(log, FS2, TAG, count, downloadMsecs);
@@ -461,17 +412,12 @@ public class RecValService3 {
 		return count;
 	}
 
-	private int createMasterFiles() throws Exception {
+	private int createMasterFiles() throws BlockingException, IOException {
 		assert this.master != null;
 		final String METHOD = "createMasterFiles()";
 		final String TAG = SOURCE + "." + METHOD + ": ";
 
-		boolean stop = false;
-		userTx.begin();
-		stop = this.control.shouldStop();
-		userTx.commit();
-		log.finest(TAG + "shouldStop: " + this.control.shouldStop());
-
+		boolean stop = shouldStop(TAG);
 		int count = 0;
 		try {
 
@@ -483,7 +429,7 @@ public class RecValService3 {
 			final long startMaster = System.currentTimeMillis();
 			long incrementalStart = startMaster;
 			boolean firstMaster = true;
-			userTx.begin();
+			// userTx.begin();
 			while (master.hasNext() && !stop) {
 
 				++count;
@@ -496,14 +442,10 @@ public class RecValService3 {
 				}
 
 				if (count % CONTROL_INTERVAL == 0) {
-					userTx.commit();
+					// userTx.commit();
 
 					log.finest(TAG + "count: " + count);
-
-					stop = control.shouldStop();
-					log.finest(
-							TAG + "shouldStop: " + this.control.shouldStop());
-
+					stop = shouldStop(TAG);
 					MemoryEstimator.writeMem();
 
 					logRecordIdCount(log, FM1, TAG, r.getId(), count);
@@ -514,13 +456,13 @@ public class RecValService3 {
 					incrementalCount = 0;
 					incrementalStart = System.currentTimeMillis();
 
-					userTx.begin();
+					// userTx.begin();
 				}
 
 			}
-			if (userTx.getStatus() == Status.STATUS_ACTIVE) {
-				userTx.commit();
-			}
+			// if (userTx.getStatus() == Status.STATUS_ACTIVE) {
+			// userTx.commit();
+			// }
 			final long downloadMsecs = System.currentTimeMillis() - startMaster;
 			logTransferRate(log, FM2, TAG, count, downloadMsecs);
 
@@ -637,6 +579,48 @@ public class RecValService3 {
 					TAG + "unable to rollback transaction: " + e1.toString();
 				log.severe(msg1);
 			}
+			throw new BlockingException(msg);
+		}
+	}
+
+	private boolean shouldStop(String tag) throws BlockingException {
+		boolean retVal = false;
+		try {
+			userTx.begin();
+			retVal = this.control.shouldStop();
+			userTx.commit();
+			log.finest(tag + "shouldStop: " + this.control.shouldStop());
+		} catch (NotSupportedException | SystemException | SecurityException
+				| IllegalStateException | RollbackException
+				| HeuristicMixedException | HeuristicRollbackException e) {
+			String msg0 =
+				"Failed to check whether processing should stop. Cause: %s";
+			String msg = String.format(msg0, e.toString());
+			log.severe(msg);
+			throw new BlockingException(msg);
+		}
+		return retVal;
+	}
+
+	private void setStatusEvent(ProcessingEvent evt) throws BlockingException {
+		setStatusEvent(evt, null);
+	}
+
+	private void setStatusEvent(ProcessingEvent evt, String info)
+			throws BlockingException {
+		assert evt != null;
+		try {
+			userTx.begin();
+			setStatusEvent(evt, info);
+			userTx.commit();
+		} catch (NotSupportedException | SystemException | SecurityException
+				| IllegalStateException | RollbackException
+				| HeuristicMixedException | HeuristicRollbackException e) {
+			String msg0 =
+				"Failed to log processing status [evt[%s], info[%s]]. "
+						+ "Cause: %s";
+			String msg = String.format(msg0, evt, info, e.toString());
+			log.severe(msg);
 			throw new BlockingException(msg);
 		}
 	}
