@@ -611,7 +611,7 @@ public class RecValService3 {
 		assert evt != null;
 		try {
 			userTx.begin();
-			setStatusEvent(evt, info);
+			this.status.setCurrentProcessingEvent(evt, info);
 			userTx.commit();
 		} catch (NotSupportedException | SystemException | SecurityException
 				| IllegalStateException | RollbackException
