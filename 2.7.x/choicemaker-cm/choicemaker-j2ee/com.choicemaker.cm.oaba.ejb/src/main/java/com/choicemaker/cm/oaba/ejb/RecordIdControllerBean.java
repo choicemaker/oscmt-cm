@@ -7,12 +7,11 @@
  *******************************************************************************/
 package com.choicemaker.cm.oaba.ejb;
 
-import static javax.ejb.TransactionAttributeType.REQUIRED;
-
 import static com.choicemaker.cm.oaba.ejb.RecordIdTranslationJPA.PN_TRANSLATEDID_DELETE_BY_JOBID_JOBID;
 import static com.choicemaker.cm.oaba.ejb.RecordIdTranslationJPA.QN_TRANSLATEDID_DELETE_BY_JOBID;
 import static com.choicemaker.cm.oaba.ejb.RecordIdTranslationJPA.QN_TRANSLATEDID_FIND_ALL;
 import static com.choicemaker.cm.oaba.utils.RecordTransferLogging.logTransferRate;
+import static javax.ejb.TransactionAttributeType.REQUIRED;
 
 import java.io.File;
 import java.sql.Connection;
@@ -33,6 +32,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import com.choicemaker.cm.aba.DatabaseAccessor;
+import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.ejb.BatchJobFileUtils;
 import com.choicemaker.cm.core.BlockingException;
@@ -40,6 +41,7 @@ import com.choicemaker.cm.core.base.RECORD_SOURCE_ROLE;
 import com.choicemaker.cm.oaba.api.DbRecordIdTranslator;
 import com.choicemaker.cm.oaba.api.ImmutableRecordIdTranslatorLocal;
 import com.choicemaker.cm.oaba.api.OabaJobManager;
+import com.choicemaker.cm.oaba.api.OabaParametersController;
 import com.choicemaker.cm.oaba.api.RecordIdController;
 import com.choicemaker.cm.oaba.api.RecordIdTranslation;
 import com.choicemaker.cm.oaba.core.IRecordIdFactory;
@@ -49,6 +51,7 @@ import com.choicemaker.cm.oaba.core.IRecordIdSource;
 import com.choicemaker.cm.oaba.core.ImmutableRecordIdTranslator;
 import com.choicemaker.cm.oaba.core.MutableRecordIdTranslator;
 import com.choicemaker.cm.oaba.core.RECORD_ID_TYPE;
+import com.choicemaker.cm.oaba.ejb.util.DbRecordIdTranslatorFactory;
 
 @Stateless
 @TransactionAttribute(REQUIRED)
@@ -57,7 +60,8 @@ public class RecordIdControllerBean implements RecordIdController {
 	private static final Logger logger =
 		Logger.getLogger(RecordIdControllerBean.class.getName());
 
-	public static final String SOURCE = RecordIdController.class.getSimpleName();
+	public static final String SOURCE =
+		RecordIdController.class.getSimpleName();
 
 	public static final String BASENAME_RECORDID_TRANSLATOR = "translator";
 
@@ -69,6 +73,12 @@ public class RecordIdControllerBean implements RecordIdController {
 	 */
 	protected static final int QUERY_INDEX_RECORD_ID_TYPE = 1;
 
+	private static RecordIdSinkSourceFactory getRecordIDFactory(BatchJob job) {
+		String wd = BatchJobFileUtils.getWorkingDir(job);
+		return new RecordIdSinkSourceFactory(wd, BASENAME_RECORDID_STORE,
+				BatchJobFileUtils.TEXT_SUFFIX);
+	}
+
 	/**
 	 * This gets the factory that is used to get translator id sink and source.
 	 */
@@ -76,12 +86,6 @@ public class RecordIdControllerBean implements RecordIdController {
 		String wd = BatchJobFileUtils.getWorkingDir(job);
 		return new RecordIdSinkSourceFactory(wd, BASENAME_RECORDID_TRANSLATOR,
 				BatchJobFileUtils.BINARY_SUFFIX);
-	}
-
-	private static RecordIdSinkSourceFactory getRecordIDFactory(BatchJob job) {
-		String wd = BatchJobFileUtils.getWorkingDir(job);
-		return new RecordIdSinkSourceFactory(wd, BASENAME_RECORDID_STORE,
-				BatchJobFileUtils.TEXT_SUFFIX);
 	}
 
 	/** Checks the system property {@link RecordIdController#PN_KEEP_FILES} */
@@ -92,13 +96,105 @@ public class RecordIdControllerBean implements RecordIdController {
 		return retVal;
 	}
 
-	private boolean keepFiles = isKeepFilesRequested();
+	protected static void logDuration(String source, String method, String tag,
+			long duration) {
+		final String msg0 = "%s.%s(%s) duration: %d (msecs)";
+		String msg = String.format(msg0, source, method, tag, duration);
+		logger.info(msg);
+	}
 
 	@PersistenceContext(unitName = "oaba")
 	private EntityManager em;
 
 	@EJB(beanName = "OabaJobManagerBean")
 	private OabaJobManager jobManager;
+
+	@EJB
+	private OabaParametersController paramsController;
+
+	private boolean keepFiles = isKeepFilesRequested();
+
+	@Override
+	public MutableRecordIdTranslator<?> createMutableRecordIdTranslator(
+			BatchJob job) throws BlockingException {
+		return createMutableRecordIdTranslator(job, null);
+	}
+
+	@Override
+	public MutableRecordIdTranslator<?> createMutableRecordIdTranslator(
+			BatchJob job, DbRecordIdTranslator dbrit) throws BlockingException {
+
+		logger.entering("createMutableRecordIdTranslator", job.toString());
+
+		RecordIdSinkSourceFactory rFactory = getTransIDFactory(job);
+		IRecordIdSink sink1 = rFactory.getNextSink();
+		logger.finer("sink1: " + sink1);
+		IRecordIdSink sink2 = rFactory.getNextSink();
+		logger.finer("sink2: " + sink2);
+
+		// Does an immutable translator already exist?
+		// FIXME count translations, don't retrieve them
+		List<?> translations = findTranslationImpls(job);
+		if (translations != null && !translations.isEmpty()) {
+			String msg =
+				"Record-id translations already exist for job " + job.getId();
+			throw new BlockingException(msg);
+		}
+
+		// Have the translator caches already been created?
+		if (sink1.exists() || sink2.exists()) {
+			logger.severe("Sink 1 already exists: " + sink1);
+			if (sink1.exists() || sink2.exists()) {
+				logger.severe("Sink 2 already exists: " + sink1);
+			}
+			File wd = job.getWorkingDirectory();
+			String location = wd == null ? "unknown" : wd.getAbsolutePath();
+			String msg =
+				"A mutable translator appears to have been created already. "
+						+ "A new translator can not be created until the "
+						+ "existing caches have been removed in the working "
+						+ "directory: " + location;
+			throw new BlockingException(msg);
+		}
+		logger.finer("Sink 1: " + sink1);
+		logger.finer("Sink 2: " + sink2);
+
+		DatabaseAccessor<?> dba = null; // FIXME getDatabaseAccessor();
+		MutableRecordIdTranslator<?> retVal =
+			DbRecordIdTranslatorFactory.createDatabaseIdTranslator(dba, job,
+					rFactory, sink1, sink2, keepFiles);
+		return retVal;
+	}
+
+	protected String createRecordIdTypeQuery(BatchJob job) {
+		final long jobId = job.getId();
+		StringBuffer b = new StringBuffer();
+		b.append("SELECT ").append(RecordIdTranslationJPA.CN_RECORD_TYPE);
+		b.append(" FROM ").append(RecordIdTranslationJPA.TABLE_NAME);
+		b.append(" WHERE ").append(RecordIdTranslationJPA.CN_JOB_ID);
+		b.append(" = ").append(jobId);
+		b.append(" GROUP BY ").append(RecordIdTranslationJPA.CN_JOB_ID);
+		return b.toString();
+	}
+
+	@Override
+	public int deleteTranslationsByJob(BatchJob job) {
+		Query query = em.createNamedQuery(QN_TRANSLATEDID_DELETE_BY_JOBID);
+		query.setParameter(PN_TRANSLATEDID_DELETE_BY_JOBID_JOBID, job.getId());
+		int deletedCount = query.executeUpdate();
+		return deletedCount;
+	}
+
+	@Override
+	public <T extends Comparable<T>> List<RecordIdTranslation<T>> findAllRecordIdTranslations() {
+		Query query = em.createNamedQuery(QN_TRANSLATEDID_FIND_ALL);
+		@SuppressWarnings("unchecked")
+		List<RecordIdTranslation<T>> entries = query.getResultList();
+		if (entries == null) {
+			entries = new ArrayList<RecordIdTranslation<T>>();
+		}
+		return entries;
+	}
 
 	@Override
 	public <T extends Comparable<T>> ImmutableRecordIdTranslatorLocal<T> findRecordIdTranslator(
@@ -150,159 +246,46 @@ public class RecordIdControllerBean implements RecordIdController {
 		return retVal;
 	}
 
-	@Override
-	public <T extends Comparable<T>> List<RecordIdTranslation<T>> findAllRecordIdTranslations() {
-		Query query = em.createNamedQuery(QN_TRANSLATEDID_FIND_ALL);
-		@SuppressWarnings("unchecked")
-		List<RecordIdTranslation<T>> entries = query.getResultList();
-		if (entries == null) {
-			entries = new ArrayList<RecordIdTranslation<T>>();
-		}
-		return entries;
-	}
-
-	@Override
-	public int deleteTranslationsByJob(BatchJob job) {
-		Query query = em.createNamedQuery(QN_TRANSLATEDID_DELETE_BY_JOBID);
-		query.setParameter(PN_TRANSLATEDID_DELETE_BY_JOBID_JOBID, job.getId());
-		int deletedCount = query.executeUpdate();
-		return deletedCount;
-	}
-
-	/**
-	 * Implements
-	 * {@link RecordIdController#toImmutableTranslator(BatchJob, MutableRecordIdTranslator)
-	 * save} for instances of {@link MutableRecordIdTranslatorImpl}.
-	 *
-	 * @throws ClassCastException
-	 *             if the specified translator is not an instance of
-	 *             <code>MutableRecordIdTranslatorImpl</code>
-	 * @throws BlockingException
-	 *             if an immutable translator can not be created
-	 */
-	@Override
-	public <T extends Comparable<T>> ImmutableRecordIdTranslator<T> toImmutableTranslator(
-			MutableRecordIdTranslator<T> translator) throws BlockingException {
-		if (translator == null) {
-			throw new IllegalArgumentException("null translator");
-		}
-		// HACK FIXME and update the Javadoc to comply with the interface
-		MutableRecordIdTranslatorImpl impl =
-			(MutableRecordIdTranslatorImpl) translator;
-		// END HACK
-		@SuppressWarnings("unchecked")
-		ImmutableRecordIdTranslator<T> retVal = toImmutableTranslatorImpl(impl);
-		assert impl.isClosed();
-		assert retVal != null;
-		return retVal;
-	}
-
-	protected ImmutableRecordIdTranslatorImpl toImmutableTranslatorImpl(
-			MutableRecordIdTranslatorImpl mrit) throws BlockingException {
-
-		logger.entering("toImmutableTranslatorImpl", mrit.toString());
-
-		final BatchJob job = mrit.getBatchJob();
-		assert job != null && job.isPersistent();
-
-		ImmutableRecordIdTranslatorImpl retVal = null;
-		if (mrit.isClosed() && !mrit.doTranslatorCachesExist()) {
-			logger.finer("finding immutable translator");
-			retVal = findTranslatorImpl(job);
-			logger.finer("found immutable translator: " + retVal);
+	protected DatabaseAccessor<?> getDatabaseAccessor(
+			OabaParameters oabaParams) {
+		final String METHOD = "getDatabaseAccessor(OabaParameters)";
+		DatabaseAccessor<?> retVal = null;
+		if (oabaParams == null) {
+			assert retVal == null;
 
 		} else {
-			// In this branch, translators caches must exist, either because
-			// the mutable translator is still open, or because the cache have
-			// not been otherwise removed.
-			assert !mrit.isClosed() || mrit.doTranslatorCachesExist();
-			if (!mrit.isClosed()) {
-				assert mrit.doTranslatorCachesExist();
+			final String dbaName =
+				paramsController.getReferenceDatabaseAccessor(oabaParams);
+			if (dbaName == null) {
+				assert retVal == null;
+
+			} else {
+				try {
+					Class<?> dbaClass = Class.forName(dbaName);
+					retVal = (DatabaseAccessor<?>) dbaClass.newInstance();
+				} catch (ClassNotFoundException | InstantiationException
+						| IllegalAccessException e) {
+					String msg0 =
+						"Unable to get database Accessor for '%s': Cause: %s";
+					String msg = String.format(msg0, dbaName, e.toString());
+					logger.warning(msg);
+					assert retVal == null;
+				}
 			}
-			logger.fine("constructing immutable translator");
-			mrit.close();
-			final BatchJob j = mrit.getBatchJob();
-			final IRecordIdSource<?> s1 =
-				mrit.getFactory().getSource(mrit.getSink1());
-			final IRecordIdSource<?> s2 =
-				mrit.getFactory().getSource(mrit.getSink2());
-
-			// Translator caches are removed by the constructor
-			// ImmutableRecordIdTranslatorImpl
-			retVal = new ImmutableRecordIdTranslatorImpl(j, s1, s2, keepFiles);
-			assert !mrit.doTranslatorCachesExist() || keepFiles;
-			logger.fine("constructed immutable translator");
-
-			// Save the immutable translator to persistent storage
-			this.saveTranslatorImpl(job, retVal);
 		}
-		assert retVal != null;
-		assert mrit.isClosed();
-		assert !mrit.doTranslatorCachesExist() || keepFiles;
+
+		String msg0 = "%s.%s returns %s";
+		String msg = String.format(msg0, SOURCE, METHOD,
+				retVal == null ? null : retVal.getClass().getName());
+		logger.fine(msg);
 
 		return retVal;
 	}
 
 	@Override
-	public MutableRecordIdTranslator<?> createMutableRecordIdTranslator(
-			BatchJob job) throws BlockingException {
-		return createMutableRecordIdTranslator(job, null);
-	}
-
-	@Override
-	public MutableRecordIdTranslator<?> createMutableRecordIdTranslator(
-			BatchJob job, DbRecordIdTranslator dbrit) throws BlockingException {
-
-		logger.entering("createMutableRecordIdTranslator", job.toString());
-
-		RecordIdSinkSourceFactory rFactory = getTransIDFactory(job);
-		IRecordIdSink sink1 = rFactory.getNextSink();
-		logger.finer("sink1: " + sink1);
-		IRecordIdSink sink2 = rFactory.getNextSink();
-		logger.finer("sink2: " + sink2);
-
-		// Does an immutable translator already exist?
-		// FIXME count translations, don't retrieve them
-		List<?> translations = findTranslationImpls(job);
-		if (translations != null && !translations.isEmpty()) {
-			String msg =
-				"Record-id translations already exist for job " + job.getId();
-			throw new BlockingException(msg);
-		}
-
-		// Have the translator caches already been created?
-		if (sink1.exists() || sink2.exists()) {
-			logger.severe("Sink 1 already exists: " + sink1);
-			if (sink1.exists() || sink2.exists()) {
-				logger.severe("Sink 2 already exists: " + sink1);
-			}
-			File wd = job.getWorkingDirectory();
-			String location = wd == null ? "unknown" : wd.getAbsolutePath();
-			String msg =
-				"A mutable translator appears to have been created already. "
-						+ "A new translator can not be created until the "
-						+ "existing caches have been removed in the working "
-						+ "directory: " + location;
-			throw new BlockingException(msg);
-		}
-		logger.finer("Sink 1: " + sink1);
-		logger.finer("Sink 2: " + sink2);
-
-		@SuppressWarnings("rawtypes")
-		MutableRecordIdTranslator retVal = new MutableRecordIdTranslatorImpl(
-				job, rFactory, sink1, sink2, keepFiles);
-		return retVal;
-	}
-
-	protected String createRecordIdTypeQuery(BatchJob job) {
-		final long jobId = job.getId();
-		StringBuffer b = new StringBuffer();
-		b.append("SELECT ").append(RecordIdTranslationJPA.CN_RECORD_TYPE);
-		b.append(" FROM ").append(RecordIdTranslationJPA.TABLE_NAME);
-		b.append(" WHERE ").append(RecordIdTranslationJPA.CN_JOB_ID);
-		b.append(" = ").append(jobId);
-		b.append(" GROUP BY ").append(RecordIdTranslationJPA.CN_JOB_ID);
-		return b.toString();
+	public IRecordIdSinkSourceFactory getRecordIdSinkSourceFactory(
+			BatchJob job) {
+		return getRecordIDFactory(job);
 	}
 
 	@Override
@@ -369,23 +352,17 @@ public class RecordIdControllerBean implements RecordIdController {
 		return retVal;
 	}
 
-	@Override
-	public IRecordIdSinkSourceFactory getRecordIdSinkSourceFactory(
-			BatchJob job) {
-		return getRecordIDFactory(job);
-	}
-
 	/**
 	 * Implements
 	 * {@link RecordIdController#save(BatchJob, MutableRecordIdTranslator) save}
-	 * for instances of {@link MutableRecordIdTranslatorImpl}. If the translator
-	 * is not {@link MutableRecordIdTranslatorImpl#isClosed() closed}:
+	 * for instances of {@link DefaultRecordIdTranslator}. If the translator is
+	 * not {@link DefaultRecordIdTranslator#isClosed() closed}:
 	 * <ol>
 	 * <li>The translator is
 	 * {@link IRecordIdFactory#toImmutableTranslator(MutableRecordIdTranslator)
 	 * converted} to an immutable translator.</li>
-	 * <li>The mutable translator is
-	 * {@link MutableRecordIdTranslatorImpl#close() closed}.</li>
+	 * <li>The mutable translator is {@link DefaultRecordIdTranslator#close()
+	 * closed}.</li>
 	 * <li>The translations of the immutable translator are saved in persistent
 	 * storage.</li>
 	 * </ol>
@@ -418,55 +395,6 @@ public class RecordIdControllerBean implements RecordIdController {
 		ImmutableRecordIdTranslatorLocal<T> retVal =
 			saveTranslatorImpl(job, impl);
 
-		return retVal;
-	}
-
-	protected <T extends Comparable<T>> ImmutableRecordIdTranslatorImpl saveTranslatorImpl(
-			BatchJob job, ImmutableRecordIdTranslatorImpl impl)
-			throws BlockingException {
-
-		logger.fine("Saving " + job + " / " + impl);
-		ImmutableRecordIdTranslatorImpl retVal = null;
-		// Check if the translations already exist in the database
-		List<AbstractRecordIdTranslationEntity<T>> translations =
-			findTranslationImpls(job);
-		if (!translations.isEmpty()) {
-			logger.info("Translations: " + translations.size());
-			impl.assertPersistent(translations);
-			retVal = impl;
-			logger.fine("Returning unaltered translator: " + retVal);
-
-		} else if (impl.isEmpty()) {
-			String msg = "Translator is empty. "
-					+ "(Has the translator translated any record ids?)";
-			logger.info(msg);
-			retVal = impl;
-			logger.warning("No translations saved: " + retVal);
-
-		} else {
-			final RECORD_ID_TYPE dataType = impl.getRecordIdType();
-			switch (dataType) {
-			case TYPE_INTEGER:
-				saveIntegerTranslations(job, impl);
-				logger.fine("Saved " + job + " / " + impl);
-				break;
-			case TYPE_LONG:
-				saveLongTranslations(job, impl);
-				logger.fine("Saved " + job + " / " + impl);
-				break;
-			case TYPE_STRING:
-				saveStringTranslations(job, impl);
-				logger.fine("Saved " + job + " / " + impl);
-				break;
-			default:
-				throw new Error("unexpected record source type: " + dataType);
-			}
-			translations = findTranslationImpls(job);
-			retVal = ImmutableRecordIdTranslatorImpl.createTranslator(job,
-					dataType, translations, keepFiles);
-			logger.fine("Returning new translator: " + retVal);
-		}
-		assert retVal != null;
 		return retVal;
 	}
 
@@ -585,6 +513,147 @@ public class RecordIdControllerBean implements RecordIdController {
 				new RecordIdStringTranslation(job, recordId, rsr, index);
 			em.persist(rit);
 		}
+	}
+
+	protected <T extends Comparable<T>> ImmutableRecordIdTranslatorImpl saveTranslatorImpl(
+			BatchJob job, ImmutableRecordIdTranslatorImpl impl)
+			throws BlockingException {
+		final String METHOD = "saveTranslatorImpl";
+		final long startSaveTranslatorImpl = System.currentTimeMillis();
+
+		logger.fine("Saving " + job + " / " + impl);
+		ImmutableRecordIdTranslatorImpl retVal = null;
+		// Check if the translations already exist in the database
+		List<AbstractRecordIdTranslationEntity<T>> translations =
+			findTranslationImpls(job);
+		if (!translations.isEmpty()) {
+			logger.info("Translations: " + translations.size());
+			impl.assertPersistent(translations);
+			retVal = impl;
+			logger.fine("Returning unaltered translator: " + retVal);
+
+		} else if (impl.isEmpty()) {
+			String msg = "Translator is empty. "
+					+ "(Has the translator translated any record ids?)";
+			logger.info(msg);
+			retVal = impl;
+			logger.warning("No translations saved: " + retVal);
+
+		} else {
+			final RECORD_ID_TYPE dataType = impl.getRecordIdType();
+			final long startSave = System.currentTimeMillis();
+			switch (dataType) {
+			case TYPE_INTEGER:
+				saveIntegerTranslations(job, impl);
+				logger.fine("Saved " + job + " / " + impl);
+				break;
+			case TYPE_LONG:
+				saveLongTranslations(job, impl);
+				logger.fine("Saved " + job + " / " + impl);
+				break;
+			case TYPE_STRING:
+				saveStringTranslations(job, impl);
+				logger.fine("Saved " + job + " / " + impl);
+				break;
+			default:
+				throw new Error("unexpected record source type: " + dataType);
+			}
+			final long finishSave = System.currentTimeMillis();
+			final long durationSave = finishSave - startSave;
+			logDuration(SOURCE, METHOD, "save", durationSave);
+
+			final long startFlush = System.currentTimeMillis();
+			em.flush();
+			final long finishFlush = System.currentTimeMillis();
+			final long durationFlush = finishFlush - startFlush;
+			logDuration(SOURCE, METHOD, "flush", durationFlush);
+
+			translations = findTranslationImpls(job);
+			retVal = ImmutableRecordIdTranslatorImpl.createTranslator(job,
+					dataType, translations, keepFiles);
+			logger.fine("Returning new translator: " + retVal);
+		}
+		assert retVal != null;
+
+		final long finishSaveTranslatorImpl = System.currentTimeMillis();
+		final long durationSaveTranslatorImpl =
+			finishSaveTranslatorImpl - startSaveTranslatorImpl;
+		logDuration(SOURCE, METHOD, "method", durationSaveTranslatorImpl);
+
+		return retVal;
+	}
+
+	/**
+	 * Implements
+	 * {@link RecordIdController#toImmutableTranslator(BatchJob, MutableRecordIdTranslator)
+	 * save} for instances of {@link DefaultRecordIdTranslator}.
+	 *
+	 * @throws ClassCastException
+	 *             if the specified translator is not an instance of
+	 *             <code>MutableRecordIdTranslatorImpl</code>
+	 * @throws BlockingException
+	 *             if an immutable translator can not be created
+	 */
+	@Override
+	public <T extends Comparable<T>> ImmutableRecordIdTranslator<T> toImmutableTranslator(
+			MutableRecordIdTranslator<T> translator) throws BlockingException {
+		if (translator == null) {
+			throw new IllegalArgumentException("null translator");
+		}
+		// HACK FIXME and update the Javadoc to comply with the interface
+		DefaultRecordIdTranslator impl = (DefaultRecordIdTranslator) translator;
+		// END HACK
+		@SuppressWarnings("unchecked")
+		ImmutableRecordIdTranslator<T> retVal = toImmutableTranslatorImpl(impl);
+		assert impl.isClosed();
+		assert retVal != null;
+		return retVal;
+	}
+
+	protected ImmutableRecordIdTranslatorImpl toImmutableTranslatorImpl(
+			DefaultRecordIdTranslator mrit) throws BlockingException {
+
+		logger.entering("toImmutableTranslatorImpl", mrit.toString());
+
+		final BatchJob job = mrit.getBatchJob();
+		assert job != null && job.isPersistent();
+
+		ImmutableRecordIdTranslatorImpl retVal = null;
+		if (mrit.isClosed() && !mrit.doTranslatorCachesExist()) {
+			logger.finer("finding immutable translator");
+			retVal = findTranslatorImpl(job);
+			logger.finer("found immutable translator: " + retVal);
+
+		} else {
+			// In this branch, translators caches must exist, either because
+			// the mutable translator is still open, or because the cache have
+			// not been otherwise removed.
+			assert !mrit.isClosed() || mrit.doTranslatorCachesExist();
+			if (!mrit.isClosed()) {
+				assert mrit.doTranslatorCachesExist();
+			}
+			logger.fine("constructing immutable translator");
+			mrit.close();
+			final BatchJob j = mrit.getBatchJob();
+			final IRecordIdSource<?> s1 =
+				mrit.getFactory().getSource(mrit.getSink1());
+			final IRecordIdSource<?> s2 =
+				mrit.getFactory().getSource(mrit.getSink2());
+
+			// Translator caches are removed by the constructor
+			// ImmutableRecordIdTranslatorImpl
+			retVal = new ImmutableRecordIdTranslatorImpl(j, s1, s2, keepFiles);
+			assert !mrit.doTranslatorCachesExist() || keepFiles;
+			logger.fine("constructed immutable translator");
+
+			// Save the immutable translator to persistent storage
+			this.saveTranslatorImpl(job, retVal);
+		}
+		assert retVal != null;
+		assert mrit.isClosed();
+		assert !mrit.doTranslatorCachesExist() || keepFiles;
+
+		return retVal;
 	}
 
 }

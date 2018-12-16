@@ -14,7 +14,11 @@ import static com.choicemaker.cm.batch.ejb.BatchJobFileUtils.formatJobId;
 
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.ejb.BatchJobFileUtils;
+import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
+import com.choicemaker.cm.oaba.core.IComparisonArraySource;
+import com.choicemaker.cm.oaba.core.IComparisonSetSource;
+import com.choicemaker.cm.oaba.core.IComparisonTreeSource;
 import com.choicemaker.cm.oaba.core.IMatchRecord2Sink;
 import com.choicemaker.cm.oaba.core.IMatchRecord2Source;
 import com.choicemaker.cm.oaba.core.IndexedFileObserver;
@@ -24,7 +28,9 @@ import com.choicemaker.cm.oaba.impl.ChunkDataSinkSourceFactory;
 import com.choicemaker.cm.oaba.impl.ChunkRecordIdSinkSourceFactory;
 import com.choicemaker.cm.oaba.impl.ComparisonArrayGroupSinkSourceFactory;
 import com.choicemaker.cm.oaba.impl.ComparisonArraySinkSourceFactory;
+import com.choicemaker.cm.oaba.impl.ComparisonSetOSSource;
 import com.choicemaker.cm.oaba.impl.ComparisonTreeGroupSinkSourceFactory;
+import com.choicemaker.cm.oaba.impl.ComparisonTreeSetSource;
 import com.choicemaker.cm.oaba.impl.ComparisonTreeSinkSourceFactory;
 import com.choicemaker.cm.oaba.impl.IDTreeSetSource;
 import com.choicemaker.cm.oaba.impl.MatchRecord2CompositeSink;
@@ -141,6 +147,42 @@ public class OabaFileUtils {
 				BASENAME_COMPARE_ARRAY_GROUP, BINARY_SUFFIX, num);
 	}
 
+	@SuppressWarnings({
+			"unchecked", "rawtypes" })
+	public static IComparisonSetSource getComparisonSetSource(BatchJob job,
+			final int currentChunk, final int treeIndex,
+			final RECORD_ID_TYPE recordIdType, final int numRegularChunks,
+			final int numProcessors, final int maxBlockSize)
+			throws BlockingException {
+		IComparisonSetSource retVal;
+		if (currentChunk < numRegularChunks) {
+			// regular-sized comparison sets
+			ComparisonTreeGroupSinkSourceFactory factory =
+				getComparisonTreeGroupFactory(job, recordIdType,
+						numProcessors);
+			IComparisonTreeSource source =
+				factory.getSource(currentChunk, treeIndex);
+			if (source.exists()) {
+				retVal = new ComparisonTreeSetSource(source);
+			} else {
+				throw new BlockingException(
+						"Could not get regular source " + source.getInfo());
+			}
+		} else {
+			// over-sized comparison sets
+			int i = currentChunk - numRegularChunks;
+			ComparisonArrayGroupSinkSourceFactory factoryOS = getComparisonArrayGroupFactoryOS(job, numProcessors);
+			IComparisonArraySource sourceOS = factoryOS.getSource(i, treeIndex);
+			if (sourceOS.exists()) {
+				retVal = new ComparisonSetOSSource(sourceOS, maxBlockSize);
+			} else {
+				throw new BlockingException(
+						"Could not get oversized source " + sourceOS.getInfo());
+			}
+		}
+		return retVal;
+	}
+
 	public static ComparisonTreeSinkSourceFactory getComparisonTreeFactory(
 			BatchJob job, RECORD_ID_TYPE stageType) {
 		String wd = BatchJobFileUtils.getWorkingDir(job);
@@ -166,19 +208,6 @@ public class OabaFileUtils {
 		String retVal = wd + BASENAME_MATCH_STORE_INDEXED + id;
 		return retVal;
 	}
-
-	// Unused
-	// /**
-	// * This returns the final sink in which to store the result of the OABA.
-	// * The file size is limited to <code>MAX_FILE_SIZE</code>.
-	// * The file name is [file dir]/match_[job id]_*.txt.
-	// *
-	// * @return IMatchRecord2Sink - the sink to store the OABA output.
-	// */
-	// @SuppressWarnings("rawtypes")
-	// public static IMatchRecord2Sink getCompositeMatchSink(BatchJob job) {
-	// return getCompositeMatchSink(job,MAX_FILE_SIZE, null);
-	// }
 
 	/**
 	 * This returns the final sink in which to store the result of the OABA.

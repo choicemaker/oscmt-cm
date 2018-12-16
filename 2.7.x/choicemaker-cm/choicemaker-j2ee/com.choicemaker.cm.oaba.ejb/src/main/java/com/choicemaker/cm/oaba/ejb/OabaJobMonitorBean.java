@@ -18,7 +18,6 @@ import com.choicemaker.cm.oaba.api.OabaJobMonitor;
 import com.choicemaker.cm.oaba.api.OabaParametersController;
 import com.choicemaker.cm.oaba.api.OabaSettingsController;
 import com.choicemaker.cm.oaba.api.ServerConfigurationController;
-import com.choicemaker.cm.oaba.ejb.util.OabaUtils;
 
 @Stateless
 @TransactionAttribute(REQUIRED)
@@ -42,7 +41,7 @@ public class OabaJobMonitorBean implements OabaJobMonitor {
 	@Override
 	public OabaJobInfo getOabaJobInfo(BatchJob batchJob) {
 		OabaJobInfo retVal = null;
-		if (batchJob != null && OabaUtils.isOabaJob(batchJob)) {
+		if (batchJob != null && OabaEjbUtils.isOabaJob(batchJob)) {
 			OabaParameters oabaParameters = getOabaParameters(batchJob);
 			OabaSettings oabaSettings = getOabaSettings(batchJob);
 			ServerConfiguration serverConfiguration =
@@ -56,7 +55,7 @@ public class OabaJobMonitorBean implements OabaJobMonitor {
 
 	protected OabaParameters getOabaParameters(BatchJob batchJob) {
 		assert batchJob != null;
-		assert OabaUtils.isOabaJob(batchJob);
+		assert OabaEjbUtils.isOabaJob(batchJob);
 		long jobId = batchJob.getId();
 		OabaParameters retVal =
 			paramsController.findOabaParametersByBatchJobId(jobId);
@@ -65,7 +64,7 @@ public class OabaJobMonitorBean implements OabaJobMonitor {
 
 	protected OabaSettings getOabaSettings(BatchJob batchJob) {
 		assert batchJob != null;
-		assert OabaUtils.isOabaJob(batchJob);
+		assert OabaEjbUtils.isOabaJob(batchJob);
 		long jobId = batchJob.getId();
 		OabaSettings retVal =
 			oabaSettingsController.findOabaSettingsByJobId(jobId);
@@ -74,7 +73,7 @@ public class OabaJobMonitorBean implements OabaJobMonitor {
 
 	protected ServerConfiguration getServerConfiguration(BatchJob batchJob) {
 		assert batchJob != null;
-		assert OabaUtils.isOabaJob(batchJob);
+		assert OabaEjbUtils.isOabaJob(batchJob);
 		long jobId = batchJob.getId();
 		ServerConfiguration retVal =
 			serverManager.findServerConfigurationByJobId(jobId);

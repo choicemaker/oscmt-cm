@@ -77,9 +77,11 @@ public class IndexedPropertyEntity extends AbstractPersistentObject
 
 	public IndexedPropertyEntity(BatchJob job, final String pn, final int index,
 			final String pv) {
-		if (job == null || !job.isPersistent()) {
-			throw new IllegalArgumentException("invalid job: " + job);
-		}
+		this(job.getId(),pn,index,pv);
+	}
+
+	public IndexedPropertyEntity(long jobId, final String pn, final int index,
+			final String pv) {
 		if (pn == null || !pn.equals(pn.trim()) || pn.isEmpty()) {
 			throw new IllegalArgumentException(
 					"invalid property name: '" + pn + "'");
@@ -95,7 +97,7 @@ public class IndexedPropertyEntity extends AbstractPersistentObject
 					+ "' to upper-case '" + stdName + "'");
 		}
 
-		this.jobId = job.getId();
+		this.jobId = jobId;
 		this.name = stdName;
 		this.index = index;
 		updateValue(pv);

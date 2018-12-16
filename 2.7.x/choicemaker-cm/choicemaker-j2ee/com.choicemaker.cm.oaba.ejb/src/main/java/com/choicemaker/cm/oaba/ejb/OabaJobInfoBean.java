@@ -10,7 +10,6 @@ import com.choicemaker.cm.batch.api.BatchJobStatus;
 import com.choicemaker.cm.batch.ejb.BatchJobInfoBean;
 import com.choicemaker.cm.oaba.api.MatchPairInfo;
 import com.choicemaker.cm.oaba.api.OabaJobInfo;
-import com.choicemaker.cm.oaba.ejb.util.OabaUtils;
 import com.choicemaker.util.Precondition;
 
 public class OabaJobInfoBean extends BatchJobInfoBean implements OabaJobInfo {
@@ -30,7 +29,7 @@ public class OabaJobInfoBean extends BatchJobInfoBean implements OabaJobInfo {
 				batchJob.getUrmId(), oabaParameters, oabaSettings,
 				serverConfiguration, matchPairInfo);
 		Precondition.assertBoolean("Must be an OabaJob",
-				OabaUtils.isOabaJob(batchJob));
+				OabaEjbUtils.isOabaJob(batchJob));
 	}
 
 	public OabaJobInfoBean(long jobId, String externalId, String description,

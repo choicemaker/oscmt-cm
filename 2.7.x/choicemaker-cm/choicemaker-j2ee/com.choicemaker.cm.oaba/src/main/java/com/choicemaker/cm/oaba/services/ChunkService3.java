@@ -7,7 +7,21 @@
  *******************************************************************************/
 package com.choicemaker.cm.oaba.services;
 
-import static com.choicemaker.cm.oaba.utils.RecordTransferLogging.*;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.EVT_CREATE_CHUNK_IDS;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.EVT_CREATE_CHUNK_OVERSIZED_IDS;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.EVT_DONE_CREATE_CHUNK_DATA;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.EVT_DONE_CREATE_CHUNK_IDS;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.EVT_DONE_DEDUP_OVERSIZED;
+import static com.choicemaker.cm.oaba.utils.RecordTransferLogging.CONTROL_INTERVAL;
+import static com.choicemaker.cm.oaba.utils.RecordTransferLogging.DEBUG_INTERVAL;
+import static com.choicemaker.cm.oaba.utils.RecordTransferLogging.FM0;
+import static com.choicemaker.cm.oaba.utils.RecordTransferLogging.FM1;
+import static com.choicemaker.cm.oaba.utils.RecordTransferLogging.FS0;
+import static com.choicemaker.cm.oaba.utils.RecordTransferLogging.FS1;
+import static com.choicemaker.cm.oaba.utils.RecordTransferLogging.FS2;
+import static com.choicemaker.cm.oaba.utils.RecordTransferLogging.logConnectionAcquisition;
+import static com.choicemaker.cm.oaba.utils.RecordTransferLogging.logRecordIdCount;
+import static com.choicemaker.cm.oaba.utils.RecordTransferLogging.logTransferRate;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -116,7 +130,8 @@ public class ChunkService3 {
 	private final IChunkDataSinkSourceFactory stageSinkFactory;
 	private final IChunkDataSinkSourceFactory masterSinkFactory;
 
-	private final ProcessingEventLog status;
+	private final ProcessingEventLog eventLog;
+
 	private final int maxChunkSize;
 
 	private final int splitIndex;
@@ -175,7 +190,7 @@ public class ChunkService3 {
 	 *            - maximum size of a chunk
 	 * @param maxFiles
 	 *            - maximum number of files to open.
-	 * @param status
+	 * @param processingEventLog
 	 *            - status of the system
 	 */
 	public ChunkService3(IIDSetSource bSource, IIDSetSource osSource,
@@ -186,7 +201,7 @@ public class ChunkService3 {
 			IChunkDataSinkSourceFactory masterSinkFactory,
 			ImmutableRecordIdTranslator translator, ITransformer transformer,
 			ITransformer transformerO, int maxChunkSize, int maxFiles,
-			ProcessingEventLog status, IControl control,
+			ProcessingEventLog processingEventLog, IControl control,
 			RecordMatchingMode mode, UserTransaction tx) {
 
 		Precondition.assertNonNullArgument(bSource);
@@ -196,7 +211,7 @@ public class ChunkService3 {
 		Precondition.assertNonNullArgument(stageSinkFactory);
 		Precondition.assertNonNullArgument(translator);
 		Precondition.assertNonNullArgument(transformer);
-		Precondition.assertNonNullArgument(status);
+		Precondition.assertNonNullArgument(processingEventLog);
 		Precondition.assertNonNullArgument(control);
 		Precondition.assertNonNullArgument(model);
 
@@ -212,8 +227,8 @@ public class ChunkService3 {
 		this.masterSinkFactory = masterSinkFactory;
 		this.maxChunkSize = maxChunkSize;
 		this.maxFiles = maxFiles;
-		this.status = status;
 		this.translator = translator;
+		this.eventLog = processingEventLog;
 		this.splitIndex = translator.getSplitIndex();
 		this.control = control;
 		this.mode = mode;
@@ -251,18 +266,18 @@ public class ChunkService3 {
 		log.entering(SOURCE, METHOD);
 		time = System.currentTimeMillis();
 
-		if (status
-				.getCurrentProcessingEventId() == OabaProcessingConstants.EVT_DONE_CREATE_CHUNK_DATA) {
+		final int currentProcessingEventId =
+			eventLog.getCurrentProcessingEventId();
+		if (currentProcessingEventId == EVT_DONE_CREATE_CHUNK_DATA) {
 			// just need to recover numChunks for the matching step
 			StringTokenizer temp = new StringTokenizer(
-					status.getCurrentProcessingEventInfo(), DELIM);
+					eventLog.getCurrentProcessingEventInfo(), DELIM);
 			numChunks = Integer.parseInt(temp.nextToken());
 			numRegularChunks = Integer.parseInt(temp.nextToken());
 			log.info("Recovery, numChunks " + numChunks + " numRegularChunks "
 					+ numRegularChunks);
 
-		} else if (status
-				.getCurrentProcessingEventId() == OabaProcessingConstants.EVT_DONE_DEDUP_OVERSIZED) {
+		} else if (currentProcessingEventId == EVT_DONE_DEDUP_OVERSIZED) {
 			// create ids
 			log.info("Creating ids for block source " + bSource.getInfo());
 			createIDs(bSource, false, 0, transformer);
@@ -281,21 +296,12 @@ public class ChunkService3 {
 				createDataFiles();
 			}
 
-			/*
-			 * REMOVEME } else if (status.getCurrentProcessingEventId() ==
-			 * OabaProcessing.EVT_DONE_CREATE_CHUNK_IDS ||
-			 * status.getCurrentProcessingEventId() ==
-			 * OabaProcessing.EVT_CREATE_CHUNK_OVERSIZED_IDS) {
-			 *
-			 */
-		} else if (status
-				.getCurrentProcessingEventId() == OabaProcessingConstants.EVT_DONE_CREATE_CHUNK_IDS
-				|| status
-						.getCurrentProcessingEventId() == OabaProcessingConstants.EVT_CREATE_CHUNK_OVERSIZED_IDS) {
+		} else if (currentProcessingEventId == EVT_DONE_CREATE_CHUNK_IDS
+				|| currentProcessingEventId == EVT_CREATE_CHUNK_OVERSIZED_IDS) {
 
 			// create the chunk data files
 			StringTokenizer temp = new StringTokenizer(
-					status.getCurrentProcessingEventInfo(), DELIM);
+					eventLog.getCurrentProcessingEventInfo(), DELIM);
 			numChunks = Integer.parseInt(temp.nextToken());
 			numRegularChunks = Integer.parseInt(temp.nextToken());
 			log.info("Recovery, numChunks " + numChunks + " numRegularChunks "
@@ -305,8 +311,7 @@ public class ChunkService3 {
 
 			createDataFiles();
 
-		} else if (status
-				.getCurrentProcessingEventId() == OabaProcessingConstants.EVT_CREATE_CHUNK_IDS) {
+		} else if (currentProcessingEventId == EVT_CREATE_CHUNK_IDS) {
 			// time to create Oversized ID files
 			if (osSource != null && osSource.exists()) {
 				log.info("Creating ids for oversized block source "
@@ -405,8 +410,7 @@ public class ChunkService3 {
 			if (!stop) {
 				String temp = Integer.toString(numChunks) + DELIM
 						+ Integer.toString(numRegularChunks);
-				setStatusEvent(
-						OabaEventBean.DONE_CREATE_CHUNK_DATA, temp);
+				setStatusEvent(OabaEventBean.DONE_CREATE_CHUNK_DATA, temp);
 
 				if (!keepFiles) {
 					// remove all the chunk record id files
@@ -623,8 +627,8 @@ public class ChunkService3 {
 					}
 				}
 				count++;
-				stop = ControlChecker.checkStop(control, count,
-						CONTROL_INTERVAL);
+				stop =
+					ControlChecker.checkStop(control, count, CONTROL_INTERVAL);
 
 			} // end while rs next
 			final long downloadMsecs =
@@ -684,7 +688,8 @@ public class ChunkService3 {
 			count++;
 			countAll++;
 
-			stop = ControlChecker.checkStop(control, countAll, CONTROL_INTERVAL);
+			stop =
+				ControlChecker.checkStop(control, countAll, CONTROL_INTERVAL);
 
 			IIDSet bs = source.next();
 			LongArrayList block = bs.getRecordIDs();
@@ -693,9 +698,6 @@ public class ChunkService3 {
 			for (int i = 0; i < block.size() && !stop; i++) {
 				// put the internal id in the set
 				Long index = new Long(block.get(i));
-				// boolean isValidIndex =
-				// this.translator.isValidStagingIndex(I.longValue())
-				// || this.translator.isValidMasterIndex(I.longValue());
 				boolean isValidIndex = index
 						.longValue() >= ImmutableRecordIdTranslator.MINIMUM_VALID_INDEX;
 				if (isValidIndex && !rows.contains(index)) {
@@ -706,6 +708,7 @@ public class ChunkService3 {
 				} else if (i == 0) {
 					// Don't bother logging if i==0; the first index in a block
 					// will be invalid
+					assert !isValidIndex;
 					continue;
 				} else if (isValidIndex) {
 					// Don't bother logging: the row already contains this index
@@ -734,11 +737,10 @@ public class ChunkService3 {
 						+ OabaProcessingConstants.DELIMIT
 						+ Integer.toString(skip + countAll);
 				if (isOS)
-					setStatusEvent(
-							OabaEventBean.CREATE_CHUNK_OVERSIZED_IDS, temp);
+					setStatusEvent(OabaEventBean.CREATE_CHUNK_OVERSIZED_IDS,
+							temp);
 				else
-					setStatusEvent(
-							OabaEventBean.CREATE_CHUNK_IDS, temp);
+					setStatusEvent(OabaEventBean.CREATE_CHUNK_IDS, temp);
 
 				// use the next sink
 				transformer.useNextSink();
@@ -767,12 +769,10 @@ public class ChunkService3 {
 			if (isOS) {
 				String temp = Integer.toString(numChunks) + DELIM
 						+ Integer.toString(numRegularChunks);
-				setStatusEvent(
-						OabaEventBean.CREATE_CHUNK_OVERSIZED_IDS, temp);
+				setStatusEvent(OabaEventBean.CREATE_CHUNK_OVERSIZED_IDS, temp);
 			} else {
 				String temp = Integer.toString(numChunks);
-				setStatusEvent(OabaEventBean.CREATE_CHUNK_IDS,
-						temp);
+				setStatusEvent(OabaEventBean.CREATE_CHUNK_IDS, temp);
 			}
 		}
 
@@ -790,7 +790,7 @@ public class ChunkService3 {
 		assert evt != null;
 		try {
 			userTx.begin();
-			status.setCurrentProcessingEvent(evt, info);
+			eventLog.setCurrentProcessingEvent(evt, info);
 			userTx.commit();
 		} catch (NotSupportedException | SystemException | SecurityException
 				| IllegalStateException | RollbackException
@@ -830,7 +830,7 @@ public class ChunkService3 {
 
 	@Override
 	public String toString() {
-		return "ChunkService3 [model=" + model + ", status=" + status
+		return "ChunkService3 [model=" + model + ", status=" + eventLog
 				+ ", maxChunkSize=" + maxChunkSize + ", splitIndex="
 				+ splitIndex + ", recIDSinks=" + recIDSinks + ", numChunks="
 				+ numChunks + ", maxFiles=" + maxFiles + ", numRegularChunks="

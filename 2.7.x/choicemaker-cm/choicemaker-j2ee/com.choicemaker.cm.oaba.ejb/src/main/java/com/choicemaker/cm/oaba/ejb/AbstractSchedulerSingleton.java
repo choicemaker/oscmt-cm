@@ -294,28 +294,21 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 			// if there are multiple processors, we have don't do anything for
 			// STATUS_ABORTED.
 
-			// getting information that a segment is done
+			final String _latestChunkProcessed = getPropertyController()
+					.getJobProperty(batchJob, PN_CURRENT_CHUNK_INDEX);
+			final int latestChunkProcessed =
+				Integer.valueOf(_latestChunkProcessed);
+			assert latestChunkProcessed == currentChunk;
+
 			numCompares += mwd.numCompares;
 			numMatches += mwd.numMatches;
 
-			// update time trackers
-			if (getLogger().isLoggable(Level.FINE)) {
-				timeWriting[mwd.treeIndex - 1] += mwd.timeWriting;
-				inHMLookUp[mwd.treeIndex - 1] += mwd.inLookup;
-				inCompare[mwd.treeIndex - 1] += mwd.inCompare;
-			}
+			final int treeIndexZeroBased = mwd.treeIndex - 1;
+			timeWriting[treeIndexZeroBased] += mwd.timeWriting;
+			inHMLookUp[treeIndexZeroBased] += mwd.inLookup;
+			inCompare[treeIndexZeroBased] += mwd.inCompare;
 
-			final String _latestChunkProcessed =
-				// getPropertyController().getJobProperty(batchJob,
-				// PN_CHUNK_FILE_COUNT);
-				getPropertyController().getJobProperty(batchJob,
-						PN_CURRENT_CHUNK_INDEX);
-			final int latestChunkProcessed =
-				Integer.valueOf(_latestChunkProcessed);
-			getLogger().info("Current chunk: " + currentChunk);
-			getLogger().info("Chunk " + latestChunkProcessed + " tree "
-					+ mwd.treeIndex + " is done.");
-			assert latestChunkProcessed == currentChunk;
+			recordChunkProperties(latestChunkProcessed, treeIndexZeroBased);
 
 			// Go on to the next chunk
 			if (countMessages == 0) {
@@ -339,34 +332,52 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 
 				if (currentChunk < numChunks) {
 					startChunk(sd, currentChunk);
+
 				} else {
 					// all the chunks are done
 					status.setCurrentProcessingEvent(
 							OabaEventBean.DONE_MATCHING_DATA);
-
-					getLogger().info("total comparisons: " + numCompares
-							+ " total matches: " + numMatches);
-					timeStart = System.currentTimeMillis() - timeStart;
-					getLogger().info("total matching time: " + timeStart);
-					getLogger()
-							.info("total reading data time: " + timeReadData);
-					getLogger()
-							.info("total garbage collection time: " + timegc);
-
-					// writing out time break downs
-					if (getLogger().isLoggable(Level.FINE)) {
-						for (int i = 0; i < getNumProcessors(); i++) {
-							getLogger().fine("Processor " + i
-									+ " writing time: " + timeWriting[i]
-									+ " lookup time: " + inHMLookUp[i]
-									+ " compare time: " + inCompare[i]);
-						}
-					}
-
+					recordSummary();
 					nextSteps(batchJob, sd);
+
 				}
 			} // end countMessages == 0
 		} // end if abort requested
+	}
+
+	protected void recordChunkProperties(final int latestChunkProcessed,
+			final int treeIndexZeroBased) {
+
+		final int treeIndexOneBased = treeIndexZeroBased + 1;
+
+		// numCompares += mwd.numCompares;
+		// numMatches += mwd.numMatches;
+		//
+		// timeWriting[mwd.treeIndex - 1] += mwd.timeWriting;
+		// inHMLookUp[mwd.treeIndex - 1] += mwd.inLookup;
+		// inCompare[mwd.treeIndex - 1] += mwd.inCompare;
+
+		getLogger().info("Current chunk: " + currentChunk);
+		getLogger().info("Chunk " + latestChunkProcessed + " tree "
+				+ treeIndexOneBased + " is done.");
+	}
+
+	protected void recordSummary() {
+		getLogger().info("total comparisons: " + numCompares
+				+ " total matches: " + numMatches);
+		final long duration = System.currentTimeMillis() - timeStart;
+		getLogger().info("total matching time: " + duration);
+		getLogger().info("total reading data time: " + timeReadData);
+		getLogger().info("total garbage collection time: " + timegc);
+
+		// log details
+		if (getLogger().isLoggable(Level.FINE)) {
+			for (int i = 0; i < getNumProcessors(); i++) {
+				getLogger().fine("Processor " + i + " writing time: "
+						+ timeWriting[i] + " lookup time: " + inHMLookUp[i]
+						+ " compare time: " + inCompare[i]);
+			}
+		}
 	}
 
 	protected RecordMatchingMode getRecordMatchingMode(final BatchJob job) {

@@ -34,6 +34,7 @@ import com.choicemaker.cm.io.db.base.DbReaderSequential;
 import com.choicemaker.cm.io.db.sqlserver.dbom.SqlDbObjectMaker;
 import com.choicemaker.util.StringUtils;
 
+@SuppressWarnings("rawtypes")
 public class SqlDatabaseAccessor implements DatabaseAccessor {
 	private static Logger logger =
 		Logger.getLogger(SqlDatabaseAccessor.class.getName());

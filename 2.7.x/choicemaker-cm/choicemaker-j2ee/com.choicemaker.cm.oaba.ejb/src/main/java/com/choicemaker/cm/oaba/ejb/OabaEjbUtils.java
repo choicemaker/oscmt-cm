@@ -5,15 +5,15 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *******************************************************************************/
-package com.choicemaker.cm.oaba.ejb.util;
+package com.choicemaker.cm.oaba.ejb;
 
 import static com.choicemaker.cm.oaba.ejb.OabaJobJPA.DISCRIMINATOR_VALUE;
 
 import com.choicemaker.cm.batch.api.BatchJob;
 
-public class OabaUtils {
+public class OabaEjbUtils {
 
-	private OabaUtils() {
+	private OabaEjbUtils() {
 	}
 
 	public static boolean isOabaJob(BatchJob batchJob) {

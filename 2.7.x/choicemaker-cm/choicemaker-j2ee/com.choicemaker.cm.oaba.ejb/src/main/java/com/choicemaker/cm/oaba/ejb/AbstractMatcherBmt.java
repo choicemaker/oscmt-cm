@@ -52,20 +52,14 @@ import com.choicemaker.cm.oaba.api.OabaParametersController;
 import com.choicemaker.cm.oaba.api.OabaSettingsController;
 import com.choicemaker.cm.oaba.api.ServerConfigurationController;
 import com.choicemaker.cm.oaba.core.ComparisonPair;
-import com.choicemaker.cm.oaba.core.IComparisonArraySource;
 import com.choicemaker.cm.oaba.core.IComparisonSet;
 import com.choicemaker.cm.oaba.core.IComparisonSetSource;
-import com.choicemaker.cm.oaba.core.IComparisonTreeSource;
 import com.choicemaker.cm.oaba.core.RECORD_ID_TYPE;
 import com.choicemaker.cm.oaba.ejb.data.ChunkDataStore;
 import com.choicemaker.cm.oaba.ejb.data.MatchWriterMessage;
 import com.choicemaker.cm.oaba.ejb.data.OabaJobMessage;
 import com.choicemaker.cm.oaba.ejb.util.LoggingUtils;
 import com.choicemaker.cm.oaba.ejb.util.MessageBeanUtils;
-import com.choicemaker.cm.oaba.impl.ComparisonArrayGroupSinkSourceFactory;
-import com.choicemaker.cm.oaba.impl.ComparisonSetOSSource;
-import com.choicemaker.cm.oaba.impl.ComparisonTreeGroupSinkSourceFactory;
-import com.choicemaker.cm.oaba.impl.ComparisonTreeSetSource;
 import com.choicemaker.cm.oaba.utils.ControlChecker;
 
 /**
@@ -78,7 +72,8 @@ public abstract class AbstractMatcherBmt
 
 	private static final long serialVersionUID = 271L;
 
-	private static final String SOURCE = AbstractOabaBmtMDB.class.getSimpleName();
+	private static final String SOURCE =
+		AbstractOabaBmtMDB.class.getSimpleName();
 
 	protected static final int INTERVAL = 50000;
 
@@ -423,43 +418,15 @@ public abstract class AbstractMatcherBmt
 				.getJobProperty(job, PN_REGULAR_CHUNK_FILE_COUNT);
 		final int numRegularChunks = Integer.valueOf(_numRegularChunks);
 
-		if (currentChunk < numRegularChunks) {
-			// regular chunks
-			final String _recordIdType =
-				getPropertyController().getJobProperty(job, PN_RECORD_ID_TYPE);
-			final RECORD_ID_TYPE recordIdType =
-				RECORD_ID_TYPE.valueOf(_recordIdType);
-			ComparisonTreeGroupSinkSourceFactory factory =
-				OabaFileUtils.getComparisonTreeGroupFactory(job, recordIdType,
-						numProcessors);
-			IComparisonTreeSource source =
-				factory.getSource(currentChunk, data.treeIndex);
-			if (source.exists()) {
-				@SuppressWarnings("unchecked")
-				IComparisonSetSource setSource =
-					new ComparisonTreeSetSource(source);
-				return setSource;
-			} else {
-				throw new BlockingException(
-						"Could not get regular source " + source.getInfo());
-			}
-		} else {
-			// over-sized chunks
-			int i = currentChunk - numRegularChunks;
-			ComparisonArrayGroupSinkSourceFactory factoryOS = OabaFileUtils
-					.getComparisonArrayGroupFactoryOS(job, numProcessors);
-			IComparisonArraySource sourceOS =
-				factoryOS.getSource(i, data.treeIndex);
-			if (sourceOS.exists()) {
-				@SuppressWarnings("unchecked")
-				IComparisonSetSource setSource =
-					new ComparisonSetOSSource(sourceOS, maxBlockSize);
-				return setSource;
-			} else {
-				throw new BlockingException(
-						"Could not get oversized source " + sourceOS.getInfo());
-			}
-		}
+		final String _recordIdType =
+			getPropertyController().getJobProperty(job, PN_RECORD_ID_TYPE);
+		final RECORD_ID_TYPE recordIdType =
+			RECORD_ID_TYPE.valueOf(_recordIdType);
+
+		IComparisonSetSource retVal = OabaFileUtils.getComparisonSetSource(job, currentChunk,
+				data.treeIndex, recordIdType, numRegularChunks, numProcessors,
+				maxBlockSize);
+		return retVal;
 	}
 
 	/**

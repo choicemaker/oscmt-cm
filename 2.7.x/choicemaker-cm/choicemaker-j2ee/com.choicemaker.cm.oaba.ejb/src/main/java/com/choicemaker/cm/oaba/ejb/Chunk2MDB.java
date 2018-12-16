@@ -7,14 +7,17 @@
  *******************************************************************************/
 package com.choicemaker.cm.oaba.ejb;
 
+import static com.choicemaker.cm.args.OperationalPropertyNames.PN_CHUNK_COMPARISONS;
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_CHUNK_FILE_COUNT;
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_RECORD_ID_TYPE;
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_REGULAR_CHUNK_FILE_COUNT;
+import static com.choicemaker.cm.args.OperationalPropertyNames.PN_TOTAL_CHUNK_COMPARISONS;
 
 import java.util.logging.Logger;
 
 import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
+import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
 import javax.ejb.MessageDrivenContext;
 import javax.ejb.TransactionManagement;
@@ -26,12 +29,14 @@ import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.api.BatchJob;
+import com.choicemaker.cm.batch.api.IndexedPropertyController;
 import com.choicemaker.cm.batch.api.ProcessingEventLog;
 import com.choicemaker.cm.batch.ejb.BatchJobControl;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ISerializableRecordSource;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.oaba.core.IBlockSinkSourceFactory;
+import com.choicemaker.cm.oaba.core.IComparisonSetSource;
 import com.choicemaker.cm.oaba.core.ImmutableRecordIdTranslator;
 import com.choicemaker.cm.oaba.core.OabaEventBean;
 import com.choicemaker.cm.oaba.core.RECORD_ID_TYPE;
@@ -74,6 +79,9 @@ public class Chunk2MDB extends AbstractOabaBmtMDB {
 
 	// private static final String SOURCE = StartOabaMDB.class.getSimpleName();
 
+	@EJB
+	private IndexedPropertyController idxPropController;
+
 	@Resource
 	private MessageDrivenContext jmsCtx;
 
@@ -87,6 +95,7 @@ public class Chunk2MDB extends AbstractOabaBmtMDB {
 			ImmutableProbabilityModel model) throws BlockingException {
 		// final String METHOD = "processOabaMessage";
 
+		final int maxBlockSize = oabaSettings.getMaxBlockSize();
 		final int maxChunk = oabaSettings.getMaxChunkSize();
 		final int numProcessors = serverConfig.getMaxChoiceMakerThreads();
 		final int maxChunkFiles = serverConfig.getMaxOabaChunkFileCount();
@@ -147,18 +156,62 @@ public class Chunk2MDB extends AbstractOabaBmtMDB {
 		chunkService.runService();
 		log.info("Done creating chunks " + chunkService.getTimeElapsed());
 
-		// transitivity needs the translator
-		// translator.cleanUp();
-
 		final int numChunks = chunkService.getNumChunks();
+		final int numRegularChunks = chunkService.getNumRegularChunks();
+		recordChunkProperties(batchJob, numChunks, numRegularChunks,
+				recordIdType, numProcessors, maxBlockSize);
+	}
+
+	protected void recordChunkProperties(final BatchJob batchJob,
+			final int numChunks, final int numRegularChunks,
+			final RECORD_ID_TYPE recordIdType, final int numProcessors,
+			final int maxBlockSize) throws BlockingException {
+
 		log.info("Number of chunks " + numChunks);
 		getPropertyController().setJobProperty(batchJob, PN_CHUNK_FILE_COUNT,
 				String.valueOf(numChunks));
 
-		final int numRegularChunks = chunkService.getNumRegularChunks();
 		log.info("Number of regular chunks " + numRegularChunks);
 		getPropertyController().setJobProperty(batchJob,
 				PN_REGULAR_CHUNK_FILE_COUNT, String.valueOf(numChunks));
+
+		int totalComparisons = 0;
+		for (int currentChunk = 0; currentChunk < numChunks; currentChunk++) {
+			int chunkComparisons = 0;
+			for (int treeIndex = 0; treeIndex < numProcessors; treeIndex++) {
+				int treeComparisons = getComparisons(batchJob, currentChunk,
+						treeIndex, recordIdType, numRegularChunks,
+						numProcessors, maxBlockSize);
+				chunkComparisons += treeComparisons;
+			}
+			String pv = Integer.toString(chunkComparisons);
+			idxPropController.setIndexedPropertyValue(batchJob,
+					PN_CHUNK_COMPARISONS, currentChunk, pv);
+			totalComparisons += chunkComparisons;
+		}
+		String pv = Integer.toString(totalComparisons);
+		this.getPropertyController().setJobProperty(batchJob,
+				PN_TOTAL_CHUNK_COMPARISONS, pv);
+
+	}
+
+	protected int getComparisons(BatchJob job, final int currentChunk,
+			final int treeIndex, final RECORD_ID_TYPE recordIdType,
+			final int numRegularChunks, final int numProcessors,
+			final int maxBlockSize) throws BlockingException {
+		assert currentChunk >= 0;
+
+		@SuppressWarnings("rawtypes")
+		IComparisonSetSource setSource = OabaFileUtils.getComparisonSetSource(
+				job, currentChunk, treeIndex, recordIdType, numRegularChunks,
+				numProcessors, maxBlockSize);
+		if (setSource.exists()) {
+			// setSource.
+		} else {
+			throw new BlockingException(
+					"Could not get regular source " + setSource.getInfo());
+		}
+		throw new Error("incomplete implementation");
 	}
 
 	@Override
@@ -190,6 +243,10 @@ public class Chunk2MDB extends AbstractOabaBmtMDB {
 	protected void notifyProcessingCompleted(OabaJobMessage data) {
 		MessageBeanUtils.sendStartData(data, getJmsContext(),
 				matchSchedulerQueue, getLogger());
+	}
+
+	protected IndexedPropertyController getIndexedPropertyController() {
+		return idxPropController;
 	}
 
 }

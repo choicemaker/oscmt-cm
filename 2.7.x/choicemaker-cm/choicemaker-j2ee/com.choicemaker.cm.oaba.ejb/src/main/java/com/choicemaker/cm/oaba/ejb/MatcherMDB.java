@@ -68,7 +68,7 @@ public class MatcherMDB extends AbstractMatcherBmt {
 		Logger.getLogger(MatcherMDB.class.getName());
 	private static final Logger jmsTrace =
 		Logger.getLogger("jmstrace." + MatcherMDB.class.getName());
-	private static final String SOURCE = MatcherMDB.class.getSimpleName();
+//	private static final String SOURCE = MatcherMDB.class.getSimpleName();
 
 	// -- Injected instance data
 

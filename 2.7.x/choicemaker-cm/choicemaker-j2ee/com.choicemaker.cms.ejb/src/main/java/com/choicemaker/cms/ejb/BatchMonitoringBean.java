@@ -36,8 +36,8 @@ import com.choicemaker.cm.oaba.api.OabaJobInfo;
 import com.choicemaker.cm.oaba.api.OabaJobManager;
 import com.choicemaker.cm.oaba.api.OabaParametersController;
 import com.choicemaker.cm.oaba.core.RECORD_ID_TYPE;
+import com.choicemaker.cm.oaba.ejb.OabaEjbUtils;
 import com.choicemaker.cm.oaba.ejb.OabaJobInfoBean;
-import com.choicemaker.cm.oaba.ejb.util.OabaUtils;
 import com.choicemaker.cm.transitivity.api.TransitiveGroupInfo;
 import com.choicemaker.cm.transitivity.api.TransitivityConfigurationController;
 import com.choicemaker.cm.transitivity.api.TransitivityJobInfo;
@@ -125,7 +125,7 @@ public class BatchMonitoringBean implements BatchMonitoring {
 	public BatchJobInfo getBatchJobInfo(BatchJob batchJob) {
 		BatchJobInfo retVal = null;
 		if (batchJob != null) {
-			if (OabaUtils.isOabaJob(batchJob)) {
+			if (OabaEjbUtils.isOabaJob(batchJob)) {
 				retVal = computeOabaJobInfo(batchJob);
 			} else if (TransitivityUtils.isTransitivityJob(batchJob)) {
 				retVal = computeTransitivityJobInfo(batchJob);
@@ -148,7 +148,7 @@ public class BatchMonitoringBean implements BatchMonitoring {
 
 	public OabaJobInfo computeOabaJobInfo(final BatchJob oabaJob) {
 		OabaJobInfo retVal = null;
-		if (oabaJob != null && OabaUtils.isOabaJob(oabaJob)) {
+		if (oabaJob != null && OabaEjbUtils.isOabaJob(oabaJob)) {
 			final long jobId = oabaJob.getId();
 			logger.finest(String.format("OabaJob id: %d", jobId));
 			OabaParameters oabaParams =

@@ -43,7 +43,7 @@ import com.choicemaker.cm.oaba.core.IRecordIdSource;
 import com.choicemaker.cm.oaba.core.ImmutableRecordIdTranslator;
 import com.choicemaker.cm.oaba.core.MutableRecordIdTranslator;
 import com.choicemaker.cm.oaba.core.RECORD_ID_TYPE;
-import com.choicemaker.cm.oaba.ejb.MutableRecordIdTranslatorImpl;
+import com.choicemaker.cm.oaba.ejb.DefaultRecordIdTranslator;
 import com.choicemaker.cm.oaba.ejb.RecordIdSink;
 import com.choicemaker.cm.oaba.ejb.RecordIdSource;
 import com.choicemaker.cmit.oaba.util.OabaDeploymentUtils;
@@ -307,7 +307,7 @@ public class RecordIdTranslatorIT {
 		IRecordIdSink sink2 = createRecordIdSink(job, TRANSLATOR2_RESOURCE);
 		@SuppressWarnings("unchecked")
 		MutableRecordIdTranslator<String> rit =
-			new MutableRecordIdTranslatorImpl(job, factory, sink1, sink2, true);
+			new DefaultRecordIdTranslator(job, factory, sink1, sink2, true);
 		assertTrue(rit != null);
 		checkCounts();
 	}
@@ -322,7 +322,7 @@ public class RecordIdTranslatorIT {
 		IRecordIdSink sink2 = createRecordIdSink(job, TRANSLATOR2_RESOURCE);
 		@SuppressWarnings("unchecked")
 		MutableRecordIdTranslator<String> rit =
-			new MutableRecordIdTranslatorImpl(job, factory, sink1, sink2, true);
+			new DefaultRecordIdTranslator(job, factory, sink1, sink2, true);
 		assertTrue(rit != null);
 
 		ImmutableRecordIdTranslator<String> irit =
