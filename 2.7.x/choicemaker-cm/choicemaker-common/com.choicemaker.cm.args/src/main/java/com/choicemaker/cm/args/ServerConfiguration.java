@@ -35,10 +35,20 @@ public interface ServerConfiguration extends Serializable {
 	 */
 	int getMaxChoiceMakerThreads();
 
-	/** The maximum number of records in an OABA chunk file */
+	/** The maximum number of entries in an OABA or Transitivity result file */
+	int getMaxFileEntries();
+
+	/** A deprecated alias for {@link #getMaxFileEntries()} */
+	@Deprecated
 	int getMaxOabaChunkFileRecords();
 
-	/** The maximum number of OABA chunk files */
+	/** A (fuzzy) maximum number of result files produced during matching or
+	 * transitivity analysis
+	 */
+	int getMaxFilesCount();
+
+	/** A deprecated alias for {@link #getMaxFilesCount()} */
+	@Deprecated
 	int getMaxOabaChunkFileCount();
 
 	/**

@@ -55,9 +55,7 @@ import com.choicemaker.cm.oaba.api.MutableServerConfiguration;
 		@NamedQuery(name = QN_SERVERCONFIG_FIND_BY_HOSTNAME,
 				query = JPQL_SERVERCONFIG_FIND_BY_HOSTNAME),
 		@NamedQuery(name = QN_SERVERCONFIG_FIND_BY_NAME,
-				query = JPQL_SERVERCONFIG_FIND_BY_NAME),
-		// @NamedQuery(name = QN_SERVERCONFIG_FIND_ANY_HOST,
-		// query = JPQL_SERVERCONFIG_FIND_ANY_HOST)
+				query = JPQL_SERVERCONFIG_FIND_BY_NAME)
 })
 @Entity
 @Table(/* schema = "CHOICEMAKER", */name = TABLE_NAME)
@@ -69,18 +67,6 @@ public class ServerConfigurationEntity implements MutableServerConfiguration {
 		Logger.getLogger(ServerConfigurationEntity.class.getName());
 
 	public static long NON_PERSISTENT_ID = 0;
-
-	protected static boolean isNonPersistentId(long id) {
-		return id == NON_PERSISTENT_ID;
-	}
-
-	public static boolean isPersistent(ServerConfiguration sc) {
-		boolean retVal = false;
-		if (sc != null) {
-			retVal = !isNonPersistentId(sc.getId());
-		}
-		return retVal;
-	}
 
 	public static String dump(ServerConfiguration c) {
 		StringWriter sw = new StringWriter();
@@ -96,154 +82,10 @@ public class ServerConfigurationEntity implements MutableServerConfiguration {
 			pw.println("SC: Server host name: " + c.getHostName());
 			pw.println("SC: Max ChoiceMaker threads: "
 					+ c.getMaxChoiceMakerThreads());
-			pw.println("SC: Max Chunk files: " + c.getMaxOabaChunkFileCount());
-			pw.println("SC: Max Records per chunk file: "
-					+ c.getMaxOabaChunkFileRecords());
+			pw.println("SC: Max result files: " + c.getMaxFilesCount());
+			pw.println("SC: Max entries per file: " + c.getMaxFileEntries());
 		}
 		String retVal = sw.toString();
-		return retVal;
-	}
-
-	public static String standardizeHostName(String s) {
-		String retVal = null;
-		if (s != null) {
-			retVal = s.trim().toUpperCase();
-		}
-		return retVal;
-	}
-
-	// -- Instance data
-
-	@Id
-	@Column(name = CN_ID)
-	@TableGenerator(name = ID_GENERATOR_NAME, table = ID_GENERATOR_TABLE,
-			pkColumnName = ID_GENERATOR_PK_COLUMN_NAME,
-			valueColumnName = ID_GENERATOR_VALUE_COLUMN_NAME,
-			pkColumnValue = ID_GENERATOR_PK_COLUMN_VALUE)
-	@GeneratedValue(strategy = GenerationType.TABLE,
-			generator = ID_GENERATOR_NAME)
-	private long id;
-
-	@Column(name = CN_CONFIGNAME)
-	private String name;
-
-	@Column(name = CN_UUID)
-	private final String uuid;
-
-	@Column(name = CN_HOSTNAME)
-	private String hostName;
-
-	@Column(name = CN_SVR_MAX_THREADS)
-	private int maxThreads;
-
-	@Column(name = CN_SVR_MAX_CHUNKSIZE)
-	private int maxChunkSize;
-
-	@Column(name = CN_SVR_MAX_CHUNKCOUNT)
-	private int maxChunkCount;
-
-	@Column(name = CN_FILE)
-	private String fileURI;
-
-	public ServerConfigurationEntity() {
-		this.uuid = UUID.randomUUID().toString();
-	}
-
-	public ServerConfigurationEntity(ServerConfiguration sc) {
-		this.uuid = UUID.randomUUID().toString();
-		this.name =
-			ServerConfigurationControllerBean.computeUniqueGenericName();
-		File f = sc.getWorkingDirectoryLocation();
-		if (f == null) {
-			throw new IllegalArgumentException("null working directory");
-		} else {
-			this.fileURI = f.toURI().toString();
-		}
-		setHostName(sc.getHostName());
-		setMaxOabaChunkFileCount(sc.getMaxOabaChunkFileCount());
-		setMaxOabaChunkFileRecords(sc.getMaxOabaChunkFileRecords());
-		setMaxChoiceMakerThreads(sc.getMaxChoiceMakerThreads());
-	}
-
-	@Override
-	public long getId() {
-		return id;
-	}
-
-	@Override
-	public boolean isPersistent() {
-		return isPersistent(this);
-	}
-
-	@Override
-	public String getName() {
-		return name;
-	}
-
-	@Override
-	public String getUUID() {
-		return uuid;
-	}
-
-	@Override
-	public String getHostName() {
-		assert hostName == null
-				|| hostName.trim().toUpperCase().equals(hostName);
-		return hostName;
-	}
-
-	@Override
-	public int getMaxChoiceMakerThreads() {
-		return maxThreads;
-	}
-
-	@Override
-	public int getMaxOabaChunkFileRecords() {
-		return maxChunkSize;
-	}
-
-	@Override
-	public int getMaxOabaChunkFileCount() {
-		return maxChunkCount;
-	}
-
-	@Override
-	public boolean isWorkingDirectoryLocationValid() {
-		boolean retVal = false;
-		try {
-			File f = new File(new URI(fileURI));
-			if (f != null && f.exists() && f.isDirectory() && f.canWrite()
-					&& f.canRead()) {
-				retVal = true;
-			}
-		} catch (Exception x) {
-			String msg =
-				"Invalid file location: " + fileURI + ": " + x.toString();
-			logger.warning(msg);
-			assert retVal == false;
-		}
-		return retVal;
-	}
-
-	@Override
-	public String getWorkingDirectoryLocationUriString() {
-		return fileURI;
-	}
-
-	@Override
-	public File getWorkingDirectoryLocation() {
-		File retVal = null;
-		if (fileURI != null) {
-			try {
-				retVal = new File(new URI(fileURI));
-			} catch (URISyntaxException e) {
-				String msg =
-					"Invalid file location: " + fileURI + ": " + e.toString();
-				logger.severe(msg);
-				new IllegalStateException(msg);
-			}
-		}
-		assert retVal != null;
 		return retVal;
 	}
 
@@ -277,12 +119,10 @@ public class ServerConfigurationEntity implements MutableServerConfiguration {
 					.equals(sc2.getWorkingDirectoryLocationUriString())) {
 				break check;
 			}
-			if (sc1.getMaxOabaChunkFileCount() != sc2
-					.getMaxOabaChunkFileCount()) {
+			if (sc1.getMaxFilesCount() != sc2.getMaxFilesCount()) {
 				break check;
 			}
-			if (sc1.getMaxOabaChunkFileRecords() != sc2
-					.getMaxOabaChunkFileRecords()) {
+			if (sc1.getMaxFileEntries() != sc2.getMaxFileEntries()) {
 				break check;
 			}
 			if (sc1.getMaxChoiceMakerThreads() != sc2
@@ -294,14 +134,175 @@ public class ServerConfigurationEntity implements MutableServerConfiguration {
 		return retVal;
 	}
 
+	protected static boolean isNonPersistentId(long id) {
+		return id == NON_PERSISTENT_ID;
+	}
+
+	public static boolean isPersistent(ServerConfiguration sc) {
+		boolean retVal = false;
+		if (sc != null) {
+			retVal = !isNonPersistentId(sc.getId());
+		}
+		return retVal;
+	}
+
+	// -- Instance data
+
+	public static String standardizeHostName(String s) {
+		String retVal = null;
+		if (s != null) {
+			retVal = s.trim().toUpperCase();
+		}
+		return retVal;
+	}
+
+	@Id
+	@Column(name = CN_ID)
+	@TableGenerator(name = ID_GENERATOR_NAME, table = ID_GENERATOR_TABLE,
+			pkColumnName = ID_GENERATOR_PK_COLUMN_NAME,
+			valueColumnName = ID_GENERATOR_VALUE_COLUMN_NAME,
+			pkColumnValue = ID_GENERATOR_PK_COLUMN_VALUE)
+	@GeneratedValue(strategy = GenerationType.TABLE,
+			generator = ID_GENERATOR_NAME)
+	private long id;
+
+	@Column(name = CN_CONFIGNAME)
+	private String name;
+
+	@Column(name = CN_UUID)
+	private final String uuid;
+
+	@Column(name = CN_HOSTNAME)
+	private String hostName;
+
+	@Column(name = CN_SVR_MAX_THREADS)
+	private int maxThreads;
+
+	@Column(name = CN_SVR_MAX_CHUNKSIZE)
+	private int maxFileEntryCount;
+
+	@Column(name = CN_SVR_MAX_CHUNKCOUNT)
+	private int maxFilesCount;
+
+	@Column(name = CN_FILE)
+	private String fileURI;
+
+	public ServerConfigurationEntity() {
+		this.uuid = UUID.randomUUID().toString();
+	}
+
+	public ServerConfigurationEntity(ServerConfiguration sc) {
+		this.uuid = UUID.randomUUID().toString();
+		this.name =
+			ServerConfigurationControllerBean.computeUniqueGenericName();
+		File f = sc.getWorkingDirectoryLocation();
+		if (f == null) {
+			throw new IllegalArgumentException("null working directory");
+		} else {
+			this.fileURI = f.toURI().toString();
+		}
+		setHostName(sc.getHostName());
+		setMaxFilesCount(sc.getMaxFilesCount());
+		setMaxFileEntries(sc.getMaxFileEntries());
+		setMaxChoiceMakerThreads(sc.getMaxChoiceMakerThreads());
+	}
+
 	public boolean equalsIgnoreIdUuid(ServerConfiguration sc2) {
 		return equalsIgnoreIdUuid(this, sc2);
 	}
 
 	@Override
-	public String toString() {
-		return "ServerConfigurationEntity [id=" + id + ", name=" + name
-				+ ", uuid=" + uuid + "]";
+	public String getHostName() {
+		assert hostName == null
+				|| hostName.trim().toUpperCase().equals(hostName);
+		return hostName;
+	}
+
+	@Override
+	public long getId() {
+		return id;
+	}
+
+	@Override
+	public int getMaxChoiceMakerThreads() {
+		return maxThreads;
+	}
+
+	@Override
+	public int getMaxFileEntries() {
+		return maxFileEntryCount;
+	}
+
+	@Override
+	public int getMaxFilesCount() {
+		return maxFilesCount;
+	}
+
+	@Override
+	@Deprecated
+	public int getMaxOabaChunkFileCount() {
+		return getMaxFilesCount();
+	}
+
+	@Override
+	@Deprecated
+	public int getMaxOabaChunkFileRecords() {
+		return getMaxFileEntries();
+	}
+
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public String getUUID() {
+		return uuid;
+	}
+
+	@Override
+	public File getWorkingDirectoryLocation() {
+		File retVal = null;
+		if (fileURI != null) {
+			try {
+				retVal = new File(new URI(fileURI));
+			} catch (URISyntaxException e) {
+				String msg =
+					"Invalid file location: " + fileURI + ": " + e.toString();
+				logger.severe(msg);
+				new IllegalStateException(msg);
+			}
+		}
+		assert retVal != null;
+		return retVal;
+	}
+
+	@Override
+	public String getWorkingDirectoryLocationUriString() {
+		return fileURI;
+	}
+
+	@Override
+	public boolean isPersistent() {
+		return isPersistent(this);
+	}
+
+	@Override
+	public boolean isWorkingDirectoryLocationValid() {
+		boolean retVal = false;
+		try {
+			File f = new File(new URI(fileURI));
+			if (f != null && f.exists() && f.isDirectory() && f.canWrite()
+					&& f.canRead()) {
+				retVal = true;
+			}
+		} catch (Exception x) {
+			String msg =
+				"Invalid file location: " + fileURI + ": " + x.toString();
+			logger.warning(msg);
+			assert retVal == false;
+		}
+		return retVal;
 	}
 
 	@Override
@@ -329,19 +330,31 @@ public class ServerConfigurationEntity implements MutableServerConfiguration {
 	}
 
 	@Override
-	public void setMaxOabaChunkFileRecords(int value) {
+	public void setMaxFileEntries(int value) {
 		if (value < 0) {
-			throw new IllegalArgumentException("negative chunk size");
+			throw new IllegalArgumentException("negative file entry count");
 		}
-		this.maxChunkSize = value;
+		this.maxFileEntryCount = value;
 	}
 
 	@Override
-	public void setMaxOabaChunkFileCount(int value) {
+	public void setMaxFilesCount(int value) {
 		if (value < 0) {
-			throw new IllegalArgumentException("negative chunk count");
+			throw new IllegalArgumentException("negative files count");
 		}
-		this.maxChunkCount = value;
+		this.maxFilesCount = value;
+	}
+
+	@Override
+	@Deprecated
+	public void setMaxOabaChunkFileCount(int value) {
+		setMaxFilesCount(value);
+	}
+
+	@Override
+	@Deprecated
+	public void setMaxOabaChunkFileRecords(int value) {
+		setMaxFileEntries(value);
 	}
 
 	@Override
@@ -366,6 +379,12 @@ public class ServerConfigurationEntity implements MutableServerConfiguration {
 					"location can not be read: " + location);
 		}
 		this.fileURI = location.toURI().toString();
+	}
+
+	@Override
+	public String toString() {
+		return "ServerConfigurationEntity [id=" + id + ", name=" + name
+				+ ", uuid=" + uuid + "]";
 	}
 
 }

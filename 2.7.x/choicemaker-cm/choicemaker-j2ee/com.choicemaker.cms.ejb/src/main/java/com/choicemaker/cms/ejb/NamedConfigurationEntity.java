@@ -203,10 +203,10 @@ public class NamedConfigurationEntity extends AbstractPersistentObject
 	protected int serverMaxThreads = DEFAULT_SERVERMAXTHREADS;
 
 	@Column(name = CN_SVR_MAX_CHUNKSIZE)
-	protected int serverMaxChunkSize = DEFAULT_SERVERMAXCHUNKSIZE;
+	protected int serverMaxFileEntries = DEFAULT_SERVERMAXFILEENTRIES;
 
 	@Column(name = CN_SVR_MAX_CHUNKCOUNT)
-	protected int serverMaxChunkCount = DEFAULT_SERVERMAXCHUNKCOUNT;
+	protected int serverMaxFilesCount = DEFAULT_SERVERMAXFILESCOUNT;
 
 	@Column(name = CN_SVR_FILE)
 	protected String serverFileURI = DEFAULT_SERVERFILEURI;
@@ -247,8 +247,8 @@ public class NamedConfigurationEntity extends AbstractPersistentObject
 		this.setOabaMinFields(nc.getOabaMinFields());
 		this.setOabaInterval(nc.getOabaInterval());
 		this.setServerMaxThreads(nc.getServerMaxThreads());
-		this.setServerMaxChunkSize(nc.getServerMaxChunkSize());
-		this.setServerMaxChunkCount(nc.getServerMaxChunkCount());
+		this.setServerMaxChunkSize(nc.getServerMaxFileEntries());
+		this.setServerMaxChunkCount(nc.getServerMaxFilesCount());
 		this.setServerFileURI(nc.getServerFileURI());
 		this.setReferenceDatabaseReader(nc.getReferenceDatabaseReader());
 	}
@@ -421,13 +421,13 @@ public class NamedConfigurationEntity extends AbstractPersistentObject
 	}
 
 	@Override
-	public int getServerMaxChunkSize() {
-		return serverMaxChunkSize;
+	public int getServerMaxFileEntries() {
+		return serverMaxFileEntries;
 	}
 
 	@Override
-	public int getServerMaxChunkCount() {
-		return serverMaxChunkCount;
+	public int getServerMaxFilesCount() {
+		return serverMaxFilesCount;
 	}
 
 	@Override
@@ -565,12 +565,22 @@ public class NamedConfigurationEntity extends AbstractPersistentObject
 		this.serverMaxThreads = serverMaxThreads;
 	}
 
-	public void setServerMaxChunkSize(int serverMaxChunkSize) {
-		this.serverMaxChunkSize = serverMaxChunkSize;
+	public void setServerMaxFileEntries(int serverMaxFileEntries) {
+		this.serverMaxFileEntries = serverMaxFileEntries;
 	}
 
+	@Deprecated
+	public void setServerMaxChunkSize(int serverMaxChunkSize) {
+		setServerMaxFileEntries(serverMaxChunkSize);
+	}
+
+	public void setServerMaxFilesCount(int serverMaxFilesCount) {
+		this.serverMaxFilesCount = serverMaxFilesCount;
+	}
+
+	@Deprecated
 	public void setServerMaxChunkCount(int serverMaxChunkCount) {
-		this.serverMaxChunkCount = serverMaxChunkCount;
+		setServerMaxFilesCount(serverMaxChunkCount);
 	}
 
 	public void setServerFileURI(String serverFileURI) {
@@ -726,10 +736,10 @@ public class NamedConfigurationEntity extends AbstractPersistentObject
 		} else if (!serverFileURI.equals(nc.getServerFileURI())) {
 			return false;
 		}
-		if (serverMaxChunkCount != nc.getServerMaxChunkCount()) {
+		if (serverMaxFilesCount != nc.getServerMaxFilesCount()) {
 			return false;
 		}
-		if (serverMaxChunkSize != nc.getServerMaxChunkSize()) {
+		if (serverMaxFileEntries != nc.getServerMaxFileEntries()) {
 			return false;
 		}
 		if (serverMaxThreads != nc.getServerMaxThreads()) {

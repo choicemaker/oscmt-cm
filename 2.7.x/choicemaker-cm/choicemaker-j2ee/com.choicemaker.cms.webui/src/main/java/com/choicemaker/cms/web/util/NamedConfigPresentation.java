@@ -49,8 +49,8 @@ public class NamedConfigPresentation {
 		_s.add(new PropertyNameType("OabaMinFields", int.class));
 		_s.add(new PropertyNameType("OabaInterval", int.class));
 		_s.add(new PropertyNameType("ServerMaxThreads", int.class));
-		_s.add(new PropertyNameType("ServerMaxChunkSize", int.class));
-		_s.add(new PropertyNameType("ServerMaxChunkCount", int.class));
+		_s.add(new PropertyNameType("ServerMaxFileEntries", int.class));
+		_s.add(new PropertyNameType("ServerMaxFilesCount", int.class));
 		_s.add(new PropertyNameType("ServerFileURI", String.class));
 	}
 

@@ -11,8 +11,8 @@ import static com.choicemaker.cms.api.NamedConfiguration.DEFAULT_OABAMAXMATCHES;
 import static com.choicemaker.cms.api.NamedConfiguration.DEFAULT_OABAMAXOVERSIZED;
 import static com.choicemaker.cms.api.NamedConfiguration.DEFAULT_OABAMAXSINGLE;
 import static com.choicemaker.cms.api.NamedConfiguration.DEFAULT_OABAMINFIELDS;
-import static com.choicemaker.cms.api.NamedConfiguration.DEFAULT_SERVERMAXCHUNKCOUNT;
-import static com.choicemaker.cms.api.NamedConfiguration.DEFAULT_SERVERMAXCHUNKSIZE;
+import static com.choicemaker.cms.api.NamedConfiguration.DEFAULT_SERVERMAXFILESCOUNT;
+import static com.choicemaker.cms.api.NamedConfiguration.DEFAULT_SERVERMAXFILEENTRIES;
 import static com.choicemaker.cms.api.NamedConfiguration.DEFAULT_SERVERMAXTHREADS;
 import static com.choicemaker.util.ReflectionUtils.getAccessor;
 import static com.choicemaker.util.ReflectionUtils.getManipulator;
@@ -301,13 +301,13 @@ public class NamedConfigurationEntityIT {
 	@Test
 	public void testServerMaxChunkSize() {
 		testPersistentProperty(int.class, "ServerMaxChunkSize",
-				randomInt(DEFAULT_SERVERMAXCHUNKSIZE));
+				randomInt(DEFAULT_SERVERMAXFILEENTRIES));
 	}
 
 	@Test
 	public void testServerMaxChunkCount() {
 		testPersistentProperty(int.class, "ServerMaxChunkCount",
-				randomInt(DEFAULT_SERVERMAXCHUNKCOUNT));
+				randomInt(DEFAULT_SERVERMAXFILESCOUNT));
 	}
 
 	@Test

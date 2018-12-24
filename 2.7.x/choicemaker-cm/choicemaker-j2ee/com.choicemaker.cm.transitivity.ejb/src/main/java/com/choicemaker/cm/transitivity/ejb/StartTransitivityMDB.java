@@ -239,7 +239,7 @@ public class StartTransitivityMDB extends AbstractTransitivityBmtMDB {
 			int numProcessors = serverConfig.getMaxChoiceMakerThreads();
 
 			// get the number of chunk files
-			int numFiles = serverConfig.getMaxOabaChunkFileCount();
+			int numFiles = serverConfig.getMaxFilesCount();
 
 			// create the oversized block transformer
 			Transformer transformerO = new Transformer(currentTranslator,

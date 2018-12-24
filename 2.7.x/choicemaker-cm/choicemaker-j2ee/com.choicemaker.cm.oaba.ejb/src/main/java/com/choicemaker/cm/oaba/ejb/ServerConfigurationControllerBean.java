@@ -48,9 +48,15 @@ public class ServerConfigurationControllerBean
 
 	public static final long INVALID_ID = 0;
 
-	public static final int DEFAULT_MAX_CHUNK_SIZE = 1000000;
+	public static final int DEFAULT_FILE_ENTRY_COUNT = 1000000;
 
-	public static final int DEFAULT_MAX_CHUNK_COUNT = 2000;
+	@Deprecated
+	public static final int DEFAULT_MAX_CHUNK_SIZE = DEFAULT_FILE_ENTRY_COUNT;
+
+	public static final int DEFAULT_MAX_FILES_COUNT = 2000;
+
+	@Deprecated
+	public static final int DEFAULT_MAX_CHUNK_COUNT = DEFAULT_MAX_FILES_COUNT;
 
 	public static int computeAvailableProcessors() {
 		int retVal = Runtime.getRuntime().availableProcessors();
@@ -204,8 +210,8 @@ public class ServerConfigurationControllerBean
 		retVal.setConfigurationName(computeUniqueGenericName());
 		retVal.setHostName(computeHostName());
 		retVal.setMaxChoiceMakerThreads(computeAvailableProcessors());
-		retVal.setMaxOabaChunkFileCount(DEFAULT_MAX_CHUNK_COUNT);
-		retVal.setMaxOabaChunkFileRecords(DEFAULT_MAX_CHUNK_SIZE);
+		retVal.setMaxFilesCount(DEFAULT_MAX_FILES_COUNT);
+		retVal.setMaxFileEntries(DEFAULT_FILE_ENTRY_COUNT);
 		retVal.setWorkingDirectoryLocation(computeGenericLocation());
 		return retVal;
 	}
@@ -222,8 +228,9 @@ public class ServerConfigurationControllerBean
 		retVal.setConfigurationName(computeUniqueGenericName());
 		retVal.setHostName(hostName);
 		retVal.setMaxChoiceMakerThreads(computeAvailableProcessors());
-		retVal.setMaxOabaChunkFileCount(DEFAULT_MAX_CHUNK_COUNT);
-		retVal.setMaxOabaChunkFileRecords(DEFAULT_MAX_CHUNK_SIZE);
+		retVal.setMaxFilesCount(DEFAULT_MAX_FILES_COUNT);
+		retVal.setMaxFileEntries(DEFAULT_FILE_ENTRY_COUNT);
+
 		retVal.setWorkingDirectoryLocation(computeGenericLocation());
 		return retVal;
 	}

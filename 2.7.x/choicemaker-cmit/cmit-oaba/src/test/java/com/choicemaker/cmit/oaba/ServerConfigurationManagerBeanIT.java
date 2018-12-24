@@ -1,5 +1,6 @@
 package com.choicemaker.cmit.oaba;
 
+import static com.choicemaker.cm.oaba.ejb.ServerConfigurationControllerBean.*;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -38,7 +39,6 @@ import com.choicemaker.cm.oaba.api.RecordSourceController;
 import com.choicemaker.cm.oaba.api.ServerConfigurationController;
 import com.choicemaker.cm.oaba.api.ServerConfigurationException;
 import com.choicemaker.cm.oaba.ejb.DefaultServerConfigurationEntity;
-import com.choicemaker.cm.oaba.ejb.ServerConfigurationControllerBean;
 import com.choicemaker.cm.oaba.ejb.ServerConfigurationEntity;
 import com.choicemaker.cmit.oaba.util.OabaDeploymentUtils;
 import com.choicemaker.cmit.utils.j2ee.TestEntityCounts;
@@ -63,8 +63,8 @@ public class ServerConfigurationManagerBeanIT {
 	public static final String LOG_SOURCE =
 		ServerConfigurationManagerBeanIT.class.getSimpleName();
 
-	private static final Logger logger = Logger
-			.getLogger(ServerConfigurationManagerBeanIT.class.getName());
+	private static final Logger logger =
+		Logger.getLogger(ServerConfigurationManagerBeanIT.class.getName());
 
 	@Resource
 	UserTransaction utx;
@@ -103,19 +103,16 @@ public class ServerConfigurationManagerBeanIT {
 
 	@Before
 	public void setUp() throws Exception {
-		te =
-			new TestEntityCounts(logger, oabaManager, paramsController,
-					oabaSettingsController, serverController,
-					eventManager, opPropController, rsController,
-					ridController);
+		te = new TestEntityCounts(logger, oabaManager, paramsController,
+				oabaSettingsController, serverController, eventManager,
+				opPropController, rsController, ridController);
 	}
 
 	public void checkCounts() {
 		if (te != null) {
 			te.checkCounts(logger, em, utx, oabaManager, paramsController,
-					oabaSettingsController, serverController,
-					eventManager, opPropController, rsController,
-					ridController);
+					oabaSettingsController, serverController, eventManager,
+					opPropController, rsController, ridController);
 		} else {
 			throw new Error("Counts not initialized");
 		}
@@ -132,15 +129,14 @@ public class ServerConfigurationManagerBeanIT {
 	@Test
 	@InSequence(10)
 	public void testComputeAvailableProcessors() {
-		int count =
-			ServerConfigurationControllerBean.computeAvailableProcessors();
+		int count = computeAvailableProcessors();
 		assertTrue(count > -1);
 	}
 
 	@Test
 	@InSequence(10)
 	public void testComputeHostName() {
-		String name = ServerConfigurationControllerBean.computeHostName();
+		String name = computeHostName();
 		assertTrue(name != null && !name.trim().isEmpty());
 	}
 
@@ -149,8 +145,7 @@ public class ServerConfigurationManagerBeanIT {
 	public void testComputeUniqueGenericName() {
 		Set<String> uniqueNames = new HashSet<>();
 		for (int i = 0; i < MAX_TEST_ITERATIONS; i++) {
-			String name =
-				ServerConfigurationControllerBean.computeUniqueGenericName();
+			String name = computeUniqueGenericName();
 			uniqueNames.add(name);
 		}
 		assertTrue(uniqueNames.size() == MAX_TEST_ITERATIONS);
@@ -162,12 +157,11 @@ public class ServerConfigurationManagerBeanIT {
 		MutableServerConfiguration msc =
 			serverController.computeGenericConfiguration();
 		assertTrue(msc.getId() == ServerConfigurationEntity.NON_PERSISTENT_ID);
-		assertTrue(msc.getHostName().equals(
-				ServerConfigurationControllerBean.computeHostName()));
-		assertTrue(msc.getMaxChoiceMakerThreads() == ServerConfigurationControllerBean
-				.computeAvailableProcessors());
-		assertTrue(msc.getMaxOabaChunkFileCount() == ServerConfigurationControllerBean.DEFAULT_MAX_CHUNK_COUNT);
-		assertTrue(msc.getMaxOabaChunkFileRecords() == ServerConfigurationControllerBean.DEFAULT_MAX_CHUNK_SIZE);
+		assertTrue(msc.getHostName().equals(computeHostName()));
+		assertTrue(
+				msc.getMaxChoiceMakerThreads() == computeAvailableProcessors());
+		assertTrue(msc.getMaxFilesCount() == DEFAULT_MAX_FILES_COUNT);
+		assertTrue(msc.getMaxFileEntries() == DEFAULT_FILE_ENTRY_COUNT);
 	}
 
 	@Test
@@ -182,10 +176,8 @@ public class ServerConfigurationManagerBeanIT {
 		assertTrue(msc.getHostName().equals(msc2.getHostName()));
 		assertTrue(msc.getMaxChoiceMakerThreads() == msc2
 				.getMaxChoiceMakerThreads());
-		assertTrue(msc.getMaxOabaChunkFileCount() == msc2
-				.getMaxOabaChunkFileCount());
-		assertTrue(msc.getMaxOabaChunkFileRecords() == msc2
-				.getMaxOabaChunkFileRecords());
+		assertTrue(msc.getMaxFilesCount() == msc2.getMaxFilesCount());
+		assertTrue(msc.getMaxFileEntries() == msc2.getMaxFileEntries());
 	}
 
 	@Test
@@ -326,9 +318,8 @@ public class ServerConfigurationManagerBeanIT {
 			assertTrue(msc5.getId() == 0);
 			final ServerConfiguration sc5 = serverController.save(msc5);
 			te.add(sc5);
-			configs =
-				serverController.findServerConfigurationsByHostName(fakeHost3,
-						strictNoWildcards);
+			configs = serverController.findServerConfigurationsByHostName(
+					fakeHost3, strictNoWildcards);
 			assertTrue(configs.size() == 2);
 			final DefaultServerConfiguration dsc6 =
 				serverController.findDefaultServerConfiguration(fakeHost3);
@@ -336,7 +327,8 @@ public class ServerConfigurationManagerBeanIT {
 
 			// Set the first configuration as the default and retrieve it
 			serverController.setDefaultConfiguration(fakeHost3, sc3);
-			te.add(new DefaultServerConfigurationEntity(fakeHost3, sc3.getId()));
+			te.add(new DefaultServerConfigurationEntity(fakeHost3,
+					sc3.getId()));
 			final DefaultServerConfiguration dsc7 =
 				serverController.findDefaultServerConfiguration(fakeHost3);
 			assertTrue(dsc7 != null);

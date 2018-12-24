@@ -258,8 +258,8 @@ public class NamedConfigConversion {
 		final String hostName =
 			ServerConfigurationControllerBean.computeHostName();
 		final int maxThreads = nc.getServerMaxThreads();
-		final int maxChunkFileRecords = nc.getServerMaxChunkSize();
-		final int maxChunkFileCount = nc.getServerMaxChunkCount();
+		final int maxFileEntries = nc.getServerMaxFileEntries();
+		final int maxFilesCount = nc.getServerMaxFilesCount();
 		final String location = nc.getServerFileURI();
 		final URI uri = new URI(location);
 		final File workingDir = new File(uri);
@@ -269,8 +269,8 @@ public class NamedConfigConversion {
 		sc.setConfigurationName(scName);
 		sc.setHostName(hostName);
 		sc.setMaxChoiceMakerThreads(maxThreads);
-		sc.setMaxOabaChunkFileRecords(maxChunkFileRecords);
-		sc.setMaxOabaChunkFileCount(maxChunkFileCount);
+		sc.setMaxFileEntries(maxFileEntries);
+		sc.setMaxFilesCount(maxFilesCount);
 		sc.setWorkingDirectoryLocation(workingDir);
 
 		ServerConfiguration retVal = sc;

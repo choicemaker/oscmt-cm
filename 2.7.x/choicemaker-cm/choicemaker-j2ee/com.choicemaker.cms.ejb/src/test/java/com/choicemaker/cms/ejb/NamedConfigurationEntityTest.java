@@ -10,8 +10,8 @@ import static com.choicemaker.cms.api.NamedConfiguration.DEFAULT_OABAMAXMATCHES;
 import static com.choicemaker.cms.api.NamedConfiguration.DEFAULT_OABAMAXOVERSIZED;
 import static com.choicemaker.cms.api.NamedConfiguration.DEFAULT_OABAMAXSINGLE;
 import static com.choicemaker.cms.api.NamedConfiguration.DEFAULT_OABAMINFIELDS;
-import static com.choicemaker.cms.api.NamedConfiguration.DEFAULT_SERVERMAXCHUNKCOUNT;
-import static com.choicemaker.cms.api.NamedConfiguration.DEFAULT_SERVERMAXCHUNKSIZE;
+import static com.choicemaker.cms.api.NamedConfiguration.DEFAULT_SERVERMAXFILESCOUNT;
+import static com.choicemaker.cms.api.NamedConfiguration.DEFAULT_SERVERMAXFILEENTRIES;
 import static com.choicemaker.cms.api.NamedConfiguration.DEFAULT_SERVERMAXTHREADS;
 import static com.choicemaker.util.ReflectionUtils.randomBoolean;
 import static com.choicemaker.util.ReflectionUtils.randomFloat;
@@ -96,9 +96,9 @@ public class NamedConfigurationEntityTest {
 		setProperty(nc0, int.class, "ServerMaxThreads",
 				randomInt(DEFAULT_SERVERMAXTHREADS));
 		setProperty(nc0, int.class, "ServerMaxChunkSize",
-				randomInt(DEFAULT_SERVERMAXCHUNKSIZE));
+				randomInt(DEFAULT_SERVERMAXFILEENTRIES));
 		setProperty(nc0, int.class, "ServerMaxChunkCount",
-				randomInt(DEFAULT_SERVERMAXCHUNKCOUNT));
+				randomInt(DEFAULT_SERVERMAXFILESCOUNT));
 		setProperty(nc0, String.class, "ServerFileURI", randomString());
 
 		// Create a copy of the modified configuration
@@ -302,13 +302,13 @@ public class NamedConfigurationEntityTest {
 	@Test
 	public void testServerMaxChunkSize() {
 		testProperty(new NamedConfigurationEntity(), int.class,
-				"ServerMaxChunkSize", randomInt(DEFAULT_SERVERMAXCHUNKSIZE));
+				"ServerMaxChunkSize", randomInt(DEFAULT_SERVERMAXFILEENTRIES));
 	}
 
 	@Test
 	public void testServerMaxChunkCount() {
 		testProperty(new NamedConfigurationEntity(), int.class,
-				"ServerMaxChunkCount", randomInt(DEFAULT_SERVERMAXCHUNKCOUNT));
+				"ServerMaxChunkCount", randomInt(DEFAULT_SERVERMAXFILESCOUNT));
 	}
 
 	@Test

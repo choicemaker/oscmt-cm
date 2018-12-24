@@ -56,8 +56,8 @@ public interface NamedConfiguration {
 	public static final int DEFAULT_OABAMINFIELDS = 3;
 	public static final int DEFAULT_OABAINTERVAL = 100;
 	public static final int DEFAULT_SERVERMAXTHREADS = 1;
-	public static final int DEFAULT_SERVERMAXCHUNKSIZE = 1000000;
-	public static final int DEFAULT_SERVERMAXCHUNKCOUNT = 2000;
+	public static final int DEFAULT_SERVERMAXFILEENTRIES = 1000000;
+	public static final int DEFAULT_SERVERMAXFILESCOUNT = 2000;
 	public static final String DEFAULT_SERVERFILEURI = "";
 
 	long getId();
@@ -126,9 +126,9 @@ public interface NamedConfiguration {
 
 	int getServerMaxThreads();
 
-	int getServerMaxChunkSize();
+	int getServerMaxFileEntries();
 
-	int getServerMaxChunkCount();
+	int getServerMaxFilesCount();
 
 	String getServerFileURI();
 

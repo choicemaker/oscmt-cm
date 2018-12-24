@@ -28,9 +28,17 @@ public interface MutableServerConfiguration extends ServerConfiguration {
 	void setMaxChoiceMakerThreads(int maxThreadCount);
 
 	/** The maximum number of records in an OABA chunk file */
+	void setMaxFileEntries(int maxFileEntries);
+
+	/** A deprecated alias for {@link #setMaxFileEntries(int)} */
+	@Deprecated
 	void setMaxOabaChunkFileRecords(int maxChunkSize);
 
 	/** The maximum number of OABA chunk files */
+	void setMaxFilesCount(int maxFilesCount);
+
+	/** A deprecated alias for {@link #setMaxFilesCount(int)} */
+	@Deprecated
 	void setMaxOabaChunkFileCount(int maxChunkCount);
 
 	/**

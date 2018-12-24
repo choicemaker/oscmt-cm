@@ -100,7 +100,7 @@ public class Chunk2MDB extends AbstractOabaBmtMDB {
 		final int maxBlockSize = oabaSettings.getMaxBlockSize();
 		final int maxChunk = oabaSettings.getMaxChunkSize();
 		final int numProcessors = serverConfig.getMaxChoiceMakerThreads();
-		final int maxChunkFiles = serverConfig.getMaxOabaChunkFileCount();
+		final int maxChunkFiles = serverConfig.getMaxFilesCount();
 		log.info("Maximum chunk size: " + maxChunk);
 		log.info("Number of processors: " + numProcessors);
 		log.info("Maximum chunk files: " + maxChunkFiles);
