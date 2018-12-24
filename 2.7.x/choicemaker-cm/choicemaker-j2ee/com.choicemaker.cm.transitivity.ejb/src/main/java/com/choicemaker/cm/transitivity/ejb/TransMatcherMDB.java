@@ -58,8 +58,8 @@ import com.choicemaker.cm.transitivity.api.TransitivityParametersController;
 		@ActivationConfigProperty(propertyName = "destinationType",
 				propertyValue = "javax.jms.Queue"),
 		@ActivationConfigProperty(propertyName = "acknowledgeMode",
-		propertyValue = "Dups-ok-acknowledge") })
-//@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+				propertyValue = "Dups-ok-acknowledge") })
+// @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 @TransactionManagement(value = TransactionManagementType.BEAN)
 public class TransMatcherMDB extends AbstractMatcherBmt
 		implements MessageListener {
@@ -69,7 +69,6 @@ public class TransMatcherMDB extends AbstractMatcherBmt
 		Logger.getLogger(TransMatcherMDB.class.getName());
 	private static final Logger jmsTrace =
 		Logger.getLogger("jmstrace." + TransMatcherMDB.class.getName());
-	private static final String SOURCE = TransMatcherMDB.class.getSimpleName();
 
 	// -- Injected instance data
 

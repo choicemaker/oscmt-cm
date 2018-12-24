@@ -13,6 +13,7 @@ import static com.choicemaker.cm.args.OperationalPropertyNames.PN_RECORD_ID_TYPE
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_REGULAR_CHUNK_FILE_COUNT;
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_TOTAL_CHUNK_COMPARISONS;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.annotation.Resource;
@@ -36,6 +37,7 @@ import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ISerializableRecordSource;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.oaba.core.IBlockSinkSourceFactory;
+import com.choicemaker.cm.oaba.core.IComparisonSet;
 import com.choicemaker.cm.oaba.core.IComparisonSetSource;
 import com.choicemaker.cm.oaba.core.ImmutableRecordIdTranslator;
 import com.choicemaker.cm.oaba.core.OabaEventBean;
@@ -178,7 +180,8 @@ public class Chunk2MDB extends AbstractOabaBmtMDB {
 		int totalComparisons = 0;
 		for (int currentChunk = 0; currentChunk < numChunks; currentChunk++) {
 			int chunkComparisons = 0;
-			for (int treeIndex = 0; treeIndex < numProcessors; treeIndex++) {
+			// Tree indices are one-based
+			for (int treeIndex = 1; treeIndex <= numProcessors; treeIndex++) {
 				int treeComparisons = getComparisons(batchJob, currentChunk,
 						treeIndex, recordIdType, numRegularChunks,
 						numProcessors, maxBlockSize);
@@ -199,19 +202,77 @@ public class Chunk2MDB extends AbstractOabaBmtMDB {
 			final int treeIndex, final RECORD_ID_TYPE recordIdType,
 			final int numRegularChunks, final int numProcessors,
 			final int maxBlockSize) throws BlockingException {
+		assert job != null;
 		assert currentChunk >= 0;
+		assert treeIndex > 0 && treeIndex <= numProcessors;
+		assert recordIdType != null;
 
 		@SuppressWarnings("rawtypes")
-		IComparisonSetSource setSource = OabaFileUtils.getComparisonSetSource(
-				job, currentChunk, treeIndex, recordIdType, numRegularChunks,
+		IComparisonSetSource sets = OabaFileUtils.getComparisonSetSource(job,
+				currentChunk, treeIndex, recordIdType, numRegularChunks,
 				numProcessors, maxBlockSize);
-		if (setSource.exists()) {
-			// setSource.
+
+		int setCount = 0;
+		int retVal = 0;
+		if (sets != null && sets.exists()) {
+			try {
+				sets.open();
+				while (sets.hasNext()) {
+					IComparisonSet set = (IComparisonSet) sets.next();
+					assert set != null;
+					++setCount;
+					while (set.hasNextPair()) {
+						++retVal;
+					}
+				}
+
+			} catch (Exception x) {
+				String msg0 = "Could not open or read comparison-set for "
+						+ "[batchJob: %d, chunk: %d, index: %d, "
+						+ "recordIdType %s]: %s";
+				String msg = String.format(msg0, job.getId(), currentChunk,
+						treeIndex, recordIdType.toString(), x.toString());
+				log.severe(msg);
+				throw new BlockingException(msg);
+
+			} finally {
+				try {
+					sets.close();
+				} catch (Exception x) {
+					String msg0 = "Unable to close %s: %s";
+					String msg =
+						String.format(msg0, sets.toString(), x.toString());
+					log.warning(msg);
+				}
+			}
+
 		} else {
-			throw new BlockingException(
-					"Could not get regular source " + setSource.getInfo());
+			String msg0 = "Could not get comparison-set for "
+					+ "[batchJob: %d, chunk: %d, index: %d, recordIdType %s]";
+			String msg = String.format(msg0, job.getId(), currentChunk,
+					treeIndex, recordIdType.toString());
+			log.severe(msg);
+			throw new BlockingException(msg);
 		}
-		throw new Error("incomplete implementation");
+
+		if (log.isLoggable(Level.FINE)) {
+			String msg0;
+			String msg;
+
+			msg0 = "Set count for "
+					+ "[batchJob: %d, chunk: %d, index: %d]: %d";
+			msg = String.format(msg0, job.getId(), currentChunk, treeIndex,
+					setCount);
+			log.fine(msg);
+
+			msg0 = "Comparison count for "
+					+ "[batchJob: %d, chunk: %d, index: %d]: %d";
+			msg = String.format(msg0, job.getId(), currentChunk, treeIndex,
+					retVal);
+			log.fine(msg);
+		}
+
+		return retVal;
 	}
 
 	@Override

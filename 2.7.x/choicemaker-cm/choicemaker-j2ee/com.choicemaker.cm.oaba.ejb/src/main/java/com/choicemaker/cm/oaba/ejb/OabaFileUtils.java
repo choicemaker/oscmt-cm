@@ -158,8 +158,7 @@ public class OabaFileUtils {
 		if (currentChunk < numRegularChunks) {
 			// regular-sized comparison sets
 			ComparisonTreeGroupSinkSourceFactory factory =
-				getComparisonTreeGroupFactory(job, recordIdType,
-						numProcessors);
+				getComparisonTreeGroupFactory(job, recordIdType, numProcessors);
 			IComparisonTreeSource source =
 				factory.getSource(currentChunk, treeIndex);
 			if (source.exists()) {
@@ -171,7 +170,8 @@ public class OabaFileUtils {
 		} else {
 			// over-sized comparison sets
 			int i = currentChunk - numRegularChunks;
-			ComparisonArrayGroupSinkSourceFactory factoryOS = getComparisonArrayGroupFactoryOS(job, numProcessors);
+			ComparisonArrayGroupSinkSourceFactory factoryOS =
+				getComparisonArrayGroupFactoryOS(job, numProcessors);
 			IComparisonArraySource sourceOS = factoryOS.getSource(i, treeIndex);
 			if (sourceOS.exists()) {
 				retVal = new ComparisonSetOSSource(sourceOS, maxBlockSize);
@@ -210,9 +210,9 @@ public class OabaFileUtils {
 	}
 
 	/**
-	 * This returns the final sink in which to store the result of the OABA.
-	 * The file size is limited to <code>maxFileSize</code>.
-	 * The file name is [file dir]/match_[job id]_*.txt.
+	 * This returns the final sink in which to store the result of the OABA. The
+	 * file size is limited to <code>maxFileSize</code>. The file name is [file
+	 * dir]/match_[job id]_*.txt.
 	 *
 	 * @return IMatchRecord2Sink - the sink to store the OABA output.
 	 */
@@ -221,8 +221,8 @@ public class OabaFileUtils {
 			int maxFileSize, IndexedFileObserver ifo) {
 		Precondition.assertBoolean(maxFileSize > 0);
 		String fileName = getCompositeMatchFileName(job);
-		return new MatchRecord2CompositeSink(fileName, TEXT_SUFFIX,
-				maxFileSize, ifo);
+		return new MatchRecord2CompositeSink(fileName, TEXT_SUFFIX, maxFileSize,
+				ifo);
 	}
 
 	/**

@@ -420,12 +420,12 @@ public abstract class AbstractMatcherBmt
 
 		final String _recordIdType =
 			getPropertyController().getJobProperty(job, PN_RECORD_ID_TYPE);
-		final RECORD_ID_TYPE recordIdType =
-			RECORD_ID_TYPE.valueOf(_recordIdType);
+		final RECORD_ID_TYPE recordIdType = _recordIdType == null ? null
+				: RECORD_ID_TYPE.valueOf(_recordIdType);
 
-		IComparisonSetSource retVal = OabaFileUtils.getComparisonSetSource(job, currentChunk,
-				data.treeIndex, recordIdType, numRegularChunks, numProcessors,
-				maxBlockSize);
+		IComparisonSetSource retVal = OabaFileUtils.getComparisonSetSource(job,
+				currentChunk, data.treeIndex, recordIdType, numRegularChunks,
+				numProcessors, maxBlockSize);
 		return retVal;
 	}
 
