@@ -41,7 +41,7 @@ public interface AbstractParametersJPA {
 
 	String CN_MODEL = "MODEL";
 
-	String CN_MAX_SINGLE = "MAX_SINGLE";
+	String CN_OABA_MAX_SINGLE = "MAX_SINGLE";
 
 	String CN_LOW_THRESHOLD = "LOW_THRESHOLD";
 

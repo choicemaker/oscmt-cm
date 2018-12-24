@@ -11,9 +11,9 @@ import static com.choicemaker.cm.oaba.ejb.ServerConfigurationJPA.CN_CONFIGNAME;
 import static com.choicemaker.cm.oaba.ejb.ServerConfigurationJPA.CN_FILE;
 import static com.choicemaker.cm.oaba.ejb.ServerConfigurationJPA.CN_HOSTNAME;
 import static com.choicemaker.cm.oaba.ejb.ServerConfigurationJPA.CN_ID;
-import static com.choicemaker.cm.oaba.ejb.ServerConfigurationJPA.CN_MAXCHUNKCOUNT;
-import static com.choicemaker.cm.oaba.ejb.ServerConfigurationJPA.CN_MAXCHUNKSIZE;
-import static com.choicemaker.cm.oaba.ejb.ServerConfigurationJPA.CN_MAXTHREADS;
+import static com.choicemaker.cm.oaba.ejb.ServerConfigurationJPA.CN_SVR_MAX_CHUNKCOUNT;
+import static com.choicemaker.cm.oaba.ejb.ServerConfigurationJPA.CN_SVR_MAX_CHUNKSIZE;
+import static com.choicemaker.cm.oaba.ejb.ServerConfigurationJPA.CN_SVR_MAX_THREADS;
 import static com.choicemaker.cm.oaba.ejb.ServerConfigurationJPA.CN_UUID;
 import static com.choicemaker.cm.oaba.ejb.ServerConfigurationJPA.ID_GENERATOR_NAME;
 import static com.choicemaker.cm.oaba.ejb.ServerConfigurationJPA.ID_GENERATOR_PK_COLUMN_NAME;
@@ -133,13 +133,13 @@ public class ServerConfigurationEntity implements MutableServerConfiguration {
 	@Column(name = CN_HOSTNAME)
 	private String hostName;
 
-	@Column(name = CN_MAXTHREADS)
+	@Column(name = CN_SVR_MAX_THREADS)
 	private int maxThreads;
 
-	@Column(name = CN_MAXCHUNKSIZE)
+	@Column(name = CN_SVR_MAX_CHUNKSIZE)
 	private int maxChunkSize;
 
-	@Column(name = CN_MAXCHUNKCOUNT)
+	@Column(name = CN_SVR_MAX_CHUNKCOUNT)
 	private int maxChunkCount;
 
 	@Column(name = CN_FILE)

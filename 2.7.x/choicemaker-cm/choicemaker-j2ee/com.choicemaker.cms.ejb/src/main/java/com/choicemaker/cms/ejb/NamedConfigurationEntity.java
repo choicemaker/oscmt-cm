@@ -6,25 +6,25 @@ import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_CM_IO_CLASS;
 import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_CONF_DESCRIPTION;
 import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_CONF_NAME;
 import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_DATASOURCE;
-import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_FILE;
+import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_SVR_FILE;
 import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_FORMAT;
 import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_GRAPH;
 import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_HIGH_THRESHOLD;
 import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_ID;
-import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_INTERVAL;
-import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_LIMIT_BLOCKSET;
-import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_LIMIT_SINGLESET;
-import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_LIMIT_SINGLETABLE;
+import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_OABA_INTERVAL;
+import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_ABA_LIMIT_BLOCKSET;
+import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_ABA_LIMIT_SINGLESET;
+import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_ABA_LIMIT_SINGLETABLE;
 import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_LOW_THRESHOLD;
-import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_MAXCHUNKCOUNT;
-import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_MAXCHUNKSIZE;
-import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_MAXTHREADS;
-import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_MAX_BLOCKSIZE;
-import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_MAX_CHUNKSIZE;
-import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_MAX_MATCHES;
-import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_MAX_OVERSIZE;
-import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_MAX_SINGLE;
-import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_MIN_FIELDS;
+import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_SVR_MAX_CHUNKCOUNT;
+import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_SVR_MAX_CHUNKSIZE;
+import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_SVR_MAX_THREADS;
+import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_OABA_MAX_BLOCKSIZE;
+import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_OABA_MAX_CHUNKSIZE;
+import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_OABA_MAX_MATCHES;
+import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_OABA_MAX_OVERSIZE;
+import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_OABA_MAX_SINGLE;
+import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_OABA_MIN_FIELDS;
 import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_MODEL;
 import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_QUERY_DBCONF;
 import static com.choicemaker.cms.ejb.NamedConfigurationJPA.CN_QUERY_IS_DEDUPED;
@@ -164,51 +164,51 @@ public class NamedConfigurationEntity extends AbstractPersistentObject
 	@Column(name = CN_ABA_MAX_MATCHES)
 	protected int abaMaxMatches = DEFAULT_ABAMAXMATCHES;
 
-	@Column(name = CN_LIMIT_BLOCKSET)
+	@Column(name = CN_ABA_LIMIT_BLOCKSET)
 	protected int abaLimitPerBlockingSet = DEFAULT_ABALIMITPERBLOCKINGSET;
 
-	@Column(name = CN_LIMIT_SINGLESET)
+	@Column(name = CN_ABA_LIMIT_SINGLESET)
 	protected int abaLimitSingleBlockingSet = DEFAULT_ABALIMITSINGLEBLOCKINGSET;
 
-	@Column(name = CN_LIMIT_SINGLETABLE)
+	@Column(name = CN_ABA_LIMIT_SINGLETABLE)
 	protected int abaSingleTableBlockingSetGraceLimit =
 		DEFAULT_ABASINGLETABLEBLOCKINGSETGRACELIMIT;
 
 	// -- OABA settings
 
-	@Column(name = CN_MAX_SINGLE)
+	@Column(name = CN_OABA_MAX_SINGLE)
 	protected int oabaMaxSingle = DEFAULT_OABAMAXSINGLE;
 
-	@Column(name = CN_MAX_BLOCKSIZE)
+	@Column(name = CN_OABA_MAX_BLOCKSIZE)
 	protected int oabaMaxBlockSize = DEFAULT_OABAMAXBLOCKSIZE;
 
-	@Column(name = CN_MAX_CHUNKSIZE)
+	@Column(name = CN_OABA_MAX_CHUNKSIZE)
 	protected int oabaMaxChunkSize = DEFAULT_OABAMAXCHUNKSIZE;
 
-	@Column(name = CN_MAX_OVERSIZE)
+	@Column(name = CN_OABA_MAX_OVERSIZE)
 	protected int oabaMaxOversized = DEFAULT_OABAMAXOVERSIZED;
 
-	@Column(name = CN_MAX_MATCHES)
+	@Column(name = CN_OABA_MAX_MATCHES)
 	protected int oabaMaxMatches = DEFAULT_OABAMAXMATCHES;
 
-	@Column(name = CN_MIN_FIELDS)
+	@Column(name = CN_OABA_MIN_FIELDS)
 	protected int oabaMinFields = DEFAULT_OABAMINFIELDS;
 
-	@Column(name = CN_INTERVAL)
+	@Column(name = CN_OABA_INTERVAL)
 	protected int oabaInterval = DEFAULT_OABAINTERVAL;
 
 	// -- Server settings
 
-	@Column(name = CN_MAXTHREADS)
+	@Column(name = CN_SVR_MAX_THREADS)
 	protected int serverMaxThreads = DEFAULT_SERVERMAXTHREADS;
 
-	@Column(name = CN_MAXCHUNKSIZE)
+	@Column(name = CN_SVR_MAX_CHUNKSIZE)
 	protected int serverMaxChunkSize = DEFAULT_SERVERMAXCHUNKSIZE;
 
-	@Column(name = CN_MAXCHUNKCOUNT)
+	@Column(name = CN_SVR_MAX_CHUNKCOUNT)
 	protected int serverMaxChunkCount = DEFAULT_SERVERMAXCHUNKCOUNT;
 
-	@Column(name = CN_FILE)
+	@Column(name = CN_SVR_FILE)
 	protected String serverFileURI = DEFAULT_SERVERFILEURI;
 
 	public NamedConfigurationEntity() {

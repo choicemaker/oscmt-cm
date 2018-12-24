@@ -7,12 +7,12 @@
  *******************************************************************************/
 package com.choicemaker.cm.oaba.ejb;
 
-import static com.choicemaker.cm.oaba.ejb.OabaSettingsJPA.CN_INTERVAL;
-import static com.choicemaker.cm.oaba.ejb.OabaSettingsJPA.CN_MAX_BLOCKSIZE;
-import static com.choicemaker.cm.oaba.ejb.OabaSettingsJPA.CN_MAX_CHUNKSIZE;
-import static com.choicemaker.cm.oaba.ejb.OabaSettingsJPA.CN_MAX_MATCHES;
-import static com.choicemaker.cm.oaba.ejb.OabaSettingsJPA.CN_MAX_OVERSIZE;
-import static com.choicemaker.cm.oaba.ejb.OabaSettingsJPA.CN_MIN_FIELDS;
+import static com.choicemaker.cm.oaba.ejb.OabaSettingsJPA.CN_OABA_INTERVAL;
+import static com.choicemaker.cm.oaba.ejb.OabaSettingsJPA.CN_OABA_MAX_BLOCKSIZE;
+import static com.choicemaker.cm.oaba.ejb.OabaSettingsJPA.CN_OABA_MAX_CHUNKSIZE;
+import static com.choicemaker.cm.oaba.ejb.OabaSettingsJPA.CN_OABA_MAX_MATCHES;
+import static com.choicemaker.cm.oaba.ejb.OabaSettingsJPA.CN_OABA_MAX_OVERSIZE;
+import static com.choicemaker.cm.oaba.ejb.OabaSettingsJPA.CN_OABA_MIN_FIELDS;
 import static com.choicemaker.cm.oaba.ejb.OabaSettingsJPA.DISCRIMINATOR_VALUE;
 import static com.choicemaker.cm.oaba.ejb.OabaSettingsJPA.JPQL_OABA_FIND_ALL;
 import static com.choicemaker.cm.oaba.ejb.OabaSettingsJPA.QN_OABA_FIND_ALL;
@@ -69,25 +69,25 @@ public class OabaSettingsEntity extends AbaSettingsEntity
 
 	// -- Instance data
 
-	@Column(name = AbstractParametersJPA.CN_MAX_SINGLE)
+	@Column(name = AbstractParametersJPA.CN_OABA_MAX_SINGLE)
 	private final int maxSingle;
 
-	@Column(name = CN_MAX_BLOCKSIZE)
+	@Column(name = CN_OABA_MAX_BLOCKSIZE)
 	private final int maxBlockSize;
 
-	@Column(name = CN_MAX_CHUNKSIZE)
+	@Column(name = CN_OABA_MAX_CHUNKSIZE)
 	private final int maxChunkSize;
 
-	@Column(name = CN_MAX_OVERSIZE)
+	@Column(name = CN_OABA_MAX_OVERSIZE)
 	private final int maxOversized;
 
-	@Column(name = CN_MAX_MATCHES)
+	@Column(name = CN_OABA_MAX_MATCHES)
 	private final int maxMatches;
 
-	@Column(name = CN_MIN_FIELDS)
+	@Column(name = CN_OABA_MIN_FIELDS)
 	private final int minFields;
 
-	@Column(name = CN_INTERVAL)
+	@Column(name = CN_OABA_INTERVAL)
 	private final int interval;
 
 	// -- Construction

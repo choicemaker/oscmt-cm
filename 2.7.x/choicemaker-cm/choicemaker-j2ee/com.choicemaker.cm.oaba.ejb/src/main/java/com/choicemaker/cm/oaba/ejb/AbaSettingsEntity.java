@@ -9,9 +9,9 @@ package com.choicemaker.cm.oaba.ejb;
 
 import static com.choicemaker.cm.oaba.ejb.AbaSettingsJPA.CN_ABA_MAX_MATCHES;
 import static com.choicemaker.cm.oaba.ejb.AbaSettingsJPA.CN_ID;
-import static com.choicemaker.cm.oaba.ejb.AbaSettingsJPA.CN_LIMIT_BLOCKSET;
-import static com.choicemaker.cm.oaba.ejb.AbaSettingsJPA.CN_LIMIT_SINGLESET;
-import static com.choicemaker.cm.oaba.ejb.AbaSettingsJPA.CN_LIMIT_SINGLETABLE;
+import static com.choicemaker.cm.oaba.ejb.AbaSettingsJPA.CN_ABA_LIMIT_BLOCKSET;
+import static com.choicemaker.cm.oaba.ejb.AbaSettingsJPA.CN_ABA_LIMIT_SINGLESET;
+import static com.choicemaker.cm.oaba.ejb.AbaSettingsJPA.CN_ABA_LIMIT_SINGLETABLE;
 import static com.choicemaker.cm.oaba.ejb.AbaSettingsJPA.CN_TYPE;
 import static com.choicemaker.cm.oaba.ejb.AbaSettingsJPA.DISCRIMINATOR_COLUMN;
 import static com.choicemaker.cm.oaba.ejb.AbaSettingsJPA.DISCRIMINATOR_VALUE;
@@ -79,13 +79,13 @@ public class AbaSettingsEntity extends AbstractPersistentObject
 	@Column(name = CN_ABA_MAX_MATCHES)
 	private int abaMaxMatches;
 
-	@Column(name = CN_LIMIT_BLOCKSET)
+	@Column(name = CN_ABA_LIMIT_BLOCKSET)
 	private int limitPerBlockingSet;
 
-	@Column(name = CN_LIMIT_SINGLESET)
+	@Column(name = CN_ABA_LIMIT_SINGLESET)
 	private int limitSingleBlockingSet;
 
-	@Column(name = CN_LIMIT_SINGLETABLE)
+	@Column(name = CN_ABA_LIMIT_SINGLETABLE)
 	private int singleTableBlockingSetGraceLimit;
 
 	// -- Construction
