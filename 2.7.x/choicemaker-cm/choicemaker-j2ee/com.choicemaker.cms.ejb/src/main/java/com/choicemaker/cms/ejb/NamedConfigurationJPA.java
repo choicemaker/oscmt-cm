@@ -11,7 +11,7 @@ import com.choicemaker.cm.oaba.ejb.SqlRecordSourceJPA;
 
 public interface NamedConfigurationJPA {
 
-	String TABLE_NAME = "CMT_NAMED_CONFIG";
+	String TABLE_NAME = "CMT_NAMED_CONFIG2";
 
 	// Basic persistence parameters
 	String CN_ID = "NC_ID";
@@ -51,24 +51,24 @@ public interface NamedConfigurationJPA {
 	String CN_GRAPH = AbstractParametersJPA.CN_GRAPH;
 
 	// ABA settings (nearly independent of a particular job)
-	String CN_ABA_MAX_MATCHES = AbaSettingsJPA.CN_ABA_MAX_MATCHES;
-	String CN_ABA_LIMIT_BLOCKSET = AbaSettingsJPA.CN_ABA_LIMIT_BLOCKSET;
-	String CN_ABA_LIMIT_SINGLESET = AbaSettingsJPA.CN_ABA_LIMIT_SINGLESET;
-	String CN_ABA_LIMIT_SINGLETABLE = AbaSettingsJPA.CN_ABA_LIMIT_SINGLETABLE;
+	String CN_ABA_MAX_MATCHES = "ABA_MATCHES";
+	String CN_ABA_LIMIT_BLOCKSET = "ABA_BLOCKSET";
+	String CN_ABA_LIMIT_SINGLESET = "ABA_SINGLESET";
+	String CN_ABA_LIMIT_SINGLETABLE = "ABA_SINGLETABLE";
 
 	// OABA settings (nearly independent of a particular job)
-	String CN_OABA_MAX_SINGLE = AbstractParametersJPA.CN_OABA_MAX_SINGLE;
-	String CN_OABA_MAX_BLOCKSIZE = OabaSettingsJPA.CN_OABA_MAX_BLOCKSIZE;
-	String CN_OABA_MAX_CHUNKSIZE = OabaSettingsJPA.CN_OABA_MAX_CHUNKSIZE;
-	String CN_OABA_MAX_OVERSIZE = OabaSettingsJPA.CN_OABA_MAX_OVERSIZE;
-	String CN_OABA_MAX_MATCHES = OabaSettingsJPA.CN_OABA_MAX_MATCHES;
-	String CN_OABA_MIN_FIELDS = OabaSettingsJPA.CN_OABA_MIN_FIELDS;
-	String CN_OABA_INTERVAL = OabaSettingsJPA.CN_OABA_INTERVAL;
+	String CN_OABA_MAX_SINGLE = "OABA_SINGLE";
+	String CN_OABA_MAX_BLOCKSIZE = "OABA_BLOCKSIZE";
+	String CN_OABA_MAX_CHUNKSIZE = "OABA_CHUNKSIZE";
+	String CN_OABA_MAX_OVERSIZE = "OABA_OVERSIZE";
+	String CN_OABA_MAX_MATCHES = "OABA_MATCHES";
+	String CN_OABA_MIN_FIELDS = "OABA_OSFIELDS";
+	String CN_OABA_INTERVAL = "OABA_INTERVAL";
 
 	// Server settings (dependent only on a particular host)
-	String CN_SVR_MAX_THREADS = ServerConfigurationJPA.CN_SVR_MAX_THREADS;
-	String CN_SVR_MAX_CHUNKSIZE = ServerConfigurationJPA.CN_SVR_MAX_CHUNKSIZE;
-	String CN_SVR_MAX_CHUNKCOUNT = ServerConfigurationJPA.CN_SVR_MAX_CHUNKCOUNT;
+	String CN_SVR_MAX_THREADS = "SVR_THREADS";
+	String CN_SVR_MAX_CHUNKSIZE = "SVR_FILE_ENTRIES";
+	String CN_SVR_MAX_CHUNKCOUNT = "SVR_FILES_COUNT";
 	String CN_SVR_FILE = ServerConfigurationJPA.CN_FILE;
 
 	// JPA ID generation
