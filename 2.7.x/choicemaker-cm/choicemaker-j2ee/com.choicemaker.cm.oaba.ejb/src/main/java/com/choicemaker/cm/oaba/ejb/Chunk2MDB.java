@@ -222,6 +222,7 @@ public class Chunk2MDB extends AbstractOabaBmtMDB {
 					assert set != null;
 					++setCount;
 					while (set.hasNextPair()) {
+						set.getNextPair();
 						++retVal;
 					}
 				}
