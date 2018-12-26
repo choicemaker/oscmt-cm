@@ -37,6 +37,7 @@ import com.choicemaker.cm.io.db.base.DataSources;
 import com.choicemaker.cm.io.db.base.DbAccessor;
 import com.choicemaker.cm.io.db.base.DbReaderParallel;
 import com.choicemaker.cm.io.db.base.DbView;
+import com.choicemaker.util.Precondition;
 
 /**
  * @author pcheung
@@ -156,7 +157,7 @@ public class SqlServerParallelRecordSource implements RecordSource {
 	 *   from CORPORATE where primary_name like 'A%'
 	 * </pre>
 	 */
-	private static boolean isValidQuery(String s) {
+	static boolean isValidQuery(String s) {
 		if (s == null || s.toUpperCase().indexOf(" AS ID ") == -1)
 			return false;
 		else
@@ -206,7 +207,8 @@ public class SqlServerParallelRecordSource implements RecordSource {
 		}
 	}
 
-	private static String getOrderBy(DbView v) {
+	public static String getOrderBy(DbView v) {
+		Precondition.assertNonNullArgument(v);
 		StringBuffer ob = new StringBuffer();
 		for (int j = 0; j < v.orderBy.length; ++j) {
 			if (j != 0)
