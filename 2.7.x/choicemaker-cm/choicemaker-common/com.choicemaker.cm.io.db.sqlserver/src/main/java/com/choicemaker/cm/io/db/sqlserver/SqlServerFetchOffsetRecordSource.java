@@ -160,61 +160,49 @@ public class SqlServerFetchOffsetRecordSource
 		}
 	}
 
-	private ResultSet[] fetchResultsFromOffset(DbReaderParallel dbr, int fetch,
-			int offset) throws SQLException {
-		assert fetch > 0;
-		assert offset >= 0;
+	private void fillQueue(Connection conn) throws IOException {
 
+		assert conn != null;
 		final Accessor accessor = getModel().getAccessor();
-		final String viewBase0 = "vw_cmt_%s_r_%d";
+		final DbAccessor dbAccessor = (DbAccessor) accessor;
+		final DbReaderParallel dbr =
+			dbAccessor.getDbReaderParallel(getDbConfiguration());
+
+		final String viewBase0 = "vw_cmt_%s_r_%s";
 		final String viewBase = String.format(viewBase0,
 				accessor.getSchemaName(), getDbConfiguration());
 		final DbView[] views = dbr.getViews();
-		final String masterId = dbr.getMasterId();
 		final int numViews = views.length;
 
-		final ResultSet[] retVal = new ResultSet[numViews];
-		for (int i = 0; i < numViews; ++i) {
-			String viewName = viewBase + i;
-			logger.finest("view: " + viewName);
-			DbView v = views[i];
-			if (v.orderBy.length == 0) {
-				String msg0 = "DbView[%d] is not ordered";
-				String msg = String.format(msg0, i);
-				logger.severe(msg);
-				throw new IllegalStateException(msg);
-			}
+		final ResultSet[] resultSets = new ResultSet[numViews];
+		final Statement[] queries = new Statement[numViews];
+		try {
+			for (int i = 0; i < numViews; ++i) {
+				final String masterId = dbr.getMasterId();
 
-			String q0 = "SELECT * FROM [%s] WHERE [%s] IN "
-					+ "(SELECT ID FROM [%s]) ORDER BY [%s] "
-					+ "OFFSET %d ROWS FETCH NEXT %d ROWS ONLY";
-			String q = String.format(q0, viewName, masterId, getDataView(),
-					getOrderBy(v), offset, fetch);
-			logger.fine("Query: " + q);
+				String viewName = viewBase + i;
+				logger.finest("view: " + viewName);
+				DbView v = views[i];
+				if (v.orderBy.length == 0) {
+					String msg0 = "DbView[%d] is not ordered";
+					String msg = String.format(msg0, i);
+					logger.severe(msg);
+					throw new IllegalStateException(msg);
+				}
 
-			try (Connection conn = getDataSource().getConnection();
-					Statement select =
-						conn.createStatement(ResultSet.TYPE_FORWARD_ONLY,
-								ResultSet.CONCUR_READ_ONLY)) {
+				String q0 = "SELECT * FROM [%s] WHERE [%s] IN "
+						+ "(SELECT ID FROM [%s]) ORDER BY [%s] "
+						+ "OFFSET %d ROWS FETCH NEXT %d ROWS ONLY";
+				String q = String.format(q0, viewName, masterId, getDataView(),
+						getOrderBy(v), offset.get(), fetch);
+				logger.fine("Query: " + q);
+
 				final long start = System.currentTimeMillis();
-				retVal[i] = select.executeQuery(q);
+				queries[i] = conn.createStatement();
+				resultSets[i] = queries[i].executeQuery(q);
 				final long duration = System.currentTimeMillis() - start;
 				logDbExecution("Execute query", i, q, duration);
 			}
-		}
-		return retVal;
-	}
-
-	private void fillQueue() throws IOException {
-
-		DbAccessor accessor = (DbAccessor) getModel().getAccessor();
-		DbReaderParallel dbr =
-			accessor.getDbReaderParallel(getDbConfiguration());
-
-		try (Connection conn = getDataSource().getConnection()) {
-			// Get result sets
-			ResultSet[] resultSets =
-				fetchResultsFromOffset(dbr, fetch, offset.get());
 
 			// Open the parallel reader
 			logger.fine("before dbr.open");
@@ -225,12 +213,41 @@ public class SqlServerFetchOffsetRecordSource
 			while (dbr.hasNext()) {
 				Record<?> r = dbr.getNext();
 				records.add(r);
+				++count;
 			}
 			offset.addAndGet(count);
 
 		} catch (SQLException ex) {
+			offset.set(CLOSED_OFFSET);
+			records.clear();
 			logger.severe(ex.toString());
 			throw new IOException(ex.toString(), ex);
+
+		} finally {
+			for (int i = 0; i < numViews; ++i) {
+				if (queries[i] != null) {
+					try {
+						queries[i].close();
+					} catch (SQLException e) {
+						String msg0 = "Unable to close query %d: %s";
+						String msg = String.format(msg0,i,e.toString());
+						logger.warning(msg);
+					}
+					queries[i] = null;
+				}
+			}
+			for (int i = 0; i < numViews; ++i) {
+				if (resultSets[i] != null) {
+					try {
+						resultSets[i].close();
+					} catch (SQLException e) {
+						String msg0 = "Unable to close result set %d: %s";
+						String msg = String.format(msg0,i,e.toString());
+						logger.warning(msg);
+					}
+					resultSets[i] = null;
+				}
+			}
 		}
 	}
 
@@ -312,7 +329,14 @@ public class SqlServerFetchOffsetRecordSource
 	public boolean hasNext() throws IOException {
 		boolean retVal = !records.isEmpty();
 		if (retVal == false) {
-			fillQueue();
+			try (Connection conn = getDataSource().getConnection()) {
+				fillQueue(conn);
+			} catch (SQLException ex) {
+				offset.set(CLOSED_OFFSET);
+				records.clear();
+				logger.severe(ex.toString());
+				throw new IOException(ex.toString(), ex);
+			}
 			retVal = !records.isEmpty();
 		}
 		return retVal;
@@ -356,7 +380,7 @@ public class SqlServerFetchOffsetRecordSource
 			}
 
 			createView(conn, getDataView(), getIdsQuery());
-			fillQueue();
+			fillQueue(conn);
 
 		} catch (SQLException ex) {
 			offset.set(CLOSED_OFFSET);
