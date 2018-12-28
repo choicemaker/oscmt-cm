@@ -47,7 +47,19 @@ public class SqlServerFetchOffsetRecordSource
 
 	public static final int DEFAULT_FETCH = 1000;
 
-	private static final int INITIAL_OFFSET = 0;
+	public static final int DEFAULT_INITIAL_OFFSET = 0;
+
+	public static final int DEFAULT_LIMIT = Integer.MAX_VALUE;
+
+	public static final String PN_FETCH_SIZE = "cm.sqlserver.fetch";
+
+	/**
+	 * Special value for the fetch size signaling that the limit is specified by
+	 * a System property; see {@link #PN_FETCH_SIZE}. If this variable is not
+	 * set, or is invalid (zero or negative), then the {@link #DEFAULT_FETCH
+	 * default value} is used.
+	 */
+	public static final int SYSPROP_OR_DEFAULT_FETCH = 0;
 
 	private static Logger logger =
 		Logger.getLogger(SqlServerFetchOffsetRecordSource.class.getName());
@@ -80,8 +92,7 @@ public class SqlServerFetchOffsetRecordSource
 		}
 	}
 
-	private static void dropView(Connection conn, String viewName)
-			throws SQLException {
+	private static void dropView(Connection conn, String viewName) {
 		try (Statement view = conn.createStatement()) {
 			String s0 = "IF EXISTS (SELECT TABLE_NAME FROM "
 					+ "INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = '%s') "
@@ -90,8 +101,51 @@ public class SqlServerFetchOffsetRecordSource
 			logger.fine(s);
 			view.execute(s);
 			view.close();
-
+		} catch (SQLException x) {
+			String msg0 = "Unable to drop view [%s]: %s";
+			String msg = String.format(msg0, viewName, x.toString());
+			logger.warning(msg);
 		}
+	}
+
+	public static int computeFetchSize(int fetch) {
+		int retVal;
+		if (fetch == SYSPROP_OR_DEFAULT_FETCH) {
+			retVal = getFetchSizeFromSystemProperty();
+		} else {
+			retVal = fetch;
+		}
+		Precondition.assertBoolean("Fetch size must be positive", retVal > 0);
+		return retVal;
+	}
+
+	public static int getFetchSizeFromSystemProperty() {
+		int retVal = DEFAULT_FETCH;
+		String _value = System.getProperty(PN_FETCH_SIZE);
+		if (_value == null) {
+			String msg0 = "Missing value for property '%s'";
+			String msg = String.format(msg0, PN_FETCH_SIZE);
+			logger.warning(msg);
+		} else {
+			try {
+				int value = Integer.parseInt(_value);
+				if (value > 0) {
+					String msg0 = "Fetch size specified as %d by property '%s'";
+					String msg = String.format(msg0, value, PN_FETCH_SIZE);
+					logger.fine(msg);
+					retVal = value;
+				} else {
+					String msg0 =
+						"Ignoring invalid value (%d) for property '%s'";
+					String msg = String.format(msg0, value, PN_FETCH_SIZE);
+					logger.warning(msg);
+				}
+			} catch (Exception x) {
+				assert retVal == DEFAULT_FETCH;
+			}
+		}
+		assert retVal == DEFAULT_FETCH || retVal > 0;
+		return retVal;
 	}
 
 	public static String getOrderBy(DbView v) {
@@ -102,11 +156,14 @@ public class SqlServerFetchOffsetRecordSource
 		return SqlServerParallelRecordSource.isValidQuery(s);
 	}
 
+	private final AtomicInteger count = new AtomicInteger(0);
 	private final String dataViewName;
 	private final String dbConfiguration;
 	private final int fetch;
 	private final String fileName;
 	private final String idsQuery;
+	private final int initialOffset;
+	private final int limit;
 	private final AtomicInteger offset = new AtomicInteger(CLOSED_OFFSET);
 	private final Queue<Record<?>> records = new ConcurrentLinkedQueue<>();
 
@@ -118,12 +175,15 @@ public class SqlServerFetchOffsetRecordSource
 	public SqlServerFetchOffsetRecordSource(String fileName,
 			ImmutableProbabilityModel model, String dsName,
 			String dbConfiguration, String idsQuery) {
-		this(fileName, model, dsName, dbConfiguration, idsQuery, DEFAULT_FETCH);
+		this(fileName, model, dsName, dbConfiguration, idsQuery,
+				SYSPROP_OR_DEFAULT_FETCH, DEFAULT_INITIAL_OFFSET,
+				DEFAULT_LIMIT);
 	}
 
 	public SqlServerFetchOffsetRecordSource(String fileName,
 			ImmutableProbabilityModel model, String dsName,
-			String dbConfiguration, String idsQuery, int fetch) {
+			String dbConfiguration, String idsQuery, int fetch, int offset,
+			int limit) {
 
 		logger.fine("Constructor: " + fileName + " " + model + " " + dsName
 				+ " " + dbConfiguration + " " + idsQuery);
@@ -135,7 +195,13 @@ public class SqlServerFetchOffsetRecordSource
 				dbConfiguration);
 		Precondition.assertBoolean("idsQuery must contain ' AS ID '.",
 				isValidQuery(idsQuery));
-		Precondition.assertBoolean("Fetch size must be positive", fetch > 0);
+		Precondition.assertBoolean("Initial offset must be non-negative",
+				offset >= 0);
+
+		String msg0 =
+			"Limit (%d) <= initialOffset (%d): no records will be retrieved";
+		String msg = String.format(msg0, limit, offset);
+		Precondition.assertBoolean(msg, limit <= 0 || limit > offset);
 
 		// Don't use public modifiers here -- preconditions may not apply
 		this.fileName = fileName;
@@ -144,7 +210,16 @@ public class SqlServerFetchOffsetRecordSource
 		this.dbConfiguration = dbConfiguration;
 		this.idsQuery = idsQuery;
 		this.dataViewName = createDataViewName();
-		this.fetch = fetch;
+		this.fetch = computeFetchSize(fetch);
+		this.initialOffset = offset;
+		if (limit <= 0) {
+			this.limit = DEFAULT_LIMIT;
+		} else {
+			this.limit = limit;
+		}
+
+		assert this.count.get() == 0;
+		assert this.limit > this.initialOffset;
 		assert this.offset.get() == CLOSED_OFFSET;
 	}
 
@@ -154,98 +229,118 @@ public class SqlServerFetchOffsetRecordSource
 		try (Connection conn = getDataSource().getConnection()) {
 			dropView(conn, getDataView());
 		} catch (SQLException x) {
-			String msg0 = "Unable to drop view '%s': %s";
+			String msg0 = "Unable to acquire connection to drop view [%s]: %s";
 			String msg = String.format(msg0, getDataView(), x.toString());
 			logger.warning(msg);
 		}
 	}
 
 	private void fillQueue(Connection conn) throws IOException {
-
 		assert conn != null;
-		final Accessor accessor = getModel().getAccessor();
-		final DbAccessor dbAccessor = (DbAccessor) accessor;
-		final DbReaderParallel dbr =
-			dbAccessor.getDbReaderParallel(getDbConfiguration());
+		if (this.count.get() >= this.limit) {
+			String msg0 = "Limit (%d) reached or exceeded: %d";
+			String msg = String.format(msg0, this.limit, this.count.get());
+			logger.fine(msg);
+		} else {
+			final Accessor accessor = getModel().getAccessor();
+			final DbAccessor dbAccessor = (DbAccessor) accessor;
+			final DbReaderParallel dbr =
+				dbAccessor.getDbReaderParallel(getDbConfiguration());
 
-		final String viewBase0 = "vw_cmt_%s_r_%s";
-		final String viewBase = String.format(viewBase0,
-				accessor.getSchemaName(), getDbConfiguration());
-		final DbView[] views = dbr.getViews();
-		final int numViews = views.length;
+			final String viewBase0 = "vw_cmt_%s_r_%s";
+			final String viewBase = String.format(viewBase0,
+					accessor.getSchemaName(), getDbConfiguration());
+			final DbView[] views = dbr.getViews();
+			final int numViews = views.length;
 
-		final ResultSet[] resultSets = new ResultSet[numViews];
-		final Statement[] queries = new Statement[numViews];
-		try {
-			for (int i = 0; i < numViews; ++i) {
-				final String masterId = dbr.getMasterId();
+			final ResultSet[] resultSets = new ResultSet[numViews];
+			final Statement[] queries = new Statement[numViews];
+			try {
+				String q0 = null;
+				for (int i = 0; i < numViews; ++i) {
+					final String masterId = dbr.getMasterId();
 
-				String viewName = viewBase + i;
-				logger.finest("view: " + viewName);
-				DbView v = views[i];
-				if (v.orderBy.length == 0) {
-					String msg0 = "DbView[%d] is not ordered";
-					String msg = String.format(msg0, i);
-					logger.severe(msg);
-					throw new IllegalStateException(msg);
+					String viewName = viewBase + i;
+					logger.finest("view: " + viewName);
+					DbView v = views[i];
+					if (v.orderBy.length == 0) {
+						String msg0 = "DbView[%d] is not ordered";
+						String msg = String.format(msg0, i);
+						logger.severe(msg);
+						throw new IllegalStateException(msg);
+					}
+
+					String q;
+					if (i == 0) {
+						String t0 = "SELECT [%s] FROM [%s] WHERE [%s] IN "
+								+ "(SELECT [ID] FROM [%s]) ORDER BY [%s] "
+								+ "OFFSET %d ROWS FETCH NEXT %d ROWS ONLY";
+						q0 = String.format(t0, masterId, viewName, masterId,
+								getDataView(), getOrderBy(v), offset.get(),
+								fetch);
+						logger.fine("q0: " + q0);
+						String t = "SELECT * FROM [%s] WHERE [%s] IN "
+								+ "(SELECT [ID] FROM [%s]) ORDER BY [%s] "
+								+ "OFFSET %d ROWS FETCH NEXT %d ROWS ONLY";
+						q = String.format(t, viewName, masterId, getDataView(),
+								getOrderBy(v), offset.get(), fetch);
+					} else {
+						assert q0 != null;
+						String t = "SELECT * FROM [%s] WHERE [%s] IN "
+								+ "(%s) ORDER BY [%s]";
+						q = String.format(t, viewName, masterId, q0,
+								getOrderBy(v));
+					}
+					logger.fine("Query: " + q);
+
+					final long start = System.currentTimeMillis();
+					queries[i] = conn.createStatement();
+					resultSets[i] = queries[i].executeQuery(q);
+					final long duration = System.currentTimeMillis() - start;
+					logDbExecution("Execute query", i, q, duration);
 				}
 
-				String q0 = "SELECT * FROM [%s] WHERE [%s] IN "
-						+ "(SELECT ID FROM [%s]) ORDER BY [%s] "
-						+ "OFFSET %d ROWS FETCH NEXT %d ROWS ONLY";
-				String q = String.format(q0, viewName, masterId, getDataView(),
-						getOrderBy(v), offset.get(), fetch);
-				logger.fine("Query: " + q);
+				// Open the parallel reader
+				logger.fine("before dbr.open");
+				dbr.open(resultSets);
 
-				final long start = System.currentTimeMillis();
-				queries[i] = conn.createStatement();
-				resultSets[i] = queries[i].executeQuery(q);
-				final long duration = System.currentTimeMillis() - start;
-				logDbExecution("Execute query", i, q, duration);
-			}
-
-			// Open the parallel reader
-			logger.fine("before dbr.open");
-			dbr.open(resultSets);
-
-			// Read a batch of records
-			int count = 0;
-			while (dbr.hasNext()) {
-				Record<?> r = dbr.getNext();
-				records.add(r);
-				++count;
-			}
-			offset.addAndGet(count);
-
-		} catch (SQLException ex) {
-			offset.set(CLOSED_OFFSET);
-			records.clear();
-			logger.severe(ex.toString());
-			throw new IOException(ex.toString(), ex);
-
-		} finally {
-			for (int i = 0; i < numViews; ++i) {
-				if (queries[i] != null) {
-					try {
-						queries[i].close();
-					} catch (SQLException e) {
-						String msg0 = "Unable to close query %d: %s";
-						String msg = String.format(msg0,i,e.toString());
-						logger.warning(msg);
-					}
-					queries[i] = null;
+				// Read a batch of records
+				while (dbr.hasNext()
+						&& this.count.incrementAndGet() < this.limit) {
+					Record<?> r = dbr.getNext();
+					records.add(r);
 				}
-			}
-			for (int i = 0; i < numViews; ++i) {
-				if (resultSets[i] != null) {
-					try {
-						resultSets[i].close();
-					} catch (SQLException e) {
-						String msg0 = "Unable to close result set %d: %s";
-						String msg = String.format(msg0,i,e.toString());
-						logger.warning(msg);
+				offset.set(count.get());
+
+			} catch (SQLException ex) {
+				close();
+				logger.severe(ex.toString());
+				throw new IOException(ex.toString(), ex);
+
+			} finally {
+				for (int i = 0; i < numViews; ++i) {
+					if (queries[i] != null) {
+						try {
+							queries[i].close();
+						} catch (SQLException e) {
+							String msg0 = "Unable to close query %d: %s";
+							String msg = String.format(msg0, i, e.toString());
+							logger.warning(msg);
+						}
+						queries[i] = null;
 					}
-					resultSets[i] = null;
+				}
+				for (int i = 0; i < numViews; ++i) {
+					if (resultSets[i] != null) {
+						try {
+							resultSets[i].close();
+						} catch (SQLException e) {
+							String msg0 = "Unable to close result set %d: %s";
+							String msg = String.format(msg0, i, e.toString());
+							logger.warning(msg);
+						}
+						resultSets[i] = null;
+					}
 				}
 			}
 		}
@@ -332,8 +427,7 @@ public class SqlServerFetchOffsetRecordSource
 			try (Connection conn = getDataSource().getConnection()) {
 				fillQueue(conn);
 			} catch (SQLException ex) {
-				offset.set(CLOSED_OFFSET);
-				records.clear();
+				close();
 				logger.severe(ex.toString());
 				throw new IOException(ex.toString(), ex);
 			}
@@ -357,14 +451,14 @@ public class SqlServerFetchOffsetRecordSource
 	private void logDbExecution(String tag, int i, String q, long t) {
 		String msg0 = "%s [%d]: %d (msecs) [%s]";
 		String msg = String.format(msg0, tag, i, t, q);
-		logger.info(msg);
+		logger.fine(msg);
 	}
 
 	public void open() throws IOException {
 
 		try (Connection conn = getDataSource().getConnection()) {
 			final boolean wasClosed =
-				offset.compareAndSet(CLOSED_OFFSET, INITIAL_OFFSET);
+				offset.compareAndSet(CLOSED_OFFSET, initialOffset);
 			if (wasClosed == false) {
 				String msg0 = "%s was already open (offset %d)";
 				String msg = String.format(msg0, SOURCE, offset.get());
@@ -383,8 +477,7 @@ public class SqlServerFetchOffsetRecordSource
 			fillQueue(conn);
 
 		} catch (SQLException ex) {
-			offset.set(CLOSED_OFFSET);
-			records.clear();
+			close();
 			logger.severe(ex.toString());
 			throw new IOException(ex.toString(), ex);
 		}
