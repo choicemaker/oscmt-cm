@@ -636,7 +636,7 @@ public class BatchMatchingBean implements BatchMatching, WorkflowListener {
 			logger.warning(msg);
 			retVal = false;
 		} else {
-			urmJobManager.abortBatchJob(urmJob);
+			urmJobManager.restartBatchJob(urmJob);
 			retVal = true;
 		}
 		return retVal;

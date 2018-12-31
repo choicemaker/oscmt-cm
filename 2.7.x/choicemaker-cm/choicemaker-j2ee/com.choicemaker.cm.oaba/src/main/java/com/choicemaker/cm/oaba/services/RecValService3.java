@@ -560,6 +560,10 @@ public class RecValService3 {
 			}
 			log.finest(TAG + "sinks closed: " + sinks.length);
 
+			// FIXME: is this service responsible for converting the
+			// translator to immutable? The service client (StartOaba)
+			// also does this (idempotent) conversion. Two conversions
+			// are harmless but time consuming.
 			log.finest(TAG + "converting translator to immutable");
 			ImmutableRecordIdTranslator usedLater = null;
 			userTx.begin();
