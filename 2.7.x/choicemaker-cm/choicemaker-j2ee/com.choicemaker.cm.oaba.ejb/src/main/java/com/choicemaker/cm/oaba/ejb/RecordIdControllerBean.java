@@ -132,6 +132,21 @@ public class RecordIdControllerBean implements RecordIdController {
 	 */
 	protected static final int QUERY_INDEX_RECORD_ID_TYPE = 1;
 
+	/**
+	 * Computes totalSize/batchSize, or 10, whichever is smallest and positive
+	 */
+	private static int computeBatchMultiple(int batchSize, int totalSize) {
+		int retVal;
+		if (batchSize <= 0) {
+			retVal = 1;
+		} else if (totalSize <= 10 * batchSize) {
+			retVal = batchSize;
+		} else {
+			retVal = batchSize * (totalSize / (10 * batchSize));
+		}
+		return retVal;
+	}
+
 	private static Constructor<?> getConstructor(Class<?> transClass,
 			Class<?> ridClass) throws BlockingException {
 		assert transClass != null;
@@ -527,6 +542,7 @@ public class RecordIdControllerBean implements RecordIdController {
 		assert em != null;
 		assert impl != null;
 		assert batchSize > 0;
+		final String METHOD = "saveIntegerTranslations";
 
 		if (impl.isSplit()) {
 			Integer recordId = RecordIdIntegerTranslation.RECORD_ID_PLACEHOLDER;
@@ -540,6 +556,7 @@ public class RecordIdControllerBean implements RecordIdController {
 		@SuppressWarnings({
 				"unchecked", "rawtypes" })
 		Set<Map.Entry> entries1 = impl.ids1_To_Indices.entrySet();
+		final int bMultiple1 = computeBatchMultiple(batchSize, entries1.size());
 		int count = 0;
 		for (@SuppressWarnings("rawtypes")
 		Map.Entry e1 : entries1) {
@@ -550,14 +567,22 @@ public class RecordIdControllerBean implements RecordIdController {
 				new RecordIdIntegerTranslation(job, recordId, rsr, index);
 			em.persist(rit);
 			if (++count % batchSize == 0) {
+				long startFlush = System.currentTimeMillis();
 				em.flush();
 				em.clear();
+				if (batchSize % bMultiple1 == 0) {
+					final long finishFlush = System.currentTimeMillis();
+					final long durationFlush = finishFlush - startFlush;
+					logDuration(SOURCE, METHOD, "incremental trans1 flush",
+							durationFlush);
+				}
 			}
 		}
 
 		@SuppressWarnings({
 				"unchecked", "rawtypes" })
 		Set<Map.Entry> entries2 = impl.ids2_To_Indices.entrySet();
+		final int bMultiple2 = computeBatchMultiple(batchSize, entries1.size());
 		for (@SuppressWarnings("rawtypes")
 		Map.Entry e2 : entries2) {
 			Integer recordId = (Integer) e2.getKey();
@@ -567,8 +592,15 @@ public class RecordIdControllerBean implements RecordIdController {
 				new RecordIdIntegerTranslation(job, recordId, rsr, index);
 			em.persist(rit);
 			if (++count % batchSize == 0) {
+				long startFlush = System.currentTimeMillis();
 				em.flush();
 				em.clear();
+				if (batchSize % bMultiple2 == 0) {
+					final long finishFlush = System.currentTimeMillis();
+					final long durationFlush = finishFlush - startFlush;
+					logDuration(SOURCE, METHOD, "incremental trans2 flush",
+							durationFlush);
+				}
 			}
 		}
 	}
@@ -578,6 +610,7 @@ public class RecordIdControllerBean implements RecordIdController {
 		assert em != null;
 		assert impl != null;
 		assert batchSize > 0;
+		final String METHOD = "saveLongTranslations";
 
 		if (impl.isSplit()) {
 			Long recordId = RecordIdLongTranslation.RECORD_ID_PLACEHOLDER;
@@ -591,6 +624,7 @@ public class RecordIdControllerBean implements RecordIdController {
 		@SuppressWarnings({
 				"unchecked", "rawtypes" })
 		Set<Map.Entry> entries1 = impl.ids1_To_Indices.entrySet();
+		final int bMultiple1 = computeBatchMultiple(batchSize, entries1.size());
 		int count = 0;
 		for (@SuppressWarnings("rawtypes")
 		Map.Entry e1 : entries1) {
@@ -601,14 +635,22 @@ public class RecordIdControllerBean implements RecordIdController {
 				new RecordIdLongTranslation(job, recordId, rsr, index);
 			em.persist(rit);
 			if (++count % batchSize == 0) {
+				long startFlush = System.currentTimeMillis();
 				em.flush();
 				em.clear();
+				if (batchSize % bMultiple1 == 0) {
+					final long finishFlush = System.currentTimeMillis();
+					final long durationFlush = finishFlush - startFlush;
+					logDuration(SOURCE, METHOD, "incremental trans1 flush",
+							durationFlush);
+				}
 			}
 		}
 
 		@SuppressWarnings({
 				"unchecked", "rawtypes" })
 		Set<Map.Entry> entries2 = impl.ids2_To_Indices.entrySet();
+		final int bMultiple2 = computeBatchMultiple(batchSize, entries1.size());
 		for (@SuppressWarnings("rawtypes")
 		Map.Entry e2 : entries2) {
 			Long recordId = (Long) e2.getKey();
@@ -618,8 +660,15 @@ public class RecordIdControllerBean implements RecordIdController {
 				new RecordIdLongTranslation(job, recordId, rsr, index);
 			em.persist(rit);
 			if (++count % batchSize == 0) {
+				long startFlush = System.currentTimeMillis();
 				em.flush();
 				em.clear();
+				if (batchSize % bMultiple2 == 0) {
+					final long finishFlush = System.currentTimeMillis();
+					final long durationFlush = finishFlush - startFlush;
+					logDuration(SOURCE, METHOD, "incremental trans2 flush",
+							durationFlush);
+				}
 			}
 		}
 	}
@@ -631,6 +680,7 @@ public class RecordIdControllerBean implements RecordIdController {
 		assert em != null;
 		assert impl != null;
 		assert batchSize > 0;
+		final String METHOD = "saveReflectedTranslations";
 
 		if (impl.isSplit()) {
 			String recordId = RecordIdStringTranslation.RECORD_ID_PLACEHOLDER;
@@ -642,6 +692,7 @@ public class RecordIdControllerBean implements RecordIdController {
 		@SuppressWarnings({
 				"unchecked", "rawtypes" })
 		Set<Map.Entry> entries1 = impl.ids1_To_Indices.entrySet();
+		final int bMultiple1 = computeBatchMultiple(batchSize, entries1.size());
 		int count = 0;
 		for (@SuppressWarnings("rawtypes")
 		Map.Entry e1 : entries1) {
@@ -650,14 +701,22 @@ public class RecordIdControllerBean implements RecordIdController {
 			RECORD_SOURCE_ROLE rsr = RECORD_SOURCE_ROLE.STAGING;
 			reflectPersist(transClass, transCtor, job, recordId, rsr, index);
 			if (++count % batchSize == 0) {
+				long startFlush = System.currentTimeMillis();
 				em.flush();
 				em.clear();
+				if (batchSize % bMultiple1 == 0) {
+					final long finishFlush = System.currentTimeMillis();
+					final long durationFlush = finishFlush - startFlush;
+					logDuration(SOURCE, METHOD, "incremental trans1 flush",
+							durationFlush);
+				}
 			}
 		}
 
 		@SuppressWarnings({
 				"unchecked", "rawtypes" })
 		Set<Map.Entry> entries2 = impl.ids2_To_Indices.entrySet();
+		final int bMultiple2 = computeBatchMultiple(batchSize, entries1.size());
 		for (@SuppressWarnings("rawtypes")
 		Map.Entry e2 : entries2) {
 			String recordId = (String) e2.getKey();
@@ -665,8 +724,15 @@ public class RecordIdControllerBean implements RecordIdController {
 			RECORD_SOURCE_ROLE rsr = RECORD_SOURCE_ROLE.MASTER;
 			reflectPersist(transClass, transCtor, job, recordId, rsr, index);
 			if (++count % batchSize == 0) {
+				long startFlush = System.currentTimeMillis();
 				em.flush();
 				em.clear();
+				if (batchSize % bMultiple2 == 0) {
+					final long finishFlush = System.currentTimeMillis();
+					final long durationFlush = finishFlush - startFlush;
+					logDuration(SOURCE, METHOD, "incremental trans2 flush",
+							durationFlush);
+				}
 			}
 		}
 	}
@@ -676,6 +742,7 @@ public class RecordIdControllerBean implements RecordIdController {
 		assert em != null;
 		assert impl != null;
 		assert batchSize > 0;
+		final String METHOD = "saveStringTranslations";
 
 		if (impl.isSplit()) {
 			String recordId = RecordIdStringTranslation.RECORD_ID_PLACEHOLDER;
@@ -689,6 +756,7 @@ public class RecordIdControllerBean implements RecordIdController {
 		@SuppressWarnings({
 				"unchecked", "rawtypes" })
 		Set<Map.Entry> entries1 = impl.ids1_To_Indices.entrySet();
+		final int bMultiple1 = computeBatchMultiple(batchSize, entries1.size());
 		int count = 0;
 		for (@SuppressWarnings("rawtypes")
 		Map.Entry e1 : entries1) {
@@ -699,14 +767,22 @@ public class RecordIdControllerBean implements RecordIdController {
 				new RecordIdStringTranslation(job, recordId, rsr, index);
 			em.persist(rit);
 			if (++count % batchSize == 0) {
+				long startFlush = System.currentTimeMillis();
 				em.flush();
 				em.clear();
+				if (batchSize % bMultiple1 == 0) {
+					final long finishFlush = System.currentTimeMillis();
+					final long durationFlush = finishFlush - startFlush;
+					logDuration(SOURCE, METHOD, "incremental trans1 flush",
+							durationFlush);
+				}
 			}
 		}
 
 		@SuppressWarnings({
 				"unchecked", "rawtypes" })
 		Set<Map.Entry> entries2 = impl.ids2_To_Indices.entrySet();
+		final int bMultiple2 = computeBatchMultiple(batchSize, entries1.size());
 		for (@SuppressWarnings("rawtypes")
 		Map.Entry e2 : entries2) {
 			String recordId = (String) e2.getKey();
@@ -716,8 +792,15 @@ public class RecordIdControllerBean implements RecordIdController {
 				new RecordIdStringTranslation(job, recordId, rsr, index);
 			em.persist(rit);
 			if (++count % batchSize == 0) {
+				long startFlush = System.currentTimeMillis();
 				em.flush();
 				em.clear();
+				if (batchSize % bMultiple2 == 0) {
+					final long finishFlush = System.currentTimeMillis();
+					final long durationFlush = finishFlush - startFlush;
+					logDuration(SOURCE, METHOD, "incremental trans2 flush",
+							durationFlush);
+				}
 			}
 		}
 	}
@@ -749,13 +832,15 @@ public class RecordIdControllerBean implements RecordIdController {
 			logger.warning("No translations saved: " + retVal);
 
 		} else if (useReflectivePersistence()) {
+			logger.finest(
+					"Using reflective persistence for record-id translations");
 			final RECORD_ID_TYPE dataType = impl.getRecordIdType();
 			Class<?> transClass;
 			Class<?> ridClass;
 			switch (dataType) {
 			case TYPE_INTEGER:
 				transClass = RecordIdIntegerTranslation.class;
-				ridClass = String.class;
+				ridClass = Integer.class;
 				break;
 			case TYPE_LONG:
 				transClass = RecordIdLongTranslation.class;
@@ -763,7 +848,7 @@ public class RecordIdControllerBean implements RecordIdController {
 				break;
 			case TYPE_STRING:
 				transClass = RecordIdStringTranslation.class;
-				ridClass = Integer.class;
+				ridClass = String.class;
 				break;
 			default:
 				throw new Error("unexpected record source type: " + dataType);
@@ -805,7 +890,18 @@ public class RecordIdControllerBean implements RecordIdController {
 			logger.fine("Reflective impl: returning new translator: " + retVal);
 
 		} else {
+			logger.finest(
+					"Using default persistence for record-id translations");
 			final RECORD_ID_TYPE dataType = impl.getRecordIdType();
+
+			// Prepare for batch insert
+			final long startFlush1 = System.currentTimeMillis();
+			em.flush();
+			em.clear();
+			final long finishFlush1 = System.currentTimeMillis();
+			final long durationFlush1 = finishFlush1 - startFlush1;
+			logDuration(SOURCE, METHOD, "initial flush", durationFlush1);
+
 			final long startSave = System.currentTimeMillis();
 			switch (dataType) {
 			case TYPE_INTEGER:
@@ -827,11 +923,12 @@ public class RecordIdControllerBean implements RecordIdController {
 			final long durationSave = finishSave - startSave;
 			logDuration(SOURCE, METHOD, "save", durationSave);
 
-			final long startFlush = System.currentTimeMillis();
+			final long startFlush2 = System.currentTimeMillis();
 			em.flush();
-			final long finishFlush = System.currentTimeMillis();
-			final long durationFlush = finishFlush - startFlush;
-			logDuration(SOURCE, METHOD, "flush", durationFlush);
+			em.clear();
+			final long finishFlush2 = System.currentTimeMillis();
+			final long durationFlush2 = finishFlush2 - startFlush2;
+			logDuration(SOURCE, METHOD, "final flush", durationFlush2);
 
 			translations = findTranslationImpls(job);
 			retVal = ImmutableRecordIdTranslatorImpl.createTranslator(job,
