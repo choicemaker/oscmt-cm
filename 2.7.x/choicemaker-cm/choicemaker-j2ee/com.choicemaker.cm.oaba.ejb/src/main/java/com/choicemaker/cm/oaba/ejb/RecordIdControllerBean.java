@@ -59,6 +59,21 @@ import com.choicemaker.cm.oaba.ejb.util.DbRecordIdTranslatorFactory;
 @TransactionAttribute(REQUIRED)
 public class RecordIdControllerBean implements RecordIdController {
 
+	/**
+	 * Specifies how record-id translations are computed.
+	 * <ul>
+	 * <li>APPLICATION: computed by the application</li>
+	 * <li>DATABASE: computed in the database. Managed by code that is
+	 * registered with a
+	 * {@link com.choicemaker.cm.oaba.ejb.util.DbRecordIdTranslatorFactory
+	 * translator factory}</li>
+	 * <li>CUSTOM: computed by custom code specified by a System property</li
+	 * </ul>
+	 */
+	public static enum TRANSLATION_TYPE {
+		APPLICATION, DATABASE, CUSTOM
+	}
+
 	private static final Logger logger =
 		Logger.getLogger(RecordIdControllerBean.class.getName());
 
@@ -80,29 +95,17 @@ public class RecordIdControllerBean implements RecordIdController {
 
 	public static final boolean DEFAULT_REFLECTIVE_PERSISTENCE = false;
 
-	public static boolean useReflectivePersistence() {
-		boolean retVal = DEFAULT_REFLECTIVE_PERSISTENCE;
-		String value = System.getProperty(PN_REFLECTIVE_PERISTENCE);
-		if (value != null) {
-			retVal = Boolean.parseBoolean(value);
-		}
-		return retVal;
-	}
-
 	/**
-	 * Specifies how record-id translations are computed.
-	 * <ul>
-	 * <li>APPLICATION: computed by the application</li>
-	 * <li>DATABASE: computed in the database. Managed by code that is
-	 * registered with a
-	 * {@link com.choicemaker.cm.oaba.ejb.util.DbRecordIdTranslatorFactory
-	 * translator factory}</li>
-	 * <li>CUSTOM: computed by custom code specified by a System property</li
-	 * </ul>
+	 * Name of a System property that controls the batch size when translations
+	 * are uploaded to a database. If this property is missing or null or not an
+	 * integer value, then the batch size is set to
+	 * {@link #DEFAULT_TRANSLATION_BATCH_SIZE}. If this property is zero or
+	 * negative, then the batch size is set to {@link Integer#MAX_VALUE}.
 	 */
-	public static enum TRANSLATION_TYPE {
-		APPLICATION, DATABASE, CUSTOM
-	}
+	public static final String PN_TRANSLATION_BATCH_SIZE =
+		"oaba.record-id.batchsize";
+
+	public static final int DEFAULT_TRANSLATION_BATCH_SIZE = 1500;
 
 	/**
 	 * Name of a System property that specifies the class of the custom code for
@@ -129,10 +132,45 @@ public class RecordIdControllerBean implements RecordIdController {
 	 */
 	protected static final int QUERY_INDEX_RECORD_ID_TYPE = 1;
 
+	private static Constructor<?> getConstructor(Class<?> transClass,
+			Class<?> ridClass) throws BlockingException {
+		assert transClass != null;
+		assert ridClass != null;
+		Constructor<?> retVal;
+		try {
+			retVal = transClass.getConstructor(BatchJob.class, ridClass,
+					RECORD_SOURCE_ROLE.class, int.class);
+		} catch (NoSuchMethodException | SecurityException e) {
+			e.printStackTrace();
+			String msg0 = "Unable to create 4-parameter constructor for "
+					+ "class '%s' (BatchJob, RECORD_SOURCE_ROLE, '%s', "
+					+ "int): %s";
+			final String transClassName = transClass.getSimpleName();
+			final String ridClassName = ridClass.getSimpleName();
+			String msg =
+				String.format(msg0, transClassName, ridClassName, e.toString());
+			throw new BlockingException(msg);
+		}
+		return retVal;
+	}
+
 	private static RecordIdSinkSourceFactory getRecordIDFactory(BatchJob job) {
 		String wd = BatchJobFileUtils.getWorkingDir(job);
 		return new RecordIdSinkSourceFactory(wd, BASENAME_RECORDID_STORE,
 				BatchJobFileUtils.TEXT_SUFFIX);
+	}
+
+	/**
+	 * @see #PN_TRANSLATION_BATCH_SIZE
+	 */
+	private static int getRecordIdTranslationBatchSize() {
+		Integer retVal = Integer.getInteger(PN_TRANSLATION_BATCH_SIZE,
+				DEFAULT_TRANSLATION_BATCH_SIZE);
+		assert retVal != null;
+		if (retVal <= 0) {
+			retVal = Integer.MAX_VALUE;
+		}
+		return retVal;
 	}
 
 	/**
@@ -157,6 +195,15 @@ public class RecordIdControllerBean implements RecordIdController {
 		final String msg0 = "%s.%s(%s) duration: %d (msecs)";
 		String msg = String.format(msg0, source, method, tag, duration);
 		logger.fine(msg);
+	}
+
+	public static boolean useReflectivePersistence() {
+		boolean retVal = DEFAULT_REFLECTIVE_PERSISTENCE;
+		String value = System.getProperty(PN_REFLECTIVE_PERISTENCE);
+		if (value != null) {
+			retVal = Boolean.parseBoolean(value);
+		}
+		return retVal;
 	}
 
 	@PersistenceContext(unitName = "oaba")
@@ -408,6 +455,27 @@ public class RecordIdControllerBean implements RecordIdController {
 		return retVal;
 	}
 
+	private void reflectPersist(Class<?> transClass, Constructor<?> transCtor,
+			BatchJob job, Object recordId, RECORD_SOURCE_ROLE rsr, int index)
+			throws BlockingException {
+		assert transClass != null;
+		assert transCtor != null;
+		assert job != null;
+		assert recordId != null;
+		assert rsr != null;
+		try {
+			Object o = transCtor.newInstance(job, recordId, rsr, index);
+			em.persist(transClass.cast(o));
+		} catch (InstantiationException | IllegalAccessException
+				| IllegalArgumentException | InvocationTargetException e) {
+			String msg0 = "Unable to translation index '%d' for recordId '%s' "
+					+ "(type %s) of batch job '%d': %s";
+			String msg = String.format(msg0, index, recordId.toString(),
+					rsr.symbol, job.getId(), e.toString());
+			throw new BlockingException(msg);
+		}
+	}
+
 	/**
 	 * Implements
 	 * {@link RecordIdController#save(BatchJob, MutableRecordIdTranslator) save}
@@ -455,7 +523,10 @@ public class RecordIdControllerBean implements RecordIdController {
 	}
 
 	protected void saveIntegerTranslations(BatchJob job,
-			ImmutableRecordIdTranslatorImpl impl) {
+			ImmutableRecordIdTranslatorImpl impl, final int batchSize) {
+		assert em != null;
+		assert impl != null;
+		assert batchSize > 0;
 
 		if (impl.isSplit()) {
 			Integer recordId = RecordIdIntegerTranslation.RECORD_ID_PLACEHOLDER;
@@ -469,6 +540,7 @@ public class RecordIdControllerBean implements RecordIdController {
 		@SuppressWarnings({
 				"unchecked", "rawtypes" })
 		Set<Map.Entry> entries1 = impl.ids1_To_Indices.entrySet();
+		int count = 0;
 		for (@SuppressWarnings("rawtypes")
 		Map.Entry e1 : entries1) {
 			Integer recordId = (Integer) e1.getKey();
@@ -477,6 +549,10 @@ public class RecordIdControllerBean implements RecordIdController {
 			RecordIdIntegerTranslation rit =
 				new RecordIdIntegerTranslation(job, recordId, rsr, index);
 			em.persist(rit);
+			if (++count % batchSize == 0) {
+				em.flush();
+				em.clear();
+			}
 		}
 
 		@SuppressWarnings({
@@ -490,11 +566,18 @@ public class RecordIdControllerBean implements RecordIdController {
 			RecordIdIntegerTranslation rit =
 				new RecordIdIntegerTranslation(job, recordId, rsr, index);
 			em.persist(rit);
+			if (++count % batchSize == 0) {
+				em.flush();
+				em.clear();
+			}
 		}
 	}
 
 	protected void saveLongTranslations(BatchJob job,
-			ImmutableRecordIdTranslatorImpl impl) {
+			ImmutableRecordIdTranslatorImpl impl, final int batchSize) {
+		assert em != null;
+		assert impl != null;
+		assert batchSize > 0;
 
 		if (impl.isSplit()) {
 			Long recordId = RecordIdLongTranslation.RECORD_ID_PLACEHOLDER;
@@ -508,6 +591,7 @@ public class RecordIdControllerBean implements RecordIdController {
 		@SuppressWarnings({
 				"unchecked", "rawtypes" })
 		Set<Map.Entry> entries1 = impl.ids1_To_Indices.entrySet();
+		int count = 0;
 		for (@SuppressWarnings("rawtypes")
 		Map.Entry e1 : entries1) {
 			Long recordId = (Long) e1.getKey();
@@ -516,6 +600,10 @@ public class RecordIdControllerBean implements RecordIdController {
 			RecordIdLongTranslation rit =
 				new RecordIdLongTranslation(job, recordId, rsr, index);
 			em.persist(rit);
+			if (++count % batchSize == 0) {
+				em.flush();
+				em.clear();
+			}
 		}
 
 		@SuppressWarnings({
@@ -529,116 +617,91 @@ public class RecordIdControllerBean implements RecordIdController {
 			RecordIdLongTranslation rit =
 				new RecordIdLongTranslation(job, recordId, rsr, index);
 			em.persist(rit);
+			if (++count % batchSize == 0) {
+				em.flush();
+				em.clear();
+			}
+		}
+	}
+
+	protected void saveReflectedTranslations(BatchJob job,
+			ImmutableRecordIdTranslatorImpl impl, final int batchSize,
+			Class<?> transClass, Constructor<?> transCtor)
+			throws BlockingException {
+		assert em != null;
+		assert impl != null;
+		assert batchSize > 0;
+
+		if (impl.isSplit()) {
+			String recordId = RecordIdStringTranslation.RECORD_ID_PLACEHOLDER;
+			int index = impl.getSplitIndex();
+			RECORD_SOURCE_ROLE rsr = RECORD_SOURCE_ROLE.SPLIT_INDEX;
+			reflectPersist(transClass, transCtor, job, recordId, rsr, index);
+		}
+
+		@SuppressWarnings({
+				"unchecked", "rawtypes" })
+		Set<Map.Entry> entries1 = impl.ids1_To_Indices.entrySet();
+		int count = 0;
+		for (@SuppressWarnings("rawtypes")
+		Map.Entry e1 : entries1) {
+			String recordId = (String) e1.getKey();
+			Integer index = (Integer) e1.getValue();
+			RECORD_SOURCE_ROLE rsr = RECORD_SOURCE_ROLE.STAGING;
+			reflectPersist(transClass, transCtor, job, recordId, rsr, index);
+			if (++count % batchSize == 0) {
+				em.flush();
+				em.clear();
+			}
+		}
+
+		@SuppressWarnings({
+				"unchecked", "rawtypes" })
+		Set<Map.Entry> entries2 = impl.ids2_To_Indices.entrySet();
+		for (@SuppressWarnings("rawtypes")
+		Map.Entry e2 : entries2) {
+			String recordId = (String) e2.getKey();
+			Integer index = (Integer) e2.getValue();
+			RECORD_SOURCE_ROLE rsr = RECORD_SOURCE_ROLE.MASTER;
+			reflectPersist(transClass, transCtor, job, recordId, rsr, index);
+			if (++count % batchSize == 0) {
+				em.flush();
+				em.clear();
+			}
 		}
 	}
 
 	protected void saveStringTranslations(BatchJob job,
-			ImmutableRecordIdTranslatorImpl impl) {
-
-		if (impl.isSplit()) {
-			String recordId = RecordIdStringTranslation.RECORD_ID_PLACEHOLDER;
-			int index = impl.getSplitIndex();
-			RECORD_SOURCE_ROLE rsr = RECORD_SOURCE_ROLE.SPLIT_INDEX;
-			RecordIdStringTranslation rit =
-				new RecordIdStringTranslation(job, recordId, rsr, index);
-			em.persist(rit);
-		}
-
-		@SuppressWarnings({
-				"unchecked", "rawtypes" })
-		Set<Map.Entry> entries1 = impl.ids1_To_Indices.entrySet();
-		for (@SuppressWarnings("rawtypes")
-		Map.Entry e1 : entries1) {
-			String recordId = (String) e1.getKey();
-			Integer index = (Integer) e1.getValue();
-			RECORD_SOURCE_ROLE rsr = RECORD_SOURCE_ROLE.STAGING;
-			RecordIdStringTranslation rit =
-				new RecordIdStringTranslation(job, recordId, rsr, index);
-			em.persist(rit);
-		}
-
-		@SuppressWarnings({
-				"unchecked", "rawtypes" })
-		Set<Map.Entry> entries2 = impl.ids2_To_Indices.entrySet();
-		for (@SuppressWarnings("rawtypes")
-		Map.Entry e2 : entries2) {
-			String recordId = (String) e2.getKey();
-			Integer index = (Integer) e2.getValue();
-			RECORD_SOURCE_ROLE rsr = RECORD_SOURCE_ROLE.MASTER;
-			RecordIdStringTranslation rit =
-				new RecordIdStringTranslation(job, recordId, rsr, index);
-			em.persist(rit);
-		}
-	}
-
-	private static Constructor<?> getConstructor(Class<?> transClass,
-			Class<?> ridClass) throws BlockingException {
-		assert transClass != null;
-		assert ridClass != null;
-		Constructor<?> retVal;
-		try {
-			retVal = transClass.getConstructor(BatchJob.class, ridClass,
-					RECORD_SOURCE_ROLE.class, int.class);
-		} catch (NoSuchMethodException | SecurityException e) {
-			e.printStackTrace();
-			String msg0 = "Unable to create 4-parameter constructor for "
-					+ "class '%s' (BatchJob, RECORD_SOURCE_ROLE, '%s', "
-					+ "int): %s";
-			final String transClassName = transClass.getSimpleName();
-			final String ridClassName = ridClass.getSimpleName();
-			String msg =
-				String.format(msg0, transClassName, ridClassName, e.toString());
-			throw new BlockingException(msg);
-		}
-		return retVal;
-	}
-
-	private static void reflectPersist(EntityManager em, Class<?> transClass,
-			Constructor<?> transCtor, BatchJob job, Object recordId,
-			RECORD_SOURCE_ROLE rsr, int index) throws BlockingException {
-		assert em != null;
-		assert transClass != null;
-		assert transCtor != null;
-		assert job != null;
-		assert recordId != null;
-		assert rsr != null;
-		try {
-			Object o = transCtor.newInstance(job, recordId, rsr, index);
-			em.persist(transClass.cast(o));
-		} catch (InstantiationException | IllegalAccessException
-				| IllegalArgumentException | InvocationTargetException e) {
-			String msg0 = "Unable to translation index '%d' for recordId '%s' "
-					+ "(type %s) of batch job '%d': %s";
-			String msg = String.format(msg0, index, recordId.toString(),
-					rsr.symbol, job.getId(), e.toString());
-			throw new BlockingException(msg);
-		}
-	}
-
-	protected static void saveTranslations(EntityManager em, BatchJob job,
-			ImmutableRecordIdTranslatorImpl impl, Class<?> transClass,
-			Constructor<?> transCtor) throws BlockingException {
+			ImmutableRecordIdTranslatorImpl impl, final int batchSize) {
 		assert em != null;
 		assert impl != null;
+		assert batchSize > 0;
 
 		if (impl.isSplit()) {
 			String recordId = RecordIdStringTranslation.RECORD_ID_PLACEHOLDER;
 			int index = impl.getSplitIndex();
 			RECORD_SOURCE_ROLE rsr = RECORD_SOURCE_ROLE.SPLIT_INDEX;
-			reflectPersist(em, transClass, transCtor, job, recordId, rsr,
-					index);
+			RecordIdStringTranslation rit =
+				new RecordIdStringTranslation(job, recordId, rsr, index);
+			em.persist(rit);
 		}
 
 		@SuppressWarnings({
 				"unchecked", "rawtypes" })
 		Set<Map.Entry> entries1 = impl.ids1_To_Indices.entrySet();
+		int count = 0;
 		for (@SuppressWarnings("rawtypes")
 		Map.Entry e1 : entries1) {
 			String recordId = (String) e1.getKey();
 			Integer index = (Integer) e1.getValue();
 			RECORD_SOURCE_ROLE rsr = RECORD_SOURCE_ROLE.STAGING;
-			reflectPersist(em, transClass, transCtor, job, recordId, rsr,
-					index);
+			RecordIdStringTranslation rit =
+				new RecordIdStringTranslation(job, recordId, rsr, index);
+			em.persist(rit);
+			if (++count % batchSize == 0) {
+				em.flush();
+				em.clear();
+			}
 		}
 
 		@SuppressWarnings({
@@ -649,8 +712,13 @@ public class RecordIdControllerBean implements RecordIdController {
 			String recordId = (String) e2.getKey();
 			Integer index = (Integer) e2.getValue();
 			RECORD_SOURCE_ROLE rsr = RECORD_SOURCE_ROLE.MASTER;
-			reflectPersist(em, transClass, transCtor, job, recordId, rsr,
-					index);
+			RecordIdStringTranslation rit =
+				new RecordIdStringTranslation(job, recordId, rsr, index);
+			em.persist(rit);
+			if (++count % batchSize == 0) {
+				em.flush();
+				em.clear();
+			}
 		}
 	}
 
@@ -661,6 +729,8 @@ public class RecordIdControllerBean implements RecordIdController {
 		final long startSaveTranslatorImpl = System.currentTimeMillis();
 
 		logger.fine("Saving " + job + " / " + impl);
+		final int batchSize = getRecordIdTranslationBatchSize();
+		logger.fine("Translation batch size: " + batchSize);
 		ImmutableRecordIdTranslatorImpl retVal = null;
 		// Check if the translations already exist in the database
 		List<AbstractRecordIdTranslationEntity<T>> translations =
@@ -706,18 +776,28 @@ public class RecordIdControllerBean implements RecordIdController {
 			final Constructor<?> transCtor;
 			transCtor = getConstructor(transClass, ridClass);
 
+			// Prepare for batch insert
+			final long startFlush1 = System.currentTimeMillis();
+			em.flush();
+			em.clear();
+			final long finishFlush1 = System.currentTimeMillis();
+			final long durationFlush1 = finishFlush1 - startFlush1;
+			logDuration(SOURCE, METHOD, "initial flush", durationFlush1);
+
 			final long startSave = System.currentTimeMillis();
-			saveTranslations(em, job, impl, transClass, transCtor);
+			saveReflectedTranslations(job, impl, batchSize, transClass,
+					transCtor);
 			logger.finest("Saved " + job + " / " + impl);
 			final long finishSave = System.currentTimeMillis();
 			final long durationSave = finishSave - startSave;
 			logDuration(SOURCE, METHOD, "save", durationSave);
 
-			final long startFlush = System.currentTimeMillis();
+			final long startFlush2 = System.currentTimeMillis();
 			em.flush();
-			final long finishFlush = System.currentTimeMillis();
-			final long durationFlush = finishFlush - startFlush;
-			logDuration(SOURCE, METHOD, "flush", durationFlush);
+			em.clear();
+			final long finishFlush2 = System.currentTimeMillis();
+			final long durationFlush2 = finishFlush2 - startFlush2;
+			logDuration(SOURCE, METHOD, "final flush", durationFlush2);
 
 			translations = findTranslationImpls(job);
 			retVal = ImmutableRecordIdTranslatorImpl.createTranslator(job,
@@ -729,15 +809,15 @@ public class RecordIdControllerBean implements RecordIdController {
 			final long startSave = System.currentTimeMillis();
 			switch (dataType) {
 			case TYPE_INTEGER:
-				saveIntegerTranslations(job, impl);
+				saveIntegerTranslations(job, impl, batchSize);
 				logger.fine("Saved " + job + " / " + impl);
 				break;
 			case TYPE_LONG:
-				saveLongTranslations(job, impl);
+				saveLongTranslations(job, impl, batchSize);
 				logger.fine("Saved " + job + " / " + impl);
 				break;
 			case TYPE_STRING:
-				saveStringTranslations(job, impl);
+				saveStringTranslations(job, impl, batchSize);
 				logger.fine("Saved " + job + " / " + impl);
 				break;
 			default:
