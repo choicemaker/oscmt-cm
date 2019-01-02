@@ -685,7 +685,7 @@ public class RecValService3 {
 						(IntArrayList) values.get(C));
 
 				if (internal % DEBUG_INTERVAL == 0) {
-					log.fine(
+					log.finest(
 							"id " + internal + " C " + C + " " + values.get(C));
 				}
 			}

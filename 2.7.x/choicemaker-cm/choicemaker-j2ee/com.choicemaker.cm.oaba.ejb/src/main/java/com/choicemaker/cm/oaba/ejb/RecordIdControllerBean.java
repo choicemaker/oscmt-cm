@@ -135,14 +135,22 @@ public class RecordIdControllerBean implements RecordIdController {
 	/**
 	 * Computes totalSize/batchSize, or 10, whichever is smallest and positive
 	 */
-	private static int computeBatchMultiple(int batchSize, int totalSize) {
+	public static int computeBatchMultiple(int batchSize, int totalSize) {
 		int retVal;
 		if (batchSize <= 0) {
 			retVal = 1;
 		} else if (totalSize <= 10 * batchSize) {
 			retVal = batchSize;
 		} else {
-			retVal = batchSize * (totalSize / (10 * batchSize));
+			retVal = batchSize * ((totalSize/(10 * batchSize)) + 1);
+		}
+		assert retVal >= batchSize;
+		assert retVal >= totalSize / 10;
+		assert batchSize <= 0 || retVal % batchSize == 0;
+		{
+			String msg0 = "computeBatchMultiple(batchSize:%d,totalSize:%d): %d";
+			String msg = String.format(msg0, batchSize, totalSize, retVal);
+			logger.fine(msg);
 		}
 		return retVal;
 	}
@@ -570,11 +578,13 @@ public class RecordIdControllerBean implements RecordIdController {
 				long startFlush = System.currentTimeMillis();
 				em.flush();
 				em.clear();
-				if (batchSize % bMultiple1 == 0) {
+				if (count % bMultiple1 == 0) {
 					final long finishFlush = System.currentTimeMillis();
 					final long durationFlush = finishFlush - startFlush;
-					logDuration(SOURCE, METHOD, "incremental trans1 flush",
-							durationFlush);
+					final int flushIdx = count / bMultiple1;
+					String msg0 = "incremental trans1 flush [%d]";
+					String msg = String.format(msg0, flushIdx);
+					logDuration(SOURCE, METHOD, msg, durationFlush);
 				}
 			}
 		}
@@ -595,11 +605,13 @@ public class RecordIdControllerBean implements RecordIdController {
 				long startFlush = System.currentTimeMillis();
 				em.flush();
 				em.clear();
-				if (batchSize % bMultiple2 == 0) {
+				if (count % bMultiple2 == 0) {
 					final long finishFlush = System.currentTimeMillis();
 					final long durationFlush = finishFlush - startFlush;
-					logDuration(SOURCE, METHOD, "incremental trans2 flush",
-							durationFlush);
+					final int flushIdx = count / bMultiple2;
+					String msg0 = "incremental trans2 flush [%d]";
+					String msg = String.format(msg0, flushIdx);
+					logDuration(SOURCE, METHOD, msg, durationFlush);
 				}
 			}
 		}
@@ -638,11 +650,13 @@ public class RecordIdControllerBean implements RecordIdController {
 				long startFlush = System.currentTimeMillis();
 				em.flush();
 				em.clear();
-				if (batchSize % bMultiple1 == 0) {
+				if (count % bMultiple1 == 0) {
 					final long finishFlush = System.currentTimeMillis();
 					final long durationFlush = finishFlush - startFlush;
-					logDuration(SOURCE, METHOD, "incremental trans1 flush",
-							durationFlush);
+					final int flushIdx = count / bMultiple1;
+					String msg0 = "incremental trans1 flush [%d]";
+					String msg = String.format(msg0, flushIdx);
+					logDuration(SOURCE, METHOD, msg, durationFlush);
 				}
 			}
 		}
@@ -663,11 +677,13 @@ public class RecordIdControllerBean implements RecordIdController {
 				long startFlush = System.currentTimeMillis();
 				em.flush();
 				em.clear();
-				if (batchSize % bMultiple2 == 0) {
+				if (count % bMultiple2 == 0) {
 					final long finishFlush = System.currentTimeMillis();
 					final long durationFlush = finishFlush - startFlush;
-					logDuration(SOURCE, METHOD, "incremental trans2 flush",
-							durationFlush);
+					final int flushIdx = count / bMultiple2;
+					String msg0 = "incremental trans2 flush [%d]";
+					String msg = String.format(msg0, flushIdx);
+					logDuration(SOURCE, METHOD, msg, durationFlush);
 				}
 			}
 		}
@@ -704,11 +720,13 @@ public class RecordIdControllerBean implements RecordIdController {
 				long startFlush = System.currentTimeMillis();
 				em.flush();
 				em.clear();
-				if (batchSize % bMultiple1 == 0) {
+				if (count % bMultiple1 == 0) {
 					final long finishFlush = System.currentTimeMillis();
 					final long durationFlush = finishFlush - startFlush;
-					logDuration(SOURCE, METHOD, "incremental trans1 flush",
-							durationFlush);
+					final int flushIdx = count / bMultiple1;
+					String msg0 = "incremental trans1 flush [%d]";
+					String msg = String.format(msg0, flushIdx);
+					logDuration(SOURCE, METHOD, msg, durationFlush);
 				}
 			}
 		}
@@ -727,11 +745,13 @@ public class RecordIdControllerBean implements RecordIdController {
 				long startFlush = System.currentTimeMillis();
 				em.flush();
 				em.clear();
-				if (batchSize % bMultiple2 == 0) {
+				if (count % bMultiple2 == 0) {
 					final long finishFlush = System.currentTimeMillis();
 					final long durationFlush = finishFlush - startFlush;
-					logDuration(SOURCE, METHOD, "incremental trans2 flush",
-							durationFlush);
+					final int flushIdx = count / bMultiple2;
+					String msg0 = "incremental trans2 flush [%d]";
+					String msg = String.format(msg0, flushIdx);
+					logDuration(SOURCE, METHOD, msg, durationFlush);
 				}
 			}
 		}
@@ -770,11 +790,13 @@ public class RecordIdControllerBean implements RecordIdController {
 				long startFlush = System.currentTimeMillis();
 				em.flush();
 				em.clear();
-				if (batchSize % bMultiple1 == 0) {
+				if (count % bMultiple1 == 0) {
 					final long finishFlush = System.currentTimeMillis();
 					final long durationFlush = finishFlush - startFlush;
-					logDuration(SOURCE, METHOD, "incremental trans1 flush",
-							durationFlush);
+					final int flushIdx = count / bMultiple1;
+					String msg0 = "incremental trans1 flush [%d]";
+					String msg = String.format(msg0, flushIdx);
+					logDuration(SOURCE, METHOD, msg, durationFlush);
 				}
 			}
 		}
@@ -795,11 +817,13 @@ public class RecordIdControllerBean implements RecordIdController {
 				long startFlush = System.currentTimeMillis();
 				em.flush();
 				em.clear();
-				if (batchSize % bMultiple2 == 0) {
+				if (count % bMultiple2 == 0) {
 					final long finishFlush = System.currentTimeMillis();
 					final long durationFlush = finishFlush - startFlush;
-					logDuration(SOURCE, METHOD, "incremental trans2 flush",
-							durationFlush);
+					final int flushIdx = count / bMultiple2;
+					String msg0 = "incremental trans2 flush [%d]";
+					String msg = String.format(msg0, flushIdx);
+					logDuration(SOURCE, METHOD, msg, durationFlush);
 				}
 			}
 		}
