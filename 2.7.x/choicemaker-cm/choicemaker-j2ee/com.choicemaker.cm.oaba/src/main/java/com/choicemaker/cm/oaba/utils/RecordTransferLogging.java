@@ -20,13 +20,13 @@ public class RecordTransferLogging {
 		assert countInfo > 0;
 		assert countDebug > 0;
 		assert countInfo >= countDebug;
-		if ((count % countInfo == 0 && log.isLoggable(Level.INFO))
-				|| (count % countDebug == 0 && log.isLoggable(Level.FINE))) {
+		if ((count % countInfo == 0 && log.isLoggable(Level.FINE))
+				|| (count % countDebug == 0 && log.isLoggable(Level.FINER))) {
 			String msg = String.format(fmt, tag, id, count);
-			if (log.isLoggable(Level.INFO)) {
-				log.info(msg);
-			} else {
+			if (log.isLoggable(Level.FINE)) {
 				log.fine(msg);
+			} else {
+				log.finer(msg);
 			}
 		}
 	}
@@ -40,12 +40,12 @@ public class RecordTransferLogging {
 	public static void logRecordIdCount(Logger log, String fmt, String tag,
 			Comparable<?> id, int count) {
 		Precondition.assertNonEmptyString(fmt);
-		if (log.isLoggable(Level.INFO)) {
-			String msg = String.format(fmt, tag, id, count);
-			log.info(msg);
-		} else if (log.isLoggable(Level.FINE)) {
+		if (log.isLoggable(Level.FINE)) {
 			String msg = String.format(fmt, tag, id, count);
 			log.fine(msg);
+		} else if (log.isLoggable(Level.FINER)) {
+			String msg = String.format(fmt, tag, id, count);
+			log.finer(msg);
 		}
 	}
 
@@ -66,7 +66,7 @@ public class RecordTransferLogging {
 	public static void logConnectionAcquisition(Logger log, String fmt,
 			String tag, long acquireMsecs) {
 		String msg = String.format(fmt, tag, acquireMsecs);
-		log.info(msg);
+		log.fine(msg);
 	}
 
 	public static void logTransferRate(Logger log, String fmt, String tag,
@@ -78,7 +78,7 @@ public class RecordTransferLogging {
 			rate = ((float) count) / msecs;
 		}
 		String msg = String.format(fmt, tag, count, msecs, rate);
-		log.info(msg);
+		log.fine(msg);
 	}
 
 }

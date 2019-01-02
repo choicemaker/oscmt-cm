@@ -81,7 +81,7 @@ public class TransitivityProcessingLog implements ProcessingEventLog {
 
 	@Override
 	public void setCurrentProcessingEvent(ProcessingEvent event, String info) {
-		logger.info(LOG_SOURCE + ".setCurrentProcessingEvent: " + event
+		logger.fine(LOG_SOURCE + ".setCurrentProcessingEvent: " + event
 				+ " (job " + this.batchJob.getId() + ")");
 		TransitivityEventManager.updateStatus(em, batchJob, event, new Date(),
 				info);

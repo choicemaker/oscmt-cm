@@ -84,9 +84,9 @@ public class MessageBeanUtils {
 		ObjectMessage message = jmsCtx.createObjectMessage(data);
 		JMSProducer sender = jmsCtx.createProducer();
 		sender.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
-		log.info(MessageBeanUtils.queueInfo("Sending", q, data));
+		log.fine(MessageBeanUtils.queueInfo("Sending", q, data));
 		sender.send(q, message);
-		log.info(MessageBeanUtils.queueInfo("Sent", q, data));
+		log.fine(MessageBeanUtils.queueInfo("Sent", q, data));
 	}
 
 	public static void sendMatchWriterData(MatchWriterMessage data,
@@ -97,9 +97,9 @@ public class MessageBeanUtils {
 		ObjectMessage message = jmsCtx.createObjectMessage(data);
 		JMSProducer sender = jmsCtx.createProducer();
 		sender.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
-		log.info(MessageBeanUtils.queueInfo("Sending", q, data));
+		log.fine(MessageBeanUtils.queueInfo("Sending", q, data));
 		sender.send(q, message);
-		log.info(MessageBeanUtils.queueInfo("Sent", q, data));
+		log.fine(MessageBeanUtils.queueInfo("Sent", q, data));
 	}
 
 	public static String queueInfo(String tag, Queue q, Object d) {

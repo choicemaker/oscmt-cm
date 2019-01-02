@@ -162,7 +162,7 @@ public class JmsUtils {
 		} catch (Exception x) {
 			fail(x.toString());
 		}
-		logger.info("Received object: " + o);
+		logger.fine("Received object: " + o);
 		if (o != null && !(o instanceof BatchProcessingNotification)) {
 			fail("Received invalid object type from status topic: "
 					+ o.getClass().getName());
