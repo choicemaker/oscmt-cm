@@ -7,10 +7,10 @@ import com.choicemaker.cm.oaba.core.IRecordIdSink;
 import com.choicemaker.cm.oaba.core.IRecordIdSinkSourceFactory;
 import com.choicemaker.cm.oaba.core.RECORD_ID_TYPE;
 
-public class SqlServerRecordIdTranslator extends AbstractRecordIdTranslator
+public class SqlServerRecordIdTranslator1 extends AbstractRecordIdTranslator
 		implements DbRecordIdTranslator {
 
-	public SqlServerRecordIdTranslator(BatchJob job,
+	public SqlServerRecordIdTranslator1(BatchJob job,
 			IRecordIdSinkSourceFactory factory, IRecordIdSink s1,
 			IRecordIdSink s2, boolean doKeepFiles) throws BlockingException {
 		super(job, factory, s1, s2, doKeepFiles);

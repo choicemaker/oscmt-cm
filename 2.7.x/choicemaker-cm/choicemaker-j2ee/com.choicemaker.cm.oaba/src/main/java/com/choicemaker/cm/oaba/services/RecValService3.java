@@ -36,6 +36,7 @@ import javax.transaction.HeuristicMixedException;
 import javax.transaction.HeuristicRollbackException;
 import javax.transaction.NotSupportedException;
 import javax.transaction.RollbackException;
+import javax.transaction.Status;
 import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 
@@ -506,11 +507,13 @@ public class RecValService3 {
 				stage.setModel(model);
 
 				final long startAcquire = System.currentTimeMillis();
+				userTx.begin();
 				acquireStaging();
 				totalAcquireMsecs += System.currentTimeMillis() - startAcquire;
 
 				final long startTransfer = System.currentTimeMillis();
 				count += createStagingFiles();
+				userTx.commit();
 				totalDownloadMsecs +=
 					System.currentTimeMillis() - startTransfer;
 			}
@@ -538,11 +541,13 @@ public class RecValService3 {
 				master.setModel(model);
 
 				final long startAcquire = System.currentTimeMillis();
+				userTx.begin();
 				acquireMaster();
 				totalAcquireMsecs += System.currentTimeMillis() - startAcquire;
 
 				final long startTransfer = System.currentTimeMillis();
 				masterCount += createMasterFiles();
+				userTx.commit();
 				count += masterCount;
 				totalDownloadMsecs +=
 					System.currentTimeMillis() - startTransfer;
@@ -590,9 +595,14 @@ public class RecValService3 {
 	private boolean shouldStop(String tag) throws BlockingException {
 		boolean retVal = false;
 		try {
-			userTx.begin();
-			retVal = this.control.shouldStop();
-			userTx.commit();
+			boolean txIsActive = userTx.getStatus() == Status.STATUS_ACTIVE;
+			if (txIsActive) {
+				retVal = this.control.shouldStop();
+			} else {
+				userTx.begin();
+				retVal = this.control.shouldStop();
+				userTx.commit();
+			}
 			log.finest(tag + "shouldStop: " + this.control.shouldStop());
 		} catch (NotSupportedException | SystemException | SecurityException
 				| IllegalStateException | RollbackException

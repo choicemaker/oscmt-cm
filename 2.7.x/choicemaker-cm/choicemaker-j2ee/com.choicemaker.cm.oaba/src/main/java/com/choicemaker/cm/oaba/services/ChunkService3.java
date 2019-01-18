@@ -589,6 +589,7 @@ public class ChunkService3 {
 			rs.setModel(model);
 
 			final long startAcquire = System.currentTimeMillis();
+			userTx.begin();
 			rs.open();
 			final long acquireMsecs = System.currentTimeMillis() - startAcquire;
 			logConnectionAcquisition(log, isStaging ? FS0 : FM0, TAG,
@@ -631,6 +632,7 @@ public class ChunkService3 {
 					ControlChecker.checkStop(control, count, CONTROL_INTERVAL);
 
 			} // end while rs next
+			userTx.commit();
 			final long downloadMsecs =
 				System.currentTimeMillis() - startDownload;
 			logTransferRate(log, FS2, TAG, count, downloadMsecs);
