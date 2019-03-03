@@ -31,6 +31,7 @@ public class ConjunctionValidator<T> extends AbstractAggregateValidator<T> {
 //	private static Logger logger =
 //		Logger.getLogger(SetBasedValidatorFactory.class.getName());
 
+	@SuppressWarnings("rawtypes")
 	private Map validatorMap;
 	
 	/**
@@ -44,13 +45,15 @@ public class ConjunctionValidator<T> extends AbstractAggregateValidator<T> {
 	 * Full constructs an aggregate validator.
 	 * @param validatorMap a non-null map of plugin names to validator instances.
 	 */
-	public ConjunctionValidator(Map validatorMap) {
+	public ConjunctionValidator(@SuppressWarnings("rawtypes") Map validatorMap) {
 		setValidators(validatorMap);
 	}
 
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.validation.eclipse.AbstractAggregateValidator#addValidator(java.lang.String, com.choicemaker.cm.validation.eclipse.IValidator)
 	 */
+	@SuppressWarnings({
+			"rawtypes", "unchecked" })
 	public void addValidator(String name, IValidator validator) {
 		// Preconditions
 		if (!StringUtils.nonEmptyString(name)) {
@@ -70,6 +73,8 @@ public class ConjunctionValidator<T> extends AbstractAggregateValidator<T> {
 	 * This implementation is a bit unsafe, since it hands back
 	 * the actual Map used by this instance, and not a clone.
 	 */
+	@SuppressWarnings({
+			"unchecked", "rawtypes" })
 	public Map getValidatorMap() {
 		invariant();
 		Map retVal = Collections.unmodifiableMap(this.validatorMap);
@@ -79,6 +84,7 @@ public class ConjunctionValidator<T> extends AbstractAggregateValidator<T> {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.validation.eclipse.IAggregateValidator#getValidatorNames()
 	 */
+	@SuppressWarnings("unchecked")
 	public String[] getValidatorNames() {
 		invariant();
 		String[] retVal = (String[]) validatorMap.keySet().toArray(new String[0]);
@@ -88,6 +94,8 @@ public class ConjunctionValidator<T> extends AbstractAggregateValidator<T> {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.validation.eclipse.IAggregateValidator#getValidators()
 	 */
+	@SuppressWarnings({
+			"unchecked", "rawtypes" })
 	public IValidator[] getValidators() {
 		invariant();
 		List list = new ArrayList();
@@ -109,6 +117,8 @@ public class ConjunctionValidator<T> extends AbstractAggregateValidator<T> {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.validation.eclipse.IValidator#isValid(java.lang.Object)
 	 */
+	@SuppressWarnings({
+			"unchecked", "rawtypes" })
 	public boolean isValid(Object value) {
 		invariant();
 		boolean retVal = this.validatorMap.size() > 0;
@@ -123,6 +133,7 @@ public class ConjunctionValidator<T> extends AbstractAggregateValidator<T> {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.validation.eclipse.AbstractAggregateValidator#setValidators(java.util.Map)
 	 */
+	@SuppressWarnings("rawtypes")
 	public void setValidators(Map validatorMap) {
 
 		// Preconditions

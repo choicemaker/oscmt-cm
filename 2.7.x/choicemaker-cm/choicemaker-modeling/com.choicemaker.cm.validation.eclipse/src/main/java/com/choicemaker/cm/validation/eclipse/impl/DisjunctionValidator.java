@@ -26,6 +26,7 @@ import com.choicemaker.util.StringUtils;
  * in order for the method of this class to evaluate to <code>true</code>.
  * @author rphall
  */
+@SuppressWarnings("rawtypes")
 public class DisjunctionValidator extends AbstractAggregateValidator {
 	
 //	private static Logger logger =
@@ -51,6 +52,7 @@ public class DisjunctionValidator extends AbstractAggregateValidator {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.validation.eclipse.AbstractAggregateValidator#addValidator(java.lang.String, com.choicemaker.cm.validation.eclipse.IValidator)
 	 */
+	@SuppressWarnings("unchecked")
 	public void addValidator(String name, IValidator validator) {
 		// Preconditions
 		if (!StringUtils.nonEmptyString(name)) {
@@ -87,6 +89,7 @@ public class DisjunctionValidator extends AbstractAggregateValidator {
 	 * This implementation is a bit unsafe, since it hands back
 	 * the actual Map used by this instance, and not a clone.
 	 */
+	@SuppressWarnings("unchecked")
 	public Map getValidatorMap() {
 		invariant();
 		Map retVal = Collections.unmodifiableMap(this.validatorMap);
@@ -98,6 +101,7 @@ public class DisjunctionValidator extends AbstractAggregateValidator {
 	 */
 	public String[] getValidatorNames() {
 		invariant();
+		@SuppressWarnings("unchecked")
 		String[] retVal = (String[]) validatorMap.keySet().toArray(new String[0]);
 		return retVal;
 	}
@@ -105,6 +109,7 @@ public class DisjunctionValidator extends AbstractAggregateValidator {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.validation.eclipse.IAggregateValidator#getValidators()
 	 */
+	@SuppressWarnings("unchecked")
 	public IValidator[] getValidators() {
 		invariant();
 		List list = new ArrayList();
@@ -126,6 +131,7 @@ public class DisjunctionValidator extends AbstractAggregateValidator {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.validation.eclipse.IValidator#isValid(java.lang.Object)
 	 */
+	@SuppressWarnings("unchecked")
 	public boolean isValid(Object value) {
 		invariant();
 		boolean retVal = false;
