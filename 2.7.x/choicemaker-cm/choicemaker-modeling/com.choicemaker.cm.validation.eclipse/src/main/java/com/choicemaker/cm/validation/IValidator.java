@@ -8,7 +8,7 @@
 package com.choicemaker.cm.validation;
 
 /**
- * Validation method for MCI names.
+ * Validation method for some object type <code>T</code>
  *
  * @author rphall
  */
