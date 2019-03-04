@@ -1,8 +1,11 @@
 package com.choicemaker.cm.validation.eclipse.impl;
 
 import com.choicemaker.util.Precondition;
+import com.choicemaker.util.StringUtils;
 
 public class LabelQualifierKey {
+
+	public static final String EMPTY_VALUE_REPLACEMENT = null;
 
 	public final String label;
 	public final String qualifier;
@@ -12,15 +15,25 @@ public class LabelQualifierKey {
 		return "[" + label + "/" + qualifier + "]";
 	}
 
-	public LabelQualifierKey(String label, String qualifier) {
+	public LabelQualifierKey(String l, String q) {
 		Precondition.assertBoolean(
 				"The label must be non-null or "
 						+ "the label and quqlifier must both be null",
-				(label != null) || (label == null && qualifier == null));
+				(l != null) || (l == null && q == null));
 
-		this.label = label == null ? null : label.trim();
-		this.qualifier = qualifier == null ? null : qualifier.trim();
-		this.key = computeKey(label, qualifier);
+		if (StringUtils.nonEmptyString(l)) {
+			this.label = l;
+		} else {
+			this.label = EMPTY_VALUE_REPLACEMENT;
+		}
+
+		if (StringUtils.nonEmptyString(q)) {
+			this.qualifier = q;
+		} else {
+			this.qualifier = EMPTY_VALUE_REPLACEMENT;
+		}
+
+		this.key = computeKey(this.label, this.qualifier);
 	}
 
 	@Override
