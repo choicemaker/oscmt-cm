@@ -30,6 +30,24 @@ public final class LabeledValidators {
 		Logger.getLogger(LabeledValidators.class.getName());
 
 	/**
+	 * The name of a system property that can be set to "true" to check for
+	 * unexpected validator labels. By default, validator labels are not
+	 * checked.
+	 */
+	public static final String PN_CHECK_VALIDATOR_LABELS =
+		"cm.validation.checkValidatorLabels";
+
+	/** Checks the system property {@link #PN_CHECK_VALIDATOR_LABELS} */
+	public static boolean isCheckValidatorLabels() {
+		String value = System.getProperty(PN_CHECK_VALIDATOR_LABELS, "true");
+		Boolean _keepFiles = Boolean.valueOf(value);
+		boolean retVal = _keepFiles.booleanValue();
+		return retVal;
+	}
+
+	public static final boolean checkValidatorLabels = isCheckValidatorLabels();
+
+	/**
 	 * Cached map of label-qualifier keys to validators. Do not use directly
 	 * (except in {@link #addValidator(String,IValidator)}; use
 	 * {@link #getValidators()} instead.
@@ -62,16 +80,16 @@ public final class LabeledValidators {
 		return Collections.unmodifiableMap(validators);
 	}
 
-	public static void addValidator(String label, String qualifier, IValidator<?> validator)
-			throws ValidatorCreationException {
-		LabelQualifierKey key = new LabelQualifierKey(label,qualifier);
-		addValidator(key,validator);
+	public static void addValidator(String label, String qualifier,
+			IValidator<?> validator) throws ValidatorCreationException {
+		LabelQualifierKey key = new LabelQualifierKey(label, qualifier);
+		addValidator(key, validator);
 	}
 
 	/**
 	 * Adds a labeled validator to the collection of validators. If two
-	 * validators are added under the same key, the second addition replaces
-	 * the first.
+	 * validators are added under the same key, the second addition replaces the
+	 * first.
 	 * 
 	 * @param key
 	 *            the key of the validator configuration to be added. As a
@@ -83,13 +101,14 @@ public final class LabeledValidators {
 	 *             if the validator collection managed by this class can not be
 	 *             created.
 	 */
-	public static void addValidator(LabelQualifierKey key, IValidator<?> validator)
-			throws ValidatorCreationException {
+	public static void addValidator(LabelQualifierKey key,
+			IValidator<?> validator) throws ValidatorCreationException {
 		Precondition.assertNonNullArgument("null validator key", key);
 		Precondition.assertNonNullArgument("null validator", validator);
 
 		synchronized (LabeledValidators.validatorsInit) {
-			Map<LabelQualifierKey, IValidator<?>> newValidatorMap = cloneMap(getValidators());
+			Map<LabelQualifierKey, IValidator<?>> newValidatorMap =
+				cloneMap(getValidators());
 			Object alreadyPresent = newValidatorMap.put(key, validator);
 			if (alreadyPresent != null) {
 				logger.warning(
@@ -103,7 +122,8 @@ public final class LabeledValidators {
 
 	}
 
-	private static Map<LabelQualifierKey, IValidator<?>> cloneMap(Map<LabelQualifierKey, IValidator<?>> map) {
+	private static Map<LabelQualifierKey, IValidator<?>> cloneMap(
+			Map<LabelQualifierKey, IValidator<?>> map) {
 		Map<LabelQualifierKey, IValidator<?>> retVal = new HashMap<>();
 		retVal.putAll(map);
 		return retVal;
@@ -169,7 +189,7 @@ public final class LabeledValidators {
 
 	public static boolean isValid(String label, String qualifier, Object value)
 			throws ValidatorCreationException {
-		LabelQualifierKey key = new LabelQualifierKey(label,qualifier);
+		LabelQualifierKey key = new LabelQualifierKey(label, qualifier);
 		return isValid(key, value);
 	}
 
@@ -191,16 +211,27 @@ public final class LabeledValidators {
 			"rawtypes", "unchecked" })
 	public static boolean isValid(LabelQualifierKey key, Object value)
 			throws ValidatorCreationException {
+
 		boolean retVal = false;
-		if (key != null && value != null) {
+		if (key == null) {
+			if (checkValidatorLabels) {
+				logger.warning("null validator key");
+			}
+			assert retVal == false;
+		}
+		else {
 			IValidator validator = (IValidator) getValidators().get(key);
 			if (validator != null) {
 				retVal = validator.isValid(value);
 			} else {
-				String msg = "missing IValidator '" + key + "'";
-				throw new IllegalArgumentException(msg);
+				if (checkValidatorLabels) {
+					String msg = "missing IValidator '" + key + "'";
+					logger.warning(msg);
+				}
+				assert retVal == false;
 			}
 		}
+
 		return retVal;
 	}
 
