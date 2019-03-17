@@ -2,7 +2,6 @@ bash.exe.stackdump
 tmp
 *.BAK-??
 *.tgz
-/.metadata
 *~
 .*.swp
 .DS_Store
@@ -16,6 +15,8 @@ _out[0-9]*
 target*
 PmjbApp
 CM-Analyzer
-/example_models
 pom.xml.versionsBackup
+/.metadata
+/example_models
 /work
+/sources
