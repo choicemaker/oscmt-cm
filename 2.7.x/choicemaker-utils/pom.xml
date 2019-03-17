@@ -31,6 +31,7 @@
   <modules>
     <module>choicemaker-util</module>
     <module>choicemaker-dates</module>
+    <module>choicemaker-jee</module>
   </modules>
 
 </project>
