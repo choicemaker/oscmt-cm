@@ -70,7 +70,6 @@ import com.choicemaker.cm.transitivity.core.TransitivityEventBean;
 				propertyValue = "java:/choicemaker/urm/jms/transitivityQueue"),
 		@ActivationConfigProperty(propertyName = "destinationType",
 				propertyValue = "javax.jms.Queue") })
-// @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 @TransactionManagement(value = TransactionManagementType.BEAN)
 public class StartTransitivityMDB extends AbstractTransitivityBmtMDB {
 

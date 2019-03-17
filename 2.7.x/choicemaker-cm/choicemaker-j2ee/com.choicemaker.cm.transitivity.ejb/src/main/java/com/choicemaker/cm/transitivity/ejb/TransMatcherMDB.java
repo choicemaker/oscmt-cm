@@ -59,7 +59,6 @@ import com.choicemaker.cm.transitivity.api.TransitivityParametersController;
 				propertyValue = "javax.jms.Queue"),
 		@ActivationConfigProperty(propertyName = "acknowledgeMode",
 				propertyValue = "Dups-ok-acknowledge") })
-// @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 @TransactionManagement(value = TransactionManagementType.BEAN)
 public class TransMatcherMDB extends AbstractMatcherBmt
 		implements MessageListener {

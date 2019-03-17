@@ -59,7 +59,6 @@ import com.choicemaker.cm.oaba.impl.ComparableMRSink;
 				propertyValue = "javax.jms.Queue"),
 		@ActivationConfigProperty(propertyName = "acknowledgeMode",
 				propertyValue = "Dups-ok-acknowledge") })
-// @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 @TransactionManagement(value = TransactionManagementType.BEAN)
 public class MatcherMDB extends AbstractMatcherBmt {
 

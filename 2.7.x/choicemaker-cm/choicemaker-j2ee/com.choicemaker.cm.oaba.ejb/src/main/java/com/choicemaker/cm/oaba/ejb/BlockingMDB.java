@@ -52,7 +52,6 @@ import com.choicemaker.cm.oaba.services.OABABlockingService;
 				propertyValue = "javax.jms.Queue"),
 		@ActivationConfigProperty(propertyName = "acknowledgeMode",
 				propertyValue = "Dups-ok-acknowledge") })
-// @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 @TransactionManagement(value = TransactionManagementType.BEAN)
 public class BlockingMDB extends AbstractOabaBmtMDB {
 

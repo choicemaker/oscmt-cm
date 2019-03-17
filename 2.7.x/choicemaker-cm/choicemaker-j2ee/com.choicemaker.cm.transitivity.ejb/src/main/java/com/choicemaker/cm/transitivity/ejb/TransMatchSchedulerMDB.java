@@ -28,7 +28,6 @@ import javax.jms.MessageListener;
 				propertyValue = "java:/choicemaker/urm/jms/transMatchSchedulerQueue"),
 		@ActivationConfigProperty(propertyName = "destinationType",
 				propertyValue = "javax.jms.Queue") })
-//@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 public class TransMatchSchedulerMDB implements MessageListener {
 
 	@EJB

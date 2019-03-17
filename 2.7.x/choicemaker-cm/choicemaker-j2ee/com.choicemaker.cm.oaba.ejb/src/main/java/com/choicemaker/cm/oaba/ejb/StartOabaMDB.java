@@ -67,7 +67,6 @@ import com.choicemaker.cm.oaba.services.RecValService3;
 				propertyValue = "javax.jms.Queue"),
 		@ActivationConfigProperty(propertyName = "acknowledgeMode",
 				propertyValue = "Dups-ok-acknowledge") })
-// @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 @TransactionManagement(value = TransactionManagementType.BEAN)
 public class StartOabaMDB extends AbstractOabaMDB {
 

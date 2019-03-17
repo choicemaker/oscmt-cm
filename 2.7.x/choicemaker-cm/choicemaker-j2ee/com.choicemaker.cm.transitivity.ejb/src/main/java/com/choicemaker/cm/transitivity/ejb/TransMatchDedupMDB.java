@@ -54,7 +54,6 @@ import com.choicemaker.cm.oaba.ejb.util.MessageBeanUtils;
 				propertyValue = "java:/choicemaker/urm/jms/transMatchDedupQueue"),
 		@ActivationConfigProperty(propertyName = "destinationType",
 				propertyValue = "javax.jms.Queue") })
-// @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 public class TransMatchDedupMDB extends AbstractTransitivityMDB {
 
 	private static final long serialVersionUID = 2711L;

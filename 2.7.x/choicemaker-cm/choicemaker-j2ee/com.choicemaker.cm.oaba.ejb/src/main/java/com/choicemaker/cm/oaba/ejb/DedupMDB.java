@@ -49,7 +49,6 @@ import com.choicemaker.cm.oaba.services.OversizedDedupService;
 				propertyValue = "javax.jms.Queue"),
 		@ActivationConfigProperty(propertyName = "acknowledgeMode",
 				propertyValue = "Dups-ok-acknowledge") })
-// @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 @TransactionManagement(value = TransactionManagementType.BEAN)
 public class DedupMDB extends AbstractOabaBmtMDB {
 
