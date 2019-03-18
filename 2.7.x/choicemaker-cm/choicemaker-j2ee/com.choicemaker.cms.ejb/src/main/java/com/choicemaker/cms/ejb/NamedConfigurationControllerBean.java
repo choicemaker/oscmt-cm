@@ -1,6 +1,7 @@
 package com.choicemaker.cms.ejb;
 
 import static javax.ejb.TransactionAttributeType.REQUIRED;
+import static javax.ejb.TransactionAttributeType.SUPPORTS;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +53,7 @@ public class NamedConfigurationControllerBean
 	@EJB
 	private ServerConfigurationController serverController;
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public List<String> findAllModelConfigurationNames() {
 		ImmutableProbabilityModel[] models = PMManager.getModels();
@@ -63,6 +65,7 @@ public class NamedConfigurationControllerBean
 		return retVal;
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public List<String> findAllServerConfigurationNames() {
 		List<ServerConfiguration> serverConfigurations =
@@ -75,6 +78,7 @@ public class NamedConfigurationControllerBean
 		return retVal;
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public NamedConfigurationEntity findNamedConfiguration(long id) {
 		NamedConfigurationEntity retVal =
@@ -82,6 +86,7 @@ public class NamedConfigurationControllerBean
 		return retVal;
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public NamedConfigurationEntity findNamedConfigurationByName(
 			String configName) {
@@ -107,6 +112,7 @@ public class NamedConfigurationControllerBean
 		return retVal;
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public List<NamedConfiguration> findAllNamedConfigurations() {
 		Query query =

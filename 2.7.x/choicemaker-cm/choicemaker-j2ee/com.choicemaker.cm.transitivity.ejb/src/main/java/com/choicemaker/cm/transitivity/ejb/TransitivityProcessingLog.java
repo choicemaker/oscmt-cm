@@ -8,6 +8,7 @@
 package com.choicemaker.cm.transitivity.ejb;
 
 import static javax.ejb.TransactionAttributeType.REQUIRED;
+import static javax.ejb.TransactionAttributeType.SUPPORTS;
 
 import java.util.Date;
 import java.util.logging.Logger;
@@ -55,6 +56,7 @@ public class TransitivityProcessingLog implements ProcessingEventLog {
 				batchJob);
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public ProcessingEvent getCurrentProcessingEvent() {
 		BatchProcessingEvent ope = getCurrentTransitivityProcessingEvent();
@@ -62,11 +64,13 @@ public class TransitivityProcessingLog implements ProcessingEventLog {
 		return retVal;
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public int getCurrentProcessingEventId() {
 		return getCurrentProcessingEvent().getEventId();
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public String getCurrentProcessingEventInfo() {
 		BatchProcessingEvent ope = getCurrentTransitivityProcessingEvent();

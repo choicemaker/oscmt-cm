@@ -8,6 +8,7 @@
 package com.choicemaker.cm.transitivity.ejb;
 
 import static javax.ejb.TransactionAttributeType.REQUIRED;
+import static javax.ejb.TransactionAttributeType.SUPPORTS;
 
 import static com.choicemaker.cm.transitivity.ejb.TransitivityProcessingEventJPA.PN_TRANSPROCESSING_DELETE_BY_JOBID_JOBID;
 import static com.choicemaker.cm.transitivity.ejb.TransitivityProcessingEventJPA.PN_TRANSPROCESSING_FIND_BY_JOBID_JOBID;
@@ -209,11 +210,13 @@ public class TransitivityEventManager implements EventPersistenceManager {
 	@Resource(lookup = "java:/choicemaker/urm/jms/transStatusTopic")
 	private Topic transStatusTopic;
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public List<BatchProcessingEvent> findProcessingEventsByJobId(long id) {
 		return findProcessingLogEntriesByJobId(em, id);
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public List<BatchProcessingEvent> findAllProcessingEvents() {
 		return findAllTransitivityProcessingEvents(em);
@@ -224,6 +227,7 @@ public class TransitivityEventManager implements EventPersistenceManager {
 		return deleteProcessingLogEntriesByJobId(em, id);
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public TransitivityProcessingLog getProcessingLog(BatchJob job) {
 		return new TransitivityProcessingLog(em, job);
@@ -236,6 +240,7 @@ public class TransitivityEventManager implements EventPersistenceManager {
 				event, timestamp, info);
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public ProcessingEvent getCurrentProcessingEvent(BatchJob batchJob) {
 		ProcessingEvent retVal = null;

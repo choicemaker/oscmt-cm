@@ -8,6 +8,7 @@
 package com.choicemaker.cm.transitivity.ejb;
 
 import static javax.ejb.TransactionAttributeType.REQUIRED;
+import static javax.ejb.TransactionAttributeType.SUPPORTS;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -32,6 +33,7 @@ public class TransitivitySettingsControllerBean extends
 	@EJB
 	private TransitivityJobManager jobManager;
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public OabaSettings findSettingsByTransitivityJobId(long jobId) {
 		OabaSettings retVal = null;

@@ -8,6 +8,7 @@
 package com.choicemaker.cm.transitivity.ejb;
 
 import static javax.ejb.TransactionAttributeType.REQUIRED;
+import static javax.ejb.TransactionAttributeType.SUPPORTS;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,6 +93,7 @@ public class TransitivityParametersControllerBean
 		return p;
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public TransitivityParameters findTransitivityParameters(long id) {
 		TransitivityParametersEntity p =
@@ -99,6 +101,7 @@ public class TransitivityParametersControllerBean
 		return p;
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public TransitivityParameters findTransitivityParametersByBatchJobId(
 			long jobId) {
@@ -111,6 +114,7 @@ public class TransitivityParametersControllerBean
 		return retVal;
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public List<TransitivityParameters> findAllTransitivityParameters() {
 		Query query = em.createNamedQuery(

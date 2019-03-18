@@ -12,6 +12,7 @@ import static com.choicemaker.cm.oaba.ejb.RecordIdTranslationJPA.QN_TRANSLATEDID
 import static com.choicemaker.cm.oaba.ejb.RecordIdTranslationJPA.QN_TRANSLATEDID_FIND_ALL;
 import static com.choicemaker.cm.oaba.utils.RecordTransferLogging.logTransferRate;
 import static javax.ejb.TransactionAttributeType.REQUIRED;
+import static javax.ejb.TransactionAttributeType.SUPPORTS;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
@@ -311,6 +312,7 @@ public class RecordIdControllerBean implements RecordIdController {
 		return deletedCount;
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public <T extends Comparable<T>> List<RecordIdTranslation<T>> findAllRecordIdTranslations() {
 		Query query = em.createNamedQuery(QN_TRANSLATEDID_FIND_ALL);
@@ -322,6 +324,7 @@ public class RecordIdControllerBean implements RecordIdController {
 		return entries;
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public <T extends Comparable<T>> ImmutableRecordIdTranslatorLocal<T> findRecordIdTranslator(
 			BatchJob job) throws BlockingException {
@@ -408,12 +411,14 @@ public class RecordIdControllerBean implements RecordIdController {
 		return retVal;
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public IRecordIdSinkSourceFactory getRecordIdSinkSourceFactory(
 			BatchJob job) {
 		return getRecordIDFactory(job);
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public RECORD_ID_TYPE getTranslatorType(BatchJob job)
 			throws BlockingException {

@@ -1,6 +1,7 @@
 package com.choicemaker.cm.batch.ejb;
 
 import static javax.ejb.TransactionAttributeType.REQUIRED;
+import static javax.ejb.TransactionAttributeType.SUPPORTS;
 
 import static com.choicemaker.cm.batch.ejb.OperationalPropertyJPA.PN_OPPROP_DELETE_BY_JOB_P1;
 import static com.choicemaker.cm.batch.ejb.OperationalPropertyJPA.PN_OPPROP_FINDALL_BY_JOB_P1;
@@ -45,6 +46,7 @@ public class OperationalPropertyControllerBean
 		save(op);
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public String getJobProperty(BatchJob job, String pn) {
 		OperationalProperty op = find(job, pn);
@@ -154,6 +156,7 @@ public class OperationalPropertyControllerBean
 		}
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public OperationalProperty find(long propertyId) {
 		return findInternal(propertyId);
@@ -167,6 +170,7 @@ public class OperationalPropertyControllerBean
 		return retVal;
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public OperationalProperty find(final BatchJob job, final String name) {
 		if (job == null || !job.isPersistent()) {
@@ -209,6 +213,7 @@ public class OperationalPropertyControllerBean
 		return retVal;
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public List<OperationalProperty> findAllByJob(BatchJob job) {
 		List<OperationalProperty> retVal = new LinkedList<>();
@@ -238,6 +243,7 @@ public class OperationalPropertyControllerBean
 		return retVal;
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public List<OperationalProperty> findAllOperationalProperties() {
 		List<OperationalProperty> retVal = new LinkedList<>();

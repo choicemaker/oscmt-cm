@@ -8,6 +8,7 @@
 package com.choicemaker.cm.transitivity.ejb;
 
 import static javax.ejb.TransactionAttributeType.REQUIRED;
+import static javax.ejb.TransactionAttributeType.SUPPORTS;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -33,6 +34,7 @@ public class TransitivityConfigurationControllerBean
 	@EJB
 	private TransitivityJobManager jobManager;
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public ServerConfiguration findConfigurationByTransitivityJobId(
 			long jobId) {

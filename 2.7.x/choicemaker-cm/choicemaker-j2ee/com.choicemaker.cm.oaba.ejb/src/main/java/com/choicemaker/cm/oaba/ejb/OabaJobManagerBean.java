@@ -8,6 +8,7 @@
 package com.choicemaker.cm.oaba.ejb;
 
 import static javax.ejb.TransactionAttributeType.REQUIRED;
+import static javax.ejb.TransactionAttributeType.SUPPORTS;
 
 import static com.choicemaker.cm.batch.ejb.BatchJobJPA.PN_BATCHJOB_FIND_BY_JOBID_P1;
 import static com.choicemaker.cm.batch.ejb.BatchJobJPA.QN_BATCHJOB_FIND_BY_JOBID;
@@ -190,12 +191,14 @@ public class OabaJobManagerBean implements OabaJobManager {
 		return job;
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public BatchJob findOabaJob(long id) {
 		OabaJobEntity batchJob = em.find(OabaJobEntity.class, id);
 		return batchJob;
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public List<BatchJob> findAll() {
 		Query query = em.createNamedQuery(OabaJobJPA.QN_OABAJOB_FIND_ALL);
@@ -228,6 +231,7 @@ public class OabaJobManagerBean implements OabaJobManager {
 		em.detach(oabaJob);
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public BatchJob findBatchJob(long id) {
 		Query query = em.createNamedQuery(QN_BATCHJOB_FIND_BY_JOBID);

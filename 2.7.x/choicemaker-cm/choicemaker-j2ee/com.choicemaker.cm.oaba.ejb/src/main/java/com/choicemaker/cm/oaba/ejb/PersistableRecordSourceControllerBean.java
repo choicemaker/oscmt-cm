@@ -8,6 +8,7 @@
 package com.choicemaker.cm.oaba.ejb;
 
 import static javax.ejb.TransactionAttributeType.REQUIRED;
+import static javax.ejb.TransactionAttributeType.SUPPORTS;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +51,7 @@ public class PersistableRecordSourceControllerBean
 	@EJB
 	private SqlRecordSourceController sqlRsController;
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public ISerializableRecordSource getStageRs(OabaParameters params)
 			throws Exception {
@@ -61,6 +63,7 @@ public class PersistableRecordSourceControllerBean
 		return retVal;
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public ISerializableRecordSource getMasterRs(OabaParameters params)
 			throws Exception {
@@ -100,6 +103,7 @@ public class PersistableRecordSourceControllerBean
 		return retVal;
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public PersistableRecordSource find(Long id, String type) {
 		PersistableRecordSource retVal = null;
@@ -117,6 +121,7 @@ public class PersistableRecordSourceControllerBean
 		return retVal;
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public ISerializableRecordSource getRecordSource(Long id, String type)
 			throws Exception {
@@ -145,6 +150,7 @@ public class PersistableRecordSourceControllerBean
 		return retVal;
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public List<PersistableRecordSource> findAll() {
 		List<PersistableRecordSource> retVal = new ArrayList<>();

@@ -1,6 +1,7 @@
 package com.choicemaker.cms.ejb;
 
 import static javax.ejb.TransactionAttributeType.REQUIRED;
+import static javax.ejb.TransactionAttributeType.SUPPORTS;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -121,6 +122,7 @@ public class BatchMonitoringBean implements BatchMonitoring {
 
 	// -- BatchJobMonitor
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public BatchJobInfo getBatchJobInfo(BatchJob batchJob) {
 		BatchJobInfo retVal = null;
@@ -266,6 +268,7 @@ public class BatchMonitoringBean implements BatchMonitoring {
 	}
 
 	/** Returns the parent OABA job of a transitivity analysis job */
+	@TransactionAttribute(SUPPORTS)
 	public BatchJob getParentOabaJob(BatchJob transitivityJob) {
 		Precondition.assertNonNullArgument(transitivityJob);
 		final long oabaJobId = transitivityJob.getBatchParentId();

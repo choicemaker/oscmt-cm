@@ -8,6 +8,7 @@
 package com.choicemaker.cm.oaba.ejb;
 
 import static javax.ejb.TransactionAttributeType.REQUIRED;
+import static javax.ejb.TransactionAttributeType.SUPPORTS;
 
 import java.lang.reflect.Constructor;
 import java.util.List;
@@ -91,6 +92,7 @@ public class SqlRecordSourceControllerBean
 		return retVal;
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public PersistableSqlRecordSource find(Long id, String type) {
 		PersistableSqlRecordSource retVal = null;
@@ -104,6 +106,7 @@ public class SqlRecordSourceControllerBean
 		return em.find(SqlRecordSourceEntity.class, id);
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public ISerializableRecordSource getRecordSource(Long rsId, String type)
 			throws Exception {
@@ -123,6 +126,7 @@ public class SqlRecordSourceControllerBean
 		return retVal;
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public List<PersistableRecordSource> findAll() {
 		Query query = em.createNamedQuery(SqlRecordSourceJPA.QN_SQLRS_FIND_ALL);
@@ -131,6 +135,7 @@ public class SqlRecordSourceControllerBean
 		return retVal;
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public DataSource getStageDataSource(OabaParameters params)
 			throws BlockingException {
@@ -138,6 +143,7 @@ public class SqlRecordSourceControllerBean
 		return retVal;
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public DataSource getMasterDataSource(OabaParameters params)
 			throws BlockingException {
@@ -145,6 +151,7 @@ public class SqlRecordSourceControllerBean
 		return retVal;
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public DataSource getDataSource(Long id) throws BlockingException {
 		DataSource retVal = null;
@@ -165,6 +172,7 @@ public class SqlRecordSourceControllerBean
 		return retVal;
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public DataSource getDataSource(String jndiName) throws BlockingException {
 		if (jndiName == null || !jndiName.trim().equals(jndiName)

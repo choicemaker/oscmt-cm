@@ -8,6 +8,7 @@
 package com.choicemaker.cm.transitivity.ejb;
 
 import static javax.ejb.TransactionAttributeType.REQUIRED;
+import static javax.ejb.TransactionAttributeType.SUPPORTS;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -209,12 +210,14 @@ public class TransitivityJobManagerBean implements TransitivityJobManager {
 		return job;
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public BatchJob findTransitivityJob(long id) {
 		TransitivityJobEntity job = em.find(TransitivityJobEntity.class, id);
 		return job;
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public List<BatchJob> findAllTransitivityJobs() {
 		Query query =
@@ -227,6 +230,7 @@ public class TransitivityJobManagerBean implements TransitivityJobManager {
 		return retVal;
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public List<BatchJob> findAllByOabaJobId(long batchJobId) {
 		Query query = em.createNamedQuery(
@@ -264,12 +268,14 @@ public class TransitivityJobManagerBean implements TransitivityJobManager {
 		em.detach(job);
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public BatchJob findBatchJob(long id) {
 		BatchJob retVal = findTransitivityJob(id);
 		return retVal;
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public List<BatchJob> findAll() {
 		List<BatchJob> retVal = findAllTransitivityJobs();

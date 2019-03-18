@@ -1,6 +1,7 @@
 package com.choicemaker.cm.oaba.ejb;
 
 import static javax.ejb.TransactionAttributeType.REQUIRED;
+import static javax.ejb.TransactionAttributeType.SUPPORTS;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -38,6 +39,7 @@ public class OabaJobMonitorBean implements OabaJobMonitor {
 	@EJB
 	private ServerConfigurationController serverManager;
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public OabaJobInfo getOabaJobInfo(BatchJob batchJob) {
 		OabaJobInfo retVal = null;

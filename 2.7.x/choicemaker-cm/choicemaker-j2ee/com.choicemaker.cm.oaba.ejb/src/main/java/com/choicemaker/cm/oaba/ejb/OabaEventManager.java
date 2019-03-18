@@ -8,6 +8,7 @@
 package com.choicemaker.cm.oaba.ejb;
 
 import static javax.ejb.TransactionAttributeType.REQUIRED;
+import static javax.ejb.TransactionAttributeType.SUPPORTS;
 
 import static com.choicemaker.cm.oaba.ejb.OabaProcessingEventJPA.PN_OABAPROCESSING_DELETE_BY_JOBID_JOBID;
 import static com.choicemaker.cm.oaba.ejb.OabaProcessingEventJPA.PN_OABAPROCESSING_FIND_BY_JOBID_JOBID;
@@ -212,11 +213,13 @@ public class OabaEventManager implements EventPersistenceManager {
 	@Resource(lookup = "java:/choicemaker/urm/jms/statusTopic")
 	private Topic oabaStatusTopic;
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public List<BatchProcessingEvent> findProcessingEventsByJobId(long id) {
 		return findProcessingLogEntriesByJobId(em, id);
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public List<BatchProcessingEvent> findAllProcessingEvents() {
 		return findAllOabaProcessingEvents(em);
@@ -227,6 +230,7 @@ public class OabaEventManager implements EventPersistenceManager {
 		return deleteProcessingLogEntriesByJobId(em, id);
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public ProcessingEventLog getProcessingLog(BatchJob job) {
 		return new OabaProcessingLog(em, job);
@@ -239,6 +243,7 @@ public class OabaEventManager implements EventPersistenceManager {
 				event, timestamp, info);
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public ProcessingEvent getCurrentProcessingEvent(BatchJob batchJob) {
 		ProcessingEvent retVal = null;

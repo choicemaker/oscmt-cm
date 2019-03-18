@@ -8,6 +8,7 @@
 package com.choicemaker.cm.urm.ejb;
 
 import static javax.ejb.TransactionAttributeType.REQUIRED;
+import static javax.ejb.TransactionAttributeType.SUPPORTS;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +35,7 @@ public class UrmConfigurationSingleton implements UrmConfigurationAdapter {
 	@PersistenceContext(unitName = "oaba")
 	private EntityManager em;
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public UrmConfigurationEntity findUrmConfiguration(long id) {
 		UrmConfigurationEntity retVal =
@@ -41,6 +43,7 @@ public class UrmConfigurationSingleton implements UrmConfigurationAdapter {
 		return retVal;
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public UrmConfiguration findUrmConfigurationByName(
 			String urmConfigurationName) {
@@ -67,6 +70,7 @@ public class UrmConfigurationSingleton implements UrmConfigurationAdapter {
 		return retVal;
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public String getCmsConfigurationName(String urmConfigurationName)
 			throws ConfigException, DatabaseException {
@@ -83,6 +87,7 @@ public class UrmConfigurationSingleton implements UrmConfigurationAdapter {
 		return retVal;
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public List<UrmConfiguration> findAllUrmConfigurations() {
 		Query query =

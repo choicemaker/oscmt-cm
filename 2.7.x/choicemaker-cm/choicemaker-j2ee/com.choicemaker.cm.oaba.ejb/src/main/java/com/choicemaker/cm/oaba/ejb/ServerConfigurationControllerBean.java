@@ -8,6 +8,7 @@
 package com.choicemaker.cm.oaba.ejb;
 
 import static javax.ejb.TransactionAttributeType.REQUIRED;
+import static javax.ejb.TransactionAttributeType.SUPPORTS;
 
 import java.io.File;
 import java.net.InetAddress;
@@ -109,6 +110,7 @@ public class ServerConfigurationControllerBean
 	@EJB
 	private OabaJobManager jobManager;
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public ServerConfiguration findServerConfiguration(long id) {
 		ServerConfigurationEntity retVal =
@@ -116,6 +118,7 @@ public class ServerConfigurationControllerBean
 		return retVal;
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public ServerConfiguration findServerConfigurationByName(
 			String configName) {
@@ -141,6 +144,7 @@ public class ServerConfigurationControllerBean
 		return retVal;
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public List<ServerConfiguration> findAllServerConfigurations() {
 		Query query = em.createNamedQuery(
@@ -154,12 +158,14 @@ public class ServerConfigurationControllerBean
 		return retVal;
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public List<ServerConfiguration> findServerConfigurationsByHostName(
 			String hostName) {
 		return findServerConfigurationsByHostName(hostName, false);
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public List<ServerConfiguration> findServerConfigurationsByHostName(
 			String hostName, boolean strict) {
@@ -193,6 +199,7 @@ public class ServerConfigurationControllerBean
 				ServerConfiguration.ANY_HOST);
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public ServerConfiguration findServerConfigurationByJobId(long jobId) {
 		ServerConfiguration retVal = null;
@@ -329,6 +336,7 @@ public class ServerConfigurationControllerBean
 		return retVal;
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public DefaultServerConfiguration findDefaultServerConfiguration(
 			String hostName) {
@@ -360,6 +368,7 @@ public class ServerConfigurationControllerBean
 	 * getDefaultConfiguration(hostName, true)
 	 * </pre>
 	 */
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public ServerConfiguration getDefaultConfiguration(String hostName) {
 		return getDefaultConfiguration(hostName, true);
@@ -379,6 +388,7 @@ public class ServerConfigurationControllerBean
 	 * <li>Otherwise returns null.
 	 * </ol>
 	 */
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public ServerConfiguration getDefaultConfiguration(String host,
 			boolean computeFallback) {
@@ -425,6 +435,7 @@ public class ServerConfigurationControllerBean
 		return retVal;
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public List<DefaultServerConfiguration> findAllDefaultServerConfigurations() {
 		Query query =

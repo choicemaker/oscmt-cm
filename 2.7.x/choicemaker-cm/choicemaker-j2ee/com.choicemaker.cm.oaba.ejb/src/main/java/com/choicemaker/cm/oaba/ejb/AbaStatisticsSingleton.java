@@ -8,6 +8,7 @@
 package com.choicemaker.cm.oaba.ejb;
 
 import static javax.ejb.TransactionAttributeType.REQUIRED;
+import static javax.ejb.TransactionAttributeType.SUPPORTS;
 
 import java.sql.SQLException;
 import java.util.Hashtable;
@@ -123,12 +124,14 @@ public class AbaStatisticsSingleton implements AbaStatisticsController {
 		putStatistics(blockingConfigurationId, counts);
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public AbaStatistics getStatistics(String blockingConfigurationId) {
 		AbaStatistics retVal = this.cachedStats.get(blockingConfigurationId);
 		return retVal;
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public AbaStatistics getStatistics(IBlockingConfiguration bc) {
 		String blockingConfigurationId = bc.getBlockingConfiguationId();

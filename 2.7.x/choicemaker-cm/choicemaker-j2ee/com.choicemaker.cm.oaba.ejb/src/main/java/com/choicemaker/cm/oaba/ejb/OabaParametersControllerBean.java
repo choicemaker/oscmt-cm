@@ -17,12 +17,12 @@ import static com.choicemaker.cm.oaba.ejb.AbstractParametersJPA.QN_PARAMETERS_FI
 import static com.choicemaker.util.jee.LogTransactionStatus.logTransactionStatus;
 import static com.choicemaker.util.jee.TransactionStatusEnum.STATUS_ACTIVE;
 import static javax.ejb.TransactionAttributeType.REQUIRED;
+import static javax.ejb.TransactionAttributeType.SUPPORTS;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -67,18 +67,6 @@ public class OabaParametersControllerBean implements OabaParametersController {
 
 	@Resource
 	TransactionSynchronizationRegistry tsr;
-
-	private boolean assertEnabled;
-
-	protected boolean isAssertEnabled() {
-		return this.assertEnabled;
-	}
-
-	@PostConstruct
-	protected void postConstruct() {
-		this.assertEnabled = false;
-		assert this.assertEnabled = true;
-	}
 
 	protected OabaJobManager getOabaJobController() {
 		return jobManager;
@@ -125,6 +113,7 @@ public class OabaParametersControllerBean implements OabaParametersController {
 		return p;
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public OabaParameters findOabaParameters(long id) {
 		OabaParametersEntity p = em.find(OabaParametersEntity.class, id);
@@ -132,6 +121,7 @@ public class OabaParametersControllerBean implements OabaParametersController {
 	}
 
 	/** Finds any instance of AbstractParametersEntity */
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public AbstractParametersEntity findParameters(long id) {
 		AbstractParametersEntity retVal = null;
@@ -151,6 +141,7 @@ public class OabaParametersControllerBean implements OabaParametersController {
 		return retVal;
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public OabaParameters findOabaParametersByBatchJobId(long jobId) {
 		OabaParameters retVal = null;
@@ -180,6 +171,7 @@ public class OabaParametersControllerBean implements OabaParametersController {
 		return retVal;
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public List<OabaParameters> findAllOabaParameters() {
 		Query query = em.createNamedQuery(QN_OABAPARAMETERS_FIND_ALL);
@@ -192,6 +184,7 @@ public class OabaParametersControllerBean implements OabaParametersController {
 	}
 
 	/** Finds all subclasses of AbstractParametersEntity */
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public List<AbstractParameters> findAllParameters() {
 		Query query = em.createNamedQuery(QN_PARAMETERS_FIND_ALL);
@@ -291,6 +284,7 @@ public class OabaParametersControllerBean implements OabaParametersController {
 		return retVal;
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public String getQueryDatabaseConfiguration(OabaParameters oabaParams) {
 		if (oabaParams == null) {
@@ -301,6 +295,7 @@ public class OabaParametersControllerBean implements OabaParametersController {
 		return getDatabaseConfiguration(type, id);
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public String getQueryDatabaseAccessor(OabaParameters oabaParams) {
 		if (oabaParams == null) {
@@ -311,6 +306,7 @@ public class OabaParametersControllerBean implements OabaParametersController {
 		return getDatabaseAccessor(type, id);
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public String getReferenceDatabaseConfiguration(OabaParameters oabaParams) {
 		if (oabaParams == null) {
@@ -321,6 +317,7 @@ public class OabaParametersControllerBean implements OabaParametersController {
 		return getDatabaseConfiguration(type, id);
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public String getReferenceDatabaseAccessor(OabaParameters oabaParams) {
 		if (oabaParams == null) {

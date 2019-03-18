@@ -8,6 +8,7 @@
 package com.choicemaker.cm.oaba.ejb;
 
 import static javax.ejb.TransactionAttributeType.REQUIRED;
+import static javax.ejb.TransactionAttributeType.SUPPORTS;
 
 import java.util.Date;
 import java.util.logging.Logger;
@@ -54,6 +55,7 @@ public class OabaProcessingLog implements ProcessingEventLog {
 		return OabaEventManager.getCurrentBatchProcessingEvent(em, batchJob);
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public ProcessingEvent getCurrentProcessingEvent() {
 		BatchProcessingEvent ope = getCurrentOabaProcessingEvent();
@@ -61,11 +63,13 @@ public class OabaProcessingLog implements ProcessingEventLog {
 		return retVal;
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public int getCurrentProcessingEventId() {
 		return getCurrentProcessingEvent().getEventId();
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public String getCurrentProcessingEventInfo() {
 		BatchProcessingEvent ope = getCurrentOabaProcessingEvent();

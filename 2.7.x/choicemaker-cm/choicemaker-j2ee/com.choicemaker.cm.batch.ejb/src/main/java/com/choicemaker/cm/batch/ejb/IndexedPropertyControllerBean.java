@@ -1,6 +1,7 @@
 package com.choicemaker.cm.batch.ejb;
 
 import static javax.ejb.TransactionAttributeType.REQUIRED;
+import static javax.ejb.TransactionAttributeType.SUPPORTS;
 
 import static com.choicemaker.cm.batch.ejb.IndexedPropertyJPA.PN_IDXPROP_DELETE_BY_JOB_PNAME_P1;
 import static com.choicemaker.cm.batch.ejb.IndexedPropertyJPA.PN_IDXPROP_DELETE_BY_JOB_PNAME_P2;
@@ -55,6 +56,7 @@ public class IndexedPropertyControllerBean
 		return retVal;
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public IndexedProperty find(BatchJob job, String name, int index) {
 		if (job == null || !job.isPersistent()) {
@@ -63,6 +65,7 @@ public class IndexedPropertyControllerBean
 		return findInternal(job.getId(), name, index);
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public Map<Integer, String> find(BatchJob job, String name) {
 		if (job == null || !job.isPersistent()) {
@@ -91,6 +94,7 @@ public class IndexedPropertyControllerBean
 		return retVal;
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public IndexedProperty find(long propertyId) {
 		return findInternal(propertyId);
@@ -140,6 +144,7 @@ public class IndexedPropertyControllerBean
 		return retVal;
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public String getIndexedPropertyValue(BatchJob job, String pn, int index) {
 		IndexedProperty op = find(job, pn, index);

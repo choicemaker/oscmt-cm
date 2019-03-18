@@ -1,6 +1,7 @@
 package com.choicemaker.cms.ejb;
 
 import static javax.ejb.TransactionAttributeType.REQUIRED;
+import static javax.ejb.TransactionAttributeType.SUPPORTS;
 
 import static com.choicemaker.cm.batch.ejb.BatchJobJPA.PN_BATCHJOB_FIND_BY_JOBID_P1;
 import static com.choicemaker.cm.batch.ejb.BatchJobJPA.QN_BATCHJOB_FIND_BY_JOBID;
@@ -85,12 +86,14 @@ public class UrmJobManagerBean implements UrmJobManager {
 		return job;
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public BatchJob findUrmJob(long id) {
 		UrmJobEntity job = em.find(UrmJobEntity.class, id);
 		return job;
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public List<BatchJob> findAllUrmJobs() {
 		Query query = em.createNamedQuery(UrmJobJPA.QN_URM_FIND_ALL);
@@ -102,6 +105,7 @@ public class UrmJobManagerBean implements UrmJobManager {
 		return retVal;
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public List<BatchJob> findAllLinkedByUrmId(long urmId) {
 		Query query = em.createNamedQuery(UrmJobJPA.QN_URM_FIND_ALL_BY_URM_ID);
@@ -135,6 +139,7 @@ public class UrmJobManagerBean implements UrmJobManager {
 		em.detach(job);
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public BatchJob findBatchJob(long id) {
 		Query query = em.createNamedQuery(QN_BATCHJOB_FIND_BY_JOBID);
@@ -154,6 +159,7 @@ public class UrmJobManagerBean implements UrmJobManager {
 		return retVal;
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public List<BatchJob> findAll() {
 		Query query = em.createNamedQuery(OabaJobJPA.QN_OABAJOB_FIND_ALL);

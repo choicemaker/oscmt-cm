@@ -8,6 +8,7 @@
 package com.choicemaker.cm.oaba.ejb;
 
 import static javax.ejb.TransactionAttributeType.REQUIRED;
+import static javax.ejb.TransactionAttributeType.SUPPORTS;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -123,6 +124,7 @@ public class OabaSettingsControllerBean implements OabaSettingsController {
 		return retVal;
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public AbaSettings findAbaSettings(long id) {
 		return findAbaSettingsInternal(id);
@@ -132,6 +134,7 @@ public class OabaSettingsControllerBean implements OabaSettingsController {
 		return em.find(AbaSettingsEntity.class, id);
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public OabaSettings findOabaSettings(long id) {
 		return findOabaSettingsInternal(id);
@@ -141,6 +144,7 @@ public class OabaSettingsControllerBean implements OabaSettingsController {
 		return em.find(OabaSettingsEntity.class, id);
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public OabaSettings findOabaSettingsByJobId(long jobId) {
 		OabaSettings retVal = null;
@@ -228,18 +232,7 @@ public class OabaSettingsControllerBean implements OabaSettingsController {
 		return retVal;
 	}
 
-	// @Override
-	// public AbaSettings findDefaultAbaSettings(ImmutableProbabilityModel
-	// model,
-	// String databaseConfigurationName, String blockingConfigurationName) {
-	// if (model == null) {
-	// throw new IllegalArgumentException("null modelId");
-	// }
-	// return findDefaultAbaSettings(model.getModelName(),
-	// databaseConfigurationName,
-	// blockingConfigurationName);
-	// }
-
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public AbaSettings findDefaultAbaSettings(String modelConfigurationId,
 			String databaseConfiguration, String blockingConfiguration) {
@@ -260,15 +253,7 @@ public class OabaSettingsControllerBean implements OabaSettingsController {
 		return retVal;
 	}
 
-	// @Override
-	// public OabaSettings findDefaultOabaSettings(ImmutableProbabilityModel
-	// model,
-	// String databaseConfigurationName, String blockingConfigurationName) {
-	// return findDefaultOabaSettings(model.getModelName(),
-	// databaseConfigurationName,
-	// blockingConfigurationName);
-	// }
-
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public OabaSettings findDefaultOabaSettings(String modelConfigurationId,
 			String databaseConfiguration, String blockingConfiguration) {
@@ -289,6 +274,7 @@ public class OabaSettingsControllerBean implements OabaSettingsController {
 		return retVal;
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public List<AbaSettings> findAllAbaSettings() {
 		Query query = em.createNamedQuery(AbaSettingsJPA.QN_ABA_FIND_ALL);
@@ -297,6 +283,7 @@ public class OabaSettingsControllerBean implements OabaSettingsController {
 		return retVal;
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public List<OabaSettings> findAllOabaSettings() {
 		Query query = em.createNamedQuery(OabaSettingsJPA.QN_OABA_FIND_ALL);
@@ -305,6 +292,7 @@ public class OabaSettingsControllerBean implements OabaSettingsController {
 		return retVal;
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public List<DefaultSettings> findAllDefaultAbaSettings() {
 		Query query =
@@ -314,6 +302,7 @@ public class OabaSettingsControllerBean implements OabaSettingsController {
 		return retVal;
 	}
 
+	@TransactionAttribute(SUPPORTS)
 	@Override
 	public List<DefaultSettings> findAllDefaultOabaSettings() {
 		Query query =
