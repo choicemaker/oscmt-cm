@@ -74,7 +74,6 @@ public class OabaPairResultControllerBean implements OabaPairResultController {
 		try {
 			connection = em.unwrap(Connection.class);
 			connection.setReadOnly(true);
-			// connection.setAutoCommit(true); // 2015-04-01a EJB3 CHANGE rphall
 			String query = createRecordCountQuery(job);
 			logger.fine(query);
 
@@ -101,13 +100,13 @@ public class OabaPairResultControllerBean implements OabaPairResultController {
 				throw new IllegalStateException(msg);
 			}
 		} catch (SQLException e) {
-			em.getTransaction().rollback();
+			// REMOVEME: NO CHANGE TO ROLLBACK em.getTransaction().rollback();
 			String msg =
 				this.getClass().getSimpleName() + ".getResultType(BatchJob): "
 						+ "unable to get pair-wise results: " + e;
 			throw new BlockingException(msg, e);
 		} finally {
-			em.getTransaction().commit();
+			// REMOVEME: NO CHANGE TO COMMIT em.getTransaction().commit();
 			if (connection != null) {
 				try {
 					connection.close();
@@ -178,13 +177,13 @@ public class OabaPairResultControllerBean implements OabaPairResultController {
 			assert dataTypes.size() == 1;
 			retVal = dataTypes.iterator().next();
 		} catch (SQLException e) {
-			em.getTransaction().rollback();
+			// REMOVEME: NO CHANGE TO ROLLBACK em.getTransaction().rollback();
 			String msg =
 				this.getClass().getSimpleName() + ".getResultType(BatchJob): "
 						+ "unable to get pair-wise results: " + e;
 			throw new BlockingException(msg, e);
 		} finally {
-			em.getTransaction().commit();
+			// REMOVEME: NO CHANGE TO COMMIT em.getTransaction().commit();
 			if (connection != null) {
 				try {
 					connection.close();
