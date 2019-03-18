@@ -273,7 +273,7 @@ public class ProbabilityModelsXmlConf {
 			int i = 0;
 			Iterator<Element> iCl = cl.iterator();
 			while (iCl.hasNext()) {
-				Element c = (Element) iCl.next();
+				Element c = iCl.next();
 				String name = c.getAttributeValue("name");
 				Object o = cm.get(name);
 				if (o != null) {
@@ -361,7 +361,7 @@ public class ProbabilityModelsXmlConf {
 					String modelName = name.trim();
 					if (!modelName.isEmpty()) {
 						assert m instanceof MutableProbabilityModel;
-						((MutableProbabilityModel) m).setModelName(modelName);
+						m.setModelName(modelName);
 					}
 				}
 

@@ -30,6 +30,7 @@ public class CompilationUnit25b extends CompilationUnit {
 		super(env, source);
 	}
 
+	@Override
 	public void codeGeneration() throws CompilerException {
 		if (getErrors() == 0 && getCompilationEnv().errors == 0) {
 			try {

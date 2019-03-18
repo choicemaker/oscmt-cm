@@ -114,7 +114,7 @@ public class ParserXmlConf {
 		// break
 		List<Element> kids = e.getChildren();
 		for (int i = 0; i < kids.size(); i++) {
-			Element kid = (Element) kids.get(i);
+			Element kid = kids.get(i);
 			String kidName = kid.getName().intern();
 			if (kidName == "tokenizer") {
 				tokenizerElements.add(kid);
@@ -172,7 +172,7 @@ public class ParserXmlConf {
 
 		// create tokenizers
 		for (int i = 0; i < tokenizerElements.size(); i++) {
-			Element kid = (Element) tokenizerElements.get(i);
+			Element kid = tokenizerElements.get(i);
 			Tokenizer t = TokenizerXmlConf.readFromElement(kid, cl);
 			parser.addTokenizer(t);
 		}
@@ -314,7 +314,7 @@ public class ParserXmlConf {
 			ClassLoader cl) throws XmlConfException {
 		Precondition.assertNonNullArgument("null class loader", cl);
 		for (int i = 0; i < elements.size(); i++) {
-			Element e = (Element) elements.get(i);
+			Element e = elements.get(i);
 			String name = e.getName().intern();
 
 			if (name == "property") {

@@ -17,12 +17,13 @@ public class FragmentDescriptor extends PluginFragmentModel {
 	// constants
 //	static final String FRAGMENT_URL = PlatformURLHandler.PROTOCOL + PlatformURLHandler.PROTOCOL_SEPARATOR + "/" + PlatformURLFragmentConnection.FRAGMENT + "/"; //$NON-NLS-1$ //$NON-NLS-2$
 
+@Override
 public String toString() {
 	return getId() + PluginDescriptor.VERSION_SEPARATOR + getVersion();
 }
 public URL getInstallURL() {
 //	try {
-		return null; // PlatformURLFactory.createURL(FRAGMENT_URL + toString() + "/"); //$NON-NLS-1$
+		return null; // PlatformURLFactory.createURL(FRAGMENT_URL + toString() + "/"); 
 //	} catch (MalformedURLException e) {
 //		throw new IllegalStateException(); // unchecked
 //	}

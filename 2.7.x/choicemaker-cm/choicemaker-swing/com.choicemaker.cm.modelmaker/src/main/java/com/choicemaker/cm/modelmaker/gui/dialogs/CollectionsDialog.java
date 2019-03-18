@@ -278,24 +278,28 @@ public class CollectionsDialog extends JDialog implements Enable {
 		JavaHelpUtils.enableHelpKey(this, "train.gui.dialog.collections");
 
 		setBox.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				refreshSetTable();
 			}
 		});
 
 		mapBox.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				refreshMapTable();
 			}
 		});
 
 		relBox.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				refreshRelsTables();
 			}
 		});
 
 		relReflexiveBox.addItemListener(new ItemListener() {
+			@Override
 			public void itemStateChanged(ItemEvent e) {
 				refreshRelsTables();
 			}
@@ -306,6 +310,7 @@ public class CollectionsDialog extends JDialog implements Enable {
 	/**
 	 * @see com.choicemaker.cm.train.gui.utils.Enable#setEnabledness()
 	 */
+	@Override
 	public void setEnabledness() {
 		if (parent.getProbabilityModel() != null) {
 			updateSetScrollPrefix();
@@ -444,6 +449,7 @@ public class CollectionsDialog extends JDialog implements Enable {
 			scroller.repaint();
 		}
 
+		@Override
 		public TableCellRenderer getCellRenderer(int row, int column) {
 			if (column == 0) {
 				return highlightingRenderer;
@@ -505,6 +511,7 @@ public class CollectionsDialog extends JDialog implements Enable {
 				setDocument(doc);
 			}
 
+			@Override
 			public Component getTableCellRendererComponent(JTable table, Object value,
 								boolean isSelected, boolean hasFocus, int row, int column) {
 
@@ -578,10 +585,12 @@ public class CollectionsDialog extends JDialog implements Enable {
 			setDataVector(data, colNames);
 		}
 
+		@Override
 		public Object[][] getSortedData() {
 			return data;
 		}
 
+		@Override
 		public boolean isCellEditable(int row, int column) {
 			return false;
 		}
@@ -621,10 +630,12 @@ public class CollectionsDialog extends JDialog implements Enable {
 			setDataVector(data, colNames);
 		}
 
+		@Override
 		public Object[][] getSortedData() {
 			return data;
 		}
 
+		@Override
 		public boolean isCellEditable(int row, int column) {
 			return false;
 		}

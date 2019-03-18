@@ -36,6 +36,7 @@ public abstract class CompositeRecord<T extends Comparable<T> & Serializable>
 				: recordList.toArray(new IRecord<?>[recordList.size()]));
 	}
 
+	@Override
 	public T getId() {
 		return id;
 	}

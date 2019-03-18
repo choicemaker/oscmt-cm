@@ -58,6 +58,7 @@ public class PiecewiseRecordPairProducer implements Runnable {
 		return numPairsProduced;
 	}
 
+	@Override
 	public void run() {
 		numRead = 0;
 		numPairsProduced = 0;

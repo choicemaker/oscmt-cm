@@ -55,6 +55,7 @@ public class PairEvaluation implements Comparable {
 	 * compare probability descending. Next, compare records ids, first
 	 * reference id, then candidate id.
 	 */
+	@Override
 	public int compareTo(Object o) {
 		if (o == null) {
 			throw new IllegalArgumentException("null pair evaluation");
@@ -93,6 +94,7 @@ public class PairEvaluation implements Comparable {
 		return retVal;
 	}
 
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -104,6 +106,7 @@ public class PairEvaluation implements Comparable {
 		return result;
 	}
 
+	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
 			return true;
@@ -143,6 +146,7 @@ public class PairEvaluation implements Comparable {
 		return true;
 	}
 
+	@Override
 	public String toString() {
 		StringBuffer buffer = new StringBuffer();
 		buffer.append("PairEvaluation [");

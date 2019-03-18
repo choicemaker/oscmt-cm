@@ -31,6 +31,7 @@ public abstract class AbstractSetBasedValidator<T> implements ISetBasedValidator
 	public AbstractSetBasedValidator() {
 	}
 
+	@Override
 	public boolean equals(IValidator<?> validator) {
 		boolean retVal = false;
 		if (validator != null) {
@@ -50,11 +51,13 @@ public abstract class AbstractSetBasedValidator<T> implements ISetBasedValidator
 		return retVal;
 	}
 	
+	@Override
 	public boolean equals(Object o) {
 		boolean retVal = AbstractValidator.validatorEquals(this,o);
 		return retVal;
 	}
 
+	@Override
 	public int hashCode() {
 		// FIXME: this implementation is Eclipse-specific. Move it to an abstract
 		// class in com.choicemaker.cm.validation.eclipse or replace it
@@ -75,6 +78,7 @@ public abstract class AbstractSetBasedValidator<T> implements ISetBasedValidator
 	 */
 	public abstract void setNamedSet(String setName);
 
+	@Override
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append(this.getClass().getName());

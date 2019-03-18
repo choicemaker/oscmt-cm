@@ -84,6 +84,7 @@ public class PostgresParallelRecordSource implements RecordSource {
 		this.idsQuery = idsQuery;
 	}
 
+	@Override
 	public void open() throws IOException {
 
 		DbAccessor accessor = (DbAccessor) getModel().getAccessor();
@@ -199,10 +200,12 @@ public class PostgresParallelRecordSource implements RecordSource {
 		return ob.toString();
 	}
 
+	@Override
 	public boolean hasNext() throws IOException {
 		return getDatabaseReader().hasNext();
 	}
 
+	@Override
 	public Record getNext() throws IOException {
 		Record r = null;
 		try {
@@ -213,6 +216,7 @@ public class PostgresParallelRecordSource implements RecordSource {
 		return r;
 	}
 
+	@Override
 	public void close() /* throws IOException */{
 
 		List exceptionMessages = new ArrayList();
@@ -290,10 +294,12 @@ public class PostgresParallelRecordSource implements RecordSource {
 		assert getConnection() == null;
 	}
 	
+	@Override
 	protected void finalize() {
 		close();
 	}
 
+	@Override
 	public ImmutableProbabilityModel getModel() {
 		if (model == null) {
 			throw new IllegalStateException("null model");
@@ -301,6 +307,7 @@ public class PostgresParallelRecordSource implements RecordSource {
 		return model;
 	}
 
+	@Override
 	public void setModel(ImmutableProbabilityModel m) {
 		if (m == null) {
 			throw new IllegalArgumentException("null model");
@@ -351,26 +358,32 @@ public class PostgresParallelRecordSource implements RecordSource {
 		return idsQuery;
 	}
 
+	@Override
 	public String getName() {
 		return "SQL Server Parallel Record Source";
 	}
 
+	@Override
 	public void setName(String name) {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
 	public boolean hasSink() {
 		return false;
 	}
 
+	@Override
 	public Sink getSink() {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
 	public String getFileName() {
 		return fileName;
 	}
 
+	@Override
 	public String toString() {
 		return "PostgresParallelRecordSource [fileName=" + getFileName()
 				+ ", model=" + getModel() + ", dbConfiguration=" + getDbConfiguration()

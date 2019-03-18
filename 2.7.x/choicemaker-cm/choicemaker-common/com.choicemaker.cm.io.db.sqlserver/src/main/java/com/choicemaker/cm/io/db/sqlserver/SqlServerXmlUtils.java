@@ -39,18 +39,23 @@ public class SqlServerXmlUtils {
 	// Deprecated model properties
 
 	/** @deprecated */
+	@Deprecated
 	public static final String PN_BLOCKING_CONFIGURATION = "blockingConfiguration";
 
 	/** @deprecated */
+	@Deprecated
 	public static final String PN_DB_CONFIGURATION = AN_RS_DBCONFIGURATION;
 
 	/** @deprecated */
+	@Deprecated
 	public static final String PN_LIMITPERBLOCKINGSET = "limitPerBlockingSet";
 
 	/** @deprecated */
+	@Deprecated
 	public static final String PN_SINGLETABLEBLOCKINGSETGRACELIMIT = "limitSingleBlockingSet";
 
 	/** @deprecated */
+	@Deprecated
 	public static final String PN_LIMITSINGLEBLOCKINGSET = "limitPerBlockingSet";
 
 	private SqlServerXmlUtils() {

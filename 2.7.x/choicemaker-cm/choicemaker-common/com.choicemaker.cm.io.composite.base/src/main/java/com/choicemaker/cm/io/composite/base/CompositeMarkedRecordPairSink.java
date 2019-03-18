@@ -34,6 +34,7 @@ public class CompositeMarkedRecordPairSink implements MarkedRecordPairSink {
 		constituentSizes = src.getSizes();
 	}
 
+	@Override
 	public void open() throws IOException {
 		curSource = 0;
 		curIdx = 0;
@@ -41,22 +42,27 @@ public class CompositeMarkedRecordPairSink implements MarkedRecordPairSink {
 		curSink.open();
 	}
 
+	@Override
 	public void close() throws Exception {
 		curSink.close();
 	}
 
+	@Override
 	public String getName() {
 		return name;
 	}
 
+	@Override
 	public void setName(String name) {
 		this.name = name;
 	}
 
+	@Override
 	public ImmutableProbabilityModel getModel() {
 		return model;
 	}
 
+	@Override
 	public void setModel(ImmutableProbabilityModel m) {
 		this.model = m;
 		for (int i = 0; i < constituents.length; ++i) {
@@ -64,10 +70,12 @@ public class CompositeMarkedRecordPairSink implements MarkedRecordPairSink {
 		}
 	}
 
+	@Override
 	public void put(ImmutableRecordPair r) throws Exception {
 		putMarkedRecordPair((ImmutableMarkedRecordPair) r);
 	}
 
+	@Override
 	public void putMarkedRecordPair(ImmutableMarkedRecordPair r) throws Exception {
 		while (curIdx == constituentSizes[curSource]) {
 			curSink.close();
@@ -81,6 +89,7 @@ public class CompositeMarkedRecordPairSink implements MarkedRecordPairSink {
 	}
 
 	/** NOP for now */
+	@Override
 	public void flush() throws IOException {
 	}
 		

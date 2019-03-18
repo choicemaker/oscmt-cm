@@ -91,8 +91,10 @@ public abstract class CMCompiler implements ICompiler {
 		CompilationEnv env,
 		Sourcecode source);
 
+	@Override
 	public abstract Properties getFeatures();
 
+	@Override
 	public int generateJavaCode(CompilationArguments arguments,
 			Writer statusOutput) throws CompilerException {
 		final String METHOD = "generateJavaCode(CompilationArguments,Writer)";
@@ -136,6 +138,7 @@ public abstract class CMCompiler implements ICompiler {
 		return retVal;
 	}
 
+	@Override
 	public String compile(CompilationArguments arguments,
 			final Writer statusOutput) throws CompilerException {
 		final String METHOD = "compile(CompilationArguments,Writer)";
@@ -176,6 +179,7 @@ public abstract class CMCompiler implements ICompiler {
 
 				// Change the location of System.out and System.err
 				ps = new PrintStream(new OutputStream() {
+					@Override
 					public void write(int c) throws IOException {
 						statusOutput.write(c);
 					}
@@ -224,6 +228,7 @@ public abstract class CMCompiler implements ICompiler {
 		}
 	}
 
+	@Override
 	public boolean compile(IProbabilityModel model, Writer statusOutput)
 		throws CompilerException {
 		final String METHOD = "compile(IProbabilityModel,Writer)";
@@ -249,6 +254,7 @@ public abstract class CMCompiler implements ICompiler {
 		return true;
 	}
 
+	@Override
 	public ImmutableProbabilityModel compile(
 			ProbabilityModelSpecification spec, Writer statusOutput)
 			throws CompilerException {

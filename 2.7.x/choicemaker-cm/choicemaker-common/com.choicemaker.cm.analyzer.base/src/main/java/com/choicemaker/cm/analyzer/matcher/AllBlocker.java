@@ -25,18 +25,22 @@ import com.choicemaker.cm.core.blocking.InMemoryBlocker;
 public class AllBlocker implements InMemoryBlocker {
 	private List records;
 
+	@Override
 	public void init(List records) {
 		this.records = records;
 	}
 
+	@Override
 	public void clear() {
 		this.records = null;
 	}
 
+	@Override
 	public RecordSource block(Record q) {
 		return new RecordBinder(records);
 	}
 
+	@Override
 	public RecordSource block(Record q, int start) {
 		return new RecordBinder(records, start);
 	}

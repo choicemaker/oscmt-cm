@@ -102,6 +102,7 @@ public class HistoCategoryDataset extends AbstractDataset implements CategoryDat
 	 *
 	 * @return the row count.
 	 */
+	@Override
 	public int getRowCount() {
 		return this.data.getRowCount();
 	}
@@ -111,6 +112,7 @@ public class HistoCategoryDataset extends AbstractDataset implements CategoryDat
 	 *
 	 * @return the column count.
 	 */
+	@Override
 	public int getColumnCount() {
 		return this.data.getColumnCount();
 	}
@@ -123,6 +125,7 @@ public class HistoCategoryDataset extends AbstractDataset implements CategoryDat
 	 *
 	 * @return the value (possibly null).
 	 */
+	@Override
 	public Number getValue(int row, int column) {
 		return this.data.getValue(row, column);
 	}
@@ -134,6 +137,7 @@ public class HistoCategoryDataset extends AbstractDataset implements CategoryDat
 	 *
 	 * @return the row key.
 	 */
+	@Override
 	public Comparable<?> getRowKey(int row) {
 		return this.data.getRowKey(row);
 	}
@@ -145,6 +149,7 @@ public class HistoCategoryDataset extends AbstractDataset implements CategoryDat
 	 *
 	 * @return the row index.
 	 */
+	@Override
 	@SuppressWarnings("rawtypes")
 	public int getRowIndex(Comparable key) {
 		return this.data.getRowIndex(key);
@@ -155,6 +160,7 @@ public class HistoCategoryDataset extends AbstractDataset implements CategoryDat
 	 *
 	 * @return the keys.
 	 */
+	@Override
 	public List<?> getRowKeys() {
 		return this.data.getRowKeys();
 	}
@@ -166,6 +172,7 @@ public class HistoCategoryDataset extends AbstractDataset implements CategoryDat
 	 *
 	 * @return the column key.
 	 */
+	@Override
 	public Comparable<?> getColumnKey(int column) {
 		return this.data.getColumnKey(column);
 	}
@@ -177,6 +184,7 @@ public class HistoCategoryDataset extends AbstractDataset implements CategoryDat
 	 *
 	 * @return the column index.
 	 */
+	@Override
 	@SuppressWarnings("rawtypes")
 	public int getColumnIndex(Comparable key) {
 		return this.data.getColumnIndex(key);
@@ -187,6 +195,7 @@ public class HistoCategoryDataset extends AbstractDataset implements CategoryDat
 	 *
 	 * @return the keys.
 	 */
+	@Override
 	public List<?> getColumnKeys() {
 		return this.data.getColumnKeys();
 	}
@@ -201,6 +210,7 @@ public class HistoCategoryDataset extends AbstractDataset implements CategoryDat
 	 *
 	 * @return the value.
 	 */
+	@Override
 	@SuppressWarnings("rawtypes")
 	public Number getValue(Comparable rowKey, Comparable columnKey) {
 		return this.data.getValue(rowKey, columnKey);

@@ -50,15 +50,18 @@ public class CykParser extends AbstractParser {
 		super(t, g, s, c);
 	}
 
+	@Override
 	public void setGrammar(ContextFreeGrammar g) {
 		super.setGrammar(g);
 		cykParserChart = new CykParserChart(new NearlyCnfGrammar(g));
 	}
 
+	@Override
 	protected ParseTreeNode getBestParseTreeFromParser(List<Token> tokens) {
 		return cykParserChart.getBestParseTree(tokens);
 	}
 
+	@Override
 	protected ParseTreeNode[] getAllParseTreesFromParser(List<Token> tokens) {
 		ParseTreeNode ptn = getBestParseTreeFromParser(tokens);
 		if (ptn == null) {

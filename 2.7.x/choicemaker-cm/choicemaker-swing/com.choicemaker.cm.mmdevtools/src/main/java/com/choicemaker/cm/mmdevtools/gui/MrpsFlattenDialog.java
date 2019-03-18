@@ -13,7 +13,6 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -139,14 +138,18 @@ public class MrpsFlattenDialog extends JDialog {
 	private void createListeners() {
 		
 		rsSelector.addDocumentListener(new DocumentListener() {
+			@Override
 			public void changedUpdate(DocumentEvent e) {
 				flatten.setEnabled(rsSelector.hasFile());
 			}
+			@Override
 			public void insertUpdate(DocumentEvent e) { changedUpdate(e); }
+			@Override
 			public void removeUpdate(DocumentEvent e) { changedUpdate(e); }
 		});
 		
 		flatten.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (doFlattening()) {
 					dispose();
@@ -155,6 +158,7 @@ public class MrpsFlattenDialog extends JDialog {
 		});
 		
 		cancel.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				dispose();
 			}
@@ -166,6 +170,7 @@ public class MrpsFlattenDialog extends JDialog {
 		public RsSelector(String label) {
 			super(label);
 		}
+		@Override
 		protected File selectFile() {
 			return FileChooserFactory.selectRsFile(modelMaker);
 		}

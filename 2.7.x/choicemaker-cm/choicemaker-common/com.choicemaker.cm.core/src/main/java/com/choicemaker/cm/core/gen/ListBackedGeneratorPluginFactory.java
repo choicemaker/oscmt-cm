@@ -217,6 +217,7 @@ public class ListBackedGeneratorPluginFactory implements
 		return Collections.unmodifiableList(retVal);
 	}
 
+	@Override
 	public List lookupGeneratorPlugins() {
 		return this.generatorPlugins;
 	}

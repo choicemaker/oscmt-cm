@@ -24,6 +24,7 @@ public class ExtensionPoint extends ExtensionPointModel implements IExtensionPoi
   {
 	super();
   }  
+@Override
 public IConfigurationElement[] getConfigurationElements() {
 	ExtensionModel[] list = getDeclaredExtensions();
 	if (list == null)
@@ -35,11 +36,13 @@ public IConfigurationElement[] getConfigurationElements() {
 			for (int j = 0; j < configs.length; j++)
 				result.add(configs[j]);
 	}
-	return (IConfigurationElement[]) result.toArray(new IConfigurationElement[result.size()]);
+	return result.toArray(new IConfigurationElement[result.size()]);
 }
+@Override
 public IPluginDescriptor getDeclaringPluginDescriptor() {
 	return (IPluginDescriptor) getParentPluginDescriptor();
 }
+@Override
 public IExtension getExtension(String id) {
 	if (id == null)
 		return null;
@@ -52,6 +55,7 @@ public IExtension getExtension(String id) {
 	}
 	return null;
 }
+@Override
 public IExtension[] getExtensions() {
 	ExtensionModel[] list = getDeclaredExtensions();
 	if (list == null)
@@ -60,6 +64,7 @@ public IExtension[] getExtensions() {
 	System.arraycopy(list, 0, newValues, 0, list.length);
 	return newValues;
 }
+@Override
 public String getLabel() {
 	String s = getName();
 	if (s == null)
@@ -69,16 +74,20 @@ public String getLabel() {
 		setLocalizedName(localized);
 	return localized;
 }
+@Override
 public java.lang.String getSchemaReference() {
 	String s = getSchema();
 	return s == null ? "" : s.replace(File.separatorChar, '/'); //$NON-NLS-1$
 }
+@Override
 public String getSimpleIdentifier() {
 	return getId();
 }
+@Override
 public String getUniqueIdentifier() {
 	return getParentPluginDescriptor().getId() + "." + getSimpleIdentifier(); //$NON-NLS-1$
 }
+@Override
 public String toString() {
 	return getParent().getPluginId() + "." + getSimpleIdentifier(); //$NON-NLS-1$
 }

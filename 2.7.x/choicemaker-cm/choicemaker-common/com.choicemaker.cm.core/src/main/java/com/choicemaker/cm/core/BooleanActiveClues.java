@@ -36,6 +36,7 @@ public class BooleanActiveClues extends ActiveClues {
 	}
 
 
+	@Override
 	public int size() {
 		return activeClues.size();
 	}

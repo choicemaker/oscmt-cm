@@ -462,6 +462,7 @@ public class ComparisonArrayOS<T extends Comparable<T>> extends
 		return retVal;
 	}
 
+	@Override
 	public String toString() {
 		int logicalStep = step() + 4;
 		return "ComparisonArrayOS [logicalStep="

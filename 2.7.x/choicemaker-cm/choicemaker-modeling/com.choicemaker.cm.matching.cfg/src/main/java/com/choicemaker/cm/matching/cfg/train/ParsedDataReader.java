@@ -92,6 +92,7 @@ public class ParsedDataReader extends DefaultHandler implements Runnable {
 		t.start();
 	}
 	
+	@Override
 	public void run() {
 		try {
 			XMLReader xmlReader = XmlParserFactory.createXMLReader();
@@ -273,6 +274,7 @@ public class ParsedDataReader extends DefaultHandler implements Runnable {
 	private String parseTreeText;
 	private ParsedData parsedDatum;
 
+	@Override
 	public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
 		qName = qName.intern();
 		depth++;
@@ -337,6 +339,7 @@ public class ParsedDataReader extends DefaultHandler implements Runnable {
 		
 	}
 	
+	@Override
 	public void characters(char[] ch, int start, int length) throws SAXException {
 				
 		if (depth < 3) {
@@ -359,6 +362,7 @@ public class ParsedDataReader extends DefaultHandler implements Runnable {
 		}
 	}
 	
+	@Override
 	public void endElement(String uri, String localName, String qName) throws SAXException {
 		qName = qName.intern();
 				

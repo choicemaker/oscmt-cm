@@ -220,7 +220,7 @@ public final class LabeledValidators {
 			assert retVal == false;
 		}
 		else {
-			IValidator validator = (IValidator) getValidators().get(key);
+			IValidator validator = getValidators().get(key);
 			if (validator != null) {
 				retVal = validator.isValid(value);
 			} else {

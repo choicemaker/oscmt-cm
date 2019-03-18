@@ -38,10 +38,12 @@ public final class EmbeddedPlatform implements CMPlatform {
 	private static final Logger logger = Logger
 			.getLogger(EmbeddedPlatform.class.getName());
 
+	@Override
 	public CMPluginRegistry getPluginRegistry() {
 		return PluginRegistryAdapter.convert(Platform.getPluginRegistry());
 	}
 
+	@Override
 	public CMPlatformRunnable loaderGetRunnable(String applicationName) {
 		assert Platform.isInitialized();
 		CMPlatformRunnable retVal = null;
@@ -103,10 +105,12 @@ public final class EmbeddedPlatform implements CMPlatform {
 		return retVal;
 	}
 
+	@Override
 	public String getPluginDirectory(String id, String version) {
 		throw new Error("not implemented");
 	}
 
+	@Override
 	public URL getPluginDescriptorUrl(String id, String version,
 			String descriptorFile) {
 		throw new Error("not implemented");

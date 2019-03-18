@@ -192,6 +192,7 @@ public class ClueTableModel extends SortableTableModel {
 		return new TableColumn(columnNumber, cd.getWidth(), renderer, editor);
 	}
 
+	@Override
 	public void sort() {
 		//logger.debug("Sorting called. sortCol = " + sortCol + " sort order = " + sortAsc);
 		Collections.sort(rows, new ClueDataComparator(sortCol, sortAsc));
@@ -321,6 +322,7 @@ public class ClueTableModel extends SortableTableModel {
 	 * @return the number of rows in the model
 	 * @see #getColumnCount
 	 */
+	@Override
 	public int getRowCount() {
 		return numClues;
 	}
@@ -333,6 +335,7 @@ public class ClueTableModel extends SortableTableModel {
 	 * @return the number of columns in the model
 	 * @see #getRowCount
 	 */
+	@Override
 	public int getColumnCount() {
 		return columns.length;
 	}
@@ -350,6 +353,7 @@ public class ClueTableModel extends SortableTableModel {
 		return str;
 	}
 
+	@Override
 	public String getColumnName(int col) {
 		String str = getRawColumnNames()[col];
 		if (col == sortCol) {
@@ -358,6 +362,7 @@ public class ClueTableModel extends SortableTableModel {
 		return str;
 	}
 
+	@Override
 	public boolean isCellEditable(int nRow, int nCol) {
 		if (nCol == COL_ENABLED) {
 			return true;
@@ -380,6 +385,7 @@ public class ClueTableModel extends SortableTableModel {
 	 *                 the column whose value is to be queried
 	 * @return the value Object at the specified cell
 	 */
+	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		if (rowIndex < 0 || rowIndex >= rows.size()) {
 			return "";
@@ -397,6 +403,7 @@ public class ClueTableModel extends SortableTableModel {
 	 * @param nRow
 	 * @param nCol
 	 */
+	@Override
 	public void setValueAt(Object value, int nRow, int nCol) {
 		ClTableRow aRow = (ClTableRow) rows.elementAt(nRow);
 		int clueId = ((NullInteger) aRow.getColumn(COL_ID)).value();

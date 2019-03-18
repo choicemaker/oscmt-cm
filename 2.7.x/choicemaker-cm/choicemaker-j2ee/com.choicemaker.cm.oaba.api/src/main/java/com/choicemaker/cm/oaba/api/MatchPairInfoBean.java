@@ -33,36 +33,43 @@ public class MatchPairInfoBean implements MatchPairInfo {
 	}
 
 	// @Override
+	@Override
 	public int getDifferCount() {
 		return differCount;
 	}
 
 	// @Override
+	@Override
 	public int getHoldCount() {
 		return holdCount;
 	}
 
 	// @Override
+	@Override
 	public int getMatchCount() {
 		return matchCount;
 	}
 
 	// @Override
+	@Override
 	public int getPairCount() {
 		return pairCount;
 	}
 
 	// @Override
+	@Override
 	public List<String> getPairFileURIs() {
 		return pairFileURIs;
 	}
 
 	// @Override
+	@Override
 	public BATCH_RESULTS_PERSISTENCE_SCHEME getPersistenceScheme() {
 		return persistenceScheme;
 	}
 
 	// @Override
+	@Override
 	public RECORD_ID_TYPE getRecordIdType() {
 		return recordIdType;
 	}

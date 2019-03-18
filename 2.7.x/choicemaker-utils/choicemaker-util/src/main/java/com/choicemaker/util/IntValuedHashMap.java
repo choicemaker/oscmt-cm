@@ -42,7 +42,7 @@ public class IntValuedHashMap<K> extends HashMap<K, Integer> {
 	}
 
 	public int getInt(K key) {
-		Integer value = (Integer) get(key);
+		Integer value = get(key);
 		if (value != null)
 			return value.intValue();
 		else

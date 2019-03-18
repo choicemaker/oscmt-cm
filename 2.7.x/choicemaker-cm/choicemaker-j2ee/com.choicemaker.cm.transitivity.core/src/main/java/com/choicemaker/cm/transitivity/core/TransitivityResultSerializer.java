@@ -57,6 +57,7 @@ public interface TransitivityResultSerializer extends Serializable {
 	 *         ChoiceMaker Technologies, Inc.
 	 */
 	public static class SortByID implements Comparator<Record> {
+		@Override
 		@SuppressWarnings("unchecked")
 		public int compare(Record r1, Record r2) {
 			return r1.id.compareTo(r2.id);
@@ -72,6 +73,7 @@ public interface TransitivityResultSerializer extends Serializable {
 	 *         ChoiceMaker Technologies, Inc.
 	 */
 	public static class SortByHoldMergeID implements Comparator<Record> {
+		@Override
 		@SuppressWarnings("unchecked")
 		public int compare(Record r1, Record r2) {
 			if (r1.holdGroupId < r2.holdGroupId)

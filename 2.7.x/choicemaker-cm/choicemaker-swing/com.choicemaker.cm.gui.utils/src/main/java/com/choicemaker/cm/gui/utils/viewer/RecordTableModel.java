@@ -69,18 +69,22 @@ public class RecordTableModel extends AbstractTableModel implements RepositoryCh
 		return descriptor.isStackable();
 	}
 
+	@Override
 	public int getRowCount() {
 		return (record == null) ? 0 : descriptor.getRowCount(record);
 	}
 
+	@Override
 	public int getColumnCount() {
 		return descriptor.getColumnCount();
 	}
 
+	@Override
 	public String getColumnName(int iCol) {
 		throw new UnsupportedOperationException("Shouldn't be called.");
 	}
 
+	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		boolean isValid = descriptor.getValidity(record, rowIndex, columnIndex);
 		boolean isUnique = true;
@@ -101,10 +105,12 @@ public class RecordTableModel extends AbstractTableModel implements RepositoryCh
 		return new TypedValue(value, isValid, isUnique, !editable[columnIndex]);
 	}
 
+	@Override
 	public boolean isCellEditable(int rowIndex, int columnIndex) {
 		return contenEditable && editable[columnIndex];
 	}
 
+	@Override
 	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
 		descriptor.setValue(record, rowIndex, columnIndex, (String) aValue);
 		this.fireTableCellUpdated(rowIndex, columnIndex);
@@ -123,17 +129,20 @@ public class RecordTableModel extends AbstractTableModel implements RepositoryCh
 	/**
 	 * @see com.choicemaker.cm.train.gui.listeners.RepositoryChangeListener#setChanged(com.choicemaker.cm.train.gui.listeners.RepositoryChangeEvent)
 	 */
+	@Override
 	public void setChanged(RepositoryChangeEvent evt) {
 	}
 	/**
 	 * @see com.choicemaker.cm.train.gui.listeners.RepositoryChangeListener#recordDataChanged(com.choicemaker.cm.train.gui.listeners.RepositoryChangeEvent)
 	 */
+	@Override
 	public void recordDataChanged(RepositoryChangeEvent evt) {
 		fireTableDataChanged();
 	}
 	/**
 	 * @see com.choicemaker.cm.train.gui.listeners.RepositoryChangeListener#markupDataChanged(com.choicemaker.cm.train.gui.listeners.RepositoryChangeEvent)
 	 */
+	@Override
 	public void markupDataChanged(RepositoryChangeEvent evt) {
 	}
 }

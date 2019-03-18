@@ -17,6 +17,7 @@ import com.choicemaker.cm.core.MutableMarkedRecordPair;
  * @author    Martin Buechi
  */
 public class SimplePairComparator implements Comparator {
+	@Override
 	public int compare(Object o1, Object o2) {
 		return comparePairs((MutableMarkedRecordPair) o1, (MutableMarkedRecordPair) o2);
 	}

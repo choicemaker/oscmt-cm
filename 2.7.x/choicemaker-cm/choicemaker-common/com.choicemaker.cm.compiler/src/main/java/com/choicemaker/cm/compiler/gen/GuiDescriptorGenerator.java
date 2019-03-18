@@ -41,6 +41,7 @@ public class GuiDescriptorGenerator implements GeneratorPlugin {
 
 	public static GuiDescriptorGenerator instance = new GuiDescriptorGenerator();
 
+	@Override
 	public void generate(IGenerator g) throws GenException {
 		createDescriptor(g, g.getRootRecord(), new ArrayList());
 	}
@@ -395,6 +396,7 @@ public class GuiDescriptorGenerator implements GeneratorPlugin {
 			this.asString = asString;
 		}
 
+		@Override
 		void write(IGenerator g, Writer w, Element r, List fields, String fld, String rcrd, String idx)
 			throws IOException {
 			w.write("switch(col) {" + Constants.LINE_SEPARATOR);
@@ -435,6 +437,7 @@ public class GuiDescriptorGenerator implements GeneratorPlugin {
 	}
 
 	private static class Validity extends Inside {
+		@Override
 		void write(IGenerator g, Writer w, Element r, List fields, String fld, String rcrd, String idx)
 			throws IOException {
 			w.write("switch(col) {" + Constants.LINE_SEPARATOR);
@@ -452,6 +455,7 @@ public class GuiDescriptorGenerator implements GeneratorPlugin {
 	}
 
 	private static class Setter extends Inside {
+		@Override
 		void write(IGenerator g, Writer w, Element r, List fields, String fld, String rcrd, String idx)
 			throws IOException {
 			w.write("switch(col) {" + Constants.LINE_SEPARATOR);
@@ -483,17 +487,20 @@ public class GuiDescriptorGenerator implements GeneratorPlugin {
 	}
 
 	private static class Adder extends Inside {
+		@Override
 		void adjust(Writer w) throws IOException {
 			w.write("if(!above) {" + Constants.LINE_SEPARATOR);
 			w.write("++row;" + Constants.LINE_SEPARATOR);
 			w.write("};" + Constants.LINE_SEPARATOR);
 		}
 
+		@Override
 		void condition(Writer w, int i, String name) throws IOException {
 			String lhs = "cur + r" + i + "." + name + ".length";
 			w.write(lhs + " < row || (above && " + lhs + " == row && row != 0)");
 		}
 
+		@Override
 		void insert(Writer w, int i, Element e) throws IOException {
 			String name = e.getAttributeValue(CoreTags.NAME);
 			String className = e.getAttributeValue(CoreTags.CLASS_NAME);
@@ -504,6 +511,7 @@ public class GuiDescriptorGenerator implements GeneratorPlugin {
 			w.write("}" + Constants.LINE_SEPARATOR);
 		}
 
+		@Override
 		void write(IGenerator g, Writer w, Element r, List fields, String fld, String rcrd, String idx)
 			throws IOException {
 			String className = r.getAttributeValue(CoreTags.CLASS_NAME);
@@ -527,6 +535,7 @@ public class GuiDescriptorGenerator implements GeneratorPlugin {
 	}
 
 	private static class Deleter extends Inside {
+		@Override
 		void write(IGenerator g, Writer w, Element r, List fields, String fld, String rcrd, String idx)
 			throws IOException {
 			String className = r.getAttributeValue(CoreTags.CLASS_NAME);

@@ -18,6 +18,7 @@ import java.util.Set;
  */
 public class DefaultIdfTokenizer implements Tokenizer {
 
+	@Override
 	public String[] tokenize(String s) {
 		List temp = new ArrayList();
 		int len = s.length();

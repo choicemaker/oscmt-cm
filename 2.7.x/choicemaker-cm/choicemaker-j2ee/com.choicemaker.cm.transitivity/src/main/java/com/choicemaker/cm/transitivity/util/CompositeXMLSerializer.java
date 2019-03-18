@@ -92,6 +92,7 @@ public class CompositeXMLSerializer extends XMLSerializer
 	 *            the approximate maximum number of records in an output file
 	 * @throws IOException
 	 */
+	@Override
 	public void serialize(TransitivityResult result, String fileBase,
 			int maxFileSize) throws IOException {
 		if (result == null) {
@@ -150,6 +151,7 @@ public class CompositeXMLSerializer extends XMLSerializer
 		writer.close();
 	}
 
+	@Override
 	public String getCurrentFileName() {
 		return currentFile;
 	}

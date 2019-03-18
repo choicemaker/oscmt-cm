@@ -93,6 +93,7 @@ public class ParserTestDialog extends JDialog {
 		public ParseAction() {
 			super("Parse");
 		}
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			String s = dataField.getText().trim();
 			Parser parser = Parsers.get((String) parserBox.getSelectedItem());

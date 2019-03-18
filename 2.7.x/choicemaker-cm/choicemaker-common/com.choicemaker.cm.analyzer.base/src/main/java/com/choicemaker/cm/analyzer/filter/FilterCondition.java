@@ -25,6 +25,7 @@ public interface FilterCondition extends Serializable {
 		/**
 		 * @see com.choicemaker.cm.train.filter.FilterCondition#satisfy(com.choicemaker.cm.core.ActiveClues)
 		 */
+		@Override
 		public boolean satisfy(ActiveClues clues) {
 			return true;
 		}
@@ -32,21 +33,26 @@ public interface FilterCondition extends Serializable {
 		/**
 		 * @see com.choicemaker.cm.train.filter.FilterCondition#getConditionString()
 		 */
+		@Override
 		public String getConditionString() {
 			return "NULL_FILTER_CONDITION";
 		}
 
+		@Override
 		public int hashCode() {
 			return 0;
 		}
 
+		@Override
 		public boolean equals(Object other){
 			return other == null || other == this || (other instanceof FilterCondition && other.equals(this));
 		}
 
+		@Override
 		public FilterCondition createFilterCondition(int clueNum) {
 			throw new IllegalStateException("cannot set the clue number of the NULL_FILTER_CONDITION");
 		}
+		@Override
 		public int getClueNum() {
 			throw new IllegalStateException("cannot get the clue number of the NULL_FILTER_CONDITION");
 		}

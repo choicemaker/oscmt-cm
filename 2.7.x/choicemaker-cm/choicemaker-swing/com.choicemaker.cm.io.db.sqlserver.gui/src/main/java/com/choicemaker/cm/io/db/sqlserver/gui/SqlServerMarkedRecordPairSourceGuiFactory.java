@@ -22,34 +22,42 @@ import com.choicemaker.cm.modelmaker.gui.sources.SourceGuiFactory;
  */
 public class SqlServerMarkedRecordPairSourceGuiFactory implements SourceGuiFactory {
 
+	@Override
 	public String getName() {
 		return "SQL Server";
 	}
 
+	@Override
 	public SourceGui createGui(ModelMaker parent, Source s) {
 		return new SqlServerMarkedRecordPairSourceGui(parent, (SqlServerMarkedRecordPairSource)s);
 	}
 
+	@Override
 	public SourceGui createGui(ModelMaker parent) {
 		return createGui(parent, new SqlServerMarkedRecordPairSource());
 	}
 
+	@Override
 	public boolean hasSink() {
 		return false;
 	}
 
+	@Override
 	public SourceGui createSaveGui(ModelMaker parent) {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
 	public Object getHandler() {
 		return this;
 	}
 
+	@Override
 	public Class getHandledType() {
 		return SqlServerMarkedRecordPairSource.class;
 	}
 
+	@Override
 	public String toString() {
 		return "SQL Server MRPS";
 	}

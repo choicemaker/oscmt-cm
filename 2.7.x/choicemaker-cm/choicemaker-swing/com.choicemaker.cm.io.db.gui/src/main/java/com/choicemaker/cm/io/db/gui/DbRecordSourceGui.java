@@ -63,7 +63,8 @@ public class DbRecordSourceGui extends RecordSourceGui implements Enable {
     /**
      * Executed by the superclass constructor to build the panel.
      */
-    public void buildContent() {
+    @Override
+	public void buildContent() {
         sourceFileNameLabel = new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.dialog.source.name"));
         sourceFileName = new JTextField(35);
         sourceFileBrowseButton = new JButton(ChoiceMakerCoreMessages.m.formatMessage("browse.elipsis"));
@@ -95,7 +96,8 @@ public class DbRecordSourceGui extends RecordSourceGui implements Enable {
         return availableDataSources;
     }
 
-    public void setVisible(boolean b) {
+    @Override
+	public void setVisible(boolean b) {
 			if (b) {
         setFields();
         setEnabledness();
@@ -116,26 +118,30 @@ public class DbRecordSourceGui extends RecordSourceGui implements Enable {
         dataSource.setSelectedItem(dsn == null ? null : dsn.intern());
     }
 
-    public void setEnabledness() {
+    @Override
+	public void setEnabledness() {
         okayButton.setEnabled(
             sourceFileName.getText().length() > 0
                 && whereField.getText().length() > 0
                 && dataSource.getSelectedItem() != null);
     }
 
-    public void addContentListeners() {
+    @Override
+	public void addContentListeners() {
         super.addContentListeners();
 
         EnablednessGuard dl = new EnablednessGuard(this);
         sourceFileName.getDocument().addDocumentListener(dl);
         whereField.getDocument().addDocumentListener(dl);
         dataSource.addItemListener(new ItemListener() {
-            public void itemStateChanged(ItemEvent e) {
+            @Override
+			public void itemStateChanged(ItemEvent e) {
                 setEnabledness();
             }
         });
 
 		sourceFileBrowseButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				File file = FileChooserFactory.selectRsFile(getParent());
 				if (file != null) {
@@ -236,7 +242,8 @@ public class DbRecordSourceGui extends RecordSourceGui implements Enable {
     /**
      * Builds an OracleRecordSource.
      */
-    public void buildSource() {
+    @Override
+	public void buildSource() {
         OracleRecordSource dbSource = (OracleRecordSource) getSource();
 
         dbSource.setDataSourceName((String) dataSource.getSelectedItem());

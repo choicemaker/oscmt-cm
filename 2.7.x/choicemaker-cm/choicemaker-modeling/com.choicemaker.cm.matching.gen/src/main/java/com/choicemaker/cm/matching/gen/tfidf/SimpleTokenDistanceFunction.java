@@ -18,10 +18,12 @@ public class SimpleTokenDistanceFunction implements TokenDistanceFunction {
 		
 	}
 
+	@Override
 	public float distance(String s1, String s2) {
 		return 0;
 	}
 
+	@Override
 	public float distance(TokenBag b1, TokenBag b2) {
 		return 0;
 	}

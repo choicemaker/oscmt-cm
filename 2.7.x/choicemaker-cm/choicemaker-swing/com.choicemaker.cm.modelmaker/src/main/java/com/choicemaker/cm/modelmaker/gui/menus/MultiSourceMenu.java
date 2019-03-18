@@ -86,6 +86,7 @@ public class MultiSourceMenu extends LastUsedMenu {
 			setEnabled(getEnabled());
 		}
 
+		@Override
 		public void propertyChange(PropertyChangeEvent e) {
 			String propertyName = e.getPropertyName();
 			// AJW 2004-04-26: used parentheses here.
@@ -102,6 +103,7 @@ public class MultiSourceMenu extends LastUsedMenu {
 		Action newAction = new SourceAction(ChoiceMakerCoreMessages.m.formatMessage("new.elipsis"), newIcon, false, false, true) {
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				MarkedRecordPairSource source = (MarkedRecordPairSource) new SourceTypeSelectorDialog(parent, false).define();
 				if (source != null) {
@@ -125,6 +127,7 @@ public class MultiSourceMenu extends LastUsedMenu {
 		Action openAction = new SourceAction(ChoiceMakerCoreMessages.m.formatMessage("open.elipsis"), openIcon, false, false, true) {
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				File file = FileChooserFactory.selectMrpsFile(parent);
 				if (file != null) {
@@ -140,6 +143,7 @@ public class MultiSourceMenu extends LastUsedMenu {
 		add(new AbstractAction("Close") {
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				parent.setMultiSource(num, null);
 			}
@@ -150,6 +154,7 @@ public class MultiSourceMenu extends LastUsedMenu {
 		Action holdAction = new AbstractAction(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.menu.source.includeholds"), holdIcon) {
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				JCheckBoxMenuItem item = (JCheckBoxMenuItem) e.getSource();
 				parent.setMultiIncludeHolds(num, item.isSelected());
@@ -161,6 +166,7 @@ public class MultiSourceMenu extends LastUsedMenu {
 		holdItem.setMnemonic('h');
 		holdItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H, ActionEvent.ALT_MASK + modifierMask));
 		parent.addPropertyChangeListener(ModelMakerEventNames.MULTI_INCLUDE_HOLDS, new PropertyChangeListener() {
+			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				boolean mih = parent.getMultiIncludeHolds(num);
 				if (holdItem.isSelected() != mih) {
@@ -176,6 +182,7 @@ public class MultiSourceMenu extends LastUsedMenu {
 		Action editAction = new SourceAction(ChoiceMakerCoreMessages.m.formatMessage("edit.elipsis"), editIcon, false, true, true) {
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				MarkedRecordPairSource source = parent.getMultiSource(num);
 				SourceGuiFactory factory = null;
@@ -211,6 +218,7 @@ public class MultiSourceMenu extends LastUsedMenu {
 		addAutoItems();
 	}
 
+	@Override
 	public void open(String fileName) {
 		try {
 			MarkedRecordPairSource s = MarkedRecordPairSourceXmlConf.getMarkedRecordPairSource(fileName);

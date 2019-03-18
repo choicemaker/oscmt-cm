@@ -23,6 +23,7 @@ package com.choicemaker.cm.compiler.gen;
  * @author   Adam Winkel
  * @deprecated no longer used, not even for testing
  */
+@Deprecated
 class Perl5ValidConverter {
 	/**
 	 * 

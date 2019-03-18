@@ -17,6 +17,7 @@ import java.util.StringTokenizer;
 import java.util.TreeSet;
 import java.util.logging.Logger;
 
+import com.choicemaker.cm.args.BatchProcessingConstants;
 import com.choicemaker.cm.batch.api.ProcessingEventLog;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.IControl;
@@ -646,7 +647,7 @@ public class ChunkService3_OLD {
 				// write status
 				numChunks++;
 				String temp = Integer.toString(numChunks)
-						+ OabaProcessingConstants.DELIMIT
+						+ BatchProcessingConstants.DELIMIT
 						+ Integer.toString(skip + countAll);
 				if (isOS)
 					status.setCurrentProcessingEvent(

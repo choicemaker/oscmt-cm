@@ -79,6 +79,7 @@ public class FlatFileMarkedRecordPairSink implements MarkedRecordPairSink {
 		return fileNameSuffix;
 	}
 
+	@Override
 	public void open() throws IOException {
 		Accessor acc = model.getAccessor();
 		FlatFileAccessor ffacc = (FlatFileAccessor) acc;
@@ -108,6 +109,7 @@ public class FlatFileMarkedRecordPairSink implements MarkedRecordPairSink {
 		}
 	}
 
+	@Override
 	public void close() throws IOException {
 		if (multiFile) {
 			for (int i = 0; i < outFile.length; ++i) {
@@ -120,10 +122,12 @@ public class FlatFileMarkedRecordPairSink implements MarkedRecordPairSink {
 		}
 	}
 
+	@Override
 	public String getName() {
 		return name;
 	}
 
+	@Override
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -152,10 +156,12 @@ public class FlatFileMarkedRecordPairSink implements MarkedRecordPairSink {
 		this.tagged = v;
 	}
 
+	@Override
 	public void put(ImmutableRecordPair r) throws IOException {
 		putMarkedRecordPair((MutableMarkedRecordPair) r);
 	}
 
+	@Override
 	public void putMarkedRecordPair(ImmutableMarkedRecordPair r) throws IOException {
 		Writer w = ws[0];
 		if (tagged) {
@@ -174,15 +180,18 @@ public class FlatFileMarkedRecordPairSink implements MarkedRecordPairSink {
 			w.write(Constants.LINE_SEPARATOR);
 	}
 
+	@Override
 	public void setModel(ImmutableProbabilityModel model) {
 		this.model = model;
 	}
 
+	@Override
 	public ImmutableProbabilityModel getModel() {
 		return model;
 	}
 
 	/** NOP for now */
+	@Override
 	public void flush() throws IOException {
 	}
 

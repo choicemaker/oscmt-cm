@@ -132,7 +132,7 @@ public class CykParserChart {
 		for (int v = numNonTokenTypes; v < numVariables; v++) {
 			TokenType tt = (TokenType) variables[v];
 			for (int i = 0; i < numTokens; i++) {
-				Token t = (Token) tokens.get(i);
+				Token t = tokens.get(i);
 				if (tt.canHaveToken(t)) {
 					probChart[v][i][i] = (float) tt.getTokenProbability(t);
 					kChart[v][i][i] = i;
@@ -230,7 +230,7 @@ public class CykParserChart {
 		if (r < 0) {
 			return null;
 		} else if (r == numRules) {
-			Rule rule = new Rule((TokenType)variables[v], (Token) tokens.get(i));
+			Rule rule = new Rule((TokenType)variables[v], tokens.get(i));
 			return new ParseTreeNode(rule);
 		} else {
 			if (rules[r] instanceof NearlyCnfGrammar.HeadCascadedRule) {
@@ -290,11 +290,11 @@ public class CykParserChart {
 		List<Rule> squashed = r.getRules();
 		int size = squashed.size();
 		
-		ParseTreeNode ret = new ParseTreeNode((Rule)squashed.get(--size), kids);
+		ParseTreeNode ret = new ParseTreeNode(squashed.get(--size), kids);
 		while (--size >= 0) {
 			kids = new ArrayList<>(1);
 			kids.add(ret);
-			ret = new ParseTreeNode((Rule)squashed.get(size), kids);
+			ret = new ParseTreeNode(squashed.get(size), kids);
 		}
 		
 		return ret;
@@ -314,13 +314,13 @@ public class CykParserChart {
 		if (ruleRhs2[r] >= 0) {
 			kids.add(recoverParseTree(ruleRhs2[r], k+1, j));
 		}		
-		ParseTreeNode ret = new ParseTreeNode((Rule)squashed.get(squashedSize - 1), kids);
+		ParseTreeNode ret = new ParseTreeNode(squashed.get(squashedSize - 1), kids);
 
 		// successively higher levels
 		for (int index = squashedSize - 2; index >= 0; index--) {
 			kids = new ArrayList<>(1);
 			kids.add(ret);
-			ret = new ParseTreeNode((Rule)squashed.get(index), kids);
+			ret = new ParseTreeNode(squashed.get(index), kids);
 		}
 
 		return ret;
@@ -333,6 +333,7 @@ public class CykParserChart {
 		List<Symbol> vList = ncnfGrammar.getVariables();
 		final Variable sv = ncnfGrammar.getStartVariable();
 		Comparator<Symbol> vc = new Comparator<Symbol>() {
+			@Override
 			public int compare(Symbol obj1, Symbol obj2) {
 				return obj1 == sv ? -1 : 
 					obj2 == sv ? 1 : 
@@ -370,9 +371,10 @@ public class CykParserChart {
 		
 		List<Rule> rList = ncnfGrammar.getRules();
 		Comparator<Rule> rc = new Comparator<Rule>() {
+			@Override
 			public int compare(Rule obj1, Rule obj2) {
-				Rule r1 = (Rule) obj1;
-				Rule r2 = (Rule) obj2;
+				Rule r1 = obj1;
+				Rule r2 = obj2;
 				
 				if ((r1.getRhsSize() == 1) == (r2.getRhsSize() == 1)) {
 					int idx1 = variableIndices.getInt(r1.getLhs());
@@ -398,7 +400,7 @@ public class CykParserChart {
 		
 		int lastLhs = -1;
 		for (int i = 0; i < numRules; i++) {
-			Rule r = (Rule) rList.get(i);
+			Rule r = rList.get(i);
 			rules[i] = r;
 			ruleIndices.putInt(r, i);
 			

@@ -37,15 +37,17 @@ public class NonEmptyStringValidator extends AbstractValidator<String> {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.validation.eclipse.IValidator#isValid(java.lang.Object)
 	 */
+	@Override
 	public boolean isValid(String object) {
 		boolean retVal = false;
 		if (object != null && (object instanceof String)) {
-			String value = (String) object;
+			String value = object;
 			retVal = StringUtils.nonEmptyString(value);
 		}
 		return retVal;
 	}
 	
+	@Override
 	public boolean equals(IValidator<?> validator) {
 		boolean retVal = false;
 		if (validator != null
@@ -55,6 +57,7 @@ public class NonEmptyStringValidator extends AbstractValidator<String> {
 		return retVal;
 	}
 
+	@Override
 	public int hashCode() {
 		return this.getClass().hashCode();
 	}

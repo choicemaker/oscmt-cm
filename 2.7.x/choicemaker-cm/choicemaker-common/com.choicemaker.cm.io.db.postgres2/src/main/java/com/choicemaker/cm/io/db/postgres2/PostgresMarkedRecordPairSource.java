@@ -62,6 +62,7 @@ public class PostgresMarkedRecordPairSource implements MarkedRecordPairSource {
 		this.mrpsQuery = mrpsQuery;
 	}
 	
+	@Override
 	public void open() throws IOException {
 		if (model == null) {
 			throw new IllegalStateException("accessProvider is null");
@@ -152,14 +153,17 @@ public class PostgresMarkedRecordPairSource implements MarkedRecordPairSource {
 		return buff.toString();
 	}
 
+	@Override
 	public boolean hasNext() throws IOException {
 		return pairIterator.hasNext();
 	}
 
+	@Override
 	public ImmutableRecordPair getNext() throws IOException {
 		return getNextMarkedRecordPair();
 	}
 
+	@Override
 	public MutableMarkedRecordPair getNextMarkedRecordPair() throws IOException {
 		Object obj = pairIterator.next();
 		if (obj instanceof ImmutableMarkedRecordPair) {
@@ -172,10 +176,12 @@ public class PostgresMarkedRecordPairSource implements MarkedRecordPairSource {
 		}
 	}
 
+	@Override
 	public void close() throws IOException {
 		pairIterator = null;
 	}
 
+	@Override
 	public String getName() {
 		File f = new File(fileName);
 		String name = f.getName();
@@ -183,14 +189,17 @@ public class PostgresMarkedRecordPairSource implements MarkedRecordPairSource {
 		return name;
 	}
 
+	@Override
 	public void setName(String name) {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
 	public void setModel(ImmutableProbabilityModel m) {
 		this.model = m;
 	}
 
+	@Override
 	public ImmutableProbabilityModel getModel() {
 		return model;
 	}
@@ -227,14 +236,17 @@ public class PostgresMarkedRecordPairSource implements MarkedRecordPairSource {
 		this.fileName = fileName;
 	}
 
+	@Override
 	public String getFileName() {
 		return fileName;
 	}
 
+	@Override
 	public boolean hasSink() {
 		return false;
 	}
 
+	@Override
 	public Sink getSink() {
 		throw new UnsupportedOperationException();
 	}

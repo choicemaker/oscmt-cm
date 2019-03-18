@@ -83,6 +83,7 @@ class MarkedRecordPairSourceSpec {
 		return pairs;
 	}
 
+	@Override
 	public String toString() {
 		return "MarkedRecordPairSourceSpec [spec=" + spec + "]";
 	}

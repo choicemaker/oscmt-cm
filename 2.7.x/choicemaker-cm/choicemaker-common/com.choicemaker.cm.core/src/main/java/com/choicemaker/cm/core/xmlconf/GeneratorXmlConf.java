@@ -20,6 +20,7 @@ import org.jdom2.Element;
  * @author    Martin Buechi
  * @deprecated
  */
+@Deprecated
 public class GeneratorXmlConf {
 
 	public static String getCodeRoot() {

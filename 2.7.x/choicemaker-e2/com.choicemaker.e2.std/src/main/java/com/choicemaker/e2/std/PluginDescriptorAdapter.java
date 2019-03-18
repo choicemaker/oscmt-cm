@@ -83,30 +83,37 @@ public class PluginDescriptorAdapter {
 			this.delegate = o;
 		}
 
+		@Override
 		public CMExtension getExtension(String extensionName) {
 			return ExtensionAdapter.convert(delegate.getExtension(extensionName));
 		}
 
+		@Override
 		public CMExtensionPoint getExtensionPoint(String extensionPointId) {
 			return ExtensionPointAdapter.convert(delegate.getExtensionPoint(extensionPointId));
 		}
 
+		@Override
 		public CMExtensionPoint[] getExtensionPoints() {
 			return ExtensionPointAdapter.convert(delegate.getExtensionPoints());
 		}
 
+		@Override
 		public CMExtension[] getExtensions() {
 			return ExtensionAdapter.convert(delegate.getExtensions());
 		}
 
+		@Override
 		public URL getInstallURL() {
 			return delegate.getInstallURL();
 		}
 
+		@Override
 		public String getLabel() {
 			return delegate.getLabel();
 		}
 
+		@Override
 		public CMPlugin getPlugin() throws E2Exception {
 			try {
 				return PluginAdapter.convert(delegate.getPlugin());
@@ -116,27 +123,33 @@ public class PluginDescriptorAdapter {
 			}
 		}
 
+		@Override
 		public ClassLoader getPluginClassLoader() {
 			return delegate.getPluginClassLoader();
 		}
 
+		@Override
 		public CMPluginPrerequisite[] getPluginPrerequisites() {
 			return PluginPrerequisiteAdapter.convert(delegate.getPluginPrerequisites());
 		}
 
+		@Override
 		public String getProviderName() {
 			return delegate.getProviderName();
 		}
 
+		@Override
 		public ResourceBundle getResourceBundle()
 				throws MissingResourceException {
 			return delegate.getResourceBundle();
 		}
 
+		@Override
 		public String getResourceString(String value) {
 			return delegate.getResourceString(value);
 		}
 
+		@Override
 		public String getResourceString(String value, ResourceBundle bundle) {
 			return delegate.getResourceString(value, bundle);
 		}
@@ -145,14 +158,17 @@ public class PluginDescriptorAdapter {
 			return LibraryAdapter.convert(delegate.getRuntimeLibraries());
 		}
 
+		@Override
 		public String getUniqueIdentifier() {
 			return delegate.getUniqueIdentifier();
 		}
 
+		@Override
 		public CMPluginVersionIdentifier getVersionIdentifier() {
 			return PluginVersionIdentifierAdapter.convert(delegate.getVersionIdentifier());
 		}
 
+		@Override
 		public boolean isPluginActivated() {
 			return delegate.isPluginActivated();
 		}
@@ -178,30 +194,37 @@ public class PluginDescriptorAdapter {
 			this.delegate = o;
 		}
 
+		@Override
 		public IExtension getExtension(String extensionName) {
 			return ExtensionAdapter.convert(delegate.getExtension(extensionName));
 		}
 
+		@Override
 		public IExtensionPoint getExtensionPoint(String extensionPointId) {
 			return ExtensionPointAdapter.convert(delegate.getExtensionPoint(extensionPointId));
 		}
 
+		@Override
 		public IExtensionPoint[] getExtensionPoints() {
 			return ExtensionPointAdapter.convert(delegate.getExtensionPoints());
 		}
 
+		@Override
 		public IExtension[] getExtensions() {
 			return ExtensionAdapter.convert(delegate.getExtensions());
 		}
 
+		@Override
 		public URL getInstallURL() {
 			return delegate.getInstallURL();
 		}
 
+		@Override
 		public String getLabel() {
 			return delegate.getLabel();
 		}
 
+		@Override
 		public Plugin getPlugin() throws CoreException {
 			try {
 				return PluginAdapter.convert(delegate.getPlugin());
@@ -211,51 +234,63 @@ public class PluginDescriptorAdapter {
 			}
 		}
 
+		@Override
 		public ClassLoader getPluginClassLoader() {
 			return delegate.getPluginClassLoader();
 		}
 
+		@Override
 		public IPluginPrerequisite[] getPluginPrerequisites() {
 			return PluginPrerequisiteAdapter.convert(delegate.getPluginPrerequisites());
 		}
 
+		@Override
 		public String getProviderName() {
 			return delegate.getProviderName();
 		}
 
+		@Override
 		public ResourceBundle getResourceBundle()
 				throws MissingResourceException {
 			return delegate.getResourceBundle();
 		}
 
+		@Override
 		public String getResourceString(String value) {
 			return delegate.getResourceString(value);
 		}
 
+		@Override
 		public String getResourceString(String value, ResourceBundle bundle) {
 			return delegate.getResourceString(value, bundle);
 		}
 
+		@Override
 		public ILibrary[] getRuntimeLibraries() {
 			throw new Error("not implemented");
 		}
 
+		@Override
 		public String getUniqueIdentifier() {
 			return delegate.getUniqueIdentifier();
 		}
 
+		@Override
 		public PluginVersionIdentifier getVersionIdentifier() {
 			return PluginVersionIdentifierAdapter.convert(delegate.getVersionIdentifier());
 		}
 
+		@Override
 		public boolean isPluginActivated() {
 			return delegate.isPluginActivated();
 		}
 
+		@Override
 		public URL find(IPath path) {
 			throw new Error("not implemented");
 		}
 
+		@Override
 		public URL find(IPath path, @SuppressWarnings("rawtypes") Map override) {
 			throw new Error("not implemented");
 		}

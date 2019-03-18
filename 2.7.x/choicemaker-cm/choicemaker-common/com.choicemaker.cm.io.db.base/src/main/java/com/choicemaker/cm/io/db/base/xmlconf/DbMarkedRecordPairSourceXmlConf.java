@@ -30,10 +30,12 @@ import com.choicemaker.cm.io.db.oracle.OracleMarkedRecordPairSource;
 public class DbMarkedRecordPairSourceXmlConf implements MarkedRecordPairSourceXmlConfigurator {
 	public static final String EXTENSION_POINT_ID = "com.choicemaker.cm.io.db.base.dbMrpsReader";
 
+	@Override
 	public Object getHandler() {
 		return this;
 	}
 
+	@Override
 	public Class getHandledType() {
 		return OracleMarkedRecordPairSource.class;
 	}
@@ -41,6 +43,7 @@ public class DbMarkedRecordPairSourceXmlConf implements MarkedRecordPairSourceXm
 	/**
 	 * Add a Db marked record pair source to the configuration.
 	 */
+	@Override
 	public void add(MarkedRecordPairSource s) throws XmlConfException {
 		try {
 			OracleMarkedRecordPairSource src = (OracleMarkedRecordPairSource) s;
@@ -60,6 +63,7 @@ public class DbMarkedRecordPairSourceXmlConf implements MarkedRecordPairSourceXm
 		}
 	}
 
+	@Override
 	public MarkedRecordPairSource getMarkedRecordPairSource(String fileName, Element e, ImmutableProbabilityModel model)
 		throws XmlConfException {
 		String conf = e.getAttributeValue("conf");

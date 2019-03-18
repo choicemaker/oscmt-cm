@@ -95,6 +95,7 @@ public class DefaultPairFilter implements Filter {
 		checkSanity();
 	}
 
+	@Override
 	public boolean satisfy(MutableMarkedRecordPair mrp) {
 		checkSanity();
 		return fromPercentage <= mrp.getProbability()
@@ -104,6 +105,7 @@ public class DefaultPairFilter implements Filter {
 	/**
 	 * Does nothing
 	 */
+	@Override
 	public void resetLimiters() {
 	}
 

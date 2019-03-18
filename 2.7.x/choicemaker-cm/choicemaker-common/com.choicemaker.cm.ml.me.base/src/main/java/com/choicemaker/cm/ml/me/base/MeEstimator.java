@@ -702,6 +702,7 @@ public class MeEstimator {
 			}	
 		}
 		
+		@Override
 		public boolean equals(Object obj) {
 			MeHistory h = (MeHistory)obj;
 			int[][] fff = h.featuresForFuture;
@@ -722,6 +723,7 @@ public class MeEstimator {
 			return true;	
 		}
 	
+		@Override
 		public int hashCode() {
 			int hash = 0;
 			

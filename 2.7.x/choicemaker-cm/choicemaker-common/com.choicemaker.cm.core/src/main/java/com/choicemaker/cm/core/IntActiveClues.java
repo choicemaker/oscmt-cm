@@ -26,6 +26,7 @@ public class IntActiveClues extends ActiveClues {
 	/**
 	 * @see com.choicemaker.cm.core.base.ActiveClues#size()
 	 */
+	@Override
 	public int size() {
 		return values.length;
 	}

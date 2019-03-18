@@ -193,26 +193,32 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 
 	// Delegates
 	final private IUserMessages userMessages = new IUserMessages() {
+		@Override
 		public Writer getWriter() {
 			return ModelMaker.this.getMessagePanel().getWriter();
 		}
 
+		@Override
 		public OutputStream getOutputStream() {
 			return ModelMaker.this.getMessagePanel().getOutputStream();
 		}
 
+		@Override
 		public PrintStream getPrintStream() {
 			return ModelMaker.this.getMessagePanel().getPrintStream();
 		}
 
+		@Override
 		public void postMessage(final String s) {
 			ModelMaker.this.getMessagePanel().getPrintStream().println(s);
 		}
 
+		@Override
 		public void clearMessages() {
 			ModelMaker.this.getMessagePanel().clearMessages();
 		}
 
+		@Override
 		public void postInfo(String s) {
 			String displayString =
 				_msgs.formatMessage("train.gui.modelmaker.message.info", s)
@@ -497,6 +503,7 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 	private void addListeners() {
 
 		aboutItem.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent ev) {
 				String title =
 					_msgs.formatMessage("train.gui.modelmaker.title");
@@ -521,6 +528,7 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 		});
 
 		exitItem.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				programExit(EXIT_OK);
 			}
@@ -1209,7 +1217,7 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 
 			// Display the error
 			final String shortName =
-				ChoiceMakerCoreMessages.elideFileName(fullName, 50);
+				MessageUtil.elideFileName(fullName, 50);
 			final String shortSummary =
 				new LoggingObject("CM-100602", shortName).getFormattedMessage();
 			postError(shortSummary, ex, true);
@@ -1259,6 +1267,7 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 		}
 		long t0 = System.currentTimeMillis();
 		final Thread t = new Thread() {
+			@Override
 			public void run() {
 				try {
 					if (!currentThread().isInterrupted()) {
@@ -1364,6 +1373,7 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 		probabilityModel.setFiringThreshold(firingThreshold);
 
 		final Thread t = new Thread() {
+			@Override
 			public void run() {
 				try {
 					if (!currentThread().isInterrupted()) {
@@ -1833,7 +1843,7 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 
 			// Display the error
 			final String shortConf =
-				ChoiceMakerCoreMessages.elideFileName(conf, 50);
+				MessageUtil.elideFileName(conf, 50);
 			final String shortSummary =
 				_msgs.formatMessage(
 						"train.gui.modelmaker.configurationfile.invalid.error",
@@ -1864,6 +1874,7 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 	 * @return the exit code that was specified when programExit(int) was
 	 *         invoked.
 	 */
+	@Override
 	public Object run(Object args2) {
 
 		// Get this instance ready to display a GUI

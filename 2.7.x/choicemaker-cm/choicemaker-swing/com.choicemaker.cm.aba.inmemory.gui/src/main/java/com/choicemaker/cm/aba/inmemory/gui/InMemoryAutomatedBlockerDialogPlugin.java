@@ -52,6 +52,7 @@ public class InMemoryAutomatedBlockerDialogPlugin extends MatchDialogBlockerPlug
 		createContent();
 	}
 
+	@Override
 	public InMemoryBlocker getBlocker() {
 
 		// easy stuff...

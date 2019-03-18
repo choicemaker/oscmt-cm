@@ -103,6 +103,7 @@ public class Symbol implements SemanticTags {
 		throw new UnsupportedOperationException(this +" is not a clue set");
 	}
 
+	@Override
 	public boolean equals(Object o) {
 		boolean b = false;
 		if (o != null)
@@ -113,10 +114,12 @@ public class Symbol implements SemanticTags {
 		return b;
 	}
 
+	@Override
 	public int hashCode() {
 		return getName().hashCode();
 	}
 
+	@Override
 	public String toString() {
 		return getName();
 	}
@@ -199,14 +202,17 @@ public class Symbol implements SemanticTags {
 			this.schema = schema;
 		}
 
+		@Override
 		public String fullname() {
 			return fullname;
 		}
 
+		@Override
 		public Scope members() {
 			return scope;
 		}
 
+		@Override
 		public ClassSymbol schema() {
 			return schema;
 		}
@@ -351,28 +357,33 @@ public class Symbol implements SemanticTags {
 			return fullname.replace('.', File.separatorChar) + ".class";
 		}
 
+		@Override
 		public String fullname() {
 			return fullname;
 		}
 
+		@Override
 		public int modifiers() {
 			if (scope == null)
 				load();
 			return getModifiers();
 		}
 
+		@Override
 		public ClassSymbol superclass() {
 			if (scope == null)
 				load();
 			return superclass;
 		}
 
+		@Override
 		public ClassSymbol[] interfaces() {
 			if (scope == null)
 				load();
 			return interfaces;
 		}
 
+		@Override
 		public Scope members() {
 			if (scope == null)
 				load();
@@ -433,6 +444,7 @@ public class Symbol implements SemanticTags {
 			}
 		}
 
+		@Override
 		public String fullname() {
 			return fullname;
 		}
@@ -465,6 +477,7 @@ public class Symbol implements SemanticTags {
 				return fullname + "." + name;
 		}
 
+		@Override
 		public Scope members() {
 			if (scope == null)
 				load();

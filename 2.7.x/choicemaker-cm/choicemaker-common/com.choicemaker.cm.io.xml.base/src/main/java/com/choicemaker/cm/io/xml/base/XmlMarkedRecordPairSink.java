@@ -85,6 +85,7 @@ public class XmlMarkedRecordPairSink implements MarkedRecordPairSink {
 		return retVal;
 	}
 
+	@Override
 	public void open() throws IOException {
 		recordOutputter = ((XmlAccessor) model.getAccessor()).getXmlRecordOutputter();
 		FileOutputStream fos = createFileOutputStream();
@@ -100,16 +101,19 @@ public class XmlMarkedRecordPairSink implements MarkedRecordPairSink {
 		getWriter().write("</ChoiceMakerMarkedRecordPairs>");
 	}
 
+	@Override
 	public void close() throws IOException, XmlDiagnosticException {
 		finishRootEntity();
 		getWriter().flush();
 		getOutputStream().close();
 	}
 
+	@Override
 	public String getName() {
 		return name;
 	}
 
+	@Override
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -138,6 +142,7 @@ public class XmlMarkedRecordPairSink implements MarkedRecordPairSink {
 		return writer;
 	}
 
+	@Override
 	public void put(ImmutableRecordPair r) throws IOException {
 		putMarkedRecordPair((ImmutableMarkedRecordPair) r);
 	}
@@ -150,6 +155,7 @@ public class XmlMarkedRecordPairSink implements MarkedRecordPairSink {
 		getWriter().write("</MarkedRecordPair>" + Constants.LINE_SEPARATOR);
 	}
 
+	@Override
 	public void putMarkedRecordPair(ImmutableMarkedRecordPair r) throws IOException {
 		startRecordPairEntity();
 		XmlOutput.writeAttribute(getWriter(), "decision", r.getMarkedDecision().toString());
@@ -171,14 +177,17 @@ public class XmlMarkedRecordPairSink implements MarkedRecordPairSink {
 	protected void putAdditionalAttributes(ImmutableMarkedRecordPair mrp)  throws IOException {
 	}
 
+	@Override
 	public void setModel(ImmutableProbabilityModel model) {
 		this.model = model;
 	}
 
+	@Override
 	public ImmutableProbabilityModel getModel() {
 		return model;
 	}
 
+	@Override
 	public void flush() throws IOException {
 		getWriter().flush();
 	}

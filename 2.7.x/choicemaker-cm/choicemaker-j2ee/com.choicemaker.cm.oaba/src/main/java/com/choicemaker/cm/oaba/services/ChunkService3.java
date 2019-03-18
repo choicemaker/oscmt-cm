@@ -38,6 +38,7 @@ import javax.transaction.RollbackException;
 import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 
+import com.choicemaker.cm.args.BatchProcessingConstants;
 import com.choicemaker.cm.args.ProcessingEvent;
 import com.choicemaker.cm.batch.api.ProcessingEventLog;
 import com.choicemaker.cm.core.BlockingException;
@@ -736,7 +737,7 @@ public class ChunkService3 {
 				// write status
 				numChunks++;
 				String temp = Integer.toString(numChunks)
-						+ OabaProcessingConstants.DELIMIT
+						+ BatchProcessingConstants.DELIMIT
 						+ Integer.toString(skip + countAll);
 				if (isOS)
 					setStatusEvent(OabaEventBean.CREATE_CHUNK_OVERSIZED_IDS,

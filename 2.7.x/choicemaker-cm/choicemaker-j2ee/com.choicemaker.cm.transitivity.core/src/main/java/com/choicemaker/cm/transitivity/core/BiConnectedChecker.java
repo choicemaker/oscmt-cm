@@ -34,6 +34,7 @@ import com.choicemaker.cm.core.base.MatchRecord2;
  *
  * ChoiceMaker Technologies Inc.
  */
+@Deprecated
 @SuppressWarnings({"rawtypes", "unchecked" })
 public class BiConnectedChecker {
 	

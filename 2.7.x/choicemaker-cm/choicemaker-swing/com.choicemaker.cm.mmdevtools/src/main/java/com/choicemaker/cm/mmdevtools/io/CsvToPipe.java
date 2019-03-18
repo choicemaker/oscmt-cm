@@ -69,6 +69,7 @@ public class CsvToPipe extends Reader {
 		lineSep = System.getProperty("line.separator");
 	}
 
+	@Override
 	public int read(char[] cbuf, int off, int len) throws IOException {
 		if (linePos >= lineLen && !fill()) {
 			return -1;
@@ -83,6 +84,7 @@ public class CsvToPipe extends Reader {
 		return toRead;
 	}
 
+	@Override
 	public void close() throws IOException {
 		reader.close();
 	}

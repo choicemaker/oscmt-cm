@@ -20,34 +20,42 @@ import com.choicemaker.cm.modelmaker.gui.sources.SourceGuiFactory;
  * @author    Martin Buechi
  */
 public class CompositeRecordSourceGuiFactory implements SourceGuiFactory {
+	@Override
 	public String getName() {
 		return "Composite";
 	}
 
+	@Override
 	public SourceGui createGui(ModelMaker parent, Source s) {
 		return new CompositeRecordSourceGui(parent, (RecordSource)s);
 	}
 
+	@Override
 	public SourceGui createGui(ModelMaker parent) {
 		return createGui(parent, new CompositeRecordSource());
 	}
 
+	@Override
 	public SourceGui createSaveGui(ModelMaker parent) {
 		return null;
 	}
 
+	@Override
 	public Object getHandler() {
 		return this;
 	}
 
+	@Override
 	public Class getHandledType() {
 		return CompositeRecordSource.class;
 	}
 
+	@Override
 	public String toString() {
 		return "Composite";
 	}
 
+	@Override
 	public boolean hasSink() {
 		return false;
 	}

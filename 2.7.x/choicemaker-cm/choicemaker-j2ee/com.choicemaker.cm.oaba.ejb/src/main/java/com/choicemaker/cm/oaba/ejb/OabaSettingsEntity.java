@@ -138,7 +138,7 @@ public class OabaSettingsEntity extends AbaSettingsEntity
 	}
 
 	public OabaSettingsEntity(OabaSettings oaba, int maxSingle) {
-		this((AbaSettings) oaba, maxSingle, oaba.getMaxBlockSize(), oaba.getMaxChunkSize(),
+		this(oaba, maxSingle, oaba.getMaxBlockSize(), oaba.getMaxChunkSize(),
 				oaba.getMaxMatches(), oaba.getMaxOversized(),
 				oaba.getMinFields(), oaba.getInterval());
 	}

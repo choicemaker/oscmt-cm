@@ -165,6 +165,7 @@ public class FlatFileRecordSource implements RecordSource {
 		setModel(model);
 	}
 
+	@Override
 	public void open() throws IOException {
 		FlatFileAccessor ffa = (FlatFileAccessor) model.getAccessor();
 		descWidths = ffa.getDescWidths();
@@ -199,10 +200,12 @@ public class FlatFileRecordSource implements RecordSource {
 		getNextMain();
 	}
 
+	@Override
 	public boolean hasNext() {
 		return record != null;
 	}
 
+	@Override
 	public Record getNext() throws IOException {
 		return getNextRecord();
 	}
@@ -231,6 +234,7 @@ public class FlatFileRecordSource implements RecordSource {
 		}
 	}
 
+	@Override
 	public void close() throws IOException {
 		for (int i = 0; i < reader.length; ++i) {
 			if (reader[i] != null) {
@@ -243,6 +247,7 @@ public class FlatFileRecordSource implements RecordSource {
 	 * Get the value of name.
 	 * @return value of name.
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -251,6 +256,7 @@ public class FlatFileRecordSource implements RecordSource {
 	 * Set the value of name.
 	 * @param v  Value to assign to name.
 	 */
+	@Override
 	public void setName(String v) {
 		this.name = v;
 	}
@@ -260,6 +266,7 @@ public class FlatFileRecordSource implements RecordSource {
 		setName(NameUtils.getNameFromFilePath(fileName));
 	}
 
+	@Override
 	public String getFileName() {
 		return fileName;
 	}
@@ -268,6 +275,7 @@ public class FlatFileRecordSource implements RecordSource {
 	 * Get the value of model.
 	 * @return value of model.
 	 */
+	@Override
 	public ImmutableProbabilityModel getModel() {
 		return model;
 	}
@@ -276,18 +284,22 @@ public class FlatFileRecordSource implements RecordSource {
 	 * Set the value of model.
 	 * @param v  Value to assign to model.
 	 */
+	@Override
 	public void setModel(ImmutableProbabilityModel v) {
 		this.model = v;
 	}
 
+	@Override
 	public String toString() {
 		return name;
 	}
 
+	@Override
 	public boolean hasSink() {
 		return true;
 	}
 
+	@Override
 	public Sink getSink() {
 		return new FlatFileRecordSink(
 			name,

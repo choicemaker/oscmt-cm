@@ -8,7 +8,6 @@
 package com.choicemaker.cm.modelmaker.gui.matcher;
 
 import java.beans.PropertyChangeListener;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -106,6 +105,7 @@ public class Matcher {
 	private void initSorter(int sortOrder) {
 		if (sortOrder == DECISION_PROBABILITY) {
 			sorter = new Comparator() {
+				@Override
 				public int compare(Object o1, Object o2) {
 					IMarkedRecordPair p1 = (IMarkedRecordPair) o1;
 					IMarkedRecordPair p2 = (IMarkedRecordPair) o2;
@@ -125,6 +125,7 @@ public class Matcher {
 			};
 		} else if (sortOrder == PROBABILITY) {
 			sorter = new Comparator() {
+				@Override
 				public int compare(Object o1, Object o2) {
 					IMarkedRecordPair p1 = (IMarkedRecordPair) o1;
 					IMarkedRecordPair p2 = (IMarkedRecordPair) o2;
@@ -260,6 +261,7 @@ public class Matcher {
 
 	private void firePropertyChange(final String propertyName, final Object oldValue, final Object newValue) {
 		SwingUtilities.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				propertyChangeListeners.firePropertyChange(propertyName, oldValue, newValue);
 			}

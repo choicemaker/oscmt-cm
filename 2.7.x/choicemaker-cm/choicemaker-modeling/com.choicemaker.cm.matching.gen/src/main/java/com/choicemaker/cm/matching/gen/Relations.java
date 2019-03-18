@@ -269,26 +269,31 @@ class LazyRelation extends Relation {
 		}
 	}
 
+	@Override
 	public boolean isReflexive() {
 		init();
 		return store.isReflexive();
 	}
 
+	@Override
 	public void add(Object x, Object y) {
 		init();
 		store.add(x, y);
 	}
 
+	@Override
 	public Set get(Object x) {
 		init();
 		return store.get(x);
 	}
 
+	@Override
 	public Set get(Object x, boolean considerReflexive) {
 		init();
 		return store.get(x, considerReflexive);
 	}
 
+	@Override
 	public Relation getInverse() {
 		init();
 		return store.getInverse();

@@ -41,6 +41,7 @@ public class ComparisonArraySource<T extends Comparable<T>> extends
 		super(fileName, type);
 	}
 
+	@Override
 	protected void resetNext() {
 		nextGroup = null;
 	}

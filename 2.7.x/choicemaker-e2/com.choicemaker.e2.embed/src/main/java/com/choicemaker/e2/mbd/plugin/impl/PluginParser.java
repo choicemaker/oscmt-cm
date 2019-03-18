@@ -119,10 +119,12 @@ public class PluginParser extends DefaultHandler implements IModel {
 	     * @see org.xml.sax.ContentHandler#setDocumentLocator
 	     * @see org.xml.sax.Locator
 	     */
+	@Override
 	public void setDocumentLocator(Locator locator) {
 		this.locator = locator;
 	}
 
+	@Override
 	public void characters(char[] ch, int start, int length) {
 		int state = ((Integer) stateStack.peek()).intValue();
 		if (state != CONFIGURATION_ELEMENT_STATE)
@@ -141,8 +143,10 @@ public class PluginParser extends DefaultHandler implements IModel {
 			}
 		}
 	}
+	@Override
 	public void endDocument() {
 	}
+	@Override
 	public void endElement(String uri, String elementName, String qName) {
 		switch (((Integer) stateStack.peek()).intValue()) {
 			case IGNORED_ELEMENT_STATE :
@@ -258,7 +262,7 @@ public class PluginParser extends DefaultHandler implements IModel {
 				if (((Integer) stateStack.peek()).intValue() == PLUGIN_EXTENSION_STATE) {
 					// Want to add this configuration element to the subelements of an extension
 					ConfigurationElementModel[] oldValues =
-						(ConfigurationElementModel[]) ((ExtensionModel) parent).getSubElements();
+						((ExtensionModel) parent).getSubElements();
 					int size = (oldValues == null) ? 0 : oldValues.length;
 					ConfigurationElementModel[] newValues = new ConfigurationElementModel[size + 1];
 					for (int i = 0; i < size; i++) {
@@ -268,7 +272,7 @@ public class PluginParser extends DefaultHandler implements IModel {
 					((ExtensionModel) parent).setSubElements(newValues);
 				} else {
 					ConfigurationElementModel[] oldValues =
-						(ConfigurationElementModel[]) ((ConfigurationElementModel) parent).getSubElements();
+						((ConfigurationElementModel) parent).getSubElements();
 					int size = (oldValues == null) ? 0 : oldValues.length;
 					ConfigurationElementModel[] newValues = new ConfigurationElementModel[size + 1];
 					for (int i = 0; i < size; i++) {
@@ -280,9 +284,11 @@ public class PluginParser extends DefaultHandler implements IModel {
 				break;
 		}
 	}
+	@Override
 	public void error(SAXParseException ex) {
 		logStatus(ex);
 	}
+	@Override
 	public void fatalError(SAXParseException ex) throws SAXException {
 		logStatus(ex);
 		throw ex;
@@ -748,12 +754,14 @@ public class PluginParser extends DefaultHandler implements IModel {
 		}
 		return str;
 	}
+	@Override
 	public void startDocument() {
 		stateStack.push(new Integer(INITIAL_STATE));
 		for (int i = 0; i <= LAST_INDEX; i++) {
 			scratchVectors[i] = new Vector();
 		}
 	}
+	@Override
 	public void startElement(String uri, String elementName, String qName, Attributes attributes) {
 		switch (((Integer) stateStack.peek()).intValue()) {
 			case INITIAL_STATE :
@@ -792,6 +800,7 @@ public class PluginParser extends DefaultHandler implements IModel {
 				internalError(Policy.bind("parse.unknownTopElement", elementName)); //$NON-NLS-1$
 		}
 	}
+	@Override
 	public void warning(SAXParseException ex) {
 		logStatus(ex);
 	}

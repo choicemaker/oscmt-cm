@@ -50,6 +50,7 @@ public class MatchRecord2Source<T extends Comparable<T>> extends
 		super(fileName, type);
 	}
 
+	@Override
 	protected void resetNext() {
 		next = null;
 	}

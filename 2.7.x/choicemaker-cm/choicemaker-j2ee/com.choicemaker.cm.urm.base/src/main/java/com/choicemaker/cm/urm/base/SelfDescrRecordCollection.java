@@ -30,6 +30,7 @@ public class SelfDescrRecordCollection extends RefRecordCollection {//implements
 		super(url);
 		
 	}
+	@Override
 	public void accept(IRecordCollectionVisitor ext) throws RecordCollectionException{
 		ext.visit(this);
 	}

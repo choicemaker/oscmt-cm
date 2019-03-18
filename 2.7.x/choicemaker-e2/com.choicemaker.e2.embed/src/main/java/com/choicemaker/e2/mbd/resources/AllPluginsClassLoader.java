@@ -40,6 +40,7 @@ public class AllPluginsClassLoader {
 			super(path, parent);
 		}
 		
+		@Override
 		protected Class<?> findClass(String name) throws ClassNotFoundException {
 			try {
 				return super.findClass(name);

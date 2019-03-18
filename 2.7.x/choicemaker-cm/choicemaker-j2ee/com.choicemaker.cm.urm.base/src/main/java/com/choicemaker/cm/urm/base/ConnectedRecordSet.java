@@ -38,6 +38,7 @@ public class ConnectedRecordSet<T extends Comparable<T> & Serializable>
 		this.connections = links;
 	}
 
+	@Override
 	public void accept(IRecordVisitor ext){
 		ext.visit(this);
 	}

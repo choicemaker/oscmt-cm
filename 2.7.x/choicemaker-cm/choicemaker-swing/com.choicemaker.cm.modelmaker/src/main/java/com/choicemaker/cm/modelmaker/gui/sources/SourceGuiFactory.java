@@ -27,5 +27,6 @@ public interface SourceGuiFactory extends DynamicDispatchHandler {
 
 	boolean hasSink();
 
+	@Override
 	Class getHandledType();
 }

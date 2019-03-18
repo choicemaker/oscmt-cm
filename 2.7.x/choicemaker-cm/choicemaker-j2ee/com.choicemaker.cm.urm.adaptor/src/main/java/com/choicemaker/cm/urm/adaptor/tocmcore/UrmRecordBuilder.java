@@ -33,6 +33,7 @@ public class UrmRecordBuilder implements IRecordVisitor {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.urm.base.IRecordVisitor#visit(com.choicemaker.cm.urm.base.IRecordHolder)
 	 */
+	@Override
 	public void visit(IRecordHolder rh) {
 		if (rh == null) {
 			resRec = null;
@@ -44,6 +45,7 @@ public class UrmRecordBuilder implements IRecordVisitor {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.urm.base.IRecordVisitor#visit(com.choicemaker.cm.urm.base.RecordRef)
 	 */
+	@Override
 	public void visit(RecordRef rRef) {
 		if (rRef == null) {
 			resRec = null;
@@ -53,6 +55,7 @@ public class UrmRecordBuilder implements IRecordVisitor {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.urm.base.IRecordVisitor#visit(com.choicemaker.cm.urm.base.GlobalRecordRef)
 	 */
+	@Override
 	public void visit(GlobalRecordRef grRef) {
 		if (grRef == null) {
 			resRec = null;
@@ -64,6 +67,7 @@ public class UrmRecordBuilder implements IRecordVisitor {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.urm.base.IRecordVisitor#visit(com.choicemaker.cm.urm.base.LinkedRecordSet)
 	 */
+	@Override
 	public void visit(LinkedRecordSet lrs) {
 		if (lrs == null) {
 			resRec = null;
@@ -73,6 +77,7 @@ public class UrmRecordBuilder implements IRecordVisitor {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.urm.base.IRecordVisitor#visit(com.choicemaker.cm.urm.base.ConnectedRecordSet)
 	 */
+	@Override
 	public void visit(ConnectedRecordSet crs) {
 		if (crs == null) {
 			resRec = null;

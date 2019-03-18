@@ -65,9 +65,11 @@ public interface INode<T extends Comparable<T>> extends Comparable<INode<T>> {
 	boolean sameId(INode<T> other);
 
 	/** Implementations should override equals(..) */
+	@Override
 	boolean equals(Object o);
 
 	/** Implementations should override hashCode() */
+	@Override
 	int hashCode();
 
 }

@@ -33,12 +33,14 @@ public class FieldIdfStat extends AbstractTableStat {
 	// DataProfiler interface
 	//
 
+	@Override
 	public void reset() {
 		calc = new TfIdfCalculator();
 //		totalRows = 0;
 //		nonNullRows = 0;
 	}
 
+	@Override
 	public void processRecord(Record r) {
 		int numRows = fa.getRowCount(r);
 //		totalRows += numRows;
@@ -54,14 +56,17 @@ public class FieldIdfStat extends AbstractTableStat {
 		}
 	}
 
+	@Override
 	public String getName() {
 		return "Field IDF";
 	}
 
+	@Override
 	public Object[] getColumnHeaders() {
 		return new Object[] {"Token", "Count", "IDF", "Length"};
 	}
 
+	@Override
 	public Object[][] getData() {
 		List keys = calc.getSortedTokens();
 		int len = keys.size();
@@ -81,6 +86,7 @@ public class FieldIdfStat extends AbstractTableStat {
 	/**
 	 * NOTE: we don't filter by token...
 	 */
+	@Override
 	public boolean filterRecord(Set values, Record r) {
 		return false;
 	}

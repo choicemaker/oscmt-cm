@@ -43,6 +43,7 @@ public abstract class CompositeSource implements Source {
 	 * Get the value of name.
 	 * @return value of name.
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -51,6 +52,7 @@ public abstract class CompositeSource implements Source {
 	 * Set the value of name.
 	 * @param v  Value to assign to name.
 	 */
+	@Override
 	public void setName(String v) {
 		this.name = v;
 	}
@@ -60,10 +62,12 @@ public abstract class CompositeSource implements Source {
 		setName(NameUtils.getNameFromFilePath(fileName));
 	}
 
+	@Override
 	public String getFileName() {
 		return fileName;
 	}
 
+	@Override
 	public void open() throws java.io.IOException {
 		try {
 			curSource = 0;
@@ -77,12 +81,14 @@ public abstract class CompositeSource implements Source {
 		}
 	}
 
+	@Override
 	public void close() throws java.io.IOException {
 		if (curSource < sources.size()) {
 			((Source) sources.get(curSource)).close();
 		}
 	}
 
+	@Override
 	public boolean hasNext() throws IOException {
 		if (curSource < sources.size()) {
 			return ((Source) sources.get(curSource)).hasNext();
@@ -186,10 +192,12 @@ public abstract class CompositeSource implements Source {
 		saveAsRelative.clear();
 	}
 
+	@Override
 	public ImmutableProbabilityModel getModel() {
 		return model;
 	}
 
+	@Override
 	public void setModel(ImmutableProbabilityModel m) {
 		model = m;
 		Iterator i = sources.iterator();
@@ -206,10 +214,12 @@ public abstract class CompositeSource implements Source {
 		return res;
 	}
 
+	@Override
 	public boolean hasSink() {
 		return false;
 	}
 
+	@Override
 	public Sink getSink() {
 		return null;
 	}

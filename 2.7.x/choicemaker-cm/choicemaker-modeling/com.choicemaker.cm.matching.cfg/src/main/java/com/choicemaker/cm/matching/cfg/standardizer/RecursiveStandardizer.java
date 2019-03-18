@@ -61,7 +61,7 @@ public class RecursiveStandardizer implements ParseTreeNodeStandardizer {
 	 * Returns the standardizer for the specified Symbol
 	 */
 	public ParseTreeNodeStandardizer getStandardizer(Variable v) {
-		return (ParseTreeNodeStandardizer) nodeStandardizers.get(v);	
+		return nodeStandardizers.get(v);	
 	}
 
 	/**
@@ -69,6 +69,7 @@ public class RecursiveStandardizer implements ParseTreeNodeStandardizer {
 	 * calling a registered Standardizer when appropriate, and storing all 
 	 * standardized data in <code>holder</code>.
 	 */
+	@Override
 	public void standardize(ParseTreeNode node, ParsedData holder) {
 		Variable v = node.getRule().getLhs();
 		if (v == null) {

@@ -125,11 +125,13 @@ public class DeriveType extends DefaultVisitor implements SemanticTags {
 		return res;
 	}
 
+	@Override
 	public void visit(Tree t) throws CompilerException {
 		unit.error(t.pos, "not a legal type");
 		result = Type.ERROR;
 	}
 
+	@Override
 	public void visit(Select t) throws CompilerException {
 		int oldkind = kind;
 		kind = PCK;
@@ -150,6 +152,7 @@ public class DeriveType extends DefaultVisitor implements SemanticTags {
 			unit.error(t.pos, "cannot select " + t.name + " from " + s.getType());
 	}
 
+	@Override
 	public void visit(Ident t) throws CompilerException {
 		result = Type.ERROR;
 		if (kind == PCK)
@@ -181,10 +184,12 @@ public class DeriveType extends DefaultVisitor implements SemanticTags {
 		}
 	}
 
+	@Override
 	public void visit(ArrayType t) throws CompilerException {
 		result = new Type.ArrayType(typeOf(t.tpe));
 	}
 
+	@Override
 	public void visit(PrimitiveType t) throws CompilerException {
 		switch (t.ttag) {
 			case Tags.BYTE :

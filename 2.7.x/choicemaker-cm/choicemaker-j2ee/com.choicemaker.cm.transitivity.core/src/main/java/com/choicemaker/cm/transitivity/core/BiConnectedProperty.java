@@ -43,6 +43,7 @@ public class BiConnectedProperty implements SubGraphProperty {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.transitivity.core.SubGraphProperty#hasProperty(com.choicemaker.cm.transitivity.core.CompositeEntity)
 	 */
+	@Override
 	public boolean hasProperty(CompositeEntity cluster) {
 		//initialize values
 		nodeInfoMap = new HashMap ();

@@ -60,6 +60,7 @@ public class XmlRecordSource extends XMLFilterImpl implements RecordHandler, Run
 		setModel(model);
 	}
 
+	@Override
 	public void open() {
 		thrown = null;
 		DefaultHandler handler = ((XmlAccessor) model.getAccessor()).getXmlReader();
@@ -74,6 +75,7 @@ public class XmlRecordSource extends XMLFilterImpl implements RecordHandler, Run
 		thread.start();
 	}
 
+	@Override
 	public synchronized boolean hasNext() throws IOException {
 		try {
 			while (size == 0 && mayHaveMore) {
@@ -89,6 +91,7 @@ public class XmlRecordSource extends XMLFilterImpl implements RecordHandler, Run
 		}
 	}
 
+	@Override
 	public synchronized Record getNext() throws IOException {
 		if (thrown != null) {
 			throw new IOException(thrown);
@@ -107,6 +110,7 @@ public class XmlRecordSource extends XMLFilterImpl implements RecordHandler, Run
 		return r;
 	}
 
+	@Override
 	public void run() {
 		FileInputStream fs = null;
 		try {
@@ -143,6 +147,7 @@ public class XmlRecordSource extends XMLFilterImpl implements RecordHandler, Run
 	 *            an exception during processing.
 	 * @see org.xml.sax.ContentHandler#startElement
 	 */
+	@Override
 	public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
 		qName = qName.intern();
 		++depth;
@@ -168,6 +173,7 @@ public class XmlRecordSource extends XMLFilterImpl implements RecordHandler, Run
 	 *            an exception during processing.
 	 * @see org.xml.sax.ContentHandler#endElement
 	 */
+	@Override
 	public void endElement(String uri, String localName, String qName) throws SAXException {
 		qName = qName.intern();
 		--depth;
@@ -178,6 +184,7 @@ public class XmlRecordSource extends XMLFilterImpl implements RecordHandler, Run
 		}
 	}
 
+	@Override
 	public synchronized void handleRecord(Record r) throws SAXException {
 		try {
 			while (size == BUF_SIZE && readMore) {
@@ -195,6 +202,7 @@ public class XmlRecordSource extends XMLFilterImpl implements RecordHandler, Run
 		}
 	}
 
+	@Override
 	public synchronized void close() {
 		readMore = false;
 		mayHaveMore = false;
@@ -205,6 +213,7 @@ public class XmlRecordSource extends XMLFilterImpl implements RecordHandler, Run
 	 * Get the value of name.
 	 * @return value of name.
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -213,6 +222,7 @@ public class XmlRecordSource extends XMLFilterImpl implements RecordHandler, Run
 	 * Set the value of name.
 	 * @param v  Value to assign to name.
 	 */
+	@Override
 	public void setName(String v) {
 		this.name = v;
 	}
@@ -248,26 +258,32 @@ public class XmlRecordSource extends XMLFilterImpl implements RecordHandler, Run
 	 * Get the value of fileName.
 	 * @return value of fileName.
 	 */
+	@Override
 	public String getFileName() {
 		return fileName;
 	}
 
+	@Override
 	public void setModel(ImmutableProbabilityModel model) {
 		this.model = model;
 	}
 
+	@Override
 	public ImmutableProbabilityModel getModel() {
 		return model;
 	}
 
+	@Override
 	public String toString() {
 		return name;
 	}
 
+	@Override
 	public boolean hasSink() {
 		return true;
 	}
 
+	@Override
 	public Sink getSink() {
 		return new XmlRecordSink(getName(), getXmlFileName(), getModel());
 	}

@@ -34,10 +34,12 @@ public class PostgresMarkedRecordPairSourceXmlConf implements MarkedRecordPairSo
 	
 	public static final String EXTENSION_POINT_ID = "com.choicemaker.cm.io.db.postgres2.postgresMrpsReader";
 
+	@Override
 	public Object getHandler() {
 		return this;
 	}
 
+	@Override
 	public Class getHandledType() {
 		return PostgresMarkedRecordPairSource.class;
 	}
@@ -45,6 +47,7 @@ public class PostgresMarkedRecordPairSourceXmlConf implements MarkedRecordPairSo
 	/**
 	 * Add a Db record source to the configuration.
 	 */
+	@Override
 	public void add(MarkedRecordPairSource s) throws XmlConfException {
 		try {
 			PostgresMarkedRecordPairSource src = (PostgresMarkedRecordPairSource) s;
@@ -64,6 +67,7 @@ public class PostgresMarkedRecordPairSourceXmlConf implements MarkedRecordPairSo
 		}
 	}
 
+	@Override
 	public MarkedRecordPairSource getMarkedRecordPairSource(String fileName, Element e, ImmutableProbabilityModel model)
 		throws XmlConfException {
 		String dataSourceName = e.getChildText(PostgresXmlUtils.AN_MRPS_DATASOURCENAME);

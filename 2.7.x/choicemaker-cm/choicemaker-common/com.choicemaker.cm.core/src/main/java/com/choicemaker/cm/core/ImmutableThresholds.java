@@ -86,6 +86,7 @@ public class ImmutableThresholds implements Cloneable {
 	/**
 	 * Checks {@link #invariant()}
 	 */
+	@Override
 	public Object clone() {
 		Object retVal;
 		try {
@@ -99,6 +100,7 @@ public class ImmutableThresholds implements Cloneable {
 		return retVal;
 	}
 
+	@Override
 	public boolean equals(Object o) {
 		boolean retVal = false;
 		if (o instanceof ImmutableThresholds) {
@@ -134,6 +136,7 @@ public class ImmutableThresholds implements Cloneable {
 		return new Thresholds(this.differThreshold, this.matchThreshold);
 	}
 
+	@Override
 	public int hashCode() {
 		int h1 = new Float(this.differThreshold).hashCode();
 		int h2 = new Float(this.matchThreshold).hashCode();

@@ -22,6 +22,7 @@ public class XmlTextFormat implements ITextFormat {
 		super();
 	}
 
+	@Override
 	public void accept(ITextFormatVisitor ext) {
 		ext.visit(this);
 	}

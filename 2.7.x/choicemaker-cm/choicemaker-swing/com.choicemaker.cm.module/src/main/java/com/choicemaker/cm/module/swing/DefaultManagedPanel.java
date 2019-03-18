@@ -30,6 +30,7 @@ public class DefaultManagedPanel extends AbstractTabbedPanel implements IModelMa
 	private final IModuleController module;
 	private Object modelMakerObject;
 	
+	@Override
 	public String getTabName() {
 		return DefaultManagedPanel.class.getName();
 	}
@@ -108,10 +109,12 @@ public class DefaultManagedPanel extends AbstractTabbedPanel implements IModelMa
 		return module;
 	}
 
+	@Override
 	public void setModelMakerObject(Object modelMakerObject) {
 		this.modelMakerObject = modelMakerObject;
 	}
 
+	@Override
 	public Object getModelMakerObject() {
 		return modelMakerObject;
 	}

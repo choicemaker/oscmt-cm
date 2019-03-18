@@ -151,6 +151,7 @@ public class PostgresSerializableRecordSource implements
 		return sqlRS;
 	}
 	
+	@Override
 	public ImmutableProbabilityModel getModel () {
 		if (model == null) {
 			model = PMManager.getModelInstance(modelName);
@@ -161,6 +162,7 @@ public class PostgresSerializableRecordSource implements
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.RecordSource#getNext()
 	 */
+	@Override
 	public Record getNext() throws IOException {
 		return getRS().getNext();
 	}
@@ -168,6 +170,7 @@ public class PostgresSerializableRecordSource implements
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.Source#open()
 	 */
+	@Override
 	public void open() throws IOException {
 		getRS().open ();
 	}
@@ -175,6 +178,7 @@ public class PostgresSerializableRecordSource implements
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.Source#close()
 	 */
+	@Override
 	public void close() throws IOException {
 		getRS().close();
 	}
@@ -182,6 +186,7 @@ public class PostgresSerializableRecordSource implements
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.Source#hasNext()
 	 */
+	@Override
 	public boolean hasNext() throws IOException {
 		return getRS().hasNext();
 	}
@@ -189,6 +194,7 @@ public class PostgresSerializableRecordSource implements
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.Source#getName()
 	 */
+	@Override
 	public String getName() {
 		return getRS().getName();
 	}
@@ -196,6 +202,7 @@ public class PostgresSerializableRecordSource implements
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.Source#setName(java.lang.String)
 	 */
+	@Override
 	public void setName(String name) {
 		getRS().setName(name);
 	}
@@ -203,6 +210,7 @@ public class PostgresSerializableRecordSource implements
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.Source#setModel(com.choicemaker.cm.core.ImmutableProbabilityModel)
 	 */
+	@Override
 	public void setModel(ImmutableProbabilityModel m) {
 		getRS().setModel(m);
 	}
@@ -210,6 +218,7 @@ public class PostgresSerializableRecordSource implements
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.Source#hasSink()
 	 */
+	@Override
 	public boolean hasSink() {
 		return getRS().hasSink();
 	}
@@ -217,6 +226,7 @@ public class PostgresSerializableRecordSource implements
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.Source#getSink()
 	 */
+	@Override
 	public Sink getSink() {
 		return getRS().getSink();
 	}
@@ -224,10 +234,12 @@ public class PostgresSerializableRecordSource implements
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.Source#getFileName()
 	 */
+	@Override
 	public String getFileName() {
 		return getRS().getFileName();
 	}
 
+	@Override
 	public boolean equals (Object o) {
 		if (o instanceof PostgresSerializableRecordSource) {
 			PostgresSerializableRecordSource rs =
@@ -242,6 +254,7 @@ public class PostgresSerializableRecordSource implements
 		}
 	}
 	
+	@Override
 	public int hashCode () {
 		return getSqlQuery().hashCode();
 	}
@@ -262,6 +275,7 @@ public class PostgresSerializableRecordSource implements
 		return sqlQuery;
 	}
 
+	@Override
 	public Properties getProperties() {
 		Properties retVal = new Properties();
 		retVal.setProperty(PN_DATASOURCE_JNDI_NAME, this.getDsJNDIName());
@@ -271,6 +285,7 @@ public class PostgresSerializableRecordSource implements
 		return retVal;
 	}
 
+	@Override
 	public void setProperties(Properties properties)
 			throws IncompleteSpecificationException {
 
@@ -323,11 +338,13 @@ public class PostgresSerializableRecordSource implements
 		}
 	}
 
+	@Override
 	public String toXML() {
 		String retVal = AbstractRecordSourceSerializer.toXML(this);
 		return retVal;
 	}
 
+	@Override
 	public String toString() {
 		return "PostgresSerializableParallelSerialRecordSource [dsJNDIName="
 				+ dsJNDIName + ", modelName=" + modelName + ", dbConfig="

@@ -25,6 +25,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.WindowConstants;
 
 import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.gui.utils.JavaHelpUtils;
@@ -72,12 +73,13 @@ public class StartDialog extends JFrame implements Enable {
 		layoutContent();
 		addContentListeners();
 		setContentPane(content);
-		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		getRootPane().setDefaultButton(ok);
 		pack();
 		setLocation();
 		setEnabledness();
 		addWindowListener(new WindowAdapter() {
+			@Override
 			public void windowClosing(WindowEvent e) {
 				res = false;
 				end();
@@ -85,6 +87,7 @@ public class StartDialog extends JFrame implements Enable {
 		});
 	}
 
+	@Override
 	public void setEnabledness() {
 		ok.setEnabled(ModelMaker.checkValidity(configuration.getText()));
 	}
@@ -191,6 +194,7 @@ public class StartDialog extends JFrame implements Enable {
 
 	private void addContentListeners() {
 		ok.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				res = true;
 				end();
@@ -198,6 +202,7 @@ public class StartDialog extends JFrame implements Enable {
 		});
 
 		cancel.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				res = false;
 				end();
@@ -205,6 +210,7 @@ public class StartDialog extends JFrame implements Enable {
 		});
 
 		configurationBrowse.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent ev) {
 				File file = FileChooserFactory.selectConfFile(null, new File(
 						configuration.getText()));

@@ -263,12 +263,14 @@ public class SqlServerIdSearchDialog extends JDialog {
 //		});
 
 		dataSource.addItemListener(new ItemListener() {
+			@Override
 			public void itemStateChanged(ItemEvent e) {
 				updateEnabledness();
 			}
 		});
 
 		blockingParametersPanel.addPropertyChangeListener(new PropertyChangeListener() {
+			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				if (BlockingParametersPanel.BLOCKING_PARAMETERS_PROPERTY.equals(evt.getPropertyName())) {
 					updateEnabledness();
@@ -277,18 +279,23 @@ public class SqlServerIdSearchDialog extends JDialog {
 		});
 
 		qId.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
 			public void insertUpdate(DocumentEvent e) { updateEnabledness(); }
+			@Override
 			public void removeUpdate(DocumentEvent e) { updateEnabledness(); }
+			@Override
 			public void changedUpdate(DocumentEvent e) { updateEnabledness(); }
 		});
 
 		cancel.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				dispose();
 			}
 		});
 
 		ok.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				findMatches();
 			}
@@ -395,7 +402,7 @@ public class SqlServerIdSearchDialog extends JDialog {
 		List<MutableMarkedRecordPair> pairs = new ArrayList<>(matches.size());
 		Iterator<Match> it = matches.iterator();
 		while (it.hasNext()) {
-			Match match = (Match) it.next();
+			Match match = it.next();
 			Record m = match.m;
 			if (!actualId.equals(m.getId())) {
 				pairs.add(new MutableMarkedRecordPair(q, m, Decision.HOLD,

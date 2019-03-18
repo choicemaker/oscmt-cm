@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
@@ -37,26 +38,31 @@ public class MeGuiFactory extends MlGuiFactory {
 	private ClueTableModelPlugin clueTableModelPlugin;
 	private ActiveClueTableModelPlugin activeClueTableModelPlugin;
 
+	@Override
 	public ClueTableModelPlugin getClueTableModelPlugin() {
 		if (clueTableModelPlugin == null) {
 			clueTableModelPlugin = new ClueTableModelPlugin() {
 				private static final long serialVersionUID = 1L;
 				TableColumn weightColumn;
+				@Override
 				public TableColumn getColumn(int column) {
 					if (weightColumn == null) {
 						DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
-						renderer.setHorizontalAlignment(JLabel.RIGHT);
+						renderer.setHorizontalAlignment(SwingConstants.RIGHT);
 						TableCellEditor editor = new DefaultCellEditor(new JTextField());
 						weightColumn = new TableColumn(startColumn, 150, renderer, editor);
 					}
 					return weightColumn;
 				}
+				@Override
 				public String getColumnName(int column) {
 					return ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.table.common.weight");
 				}
+				@Override
 				public boolean isCellEditable(int row, int column) {
 					return !model.getClueSet().getClueDesc()[row].rule;
 				}
+				@Override
 				public Object getValueAt(int row, int column) {
 					float[] weights = ((MaximumEntropy) model.getMachineLearner()).getWeights();
 					return weights == null
@@ -64,6 +70,7 @@ public class MeGuiFactory extends MlGuiFactory {
 							? NullFloat.getNullInstance()
 							: new NullFloat(weights[row]);
 				}
+				@Override
 				public void setValueAt(Object value, int row, int col) {
 					try {
 						float we = Float.parseFloat(value.toString());
@@ -77,9 +84,11 @@ public class MeGuiFactory extends MlGuiFactory {
 						logger.warning(msg);
 					}
 				}
+				@Override
 				public int getColumnCount() {
 					return 1;
 				}
+				@Override
 				public int getRowCount() {
 					throw new UnsupportedOperationException();
 				}
@@ -88,26 +97,31 @@ public class MeGuiFactory extends MlGuiFactory {
 		return clueTableModelPlugin;
 	}
 
+	@Override
 	public ActiveClueTableModelPlugin getActiveClueTableModelPlugin() {
 		if (activeClueTableModelPlugin == null) {
 			activeClueTableModelPlugin = new ActiveClueTableModelPlugin() {
 				private static final long serialVersionUID = 1L;
 				TableColumn weightColumn;
+				@Override
 				public TableColumn getColumn(int column) {
 					if (weightColumn == null) {
 						DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
-						renderer.setHorizontalAlignment(JLabel.RIGHT);
+						renderer.setHorizontalAlignment(SwingConstants.RIGHT);
 						TableCellEditor editor = new DefaultCellEditor(new JTextField());
 						weightColumn = new TableColumn(startColumn, 150, renderer, editor);
 					}
 					return weightColumn;
 				}
+				@Override
 				public String getColumnName(int column) {
 					return ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.table.common.weight");
 				}
+				@Override
 				public boolean isCellEditable(int row, int column) {
 					return false;
 				}
+				@Override
 				public Object getValueAt(int row, int column) {
 					if (model.getClueSet().getClueDesc()[row].rule) {
 						return NullFloat.getNullInstance();
@@ -115,12 +129,15 @@ public class MeGuiFactory extends MlGuiFactory {
 						return new NullFloat(((MaximumEntropy) model.getMachineLearner()).getWeights()[row]);
 					}
 				}
+				@Override
 				public void setValueAt(Object value, int row, int col) {
 					throw new UnsupportedOperationException();
 				}
+				@Override
 				public int getColumnCount() {
 					return 1;
 				}
+				@Override
 				public int getRowCount() {
 					throw new UnsupportedOperationException();
 				}
@@ -141,28 +158,33 @@ public class MeGuiFactory extends MlGuiFactory {
 	/**
 	 * @see com.choicemaker.cm.ml.gui.MlGuiFactory#getTrainDialogPlugin(com.choicemaker.cm.core.MachineLearner)
 	 */
+	@Override
 	public TrainDialogPlugin getTrainDialogPlugin(MachineLearner learner) {
 		return new MeTrainDialogPlugin((MaximumEntropy) learner);
 	}
 	/**
 	 * @see com.choicemaker.cm.core.base.DynamicDispatchHandler#getHandler()
 	 */
+	@Override
 	public Object getHandler() {
 		return this;
 	}
 	/**
 	 * @see com.choicemaker.cm.core.base.DynamicDispatchHandler#getHandledType()
 	 */
+	@Override
 	public Class<?> getHandledType() {
 		return MaximumEntropy.class;
 	}
 
+	@Override
 	public String toString() {
 		return ChoiceMakerCoreMessages.m.formatMessage("ml.me.label");
 	}
 	/**
 	 * @see com.choicemaker.cm.ml.gui.MlGuiFactory#getMlInstance()
 	 */
+	@Override
 	public MachineLearner getMlInstance() {
 		return new MaximumEntropy();
 	}

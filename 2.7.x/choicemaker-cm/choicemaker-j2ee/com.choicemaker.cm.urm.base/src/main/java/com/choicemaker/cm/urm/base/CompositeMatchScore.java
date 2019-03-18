@@ -55,11 +55,13 @@ public class CompositeMatchScore implements IMatchScore {
 		return  avProb/this.innerScores.length; 
 	}
 
+	@Override
 	public Decision3 getDecision() {
 		return getConservativeDecision(); 
 	}
 
 
+	@Override
 	public float getProbability() {
 		return getAverageProbability();
 	}

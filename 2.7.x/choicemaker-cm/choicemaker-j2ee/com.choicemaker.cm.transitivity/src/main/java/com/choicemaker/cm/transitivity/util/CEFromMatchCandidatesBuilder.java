@@ -101,6 +101,7 @@ public class CEFromMatchCandidatesBuilder extends CEFromMatchesBuilder {
 	 *
 	 * @return Iterator
 	 */
+	@Override
 	public Iterator getCompositeEntities() throws TransitivityException {
 
 		List<MatchRecord2> pairs = new ArrayList<>();

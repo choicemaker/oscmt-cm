@@ -192,60 +192,74 @@ public class SubExpressions extends TreeGen implements TargetTree.Visitor {
 	
 	// Visitor methods
 	
+	@Override
 	public void visit(Tree t) {
 		throw new Error();
 	}
 	
+	@Override
 	public void visit(Bad t) {
 		hashcode = DO_NOT_ENTER;
 	}
 	
+	@Override
 	public void visit(PackageDecl t) {
 		throw new Error();
 	}
 	
+	@Override
 	public void visit(ImportDecl t) {
 		throw new Error();
 	}
 	
+	@Override
 	public void visit(ClueSetDecl t) {
 		throw new Error();
 	}
 	
+	@Override
 	public void visit(ClueDecl t) {
 		throw new Error();
 	}
 	
+	@Override
 	public void visit(Index t) {
 		throw new Error();
 	}
 	
+	@Override
 	public void visit(MethodDecl t) {
 		throw new Error();
 	}
 	
+	@Override
 	public void visit(VarDecl t) throws CompilerException {
 		if (t.initializer != null)
 			t.initializer.apply(this);
 		hashcode = DO_NOT_ENTER;
 	}
 	
+	@Override
 	public void visit(Quantified t) {
 		throw new Error();
 	}
 	
+	@Override
 	public void visit(Let t) {
 		throw new Error();
 	}
 	
+	@Override
 	public void visit(Shorthand t) {
 		throw new Error();
 	}
 	
+	@Override
 	public void visit(Valid t) {
 		throw new Error();
 	}
 	
+	@Override
 	public void visit(If t) throws CompilerException {
 		t.cond.apply(this);
 		if (hashcode == DO_NOT_ENTER)
@@ -262,6 +276,7 @@ public class SubExpressions extends TreeGen implements TargetTree.Visitor {
 		enter(t, hcode << 3);
 	}
 	
+	@Override
 	public void visit(Apply t) throws CompilerException {
 		t.fun.apply(this);
 		if (hashcode == DO_NOT_ENTER)
@@ -276,14 +291,17 @@ public class SubExpressions extends TreeGen implements TargetTree.Visitor {
 		enter(t, (hcode << 3) | 0x01);
 	}
 	
+	@Override
 	public void visit(New t) {
 		hashcode = DO_NOT_ENTER;
 	}
 	
+	@Override
 	public void visit(NewArray t) {
 		hashcode = DO_NOT_ENTER;
 	}
 	
+	@Override
 	public void visit(Typeop t) throws CompilerException {
 		t.expr.apply(this);
 		if (hashcode == DO_NOT_ENTER)
@@ -295,6 +313,7 @@ public class SubExpressions extends TreeGen implements TargetTree.Visitor {
 			enter(t, (hcode << 3) | 0x03);
 	}
 	
+	@Override
 	public void visit(Unop t) throws CompilerException {
 		t.arg.apply(this);
 		if (hashcode == DO_NOT_ENTER)
@@ -302,6 +321,7 @@ public class SubExpressions extends TreeGen implements TargetTree.Visitor {
 		enter(t, (((hashcode * 31) + t.opcode) << 3) | 0x04);
 	}
 	
+	@Override
 	public void visit(Binop t) throws CompilerException {
 		t.left.apply(this);
 		if (hashcode == DO_NOT_ENTER)
@@ -314,6 +334,7 @@ public class SubExpressions extends TreeGen implements TargetTree.Visitor {
 		enter(t, (hcode << 3) | 0x05);
 	}
 	
+	@Override
 	public void visit(Indexed t) throws CompilerException {
 		t.expr.apply(this);
 		if (hashcode == DO_NOT_ENTER)
@@ -326,6 +347,7 @@ public class SubExpressions extends TreeGen implements TargetTree.Visitor {
 		enter(t, (hcode << 3) | 0x06);
 	}
 	
+	@Override
 	public void visit(Select t) throws CompilerException {
 		t.qualifier.apply(this);
 		if (hashcode == DO_NOT_ENTER)
@@ -333,14 +355,17 @@ public class SubExpressions extends TreeGen implements TargetTree.Visitor {
 		enter(t, ((hashcode * 31415 + t.name.hashCode()) << 3) | 0x07);
 	}
 	
+	@Override
 	public void visit(Ident t) {
 		enter(t, t.name.hashCode());
 	}
 	
+	@Override
 	public void visit(Self t) {
 		enter(t, t.stag << 3);
 	}
 	
+	@Override
 	public void visit(ArrayType t) throws CompilerException {
 		t.tpe.apply(this);
 		if (hashcode == DO_NOT_ENTER)
@@ -348,28 +373,34 @@ public class SubExpressions extends TreeGen implements TargetTree.Visitor {
 		enter(t, (hashcode << 3) | 0x01);
 	}
 	
+	@Override
 	public void visit(PrimitiveType t) {
 		enter(t, (t.ttag << 6) | 0x02);
 	}
 	
+	@Override
 	public void visit(Literal t) {
 		enter(t, (t.value.hashCode() << 3) + t.ltag);
 	}
 
+	@Override
 	public void visit(ClassDecl t) throws CompilerException {
 		throw new Error();
 	}
 	
+	@Override
 	public void visit(JMethodDecl t) throws CompilerException {
 		throw new Error();
 	}
 	
+	@Override
 	public void visit(Block t) throws CompilerException {
 		for (int i = 0; i < t.stats.length; i++)
 			t.stats[i].apply(this);
 		hashcode = DO_NOT_ENTER;
 	}
 	
+	@Override
 	public void visit(Cond t) throws CompilerException {
 		t.cond.apply(this);
 		t.thenp.apply(this);
@@ -378,53 +409,65 @@ public class SubExpressions extends TreeGen implements TargetTree.Visitor {
 		hashcode = DO_NOT_ENTER;
 	}
 	
+	@Override
 	public void visit(While t) {
 		hashcode = DO_NOT_ENTER;
 	}
 	
+	@Override
 	public void visit(DoWhile t) {
 		hashcode = DO_NOT_ENTER;
 	}
 	
+	@Override
 	public void visit(For t) {
 		hashcode = DO_NOT_ENTER;
 	}
 	
+	@Override
 	public void visit(Taged t) throws CompilerException {
 		t.stat.apply(this);
 		hashcode = DO_NOT_ENTER;
 	}
 	
+	@Override
 	public void visit(Switch t) {
 		hashcode = DO_NOT_ENTER;
 	}
 	
+	@Override
 	public void visit(Case t) {
 		hashcode = DO_NOT_ENTER;
 	}
 	
+	@Override
 	public void visit(Break t) {
 		hashcode = DO_NOT_ENTER;
 	}
 	
+	@Override
 	public void visit(Continue t) {
 		hashcode = DO_NOT_ENTER;
 	}
 	
+	@Override
 	public void visit(Return t) throws CompilerException {
 		t.expr.apply(this);
 		hashcode = DO_NOT_ENTER;
 	}
 	
+	@Override
 	public void visit(Assign t) throws CompilerException {
 		t.rhs.apply(this);
 		hashcode = DO_NOT_ENTER;
 	}
 	
+	@Override
 	public void visit(Try t) {
 		hashcode = DO_NOT_ENTER;
 	}
 	
+	@Override
 	public void visit(Catch t) {
 		hashcode = DO_NOT_ENTER;
 	}
@@ -471,56 +514,69 @@ public class SubExpressions extends TreeGen implements TargetTree.Visitor {
 			res = t;
 		}
 	
+		@Override
 		public void visit(Bad t) {
 			res = t;
 		}
 	
+		@Override
 		public void visit(PackageDecl t) {
 			res = t;
 		}
 	
+		@Override
 		public void visit(ImportDecl t) {
 			res = t;
 		}
 	
+		@Override
 		public void visit(ClueSetDecl t) {
 			res = t;
 		}
 	
+		@Override
 		public void visit(ClueDecl t) {
 			res = t;
 		}
 	
+		@Override
 		public void visit(Index t) {
 			res = t;
 		}
 	
+		@Override
 		public void visit(MethodDecl t) {
 			res = t;
 		}
 	
+		@Override
 		public void visit(VarDecl t) throws CompilerException {
 			t.initializer.apply(this);
 			t.initializer = res;
 			res = t;
 		}
 	
+		@Override
 		public void visit(Quantified t) {
 			res = t;
 		}
 	
+		@Override
 		public void visit(Let t) {
 			res = t;
 		}
 	
+		@Override
 		public void visit(Shorthand t) {
 			res = t;
 		}
 	
+		@Override
 		public void visit(Valid t) {
 			res = t;
 		}
 	
+		@Override
 		public void visit(If t) throws CompilerException {
 			if (subst(t))
 				return;
@@ -533,6 +589,7 @@ public class SubExpressions extends TreeGen implements TargetTree.Visitor {
 			res = t;
 		}
 	
+		@Override
 		public void visit(Apply t) throws CompilerException {
 			if (subst(t))
 				return;
@@ -545,14 +602,17 @@ public class SubExpressions extends TreeGen implements TargetTree.Visitor {
 			res = t;
 		}
 	
+		@Override
 		public void visit(New t) {
 			res = t;
 		}
 	
+		@Override
 		public void visit(NewArray t) {
 			res = t;
 		}
 	
+		@Override
 		public void visit(Typeop t) throws CompilerException {
 			if (subst(t))
 				return;
@@ -561,6 +621,7 @@ public class SubExpressions extends TreeGen implements TargetTree.Visitor {
 			res = t;
 		}
 	
+		@Override
 		public void visit(Unop t) throws CompilerException {
 			if (subst(t))
 				return;
@@ -569,6 +630,7 @@ public class SubExpressions extends TreeGen implements TargetTree.Visitor {
 			res = t;
 		}
 	
+		@Override
 		public void visit(Binop t) throws CompilerException {
 			if (subst(t))
 				return;
@@ -579,6 +641,7 @@ public class SubExpressions extends TreeGen implements TargetTree.Visitor {
 			res = t;
 		}
 	
+		@Override
 		public void visit(Indexed t) throws CompilerException {
 			if (subst(t))
 				return;
@@ -589,6 +652,7 @@ public class SubExpressions extends TreeGen implements TargetTree.Visitor {
 			res = t;
 		}
 	
+		@Override
 		public void visit(Select t) throws CompilerException {
 			if (subst(t))
 				return;
@@ -597,34 +661,42 @@ public class SubExpressions extends TreeGen implements TargetTree.Visitor {
 			res = t;
 		}
 	
+		@Override
 		public void visit(Ident t) {
 			res = t;
 		}
 	
+		@Override
 		public void visit(Self t) {
 			res = t;
 		}
 	
+		@Override
 		public void visit(ArrayType t) {
 			res = t;
 		}
 	
+		@Override
 		public void visit(PrimitiveType t) {
 			res = t;
 		}
 	
+		@Override
 		public void visit(Literal t) {
 			res = t;
 		}
 
+		@Override
 		public void visit(ClassDecl t) {
 			res = t;
 		}
 	
+		@Override
 		public void visit(JMethodDecl t) {
 			res = t;
 		}
 	
+		@Override
 		public void visit(Block t) throws CompilerException {
 			if (subst(t))
 				return;
@@ -635,6 +707,7 @@ public class SubExpressions extends TreeGen implements TargetTree.Visitor {
 			res = t;
 		}
 		
+		@Override
 		public void visit(Cond t) throws CompilerException {
 			if (subst(t))
 				return;
@@ -649,46 +722,56 @@ public class SubExpressions extends TreeGen implements TargetTree.Visitor {
 			res = t;
 		}
 	
+		@Override
 		public void visit(While t) {
 			res = t;
 		}
 	
+		@Override
 		public void visit(DoWhile t) {
 			res = t;
 		}
 	
+		@Override
 		public void visit(For t) {
 			res = t;
 		}
 	
+		@Override
 		public void visit(Taged t) throws CompilerException {
 			t.stat.apply(this);
 			t.stat = res;
 			res = t;
 		}
 	
+		@Override
 		public void visit(Switch t) {
 			res = t;
 		}
 	
+		@Override
 		public void visit(Case t) {
 			res = t;
 		}
 	
+		@Override
 		public void visit(Break t) {
 			res = t;
 		}
 	
+		@Override
 		public void visit(Continue t) {
 			res = t;
 		}
 	
+		@Override
 		public void visit(Return t) throws CompilerException {
 			t.expr.apply(this);
 			t.expr = res;
 			res = t;
 		}
 	
+		@Override
 		public void visit(Assign t) throws CompilerException {
 			t.rhs.apply(this);
 			if (res == null)
@@ -697,10 +780,12 @@ public class SubExpressions extends TreeGen implements TargetTree.Visitor {
 			res = t;
 		}
 	
+		@Override
 		public void visit(Try t) {
 			res = t;
 		}
 	
+		@Override
 		public void visit(Catch t) {
 			res = t;
 		}

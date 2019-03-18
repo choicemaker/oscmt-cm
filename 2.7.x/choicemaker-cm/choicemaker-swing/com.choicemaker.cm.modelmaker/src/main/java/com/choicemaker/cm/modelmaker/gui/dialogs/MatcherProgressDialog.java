@@ -55,12 +55,14 @@ class MatcherProgressDialog extends JDialog implements PropertyChangeListener {
 	 */
 	private void addListeners() {
 		ok.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent evt) {
 				dispose();
 			}
 		});
 
 		cancel.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent evt) {
 				cancel.setEnabled(false);
 				thread.interrupt();
@@ -74,6 +76,7 @@ class MatcherProgressDialog extends JDialog implements PropertyChangeListener {
 		});
 	}
 
+	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		String propertyName = evt.getPropertyName();
 		Object newValue = evt.getNewValue();

@@ -95,11 +95,13 @@ public class ActiveClueTable extends JTable implements RepositoryChangeListener 
 	/**
 	 * @see com.choicemaker.cm.train.gui.listeners.RepositoryChangeListener#setChanged(com.choicemaker.cm.train.gui.listeners.RepositoryChangeEvent)
 	 */
+	@Override
 	public void setChanged(RepositoryChangeEvent evt) {
 	}
 	/**
 	 * @see com.choicemaker.cm.train.gui.listeners.RepositoryChangeListener#recordDataChanged(com.choicemaker.cm.train.gui.listeners.RepositoryChangeEvent)
 	 */
+	@Override
 	public void recordDataChanged(RepositoryChangeEvent evt) {
 		myModel.setMarkedRecordPair(markedRecordPair);
 		refresh();
@@ -107,6 +109,7 @@ public class ActiveClueTable extends JTable implements RepositoryChangeListener 
 	/**
 	 * @see com.choicemaker.cm.train.gui.listeners.RepositoryChangeListener#markupDataChanged(com.choicemaker.cm.train.gui.listeners.RepositoryChangeEvent)
 	 */
+	@Override
 	public void markupDataChanged(RepositoryChangeEvent evt) {
 	}
 }

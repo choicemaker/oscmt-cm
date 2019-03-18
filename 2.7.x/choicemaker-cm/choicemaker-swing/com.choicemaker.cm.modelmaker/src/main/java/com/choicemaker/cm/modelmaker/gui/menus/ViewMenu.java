@@ -46,6 +46,7 @@ public class ViewMenu extends JMenu {
 				showToolbarIcon) {
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				JCheckBoxMenuItem item = (JCheckBoxMenuItem) e.getSource();
 				parent.showToolbar(item.isSelected());
@@ -64,6 +65,7 @@ public class ViewMenu extends JMenu {
 				showPairIndicesIcon) {
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				JCheckBoxMenuItem item = (JCheckBoxMenuItem) e.getSource();
 				parent.showPairIndices(item.isSelected());
@@ -76,6 +78,7 @@ public class ViewMenu extends JMenu {
 		Action showStatusMessagesAction = new AbstractAction("Status Messages") {
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				JCheckBoxMenuItem item = (JCheckBoxMenuItem) e.getSource();
 				parent.showStatusMessages(item.isSelected());
@@ -95,6 +98,7 @@ public class ViewMenu extends JMenu {
 				showSummaryIcon) {
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				JCheckBoxMenuItem item = (JCheckBoxMenuItem) e.getSource();
 				parent.getTrainingControlPanel().showCluePerformancePanel(item.isSelected());
@@ -109,6 +113,7 @@ public class ViewMenu extends JMenu {
 		Action showActiveCluesAction = new AbstractAction("Active Clue Table") {
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				JCheckBoxMenuItem item = (JCheckBoxMenuItem) e.getSource();
 				parent.getHumanReviewPanel().showActiveCluesPanel(item.isSelected());

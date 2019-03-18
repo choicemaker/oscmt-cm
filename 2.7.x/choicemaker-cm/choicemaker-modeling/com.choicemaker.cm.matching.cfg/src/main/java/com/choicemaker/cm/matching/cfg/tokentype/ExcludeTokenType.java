@@ -47,6 +47,7 @@ public class ExcludeTokenType extends WordTokenType {
 		}
 	}
 	
+	@Override
 	public boolean canHaveToken(String token) {
 		if (exclude != null) {
 			return super.canHaveToken(token) && !exclude.contains(token);

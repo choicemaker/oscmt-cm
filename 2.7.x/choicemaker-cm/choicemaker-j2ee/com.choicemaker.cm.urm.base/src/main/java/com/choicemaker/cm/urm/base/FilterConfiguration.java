@@ -111,38 +111,47 @@ public class FilterConfiguration implements IFilterConfiguration {
 		}
 	}
 
+	@Override
 	public int getBatchSize() {
 		return (Integer) props.get(PN_BATCH_SIZE);
 	}
 
+	@Override
 	public float getDefaultPrefilterFromPercentage() {
 		return (Float) props.get(PN_DEFAULT_PREFILTER_FROM_PERCENTAGE);
 	}
 
+	@Override
 	public float getDefaultPrefilterToPercentage() {
 		return (Float) props.get(PN_DEFAULT_PREFILTER_TO_PERCENTAGE);
 	}
 
+	@Override
 	public float getDefaultPostfilterFromPercentage() {
 		return (Float) props.get(PN_DEFAULT_POSTFILTER_FROM_PERCENTAGE);
 	}
 
+	@Override
 	public float getDefaultPostfilterToPercentage() {
 		return (Float) props.get(PN_DEFAULT_POSTFILTER_TO_PERCENTAGE);
 	}
 
+	@Override
 	public int getDefaultPairSamplerSize() {
 		return (Integer) props.get(PN_DEFAULT_PAIR_SAMPLER_SIZE);
 	}
 
+	@Override
 	public boolean getUseDefaultPrefilter() {
 		return (Boolean) props.get(PN_USE_DEFAULT_PREFILTER);
 	}
 
+	@Override
 	public boolean getUseDefaultPostfilter() {
 		return (Boolean) props.get(PN_USE_DEFAULT_POSTFILTER);
 	}
 
+	@Override
 	public boolean getUseDefaultPairSampler() {
 		return (Boolean) props.get(PN_USE_DEFAULT_PAIR_SAMPLER);
 	}

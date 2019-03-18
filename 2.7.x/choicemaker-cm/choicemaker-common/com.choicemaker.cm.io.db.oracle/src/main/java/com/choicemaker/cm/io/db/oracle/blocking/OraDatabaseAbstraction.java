@@ -19,6 +19,7 @@ public class OraDatabaseAbstraction implements DatabaseAbstraction {
 	/**
 	 * @see com.choicemaker.cm.io.db.base.plugin.automatedblocking.db.DatabaseAbstraction#getSetDateFormatExpression()
 	 */
+	@Override
 	public String getSetDateFormatExpression() {
 		return "ALTER SESSION SET nls_date_format = 'YYYY-MM-DD'";
 	}
@@ -26,6 +27,7 @@ public class OraDatabaseAbstraction implements DatabaseAbstraction {
 	/**
 	 * @see com.choicemaker.cm.io.db.base.plugin.automatedblocking.db.DatabaseAbstraction#getSysdateExpression()
 	 */
+	@Override
 	public String getSysdateExpression() {
 		return "sysdate";
 	}
@@ -33,6 +35,7 @@ public class OraDatabaseAbstraction implements DatabaseAbstraction {
 	/**
 	 * @see com.choicemaker.cm.io.db.base.plugin.automatedblocking.db.DatabaseAbstraction#getDateFieldExpression(java.lang.String)
 	 */
+	@Override
 	public String getDateFieldExpression(String field) {
 		return field;
 	}

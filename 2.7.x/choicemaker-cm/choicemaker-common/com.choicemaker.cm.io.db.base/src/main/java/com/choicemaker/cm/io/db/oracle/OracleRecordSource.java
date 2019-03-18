@@ -76,6 +76,7 @@ public class OracleRecordSource implements RecordSource {
 		this.conf = conf;
 	}
 
+	@Override
 	public void open() throws IOException {
 		try {
 			conn = ds.getConnection();
@@ -126,10 +127,12 @@ public class OracleRecordSource implements RecordSource {
 		}
 	}
 
+	@Override
 	public boolean hasNext() {
 		return record != null;
 	}
 
+	@Override
 	public Record<?> getNext() throws IOException {
 		Record<?> r = record;
 		getNextMain();
@@ -148,6 +151,7 @@ public class OracleRecordSource implements RecordSource {
 		}
 	}
 
+	@Override
 	public void close() throws IOException {
 		Exception ex = null;
 		try {
@@ -182,6 +186,7 @@ public class OracleRecordSource implements RecordSource {
 	 * Get the value of name.
 	 * @return value of name.
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -190,6 +195,7 @@ public class OracleRecordSource implements RecordSource {
 	 * Set the value of name.
 	 * @param v  Value to assign to name.
 	 */
+	@Override
 	public void setName(String v) {
 		this.name = v;
 	}
@@ -199,6 +205,7 @@ public class OracleRecordSource implements RecordSource {
 		setName(NameUtils.getNameFromFilePath(fileName));
 	}
 
+	@Override
 	public String getFileName() {
 		return fileName;
 	}
@@ -240,6 +247,7 @@ public class OracleRecordSource implements RecordSource {
 	 * Get the value of model.
 	 * @return value of model. May be null.
 	 */
+	@Override
 	public ImmutableProbabilityModel getModel() {
 		return model;
 	}
@@ -249,6 +257,7 @@ public class OracleRecordSource implements RecordSource {
 	 * @param v  Value to assign to model.
 	 * May be null (required for ISerializableRecordSource impl).
 	 */
+	@Override
 	public void setModel(ImmutableProbabilityModel v) {
 		this.model = v;
 	}
@@ -277,14 +286,17 @@ public class OracleRecordSource implements RecordSource {
 		conf = v;
 	}
 
+	@Override
 	public String toString() {
 		return name;
 	}
 
+	@Override
 	public boolean hasSink() {
 		return false;
 	}
 
+	@Override
 	public Sink getSink() {
 		return null;
 	}

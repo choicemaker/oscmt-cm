@@ -305,12 +305,16 @@ public class ExportProbabilitiesDialog extends JDialog {
 	private void createListeners() {
 		
 		fileField.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
 			public void changedUpdate(DocumentEvent e) { updateEnabledness(); }
+			@Override
 			public void insertUpdate(DocumentEvent e) { updateEnabledness(); }
+			@Override
 			public void removeUpdate(DocumentEvent e) { updateEnabledness(); }
 		});
 		
 		browseButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser fc = new JFileChooser();
 				File f = getFile();
@@ -325,6 +329,7 @@ public class ExportProbabilitiesDialog extends JDialog {
 		});
 		
 		ItemListener updateListener = new ItemListener() {
+			@Override
 			public void itemStateChanged(ItemEvent e) {
 				updateEnabledness();
 			}
@@ -350,6 +355,7 @@ public class ExportProbabilitiesDialog extends JDialog {
 		bg.add(acClueOnlyGroups);
 
 		okButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				List pairs = parent.getSourceList();
 				File file = getFile();
@@ -375,6 +381,7 @@ public class ExportProbabilitiesDialog extends JDialog {
 		});
 		
 		cancelButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				maybeRememberFile();
 				dispose();

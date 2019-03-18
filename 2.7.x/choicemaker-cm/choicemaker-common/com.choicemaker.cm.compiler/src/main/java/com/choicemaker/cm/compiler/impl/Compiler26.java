@@ -32,6 +32,7 @@ public class Compiler26 extends CMCompiler {
 
 	public final static String OPTIMIZING_VALUE = "true";
 
+	@Override
 	protected ICompilationUnit getCompilationUnit(
 		CompilationEnv env,
 		Sourcecode source) {
@@ -48,6 +49,7 @@ public class Compiler26 extends CMCompiler {
 		return new CompilationUnit25b(env, source);
 	}
 
+	@Override
 	public Properties getFeatures() {
 		Properties retVal = new Properties();
 		retVal.setProperty(ICompilerFeatureNames.VERSION,VERSION_VALUE);

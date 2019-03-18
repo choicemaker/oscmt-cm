@@ -19,6 +19,7 @@ import com.choicemaker.cm.core.base.MatchCandidateFactory;
  */
 public class XmlMatchCandidateFactory extends MatchCandidateFactory {
 
+	@Override
 	public MatchCandidate createMatchCandidate(Match match, ImmutableProbabilityModel model) {
 		return new XmlMatchCandidate(match, model);
 	}

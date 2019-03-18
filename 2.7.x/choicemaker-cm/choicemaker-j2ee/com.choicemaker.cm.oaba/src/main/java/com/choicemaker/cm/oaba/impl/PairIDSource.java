@@ -34,6 +34,7 @@ public class PairIDSource extends BaseFileSource<PairID> implements
 		super(fileName, type);
 	}
 
+	@Override
 	protected void resetNext() {
 		this.p = null;
 	}

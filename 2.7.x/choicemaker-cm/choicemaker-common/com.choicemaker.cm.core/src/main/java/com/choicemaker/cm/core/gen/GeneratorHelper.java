@@ -75,7 +75,7 @@ public class GeneratorHelper {
 		int maxPos = -1;
 		for (Iterator<Element> iFields = fields.iterator(); iFields
 				.hasNext();) {
-			Element f = (Element) iFields.next();
+			Element f = iFields.next();
 			Element d = f.getChild("derived");
 			if (d != null) {
 				String fSrc = d.getAttributeValue("src");
@@ -128,7 +128,7 @@ public class GeneratorHelper {
 		int maxPos = -1;
 		for (Iterator<Element> iFields = fields.iterator(); iFields
 				.hasNext();) {
-			Element f = (Element) iFields.next();
+			Element f = iFields.next();
 			Element d = f.getChild("derived");
 			if (d != null) {
 				String fSrc = d.getAttributeValue("src");
@@ -144,7 +144,7 @@ public class GeneratorHelper {
 			List<Element> list = f.getChildren(field);
 			boolean found = false;
 			for (int i = 0; i < list.size(); i++) {
-				Element c = (Element) list.get(i);
+				Element c = list.get(i);
 				if (c != null) {
 					if (includesConf(c, conf) && !"false"
 							.equals(c.getAttributeValue(CoreTags.USE))) {
@@ -390,7 +390,7 @@ public class GeneratorHelper {
 			return null;
 		Element allConfElm = null;
 		for (int i = 0; i < list.size(); i++) {
-			Element et = (Element) list.get(i);
+			Element et = list.get(i);
 			// System.out.println ("element " + et.getName() + " " +
 			// et.getAttributeValue("conf") + " " +
 			// et.getAttributeValue("from"));
@@ -420,7 +420,7 @@ public class GeneratorHelper {
 
 			if (list != null) {
 				for (int i = 0; i < list.size(); i++) {
-					Element et = (Element) list.get(i);
+					Element et = list.get(i);
 					// System.out.println ("element " + et.getName() + " " +
 					// et.getAttributeValue("conf") + " " +
 					// et.getAttributeValue("from"));
@@ -429,7 +429,7 @@ public class GeneratorHelper {
 						return et;
 				}
 				// if nothing matches, then return the first value
-				return (Element) list.get(0);
+				return list.get(0);
 			} else {
 				return null;
 			}
@@ -465,7 +465,7 @@ public class GeneratorHelper {
 		List<Element> l = r.getChildren(name + "Field");
 		Iterator<Element> iL = l.iterator();
 		while (iL.hasNext()) {
-			Element e = (Element) iL.next();
+			Element e = iL.next();
 			if (includesConf(e, conf))
 				return e;
 		}
@@ -490,7 +490,7 @@ public class GeneratorHelper {
 		List<Element> fields = r.getChildren("field");
 		Iterator<Element> i = fields.iterator();
 		while (i.hasNext()) {
-			Element e = (Element) i.next();
+			Element e = i.next();
 			Element o = e.getChild(fld);
 			if (o != null && "true".equals(o.getAttributeValue("key"))) {
 				if (keyField == null) {
@@ -523,7 +523,7 @@ public class GeneratorHelper {
 		}
 		Iterator<Id> i = ids.iterator();
 		while (i.hasNext()) {
-			Id id = (Id) i.next();
+			Id id = i.next();
 			w.write("private " + id.type + " " + className + "__" + id.name
 					+ ";" + Constants.LINE_SEPARATOR);
 		}
@@ -532,7 +532,7 @@ public class GeneratorHelper {
 			ids.add(GeneratorHelper.getId(g, r, tpe));
 			Iterator<Element> iR = records.iterator();
 			while (iR.hasNext()) {
-				multiFileFieldDeclarations(g, w, (Element) iR.next(), tpe, ids);
+				multiFileFieldDeclarations(g, w, iR.next(), tpe, ids);
 			}
 			ids.removeLast();
 		}
@@ -591,7 +591,7 @@ public class GeneratorHelper {
 			pos == -1 ? fqNodeTypeName : fqNodeTypeName.substring(0, pos);
 		List<Element> l = node.getChildren(CoreTags.NODE_TYPE);
 		for (Iterator<Element> iL = l.iterator(); iL.hasNext();) {
-			Element e = (Element) iL.next();
+			Element e = iL.next();
 			if (e.getAttributeValue(CoreTags.NAME).equals(s)) {
 				if (pos == -1) {
 					return e;
@@ -606,7 +606,7 @@ public class GeneratorHelper {
 	public static Element findField(Element nodeType, String fieldName) {
 		List<Element> l = nodeType.getChildren(CoreTags.FIELD);
 		for (Iterator<Element> iL = l.iterator(); iL.hasNext();) {
-			Element field = (Element) iL.next();
+			Element field = iL.next();
 			if (field.getAttributeValue(CoreTags.NAME).equals(fieldName)) {
 				return field;
 			}

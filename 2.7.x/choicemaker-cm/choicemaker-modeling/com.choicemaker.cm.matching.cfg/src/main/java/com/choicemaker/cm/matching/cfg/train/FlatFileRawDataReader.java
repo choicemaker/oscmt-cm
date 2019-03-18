@@ -55,14 +55,17 @@ public class FlatFileRawDataReader implements RawDataReader {
 		getNextRawData();
 	}
 
+	@Override
 	public void close() throws IOException {
 		reader.close();
 	}
 
+	@Override
 	public boolean hasNext() {
 		return nextRawData != null;
 	}
 
+	@Override
 	public String[] next() throws IOException {
 		String[] ret = nextRawData;
 		getNextRawData();

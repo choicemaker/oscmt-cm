@@ -51,10 +51,12 @@ public class XmlEncMarkedRecordPairSourceXmlConf implements
 		this.crdsMgr = cm;
 	}
 
+	@Override
 	public Object getHandler() {
 		return this;
 	}
 
+	@Override
 	public Class<?> getHandledType() {
 		return XmlEncMarkedRecordPairSource.class;
 	}
@@ -62,6 +64,7 @@ public class XmlEncMarkedRecordPairSourceXmlConf implements
 	/**
 	 * Add a XML marked record pair source to the configuration.
 	 */
+	@Override
 	public void add(MarkedRecordPairSource s) throws XmlConfException {
 		try {
 			XmlEncMarkedRecordPairSource src = (XmlEncMarkedRecordPairSource) s;
@@ -85,6 +88,7 @@ public class XmlEncMarkedRecordPairSourceXmlConf implements
 		}
 	}
 
+	@Override
 	public MarkedRecordPairSource getMarkedRecordPairSource(String fileName,
 			Element e, ImmutableProbabilityModel model) throws XmlConfException {
 		String xmlFileName = e.getChildText("fileName");

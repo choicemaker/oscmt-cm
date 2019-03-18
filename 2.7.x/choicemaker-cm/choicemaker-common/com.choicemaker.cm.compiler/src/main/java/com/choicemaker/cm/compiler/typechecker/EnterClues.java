@@ -90,6 +90,7 @@ public class EnterClues extends DefaultVisitor implements Tags {
 			ts[i].apply(this);
 	}
 
+	@Override
 	public void visit(Tree t) {
 	}
 
@@ -102,6 +103,7 @@ public class EnterClues extends DefaultVisitor implements Tags {
 	// 	cPkge = ((Ident)pckage).name + cPkge;
 	//     }
 
+	@Override
 	public void visit(ImportDecl t) {
 		if (t.starImport) {
 			PackageSymbol p = repository.definePackage(t.pckage.toString());
@@ -125,6 +127,7 @@ public class EnterClues extends DefaultVisitor implements Tags {
 		}
 	}
 
+	@Override
 	public void visit(ClueSetDecl t) throws CompilerException {
 		if (t.name == null || !(t.name + ".clues").equals(unit.getSource().getShortName())) {
 			unit.error("Clueset " + t.name + " must be defined in a file named " + t.name + ".clues.");
@@ -161,6 +164,7 @@ public class EnterClues extends DefaultVisitor implements Tags {
 		}
 	}
 
+	@Override
 	public void visit(ClueDecl t) {
 		t.sym = new ClueSymbol(t.name, set, t);
 		// we check that later:
@@ -170,6 +174,7 @@ public class EnterClues extends DefaultVisitor implements Tags {
 		//    unit.error(t.pos, "duplicate definition of clue " + t.name);
 	}
 
+	@Override
 	public void visit(MethodDecl t) throws CompilerException {
 		// enter parameters and thrown clause first
 		applyTo(t.params);
@@ -206,6 +211,7 @@ public class EnterClues extends DefaultVisitor implements Tags {
 			set.members().enter(t.sym);
 	}
 
+	@Override
 	public void visit(VarDecl t) throws CompilerException {
 		// get parameter type
 		derive.typeOf(t.tpe);

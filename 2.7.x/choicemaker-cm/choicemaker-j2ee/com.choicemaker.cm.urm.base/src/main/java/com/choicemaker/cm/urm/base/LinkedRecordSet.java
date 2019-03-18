@@ -38,6 +38,7 @@ public class LinkedRecordSet<T extends Comparable<T> & Serializable>
 		return criteria;
 	}
 
+	@Override
 	public void accept(IRecordVisitor ext) {
 		ext.visit(this);
 	}

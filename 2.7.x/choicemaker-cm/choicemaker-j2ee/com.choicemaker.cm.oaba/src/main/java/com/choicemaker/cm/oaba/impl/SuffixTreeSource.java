@@ -38,6 +38,7 @@ public class SuffixTreeSource extends BaseFileSource<SuffixTreeNode> implements
 		super(fileName, EXTERNAL_DATA_FORMAT.STRING);
 	}
 
+	@Override
 	protected void resetNext() {
 		nextTree = null;
 	}

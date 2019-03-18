@@ -68,6 +68,7 @@ public class DbRecordCollection extends RefRecordCollection {
 		name = n;
 	}
 
+	@Override
 	public void accept(IRecordCollectionVisitor ext)throws RecordCollectionException{
 		ext.visit(this);
 	}
@@ -87,6 +88,7 @@ public class DbRecordCollection extends RefRecordCollection {
 			bufferSize = sz;
 	}
 
+	@Override
 	public String toString() {
 		return super.toString()+"|"+this.name;
 	}

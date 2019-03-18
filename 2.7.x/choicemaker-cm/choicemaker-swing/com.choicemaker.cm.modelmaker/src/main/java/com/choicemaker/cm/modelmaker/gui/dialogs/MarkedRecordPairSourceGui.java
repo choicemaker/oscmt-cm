@@ -22,10 +22,12 @@ public abstract class MarkedRecordPairSourceGui extends SourceGui {
 		super(parent, title);
 	}
 
+	@Override
 	protected String getFileTypeDescription() {
 		return "Marked record pair descriptors (*.mrps)";
 	}
 	
+	@Override
 	protected String getExtension() {
 		return Constants.MRPS_EXTENSION;
 	}

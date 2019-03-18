@@ -52,6 +52,7 @@ public class ConjunctionValidator<T> extends AbstractAggregateValidator<T> {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.validation.eclipse.AbstractAggregateValidator#addValidator(java.lang.String, com.choicemaker.cm.validation.eclipse.IValidator)
 	 */
+	@Override
 	@SuppressWarnings({
 			"rawtypes", "unchecked" })
 	public void addValidator(String name, IValidator validator) {
@@ -73,6 +74,7 @@ public class ConjunctionValidator<T> extends AbstractAggregateValidator<T> {
 	 * This implementation is a bit unsafe, since it hands back
 	 * the actual Map used by this instance, and not a clone.
 	 */
+	@Override
 	@SuppressWarnings({
 			"unchecked", "rawtypes" })
 	public Map getValidatorMap() {
@@ -84,6 +86,7 @@ public class ConjunctionValidator<T> extends AbstractAggregateValidator<T> {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.validation.eclipse.IAggregateValidator#getValidatorNames()
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	public String[] getValidatorNames() {
 		invariant();
@@ -94,6 +97,7 @@ public class ConjunctionValidator<T> extends AbstractAggregateValidator<T> {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.validation.eclipse.IAggregateValidator#getValidators()
 	 */
+	@Override
 	@SuppressWarnings({
 			"unchecked", "rawtypes" })
 	public IValidator[] getValidators() {
@@ -117,6 +121,7 @@ public class ConjunctionValidator<T> extends AbstractAggregateValidator<T> {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.validation.eclipse.IValidator#isValid(java.lang.Object)
 	 */
+	@Override
 	@SuppressWarnings({
 			"unchecked", "rawtypes" })
 	public boolean isValid(Object value) {
@@ -133,6 +138,7 @@ public class ConjunctionValidator<T> extends AbstractAggregateValidator<T> {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.validation.eclipse.AbstractAggregateValidator#setValidators(java.util.Map)
 	 */
+	@Override
 	@SuppressWarnings("rawtypes")
 	public void setValidators(Map validatorMap) {
 

@@ -404,6 +404,7 @@ public class BlockingConfigurationGenerator {
 			targetGroup = getGroup(bf, BlockingTags.TARGET_GROUP, targetRecordNumber);
 		}
 
+		@Override
 		public int compareTo(Object o) {
 			Field f = (Field) o;
 			if (targetRecordNumber < f.targetRecordNumber) {

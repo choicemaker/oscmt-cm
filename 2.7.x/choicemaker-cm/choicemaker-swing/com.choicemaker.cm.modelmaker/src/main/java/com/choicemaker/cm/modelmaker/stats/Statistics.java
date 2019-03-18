@@ -316,6 +316,7 @@ public final class Statistics implements IStatistics {
 	}
 
 	// don't compute in init() so that we don't have to re-run init upon change of threshold
+	@Override
 	public int[][] getConfusionMatrix() {
 		if (confusionMatrix == null) {
 			init();
@@ -352,6 +353,7 @@ public final class Statistics implements IStatistics {
 		return confusionMatrix;
 	}
 
+	@Override
 	public StatPoint getCurrentStatPoint() {
 		StatPoint res = new StatPoint();
 		res.differThreshold = differThreshold;
@@ -404,6 +406,7 @@ public final class Statistics implements IStatistics {
 //		}
 //	}
 
+	@Override
 	public void computeStatPoint(StatPoint pt) {
 		init();
 		int dPos = -1;
@@ -601,6 +604,7 @@ public final class Statistics implements IStatistics {
 
 	private static final int MAX_NUM_POINTS = 100;
 
+	@Override
 	public float[][] getThresholdVsAccuracy() {
 		init();
 		int np = numPoints <= MAX_NUM_POINTS ? numPoints : MAX_NUM_POINTS;
@@ -624,6 +628,7 @@ public final class Statistics implements IStatistics {
 		return res;
 	}
 
+	@Override
 	public float[][] getHoldPercentageVsAccuracy(float[] errorRates) {
 
 		/*
@@ -687,6 +692,7 @@ public final class Statistics implements IStatistics {
 		return res;
 	}
 
+	@Override
 	public int[][] getHistogram(int numBins) {
 		init();
 		int[][] res = new int[Decision.NUM_DECISIONS][numBins];
@@ -742,6 +748,7 @@ public final class Statistics implements IStatistics {
 		}
 	}
 
+	@Override
 	public void setThresholds(Thresholds t) {
 		differThreshold = t.getDifferThreshold();
 		matchThreshold = t.getMatchThreshold();

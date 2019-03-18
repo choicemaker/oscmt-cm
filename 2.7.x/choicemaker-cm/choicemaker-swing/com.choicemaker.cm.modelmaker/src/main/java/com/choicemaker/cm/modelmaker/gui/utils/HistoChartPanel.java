@@ -68,6 +68,7 @@ public class HistoChartPanel extends ChartPanel {
 		final JCheckBoxMenuItem logYScale =
 			new JCheckBoxMenuItem(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.test.logscale.y"));
 		logYScale.addItemListener(new ItemListener() {
+			@Override
 			public void itemStateChanged(ItemEvent e) {
 				CategoryPlot p = (CategoryPlot) chart.getPlot();
 				Axis oldAxis = p.getRangeAxis();
@@ -101,6 +102,7 @@ public class HistoChartPanel extends ChartPanel {
 		final JMenuItem cmMatch = new JMenuItem("Human marked match");
 		select.add(cmMatch);
 		ActionListener l = new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent ev) {
 				ListeningMarkedRecordPairFilter filter = modelMaker.getFilter();
 				filter.reset();
@@ -127,6 +129,7 @@ public class HistoChartPanel extends ChartPanel {
 		cmMatch.addActionListener(l);
 		popup.add(select);
 		addChartMouseListener(new ChartMouseListener() {
+			@Override
 			public void chartMouseClicked(ChartMouseEvent evt) {
 				ChartEntity e = evt.getEntity();
 				if (e instanceof CategoryItemEntity) {
@@ -156,6 +159,7 @@ public class HistoChartPanel extends ChartPanel {
 
 				}
 			}
+			@Override
 			public void chartMouseMoved(ChartMouseEvent arg0) {
 			}
 		});
@@ -187,6 +191,7 @@ public class HistoChartPanel extends ChartPanel {
 		select.setEnabled(data.hasData());
 	}
 
+	@Override
 	protected void displayPopupMenu(int x, int y) {
 		popupX = x;
 		popupY = y;

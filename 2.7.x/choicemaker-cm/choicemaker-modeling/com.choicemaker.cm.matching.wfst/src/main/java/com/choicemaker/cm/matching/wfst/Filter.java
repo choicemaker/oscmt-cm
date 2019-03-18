@@ -100,6 +100,7 @@ public class Filter implements Cloneable {
 		this.rightBracket = r;
 	}
 	
+	@Override
 	public Object clone() {
 		char b = this.blank;
 		char d = this.delim;

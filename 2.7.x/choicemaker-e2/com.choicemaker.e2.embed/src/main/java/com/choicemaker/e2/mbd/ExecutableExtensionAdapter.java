@@ -66,6 +66,7 @@ public class ExecutableExtensionAdapter {
 			this.delegate = o;
 		}
 
+		@Override
 		public void setInitializationData(CMConfigurationElement config,
 				String propertyName, Object data) throws E2Exception {
 			try {
@@ -90,6 +91,7 @@ public class ExecutableExtensionAdapter {
 			this.delegate = o;
 		}
 
+		@Override
 		public void setInitializationData(IConfigurationElement config,
 				String propertyName, Object data) throws CoreException {
 			try {

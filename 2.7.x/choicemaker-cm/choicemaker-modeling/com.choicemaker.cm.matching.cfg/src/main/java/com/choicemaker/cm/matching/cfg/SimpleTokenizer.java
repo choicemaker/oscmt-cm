@@ -103,6 +103,7 @@ public class SimpleTokenizer implements Tokenizer {
 	/**
 	 * Returns a list of tokens for the specified String.
 	 */
+	@Override
 	public List<Token> tokenize(String s) {
 		if (s == null) {
 			return new ArrayList<Token>(0);
@@ -119,6 +120,7 @@ public class SimpleTokenizer implements Tokenizer {
 	 * Null array elements do not result in a Token, and no field-separator
 	 * Token is used.
 	 */
+	@Override
 	public List<Token> tokenize(String[] s) {
 		return tokenize(s, null, null);
 	}
@@ -235,7 +237,7 @@ public class SimpleTokenizer implements Tokenizer {
 		
 		List<Token> tokens = new ArrayList<>(len);
 		for (int i = 0; i < len; i++) {
-			String s = (String) strings.get(i);
+			String s = strings.get(i);
 			s = s.trim();
 			
 			if (s.length() > 0) {

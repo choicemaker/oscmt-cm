@@ -44,6 +44,7 @@ public class Decision3 implements Serializable {
 	 *
 	 * @return  The string representation of the <code>Decision</code>.
 	 */
+	@Override
 	public String toString() {
 		return this.value;
 	}
@@ -73,6 +74,7 @@ public class Decision3 implements Serializable {
 		}
 	}	
 	
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -80,6 +82,7 @@ public class Decision3 implements Serializable {
 		return result;
 	}
 
+	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
@@ -100,6 +103,7 @@ public class Decision3 implements Serializable {
 	 * Obsolete method for {@link #equals(Object)}. Used for testing only.
 	 * @deprecated
 	 */
+	@Deprecated
 	public boolean equals_00(Object o){
 		if (o instanceof Decision3) {
 			Decision3 d = (Decision3) o;

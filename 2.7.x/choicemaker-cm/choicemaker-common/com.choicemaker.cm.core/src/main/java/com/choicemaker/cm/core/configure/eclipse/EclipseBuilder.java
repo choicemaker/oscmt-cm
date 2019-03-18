@@ -32,6 +32,7 @@ public class EclipseBuilder implements IBuilder {
 	 * file should be isolated so that the character stream starts reading at
 	 * the start of a <code>configurable</code> element.
 	 */
+	@Override
 	public IDocument build(Reader characterStream)
 		throws XmlSpecificationException, IOException {
 		JdomBuilder builder = new JdomBuilder();

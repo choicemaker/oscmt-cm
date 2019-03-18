@@ -19,6 +19,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 
 import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 
@@ -63,6 +64,7 @@ public class ThreadWatcher extends JDialog implements Runnable {
 		c.anchor = GridBagConstraints.EAST;
 		content.add(stop, c);
 		stop.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent event) {
 				interrupted = true;
 				worker.interrupt();
@@ -70,7 +72,7 @@ public class ThreadWatcher extends JDialog implements Runnable {
 		});
 		setContentPane(content);
 		setModal(true);
-		setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		pack();
 		setSize(l.getPreferredSize().width + 20, 100);
 		Dimension d1 = getSize();
@@ -80,6 +82,7 @@ public class ThreadWatcher extends JDialog implements Runnable {
 		super.setBounds(x, y, d1.width, d1.height);
 	}
 
+	@Override
 	public void run() {
 		worker.start();
 		try {

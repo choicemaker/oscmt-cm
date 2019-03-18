@@ -19,6 +19,7 @@ import com.choicemaker.cm.core.Match;
  * @author   Martin Buechi
  */
 public class BeanMatchCandidateFactory extends MatchCandidateFactory {
+	@Override
 	public MatchCandidate createMatchCandidate(Match match, ImmutableProbabilityModel model) {
 		return new BeanMatchCandidate(match, model);
 	}

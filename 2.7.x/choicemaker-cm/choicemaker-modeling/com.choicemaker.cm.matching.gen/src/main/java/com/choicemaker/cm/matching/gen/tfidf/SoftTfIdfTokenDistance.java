@@ -32,6 +32,7 @@ public class SoftTfIdfTokenDistance extends TfIdfTokenDistance {
 		this.simCutoff = simCutoff;
 	}
 
+	@Override
 	public float distance(TokenBag b1, TokenBag b2) {
 		if (b1.size() > b2.size()) {
 			TokenBag temp = b1;

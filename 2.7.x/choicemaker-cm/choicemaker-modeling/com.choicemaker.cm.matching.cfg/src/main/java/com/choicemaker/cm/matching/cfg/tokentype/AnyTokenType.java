@@ -35,6 +35,7 @@ public class AnyTokenType extends TokenType {
 	/**
 	 * Returns true for all arguments.
 	 */
+	@Override
 	public boolean canHaveToken(String token) {
 		return true;
 	}
@@ -43,6 +44,7 @@ public class AnyTokenType extends TokenType {
 	 * Since this class is meant to be a last resort thing, we 
 	 * don't do anything...
 	 */
+	@Override
 	protected double getTokenProbability(String token) {
 		return probability;
 	}

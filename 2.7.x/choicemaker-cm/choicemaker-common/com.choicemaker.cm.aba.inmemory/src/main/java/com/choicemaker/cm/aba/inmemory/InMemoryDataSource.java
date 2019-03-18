@@ -224,7 +224,9 @@ public class InMemoryDataSource {
 	}
 
 	private static final IntIterator EMPTY_ITERATOR = new IntIterator() {
+		@Override
 		public boolean hasNext() { return false; }
+		@Override
 		public int next() { throw new NoSuchElementException(); };
 	};
 
@@ -241,9 +243,11 @@ public class InMemoryDataSource {
 			this(list);
 			fastForwardTo(start);
 		}
+		@Override
 		public boolean hasNext() {
 			return nextIndex < size;
 		}
+		@Override
 		public int next() {
 			return list.get(nextIndex++);
 		}
@@ -271,9 +275,11 @@ public class InMemoryDataSource {
 			i1Valid = i2Valid = true;
 			advance();
 		}
+		@Override
 		public boolean hasNext() {
 			return i1Valid || i2Valid;
 		}
+		@Override
 		public int next() {
 			if (hasNext()) {
 				int nextInt = nextImpl();
@@ -340,9 +346,11 @@ public class InMemoryDataSource {
 
 			advance();
 		}
+		@Override
 		public boolean hasNext() {
 			return nextIsValid;
 		}
+		@Override
 		public int next() {
 			if (hasNext()) {
 				int nextInt = this.next;
@@ -386,14 +394,17 @@ public class InMemoryDataSource {
 			this.indices = indices;
 		}
 
+		@Override
 		public boolean hasNext() {
 			return indices.hasNext();
 		}
 
+		@Override
 		public Object next() {
 			return recordList.get(indices.next());
 		}
 
+		@Override
 		public void remove() {
 			throw new UnsupportedOperationException();
 		}

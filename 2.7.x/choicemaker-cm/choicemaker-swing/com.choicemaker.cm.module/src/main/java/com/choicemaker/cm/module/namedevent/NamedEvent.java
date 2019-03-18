@@ -29,6 +29,7 @@ public class NamedEvent extends EventObject implements INamedEvent {
 		super(source);
 	}
 	
+	@Override
 	public String getName() {
 		return DEFAULT_EVENT_NAME;
 	}

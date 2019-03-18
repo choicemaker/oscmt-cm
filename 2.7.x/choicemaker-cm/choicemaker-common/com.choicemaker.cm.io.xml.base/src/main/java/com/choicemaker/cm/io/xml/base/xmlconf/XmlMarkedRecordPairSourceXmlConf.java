@@ -30,10 +30,12 @@ import com.choicemaker.cm.io.xml.base.XmlMarkedRecordPairSource;
 public class XmlMarkedRecordPairSourceXmlConf implements MarkedRecordPairSourceXmlConfigurator {
 	public static final String EXTENSION_POINT_ID = "com.choicemaker.cm.io.xml.base.xmlMrpsReader";
 
+	@Override
 	public Object getHandler() {
 		return this;
 	}
 
+	@Override
 	public Class getHandledType() {
 		return XmlMarkedRecordPairSource.class;
 	}
@@ -41,6 +43,7 @@ public class XmlMarkedRecordPairSourceXmlConf implements MarkedRecordPairSourceX
 	/**
 	 * Add a XML marked record pair source to the configuration.
 	 */
+	@Override
 	public void add(MarkedRecordPairSource s) throws XmlConfException {
 		try {
 			XmlMarkedRecordPairSource src = (XmlMarkedRecordPairSource) s;
@@ -59,6 +62,7 @@ public class XmlMarkedRecordPairSourceXmlConf implements MarkedRecordPairSourceX
 		}
 	}
 
+	@Override
 	public MarkedRecordPairSource getMarkedRecordPairSource(String fileName, Element e, ImmutableProbabilityModel model)
 		throws XmlConfException {
 		String xmlFileName = e.getChildText("fileName");

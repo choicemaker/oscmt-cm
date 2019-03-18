@@ -68,7 +68,7 @@ public class MarkedRecordPairSourceXmlConf {
 				if (fileMrpsReaders == null) {
 					initFileMrpsReaders();
 				}
-				Class<?> cls = (Class<?>) fileMrpsReaders.get(extension);
+				Class<?> cls = fileMrpsReaders.get(extension);
 				if (cls != null) {
 					MarkedRecordPairSourceXmlConfigurator c =
 						(MarkedRecordPairSourceXmlConfigurator) cls
@@ -127,7 +127,7 @@ public class MarkedRecordPairSourceXmlConf {
 
 		String[] strings = new String[extensions.size()];
 		for (int i = 0; i < strings.length; i++) {
-			strings[i] = (String) extensions.get(i);
+			strings[i] = extensions.get(i);
 		}
 
 		return strings;

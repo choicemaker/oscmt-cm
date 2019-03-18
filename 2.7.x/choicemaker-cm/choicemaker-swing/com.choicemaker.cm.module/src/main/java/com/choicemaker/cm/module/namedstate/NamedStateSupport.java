@@ -57,10 +57,12 @@ public abstract class NamedStateSupport implements INamedStateControl {
 				throw new IllegalArgumentException("null listener");
 			}
 		}
+		@Override
 		public void update(Observable src, Object evt) {
 			// assert src instance of IClusterControlSupport.this ;
 			this.namedStateListener.stateChanged((INamedEvent) evt);
 		}
+		@Override
 		public boolean equals(Object o) {
 			boolean retVal = false;
 			if (o instanceof IModuleController) {
@@ -68,6 +70,7 @@ public abstract class NamedStateSupport implements INamedStateControl {
 			}
 			return retVal;
 		}
+		@Override
 		public int hashCode() {
 			return this.namedStateListener.hashCode();
 		}
@@ -81,10 +84,12 @@ public abstract class NamedStateSupport implements INamedStateControl {
 		}
 	}
 	
+	@Override
 	public void addStateListener(INamedStateListener l) {
 		this.delegate.addObserver(new NamedStateObserver(l));
 	}
 
+	@Override
 	public void removeStateListener(INamedStateListener l) {
 		this.delegate.deleteObserver(new NamedStateObserver(l));
 	}

@@ -223,6 +223,7 @@ public class SqlServerFetchOffsetRecordSource
 		assert this.offset.get() == CLOSED_OFFSET;
 	}
 
+	@Override
 	public void close() {
 		this.offset.set(CLOSED_OFFSET);
 		this.records.clear();
@@ -384,6 +385,7 @@ public class SqlServerFetchOffsetRecordSource
 		return fetch;
 	}
 
+	@Override
 	public String getFileName() {
 		return fileName;
 	}
@@ -393,6 +395,7 @@ public class SqlServerFetchOffsetRecordSource
 		return idsQuery;
 	}
 
+	@Override
 	public ImmutableProbabilityModel getModel() {
 		if (model == null) {
 			throw new IllegalStateException("null model");
@@ -400,10 +403,12 @@ public class SqlServerFetchOffsetRecordSource
 		return model;
 	}
 
+	@Override
 	public String getName() {
 		return "SQL Server Fetch-Offset Record Source";
 	}
 
+	@Override
 	public Record<?> getNext() {
 		Record<?> r = records.remove();
 		return r;
@@ -413,6 +418,7 @@ public class SqlServerFetchOffsetRecordSource
 		return offset.get();
 	}
 
+	@Override
 	public Sink getSink() {
 		throw new UnsupportedOperationException();
 	}
@@ -421,6 +427,7 @@ public class SqlServerFetchOffsetRecordSource
 		return SOURCE;
 	}
 
+	@Override
 	public boolean hasNext() throws IOException {
 		boolean retVal = !records.isEmpty();
 		if (retVal == false) {
@@ -436,6 +443,7 @@ public class SqlServerFetchOffsetRecordSource
 		return retVal;
 	}
 
+	@Override
 	public boolean hasSink() {
 		return false;
 	}
@@ -454,6 +462,7 @@ public class SqlServerFetchOffsetRecordSource
 		logger.fine(msg);
 	}
 
+	@Override
 	public void open() throws IOException {
 
 		try (Connection conn = getDataSource().getConnection()) {
@@ -492,6 +501,7 @@ public class SqlServerFetchOffsetRecordSource
 		this.ds = ds;
 	}
 
+	@Override
 	public void setModel(ImmutableProbabilityModel m) {
 		Precondition.assertBoolean(SOURCE + " must be closed", isClosed());
 		if (m == null) {
@@ -500,11 +510,13 @@ public class SqlServerFetchOffsetRecordSource
 		this.model = m;
 	}
 
+	@Override
 	public void setName(String name) {
 		Precondition.assertBoolean(SOURCE + " must be closed", isClosed());
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
 	public String toString() {
 		return getSource() + " [fileName=" + getFileName() + ", model="
 				+ getModel() + ", dbConfiguration=" + getDbConfiguration()

@@ -25,6 +25,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.WindowConstants;
 
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.MachineLearner;
@@ -76,7 +77,7 @@ public class TrainDialog extends JDialog implements Enable {
 		layoutContent();
 		addContentListeners();
 		setContentPane(content);
-		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		pack();
 		setLocationRelativeTo(parent);
 		Point pt = getLocation();
@@ -84,6 +85,7 @@ public class TrainDialog extends JDialog implements Enable {
 		setLocation(pt);
 	}
 
+	@Override
 	public void setVisible(boolean b) {
 		if (b) {
 			IProbabilityModel model = parent.getProbabilityModel();
@@ -114,6 +116,7 @@ public class TrainDialog extends JDialog implements Enable {
 		setEnabledness();
 	}
 
+	@Override
 	public void setEnabledness() {
 		int ni = 0;
 		try {
@@ -128,6 +131,7 @@ public class TrainDialog extends JDialog implements Enable {
 		//trainButton
 		trainButton.addActionListener(new ActionListener() {
 
+			@Override
 			public void actionPerformed(ActionEvent e) {
 					IProbabilityModel model = parent.getProbabilityModel();
 					MachineLearner cml = model.getMachineLearner();
@@ -181,12 +185,14 @@ public class TrainDialog extends JDialog implements Enable {
 
 		//cancelButton
 		cancelButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				dispose();
 			}
 		});
 
 		mlc.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (!setting) {
 					ml = ((MlGuiFactory) mlc.getSelectedItem()).getMlInstance();
@@ -201,6 +207,7 @@ public class TrainDialog extends JDialog implements Enable {
 		JavaHelpUtils.enableHelpKey(this, "train.gui.dialog.train");
 	}
 
+	@Override
 	public void dispose() {
 		ml = null;
 		trainDialogPluginContainer.removeAll();

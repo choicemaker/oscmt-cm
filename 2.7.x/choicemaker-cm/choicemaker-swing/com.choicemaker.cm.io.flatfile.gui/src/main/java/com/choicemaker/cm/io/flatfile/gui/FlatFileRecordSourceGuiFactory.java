@@ -20,34 +20,42 @@ import com.choicemaker.cm.modelmaker.gui.sources.SourceGuiFactory;
  * @author    Martin Buechi
  */
 public class FlatFileRecordSourceGuiFactory implements SourceGuiFactory {
+	@Override
 	public String getName() {
 		return "FlatFile";
 	}
 
+	@Override
 	public SourceGui createGui(ModelMaker parent, Source s) {
 		return new FlatFileRecordSourceGui(parent, (RecordSource)s);
 	}
 
+	@Override
 	public SourceGui createGui(ModelMaker parent) {
 		return createGui(parent, new FlatFileRecordSource());
 	}
 
+	@Override
 	public SourceGui createSaveGui(ModelMaker parent) {
 		return new FlatFileRecordSourceGui(parent, new FlatFileRecordSource());
 	}
 
+	@Override
 	public Object getHandler() {
 		return this;
 	}
 
+	@Override
 	public Class getHandledType() {
 		return FlatFileRecordSource.class;
 	}
 
+	@Override
 	public String toString() {
 		return "FlatFile";
 	}
 
+	@Override
 	public boolean hasSink() {
 		return true;
 	}

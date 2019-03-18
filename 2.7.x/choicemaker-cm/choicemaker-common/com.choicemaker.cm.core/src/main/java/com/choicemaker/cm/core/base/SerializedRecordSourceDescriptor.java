@@ -65,6 +65,7 @@ public class SerializedRecordSourceDescriptor implements ISerializableFileBasedR
 		return rs;
 	}
 
+	@Override
 	public ImmutableProbabilityModel getModel() {
 		if (model == null) {
 			model = PMManager.getModelInstance(getModelName());
@@ -75,6 +76,7 @@ public class SerializedRecordSourceDescriptor implements ISerializableFileBasedR
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.base.RecordSource#getNext()
 	 */
+	@Override
 	public Record getNext() throws IOException {
 		return getRS().getNext();
 	}
@@ -82,6 +84,7 @@ public class SerializedRecordSourceDescriptor implements ISerializableFileBasedR
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.base.Source#open()
 	 */
+	@Override
 	public void open() throws IOException {
 		getRS().open();
 	}
@@ -89,6 +92,7 @@ public class SerializedRecordSourceDescriptor implements ISerializableFileBasedR
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.base.Source#close()
 	 */
+	@Override
 	public void close() throws IOException {
 		getRS().close();
 	}
@@ -96,6 +100,7 @@ public class SerializedRecordSourceDescriptor implements ISerializableFileBasedR
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.base.Source#hasNext()
 	 */
+	@Override
 	public boolean hasNext() throws IOException {
 		return getRS().hasNext();
 	}
@@ -103,6 +108,7 @@ public class SerializedRecordSourceDescriptor implements ISerializableFileBasedR
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.base.Source#getName()
 	 */
+	@Override
 	public String getName() {
 		return getRS().getName();
 	}
@@ -110,6 +116,7 @@ public class SerializedRecordSourceDescriptor implements ISerializableFileBasedR
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.base.Source#setName(java.lang.String)
 	 */
+	@Override
 	public void setName(String name) {
 		getRS().setName(name);
 	}
@@ -117,6 +124,7 @@ public class SerializedRecordSourceDescriptor implements ISerializableFileBasedR
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.base.Source#setModel(com.choicemaker.cm.core.base.ProbabilityModel)
 	 */
+	@Override
 	public void setModel(ImmutableProbabilityModel m) {
 		getRS().setModel(m);
 	}
@@ -124,6 +132,7 @@ public class SerializedRecordSourceDescriptor implements ISerializableFileBasedR
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.base.Source#hasSink()
 	 */
+	@Override
 	public boolean hasSink() {
 		return getRS().hasSink();
 	}
@@ -131,6 +140,7 @@ public class SerializedRecordSourceDescriptor implements ISerializableFileBasedR
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.base.Source#getSink()
 	 */
+	@Override
 	public Sink getSink() {
 		return getRS().getSink();
 	}
@@ -138,10 +148,12 @@ public class SerializedRecordSourceDescriptor implements ISerializableFileBasedR
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.base.Source#getFileName()
 	 */
+	@Override
 	public String getFileName() {
 		return getRS().getFileName();
 	}
 
+	@Override
 	public boolean equals(Object o) {
 		boolean retVal = false;
 		if (o instanceof SerializedRecordSourceDescriptor) {
@@ -167,12 +179,14 @@ public class SerializedRecordSourceDescriptor implements ISerializableFileBasedR
 		return retVal;
 	}
 
+	@Override
 	public int hashCode() {
 		int retVal = HashUtils.hashCode(this.getModelName());
 		retVal = HashUtils.hashCode(retVal, this.getRsFile());
 		return retVal;
 	}
 
+	@Override
 	public Properties getProperties() {
 		Properties retVal = new Properties();
 		retVal.setProperty(PN_DESCRIPTOR_FILE_NAME, this.getRsFile());
@@ -180,6 +194,7 @@ public class SerializedRecordSourceDescriptor implements ISerializableFileBasedR
 		return retVal;
 	}
 
+	@Override
 	public void  setProperties(Properties properties) throws IncompleteSpecificationException {
 
 		Precondition.assertNonNullArgument("null properties",properties);
@@ -213,6 +228,7 @@ public class SerializedRecordSourceDescriptor implements ISerializableFileBasedR
 		}
 	}
 
+	@Override
 	public String toXML() {
 		String retVal = AbstractRecordSourceSerializer.toXML(this);
 		return retVal;

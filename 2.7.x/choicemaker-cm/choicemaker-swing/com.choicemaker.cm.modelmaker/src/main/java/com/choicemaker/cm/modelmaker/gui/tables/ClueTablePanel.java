@@ -46,6 +46,7 @@ public class ClueTablePanel extends JScrollPane implements PropertyChangeListene
 	/**
 	 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
 	 */
+	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		String propertyName = evt.getPropertyName();
 		Object source = evt.getSource();
@@ -66,6 +67,7 @@ public class ClueTablePanel extends JScrollPane implements PropertyChangeListene
 		}
 	}
 
+	@Override
 	public void evaluated(EvaluationEvent evt) {
 		refreshStatistics();
 	}

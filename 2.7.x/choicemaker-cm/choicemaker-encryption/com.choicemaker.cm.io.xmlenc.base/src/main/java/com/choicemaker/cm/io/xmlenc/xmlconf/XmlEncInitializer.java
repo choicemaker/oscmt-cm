@@ -94,7 +94,7 @@ public class XmlEncInitializer implements XmlModuleInitializer {
 					Element ep = cs.getChild("properties");
 					DocType dt = new DocType("properties",
 							"http://java.sun.com/dtd/properties.dtd");
-					Document d = new Document((Element) ep.clone(), dt);
+					Document d = new Document(ep.clone(), dt);
 					XMLOutputter outp = new XMLOutputter();
 					String s = outp.outputString(d);
 

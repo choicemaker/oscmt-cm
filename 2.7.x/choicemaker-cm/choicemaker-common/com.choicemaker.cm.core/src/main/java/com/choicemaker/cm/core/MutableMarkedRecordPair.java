@@ -67,11 +67,13 @@ public class MutableMarkedRecordPair<T extends Comparable<T> & Serializable>
 	}
 
 	/** Set a comment. */
+	@Override
 	public String getComment() {
 		return comment;
 	}
 
 	/** Get the date the decision was made or last revised. */
+	@Override
 	public Date getDateMarked() {
 		return date;
 	}
@@ -81,21 +83,25 @@ public class MutableMarkedRecordPair<T extends Comparable<T> & Serializable>
 	 * whether this pair matches or not. This distinct from the {@link IRecordPair#getCmDecision Decision}
 	 * that ChoiceMaker assigns.
 	 */
+	@Override
 	public Decision getMarkedDecision() {
 		return decision;
 	}
 
 	/** Get the source of this record. */
+	@Override
 	public String getSource() {
 		return src;
 	}
 
 	/** Get the user who made the decision/last revised it. */
+	@Override
 	public String getUser() {
 		return user;
 	}
 
 	/** Get a comment. */
+	@Override
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
@@ -105,6 +111,7 @@ public class MutableMarkedRecordPair<T extends Comparable<T> & Serializable>
 	 * This field is <em>not</em> updated automatically
 	 * when the decision field is modified.
 	 */
+	@Override
 	public void setDateMarked(Date date) {
 		this.date = date;
 	}
@@ -115,16 +122,19 @@ public class MutableMarkedRecordPair<T extends Comparable<T> & Serializable>
 	 * {@link IRecordPair#setCmDecision assignments} made by
 	 * ChoiceMaker.
 	 */
+	@Override
 	public void setMarkedDecision(Decision decision) {
 		this.decision = decision;
 	}
 
 	/** Set the source of this record. */
+	@Override
 	public void setSource(String src) {
 		this.src = src;
 	}
 
 	/** Set the user who made the decision/last revised it. */
+	@Override
 	public void setUser(String user) {
 		this.user = user;
 	}

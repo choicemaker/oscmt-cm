@@ -203,7 +203,7 @@ public class XmlConfigurator implements ChoiceMakerConfigurator,
 			List<Element> modules = ConfigurationUtils.getModules(document);
 			Iterator<Element> i = modules.iterator();
 			while (i.hasNext()) {
-				Element e = (Element) i.next();
+				Element e = i.next();
 				String className = e.getAttributeValue("class");
 				Class<?> clazz = Class.forName(className, true, cl);
 				XmlModuleInitializer m = (XmlModuleInitializer) clazz

@@ -22,6 +22,7 @@ import com.choicemaker.cm.io.db.base.DatabaseAbstractionManager;
  * @author rphall
  * @deprecated
  */
+@Deprecated
 public class PostgresDatabaseAbstractionManager implements
 		DatabaseAbstractionManager {
 
@@ -29,6 +30,7 @@ public class PostgresDatabaseAbstractionManager implements
 		// TODO Auto-generated constructor stub
 	}
 
+	@Override
 	public DatabaseAbstraction lookupDatabaseAbstraction(DataSource ds)
 			throws DatabaseException {
 

@@ -603,7 +603,7 @@ public class OABABlockingService {
 
 		// only keep those id in osIDs in the rec_id, val_id file.
 		for (int i = 0; i < osIDs.size(); i++) {
-			IntArrayList list = (IntArrayList) recVal.getValues(osIDs.get(i));
+			IntArrayList list = recVal.getValues(osIDs.get(i));
 			sink.writeRecordValue(osIDs.get(i), list);
 			// count ++;
 		}
@@ -666,7 +666,7 @@ public class OABABlockingService {
 		for (int j = 0; j < recordList.size() && !stop; j++) {
 			stop = ControlChecker.checkStop(control, j, CONTROL_INTERVAL);
 			recID = j;
-			IntArrayList values = (IntArrayList) recordList.get(j);
+			IntArrayList values = recordList.get(j);
 
 			if (values != null) {
 				if (values.size() == 0) {
@@ -811,7 +811,7 @@ public class OABABlockingService {
 			long row = recs.get(i);
 
 			// get the values of the given row
-			IntArrayList values = (IntArrayList) record.getValues(row);
+			IntArrayList values = record.getValues(row);
 
 			if (values != null) {
 

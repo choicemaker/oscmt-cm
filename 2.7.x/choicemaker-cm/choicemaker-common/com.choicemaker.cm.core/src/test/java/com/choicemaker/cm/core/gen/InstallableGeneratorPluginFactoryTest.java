@@ -10,6 +10,7 @@ import com.choicemaker.util.SystemPropertyUtils;
 
 public class InstallableGeneratorPluginFactoryTest extends TestCase {
 
+	@Override
 	public void setUp() {
 		// The default list of generator plugins must be overridden for
 		// this test because it may contain FQCNs that are not on the
@@ -21,6 +22,7 @@ public class InstallableGeneratorPluginFactoryTest extends TestCase {
 				.getProperty(ListBackedGeneratorPluginFactory.PROPERTY_GENERATOR_PLUGIN_FACTORIES) != null);
 	}
 
+	@Override
 	public void tearDown() {
 		Properties p = System.getProperties();
 		p.remove(ListBackedGeneratorPluginFactory.PROPERTY_GENERATOR_PLUGIN_FACTORIES);

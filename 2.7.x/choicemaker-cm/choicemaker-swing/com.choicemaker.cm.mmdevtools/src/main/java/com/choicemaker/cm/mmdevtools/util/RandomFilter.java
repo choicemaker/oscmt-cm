@@ -36,10 +36,12 @@ public class RandomFilter implements Filter {
 		}
 	}
 
+	@Override
 	public boolean satisfy(Record r) {
 		return getRandom().nextFloat() < prob;
 	}
 
+	@Override
 	public boolean satisfy(RecordData r) {
 		return getRandom().nextFloat() < prob;
 	}

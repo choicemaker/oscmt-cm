@@ -54,10 +54,12 @@ public class MutableRecordPair<T extends Comparable<T> & Serializable>
 		setMatchRecord(m);
 	}
 
+	@Override
 	public ActiveClues getActiveClues() {
 		return af;
 	}
 
+	@Override
 	public Decision getCmDecision() {
 		return cmDecision;
 	}
@@ -65,18 +67,22 @@ public class MutableRecordPair<T extends Comparable<T> & Serializable>
 	/**
 	 * @see com.choicemaker.cm.core.base.RecordData#getFirstRecord()
 	 */
+	@Override
 	public Record<T> getFirstRecord() {
 		return getQueryRecord();
 	}
 
+	@Override
 	public Record<T> getMatchRecord() {
 		return m;
 	}
 
+	@Override
 	public float getProbability() {
 		return probability;
 	}
 
+	@Override
 	public Record<T> getQueryRecord() {
 		return q;
 	}
@@ -84,26 +90,32 @@ public class MutableRecordPair<T extends Comparable<T> & Serializable>
 	/**
 	 * @see com.choicemaker.cm.core.base.RecordData#getSecondRecord()
 	 */
+	@Override
 	public Record<T> getSecondRecord() {
 		return getMatchRecord();
 	}
 
+	@Override
 	public void setActiveClues(ActiveClues af) {
 		this.af = af;
 	}
 
+	@Override
 	public void setCmDecision(Decision cmDecision) {
 		this.cmDecision = cmDecision;
 	}
 
+	@Override
 	public void setMatchRecord(Record<T> m) {
 		this.m = m;
 	}
 
+	@Override
 	public void setProbability(float probability) {
 		this.probability = probability;
 	}
 
+	@Override
 	public void setQueryRecord(Record<T> q) {
 		this.q = q;
 	}

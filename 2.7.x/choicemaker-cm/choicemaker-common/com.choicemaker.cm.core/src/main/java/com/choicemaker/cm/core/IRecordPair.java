@@ -16,14 +16,19 @@ import com.choicemaker.client.api.Decision;
  */
 public interface IRecordPair<T extends Comparable<T> & Serializable> extends ImmutableRecordPair<T> {
 
+	@Override
 	public abstract ActiveClues getActiveClues();
 	public abstract void setActiveClues(ActiveClues af);
 	public abstract void setQueryRecord(Record<T> q);
+	@Override
 	public abstract Record<T> getQueryRecord();
 	public abstract void setMatchRecord(Record<T> m);
+	@Override
 	public abstract Record<T> getMatchRecord();
 	public abstract void setCmDecision(Decision cmDecision);
+	@Override
 	public abstract Decision getCmDecision();
 	public abstract void setProbability(float probability);
+	@Override
 	public abstract float getProbability();
 }

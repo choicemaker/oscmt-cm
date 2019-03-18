@@ -39,6 +39,7 @@ public class RoundRobinSink implements RecordSink, MarkedRecordPairSink {
 		this.sinkSize = sinkSize;
 	}
 
+	@Override
 	public void put(Record r) throws Exception {
 		((RecordSink)sinks[curSink]).put(r);
 		sizes[curSink]++;
@@ -51,6 +52,7 @@ public class RoundRobinSink implements RecordSink, MarkedRecordPairSink {
 		curSink = (curSink + 1) % distrib;
 	}
 
+	@Override
 	public void putMarkedRecordPair(ImmutableMarkedRecordPair mrp) throws Exception {
 		((MarkedRecordPairSink)sinks[curSink]).put(mrp);
 		sizes[curSink]++;
@@ -63,6 +65,7 @@ public class RoundRobinSink implements RecordSink, MarkedRecordPairSink {
 		curSink = (curSink + 1) % distrib;
 	}
 
+	@Override
 	public void put(ImmutableRecordPair rp) throws Exception {
 		putMarkedRecordPair((ImmutableMarkedRecordPair)rp);
 	}
@@ -76,6 +79,7 @@ public class RoundRobinSink implements RecordSink, MarkedRecordPairSink {
 		}
 	}
 
+	@Override
 	public void open() throws IOException {
 		sizes = new int[distrib];
 		sinks = new Sink[distrib];
@@ -86,6 +90,7 @@ public class RoundRobinSink implements RecordSink, MarkedRecordPairSink {
 		curSink = 0;
 	}
 
+	@Override
 	public void close() throws Exception {
 		for (int i = 0; i < distrib; i++) {
 			sinks[i].close();
@@ -95,18 +100,22 @@ public class RoundRobinSink implements RecordSink, MarkedRecordPairSink {
 		curSink = -1;
 	}
 
+	@Override
 	public String getName() {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
 	public void setName(String name) {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
 	public ImmutableProbabilityModel getModel() {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
 	public void setModel(ImmutableProbabilityModel m) {
 		throw new UnsupportedOperationException();
 	}
@@ -115,6 +124,7 @@ public class RoundRobinSink implements RecordSink, MarkedRecordPairSink {
 	 * NOP for now
 	 * @see com.choicemaker.cm.core.base.Sink#flush()
 	 */
+	@Override
 	public void flush() {
 	}
 

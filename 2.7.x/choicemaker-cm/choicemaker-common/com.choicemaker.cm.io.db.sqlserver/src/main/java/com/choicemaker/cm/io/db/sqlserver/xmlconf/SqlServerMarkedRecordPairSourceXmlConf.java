@@ -34,10 +34,12 @@ public class SqlServerMarkedRecordPairSourceXmlConf implements MarkedRecordPairS
 	
 	public static final String EXTENSION_POINT_ID = "com.choicemaker.cm.io.db.sqlserver.sqlServerMrpsReader";
 
+	@Override
 	public Object getHandler() {
 		return this;
 	}
 
+	@Override
 	public Class getHandledType() {
 		return SqlServerMarkedRecordPairSource.class;
 	}
@@ -45,6 +47,7 @@ public class SqlServerMarkedRecordPairSourceXmlConf implements MarkedRecordPairS
 	/**
 	 * Add a Db record source to the configuration.
 	 */
+	@Override
 	public void add(MarkedRecordPairSource s) throws XmlConfException {
 		try {
 			SqlServerMarkedRecordPairSource src = (SqlServerMarkedRecordPairSource) s;
@@ -64,6 +67,7 @@ public class SqlServerMarkedRecordPairSourceXmlConf implements MarkedRecordPairS
 		}
 	}
 
+	@Override
 	public MarkedRecordPairSource getMarkedRecordPairSource(String fileName, Element e, ImmutableProbabilityModel model)
 		throws XmlConfException {
 		String dataSourceName = e.getChildText(SqlServerXmlUtils.AN_MRPS_DATASOURCENAME);

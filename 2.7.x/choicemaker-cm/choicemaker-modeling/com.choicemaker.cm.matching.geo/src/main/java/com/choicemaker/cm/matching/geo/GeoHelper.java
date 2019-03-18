@@ -23,6 +23,7 @@ public class GeoHelper {
 	/**
 	 * @deprecated see {@link GeoUtil#mileToKm(double)}
 	 */
+	@Deprecated
 	public static double mileToKm(double mld) {
 		return GeoUtil.mileToKm(mld);
 	}
@@ -30,6 +31,7 @@ public class GeoHelper {
 	/**
 	 * @deprecated see {@link GeoUtil#kmToMile(double)}
 	 */
+	@Deprecated
 	public static double kmToMile(double kmd) {
 		return GeoUtil.kmToMile(kmd);
 	}
@@ -37,6 +39,7 @@ public class GeoHelper {
 	/**
 	 * @deprecated see {@link GeoUtil#dist(GeoPoint, GeoPoint)}
 	 */
+	@Deprecated
 	public static double dist(GeoPoint gp1, GeoPoint gp2) {
 		return GeoUtil.dist(gp1, gp2);
 	}
@@ -44,6 +47,7 @@ public class GeoHelper {
 	/**
 	 * @deprecated see {@link GeoMaps#addMap(String, GeoMap) }
 	 */
+	@Deprecated
 	public static void addMap(String name, GeoMap map) {
 		GeoMaps.addMap(name, map);
 	}
@@ -51,6 +55,7 @@ public class GeoHelper {
 	/**
 	 * @deprecated see {@link GeoMaps#getMap(String) }
 	 */
+	@Deprecated
 	public static GeoMap getMap(String geoEntityType) {
 		return GeoMaps.getMap(geoEntityType);
 	}
@@ -58,6 +63,7 @@ public class GeoHelper {
 	/**
 	 * @deprecated see {@link GeoMaps#getGeoTypes() }
 	 */
+	@Deprecated
 	public static Collection<String> getGeoTypes() {
 		return GeoMaps.getGeoTypes();
 	}
@@ -65,6 +71,7 @@ public class GeoHelper {
 	/**
 	 * @deprecated see {@link GeoMaps#geoPoint(String, int) }
 	 */
+	@Deprecated
 	public static GeoPoint geoPoint(String geoEntityType,
 			int geoEntityDescription) {
 		return GeoMaps.geoPoint(geoEntityType, geoEntityDescription);
@@ -73,6 +80,7 @@ public class GeoHelper {
 	/**
 	 * @deprecated see {@link GeoMaps#geoPoint(String, String) }
 	 */
+	@Deprecated
 	public static GeoPoint geoPoint(String geoEntityType,
 			String geoEntityDescription) {
 		return GeoMaps.geoPoint(geoEntityType, geoEntityDescription);

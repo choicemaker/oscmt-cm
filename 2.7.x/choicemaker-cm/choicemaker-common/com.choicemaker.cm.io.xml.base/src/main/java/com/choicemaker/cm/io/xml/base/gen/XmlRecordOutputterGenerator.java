@@ -66,6 +66,7 @@ public class XmlRecordOutputterGenerator implements GeneratorPlugin {
 	public static XmlRecordOutputterGenerator instance = new XmlRecordOutputterGenerator(false);
 	public static XmlRecordOutputterGenerator reportinstance = new XmlRecordOutputterGenerator(true);
 
+	@Override
 	public void generate(IGenerator g) throws GenException {
 		g.addAccessorImport("import com.choicemaker.cm.io.xml.base.*;" + Constants.LINE_SEPARATOR);
 		String className = g.getSchemaName();

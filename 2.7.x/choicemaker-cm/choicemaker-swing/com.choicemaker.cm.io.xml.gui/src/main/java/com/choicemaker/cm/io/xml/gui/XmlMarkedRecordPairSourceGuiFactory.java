@@ -20,34 +20,42 @@ import com.choicemaker.cm.modelmaker.gui.sources.SourceGuiFactory;
  * @author    Martin Buechi
  */
 public class XmlMarkedRecordPairSourceGuiFactory implements SourceGuiFactory {
+	@Override
 	public String getName() {
 		return "XML";
 	}
 
+	@Override
 	public SourceGui createGui(ModelMaker parent, Source s) {
 		return new XmlMarkedRecordPairSourceGui(parent, (MarkedRecordPairSource)s, false);
 	}
 
+	@Override
 	public SourceGui createGui(ModelMaker parent) {
 		return createGui(parent, new XmlMarkedRecordPairSource());
 	}
 
+	@Override
 	public SourceGui createSaveGui(ModelMaker parent) {
 		return new XmlMarkedRecordPairSourceGui(parent, new XmlMarkedRecordPairSource(), true);
 	}
 
+	@Override
 	public Object getHandler() {
 		return this;
 	}
 
+	@Override
 	public Class getHandledType() {
 		return XmlMarkedRecordPairSource.class;
 	}
 
+	@Override
 	public String toString() {
 		return "XML MRPS";
 	}
 
+	@Override
 	public boolean hasSink() {
 		return true;
 	}

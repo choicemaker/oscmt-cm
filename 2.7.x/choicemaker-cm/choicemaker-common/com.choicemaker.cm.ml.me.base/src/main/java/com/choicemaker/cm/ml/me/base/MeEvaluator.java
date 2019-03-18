@@ -101,6 +101,7 @@ public class MeEvaluator extends Evaluator {
 	 * Returns the ChoiceMaker probability score for a set of active clues
 	 * (a.k.a. features).
 	 */
+	@Override
 	public float getProbability(ActiveClues a) {
 		float retVal;
 		float[] outcomes = getClassificationProbabilities(a);
@@ -122,6 +123,7 @@ public class MeEvaluator extends Evaluator {
 	 * @return An XML fragment representing classification probabilities.
 	 * @since 2010-08-11
 	 */
+	@Override
 	public String getProbabilityDetails(ActiveClues a) {
 		float[] outcomes = getClassificationProbabilities(a);
 		StringBuffer sb = new StringBuffer("<maxEntClasses>");
@@ -141,6 +143,7 @@ public class MeEvaluator extends Evaluator {
 	/**
 	 * Returns a signature based on the class of this instance and its weights.
 	 */
+	@Override
 	public String getSignature() {
 		String retVal = Signature.calculateSignature(getClass());
 		StringBuilder sb = new StringBuilder(retVal);

@@ -71,6 +71,7 @@ public class DesktopPaneMouseListener extends MouseAdapter {
 		popup.add(
 			ChoiceMakerCoreMessages.m.formatMessage(
 				"train.gui.modelmaker.listener.desktop.add.space.right")).addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				parent.growDesktopPane(200, 0);
 			};
@@ -79,6 +80,7 @@ public class DesktopPaneMouseListener extends MouseAdapter {
 		popup.add(
 			ChoiceMakerCoreMessages.m.formatMessage(
 				"train.gui.modelmaker.listener.desktop.add.space.bottom")).addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				parent.growDesktopPane(0, 200);
 			};
@@ -86,6 +88,7 @@ public class DesktopPaneMouseListener extends MouseAdapter {
 
 		fitContents = popup.add(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.listener.desktop.fitcontents"));
 		fitContents.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				parent.fitDesktopPane();
 			};
@@ -96,6 +99,7 @@ public class DesktopPaneMouseListener extends MouseAdapter {
 		JMenu insert2 = new JMenu(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.listener.desktop.layout"));
 		popup.add(insert2);
 		insert2.add(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.listener.desktop.insert.frame")).addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent ev) {
 				try {
 					parent.getRecordPairViewerModel().addFrameModel(new CompositeFrameModel(parentDescriptor, x, y));
@@ -108,6 +112,7 @@ public class DesktopPaneMouseListener extends MouseAdapter {
 		renameFrame = new AbstractAction(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.listener.desktop.rename.frame")) {
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public void actionPerformed(ActionEvent ev) {
 				try {
 					new InternalFrameDialog(getParentFrame(), ((CompositeFrame)SwingUtilities.getAncestorOfClass(CompositeFrame.class, parent)).getInternalFrameModel());
@@ -124,6 +129,7 @@ public class DesktopPaneMouseListener extends MouseAdapter {
 		addTab = new AbstractAction(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.listener.desktop.insert.tab")) {
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public void actionPerformed(ActionEvent ev) {
 				try {
 					parent.addTab();
@@ -137,6 +143,7 @@ public class DesktopPaneMouseListener extends MouseAdapter {
 		renameTab = new AbstractAction(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.listener.desktop.rename.tab")) {
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public void actionPerformed(ActionEvent ev) {
 				try {
 					new TabRenameDialog(getParentFrame(), parent.getRecordPairViewerModel());
@@ -150,6 +157,7 @@ public class DesktopPaneMouseListener extends MouseAdapter {
 		removeTab = new AbstractAction(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.listener.desktop.remove.tab")) {
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public void actionPerformed(ActionEvent ev) {
 				try {
 					parent.removeCurrentTab();
@@ -162,12 +170,14 @@ public class DesktopPaneMouseListener extends MouseAdapter {
 		
 	}
 
+	@Override
 	public void mousePressed(MouseEvent e) {
 		if (e.isPopupTrigger()) {
 			displayPopup(e);
 		}
 	}
 
+	@Override
 	public void mouseReleased(MouseEvent e) {
 		if (e.isPopupTrigger()) {
 			displayPopup(e);
@@ -197,6 +207,7 @@ public class DesktopPaneMouseListener extends MouseAdapter {
 		InsertListener(Descriptor d) {
 			this.d = d;
 		}
+		@Override
 		public void actionPerformed(ActionEvent ev) {
 			try {
 				int desktopPaneWidth = (int)parent.getVisibleRect().getWidth();

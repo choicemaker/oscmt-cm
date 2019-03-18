@@ -31,6 +31,7 @@ public interface IValidator<T> {
 	 * @see AbstractValidator#equals(Object)
 	 * @see AbstractValidator#validatorEquals(IValidator,Object)
 	 */
+	@Override
 	public boolean equals(Object o);
 
 	/**
@@ -41,6 +42,7 @@ public interface IValidator<T> {
 	 * class, unique by the set of validation checks that are performed.
 	 * @see #equals(IValidator)
 	 */
+	@Override
 	public int hashCode();
 
 	/**

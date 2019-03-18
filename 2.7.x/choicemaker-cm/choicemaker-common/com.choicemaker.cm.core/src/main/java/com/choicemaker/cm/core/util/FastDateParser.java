@@ -18,6 +18,7 @@ import java.util.Date;
  * @deprecated This class will cause silent problems in training data. Use
  * a DateFormat instance instead.
  */
+@Deprecated
 public class FastDateParser implements DateParser {
 
 	private final int centuryTurn;
@@ -32,10 +33,12 @@ public class FastDateParser implements DateParser {
 		this.dmy = dmy;
 	}
 	
+	@Override
 	public Object clone() {
 		return new FastDateParser(this.centuryTurn,this.dmy);
 	}
 
+	@Override
 	public Date parse(String s) {
 
 		int[] parseArgs = new int[ARRAY_LENGTH];

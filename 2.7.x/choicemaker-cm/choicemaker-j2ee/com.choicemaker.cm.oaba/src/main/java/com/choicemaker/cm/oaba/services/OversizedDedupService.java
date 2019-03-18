@@ -8,7 +8,6 @@
 package com.choicemaker.cm.oaba.services;
 
 import static com.choicemaker.cm.oaba.core.OabaEventBean.*;
-import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.*;
 import static com.choicemaker.cm.oaba.utils.RecordTransferLogging.CONTROL_INTERVAL;
 
 import java.io.FileNotFoundException;

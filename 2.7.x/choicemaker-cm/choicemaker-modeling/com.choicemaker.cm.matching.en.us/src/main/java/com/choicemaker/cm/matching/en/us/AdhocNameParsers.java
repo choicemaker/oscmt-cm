@@ -57,7 +57,7 @@ public final class AdhocNameParsers {
 
 	public static AdhocNameParser get(String name) {
 		Precondition.assertNonNullArgument(name);
-		AdhocNameParser retVal = (AdhocNameParser) parsersMap().get(name);
+		AdhocNameParser retVal = parsersMap().get(name);
 		if (retVal == null) {
 			String msg = "No parser named '" + name + "'";
 			logger.warning(msg);
@@ -190,7 +190,7 @@ public final class AdhocNameParsers {
 
 		Set<String> retVal = new HashSet<>();
 		for (Iterator<String> i = c.iterator(); i.hasNext();) {
-			String s = (String) i.next();
+			String s = i.next();
 			boolean nonEmpty = StringUtils.nonEmptyString(s);
 			if (nonEmpty && !s.startsWith(COMMENT_FLAG)) {
 				logger.finer(_setName + ": adding '" + s + "'");

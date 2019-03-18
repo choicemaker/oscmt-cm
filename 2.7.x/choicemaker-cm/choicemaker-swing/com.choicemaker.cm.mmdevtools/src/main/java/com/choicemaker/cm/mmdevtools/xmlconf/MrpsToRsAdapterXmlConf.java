@@ -27,6 +27,7 @@ import com.choicemaker.util.FileUtilities;
  */
 public class MrpsToRsAdapterXmlConf implements RecordSourceXmlConfigurator {
 
+	@Override
 	public RecordSource getRecordSource(String fileName, Element e, ImmutableProbabilityModel model) throws XmlConfException {
 		String mrpsFileName = e.getChildText("fileName");
 		mrpsFileName = FileUtilities.getAbsoluteFile(new File(fileName).getParentFile(), mrpsFileName).getAbsolutePath();		
@@ -35,14 +36,17 @@ public class MrpsToRsAdapterXmlConf implements RecordSourceXmlConfigurator {
 		return new MrpsToRsAdapter(mrps);
 	}
 	
+	@Override
 	public void add(RecordSource desc) throws XmlConfException {
 		throw new XmlConfException("Cannot save an MrpsToRsAdapter!");
 	}
 
+	@Override
 	public Object getHandler() {
 		return this;
 	}
 
+	@Override
 	public Class getHandledType() {
 		return MrpsToRsAdapter.class;
 	}

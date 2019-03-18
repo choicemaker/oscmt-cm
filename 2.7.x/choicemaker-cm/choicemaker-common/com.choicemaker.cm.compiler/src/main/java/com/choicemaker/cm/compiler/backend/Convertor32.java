@@ -101,58 +101,72 @@ class Convertor32 extends TreeGen implements TargetTree.Visitor {
 	
 	// Visitor methods
 	
+	@Override
 	public void visit(Tree t) {
 		throw new Error();
 	}
 	
+	@Override
 	public void visit(Bad t) {
 		throw new Error();
 	}
 	
+	@Override
 	public void visit(PackageDecl t) {
 		throw new Error();
 	}
 	
+	@Override
 	public void visit(ImportDecl t) {
 		throw new Error();
 	}
 	
+	@Override
 	public void visit(ClueSetDecl t) {
 		throw new Error();
 	}
 	
+	@Override
 	public void visit(ClueDecl t) {
 		throw new Error();
 	}
 	
+	@Override
 	public void visit(Index t) {
 		throw new Error();
 	}
 	
+	@Override
 	public void visit(MethodDecl t) {
 		throw new Error();
 	}
 	
+	@Override
 	public void visit(VarDecl t) {
 		throw new Error();
 	}
 	
+	@Override
 	public void visit(Quantified t) {
 		throw new Error();
 	}
 	
+	@Override
 	public void visit(Let t) {
 		throw new Error();
 	}
 	
+	@Override
 	public void visit(Shorthand t) {
 		throw new Error();
 	}
 	
+	@Override
 	public void visit(Valid t) {
 		throw new Error();
 	}
 	
+	@Override
 	public void visit(If t) throws CompilerException {
 		if(this.neg)
 			resExp = new Unop(t.pos, Tags.NOT, t);
@@ -160,6 +174,7 @@ class Convertor32 extends TreeGen implements TargetTree.Visitor {
 			resExp = t;
 	}
 	
+	@Override
 	public void visit(Apply t) throws CompilerException {
 		if(this.neg)
 			resExp = new Unop(t.pos, Tags.NOT, t);
@@ -167,6 +182,7 @@ class Convertor32 extends TreeGen implements TargetTree.Visitor {
 			resExp = t;
 	}
 	
+	@Override
 	public void visit(New t) {
 		if(this.neg)
 			resExp = new Unop(t.pos, Tags.NOT, t);
@@ -174,6 +190,7 @@ class Convertor32 extends TreeGen implements TargetTree.Visitor {
 			resExp = t;
 	}
 	
+	@Override
 	public void visit(NewArray t) {
 		if(this.neg)
 			resExp = new Unop(t.pos, Tags.NOT, t);
@@ -181,10 +198,12 @@ class Convertor32 extends TreeGen implements TargetTree.Visitor {
 			resExp = t;
 	}
 	
+	@Override
 	public void visit(Typeop t) throws CompilerException {
 		t.expr.apply(this);
 	}
 	
+	@Override
 	public void visit(Unop t) throws CompilerException {
 		boolean negation = this.neg;
 		if( t.opcode == Tags.NOT )	{
@@ -200,6 +219,7 @@ class Convertor32 extends TreeGen implements TargetTree.Visitor {
 		this.neg = negation;
 	}
 	
+	@Override
 	public void visit(Binop t) throws CompilerException {
 		Tree 		exp1;
 		boolean		const1;
@@ -252,6 +272,7 @@ class Convertor32 extends TreeGen implements TargetTree.Visitor {
 		this.neg = negation;
 	}
 	
+	@Override
 	public void visit(Literal t) {
 		if (t.ltag == Tags.UNKNOWN){
 			resExp = null; resConst = !isPosConv;
@@ -265,6 +286,7 @@ class Convertor32 extends TreeGen implements TargetTree.Visitor {
 	}
 
 	
+	@Override
 	public void visit(Indexed t) throws CompilerException {
 		if(this.neg)
 			resExp = new Unop(t.pos, Tags.NOT, t);
@@ -272,6 +294,7 @@ class Convertor32 extends TreeGen implements TargetTree.Visitor {
 			resExp = t;
 	}
 	
+	@Override
 	public void visit(Select t) throws CompilerException {
 		if(this.neg)
 			resExp = new Unop(t.pos, Tags.NOT, t);
@@ -279,6 +302,7 @@ class Convertor32 extends TreeGen implements TargetTree.Visitor {
 			resExp = t;
 	}
 	
+	@Override
 	public void visit(Ident t) throws CompilerException {
 		if(this.neg)
 			resExp = new Unop(t.pos, Tags.NOT, t);
@@ -286,78 +310,97 @@ class Convertor32 extends TreeGen implements TargetTree.Visitor {
 			resExp = t;
 	}
 	
+	@Override
 	public void visit(Self t) {
 		throw new Error();
 	}
 	
+	@Override
 	public void visit(ArrayType t) {
 		throw new Error();
 	}
 	
+	@Override
 	public void visit(PrimitiveType t) {
 		throw new Error();
 	}
 	
+	@Override
 	public void visit(ClassDecl t) {
 		throw new Error();
 	}
 	
+	@Override
 	public void visit(JMethodDecl t) {
 		throw new Error();
 	}
 	
+	@Override
 	public void visit(Block t) {
 		throw new Error();
 	}
 	
+	@Override
 	public void visit(Cond t) {
 		throw new Error();
 	}
 	
+	@Override
 	public void visit(While t) {
 		throw new Error();
 	}
 	
+	@Override
 	public void visit(DoWhile t) {
 		throw new Error();
 	}
 	
+	@Override
 	public void visit(For t) {
 		throw new Error();
 	}
 	
+	@Override
 	public void visit(Taged t) {
 		throw new Error();
 	}
 	
+	@Override
 	public void visit(Switch t) {
 		throw new Error();
 	}
 	
+	@Override
 	public void visit(Case t) {
 		throw new Error();
 	}
 	
+	@Override
 	public void visit(Break t) {
 		throw new Error();
 	}
 	
+	@Override
 	public void visit(Continue t) {
 		throw new Error();
 	}
 	
+	@Override
 	public void visit(Return t) {
 		throw new Error();
 	}
 	
+	@Override
 	public void visit(Assign t) {
 		throw new Error();
 	}
 	
+	@Override
 	public void visit(Try t) {
 		throw new Error();
 	}
 	
+	@Override
 	public void visit(Catch t) {
 		throw new Error();
 	}

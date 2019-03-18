@@ -26,6 +26,7 @@ public class DefaultTokenizer implements Tokenizer {
 		return instance;
 	}
 
+	@Override
 	public String[] tokenize(String s) {
 		return defaultTokenize(s);
 	}

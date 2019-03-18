@@ -88,6 +88,7 @@ public class IntFilterCondition implements FilterCondition {
 		}
 	}
 
+	@Override
 	public boolean satisfy(ActiveClues clues) {
 		IntActiveClues intActiveClues = (IntActiveClues)clues;
 		boolean returnValue;
@@ -153,6 +154,7 @@ public class IntFilterCondition implements FilterCondition {
 	 * Returns the clueNum.
 	 * @return int
 	 */
+	@Override
 	public int getClueNum() {
 		return clueNum;
 	}
@@ -165,10 +167,12 @@ public class IntFilterCondition implements FilterCondition {
 		return condition;
 	}
 
+	@Override
 	public String getConditionString(){
 		return CONDITION_STRING[getCondition()];
 	}
 
+	@Override
 	public String toString(){
 		String returnValue = getConditionString();
 
@@ -179,6 +183,7 @@ public class IntFilterCondition implements FilterCondition {
 		return returnValue;
 	}
 
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -194,6 +199,7 @@ public class IntFilterCondition implements FilterCondition {
 	 * true if we are compared agains another IntFilterCondition that represents the same condition as us;
 	 * false otherwise.
 	 */
+	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
@@ -236,6 +242,7 @@ public class IntFilterCondition implements FilterCondition {
 		}
 	}
 
+	@Override
 	public FilterCondition createFilterCondition(int clueNum) {
 		return new IntFilterCondition(clueNum, condition, a, b);
 	}

@@ -67,6 +67,7 @@ public class RecordPairList
 
 	private void addListeners() {
 		recordPairList.addListSelectionListener(new ListSelectionListener() {
+			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				String sv = (String) recordPairList.getSelectedValue();
 				if (sv != null) {
@@ -88,6 +89,7 @@ public class RecordPairList
 		}
 	}
 
+	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		String propertyName = evt.getPropertyName();
 		Object source = evt.getSource();
@@ -102,17 +104,21 @@ public class RecordPairList
 		}
 	}
 
+	@Override
 	public void evaluated(EvaluationEvent evt) {
 		clearRecordPairList();
 	}
 
+	@Override
 	public void setChanged(RepositoryChangeEvent evt) {
 		clearRecordPairList();
 	}
 
+	@Override
 	public void recordDataChanged(RepositoryChangeEvent evt) {
 	}
 
+	@Override
 	public void markupDataChanged(RepositoryChangeEvent evt) {
 	}
 

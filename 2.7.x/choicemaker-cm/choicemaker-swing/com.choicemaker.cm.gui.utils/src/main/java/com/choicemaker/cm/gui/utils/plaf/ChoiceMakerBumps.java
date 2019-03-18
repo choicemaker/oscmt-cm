@@ -96,7 +96,8 @@ public class ChoiceMakerBumps implements Icon {
 	backColor = newBackColor;
     }
 
-    public void paintIcon( Component c, Graphics g, int x, int y ) {
+    @Override
+	public void paintIcon( Component c, Graphics g, int x, int y ) {
         GraphicsConfiguration gc = (g instanceof Graphics2D) ?
                                      (GraphicsConfiguration)((Graphics2D)g).
                                      getDeviceConfiguration() : null;
@@ -124,11 +125,13 @@ public class ChoiceMakerBumps implements Icon {
 	}
     }
 
-    public int getIconWidth() {
+    @Override
+	public int getIconWidth() {
         return xBumps * 2;
     }
 
-    public int getIconHeight() {
+    @Override
+	public int getIconHeight() {
         return yBumps * 2;
     }
 }

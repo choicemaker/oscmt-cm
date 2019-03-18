@@ -37,6 +37,7 @@ public class FlatFileGenerator implements GeneratorPlugin {
 	private Set recordTypes;
 	private List typeNames;
 
+	@Override
 	public void generate(IGenerator g) throws GenException {
 		recordTypes = new TreeSet();
 		num = -1;

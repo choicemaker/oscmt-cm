@@ -37,6 +37,7 @@ public class TableColumnListener extends MouseAdapter {
 	/**
 	 * Invoked when the mouse has been clicked on a component.
 	 */
+	@Override
 	public void mouseClicked(MouseEvent e) {
 		TableColumnModel colModel = table.getColumnModel();
 		int columnModelIndex = colModel.getColumnIndexAtX(e.getX());

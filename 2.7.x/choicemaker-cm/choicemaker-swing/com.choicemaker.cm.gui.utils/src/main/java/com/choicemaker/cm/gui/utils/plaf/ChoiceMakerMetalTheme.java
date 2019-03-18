@@ -27,6 +27,7 @@ public class ChoiceMakerMetalTheme extends DefaultMetalTheme {
 	/**
 	 * @see javax.swing.plaf.metal.MetalTheme#addCustomEntriesToTable(javax.swing.UIDefaults)
 	 */
+	@Override
 	public void addCustomEntriesToTable(UIDefaults table) {
 		super.addCustomEntriesToTable(table);
 		table.put("InternalFrameUI", ChoiceMakerInternalFrameUI.class.getName());

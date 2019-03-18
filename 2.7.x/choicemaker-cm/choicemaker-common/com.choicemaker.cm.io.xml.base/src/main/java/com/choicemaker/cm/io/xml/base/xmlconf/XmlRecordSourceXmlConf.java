@@ -31,10 +31,12 @@ import com.choicemaker.cm.io.xml.base.XmlRecordSource;
 public class XmlRecordSourceXmlConf implements RecordSourceXmlConfigurator {
 	public static final String EXTENSION_POINT_ID = "com.choicemaker.cm.io.xml.base.xmlRsReader";
 
+	@Override
 	public Object getHandler() {
 		return this;
 	}
 
+	@Override
 	public Class getHandledType() {
 		return XmlRecordSource.class;
 	}
@@ -42,6 +44,7 @@ public class XmlRecordSourceXmlConf implements RecordSourceXmlConfigurator {
 	/**
 	 * Add a XML marked record pair source to the configuration.
 	 */
+	@Override
 	public void add(RecordSource s) throws XmlConfException {
 		try {
 			XmlRecordSource src = (XmlRecordSource) s;
@@ -61,6 +64,7 @@ public class XmlRecordSourceXmlConf implements RecordSourceXmlConfigurator {
 		}
 	}
 
+	@Override
 	public RecordSource getRecordSource(String fileName, Element e, ImmutableProbabilityModel model)
 		throws XmlConfException {
 		String xmlFileName = e.getChildText("fileName");

@@ -24,6 +24,7 @@ public class SimpleConnectedProperty implements SubGraphProperty {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.transitivity.core.SubGraphProperty#hasProperty(com.choicemaker.cm.transitivity.core.CompositeEntity)
 	 */
+	@Override
 	public boolean hasProperty(CompositeEntity ce) {
 		int numChildren = ce.getChildren().size();
 		INode<?> fNode = ce.getFirstNode();

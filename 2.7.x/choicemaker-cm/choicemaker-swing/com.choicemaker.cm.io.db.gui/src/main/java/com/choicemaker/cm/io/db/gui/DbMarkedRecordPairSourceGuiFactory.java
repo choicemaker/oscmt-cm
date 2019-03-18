@@ -20,34 +20,42 @@ import com.choicemaker.cm.modelmaker.gui.sources.SourceGuiFactory;
  * @author    Martin Buechi
  */
 public class DbMarkedRecordPairSourceGuiFactory implements SourceGuiFactory {
+	@Override
 	public String getName() {
 		return "Db";
 	}
 
+	@Override
 	public SourceGui createGui(ModelMaker parent, Source s) {
 		return new DbMarkedRecordPairSourceGui(parent, (MarkedRecordPairSource)s);
 	}
 
+	@Override
 	public SourceGui createGui(ModelMaker parent) {
 		return createGui(parent, new OracleMarkedRecordPairSource());
 	}
 
+	@Override
 	public SourceGui createSaveGui(ModelMaker parent) {
 		return null;
 	}
 
+	@Override
 	public Object getHandler() {
 		return this;
 	}
 
+	@Override
 	public Class getHandledType() {
 		return OracleMarkedRecordPairSource.class;
 	}
 
+	@Override
 	public String toString() {
 		return "Db MRPS";
 	}
 
+	@Override
 	public boolean hasSink() {
 		return false;
 	}

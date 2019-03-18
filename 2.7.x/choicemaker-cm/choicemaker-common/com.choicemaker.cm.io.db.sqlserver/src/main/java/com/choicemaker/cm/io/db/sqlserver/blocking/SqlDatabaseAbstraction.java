@@ -19,6 +19,7 @@ public class SqlDatabaseAbstraction implements DatabaseAbstraction {
 	/**
 	 * @see com.choicemaker.cm.io.db.base.plugin.automatedblocking.db.DatabaseAbstraction#getSetDateFormatExpression()
 	 */
+	@Override
 	public String getSetDateFormatExpression() {
 		return "SET DATEFORMAT ymd"; // doesn't really matter
 	}
@@ -26,6 +27,7 @@ public class SqlDatabaseAbstraction implements DatabaseAbstraction {
 	/**
 	 * @see com.choicemaker.cm.io.db.base.plugin.automatedblocking.db.DatabaseAbstraction#getSysdateExpression()
 	 */
+	@Override
 	public String getSysdateExpression() {
 		return "getdate()";
 	}
@@ -33,6 +35,7 @@ public class SqlDatabaseAbstraction implements DatabaseAbstraction {
 	/**
 	 * @see com.choicemaker.cm.io.db.base.plugin.automatedblocking.db.DatabaseAbstraction#getDateFieldExpression(java.lang.String)
 	 */
+	@Override
 	public String getDateFieldExpression(String field) {
 		return "Convert(VARCHAR(10), " + field + ", 120)";
 	}

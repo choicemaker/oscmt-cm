@@ -45,6 +45,7 @@ public class XmlMatchCandidate extends MatchCandidate {
 	 * 
 	 * @return  The XML representation of the match record.
 	 */
+	@Override
 	public Object getProfile() {
 		return profile;
 	}

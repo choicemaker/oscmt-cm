@@ -29,6 +29,7 @@ public final class InstallableGeneratorPluginFactory implements
 	 */
 	static final IGeneratorPluginFactory getDefaultInstance() {
 		return new IGeneratorPluginFactory() {
+			@Override
 			public List lookupGeneratorPlugins() throws GenException {
 				return new LinkedList();
 			}
@@ -88,6 +89,7 @@ public final class InstallableGeneratorPluginFactory implements
 		return delegate;
 	}
 
+	@Override
 	public List lookupGeneratorPlugins() throws GenException {
 		List retVal = getDelegate().lookupGeneratorPlugins();
 		assert retVal != null;

@@ -104,7 +104,7 @@ public class CompositeEntitySource<T extends Comparable<T>> implements
 			if (separator == null) {
 				Comparable c = mr.getRecordID1();
 				separator =
-					(MatchRecord2<T>) MatchRecord2Factory.getSeparator(c);
+					MatchRecord2Factory.getSeparator(c);
 			}
 
 			if (!mr.equals(separator)) {

@@ -78,6 +78,7 @@ public class RecordReader implements RecordSource {
 		return p;
 	}
 
+	@Override
 	public void open() throws IOException {
 		Accessor acc = model.getAccessor();
 		dbr = ((DbAccessor) acc).getDbReaderSequential(databaseConfiguration);
@@ -98,6 +99,7 @@ public class RecordReader implements RecordSource {
 			throw new IOException(ex.toString(), ex);
 		}
 	}
+	@Override
 	public void close() throws IOException {
 		Exception ex = null;
 		try {
@@ -143,10 +145,12 @@ public class RecordReader implements RecordSource {
 		}
 	}
 
+	@Override
 	public boolean hasNext() {
 		return dbr.hasNext();
 	}
 
+	@Override
 	public Record getNext() throws IOException {
 		return dbr.getNext();
 	}
@@ -158,38 +162,46 @@ public class RecordReader implements RecordSource {
 			"DECLARE @ids TABLE (id " + dbr.getMasterIdType() + ")" + Constants.LINE_SEPARATOR + "INSERT INTO @ids ");
 		b.append(condition);
 		b.append(Constants.LINE_SEPARATOR);
-		b.append((String) p.getProperty(dbr.getName() + ":Postgres"));
+		b.append(p.getProperty(dbr.getName() + ":Postgres"));
 		return b.toString();
 	}
 
+	@Override
 	public String getName() {
 		return name;
 	}
 
+	@Override
 	public void setName(String name) {
 		this.name = name;
 	}
 
+	@Override
 	public ImmutableProbabilityModel getModel() {
 		return model;
 	}
 
+	@Override
 	public void setModel(ImmutableProbabilityModel model) {
 		this.model = model;
 	}
 
+	@Override
 	public boolean hasSink() {
 		return false;
 	}
 
+	@Override
 	public Sink getSink() {
 		return null;
 	}
 
+	@Override
 	public String getFileName() {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
 	public String toString() {
 		return "RecordReader [model=" + model + ", condition=" + condition
 				+ ", name=" + name + "]";

@@ -85,25 +85,30 @@ public final class InstallableCompiler implements ICompiler {
 		return delegate;
 	}
 
+	@Override
 	public int generateJavaCode(CompilationArguments arguments,
 			Writer statusOutput) throws CompilerException {
 		return getDelegate().generateJavaCode(arguments, statusOutput);
 	}
 
+	@Override
 	public String compile(CompilationArguments arguments, Writer statusOutput)
 			throws CompilerException {
 		return getDelegate().compile(arguments, statusOutput);
 	}
 
+	@Override
 	public ImmutableProbabilityModel compile(ProbabilityModelSpecification model,
 			Writer statusOutput) throws CompilerException {
 		return getDelegate().compile(model, statusOutput);
 	}
 
+	@Override
 	public Properties getFeatures() {
 		return getDelegate().getFeatures();
 	}
 
+	@Override
 	public boolean compile(IProbabilityModel model, Writer statusOutput)
 			throws CompilerException {
 		return getDelegate().compile(model, statusOutput);

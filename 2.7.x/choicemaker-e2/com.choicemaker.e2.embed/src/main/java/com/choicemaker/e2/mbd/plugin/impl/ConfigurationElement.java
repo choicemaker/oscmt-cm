@@ -32,6 +32,7 @@ public class ConfigurationElement extends ConfigurationElementModel implements I
   {
 	super();
   }  
+@Override
 public Object createExecutableExtension(String attributeName) throws CoreException {
 	String prop = null;
 	String executable;
@@ -63,13 +64,13 @@ public Object createExecutableExtension(String attributeName) throws CoreExcepti
 		exec = getChildren(attributeName);
 		if (exec.length != 0) {
 			element = exec[0]; // assumes single definition
-			pluginName = (String) element.getAttribute("plugin"); //$NON-NLS-1$
-			className = (String) element.getAttribute("class"); //$NON-NLS-1$
+			pluginName = element.getAttribute("plugin"); //$NON-NLS-1$
+			className = element.getAttribute("class"); //$NON-NLS-1$
 			parms = element.getChildren("parameter"); //$NON-NLS-1$
 			if (parms != null) {
 				initParms = new Hashtable<>(parms.length + 1);
 				for (i = 0; i < parms.length; i++) {
-					pname = (String) parms[i].getAttribute("name"); //$NON-NLS-1$
+					pname = parms[i].getAttribute("name"); //$NON-NLS-1$
 					if (pname != null)
 						initParms.put(pname, parms[i].getAttribute("value")); //$NON-NLS-1$
 				}
@@ -112,8 +113,9 @@ public Object createExecutableExtension(String attributeName) throws CoreExcepti
 	IPluginDescriptor plugin = getDeclaringExtension().getDeclaringPluginDescriptor();
 	return ((PluginDescriptor) plugin).createExecutableExtension(pluginName, className, initData, this, attributeName);
 }
+@Override
 public String getAttribute(String name) {
-	ConfigurationPropertyModel[] list = (ConfigurationPropertyModel[]) getProperties();
+	ConfigurationPropertyModel[] list = getProperties();
 	if (list == null)
 		return null;
 		
@@ -132,8 +134,9 @@ public String getAttribute(String name) {
 		found.setLocalizedValue(localized);
 	return localized;
 }
+@Override
 public String getAttributeAsIs(String name) {
-	ConfigurationPropertyModel[] list = (ConfigurationPropertyModel[]) getProperties();
+	ConfigurationPropertyModel[] list = getProperties();
 	if (list == null)
 		return null;
 	for (int i = 0; i < list.length; i++)
@@ -141,6 +144,7 @@ public String getAttributeAsIs(String name) {
 			return list[i].getValue();
 	return null;
 }
+@Override
 public String[] getAttributeNames() {
 	ConfigurationPropertyModel[] list = getProperties();
 	if (list == null)
@@ -150,6 +154,7 @@ public String[] getAttributeNames() {
 		result[i] = list[i].getName();
 	return result;
 }
+@Override
 public IConfigurationElement[] getChildren() {
 	ConfigurationElementModel[] list = getSubElements();
 	if (list == null)
@@ -158,6 +163,7 @@ public IConfigurationElement[] getChildren() {
 	System.arraycopy(list, 0, newValues, 0, list.length);
 	return newValues;
 }
+@Override
 public IConfigurationElement[] getChildren(String name) {
 	ConfigurationElementModel[] list = getSubElements();
 	if (list == null)
@@ -168,11 +174,13 @@ public IConfigurationElement[] getChildren(String name) {
 		if (name.equals(element.getName()))
 			children.add(list[i]);
 	}
-	return (IConfigurationElement[]) children.toArray(new IConfigurationElement[children.size()]);
+	return children.toArray(new IConfigurationElement[children.size()]);
 }
+@Override
 public IExtension getDeclaringExtension() {
 	return (IExtension) getParentExtension();
 }
+@Override
 public String getValue() {
 	String s = getValueAsIs();
 	if (s == null)

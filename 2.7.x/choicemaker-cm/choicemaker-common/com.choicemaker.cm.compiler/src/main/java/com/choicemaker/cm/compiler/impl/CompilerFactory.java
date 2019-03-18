@@ -23,6 +23,7 @@ import com.choicemaker.cm.core.compiler.UnavailableCompilerFeaturesException;
  * @deprecated
  * @see com.choicemaker.cm.core.compiler.InstallableCompiler
  */
+@Deprecated
 public class CompilerFactory implements ICompilerFactory {
 
 	public static final String C26 = "26";
@@ -43,6 +44,7 @@ public class CompilerFactory implements ICompilerFactory {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.compiler.ICompilerFactory#getCompiler(java.util.Properties)
 	 */
+	@Override
 	public ICompiler getCompiler(Properties features) throws UnavailableCompilerFeaturesException {
 		// TODO add more checks to features
 
@@ -54,6 +56,7 @@ public class CompilerFactory implements ICompilerFactory {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.compiler.ICompilerFactory#getCompiler(java.lang.String)
 	 */
+	@Override
 	public ICompiler getCompiler(String name) throws UnavailableCompilerFeaturesException {
 
 		if (name == null || name.equals("")) {
@@ -69,6 +72,7 @@ public class CompilerFactory implements ICompilerFactory {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.compiler.ICompilerFactory#getDefaultCompiler()
 	 */
+	@Override
 	public ICompiler getDefaultCompiler() {
 		return new Compiler26();
 	}

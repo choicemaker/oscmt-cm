@@ -76,6 +76,7 @@ public class PostgresDatabaseAccessor<T extends Comparable<T>>
 		setCondition(condition);
 	}
 
+	@Override
 	public void setDataSource(DataSource dataSource) {
 		assert isConsistent();
 		this.ds = dataSource;
@@ -93,6 +94,7 @@ public class PostgresDatabaseAccessor<T extends Comparable<T>>
 		return p;
 	}
 
+	@Override
 	@Deprecated
 	public void setCondition(Object condition) {
 		setConditions((String[]) condition);
@@ -129,11 +131,13 @@ public class PostgresDatabaseAccessor<T extends Comparable<T>>
 		}
 	}
 
+	@Override
 	public DatabaseAccessor<T> cloneWithNewConnection()
 			throws CloneNotSupportedException {
 		throw new CloneNotSupportedException("not yet implemented");
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
 	public void open(AutomatedBlocker blocker, String databaseConfiguration)
 			throws IOException {
@@ -183,6 +187,7 @@ public class PostgresDatabaseAccessor<T extends Comparable<T>>
 		}
 	}
 
+	@Override
 	public void close() throws IOException {
 		Exception ex = null;
 		try {
@@ -212,10 +217,12 @@ public class PostgresDatabaseAccessor<T extends Comparable<T>>
 		}
 	}
 
+	@Override
 	public boolean hasNext() {
 		return dbr.hasNext();
 	}
 
+	@Override
 	public Record<T> getNext() throws IOException {
 		return dbr.getNext();
 	}
@@ -267,7 +274,7 @@ public class PostgresDatabaseAccessor<T extends Comparable<T>>
 			// table has an ID column, then things don't work...
 			b.append("v0." + id);
 			b.append(" FROM ");
-			IBlockingSet bs = (IBlockingSet) blocker.getBlockingSets().get(i);
+			IBlockingSet bs = blocker.getBlockingSets().get(i);
 			int numViews = bs.getNumTables();
 			for (int j = 0; j < numViews; ++j) {
 				if (j > 0) {
@@ -328,7 +335,7 @@ public class PostgresDatabaseAccessor<T extends Comparable<T>>
 			}
 		}
 
-		return (String) p.getProperty(key);
+		return p.getProperty(key);
 	}
 
 	private boolean mustQuote(String type) {

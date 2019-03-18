@@ -162,12 +162,14 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 		}
 	}
 
+	@Override
 	public void compile() throws CompilerException {
 		syntacticAnalysis();
 		semanticAnalysis();
 		codeGeneration();
 	}
 
+	@Override
 	public void syntacticAnalysis() throws CompilerException {
 		long start = System.currentTimeMillis();
 		setDecls(new Parser(new Scanner(this)).compilationUnit());
@@ -179,6 +181,7 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 						+ (System.currentTimeMillis() - start) + "ms]");
 	}
 
+	@Override
 	public void semanticAnalysis() throws CompilerException {
 		if (getErrors() == 0 && getCompilationEnv().errors == 0)
 			// get a symbol for the package of this compilation unit
@@ -192,11 +195,13 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 		}
 	}
 
+	@Override
 	public abstract void codeGeneration() throws CompilerException;
 
 	/**
 	 * issue an error for this compilation context
 	 */
+	@Override
 	public void error(String message) throws CompilerException {
 		if (getSource().printMessageIfNew(Location.NOPOS, message)) {
 			setErrors(getErrors() + 1);
@@ -211,6 +216,7 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 	/**
 	 * issue a warning for this compilation context
 	 */
+	@Override
 	public void warning(String message) {
 		if (getSource().printMessageIfNew(Location.NOPOS, message)) {
 			setWarnings(getWarnings() + 1);
@@ -220,6 +226,7 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 	/**
 	 * issue an error for a specific line of this compilation context
 	 */
+	@Override
 	public void error(int pos, String message) throws CompilerException {
 		String msg = getSource().getShortName() + ": " + pos + ": " + message;
 		logger.severe(msg);
@@ -237,6 +244,7 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 	/**
 	 * issue a warning for a specific source code file
 	 */
+	@Override
 	public void warning(Sourcecode source, String message) {
 		if (source.printMessageIfNew(Location.NOPOS, ChoiceMakerCoreMessages.m
 				.formatMessage("compiler.unit.warning", message)))
@@ -247,6 +255,7 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 	/**
 	 * issue a warning for a specific line of a specific source code file
 	 */
+	@Override
 	public void warning(int pos, String message) {
 		if (getSource().printMessageIfNew(
 				pos,
@@ -256,6 +265,7 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 		setWarnings(getWarnings() + 1);
 	}
 
+	@Override
 	public void conclusion(Writer statusOutput) {
 		setErrors(getErrors() + getCompilationEnv().errors);
 		setWarnings(getWarnings() + getCompilationEnv().warnings);
@@ -288,6 +298,7 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 	 * @param className
 	 *            The name of the class.
 	 */
+	@Override
 	public void addClassType(String className) {
 		// define a new class
 		ClassSymbol c =
@@ -311,6 +322,7 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 	 * @param fieldName
 	 *            The name of the field.
 	 */
+	@Override
 	public void addField(String className, String typeName, String fieldName)
 			throws CompilerException {
 		// Do actual addition to symbol table.
@@ -359,6 +371,7 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 	 * @param recordName
 	 *            The name of the record.
 	 */
+	@Override
 	public void addNestedRecord(String className, String typeName,
 			String recordName) throws CompilerException {
 		// Do actual addition to symbol table.
@@ -386,15 +399,18 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 	 *            The name of the type. Must be created with addClassType prior
 	 *            to calling this method.
 	 */
+	@Override
 	public void setBaseType(String name) {
 		setBaseClass(getCompilationEnv().repository.defineClass(getPackage()
 				.fullname() + "." + name));
 	}
 
+	@Override
 	public void addGeneratedJavaSourceFile(String fileName) {
 		getGeneratedJavaSourceFiles().add(fileName);
 	}
 
+	@Override
 	public ClassSymbol createSameBaseClass(ClassSymbol c) {
 		ClassSymbol res =
 			new ClassSymbol(c.getName(), c.getOwner(),
@@ -414,6 +430,7 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 		return res;
 	}
 
+	@Override
 	public ClassSymbol createExistsBaseClass(ClassSymbol c) {
 		ClassSymbol res =
 			new ClassSymbol(c.getName(), c.getOwner(),
@@ -442,6 +459,7 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 		return res;
 	}
 
+	@Override
 	public ClassSymbol createDoubleIndexBaseClass(ClassSymbol c) {
 		ClassSymbol res =
 			new ClassSymbol(c.getName(), c.getOwner(),
@@ -477,6 +495,7 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 	 *
 	 * @return value of packageName.
 	 */
+	@Override
 	public String getPackageName() {
 		return packageName;
 	}
@@ -487,15 +506,18 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 	 * @param v
 	 *            Value to assign to packageName.
 	 */
+	@Override
 	public void setPackageName(String v) {
 		this.packageName = v;
 		getCompilationEnv().sourcePackages.add(v);
 	}
 
+	@Override
 	public void setAccessorClass(String accessorClass) {
 		this.accessorClass = accessorClass;
 	}
 
+	@Override
 	public String getAccessorClass() {
 		return accessorClass;
 	}
@@ -504,6 +526,7 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 		this.ambiguousImports = ambiguousImports;
 	}
 
+	@Override
 	public Scope getAmbiguousImports() {
 		return ambiguousImports;
 	}
@@ -512,14 +535,17 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 		this.baseClass = baseClass;
 	}
 
+	@Override
 	public Symbol getBaseClass() {
 		return baseClass;
 	}
 
+	@Override
 	public void setClueSetFileName(String clueSetFileName) {
 		this.clueSetFileName = clueSetFileName;
 	}
 
+	@Override
 	public String getClueSetFileName() {
 		return clueSetFileName;
 	}
@@ -528,14 +554,17 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 		this.decls = decls;
 	}
 
+	@Override
 	public Tree[] getDecls() {
 		return decls;
 	}
 
+	@Override
 	public void setDoubleIndexBaseClass(Symbol doubleIndexBaseClass) {
 		this.doubleIndexBaseClass = doubleIndexBaseClass;
 	}
 
+	@Override
 	public Symbol getDoubleIndexBaseClass() {
 		return doubleIndexBaseClass;
 	}
@@ -544,6 +573,7 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 		this.env = env;
 	}
 
+	@Override
 	public CompilationEnv getCompilationEnv() {
 		return env;
 	}
@@ -552,14 +582,17 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 		this.errors = errors;
 	}
 
+	@Override
 	public int getErrors() {
 		return errors;
 	}
 
+	@Override
 	public void setExistsBaseClass(Symbol existsBaseClass) {
 		this.existsBaseClass = existsBaseClass;
 	}
 
+	@Override
 	public Symbol getExistsBaseClass() {
 		return existsBaseClass;
 	}
@@ -568,14 +601,17 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 		this.generatedJavaSourceFiles = generatedJavaSourceFiles;
 	}
 
+	@Override
 	public List getGeneratedJavaSourceFiles() {
 		return generatedJavaSourceFiles;
 	}
 
+	@Override
 	public void setIntern(boolean intern) {
 		this.intern = intern;
 	}
 
+	@Override
 	public boolean isIntern() {
 		return intern;
 	}
@@ -584,6 +620,7 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 		this.namedImports = namedImports;
 	}
 
+	@Override
 	public Scope getNamedImports() {
 		return namedImports;
 	}
@@ -592,14 +629,17 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 		this.pckage = pckage;
 	}
 
+	@Override
 	public PackageSymbol getPackage() {
 		return pckage;
 	}
 
+	@Override
 	public void setSchemaName(String schemaName) {
 		this.schemaName = schemaName;
 	}
 
+	@Override
 	public String getSchemaName() {
 		return schemaName;
 	}
@@ -608,6 +648,7 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 		this.source = source;
 	}
 
+	@Override
 	public Sourcecode getSource() {
 		return source;
 	}
@@ -616,14 +657,17 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 		this.starImports = starImports;
 	}
 
+	@Override
 	public Scope getStarImports() {
 		return starImports;
 	}
 
+	@Override
 	public void setTarget(Tree[] target) {
 		this.target = target;
 	}
 
+	@Override
 	public Tree[] getTarget() {
 		return target;
 	}
@@ -632,10 +676,12 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 		this.warnings = warnings;
 	}
 
+	@Override
 	public int getWarnings() {
 		return warnings;
 	}
 
+	@Override
 	public String toString() {
 		return "CompilationUnit [source=" + source + ", errors=" + errors
 				+ ", warnings=" + warnings + ", clueSetFileName="

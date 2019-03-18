@@ -27,6 +27,7 @@ public class DataProfilerAction extends ToolAction {
 		super("Data Profiler...");
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		DataProfilerDialog.showDataProfilerDialog(modelMaker);
 	}
@@ -35,9 +36,11 @@ public class DataProfilerAction extends ToolAction {
 		setEnabled(modelMaker.haveProbabilityModel());
 	}
 	
+	@Override
 	public void setModelMaker(ModelMaker mm) {
 		super.setModelMaker(mm);
 		mm.addPropertyChangeListener(new PropertyChangeListener() {
+			@Override
 			public void propertyChange(PropertyChangeEvent e) {
 				updateEnabled();
 			}

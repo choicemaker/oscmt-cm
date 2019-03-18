@@ -230,6 +230,7 @@ public class PiecewiseMatcher2 {
 			return numPairsOutput;
 		}
 		
+		@Override
 		public void run() {
 			numCompared = 0;
 			numPairsOutput = 0;
@@ -270,35 +271,43 @@ public class PiecewiseMatcher2 {
 			this.inner = sink;
 		}
 
+		@Override
 		public synchronized void putMarkedRecordPair(ImmutableMarkedRecordPair r)
 				throws Exception {
 			inner.putMarkedRecordPair(r);
 		}
 
+		@Override
 		public synchronized void put(ImmutableRecordPair r) throws Exception {
 			inner.put(r);
 		}
 
+		@Override
 		public synchronized void open() throws IOException {
 			inner.open();
 		}
 
+		@Override
 		public synchronized void close() throws Exception {
 			inner.close();
 		}
 
+		@Override
 		public synchronized String getName() {
 			return inner.getName();
 		}
 
+		@Override
 		public synchronized void setName(String name) {
 			inner.setName(name);
 		}
 
+		@Override
 		public synchronized ImmutableProbabilityModel getModel() {
 			return inner.getModel();
 		}
 
+		@Override
 		public synchronized void setModel(ImmutableProbabilityModel m) {
 			inner.setModel(m);
 		}
@@ -307,6 +316,7 @@ public class PiecewiseMatcher2 {
 		 * NOP for now
 		 * @see com.choicemaker.cm.Sink#flush()
 		 */
+		@Override
 		public void flush() throws IOException {
 		}
 		
@@ -343,12 +353,15 @@ public class PiecewiseMatcher2 {
 			/**
 			 * This call can be ignored...
 			 */
+			@Override
 			public void open() { }
 
+			@Override
 			public void put(ImmutableRecordPair r) {
 				buffer.put(r);
 			}
 
+			@Override
 			public void close() {
 				buffer.close();
 			}
@@ -356,16 +369,21 @@ public class PiecewiseMatcher2 {
 			/**
 			 * Ignorable...
 			 */
+			@Override
 			public void setModel(ImmutableProbabilityModel m) { }
 
+			@Override
 			public ImmutableProbabilityModel getModel() { throw new UnsupportedOperationException(); }
+			@Override
 			public String getName() { throw new UnsupportedOperationException(); }
+			@Override
 			public void setName(String name) { throw new UnsupportedOperationException(); }
 			
 			/**
 			 * NOP for now
 			 * @see com.choicemaker.cm.Sink#flush()
 			 */
+			@Override
 			public void flush() throws IOException {
 			}
 		

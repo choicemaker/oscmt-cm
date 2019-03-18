@@ -61,7 +61,8 @@ public class TrainingControlPanel extends JPanel implements RepositoryChangeList
         parent.addMarkedRecordPairDataChangeListener(this);
     }
 
-    public void setVisible(boolean b) {
+    @Override
+	public void setVisible(boolean b) {
         super.setVisible(b);
         if (b && dirty) {
             display();
@@ -103,7 +104,8 @@ public class TrainingControlPanel extends JPanel implements RepositoryChangeList
     private void addListeners() {
     }
 
-    public void propertyChange(PropertyChangeEvent evt) {
+    @Override
+	public void propertyChange(PropertyChangeEvent evt) {
         String propertyName = evt.getPropertyName();
         Object source = evt.getSource();
         if (source == parent) {
@@ -117,7 +119,8 @@ public class TrainingControlPanel extends JPanel implements RepositoryChangeList
         }
     }
 
-    public void evaluated(EvaluationEvent evt) {
+    @Override
+	public void evaluated(EvaluationEvent evt) {
         if (evt.isEvaluated()) {
             setDirty();
         } else {
@@ -141,15 +144,18 @@ public class TrainingControlPanel extends JPanel implements RepositoryChangeList
         }
     }
 
-    public void setChanged(RepositoryChangeEvent evt) {
+    @Override
+	public void setChanged(RepositoryChangeEvent evt) {
         performanceTable.reset();
         clueTablePanel.refreshStatistics();
     }
 
-    public void recordDataChanged(RepositoryChangeEvent evt) {
+    @Override
+	public void recordDataChanged(RepositoryChangeEvent evt) {
     }
 
-    public void markupDataChanged(RepositoryChangeEvent evt) {
+    @Override
+	public void markupDataChanged(RepositoryChangeEvent evt) {
     }
 
     private void layoutPanel() {

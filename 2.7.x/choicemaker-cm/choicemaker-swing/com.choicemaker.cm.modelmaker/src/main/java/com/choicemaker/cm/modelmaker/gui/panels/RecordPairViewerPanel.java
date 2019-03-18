@@ -50,6 +50,7 @@ public class RecordPairViewerPanel implements RepositoryChangeListener, Property
 		modelMaker.addMarkedRecordPairDataChangeListener(this);
 	}
 
+	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		String propertyName = evt.getPropertyName();
 		Object src = evt.getSource();
@@ -78,13 +79,16 @@ public class RecordPairViewerPanel implements RepositoryChangeListener, Property
 		}
 	}
 
+	@Override
 	public void setChanged(RepositoryChangeEvent evt) {
 		viewer.setRecordData(null);
 	}
 
+	@Override
 	public void recordDataChanged(RepositoryChangeEvent evt) {
 	}
 
+	@Override
 	public void markupDataChanged(RepositoryChangeEvent evt) {
 	}
 

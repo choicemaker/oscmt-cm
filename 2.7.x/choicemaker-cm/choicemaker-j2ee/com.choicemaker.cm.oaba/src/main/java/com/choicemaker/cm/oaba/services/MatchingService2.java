@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
+import com.choicemaker.cm.args.BatchProcessingConstants;
 import com.choicemaker.cm.batch.api.ProcessingEventLog;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
@@ -143,7 +144,7 @@ public class MatchingService2 {
 		} else if (status.getCurrentProcessingEventId() == OabaProcessingConstants.EVT_MATCHING_DATA) {
 			// recovery mode
 			String temp = status.getCurrentProcessingEventInfo();
-			int ind = temp.indexOf(OabaProcessingConstants.DELIMIT);
+			int ind = temp.indexOf(BatchProcessingConstants.DELIMIT);
 			numChunks = Integer.parseInt(temp.substring(0, ind));
 			int startPoint = Integer.parseInt(temp.substring(ind + 1)) + 1;
 
@@ -236,7 +237,7 @@ public class MatchingService2 {
 
 			// log the status
 			String temp =
-				Integer.toString(numChunks) + OabaProcessingConstants.DELIMIT
+				Integer.toString(numChunks) + BatchProcessingConstants.DELIMIT
 						+ Integer.toString(i);
 			status.setCurrentProcessingEvent(OabaEventBean.MATCHING_DATA, temp);
 

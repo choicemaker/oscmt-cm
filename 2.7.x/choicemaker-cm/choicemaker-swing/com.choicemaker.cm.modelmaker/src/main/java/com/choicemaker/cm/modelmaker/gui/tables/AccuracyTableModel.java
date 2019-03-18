@@ -41,6 +41,7 @@ public class AccuracyTableModel extends AbstractTableModel {
 		}
 	}
 
+	@Override
 	public String getColumnName(int col) {
 		return columnNames[col];
 	}
@@ -67,18 +68,22 @@ public class AccuracyTableModel extends AbstractTableModel {
 		return ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.table.confusion.label");
 	}
 
+	@Override
 	public int getColumnCount() {
 		return 4;
 	}
 
+	@Override
 	public int getRowCount() {
 		return firstColumn.length;
 	}
 
+	@Override
 	public boolean isCellEditable(int nRow, int nCol) {
 		return false;
 	}
 
+	@Override
 	public Object getValueAt(int iRow, int iCol) {
 		if (isEmpty || iCol == 0) {
 			if (iCol == 0) {

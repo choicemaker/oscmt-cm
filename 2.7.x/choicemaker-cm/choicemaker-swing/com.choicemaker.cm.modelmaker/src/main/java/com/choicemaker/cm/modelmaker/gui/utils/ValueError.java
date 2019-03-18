@@ -25,6 +25,7 @@ public class ValueError {
 		myValue = value;
 	}
 
+	@Override
 	public String toString() {
 		return myValue;
 	}

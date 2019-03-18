@@ -53,106 +53,132 @@ public abstract class DefaultVisitor implements Visitor {
 
 	// map all other cases to the default case
 
+	@Override
 	public void visit(Bad t) throws CompilerException {
 		visit((Tree) t);
 	}
 
+	@Override
 	public void visit(PackageDecl t) throws CompilerException {
 		visit((Tree) t);
 	}
 
+	@Override
 	public void visit(ImportDecl t) throws CompilerException {
 		visit((Tree) t);
 	}
 
+	@Override
 	public void visit(ClueSetDecl t) throws CompilerException {
 		visit((Tree) t);
 	}
 
+	@Override
 	public void visit(ClueDecl t) throws CompilerException {
 		visit((Tree) t);
 	}
 
+	@Override
 	public void visit(Index t) throws CompilerException {
 		visit((Tree) t);
 	}
 
+	@Override
 	public void visit(MethodDecl t) throws CompilerException {
 		visit((Tree) t);
 	}
 
+	@Override
 	public void visit(VarDecl t) throws CompilerException {
 		visit((Tree) t);
 	}
 
+	@Override
 	public void visit(Quantified t) throws CompilerException {
 		visit((Tree) t);
 	}
 
+	@Override
 	public void visit(Let t) throws CompilerException {
 		visit((Tree) t);
 	}
 
+	@Override
 	public void visit(Shorthand t) throws CompilerException {
 		visit((Tree) t);
 	}
 
+	@Override
 	public void visit(Valid t) throws CompilerException {
 		visit((Tree) t);
 	}
 
+	@Override
 	public void visit(If t) throws CompilerException {
 		visit((Tree) t);
 	}
 
+	@Override
 	public void visit(Apply t) throws CompilerException {
 		visit((Tree) t);
 	}
 
+	@Override
 	public void visit(New t) throws CompilerException {
 		visit((Tree) t);
 	}
 
+	@Override
 	public void visit(NewArray t) throws CompilerException {
 		visit((Tree) t);
 	}
 
+	@Override
 	public void visit(Typeop t) throws CompilerException {
 		visit((Tree) t);
 	}
 
+	@Override
 	public void visit(Unop t) throws CompilerException {
 		visit((Tree) t);
 	}
 
+	@Override
 	public void visit(Binop t) throws CompilerException {
 		visit((Tree) t);
 	}
 
+	@Override
 	public void visit(Indexed t) throws CompilerException {
 		visit((Tree) t);
 	}
 
+	@Override
 	public void visit(Select t) throws CompilerException {
 		visit((Tree) t);
 	}
 
+	@Override
 	public void visit(Ident t) throws CompilerException {
 		visit((Tree) t);
 	}
 
+	@Override
 	public void visit(Self t) throws CompilerException {
 		visit((Tree) t);
 	}
 
+	@Override
 	public void visit(ArrayType t) throws CompilerException {
 		visit((Tree) t);
 	}
 
+	@Override
 	public void visit(PrimitiveType t) throws CompilerException {
 		visit((Tree) t);
 	}
 
+	@Override
 	public void visit(Literal t) throws CompilerException {
 		visit((Tree) t);
 	}

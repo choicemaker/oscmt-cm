@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.TreeSet;
 import java.util.logging.Logger;
 
+import com.choicemaker.cm.args.BatchProcessingConstants;
 import com.choicemaker.cm.batch.api.ProcessingEventLog;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.base.MatchRecord2;
@@ -86,7 +87,7 @@ public class MatchDedupService2 {
 		} else if (status.getCurrentProcessingEventId() == OabaProcessingConstants.EVT_OUTPUT_DEDUP_MATCHES) {
 			// recover writing out dedup matches
 			String temp = status.getCurrentProcessingEventInfo();
-			int ind = temp.indexOf(OabaProcessingConstants.DELIMIT);
+			int ind = temp.indexOf(BatchProcessingConstants.DELIMIT);
 			int size = Integer.parseInt(temp.substring(0, ind));
 			int skip = Integer.parseInt(temp.substring(ind + 1));
 
@@ -193,7 +194,7 @@ public class MatchDedupService2 {
 
 						String temp =
 							Integer.toString(tempSinks.size())
-									+ OabaProcessingConstants.DELIMIT
+									+ BatchProcessingConstants.DELIMIT
 									+ Integer.toString(numBefore);
 						status.setCurrentProcessingEvent(
 								OabaEventBean.OUTPUT_DEDUP_MATCHES, temp);
@@ -211,7 +212,7 @@ public class MatchDedupService2 {
 				log.info("writing out " + matches.size());
 				tempSink.writeMatches(matches.iterator());
 				String temp =
-					Integer.toString(tempSinks.size()) + OabaProcessingConstants.DELIMIT
+					Integer.toString(tempSinks.size()) + BatchProcessingConstants.DELIMIT
 							+ Integer.toString(numBefore);
 				status.setCurrentProcessingEvent(
 						OabaEventBean.OUTPUT_DEDUP_MATCHES, temp);

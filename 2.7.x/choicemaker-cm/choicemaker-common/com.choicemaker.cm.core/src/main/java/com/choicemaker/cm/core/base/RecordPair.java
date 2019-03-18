@@ -30,6 +30,7 @@ import com.choicemaker.cm.core.RecordData;
  * @see IRecordPair
  * @see ImmutableRecordPair
  */
+@Deprecated
 public class RecordPair<T extends Comparable<T> & Serializable> extends RecordData implements IRecordPair<T> {
 
 	/**
@@ -37,6 +38,7 @@ public class RecordPair<T extends Comparable<T> & Serializable> extends RecordDa
 	 * @deprecated use get/setQueryRecord() instead. This is field
 	 * is still used by generated code, but shouldn't used elsewhere.
 	 */
+	@Deprecated
 	public Record<T> q;
 
 	/**
@@ -44,6 +46,7 @@ public class RecordPair<T extends Comparable<T> & Serializable> extends RecordDa
 	 * @deprecated use get/setMatchRecord() instead. This is field
 	 * is still used by generated code, but shouldn't used elsewhere.
 	 */
+	@Deprecated
 	public Record<T> m;
 
 	/**
@@ -51,6 +54,7 @@ public class RecordPair<T extends Comparable<T> & Serializable> extends RecordDa
 	 * @deprecated use get/setProbability instead. This is field
 	 * is still used by generated code, but shouldn't used elsewhere.
 	 */
+	@Deprecated
 	public float probability;
 
 	/**
@@ -58,6 +62,7 @@ public class RecordPair<T extends Comparable<T> & Serializable> extends RecordDa
 	 * @deprecated use get/setCmDecision instead. This is field
 	 * is still used by generated code, but shouldn't used elsewhere.
 	 */
+	@Deprecated
 	public Decision cmDecision;
 	
 	/**
@@ -65,6 +70,7 @@ public class RecordPair<T extends Comparable<T> & Serializable> extends RecordDa
 	 * @deprecated use get/setProbability instead. This is field
 	 * is still used by generated code, but shouldn't used elsewhere.
 	 */
+	@Deprecated
 	public ActiveClues af;
 	
 	public RecordPair() {
@@ -84,6 +90,7 @@ public class RecordPair<T extends Comparable<T> & Serializable> extends RecordDa
 	/**
 	 * @see com.choicemaker.cm.core.base.RecordData#getFirstRecord()
 	 */
+	@Override
 	public Record<T> getFirstRecord() {
 		return getQueryRecord();
 	}
@@ -91,46 +98,57 @@ public class RecordPair<T extends Comparable<T> & Serializable> extends RecordDa
 	/**
 	 * @see com.choicemaker.cm.core.base.RecordData#getSecondRecord()
 	 */
+	@Override
 	public Record<T> getSecondRecord() {
 		return getMatchRecord();
 	}
 	
+	@Override
 	public ActiveClues getActiveClues() {
 		return af;	
 	}
 	
+	@Override
 	public void setActiveClues(ActiveClues af) {
 		this.af = af;	
 	}
 
+	@Override
 	public void setQueryRecord(Record<T> q) {
 		this.q = q;
 	}
 
+	@Override
 	public Record<T> getQueryRecord() {
 		return q;
 	}
 
+	@Override
 	public void setMatchRecord(Record<T> m) {
 		this.m = m;
 	}
 
+	@Override
 	public Record<T> getMatchRecord() {
 		return m;
 	}
 
+	@Override
 	public void setCmDecision(Decision cmDecision) {
 		this.cmDecision = cmDecision;
 	}
 
+	@Override
 	public Decision getCmDecision() {
 		return cmDecision;
 	}
 
+	@Override
 	public void setProbability(float probability) {
 		this.probability = probability;
 	}
 
+	@Override
 	public float getProbability() {
 		return probability;
 	}

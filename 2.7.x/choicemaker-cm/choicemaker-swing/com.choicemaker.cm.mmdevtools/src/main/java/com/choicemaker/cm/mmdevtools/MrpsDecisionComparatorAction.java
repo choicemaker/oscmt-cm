@@ -24,6 +24,7 @@ public class MrpsDecisionComparatorAction extends ToolAction {
 		super("MRPS Decision Comparator...");
 	}
 	
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		MrpsDecisionComparatorDialog.showDialog(modelMaker);
 	}

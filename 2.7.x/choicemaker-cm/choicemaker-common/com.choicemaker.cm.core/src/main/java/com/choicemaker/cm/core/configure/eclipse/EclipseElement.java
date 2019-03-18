@@ -36,6 +36,7 @@ public class EclipseElement implements IElement {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.base.configure.IElement#getName()
 	 */
+	@Override
 	public String getName() {
 		return this.getElement().getName();
 	}
@@ -43,6 +44,7 @@ public class EclipseElement implements IElement {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.base.configure.IElement#getChildren()
 	 */
+	@Override
 	public List getChildren() {
 		List retVal = new LinkedList();
 		CMConfigurationElement[] eclipseChildren = this.getElement().getChildren();
@@ -57,6 +59,7 @@ public class EclipseElement implements IElement {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.base.configure.IElement#getChildren(java.lang.String)
 	 */
+	@Override
 	public List getChildren(String name) {
 		List retVal = new LinkedList();
 		CMConfigurationElement[] eclipseChildren = this.getElement().getChildren(name);
@@ -71,6 +74,7 @@ public class EclipseElement implements IElement {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.base.configure.IElement#getChild(java.lang.String)
 	 */
+	@Override
 	public IElement getChild(String name) {
 		IElement retVal = null;
 		List list = getChildren(name);
@@ -101,6 +105,7 @@ public class EclipseElement implements IElement {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.base.configure.IElement#getAttributeValue(java.lang.String)
 	 */
+	@Override
 	public String getAttributeValue(String name) {
 		return this.getElement().getAttribute(name);
 	}

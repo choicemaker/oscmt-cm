@@ -69,6 +69,7 @@ class State implements Cloneable {
 
 	} //ctor(boolean,boolean,int,HashMap)
 
+	@Override
 	public Object clone() {
 		return new State(this.start, this.end, this.no, this.transes);
 	}

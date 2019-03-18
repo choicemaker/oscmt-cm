@@ -38,6 +38,7 @@ public class DbDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 	private static final int SINGLE_UNION = 1;
 	private static final int MULTI = 2;
 
+	@Override
 	public Object run(Object args) throws Exception {
 		CommandLineArguments cla = new CommandLineArguments();
 		cla.addExtensions();
@@ -61,6 +62,7 @@ public class DbDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 		dbom.generateObjects(new File(args[2]));
 	}
 
+	@Override
 	public void generateObjects(File outDir) throws IOException {
 		File outFile = new File(outDir, "Oracle_Custom_Objects.txt");
 		Writer w = new FileWriter(outFile);

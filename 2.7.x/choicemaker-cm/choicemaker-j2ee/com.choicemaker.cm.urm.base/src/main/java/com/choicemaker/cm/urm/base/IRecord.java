@@ -27,6 +27,7 @@ public interface IRecord<T extends Comparable<T> & Serializable> extends DataAcc
 	 * <p>
 	 * See <code>com.choicemaker.cm.core.Identifiable</code>
 	 */
+	@Override
 	public T getId();
 	
 	/**

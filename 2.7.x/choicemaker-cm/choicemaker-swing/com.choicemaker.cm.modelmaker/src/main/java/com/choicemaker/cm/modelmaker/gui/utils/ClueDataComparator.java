@@ -59,6 +59,7 @@ public class ClueDataComparator implements Comparator {
 	 * @throws ClassCastException if the arguments' types prevent them from
 	 *         being compared by this Comparator.
 	 */
+	@Override
 	public int compare(Object o1, Object o2) {
 		int result;
 		Object v1 = ((ClTableRow) o1).getColumn(sortCol);
@@ -82,6 +83,7 @@ public class ClueDataComparator implements Comparator {
 		return result;
 	}
 
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -90,7 +92,8 @@ public class ClueDataComparator implements Comparator {
 		return result;
 	}
 
- 	public boolean equals(Object obj) {
+ 	@Override
+	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
@@ -109,6 +112,7 @@ public class ClueDataComparator implements Comparator {
 	 * Obsolete method for {@link #equals(Object)}. Used for testing only.
 	 * @deprecated
 	 */
+	@Deprecated
 	public boolean equals_00(Object obj){
 		if (obj instanceof ClueDataComparator) {
 			ClueDataComparator compObj = (ClueDataComparator) obj;

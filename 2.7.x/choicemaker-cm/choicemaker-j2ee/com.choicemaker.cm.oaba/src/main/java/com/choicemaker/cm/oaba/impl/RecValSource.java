@@ -41,6 +41,7 @@ public class RecValSource extends BaseFileSource<Long> implements IRecValSource 
 		super(fileName, type);
 	}
 
+	@Override
 	protected void resetNext() {
 		nextRecID = 0;
 		nextValues = null;

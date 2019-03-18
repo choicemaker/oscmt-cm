@@ -32,6 +32,7 @@ public abstract class DefaultObservableData implements ObservableData {
 	/**
 	 * @see java.beans.PropertyChangeSupport#addPropertyChangeListener(java.beans.PropertyChangeListener)
 	 */
+	@Override
 	public void addPropertyChangeListener(PropertyChangeListener listener) {
 		support.addPropertyChangeListener(listener);
 	}
@@ -39,6 +40,7 @@ public abstract class DefaultObservableData implements ObservableData {
 	/**
 	 * @see java.beans.PropertyChangeSupport#getPropertyChangeListeners()
 	 */
+	@Override
 	public PropertyChangeListener[] getPropertyChangeListeners() {
 		return support.getPropertyChangeListeners();
 	}
@@ -46,6 +48,7 @@ public abstract class DefaultObservableData implements ObservableData {
 	/**
 	 * @see java.beans.PropertyChangeSupport#removePropertyChangeListener(java.beans.PropertyChangeListener)
 	 */
+	@Override
 	public void removePropertyChangeListener(PropertyChangeListener listener) {
 		support.removePropertyChangeListener(listener);
 	}

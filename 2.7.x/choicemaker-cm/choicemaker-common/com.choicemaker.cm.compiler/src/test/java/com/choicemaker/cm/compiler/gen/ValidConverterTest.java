@@ -40,6 +40,7 @@ public class ValidConverterTest extends TestCase {
 
 	private Map testData;
 
+	@Override
 	public void setUp() {
 		InputStream is = null;
 		try {
@@ -68,6 +69,7 @@ public class ValidConverterTest extends TestCase {
 		}
 	}
 
+	@Override
 	public void tearDown() {
 		if (testData != null) {
 			testData = null;
@@ -111,6 +113,7 @@ public class ValidConverterTest extends TestCase {
 			return Collections.unmodifiableMap(examples);
 		}
 
+		@Override
 		public void startElement(String uri, String localName, String qName,
 				Attributes attributes) throws SAXException {
 			qName = qName.intern();
@@ -134,6 +137,7 @@ public class ValidConverterTest extends TestCase {
 			}
 		}
 
+		@Override
 		public void characters(char[] ch, int start, int length) {
 			if (isInput) {
 				String s = new String(ch, start, length);
@@ -144,6 +148,7 @@ public class ValidConverterTest extends TestCase {
 			}
 		}
 
+		@Override
 		public void endElement(String uri, String localName, String qName)
 				throws SAXException {
 			qName = qName.intern();

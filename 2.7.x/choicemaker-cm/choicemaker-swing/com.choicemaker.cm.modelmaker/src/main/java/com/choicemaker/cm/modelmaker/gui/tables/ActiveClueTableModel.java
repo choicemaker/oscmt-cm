@@ -144,6 +144,7 @@ public class ActiveClueTableModel extends SortableTableModel {
 		return columns;
 	}
 
+	@Override
 	public void sort() {
 		Collections.sort(rows, new ClueDataComparator(sortCol, sortAsc));
 	}
@@ -238,6 +239,7 @@ public class ActiveClueTableModel extends SortableTableModel {
 	 * @return the number of columns in the model
 	 * @see #getRowCount
 	 */
+	@Override
 	public int getColumnCount() {
 		return columns.length;
 	}
@@ -250,10 +252,12 @@ public class ActiveClueTableModel extends SortableTableModel {
 	 * @return the number of rows in the model
 	 * @see #getColumnCount
 	 */
+	@Override
 	public int getRowCount() {
 		return (record == null) ? 0 : rows.size();
 	}
 
+	@Override
 	public String getColumnName(int col) {
 		String str = columnNames[col];
 		if (col == sortCol) {
@@ -262,6 +266,7 @@ public class ActiveClueTableModel extends SortableTableModel {
 		return str;
 	}
 
+	@Override
 	public boolean isCellEditable(int nRow, int nCol) {
 		return false;
 	}
@@ -276,6 +281,7 @@ public class ActiveClueTableModel extends SortableTableModel {
 	 *                 the column whose value is to be queried
 	 * @return the value Object at the specified cell
 	 */
+	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		if (record == null || rowIndex < 0 || rowIndex >= getRowCount()) {
 			return "";

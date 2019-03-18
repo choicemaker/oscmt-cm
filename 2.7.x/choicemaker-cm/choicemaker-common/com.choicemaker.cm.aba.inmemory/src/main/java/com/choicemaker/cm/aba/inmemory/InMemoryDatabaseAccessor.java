@@ -32,31 +32,38 @@ public class InMemoryDatabaseAccessor implements DatabaseAccessor {
 		this.start = start;
 	}
 
+	@Override
 	public DatabaseAccessor cloneWithNewConnection()
 		throws CloneNotSupportedException {
 		throw new CloneNotSupportedException("not yet implemented");
 	}
 
+	@Override
 	public void setDataSource(DataSource dataSource) { 
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
 	public void setCondition(Object condition) { 
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
 	public void open(AutomatedBlocker blocker, String unused) throws IOException {
 		itBlocked = imds.select(blocker.getBlockingSets(), start);
 	}
 
+	@Override
 	public boolean hasNext() {
 		return itBlocked.hasNext();
 	}
 
+	@Override
 	public Record getNext() throws IOException {
 		return (Record)itBlocked.next();
 	}
 
+	@Override
 	public void close() throws IOException {
 		itBlocked = null;
 	}

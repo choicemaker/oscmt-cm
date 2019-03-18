@@ -64,6 +64,7 @@ public class SqlServerRecordSource implements RecordSource {
 		setFileName(fileName);
 	}
 
+	@Override
 	public void open() throws IOException {
 		DbAccessor accessor = (DbAccessor) model.getAccessor();
 		dbr = accessor.getDbReaderSequential(dbConfiguration);
@@ -124,14 +125,17 @@ public class SqlServerRecordSource implements RecordSource {
 		}
 	}
 
+	@Override
 	public boolean hasNext() throws IOException {
 		return dbr.hasNext();
 	}
 
+	@Override
 	public Record getNext() throws IOException {
 		return dbr.getNext();
 	}
 
+	@Override
 	public void close() throws IOException {
 		try {
 			if (stmt != null) {
@@ -155,10 +159,12 @@ public class SqlServerRecordSource implements RecordSource {
 		}
 	}
 
+	@Override
 	public ImmutableProbabilityModel getModel() {
 		return model;
 	}
 
+	@Override
 	public void setModel(ImmutableProbabilityModel model) {
 		this.model = model;
 	}
@@ -204,18 +210,22 @@ public class SqlServerRecordSource implements RecordSource {
 		this.idsQuery = idsQuery;
 	}
 	
+	@Override
 	public String getName() {
 		return "SQL Server Record Source";
 	}
 
+	@Override
 	public void setName(String name) {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
 	public boolean hasSink() {
 		return false;
 	}
 
+	@Override
 	public Sink getSink() {
 		throw new UnsupportedOperationException();
 	}
@@ -224,6 +234,7 @@ public class SqlServerRecordSource implements RecordSource {
 		this.fileName = fileName;
 	}
 
+	@Override
 	public String getFileName() {
 		return fileName;
 	}
@@ -237,6 +248,7 @@ public class SqlServerRecordSource implements RecordSource {
 		return b.toString();
 	}
 
+	@Override
 	public String toString() {
 		return "SqlServerRecordSource [fileName=" + fileName + ", model="
 				+ model + ", dbConfiguration=" + dbConfiguration

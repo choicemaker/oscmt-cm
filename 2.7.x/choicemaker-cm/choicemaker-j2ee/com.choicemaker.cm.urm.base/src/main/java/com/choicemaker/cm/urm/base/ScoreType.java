@@ -37,6 +37,7 @@ public class ScoreType implements Serializable {
 	public static final ScoreType NO_NOTE = new ScoreType("NO_NOTE");
 	public static final ScoreType RULE_LIST_NOTE = new ScoreType("RULE_LIST_NOTE");
 	
+	@Override
 	public String toString() {
 		return value;
 	}

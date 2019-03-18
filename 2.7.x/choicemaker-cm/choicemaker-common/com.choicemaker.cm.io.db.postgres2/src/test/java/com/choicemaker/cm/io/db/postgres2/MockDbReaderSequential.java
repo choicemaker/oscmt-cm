@@ -42,7 +42,7 @@ public final class MockDbReaderSequential implements DbReaderSequential<String> 
 
 	@Override
 	public Record<String> getNext() {
-		Record<String> r = (Record<String>) iRes.next();
+		Record<String> r = iRes.next();
 		r.computeValidityAndDerived(src);
 		return r;
 	}

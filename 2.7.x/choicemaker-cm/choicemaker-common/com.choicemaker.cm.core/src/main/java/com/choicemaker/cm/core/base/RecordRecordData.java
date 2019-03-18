@@ -28,6 +28,7 @@ public class RecordRecordData extends RecordData {
 	/**
 	 * @see com.choicemaker.cm.core.base.RecordData#getFirstRecord()
 	 */
+	@Override
 	public Record getFirstRecord() {
 		return record;
 	}
@@ -35,6 +36,7 @@ public class RecordRecordData extends RecordData {
 	/**
 	 * @see com.choicemaker.cm.core.base.RecordData#getSecondRecord()
 	 */
+	@Override
 	public Record getSecondRecord() {
 		return null;
 	}

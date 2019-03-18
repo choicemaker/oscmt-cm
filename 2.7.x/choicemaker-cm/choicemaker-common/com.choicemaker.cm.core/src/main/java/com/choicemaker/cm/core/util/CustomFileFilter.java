@@ -30,6 +30,7 @@ public class CustomFileFilter extends javax.swing.filechooser.FileFilter impleme
 		this.dirs = dirs;
 	}
 
+	@Override
 	public boolean accept(File f) {
 		if (f.isDirectory()) {
 			return dirs;
@@ -50,6 +51,7 @@ public class CustomFileFilter extends javax.swing.filechooser.FileFilter impleme
 	}
 
 	// The description of this filter
+	@Override
 	public String getDescription() {
 		return description;
 	}

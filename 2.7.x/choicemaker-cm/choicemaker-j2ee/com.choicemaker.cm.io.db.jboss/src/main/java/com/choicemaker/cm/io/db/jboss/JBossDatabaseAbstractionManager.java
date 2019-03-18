@@ -30,6 +30,7 @@ import com.choicemaker.cm.io.db.sqlserver.blocking.SqlDatabaseAbstraction;
  * @author rphall
  * @deprecated
  */
+@Deprecated
 public class JBossDatabaseAbstractionManager implements
 		DatabaseAbstractionManager {
 
@@ -44,6 +45,7 @@ public class JBossDatabaseAbstractionManager implements
 
 	public static final String POSTGRES_SIGNATURE = "sqlserver";
 
+	@Override
 	public DatabaseAbstraction lookupDatabaseAbstraction(DataSource ds)
 			throws DatabaseException {
 

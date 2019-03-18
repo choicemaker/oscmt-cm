@@ -36,6 +36,7 @@ public interface DbReaderSequential<T extends Comparable<T>> extends DbReader<T>
 	 *
 	 * @return  The next entity.
 	 */
+	@Override
 	Record<T> getNext();
 
 	String getMasterIdType();

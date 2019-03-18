@@ -49,6 +49,7 @@ public class SimpleGraphCompactor implements
 	 * link is between two compacted nodes.
 	 * 
 	 */
+	@Override
 	public CompositeEntity compact(CompositeEntity ce)
 			throws TransitivityException {
 		CompositeEntity ret = new CompositeEntity(ce.getNodeId());
@@ -78,7 +79,7 @@ public class SimpleGraphCompactor implements
 				CompositeEntity compacted = getFromCompactedNodes(marking2);
 
 				CompositePair pair = new CompositePair(node1.getNodeId(), marking2);
-				Link compLink = (Link) compactedLinks.get(pair);
+				Link compLink = compactedLinks.get(pair);
 
 				Link newLink = null;
 				if (compLink == null) {
@@ -99,7 +100,7 @@ public class SimpleGraphCompactor implements
 				CompositeEntity compacted = getFromCompactedNodes(marking1);
 
 				CompositePair pair = new CompositePair(node2.getNodeId(), marking1);
-				Link compLink = (Link) compactedLinks.get(pair);
+				Link compLink = compactedLinks.get(pair);
 
 				Link newLink = null;
 				if (compLink == null) {
@@ -136,7 +137,7 @@ public class SimpleGraphCompactor implements
 					cp = new CompositePair(marking1, marking2);
 				else
 					cp = new CompositePair(marking2, marking1);
-				Link compLink = (Link) compactedLinks.get(cp);
+				Link compLink = compactedLinks.get(cp);
 
 				Link newLink = null;
 				if (compLink == null) {
@@ -162,7 +163,7 @@ public class SimpleGraphCompactor implements
 	}
 
 	private CompositeEntity getFromCompactedNodes(Integer I) {
-		CompositeEntity compacted = (CompositeEntity) compactedNodes.get(I);
+		CompositeEntity compacted = compactedNodes.get(I);
 
 		if (compacted == null) {
 			compacted = new CompositeEntity(I);
@@ -191,6 +192,7 @@ public class SimpleGraphCompactor implements
 			this.id2 = id2;
 		}
 
+		@Override
 		public int compareTo(CompositePair<E> cp) {
 			int i1 = this.id1.compareTo(cp.id1);
 			int i2 = this.id2.compareTo(cp.id2);

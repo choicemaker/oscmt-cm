@@ -59,10 +59,12 @@ public class BeanProfile implements Profile {
 		this.profile = profile;
 	}
 	
+	@Override
 	public String toString() {
 		return "beanProfile";
 	}
 	
+	@Override
 	public Record getRecord(ImmutableProbabilityModel model) {
 		return model.getAccessor().toImpl(getProfile());
 	}

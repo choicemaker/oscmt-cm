@@ -15,9 +15,11 @@ import com.choicemaker.cm.core.RecordData;
  *
  */
 public class AllFilter implements Filter {
+	@Override
 	public boolean satisfy(Record r) {
 		return true;	
 	}
+	@Override
 	public boolean satisfy(RecordData rd) {
 		return true;
 	}

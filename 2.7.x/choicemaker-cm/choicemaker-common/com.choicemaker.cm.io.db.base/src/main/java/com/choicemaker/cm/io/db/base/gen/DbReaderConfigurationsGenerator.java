@@ -45,6 +45,7 @@ public class DbReaderConfigurationsGenerator implements GeneratorPlugin {
 		return (DbReaderConfigurationGenerator[]) confList.toArray(new DbReaderConfigurationGenerator[confList.size()]);
 	}
 
+	@Override
 	public synchronized void generate(IGenerator g) throws GenException {
 		try {
 			DbReaderConfigurationGenerator[] confs = addConfigurations(g);

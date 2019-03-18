@@ -28,6 +28,7 @@ public class MeModelConf implements MlModelConf {
 		this.ml = ml;
 	}
 
+	@Override
 	public MachineLearner readMachineLearner(Element e, Accessor acc, List<?> clues, int[] oldClueNums) {
 		MaximumEntropy me = new MaximumEntropy();
 		me.setTrainingIterations(Integer.parseInt(e.getAttributeValue("trainingIterations")));
@@ -37,7 +38,7 @@ public class MeModelConf implements MlModelConf {
 		int i = 0;
 		while (iClues.hasNext()) {
 			int clueNum = oldClueNums[i];
-			Element cl = (Element) iClues.next();
+			Element cl = iClues.next();
 			if (clueNum != -1) {
 				weights[clueNum] = Float.parseFloat(cl.getAttributeValue("weight"));
 			}
@@ -47,10 +48,12 @@ public class MeModelConf implements MlModelConf {
 		return me;
 	}
 
+	@Override
 	public void saveMachineLearner(Element e) {
 		e.setAttribute("trainingIterations", String.valueOf(ml.getTrainingIterations()));
 	}
 
+	@Override
 	public void saveClue(Element e, int clueNum) {
 		e.setAttribute("weight", String.valueOf(ml.getWeights()[clueNum]));
 	}
@@ -58,6 +61,7 @@ public class MeModelConf implements MlModelConf {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.xmlconf.MlModelConf#getExtensionPointId()
 	 */
+	@Override
 	public String getExtensionPointId() {
 		return "com.choicemaker.cm.ml.me.base.me";
 	}

@@ -23,6 +23,7 @@ public class EclipseXmlSpecificationParser
 	 * Returns an instance of <code>EclipseBuilder</code>
 	 * @see EclipseBuilder
 	 */
+	@Override
 	public IBuilder getBuilder() {
 		return new EclipseBuilder();
 	}

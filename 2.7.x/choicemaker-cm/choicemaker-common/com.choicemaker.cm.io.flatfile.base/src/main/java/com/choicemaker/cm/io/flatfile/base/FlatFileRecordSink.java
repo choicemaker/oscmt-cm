@@ -70,10 +70,12 @@ public class FlatFileRecordSink implements RecordSink {
 		setModel(model);
 	}
 
+	@Override
 	public void setModel(ImmutableProbabilityModel model) {
 		this.model = model;
 	}
 
+	@Override
 	public ImmutableProbabilityModel getModel() {
 		return model;
 	}
@@ -90,10 +92,12 @@ public class FlatFileRecordSink implements RecordSink {
 		return fileNameSuffix;
 	}
 
+	@Override
 	public String getName() {
 		return name;
 	}
 
+	@Override
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -110,6 +114,7 @@ public class FlatFileRecordSink implements RecordSink {
 		this.tagged = v;
 	}
 
+	@Override
 	public void open() throws IOException {
 		FlatFileAccessor ffacc = (FlatFileAccessor) model.getAccessor();
 		descWidths = ffacc.getDescWidths();
@@ -150,6 +155,7 @@ public class FlatFileRecordSink implements RecordSink {
 		}
 	}
 
+	@Override
 	public void close() throws IOException {
 		if (multiFile) {
 			for (int i = 1; i < ws.length; ++i) {
@@ -164,6 +170,7 @@ public class FlatFileRecordSink implements RecordSink {
 		}
 	}
 
+	@Override
 	public void put(Record r) throws IOException {
 		recordOutputter.put(ws, r);
 	}
@@ -171,6 +178,7 @@ public class FlatFileRecordSink implements RecordSink {
 	/**
 	 * @see com.choicemaker.cm.core.Sink#flush()
 	 */
+	@Override
 	public void flush() throws IOException {
 		if (multiFile) {
 			for (int i = 1; i < ws.length; ++i) {

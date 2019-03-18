@@ -29,10 +29,12 @@ public class FixedLengthNumberTokenType extends NumberTokenType {
 		this.probability = 1.0 / Math.pow(10, length);
 	}
 	
+	@Override
 	public boolean canHaveToken(String token) {
 		return super.canHaveToken(token) && token.length() == length;
 	}
 
+	@Override
 	protected double getTokenProbability(String token) {
 		return probability;
 	}

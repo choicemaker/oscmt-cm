@@ -24,6 +24,7 @@ public class ErrorReporter implements ReporterPlugin {
 		this.thrown = thrown;
 	}
 
+	@Override
 	public void report(StringBuffer b, boolean newLines) {
 		b.append("<error>");
 		if (newLines)

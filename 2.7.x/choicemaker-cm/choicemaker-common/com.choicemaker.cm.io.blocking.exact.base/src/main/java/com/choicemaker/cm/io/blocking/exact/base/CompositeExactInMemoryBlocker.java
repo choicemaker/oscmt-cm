@@ -29,6 +29,7 @@ public class CompositeExactInMemoryBlocker implements InMemoryBlocker {
 		this.positionMap = positionMap;
 	}
 
+	@Override
 	public void init(List records) {
 		positionMap.setRecords(records);
 		for (int i = 0; i < constituents.length; i++) {
@@ -36,6 +37,7 @@ public class CompositeExactInMemoryBlocker implements InMemoryBlocker {
 		}
 	}
 
+	@Override
 	public void clear() {
 		positionMap.clear();
 		for (int i = 0; i < constituents.length; i++) {
@@ -43,6 +45,7 @@ public class CompositeExactInMemoryBlocker implements InMemoryBlocker {
 		}
 	}
 
+	@Override
 	public RecordSource block(Record q) {
 		HashSet res = new HashSet();
 		for (int i = 0; i < constituents.length; i++) {
@@ -51,6 +54,7 @@ public class CompositeExactInMemoryBlocker implements InMemoryBlocker {
 		return new RecordBinder(res);
 	}
 
+	@Override
 	public RecordSource block(Record q, int start) {
 		HashSet res = new HashSet();
 		for (int i = 0; i < constituents.length; i++) {

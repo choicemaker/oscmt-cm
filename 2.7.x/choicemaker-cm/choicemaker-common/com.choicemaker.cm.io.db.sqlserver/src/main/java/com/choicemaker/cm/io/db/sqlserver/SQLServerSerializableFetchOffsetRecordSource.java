@@ -118,6 +118,7 @@ public class SQLServerSerializableFetchOffsetRecordSource
 		return sqlRS;
 	}
 
+	@Override
 	public ImmutableProbabilityModel getModel() {
 		if (model == null) {
 			model = PMManager.getModelInstance(modelName);
@@ -125,46 +126,57 @@ public class SQLServerSerializableFetchOffsetRecordSource
 		return model;
 	}
 
+	@Override
 	public Record<?> getNext() throws IOException {
 		return getRS().getNext();
 	}
 
+	@Override
 	public void open() throws IOException {
 		getRS().open();
 	}
 
+	@Override
 	public void close() throws IOException {
 		getRS().close();
 	}
 
+	@Override
 	public boolean hasNext() throws IOException {
 		return getRS().hasNext();
 	}
 
+	@Override
 	public String getName() {
 		return getRS().getName();
 	}
 
+	@Override
 	public void setName(String name) {
 		getRS().setName(name);
 	}
 
+	@Override
 	public void setModel(ImmutableProbabilityModel m) {
 		getRS().setModel(m);
 	}
 
+	@Override
 	public boolean hasSink() {
 		return getRS().hasSink();
 	}
 
+	@Override
 	public Sink getSink() {
 		return getRS().getSink();
 	}
 
+	@Override
 	public String getFileName() {
 		return getRS().getFileName();
 	}
 
+	@Override
 	public boolean equals(Object o) {
 		if (o instanceof SQLServerSerializableFetchOffsetRecordSource) {
 			SQLServerSerializableFetchOffsetRecordSource rs =
@@ -178,6 +190,7 @@ public class SQLServerSerializableFetchOffsetRecordSource
 		}
 	}
 
+	@Override
 	public int hashCode() {
 		return getSqlQuery().hashCode();
 	}
@@ -198,6 +211,7 @@ public class SQLServerSerializableFetchOffsetRecordSource
 		return sqlQuery;
 	}
 
+	@Override
 	public Properties getProperties() {
 		Properties retVal = new Properties();
 		retVal.setProperty(PN_DATASOURCE_JNDI_NAME, this.getDsJNDIName());
@@ -207,6 +221,7 @@ public class SQLServerSerializableFetchOffsetRecordSource
 		return retVal;
 	}
 
+	@Override
 	public void setProperties(Properties properties)
 			throws IncompleteSpecificationException {
 
@@ -258,11 +273,13 @@ public class SQLServerSerializableFetchOffsetRecordSource
 		}
 	}
 
+	@Override
 	public String toXML() {
 		String retVal = AbstractRecordSourceSerializer.toXML(this);
 		return retVal;
 	}
 
+	@Override
 	public String toString() {
 		return "SQLServerSerializableParallelSerialRecordSource [dsJNDIName="
 				+ dsJNDIName + ", modelName=" + modelName + ", dbConfig="

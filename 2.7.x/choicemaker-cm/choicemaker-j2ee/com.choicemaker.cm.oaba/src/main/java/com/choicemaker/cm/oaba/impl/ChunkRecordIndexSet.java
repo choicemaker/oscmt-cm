@@ -136,6 +136,7 @@ public class ChunkRecordIndexSet implements IChunkRecordIndexSet {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.oaba.core.IChunkRecordIndexSet#containsRecordIndex(long)
 	 */
+	@Override
 	public boolean containsRecordIndex(long recordIndex) throws BlockingException {
 		Precondition.assertBoolean(errorMsg1,precondition2(this.data));
 		int insertionPoint = Arrays.binarySearch(this.data,recordIndex);
@@ -149,6 +150,7 @@ public class ChunkRecordIndexSet implements IChunkRecordIndexSet {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.oaba.core.IChunkRecordIndexSet#getSource()
 	 */
+	@Override
 	public IChunkRecordIdSource getSource() {
 		return this.source;
 	}
@@ -156,6 +158,7 @@ public class ChunkRecordIndexSet implements IChunkRecordIndexSet {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.oaba.core.IChunkRecordIndexSet#exists()
 	 */
+	@Override
 	public boolean exists() {
 		return this.getSource().exists();
 	}
@@ -163,6 +166,7 @@ public class ChunkRecordIndexSet implements IChunkRecordIndexSet {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.oaba.core.IChunkRecordIndexSet#open()
 	 */
+	@Override
 	public void open() throws BlockingException {
 
 		int capacity = DEFAULT_INITIAL_CAPACITY;
@@ -202,6 +206,7 @@ public class ChunkRecordIndexSet implements IChunkRecordIndexSet {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.oaba.core.IChunkRecordIndexSet#close()
 	 */
+	@Override
 	public void close() throws BlockingException {
 		this.data = null;
 		this.getSource().close();
@@ -211,6 +216,7 @@ public class ChunkRecordIndexSet implements IChunkRecordIndexSet {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.oaba.core.IChunkRecordIndexSet#getInfo()
 	 */
+	@Override
 	public String getInfo() {
 		return this.getSource().getInfo();
 	}
@@ -218,6 +224,7 @@ public class ChunkRecordIndexSet implements IChunkRecordIndexSet {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.oaba.core.IChunkRecordIndexSet#remove()
 	 */
+	@Override
 	public void remove() throws BlockingException {
 		if (this.data != null) {
 			this.close();
@@ -228,6 +235,7 @@ public class ChunkRecordIndexSet implements IChunkRecordIndexSet {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.oaba.core.IChunkRecordIndexSet#isDebugEnabled()
 	 */
+	@Override
 	public boolean isDebugEnabled() {
 		return isDebugEnabled;
 	}
@@ -235,6 +243,7 @@ public class ChunkRecordIndexSet implements IChunkRecordIndexSet {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.oaba.core.IChunkRecordIndexSet#isDebugEnabled()
 	 */
+	@Override
 	public IChunkRecordIdSource getUncheckedIndices() {
 		IChunkRecordIdSource retVal;
 		synchronized(this) {
@@ -261,6 +270,7 @@ public class ChunkRecordIndexSet implements IChunkRecordIndexSet {
 		}
 		IChunkRecordIdSource retVal = new IChunkRecordIdSource() {
 			private int current = 0;
+			@Override
 			public Long next() throws BlockingException {
 				if (current >= copy.length) {
 					throw new ArrayIndexOutOfBoundsException(
@@ -269,24 +279,30 @@ public class ChunkRecordIndexSet implements IChunkRecordIndexSet {
 				return copy[current++];
 			}
 
+			@Override
 			public boolean exists() {
 				return true;
 			}
 
+			@Override
 			public void open() throws BlockingException {
 			}
 
+			@Override
 			public boolean hasNext() throws BlockingException {
 				return current < copy.length;
 			}
 
+			@Override
 			public void close() throws BlockingException {
 			}
 
+			@Override
 			public String getInfo() {
 				return null;
 			}
 
+			@Override
 			public void delete() throws BlockingException {
 			}
 		};

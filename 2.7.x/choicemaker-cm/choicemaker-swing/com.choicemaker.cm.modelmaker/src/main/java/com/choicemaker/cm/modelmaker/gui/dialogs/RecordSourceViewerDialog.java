@@ -21,6 +21,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.WindowConstants;
 
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.RecordSource;
@@ -69,7 +70,7 @@ public class RecordSourceViewerDialog extends JDialog {
 		buildContent();
 		addContentListeners();
 		setContentPane(content);
-		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		pack();
 		Dimension packPreferred = getPreferredSize();
 		Dimension screenSize = getToolkit().getScreenSize();
@@ -83,6 +84,7 @@ public class RecordSourceViewerDialog extends JDialog {
 	 */
 	private void addContentListeners() {
 		nextButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
 					showNext();
@@ -95,12 +97,14 @@ public class RecordSourceViewerDialog extends JDialog {
 		});
 
 		closeButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				dispose();
 			}
 		});
 	}
 
+	@Override
 	public void dispose() {
 		super.dispose();
 		try {

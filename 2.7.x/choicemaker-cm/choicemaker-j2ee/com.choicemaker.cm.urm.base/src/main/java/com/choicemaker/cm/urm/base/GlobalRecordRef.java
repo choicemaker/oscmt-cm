@@ -34,6 +34,7 @@ public class GlobalRecordRef<T extends Comparable<T> & Serializable> implements 
 	 * 
 	 * @return
 	 */
+	@Override
 	public T getId() {
 		return id;
 	}
@@ -68,6 +69,7 @@ public class GlobalRecordRef<T extends Comparable<T> & Serializable> implements 
 		recCollRef = collection;
 	}
 
+	@Override
 	public void accept(IRecordVisitor ext){
 		ext.visit(this);
 	}	

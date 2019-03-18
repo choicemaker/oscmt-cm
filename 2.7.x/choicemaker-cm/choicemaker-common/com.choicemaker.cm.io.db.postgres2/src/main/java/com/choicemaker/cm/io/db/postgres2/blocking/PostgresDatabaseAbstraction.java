@@ -19,6 +19,7 @@ public class PostgresDatabaseAbstraction implements DatabaseAbstraction {
 	/**
 	 * @see com.choicemaker.cm.io.db.base.plugin.automatedblocking.db.DatabaseAbstraction#getSetDateFormatExpression()
 	 */
+	@Override
 	public String getSetDateFormatExpression() {
 		return "SET datestyle = \"ISO, YMD\";";
 	}
@@ -26,6 +27,7 @@ public class PostgresDatabaseAbstraction implements DatabaseAbstraction {
 	/**
 	 * @see com.choicemaker.cm.io.db.base.plugin.automatedblocking.db.DatabaseAbstraction#getSysdateExpression()
 	 */
+	@Override
 	public String getSysdateExpression() {
 		return "now()";
 	}
@@ -33,6 +35,7 @@ public class PostgresDatabaseAbstraction implements DatabaseAbstraction {
 	/**
 	 * @see com.choicemaker.cm.io.db.base.plugin.automatedblocking.db.DatabaseAbstraction#getDateFieldExpression(java.lang.String)
 	 */
+	@Override
 	public String getDateFieldExpression(String field) {
 		return "to_char(" + field + ", 'YYYY-MM-DD')";
 	}

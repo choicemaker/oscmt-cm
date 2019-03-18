@@ -76,6 +76,7 @@ public class ConfusionTable extends JTable {
 
 		addMouseListener(new MouseAdapter() {
 
+			@Override
 			public void mousePressed(MouseEvent e) {
 				Point origin = e.getPoint();
 				int row = rowAtPoint(origin);

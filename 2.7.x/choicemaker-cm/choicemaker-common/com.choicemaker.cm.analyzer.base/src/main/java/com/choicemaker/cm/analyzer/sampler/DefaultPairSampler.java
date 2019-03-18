@@ -112,6 +112,7 @@ public class DefaultPairSampler implements PairSampler {
 	/**
 	 * Returns the number of pairs that have been retained to this point.
 	 */
+	@Override
 	public int getNumRetained() {
 		return numRetained;
 	}
@@ -135,6 +136,7 @@ public class DefaultPairSampler implements PairSampler {
 	/**
 	 * Returns a List containing the retained pairs.
 	 */
+	@Override
 	public List getRetainedPairs() {
 		List ret = null;
 		if (retained!=null) {
@@ -165,6 +167,7 @@ public class DefaultPairSampler implements PairSampler {
 	/**
 	 * Process an incoming pair.
 	 */
+	@Override
 	public void processPair(MutableMarkedRecordPair pair) {
 		maybeInit();
 
@@ -524,6 +527,7 @@ public class DefaultPairSampler implements PairSampler {
 			}
 		}
 
+		@Override
 		public boolean equals(Object other) {
 			IntArrayWrapper w = (IntArrayWrapper) other;
 			if (wrappee.length == w.wrappee.length) {
@@ -538,6 +542,7 @@ public class DefaultPairSampler implements PairSampler {
 			return false;
 		}
 
+		@Override
 		public int hashCode() {
 			int ret = 0;
 			for (int i = 0, n = wrappee.length; i < n; i++) {
@@ -558,6 +563,7 @@ public class DefaultPairSampler implements PairSampler {
 			this.index = index;
 			this.score = score;
 		}
+		@Override
 		public int compareTo(Object other) {
 			float diff = score - ((MrpWrapper)other).score;
 			return diff < 0 ? -1 :

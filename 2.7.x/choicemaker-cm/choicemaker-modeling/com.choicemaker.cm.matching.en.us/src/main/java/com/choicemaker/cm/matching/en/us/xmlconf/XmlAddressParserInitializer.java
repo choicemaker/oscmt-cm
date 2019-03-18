@@ -27,6 +27,7 @@ import com.choicemaker.cm.core.xmlconf.XmlModuleInitializer;
  * @author Martin Buechi
  * @deprecated
  */
+@Deprecated
 public class XmlAddressParserInitializer implements XmlModuleInitializer {
 
 	private static Logger logger =

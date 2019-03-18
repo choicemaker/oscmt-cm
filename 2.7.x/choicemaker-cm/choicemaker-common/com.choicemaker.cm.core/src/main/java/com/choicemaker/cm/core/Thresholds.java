@@ -32,6 +32,7 @@ public class Thresholds extends ImmutableThresholds implements Cloneable {
 		super(imt);
 	}
 
+	@Override
 	public Object clone() {
 		Object retVal = super.clone();
 		return retVal;
@@ -58,6 +59,7 @@ public class Thresholds extends ImmutableThresholds implements Cloneable {
 		setDifferThreshold((double) v);
 	}
 
+	@Override
 	protected void setDifferThreshold(double v) {
 		super.invariant();
 		if (v < ImmutableThresholds.MIN_VALUE) {
@@ -83,6 +85,7 @@ public class Thresholds extends ImmutableThresholds implements Cloneable {
 		setMatchThreshold((double) v);
 	}
 
+	@Override
 	protected void setMatchThreshold(double v) {
 		super.invariant();
 		if (v < ImmutableThresholds.MIN_VALUE) {

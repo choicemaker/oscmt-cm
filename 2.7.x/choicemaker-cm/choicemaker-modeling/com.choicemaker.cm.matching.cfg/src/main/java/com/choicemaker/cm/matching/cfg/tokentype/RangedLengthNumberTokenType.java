@@ -36,6 +36,7 @@ public class RangedLengthNumberTokenType extends NumberTokenType {
 		maxLength = max;
 	}
 	
+	@Override
 	public boolean canHaveToken(String token) {
 		return super.canHaveToken(token) && token.length() >= minLength && token.length() <= maxLength;
 	}

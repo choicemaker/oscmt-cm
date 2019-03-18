@@ -43,6 +43,7 @@ public class ComparisonTreeSource<T extends Comparable<T>> extends
 		this.dataType = dataType;
 	}
 
+	@Override
 	protected void resetNext() {
 		nextTree = null;
 	}

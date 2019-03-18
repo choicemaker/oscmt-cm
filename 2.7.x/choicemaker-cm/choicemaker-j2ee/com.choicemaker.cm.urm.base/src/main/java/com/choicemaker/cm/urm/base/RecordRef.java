@@ -46,6 +46,7 @@ public class RecordRef<T extends Comparable<T> & Serializable> implements ISingl
 	 * 
 	 * @return
 	 */
+	@Override
 	public T getId() {
 		return id;
 	}
@@ -60,6 +61,7 @@ public class RecordRef<T extends Comparable<T> & Serializable> implements ISingl
 		this.id = id;
 	}
 
+	@Override
 	public void accept(IRecordVisitor ext){
 		ext.visit(this);
 	}

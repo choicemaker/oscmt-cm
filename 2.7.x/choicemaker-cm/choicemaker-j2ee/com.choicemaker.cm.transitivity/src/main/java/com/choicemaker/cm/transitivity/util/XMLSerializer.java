@@ -72,6 +72,7 @@ public abstract class XMLSerializer implements TransitivityResultSerializer {
 	 *            a non-null writer
 	 * @throws IOException
 	 */
+	@Override
 	public void serialize(TransitivityResult result, Writer writer)
 			throws IOException {
 		if (result == null || writer == null) {

@@ -10,7 +10,6 @@
  */
 package com.choicemaker.cm.analyzer.matcher;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -104,6 +103,7 @@ public class InMemoryMatcher {
 	private void initSorter(int sortOrder) {
 		if (sortOrder == DECISION_PROBABILITY) {
 			sorter = new Comparator() {
+				@Override
 				public int compare(Object o1, Object o2) {
 					IMarkedRecordPair p1 = (IMarkedRecordPair) o1;
 					IMarkedRecordPair p2 = (IMarkedRecordPair) o2;
@@ -123,6 +123,7 @@ public class InMemoryMatcher {
 			};
 		} else if (sortOrder == PROBABILITY) {
 			sorter = new Comparator() {
+				@Override
 				public int compare(Object o1, Object o2) {
 					IMarkedRecordPair p1 = (IMarkedRecordPair) o1;
 					IMarkedRecordPair p2 = (IMarkedRecordPair) o2;

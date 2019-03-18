@@ -22,22 +22,28 @@ import com.choicemaker.cm.core.Record;
  * @deprecated use MutableMarkedRecordPair instead
  * @author    Martin Buechi
  */
+@Deprecated
 public class MarkedRecordPair<T extends Comparable<T> & Serializable>
 		extends RecordPair<T> implements IMarkedRecordPair<T> {
 
 	/** @deprecated */
+	@Deprecated
 	public Decision decision;
 
 	/** @deprecated */
+	@Deprecated
 	public Date date;
 
 	/** @deprecated */
+	@Deprecated
 	public String user;
 
 	/** @deprecated */
+	@Deprecated
 	public String src;
 
 	/** @deprecated */
+	@Deprecated
 	public String comment;
 
 	public MarkedRecordPair() {
@@ -76,6 +82,7 @@ public class MarkedRecordPair<T extends Comparable<T> & Serializable>
 	 * {@link IRecordPair#setCmDecision assignments} made by
 	 * ChoiceMaker.
 	 */
+	@Override
 	public void setMarkedDecision(Decision decision) {
 		this.decision = decision;
 	}
@@ -85,6 +92,7 @@ public class MarkedRecordPair<T extends Comparable<T> & Serializable>
 	 * whether this pair matches or not. This distinct from the {@link IRecordPair#getCmDecision Decision}
 	 * that ChoiceMaker assigns.
 	 */
+	@Override
 	public Decision getMarkedDecision() {
 		return decision;
 	}
@@ -94,41 +102,49 @@ public class MarkedRecordPair<T extends Comparable<T> & Serializable>
 	 * This field is <em>not</em> updated automatically
 	 * when the decision field is modified.
 	 */
+	@Override
 	public void setDateMarked(Date date) {
 		this.date = date;
 	}
 
 	/** Get the date the decision was made or last revised. */
+	@Override
 	public Date getDateMarked() {
 		return date;
 	}
 
 	/** Set the user who made the decision/last revised it. */
+	@Override
 	public void setUser(String user) {
 		this.user = user;
 	}
 
 	/** Get the user who made the decision/last revised it. */
+	@Override
 	public String getUser() {
 		return user;
 	}
 
 	/** Set the source of this record. */
+	@Override
 	public void setSource(String src) {
 		this.src = src;
 	}
 
 	/** Get the source of this record. */
+	@Override
 	public String getSource() {
 		return src;
 	}
 
 	/** Get a comment. */
+	@Override
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
 
 	/** Set a comment. */
+	@Override
 	public String getComment() {
 		return comment;
 	}
@@ -136,6 +152,7 @@ public class MarkedRecordPair<T extends Comparable<T> & Serializable>
 	/**
 	 * @deprecated use getMarkedDecision instead
 	 */
+	@Deprecated
 	public Decision getDecision() {
 		return getMarkedDecision();
 	}
@@ -143,10 +160,12 @@ public class MarkedRecordPair<T extends Comparable<T> & Serializable>
 	/**
 	 * @deprecated use setMarkedDecision instead
 	 */
+	@Deprecated
 	public void setDecision(Decision d) {
 		setMarkedDecision(d);
 	}
 
+	@Override
 	public float getProbability() {
 		return getProbability();
 	}

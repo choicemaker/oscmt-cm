@@ -91,6 +91,7 @@ public class HoldVsAccuracyPlotPanel extends JPanel {
 				dataset,
 				orientation, true, true, true);
 		MouseListener tableMouseListener = new MouseAdapter() {
+			@Override
 			public void mousePressed(MouseEvent e) {
 				Point origin = e.getPoint();
 				JTable src = (JTable) e.getSource();
@@ -149,6 +150,7 @@ public class HoldVsAccuracyPlotPanel extends JPanel {
 		return panel;
 	}
 
+	@Override
 	public void setVisible(boolean b) {
 		super.setVisible(b);
 		if (b && dirty) {

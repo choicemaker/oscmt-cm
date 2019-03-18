@@ -42,6 +42,7 @@ public class FlatFileMultiFileReaderGenerator implements GeneratorPlugin {
 
 	private int recordNum;
 
+	@Override
 	public void generate(IGenerator g) throws GenException {
 		String className = g.getSchemaName() + "MultiFileFlatFileReader";
 		String packageName = g.getPackage() + ".flatfile";

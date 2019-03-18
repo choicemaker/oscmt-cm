@@ -37,6 +37,7 @@ public class NamedState
 		this.name = name;
 	}
 
+	@Override
 	public String getName() {
 		return name;
 	}

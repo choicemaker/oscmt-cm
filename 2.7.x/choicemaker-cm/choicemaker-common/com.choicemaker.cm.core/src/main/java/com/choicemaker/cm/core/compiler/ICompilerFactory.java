@@ -16,6 +16,7 @@ import java.util.Properties;
  * @author rphall
  * @deprecated see InstallableCompiler
  */
+@Deprecated
 public interface ICompilerFactory {
 
 	/** This method gets the compiler with the given set of properties.

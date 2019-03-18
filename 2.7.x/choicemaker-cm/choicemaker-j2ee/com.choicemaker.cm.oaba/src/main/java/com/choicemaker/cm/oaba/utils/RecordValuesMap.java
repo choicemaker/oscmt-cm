@@ -131,7 +131,7 @@ public class RecordValuesMap /* implements Map<Integer, List<Integer>> */{
 				if (!list.isEmpty()) {
 					assert list.size() == cid + 1 : sizeMsg(list, cid + 1);
 					IntArrayList previousValues =
-						(IntArrayList) list.remove(cid);
+						list.remove(cid);
 					assert previousValues != null;
 					values.addAll(previousValues);
 					values = sortDedup(values);

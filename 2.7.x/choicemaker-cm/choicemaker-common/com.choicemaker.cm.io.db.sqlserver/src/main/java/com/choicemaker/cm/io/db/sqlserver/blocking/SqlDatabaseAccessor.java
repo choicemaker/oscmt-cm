@@ -67,6 +67,7 @@ public class SqlDatabaseAccessor implements DatabaseAccessor {
 		setCondition(condition);
 	}
 
+	@Override
 	public void setDataSource(DataSource dataSource) {
 		assert isConsistent();
 		this.ds = dataSource;
@@ -84,6 +85,7 @@ public class SqlDatabaseAccessor implements DatabaseAccessor {
 		return p;
 	}
 
+	@Override
 	public void setCondition(Object c) {
 		if (c instanceof String) {
 			logger.fine(String.format("setting condition to '%s'", (String) c));
@@ -116,11 +118,13 @@ public class SqlDatabaseAccessor implements DatabaseAccessor {
 		}
 	}
 
+	@Override
 	public DatabaseAccessor cloneWithNewConnection()
 			throws CloneNotSupportedException {
 		throw new CloneNotSupportedException("not yet implemented");
 	}
 
+	@Override
 	public void open(AutomatedBlocker blocker, String databaseConfiguration)
 			throws IOException {
 		Accessor acc = blocker.getModel().getAccessor();
@@ -179,6 +183,7 @@ public class SqlDatabaseAccessor implements DatabaseAccessor {
 		}
 	}
 
+	@Override
 	public void close() throws IOException {
 		Exception ex = null;
 		try {
@@ -226,10 +231,12 @@ public class SqlDatabaseAccessor implements DatabaseAccessor {
 		}
 	}
 
+	@Override
 	public boolean hasNext() {
 		return dbr.hasNext();
 	}
 
+	@Override
 	public Record getNext() throws IOException {
 		return dbr.getNext();
 	}
@@ -264,7 +271,7 @@ public class SqlDatabaseAccessor implements DatabaseAccessor {
 			b.append("v0." + id);
 			// b.append(id);
 			b.append(" FROM ");
-			IBlockingSet bs = (IBlockingSet) blocker.getBlockingSets().get(i);
+			IBlockingSet bs = blocker.getBlockingSets().get(i);
 			int numViews = bs.getNumTables();
 			for (int j = 0; j < numViews; ++j) {
 				if (j > 0) {
@@ -327,7 +334,7 @@ public class SqlDatabaseAccessor implements DatabaseAccessor {
 			}
 		}
 
-		return (String) p.getProperty(key);
+		return p.getProperty(key);
 	}
 
 	private boolean mustQuote(String type) {

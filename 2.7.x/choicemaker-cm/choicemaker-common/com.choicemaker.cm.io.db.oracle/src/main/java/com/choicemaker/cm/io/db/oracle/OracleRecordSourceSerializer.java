@@ -44,10 +44,12 @@ public class OracleRecordSourceSerializer
 		logIgnoredProperties(logger, Level.FINE, ignored);
 	}
 
+	@Override
 	public Properties getProperties() {
 		return new Properties();
 	}
 	
+	@Override
 	public void setProperties(Properties p) {
 		if (p != null) {
 			logger.fine("Ignoring properties: [" + p.toString() + "]");
@@ -63,6 +65,7 @@ public class OracleRecordSourceSerializer
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.IRecordSourceSerializer#getSerializableRecordSource(java.lang.String)
 	 */
+	@Override
 	public ISerializableRecordSource getSerializableRecordSource(Properties properties)
 		throws NotSerializableException {
 		// TODO NOT YET IMPLEMENTED
@@ -72,6 +75,7 @@ public class OracleRecordSourceSerializer
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.IRecordSourceSerializer#getSerializableRecordSource(com.choicemaker.cm.core.RecordSource)
 	 */
+	@Override
 	public ISerializableRecordSource getSerializableRecordSource(RecordSource rs)
 		throws NotSerializableException {
 		Precondition.assertNonNullArgument("null record source", rs);

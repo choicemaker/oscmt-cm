@@ -40,6 +40,7 @@ public class ChunkRecordIdSource extends BaseFileSource<Long> implements
 		super(fileName, type);
 	}
 
+	@Override
 	protected void resetNext() {
 		nextRecID = 0;
 		used = true;

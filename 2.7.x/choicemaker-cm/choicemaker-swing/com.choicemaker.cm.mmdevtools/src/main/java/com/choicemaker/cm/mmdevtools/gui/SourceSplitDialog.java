@@ -16,8 +16,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
-import java.io.IOException;
-
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -444,12 +442,15 @@ public class SourceSplitDialog extends JDialog {
 		// source panel
 
 		inputList.addListener(new ListDataListener() {
+			@Override
 			public void intervalAdded(ListDataEvent e) {
 				updateOkButton();
 			}
+			@Override
 			public void intervalRemoved(ListDataEvent e) {
 				updateOkButton();
 			}
+			@Override
 			public void contentsChanged(ListDataEvent e) {
 				updateOkButton();
 			}
@@ -464,6 +465,7 @@ public class SourceSplitDialog extends JDialog {
 		bg.add(randomPercentButton);
 
 		ActionListener al = new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				updateOkButton();
 			}
@@ -475,6 +477,7 @@ public class SourceSplitDialog extends JDialog {
 		randomPercentButton.addActionListener(al);
 
 		selectionField.getDocument().addDocumentListener(new DocumentEventRedirector() {
+			@Override
 			public void redirectedEvent(DocumentEvent e) {
 				selectionButton.setSelected(true);
 				updateOkButton();
@@ -482,6 +485,7 @@ public class SourceSplitDialog extends JDialog {
 		});
 
 		randomTargetField.getDocument().addDocumentListener(new DocumentEventRedirector() {
+			@Override
 			public void redirectedEvent(DocumentEvent e) {
 				randomTargetButton.setSelected(true);
 				updateOkButton();
@@ -489,6 +493,7 @@ public class SourceSplitDialog extends JDialog {
 		});
 
 		randomPercentField.getDocument().addDocumentListener(new DocumentEventRedirector() {
+			@Override
 			public void redirectedEvent(DocumentEvent e) {
 				randomPercentButton.setSelected(true);
 				updateOkButton();
@@ -502,12 +507,14 @@ public class SourceSplitDialog extends JDialog {
 		bg2.add(multiSinkButton);
 
 		sinkField.getDocument().addDocumentListener(new DocumentEventRedirector() {
+			@Override
 			public void redirectedEvent(DocumentEvent e) {
 				updateOkButton();
 			}
 		});
 
 		browseButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				File file = null;
 				if (type == RS) {
@@ -524,6 +531,7 @@ public class SourceSplitDialog extends JDialog {
 		});
 
 		newButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				Source src = null;
 				if (type == RS) {
@@ -549,6 +557,7 @@ public class SourceSplitDialog extends JDialog {
 		});
 
 		multiSinkButton.addItemListener(new ItemListener() {
+			@Override
 			public void itemStateChanged(ItemEvent e) {
 				boolean enabled = e.getStateChange() == ItemEvent.SELECTED;
 				roundRobinLabel.setEnabled(enabled);
@@ -561,12 +570,14 @@ public class SourceSplitDialog extends JDialog {
 		});
 
 		roundRobinField.getDocument().addDocumentListener(new DocumentEventRedirector() {
+			@Override
 			public void redirectedEvent(DocumentEvent e) {
 				updateOkButton();
 			}
 		});
 
 		maxPairsField.getDocument().addDocumentListener(new DocumentEventRedirector() {
+			@Override
 			public void redirectedEvent(DocumentEvent e) {
 				updateOkButton();
 			}
@@ -575,12 +586,14 @@ public class SourceSplitDialog extends JDialog {
 		// buttons panel
 
 		okButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				splitOrMerge();
 			}
 		});
 
 		cancelButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				dispose();
 			}
@@ -626,12 +639,15 @@ public class SourceSplitDialog extends JDialog {
 	}
 
 	public static abstract class DocumentEventRedirector implements DocumentListener {
+		@Override
 		public void insertUpdate(DocumentEvent e) {
 			redirectedEvent(e);
 		}
+		@Override
 		public void removeUpdate(DocumentEvent e) {
 			redirectedEvent(e);
 		}
+		@Override
 		public void changedUpdate(DocumentEvent e) {
 			redirectedEvent(e);
 		}

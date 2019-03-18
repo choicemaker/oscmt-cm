@@ -45,6 +45,7 @@ public class ExactBlockerDialogPlugin extends MatchDialogBlockerPlugin {
 		add(sp);		
 	}
 
+	@Override
 	public InMemoryBlocker getBlocker() {
 		PositionMap positionMap = new PositionMap();
 		Object[] vals = configurationsList.getSelectedValues();

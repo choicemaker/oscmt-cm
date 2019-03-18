@@ -115,6 +115,7 @@ public class StringComparator extends JDialog implements Enable {
 		b.getDocument().addDocumentListener(dl);
 		
 		ActionListener al = new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				setEnabledness();
 			}
@@ -131,12 +132,14 @@ public class StringComparator extends JDialog implements Enable {
 		lcsAbbrevAnyLen.addActionListener(al);
 
 		setDefaultParametersButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				setDefaultParameters();
 			}
 		});
 
 		closeButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent ev) {
 				dispose();
 			}
@@ -586,6 +589,7 @@ public class StringComparator extends JDialog implements Enable {
 	/**
 	 * @see com.choicemaker.cm.train.gui.utils.Enable#setEnabledness()
 	 */
+	@Override
 	public void setEnabledness() {
 		String at = a.getText().toUpperCase();
 		String bt = b.getText().toUpperCase();

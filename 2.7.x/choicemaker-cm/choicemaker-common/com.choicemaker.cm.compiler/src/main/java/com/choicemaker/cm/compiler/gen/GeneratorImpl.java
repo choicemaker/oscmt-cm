@@ -141,14 +141,17 @@ public class GeneratorImpl implements IGenerator {
 	 * @return   The package of the generated code.
 	 * @throws   GenException  if the data cannot be read.
 	 */
+	@Override
 	public String getPackage() {
 		return pckage;
 	}
 
+	@Override
 	public String getExternalPackage() {
 		return externalPackage;
 	}
 
+	@Override
 	public boolean isIntern() {
 		return intern;
 	}
@@ -164,6 +167,7 @@ public class GeneratorImpl implements IGenerator {
 	 * @return   The root directory for the generated source code.
 	 * @throws   GenException  if the data cannot be read.
 	 */
+	@Override
 	public String getSourceCodeRoot() throws GenException {
 		return ConfigurationManager.getInstance().getGeneratedSourceRoot();
 	}
@@ -174,6 +178,7 @@ public class GeneratorImpl implements IGenerator {
 	 * @return   The directory for the generated source code.
 	 * @throws   GenException  if the data cannot be read.
 	 */
+	@Override
 	public String getSourceCodePackageRoot() throws GenException {
 		if (sourceCodePackageRoot == null) {
 			sourceCodePackageRoot =
@@ -183,6 +188,7 @@ public class GeneratorImpl implements IGenerator {
 		return sourceCodePackageRoot;
 	}
 
+	@Override
 	public String getExternalSourceCodePackageRoot() throws GenException {
 		if (externalSourceCodePackageRoot == null) {
 			externalSourceCodePackageRoot =
@@ -197,10 +203,12 @@ public class GeneratorImpl implements IGenerator {
 	 *
 	 * @return   The name of the clue set.
 	 */
+	@Override
 	public String getClueSetName() {
 		return clueSetName;
 	}
 
+	@Override
 	public String getSchemaName() {
 		return schemaName;
 	}
@@ -210,6 +218,7 @@ public class GeneratorImpl implements IGenerator {
 	 *
 	 * @return  The JDOM Document representing the ChoiceMaker schema.
 	 */
+	@Override
 	public Document getDocument() {
 		return document;
 	}
@@ -219,6 +228,7 @@ public class GeneratorImpl implements IGenerator {
 	 *
 	 * @return  The root element of the JDOM Document representing the ChoiceMaker schema.
 	 */
+	@Override
 	public Element getRootElement() {
 		return document.getRootElement();
 	}
@@ -228,6 +238,7 @@ public class GeneratorImpl implements IGenerator {
 	 *
 	 * @return  The root record of the ChoiceMaker schema.
 	 */
+	@Override
 	public Element getRootRecord() {
 		return getRootElement().getChild(CoreTags.NODE_TYPE);
 	}
@@ -241,6 +252,7 @@ public class GeneratorImpl implements IGenerator {
 	 *
 	 * @return   The maximal record stacking depth.
 	 */
+	@Override
 	public int getStackingDepth() {
 		return stackingDepth;
 	}
@@ -250,13 +262,14 @@ public class GeneratorImpl implements IGenerator {
 	 *
 	 * @return   The import statements to be added to generated code.
 	 */
+	@Override
 	public String getImports() {
 		if (imports == null) {
 			StringBuffer b = new StringBuffer();
 			List<Element> imp = getRootElement().getChildren("import");
 			Iterator<Element> i = imp.iterator();
 			while (i.hasNext()) {
-				b.append("import " + ((Element) i.next()).getText() + ";" + Constants.LINE_SEPARATOR);
+				b.append("import " + i.next().getText() + ";" + Constants.LINE_SEPARATOR);
 			}
 			imports = b.toString();
 		}
@@ -268,22 +281,27 @@ public class GeneratorImpl implements IGenerator {
 	 *
 	 * @param  fileName  The fully qualified file name of the Java source file.
 	 */
+	@Override
 	public void addGeneratedFile(String fileName) {
 		cu.addGeneratedJavaSourceFile(fileName);
 	}
 
+	@Override
 	public void error(String message) {
 		logger.severe(message);
 	}
 
+	@Override
 	public void warning(String message) {
 		logger.warning(message);
 	}
 
+	@Override
 	public void info(String message) {
 		logger.info(message);
 	}
 
+	@Override
 	public boolean hasErrors() {
 		return cu.getErrors() > 0;
 	}
@@ -309,6 +327,7 @@ public class GeneratorImpl implements IGenerator {
 	 * 
 	 * @throws CompilerException if generation fails
 	 */
+	@Override
 	public void generate() throws CompilerException {
 		boolean validate = XmlParserFactory.connected();
 		SAXBuilder builder = XmlParserFactory.createSAXBuilder(validate);
@@ -343,14 +362,17 @@ public class GeneratorImpl implements IGenerator {
 	}
 
 	private class SaxErrorHandler implements org.xml.sax.ErrorHandler {
+		@Override
 		public void error(SAXParseException ex) {
 			logger.severe("XML error in schema file " + schemaFileName + Constants.LINE_SEPARATOR + ex);
 		}
 
+		@Override
 		public void fatalError(SAXParseException ex) {
 			logger.severe("XML error in schema file " + schemaFileName + Constants.LINE_SEPARATOR + ex);
 		}
 
+		@Override
 		public void warning(SAXParseException ex) {
 			logger.severe("XML error in schema file " + schemaFileName + Constants.LINE_SEPARATOR + ex);
 		}
@@ -373,7 +395,7 @@ public class GeneratorImpl implements IGenerator {
 		String n=null;
 		String t=null;
 		while (i.hasNext()) {
-			Element e = (Element) i.next();
+			Element e = i.next();
 			String typeName = e.getAttributeValue("type");
 			String fieldName = e.getAttributeValue("name");
 			if ("true".equals(e.getAttributeValue("key"))){
@@ -400,7 +422,7 @@ public class GeneratorImpl implements IGenerator {
 				.getInstance();
 		List<GeneratorPlugin> generatorPlugins = factory.lookupGeneratorPlugins();
 		for (Iterator<GeneratorPlugin> i = generatorPlugins.iterator(); i.hasNext();) {
-			GeneratorPlugin gp = (GeneratorPlugin) i.next();
+			GeneratorPlugin gp = i.next();
 			logger.info("Generator: '" + gp.toString() + "'");
 			gp.generate(this);
 			// BUG never checks if GeneratorPlugin produces errors
@@ -455,7 +477,7 @@ public class GeneratorImpl implements IGenerator {
 		}
 		Iterator<Element> i = nestedRecords.iterator();
 		while (i.hasNext()) {
-			nameRecords((Element) i.next(), className, separator, level + 1, fqName + ".");
+			nameRecords(i.next(), className, separator, level + 1, fqName + ".");
 		}
 	}
 
@@ -803,7 +825,7 @@ public class GeneratorImpl implements IGenerator {
 						+ Constants.LINE_SEPARATOR);
 			}
 			for (Iterator<Element> iEmbeddedRecords = embeddedRecords.iterator(); iEmbeddedRecords.hasNext();) {
-				Element e = (Element) iEmbeddedRecords.next();
+				Element e = iEmbeddedRecords.next();
 				w.write(
 					e.getAttributeValue(CoreTags.NAME)
 						+ " = "
@@ -857,7 +879,7 @@ public class GeneratorImpl implements IGenerator {
 			Iterator<Element> i = fields.iterator();
 			DerivedSource beanSource = DerivedSource.valueOf("bean");
 			while (i.hasNext()) {
-				Element e = (Element) i.next();
+				Element e = i.next();
 				String typeName = e.getAttributeValue("type");
 				String fieldName = e.getAttributeValue("name");
 
@@ -929,7 +951,7 @@ public class GeneratorImpl implements IGenerator {
 
 			i = embeddedRecords.iterator();
 			while (i.hasNext()) {
-				Element e = (Element) i.next();
+				Element e = i.next();
 				String typeName = e.getAttributeValue(CoreTags.BASE_INTERFACE_NAME);
 				String recordName = e.getAttributeValue("name");
 				w.write(addArrayField(typeName, recordName, PROTECTED));
@@ -998,7 +1020,7 @@ public class GeneratorImpl implements IGenerator {
 						+ " __o) {" + Constants.LINE_SEPARATOR);
 			}
 			for (Iterator<Element> iFields = fields.iterator(); iFields.hasNext();) {
-				Element field = (Element) iFields.next();
+				Element field = iFields.next();
 				String name = field.getAttributeValue(CoreTags.NAME);
 				String methodStem = Character.toUpperCase(name.charAt(0)) + name.substring(1);
 				if (!GeneratorHelper.isDerived(field, beanSource)) {
@@ -1007,7 +1029,7 @@ public class GeneratorImpl implements IGenerator {
 				}
 			}
 			for (Iterator<Element> iEmbeddedRecords = embeddedRecords.iterator(); iEmbeddedRecords.hasNext();) {
-				Element record = (Element) iEmbeddedRecords.next();
+				Element record = iEmbeddedRecords.next();
 				String name = record.getAttributeValue(CoreTags.NAME);
 				String iface = record.getAttributeValue(CoreTags.BASE_INTERFACE_NAME);
 				w.write(
@@ -1052,7 +1074,7 @@ public class GeneratorImpl implements IGenerator {
 			bifs.close();
 			i = embeddedRecords.iterator();
 			while (i.hasNext()) {
-				final Element embedded = (Element) i.next();
+				final Element embedded = i.next();
 				final KeyFieldInfo embeddedKFI = getKeyFieldInfo(embedded);
 				createInterfaceClasses(embedded, r, embeddedKFI);
 			}
@@ -1113,7 +1135,7 @@ public class GeneratorImpl implements IGenerator {
 				Iterator<Element> i = fields.iterator();
 				boolean keyDefd = false;
 				while (i.hasNext()) {
-					Element e = (Element) i.next();
+					Element e = i.next();
 					if ("true".equals(e.getAttributeValue("key"))) {
 						final String type = e.getAttributeValue("type");
 						String t = GeneratorHelper.getObjectType(type);
@@ -1150,14 +1172,14 @@ public class GeneratorImpl implements IGenerator {
 			}
 			Iterator<Element> i = fields.iterator();
 			while (i.hasNext()) {
-				Element field = (Element) i.next();
+				Element field = i.next();
 				if (!GeneratorHelper.isNodeInitScope(field)) {
 					w.write(addField("boolean", "__v_" + (field).getAttributeValue("name"), false, PUBLIC));
 				}
 			}
 			i = fields.iterator();
 			while (i.hasNext()) {
-				Element e = (Element) i.next();
+				Element e = i.next();
 				if (GeneratorHelper.isNodeInitScope(e)) {
 					if (!derivedAll(e)) {
 						error("Field with nodeInit scope must be derived for all sources.");
@@ -1183,7 +1205,7 @@ public class GeneratorImpl implements IGenerator {
 			List<Element> embeddedRecords = r.getChildren(CoreTags.NODE_TYPE);
 			i = embeddedRecords.iterator();
 			while (i.hasNext()) {
-				Element e = (Element) i.next();
+				Element e = i.next();
 				String typeName = e.getAttributeValue("className");
 				String recordName = e.getAttributeValue("name");
 				String iface = e.getAttributeValue(CoreTags.BASE_INTERFACE_NAME);
@@ -1203,7 +1225,7 @@ public class GeneratorImpl implements IGenerator {
 
 			w.write("public " + className + "(" + baseInterfaceName + " __o) {" + Constants.LINE_SEPARATOR);
 			for (Iterator<Element> iFields = fields.iterator(); iFields.hasNext();) {
-				Element field = (Element) iFields.next();
+				Element field = iFields.next();
 				if (!GeneratorHelper.isDerived(field, beanSource)) {
 					String name = field.getAttributeValue(CoreTags.NAME);
 					String methodStem = Character.toUpperCase(name.charAt(0)) + name.substring(1);
@@ -1211,7 +1233,7 @@ public class GeneratorImpl implements IGenerator {
 				}
 			}
 			for (Iterator<Element> iEmbeddedRecords = embeddedRecords.iterator(); iEmbeddedRecords.hasNext();) {
-				Element record = (Element) iEmbeddedRecords.next();
+				Element record = iEmbeddedRecords.next();
 				String name = record.getAttributeValue(CoreTags.NAME);
 				String ncn = record.getAttributeValue(CoreTags.CLASS_NAME);
 				String iface = record.getAttributeValue(CoreTags.BASE_INTERFACE_NAME);
@@ -1249,7 +1271,7 @@ public class GeneratorImpl implements IGenerator {
 			w.write("try {" + Constants.LINE_SEPARATOR);
 			i = fields.iterator();
 			while (i.hasNext()) {
-				Element field = (Element) i.next();
+				Element field = i.next();
 				Element d = field.getChild("derived");
 				if (d != null) {
 					boolean nodeInitScope = GeneratorHelper.isNodeInitScope(field);
@@ -1299,7 +1321,7 @@ public class GeneratorImpl implements IGenerator {
 			// NEED A CALLBACK HERE FOR ITERATED NODES
 			i = embeddedRecords.iterator();
 			while (i.hasNext()) {
-				Element e = (Element) i.next();
+				Element e = i.next();
 				String eName = e.getAttributeValue(CoreTags.NAME);
 				// FIXME DEFINE CoreTags: iteratedNode and assigned
 				Element iteratedNodeType = GeneratorHelper.getNodeTypeExt(e,"iterated");
@@ -1360,7 +1382,7 @@ public class GeneratorImpl implements IGenerator {
 			w.write("public void resetValidityAndDerived(DerivedSource __src) {" + Constants.LINE_SEPARATOR);
 			i = fields.iterator();
 			while (i.hasNext()) {
-				Element field = (Element) i.next();
+				Element field = i.next();
 				Element d = field.getChild("derived");
 				if (d != null && !GeneratorHelper.isNodeInitScope(field)) {
 					String fieldName = field.getAttributeValue("name");
@@ -1378,7 +1400,7 @@ public class GeneratorImpl implements IGenerator {
 			}
 			i = embeddedRecords.iterator();
 			while (i.hasNext()) {
-				Element e = (Element) i.next();
+				Element e = i.next();
 				String eName = e.getAttributeValue(CoreTags.NAME);
 				// FIXME DEFINE CoreTags: iteratedNode and assigned
 				Element iteratedNodeType = GeneratorHelper.getNodeTypeExt(e,"iterated");
@@ -1404,7 +1426,7 @@ public class GeneratorImpl implements IGenerator {
 			w.write(className + " tmpInstance = new " + className + "();" + Constants.LINE_SEPARATOR);
 			i = embeddedRecords.iterator();
 			while (i.hasNext()) {
-				Element e = (Element) i.next();
+				Element e = i.next();
 				String eName = e.getAttributeValue("name");
 				String eClassName = e.getAttributeValue("className");
 				w.write("tmpInstance." + eName + " = new " + eClassName + "[0];" + Constants.LINE_SEPARATOR);
@@ -1415,7 +1437,7 @@ public class GeneratorImpl implements IGenerator {
 			List<Element> methodsTags = r.getChildren("method");
 			Iterator<Element> methIter = methodsTags.iterator();
 			while (methIter.hasNext()) {
-				Element e = (Element) methIter.next();
+				Element e = methIter.next();
 				String methodCode = e.getText();
 				w.write(methodCode + Constants.LINE_SEPARATOR);
 			}
@@ -1426,7 +1448,7 @@ public class GeneratorImpl implements IGenerator {
 			fs.close();
 			i = embeddedRecords.iterator();
 			while (i.hasNext()) {
-				createHolderClasses((Element) i.next(), r);
+				createHolderClasses(i.next(), r);
 			}
 		} catch (GenException ex) {
 			throw ex;
@@ -1595,6 +1617,7 @@ public class GeneratorImpl implements IGenerator {
 	 *
 	 * @param   imp  The text to be added to the import section.
 	 */
+	@Override
 	public void addAccessorImport(String imp) {
 		accessorImports.append(imp);
 	}
@@ -1605,6 +1628,7 @@ public class GeneratorImpl implements IGenerator {
 	 * @param   imp  The text to be added to the implements list.
 	 *            Must start with a comma, e.g., <code>", OraAccessor"</code>.
 	 */
+	@Override
 	public void addAccessorImplements(String imp) {
 //		accessorImplements.append(imp);
 	}
@@ -1614,6 +1638,7 @@ public class GeneratorImpl implements IGenerator {
 	 *
 	 * @param   decls  The text to be added to the body section.
 	 */
+	@Override
 	public void addAccessorBody(String decls) {
 		accessorBody.append(decls);
 	}

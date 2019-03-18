@@ -2,10 +2,8 @@ package com.choicemaker.cms.ejb;
 
 import com.choicemaker.cm.batch.ejb.AbstractPersistentObjectJPA;
 import com.choicemaker.cm.batch.ejb.BatchJobJPA;
-import com.choicemaker.cm.oaba.ejb.AbaSettingsJPA;
 import com.choicemaker.cm.oaba.ejb.AbstractParametersJPA;
 import com.choicemaker.cm.oaba.ejb.DefaultSettingsJPA;
-import com.choicemaker.cm.oaba.ejb.OabaSettingsJPA;
 import com.choicemaker.cm.oaba.ejb.ServerConfigurationJPA;
 import com.choicemaker.cm.oaba.ejb.SqlRecordSourceJPA;
 

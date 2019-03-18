@@ -35,6 +35,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
@@ -234,7 +235,7 @@ public class HumanReviewPanel
 
 		globalSelectLabel =
 			new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.humanreview.navigation.all"));
-		recordPairSlider = new JSlider(JSlider.HORIZONTAL);
+		recordPairSlider = new JSlider(SwingConstants.HORIZONTAL);
 		recordPairSlider.setPaintTicks(true);
 		recordPairSlider.setPaintLabels(true);
 		recordPairSlider.setEnabled(false);
@@ -255,6 +256,7 @@ public class HumanReviewPanel
 	private void addListeners() {
 		//markedDecisionComboBox
 		markedDecisionComboBox.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent ev) {
 				@SuppressWarnings("unchecked")
 				JComboBox<String> cb = (JComboBox<String>) ev.getSource();
@@ -273,12 +275,15 @@ public class HumanReviewPanel
 		});
 
 		comment.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
 			public void insertUpdate(DocumentEvent e) {
 				set();
 			}
+			@Override
 			public void removeUpdate(DocumentEvent e) {
 				set();
 			}
+			@Override
 			public void changedUpdate(DocumentEvent e) {
 				set();
 			}
@@ -290,12 +295,14 @@ public class HumanReviewPanel
 		});
 
 		fullButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent A) {
 				humanDataDialog.setVisible(true);
 			}
 		});
 
 		checked.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (markedRecordPairIndex >= 0) {
 					parent.setChecked(markedRecordPairIndex, checked.isSelected());	
@@ -305,6 +312,7 @@ public class HumanReviewPanel
 
 		//stepForwardButton
 		stepForwardButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent A) {
 				//logger.debug("Request step forward.");
 				parent.reviewNextMarkedRecordPair();
@@ -313,6 +321,7 @@ public class HumanReviewPanel
 
 		//stepBackButton
 		stepBackButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent A) {
 				//logger.debug("Request step back.");
 				parent.reviewPreviousMarkedRecordPair();
@@ -321,6 +330,7 @@ public class HumanReviewPanel
 
 		//recordPairSlider
 		recordPairSlider.addChangeListener(new ChangeListener() {
+			@Override
 			public void stateChanged(ChangeEvent e) {
 				JSlider source = (JSlider) e.getSource();
 				if (!reset && !source.getValueIsAdjusting()) {
@@ -332,6 +342,7 @@ public class HumanReviewPanel
 		});
 
 		currentRecord.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				JTextField source = (JTextField) e.getSource();
 				int selection = markedRecordPairIndex;
@@ -360,6 +371,7 @@ public class HumanReviewPanel
 		parent.saveMarkedRecordPairSource();
 	}
 
+	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		String propertyName = evt.getPropertyName();
 		Object source = evt.getSource();
@@ -382,6 +394,7 @@ public class HumanReviewPanel
 		}
 	}
 
+	@Override
 	public void evaluated(EvaluationEvent evt) {
 		if (evt.isEvaluated()) {
 			setDirty();
@@ -410,14 +423,17 @@ public class HumanReviewPanel
 		}
 	}
 
+	@Override
 	public void setChanged(RepositoryChangeEvent evt) {
 		reset();
 	}
 
+	@Override
 	public void recordDataChanged(RepositoryChangeEvent evt) {
 		updateDisplay();
 	}
 
+	@Override
 	public void markupDataChanged(RepositoryChangeEvent evt) {
 	}
 
@@ -454,6 +470,7 @@ public class HumanReviewPanel
 		reset = false;
 	}
 
+	@Override
 	public void setVisible(boolean b) {
 		super.setVisible(b);
 		layoutMenu.setEnabled(b);

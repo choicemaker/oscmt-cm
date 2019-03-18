@@ -117,12 +117,14 @@ public class GenericProgressDialog extends JDialog implements PropertyChangeList
 	private void createListeners() {
 		
 		ok.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent evt) {
 				dispose();
 			}
 		});
 
 		cancel.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent evt) {
 				cancel.setEnabled(false);
 				thread.interrupt();
@@ -137,6 +139,7 @@ public class GenericProgressDialog extends JDialog implements PropertyChangeList
 		
 	}
 
+	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		String propertyName = evt.getPropertyName();
 		Object newValue = evt.getNewValue();

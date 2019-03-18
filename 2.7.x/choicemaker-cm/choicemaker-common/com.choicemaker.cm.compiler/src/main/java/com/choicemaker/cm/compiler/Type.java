@@ -82,6 +82,7 @@ public class Type implements SemanticTags {
 		this.tag = tag;
 	}
 
+	@Override
 	public String toString() {
 		switch (tag) {
 			case SemanticTags.NONE :
@@ -270,6 +271,7 @@ public class Type implements SemanticTags {
 		return tag == SemanticTags.ERROR;
 	}
 
+	@Override
 	public boolean equals(Object that) {
 		if (!(that instanceof Type) || (this.tag == ALL) || (((Type) that).tag == ALL))
 			return false;
@@ -278,6 +280,7 @@ public class Type implements SemanticTags {
 		return this == that;
 	}
 
+	@Override
 	public int hashCode() {
 		return tag;
 	}
@@ -391,14 +394,17 @@ public class Type implements SemanticTags {
 			this.sym = sym;
 		}
 
+		@Override
 		public String toString() {
 			return sym.fullname();
 		}
 
+		@Override
 		public Symbol sym() {
 			return sym;
 		}
 
+		@Override
 		public Type supertype() {
 			Symbol.ClassSymbol c = sym.superclass();
 			if (c == null)
@@ -407,6 +413,7 @@ public class Type implements SemanticTags {
 				return sym.superclass().getType();
 		}
 
+		@Override
 		public Type[] implemented() {
 			Symbol[] syms = sym.interfaces();
 			Type[] res = new Type[syms.length];
@@ -415,27 +422,33 @@ public class Type implements SemanticTags {
 			return res;
 		}
 
+		@Override
 		public boolean isPrim() {
 			return false;
 		}
 
+		@Override
 		public boolean isRef() {
 			return true;
 		}
 
+		@Override
 		public boolean isObject() {
 			return true;
 		}
 
+		@Override
 		public boolean equals(Object that) {
 			return (that == Type.ERROR)
 				|| ((that instanceof Type) && (((Type) that).tag == CLASS) && (((Type) that).sym() == this.sym));
 		}
 
+		@Override
 		public int hashCode() {
 			return sym.fullname().hashCode();
 		}
 
+		@Override
 		public boolean subtype(Type that) {
 			if ((that == Type.ERROR) || (that == Type.ANY))
 				return true;
@@ -469,26 +482,32 @@ public class Type implements SemanticTags {
 			this.multiIndex = multiIndex;
 		}
 
+		@Override
 		public String toString() {
 			return elemtype + "[]";
 		}
 
+		@Override
 		public Type elemtype() {
 			return elemtype;
 		}
 
+		@Override
 		public boolean isPrim() {
 			return false;
 		}
 
+		@Override
 		public boolean isRef() {
 			return true;
 		}
 
+		@Override
 		public boolean isArray() {
 			return true;
 		}
 
+		@Override
 		public boolean equals(Object that) {
 			return (that == Type.ERROR)
 				|| ((that instanceof Type)
@@ -497,10 +516,12 @@ public class Type implements SemanticTags {
 					&& multiIndex == ((ArrayType) that).multiIndex);
 		}
 
+		@Override
 		public int hashCode() {
 			return elemtype.hashCode();
 		}
 
+		@Override
 		public boolean subtype(Type that) {
 			return (that == Type.ERROR)
 				|| (that == Type.ANY)
@@ -530,30 +551,37 @@ public class Type implements SemanticTags {
 			this.thrown = thrown;
 		}
 
+		@Override
 		public Type[] argtypes() {
 			return argtypes;
 		}
 
+		@Override
 		public Type restype() {
 			return restype;
 		}
 
+		@Override
 		public Type[] thrown() {
 			return thrown;
 		}
 
+		@Override
 		public boolean isPrim() {
 			return false;
 		}
 
+		@Override
 		public boolean isRef() {
 			return false;
 		}
 
+		@Override
 		public boolean isMethod() {
 			return true;
 		}
 
+		@Override
 		public String toString() {
 			String res = restype + " (";
 			if (argtypes.length == 0)
@@ -564,6 +592,7 @@ public class Type implements SemanticTags {
 			return res + ")";
 		}
 
+		@Override
 		public boolean equals(Object tha) {
 			if (!(tha instanceof Type))
 				return false;
@@ -576,10 +605,12 @@ public class Type implements SemanticTags {
 					&& incl(that.thrown(), thrown));
 		}
 
+		@Override
 		public int hashCode() {
 			return restype.hashCode();
 		}
 
+		@Override
 		public boolean subtype(Type that) {
 			return (that == Type.ERROR)
 				|| (that == Type.ANY)
@@ -600,35 +631,43 @@ public class Type implements SemanticTags {
 			this.sym = sym;
 		}
 
+		@Override
 		public String toString() {
 			return sym.fullname();
 		}
 
+		@Override
 		public Symbol sym() {
 			return sym;
 		}
 
+		@Override
 		public boolean isPrim() {
 			return false;
 		}
 
+		@Override
 		public boolean isRef() {
 			return false;
 		}
 
+		@Override
 		public boolean isObject() {
 			return false;
 		}
 
+		@Override
 		public boolean isPackage() {
 			return true;
 		}
 
+		@Override
 		public boolean equals(Object that) {
 			return (that == Type.ERROR)
 				|| ((that instanceof Type) && (((Type) that).tag == PACKAGE) && (((Type) that).sym() == this.sym));
 		}
 
+		@Override
 		public int hashCode() {
 			return sym.fullname().hashCode();
 		}

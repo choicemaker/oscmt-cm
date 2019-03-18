@@ -23,6 +23,7 @@ public abstract class TargetTree extends Tree implements TargetTags {
 
 	/** application of visitors
 	 */
+	@Override
 	public void apply(Tree.Visitor v) throws CompilerException {
 		apply((Visitor) v);
 	}
@@ -78,10 +79,12 @@ public abstract class TargetTree extends Tree implements TargetTags {
 		private ClassDecl() {
 		}
 
+		@Override
 		public void apply(Visitor v) throws CompilerException {
 			v.visit(this);
 		}
 
+		@Override
 		public Tree deepCopy() {
 			ClassDecl t = new ClassDecl();
 			deepCopyTo(t);
@@ -93,6 +96,7 @@ public abstract class TargetTree extends Tree implements TargetTags {
 			return t;
 		}
 
+		@Override
 		public boolean isBlock() {
 			return true;
 		}
@@ -119,10 +123,12 @@ public abstract class TargetTree extends Tree implements TargetTags {
 		private JMethodDecl() {
 		}
 
+		@Override
 		public void apply(Visitor v) throws CompilerException {
 			v.visit(this);
 		}
 
+		@Override
 		public Tree deepCopy() {
 			JMethodDecl t = new JMethodDecl();
 			deepCopyTo(t);
@@ -135,6 +141,7 @@ public abstract class TargetTree extends Tree implements TargetTags {
 			return t;
 		}
 
+		@Override
 		public boolean isBlock() {
 			return true;
 		}
@@ -151,10 +158,12 @@ public abstract class TargetTree extends Tree implements TargetTags {
 		private Block() {
 		}
 
+		@Override
 		public void apply(Visitor v) throws CompilerException {
 			v.visit(this);
 		}
 
+		@Override
 		public Tree deepCopy() {
 			Block t = new Block();
 			deepCopyTo(t);
@@ -162,6 +171,7 @@ public abstract class TargetTree extends Tree implements TargetTags {
 			return t;
 		}
 
+		@Override
 		public boolean isBlock() {
 			return true;
 		}
@@ -182,10 +192,12 @@ public abstract class TargetTree extends Tree implements TargetTags {
 		private Cond() {
 		}
 
+		@Override
 		public void apply(Visitor v) throws CompilerException {
 			v.visit(this);
 		}
 
+		@Override
 		public boolean isSameAs(Tree t) {
 			if (t instanceof Cond) {
 				Cond i = (Cond)t;
@@ -196,6 +208,7 @@ public abstract class TargetTree extends Tree implements TargetTags {
 				return false;
 		}
 		
+		@Override
 		public Tree deepCopy() {
 			Cond t = new Cond();
 			deepCopyTo(t);
@@ -220,10 +233,12 @@ public abstract class TargetTree extends Tree implements TargetTags {
 		private Try() {
 		}
 
+		@Override
 		public void apply(Visitor v) throws CompilerException {
 			v.visit(this);
 		}
 
+		@Override
 		public Tree deepCopy() {
 			Try t = new Try();
 			deepCopyTo(t);
@@ -232,6 +247,7 @@ public abstract class TargetTree extends Tree implements TargetTags {
 			return t;
 		}
 
+		@Override
 		public boolean isBlock() {
 			return true;
 		}
@@ -250,10 +266,12 @@ public abstract class TargetTree extends Tree implements TargetTags {
 		private Catch() {
 		}
 
+		@Override
 		public void apply(Visitor v) throws CompilerException {
 			v.visit(this);
 		}
 
+		@Override
 		public Tree deepCopy() {
 			Catch t = new Catch();
 			deepCopyTo(t);
@@ -262,6 +280,7 @@ public abstract class TargetTree extends Tree implements TargetTags {
 			return t;
 		}
 
+		@Override
 		public boolean isBlock() {
 			return true;
 		}
@@ -280,10 +299,12 @@ public abstract class TargetTree extends Tree implements TargetTags {
 		private While() {
 		}
 
+		@Override
 		public void apply(Visitor v) throws CompilerException {
 			v.visit(this);
 		}
 
+		@Override
 		public Tree deepCopy() {
 			While t = new While();
 			deepCopyTo(t);
@@ -306,10 +327,12 @@ public abstract class TargetTree extends Tree implements TargetTags {
 		private DoWhile() {
 		}
 
+		@Override
 		public void apply(Visitor v) throws CompilerException {
 			v.visit(this);
 		}
 
+		@Override
 		public Tree deepCopy() {
 			DoWhile t = new DoWhile();
 			deepCopyTo(t);
@@ -336,10 +359,12 @@ public abstract class TargetTree extends Tree implements TargetTags {
 		private For() {
 		}
 
+		@Override
 		public void apply(Visitor v) throws CompilerException {
 			v.visit(this);
 		}
 
+		@Override
 		public Tree deepCopy() {
 			For t = new For();
 			deepCopyTo(t);
@@ -364,10 +389,12 @@ public abstract class TargetTree extends Tree implements TargetTags {
 		private Switch() {
 		}
 
+		@Override
 		public void apply(Visitor v) throws CompilerException {
 			v.visit(this);
 		}
 
+		@Override
 		public Tree deepCopy() {
 			Switch t = new Switch();
 			deepCopyTo(t);
@@ -376,6 +403,7 @@ public abstract class TargetTree extends Tree implements TargetTags {
 			return t;
 		}
 
+		@Override
 		public boolean isBlock() {
 			return true;
 		}
@@ -394,10 +422,12 @@ public abstract class TargetTree extends Tree implements TargetTags {
 		private Case() {
 		}
 
+		@Override
 		public void apply(Visitor v) throws CompilerException {
 			v.visit(this);
 		}
 
+		@Override
 		public Tree deepCopy() {
 			Case t = new Case();
 			deepCopyTo(t);
@@ -420,10 +450,12 @@ public abstract class TargetTree extends Tree implements TargetTags {
 		private Taged() {
 		}
 
+		@Override
 		public void apply(Visitor v) throws CompilerException {
 			v.visit(this);
 		}
 
+		@Override
 		public Tree deepCopy() {
 			Taged t = new Taged();
 			deepCopyTo(t);
@@ -444,10 +476,12 @@ public abstract class TargetTree extends Tree implements TargetTags {
 		private Break() {
 		}
 
+		@Override
 		public void apply(Visitor v) throws CompilerException {
 			v.visit(this);
 		}
 
+		@Override
 		public Tree deepCopy() {
 			Break t = new Break();
 			deepCopyTo(t);
@@ -467,10 +501,12 @@ public abstract class TargetTree extends Tree implements TargetTags {
 		private Continue() {
 		}
 
+		@Override
 		public void apply(Visitor v) throws CompilerException {
 			v.visit(this);
 		}
 
+		@Override
 		public Tree deepCopy() {
 			Continue t = new Continue();
 			deepCopyTo(t);
@@ -490,10 +526,12 @@ public abstract class TargetTree extends Tree implements TargetTags {
 		private Return() {
 		}
 
+		@Override
 		public void apply(Visitor v) throws CompilerException {
 			v.visit(this);
 		}
 
+		@Override
 		public Tree deepCopy() {
 			Return t = new Return();
 			deepCopyTo(t);
@@ -515,10 +553,12 @@ public abstract class TargetTree extends Tree implements TargetTags {
 		private Assign() {
 		}
 
+		@Override
 		public void apply(Visitor v) throws CompilerException {
 			v.visit(this);
 		}
 
+		@Override
 		public Tree deepCopy() {
 			Assign t = new Assign();
 			deepCopyTo(t);

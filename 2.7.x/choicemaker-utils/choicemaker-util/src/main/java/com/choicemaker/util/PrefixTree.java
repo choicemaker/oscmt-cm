@@ -41,7 +41,7 @@ public class PrefixTree {
 	public void addAll(Collection<String> strings) {
 		Iterator<String> it = strings.iterator();
 		while (it.hasNext()) {
-			add((String) it.next());
+			add(it.next());
 		}
 	}
 
@@ -114,7 +114,7 @@ public class PrefixTree {
 			PrefixTreeNode child = null;
 
 			if (kids != null) {
-				child = (PrefixTreeNode) kids.get(nextCharacter);
+				child = kids.get(nextCharacter);
 			}
 
 			if (child == null) {
@@ -142,7 +142,7 @@ public class PrefixTree {
 			char next = s.charAt(index);
 			Character nextCharacter = new Character(next);
 
-			PrefixTreeNode child = (PrefixTreeNode) kids.get(nextCharacter);
+			PrefixTreeNode child = kids.get(nextCharacter);
 			if (child != null) {
 				return child.contains(s, index + 1);
 			}
@@ -166,7 +166,7 @@ public class PrefixTree {
 			char next = s.charAt(index);
 			Character nextCharacter = new Character(next);
 
-			PrefixTreeNode child = (PrefixTreeNode) kids.get(nextCharacter);
+			PrefixTreeNode child = kids.get(nextCharacter);
 			if (child != null) {
 				int childLongest = child.getLongestPrefixLength(s, index + 1);
 				if (childLongest > 0) {
@@ -199,7 +199,7 @@ public class PrefixTree {
 			char next = s.charAt(index);
 			Character nextCharacter = new Character(next);
 
-			PrefixTreeNode child = (PrefixTreeNode) kids.get(nextCharacter);
+			PrefixTreeNode child = kids.get(nextCharacter);
 			if (child != null) {
 				return child.getShortestPrefixLength(s, index + 1);
 			}
@@ -225,7 +225,7 @@ public class PrefixTree {
 			char next = s.charAt(index);
 			Character nextCharacter = new Character(next);
 
-			PrefixTreeNode child = (PrefixTreeNode) kids.get(nextCharacter);
+			PrefixTreeNode child = kids.get(nextCharacter);
 			if (child != null) {
 				child.getAllPrefixes(s, index + 1, prefixes);
 			}

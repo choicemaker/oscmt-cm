@@ -48,6 +48,7 @@ public class PostgresDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 	private static final Logger logger = Logger
 			.getLogger(PostgresDbObjectMaker.class.getName());
 
+	@Override
 	public Object run(Object args) throws Exception {
 		CommandLineArguments cla = new CommandLineArguments();
 		cla.addExtensions();
@@ -73,6 +74,7 @@ public class PostgresDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 		w.close();
 	}
 	
+	@Override
 	public void generateObjects(File outDir) throws IOException {
 		File outFile = new File(outDir, "Postgres_Custom_Objects.txt").getAbsoluteFile();
 		Writer w = new FileWriter(outFile);

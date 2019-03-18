@@ -17,7 +17,9 @@ import com.choicemaker.cm.core.Record;
  */
 public abstract class AbstractTableStat implements FieldProfiler {
 
+	@Override
 	public abstract void reset();
+	@Override
 	public abstract void processRecord(Record r);
 	
 	public abstract String getName();
@@ -25,26 +27,32 @@ public abstract class AbstractTableStat implements FieldProfiler {
 	public abstract Object[][] getData();
 	public abstract boolean filterRecord(Set values, Record r);
 		
+	@Override
 	public final int getScalarStatCount() {
 		return 0;
 	}
 	
+	@Override
 	public final String getScalarStatName(int index) {
 		throw new UnsupportedOperationException();
 	}
 	
+	@Override
 	public final Object getScalarStatValue(int index) {
 		throw new UnsupportedOperationException();
 	}
 	
+	@Override
 	public final boolean filterRecordForScalarStat(int index, Record r) {
 		throw new UnsupportedOperationException();
 	}
 	
+	@Override
 	public final int getTabularStatCount() {
 		return 1;
 	}
 
+	@Override
 	public final String getTabularStatName(int index) {
 		if (index != 0) {
 			throw new IllegalArgumentException("Index: " + index);
@@ -53,6 +61,7 @@ public abstract class AbstractTableStat implements FieldProfiler {
 		}
 	}
 
+	@Override
 	public final Object[] getTabularStatColumnHeaders(int index) {
 		if (index != 0) {
 			throw new IllegalArgumentException("Index: " + index);
@@ -61,6 +70,7 @@ public abstract class AbstractTableStat implements FieldProfiler {
 		}
 	}
 
+	@Override
 	public final Object[][] getTabularStatTableData(int index) {
 		if (index != 0) {
 			throw new IllegalArgumentException("Index: " + index);
@@ -69,6 +79,7 @@ public abstract class AbstractTableStat implements FieldProfiler {
 		}
 	}
 	
+	@Override
 	public final boolean filterRecordForTableStat(int index, Set values, Record r) {
 		if (index != 0) {
 			throw new IllegalArgumentException("Index: " + index);

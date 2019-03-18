@@ -98,6 +98,7 @@ public class SqlServerParallelRecordSource implements RecordSource {
 		this.dataViewName = createDataViewName();
 	}
 
+	@Override
 	public void open() throws IOException {
 
 		DbAccessor accessor = (DbAccessor) getModel().getAccessor();
@@ -218,10 +219,12 @@ public class SqlServerParallelRecordSource implements RecordSource {
 		return ob.toString();
 	}
 
+	@Override
 	public boolean hasNext() throws IOException {
 		return getDatabaseReader().hasNext();
 	}
 
+	@Override
 	@SuppressWarnings("rawtypes")
 	public Record getNext() throws IOException {
 		Record r = null;
@@ -233,6 +236,7 @@ public class SqlServerParallelRecordSource implements RecordSource {
 		return r;
 	}
 
+	@Override
 	public void close() /* throws IOException */ {
 
 		List<String> exceptionMessages = new ArrayList<>();
@@ -295,7 +299,7 @@ public class SqlServerParallelRecordSource implements RecordSource {
 			String msg = "Problem(s) closing SqlServerParallelReader: " + count;
 			pw.println(msg);
 			for (int i = 0; i < count; i++) {
-				msg = (String) exceptionMessages.get(i);
+				msg = exceptionMessages.get(i);
 				pw.println(msg);
 			}
 			msg = sw.toString();
@@ -308,10 +312,12 @@ public class SqlServerParallelRecordSource implements RecordSource {
 		assert getConnection() == null;
 	}
 
+	@Override
 	protected void finalize() {
 		close();
 	}
 
+	@Override
 	public ImmutableProbabilityModel getModel() {
 		if (model == null) {
 			throw new IllegalStateException("null model");
@@ -319,6 +325,7 @@ public class SqlServerParallelRecordSource implements RecordSource {
 		return model;
 	}
 
+	@Override
 	public void setModel(ImmutableProbabilityModel m) {
 		if (m == null) {
 			throw new IllegalArgumentException("null model");
@@ -388,26 +395,32 @@ public class SqlServerParallelRecordSource implements RecordSource {
 		return idsQuery;
 	}
 
+	@Override
 	public String getName() {
 		return "SQL Server Parallel Record Source";
 	}
 
+	@Override
 	public void setName(String name) {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
 	public boolean hasSink() {
 		return false;
 	}
 
+	@Override
 	public Sink getSink() {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
 	public String getFileName() {
 		return fileName;
 	}
 
+	@Override
 	public String toString() {
 		return getSource() + " [fileName=" + getFileName()
 				+ ", model=" + getModel() + ", dbConfiguration="

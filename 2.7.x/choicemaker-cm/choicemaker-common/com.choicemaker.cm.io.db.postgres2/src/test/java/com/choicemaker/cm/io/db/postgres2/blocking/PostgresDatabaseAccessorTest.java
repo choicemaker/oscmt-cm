@@ -1,7 +1,5 @@
 package com.choicemaker.cm.io.db.postgres2.blocking;
 
-import static org.junit.Assert.fail;
-
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

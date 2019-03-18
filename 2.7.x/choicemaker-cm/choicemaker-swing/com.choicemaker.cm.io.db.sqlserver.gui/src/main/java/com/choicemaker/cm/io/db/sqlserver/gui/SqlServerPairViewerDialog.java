@@ -165,6 +165,7 @@ public class SqlServerPairViewerDialog extends JDialog {
 		
 	private void createListeners() {
 		ItemListener il = new ItemListener() {
+			@Override
 			public void itemStateChanged(ItemEvent e) {
 				updateEnabledness();
 			}
@@ -174,8 +175,11 @@ public class SqlServerPairViewerDialog extends JDialog {
 		dbConfiguration.addItemListener(il);
 		
 		DocumentListener dl = new DocumentListener() {
+			@Override
 			public void insertUpdate(DocumentEvent e) { updateEnabledness(); }
+			@Override
 			public void removeUpdate(DocumentEvent e) { updateEnabledness(); }
+			@Override
 			public void changedUpdate(DocumentEvent e) { updateEnabledness(); }
 		};
 		
@@ -183,12 +187,14 @@ public class SqlServerPairViewerDialog extends JDialog {
 		mId.getDocument().addDocumentListener(dl);
 		
 		cancel.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				dispose();
 			}
 		});
 		
 		ok.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				getPair();
 			}

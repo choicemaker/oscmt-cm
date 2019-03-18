@@ -65,18 +65,22 @@ public class PluginAdapter {
 			this.delegate = o;
 		}
 
+		@Override
 		public CMPluginDescriptor getDescriptor() {
 			return PluginDescriptorAdapter.convert(delegate.getDescriptor());
 		}
 
+		@Override
 		public boolean isDebugging() {
 			return delegate.isDebugging();
 		}
 
+		@Override
 		public void setDebugging(boolean value) {
 			delegate.setDebugging(value);
 		}
 
+		@Override
 		public void shutdown() throws E2Exception {
 			try {
 				delegate.shutdown();
@@ -86,6 +90,7 @@ public class PluginAdapter {
 			}
 		}
 
+		@Override
 		public void startup() throws E2Exception {
 			try {
 				delegate.startup();

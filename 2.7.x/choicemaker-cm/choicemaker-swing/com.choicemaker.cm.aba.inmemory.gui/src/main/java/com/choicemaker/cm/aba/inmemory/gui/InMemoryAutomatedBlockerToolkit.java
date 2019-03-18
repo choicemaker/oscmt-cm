@@ -22,6 +22,7 @@ import com.choicemaker.cm.modelmaker.gui.matcher.MatchDialogBlockerPlugin;
  */
 public class InMemoryAutomatedBlockerToolkit implements BlockerToolkit {
 
+	@Override
 	public MatchDialogBlockerPlugin getDialogPlugin(ImmutableProbabilityModel model) {
 		return new InMemoryAutomatedBlockerDialogPlugin(model);
 	}

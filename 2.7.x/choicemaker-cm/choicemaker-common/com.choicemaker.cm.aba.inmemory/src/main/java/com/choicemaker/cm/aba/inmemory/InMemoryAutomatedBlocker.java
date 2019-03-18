@@ -67,6 +67,7 @@ public class InMemoryAutomatedBlocker implements InMemoryBlocker {
 		this.blockingConfiguration = blockingConfiguration;
 	}
 
+	@Override
 	public void init(List records) {
 		// the blocking configuration
 		IBlockingConfiguration bc =
@@ -81,15 +82,18 @@ public class InMemoryAutomatedBlocker implements InMemoryBlocker {
 		this.abaStatistics = imds.createCountSource();
 	}
 
+	@Override
 	public void clear() {
 		this.imds = null;
 		this.abaStatistics = null;
 	}
 
+	@Override
 	public RecordSource block(Record q) {
 		return block(q, -1);
 	}
 
+	@Override
 	public RecordSource block(Record q, int start) {
 		AutomatedBlocker blocker = createBlocker(q, start);
 		return new BlockerWrapper(blocker);
@@ -122,6 +126,7 @@ public class InMemoryAutomatedBlocker implements InMemoryBlocker {
 			}
 		}
 
+		@Override
 		public void open() throws IOException {
 			threwException = true;
 			try {
@@ -140,6 +145,7 @@ public class InMemoryAutomatedBlocker implements InMemoryBlocker {
 
 		}
 
+		@Override
 		public boolean hasNext() throws IOException {
 			if (threwException) {
 				logger.severe("Blocker has no additional candidates because of an earlier exception");
@@ -147,6 +153,7 @@ public class InMemoryAutomatedBlocker implements InMemoryBlocker {
 			return !threwException && blocker.hasNext();
 		}
 
+		@Override
 		public Record getNext() throws IOException {
 			if (threwException) {
 				logger.severe("Blocker can not return next candidate because of an earlier exception");
@@ -159,35 +166,43 @@ public class InMemoryAutomatedBlocker implements InMemoryBlocker {
 			}
 		}
 
+		@Override
 		public void close() throws IOException {
 			blocker.close();
 			blocker = null;
 		}
 
+		@Override
 		public String getName() {
 			throw new UnsupportedOperationException();
 		}
 
+		@Override
 		public void setName(String name) {
 			throw new UnsupportedOperationException();
 		}
 
+		@Override
 		public ImmutableProbabilityModel getModel() {
 			throw new UnsupportedOperationException();
 		}
 
+		@Override
 		public void setModel(ImmutableProbabilityModel m) {
 			throw new UnsupportedOperationException();
 		}
 
+		@Override
 		public boolean hasSink() {
 			throw new UnsupportedOperationException();
 		}
 
+		@Override
 		public Sink getSink() {
 			throw new UnsupportedOperationException();
 		}
 
+		@Override
 		public String getFileName() {
 			throw new UnsupportedOperationException();
 		}

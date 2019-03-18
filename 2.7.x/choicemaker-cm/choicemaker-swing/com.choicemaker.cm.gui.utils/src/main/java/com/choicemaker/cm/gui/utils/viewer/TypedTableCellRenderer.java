@@ -29,6 +29,7 @@ public class TypedTableCellRenderer extends DefaultTableCellRenderer {
 		defaultBackground = backgroundColor;
 	}
 
+	@Override
 	public void setValue(Object value) {
 		if (value instanceof TypedValue) {
 			TypedValue v = (TypedValue) value;

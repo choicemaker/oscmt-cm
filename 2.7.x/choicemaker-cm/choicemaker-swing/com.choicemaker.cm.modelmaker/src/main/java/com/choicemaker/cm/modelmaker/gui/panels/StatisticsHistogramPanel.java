@@ -96,6 +96,7 @@ public class StatisticsHistogramPanel extends JPanel {
 
 		//binWidthField
 		binWidthField.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent ev) {
 				setBinWidth(Float.parseFloat(binWidthField.getText()));
 			}
@@ -151,6 +152,7 @@ public class StatisticsHistogramPanel extends JPanel {
 		data.setData(null);
 	}
 
+	@Override
 	public void setVisible(boolean b) {
 		super.setVisible(b);
 		if (b && dirty) {

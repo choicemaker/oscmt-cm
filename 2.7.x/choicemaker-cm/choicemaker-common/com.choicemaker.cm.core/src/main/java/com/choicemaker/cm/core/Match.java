@@ -68,6 +68,7 @@ public class Match implements /* ImmutableUnsafeMatch, */ Comparable {
 	}
 
 	/** Match before differ, differ before hold. Then by probability descending */
+	@Override
 	@SuppressWarnings("unchecked")
 	public int compareTo(Object o) {
 		Match m = (Match) o;
@@ -87,6 +88,7 @@ public class Match implements /* ImmutableUnsafeMatch, */ Comparable {
 	 * <strong>FIXME:</strong> The implementation of this method is
 	 * pathological.
 	 */
+	@Override
 	public boolean equals(Object o) {
 		// FIXME
 		final String msg = "pathological method for equals(Object)";
@@ -162,10 +164,12 @@ public class Match implements /* ImmutableUnsafeMatch, */ Comparable {
 		return retVal;
 	}
 
+	@Override
 	public int hashCode() {
 		return id.hashCode();
 	}
 
+	@Override
 	public String toString() {
 		StringBuffer b = new StringBuffer("Match[decision:");
 		if (decision != null)

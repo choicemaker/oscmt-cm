@@ -39,46 +39,57 @@ public class SQLServerSerializableParallelSerialRecordSource
 
 	private final SQLServerSerializableParallelRecordSource delegate;
 
+	@Override
 	public ImmutableProbabilityModel getModel() {
 		return delegate.getModel();
 	}
 
+	@Override
 	public Record<?> getNext() throws IOException {
 		return delegate.getNext();
 	}
 
+	@Override
 	public void open() throws IOException {
 		delegate.open();
 	}
 
+	@Override
 	public void close() throws IOException {
 		delegate.close();
 	}
 
+	@Override
 	public boolean hasNext() throws IOException {
 		return delegate.hasNext();
 	}
 
+	@Override
 	public String getName() {
 		return delegate.getName();
 	}
 
+	@Override
 	public void setName(String name) {
 		delegate.setName(name);
 	}
 
+	@Override
 	public void setModel(ImmutableProbabilityModel m) {
 		delegate.setModel(m);
 	}
 
+	@Override
 	public boolean hasSink() {
 		return delegate.hasSink();
 	}
 
+	@Override
 	public Sink getSink() {
 		return delegate.getSink();
 	}
 
+	@Override
 	public String getFileName() {
 		return delegate.getFileName();
 	}
@@ -99,15 +110,18 @@ public class SQLServerSerializableParallelSerialRecordSource
 		return delegate.getSqlQuery();
 	}
 
+	@Override
 	public Properties getProperties() {
 		return delegate.getProperties();
 	}
 
+	@Override
 	public void setProperties(Properties properties)
 			throws IncompleteSpecificationException {
 		delegate.setProperties(properties);
 	}
 
+	@Override
 	public String toXML() {
 		return delegate.toXML();
 	}
@@ -130,6 +144,7 @@ public class SQLServerSerializableParallelSerialRecordSource
 					modelName, dbConfig, sqlQuery, DEFAULT_MAX_COMPOSITE_SIZE);
 	}
 
+	@Override
 	public boolean equals(Object o) {
 		if (o instanceof SQLServerSerializableParallelSerialRecordSource) {
 			SQLServerSerializableParallelSerialRecordSource rs =
@@ -140,10 +155,12 @@ public class SQLServerSerializableParallelSerialRecordSource
 		}
 	}
 
+	@Override
 	public int hashCode() {
 		return getSqlQuery().hashCode();
 	}
 
+	@Override
 	public String toString() {
 		return "SQLServerSerializableParallelSerialRecordSource [dsJNDIName="
 				+ this.getDsJNDIName() + ", modelName=" + this.getModelName()

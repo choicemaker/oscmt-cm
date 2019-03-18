@@ -73,6 +73,7 @@ public class FlatFileRecordSourceGui extends RecordSourceGui implements Enable {
 		init(s);
 	}
 
+	@Override
 	public void setVisible(boolean b) {
 		if (b) {
 			setFields();
@@ -131,6 +132,7 @@ public class FlatFileRecordSourceGui extends RecordSourceGui implements Enable {
 		}
 	}
 
+	@Override
 	public void setEnabledness() {
 		boolean ok =
 			fileName.getText().length() > 0
@@ -141,6 +143,7 @@ public class FlatFileRecordSourceGui extends RecordSourceGui implements Enable {
 		separator.setEnabled(!fixedLength.isSelected() && ((Separator) separatorList.getSelectedItem()).isOther());
 	}
 
+	@Override
 	public void buildSource() {
 		FlatFileRecordSource ffSource = (FlatFileRecordSource) getSource();
 		ffSource.setFileName(getSourceFileName());
@@ -170,6 +173,7 @@ public class FlatFileRecordSourceGui extends RecordSourceGui implements Enable {
 	/**
 	 * Executed by the superclass constructor to build the panel.
 	 */
+	@Override
 	public void buildContent() {
 		sourceNameLabel = new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.dialog.source.name"));
 		sourceFileName = new JTextField(35);
@@ -201,11 +205,13 @@ public class FlatFileRecordSourceGui extends RecordSourceGui implements Enable {
 		layoutContent();
 	}
 
+	@Override
 	public void addContentListeners() {
 		super.addContentListeners();
 
 		//sourceFileBrowseButton
 		sourceFileBrowseButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent ev) {
 				File f = FileChooserFactory.selectRsFile(parent);
 				if (f != null) {
@@ -216,6 +222,7 @@ public class FlatFileRecordSourceGui extends RecordSourceGui implements Enable {
 
 		//browsebutton
 		browseButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent ev) {
 				File file = FileChooserFactory.selectFlatFile(parent);
 				if (file != null) {
@@ -225,6 +232,7 @@ public class FlatFileRecordSourceGui extends RecordSourceGui implements Enable {
 		});
 
 		ItemListener il = new ItemListener() {
+			@Override
 			public void itemStateChanged(ItemEvent e) {
 				setEnabledness();
 			}
@@ -238,6 +246,7 @@ public class FlatFileRecordSourceGui extends RecordSourceGui implements Enable {
 		fileName.getDocument().addDocumentListener(dl);
 		separator.getDocument().addDocumentListener(dl);
 		separatorList.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				setEnabledness();
 			}

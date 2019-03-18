@@ -189,50 +189,62 @@ public class MarkedRecordPairBinder implements MarkedRecordPairSource {
 		this.c = c;
 	}
 
+	@Override
 	public void open() {
 		i = c.iterator();
 	}
 
+	@Override
 	public void close() {
 		i = null;
 	}
 
+	@Override
 	public boolean hasNext() {
 		return i.hasNext();
 	}
 
+	@Override
 	public String getName() {
 		return name;
 	}
 
+	@Override
 	public void setName(String name) {
 		this.name = name;
 	}
 
+	@Override
 	public String getFileName() {
 		return null;
 	}
 
+	@Override
 	public ImmutableRecordPair getNext() {
 		return (ImmutableRecordPair) i.next();
 	}
 
+	@Override
 	public MutableMarkedRecordPair getNextMarkedRecordPair() {
 		return (MutableMarkedRecordPair) i.next();
 	}
 
+	@Override
 	public ImmutableProbabilityModel getModel() {
 		return model;
 	}
 
+	@Override
 	public void setModel(ImmutableProbabilityModel m) {
 		model = m;
 	}
 
+	@Override
 	public boolean hasSink() {
 		return false;
 	}
 
+	@Override
 	public Sink getSink() {
 		return null;
 	}

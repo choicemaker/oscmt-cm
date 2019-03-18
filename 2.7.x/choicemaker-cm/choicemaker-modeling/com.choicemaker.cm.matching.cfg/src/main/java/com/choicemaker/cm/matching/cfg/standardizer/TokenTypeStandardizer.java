@@ -39,6 +39,7 @@ public class TokenTypeStandardizer extends DefaultStandardizer {
 	 * the <code>fieldName</code> (passed in the constructor) field
 	 * of <code>holder</code>.
 	 */
+	@Override
 	public void standardize(ParseTreeNode node, ParsedData holder) {
 		TokenType type = (TokenType)node.getRule().getLhs();
 		Token tok = (Token)node.getRule().getRhsSymbol(0);

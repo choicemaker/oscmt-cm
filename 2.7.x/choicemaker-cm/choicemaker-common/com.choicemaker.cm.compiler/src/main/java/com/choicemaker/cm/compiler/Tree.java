@@ -146,18 +146,22 @@ public abstract class Tree implements Tags {
 		private Bad() {
 		}
 
+		@Override
 		public void apply(Visitor v) throws CompilerException {
 			v.visit(this);
 		}
 
+		@Override
 		public boolean isExpr() {
 			return true;
 		}
 
+		@Override
 		public boolean isType() {
 			return true;
 		}
 
+		@Override
 		public Tree deepCopy() {
 			Bad t = new Bad();
 			deepCopyTo(t);
@@ -177,10 +181,12 @@ public abstract class Tree implements Tags {
 		private PackageDecl() {
 		}
 
+		@Override
 		public void apply(Visitor v) throws CompilerException {
 			v.visit(this);
 		}
 
+		@Override
 		public Tree deepCopy() {
 			PackageDecl t = new PackageDecl();
 			deepCopyTo(t);
@@ -204,10 +210,12 @@ public abstract class Tree implements Tags {
 		private ImportDecl() {
 		}
 
+		@Override
 		public void apply(Visitor v) throws CompilerException {
 			v.visit(this);
 		}
 
+		@Override
 		public Tree deepCopy() {
 			ImportDecl t = new ImportDecl();
 			deepCopyTo(t);
@@ -238,14 +246,17 @@ public abstract class Tree implements Tags {
 		private ClueSetDecl() {
 		}
 
+		@Override
 		public void apply(Visitor v) throws CompilerException {
 			v.visit(this);
 		}
 
+		@Override
 		public Symbol symbol() {
 			return sym;
 		}
 
+		@Override
 		public Tree deepCopy() {
 			ClueSetDecl t = new ClueSetDecl();
 			deepCopyTo(t);
@@ -257,6 +268,7 @@ public abstract class Tree implements Tags {
 			return t;
 		}
 
+		@Override
 		public boolean isBlock() {
 			return true;
 		}
@@ -298,14 +310,17 @@ public abstract class Tree implements Tags {
 		private ClueDecl() {
 		}
 
+		@Override
 		public void apply(Visitor v) throws CompilerException {
 			v.visit(this);
 		}
 
+		@Override
 		public Symbol symbol() {
 			return sym;
 		}
 
+		@Override
 		public Tree deepCopy() {
 			ClueDecl t = new ClueDecl();
 			deepCopyTo(t);
@@ -319,6 +334,7 @@ public abstract class Tree implements Tags {
 			return t;
 		}
 
+		@Override
 		public boolean isBlock() {
 			return true;
 		}
@@ -372,14 +388,17 @@ public abstract class Tree implements Tags {
 		private Index() {
 		}
 
+		@Override
 		public void apply(Visitor v) throws CompilerException {
 			v.visit(this);
 		}
 
+		@Override
 		public Symbol symbol() {
 			return sym;
 		}
 
+		@Override
 		public Tree deepCopy() {
 			Index t = new Index();
 			deepCopyTo(t);
@@ -413,14 +432,17 @@ public abstract class Tree implements Tags {
 		private MethodDecl() {
 		}
 
+		@Override
 		public void apply(Visitor v) throws CompilerException {
 			v.visit(this);
 		}
 
+		@Override
 		public Symbol symbol() {
 			return sym;
 		}
 
+		@Override
 		public Tree deepCopy() {
 			MethodDecl t = new MethodDecl();
 			deepCopyTo(t);
@@ -433,6 +455,7 @@ public abstract class Tree implements Tags {
 			return t;
 		}
 
+		@Override
 		public boolean isBlock() {
 			return true;
 		}
@@ -461,14 +484,17 @@ public abstract class Tree implements Tags {
 			this(pos, 0, tpe, name, initializer);
 		}
 
+		@Override
 		public void apply(Visitor v) throws CompilerException {
 			v.visit(this);
 		}
 
+		@Override
 		public Symbol symbol() {
 			return sym;
 		}
 
+		@Override
 		public Tree deepCopy() {
 			VarDecl t = new VarDecl();
 			deepCopyTo(t);
@@ -505,19 +531,22 @@ public abstract class Tree implements Tags {
 		private Quantified() {
 		}
 
+		@Override
 		public void apply(Visitor v) throws CompilerException {
 			v.visit(this);
 		}
 
+		@Override
 		public boolean isExpr() {
 			return true;
 		}
 
+		@Override
 		public Tree deepCopy() {
 			Quantified t = new Quantified();
 			deepCopyTo(t);
 			t.quantifier = quantifier;
-			t.vars = (String[]) vars.clone();
+			t.vars = vars.clone();
 			t.expr = expr.deepCopy();
 			if (valueExpr != null) {
 				t.valueExpr = valueExpr.deepCopy();
@@ -542,14 +571,17 @@ public abstract class Tree implements Tags {
 		private Let() {
 		}
 
+		@Override
 		public void apply(Visitor v) throws CompilerException {
 			v.visit(this);
 		}
 
+		@Override
 		public boolean isExpr() {
 			return true;
 		}
 
+		@Override
 		public Tree deepCopy() {
 			Let t = new Let();
 			deepCopyTo(t);
@@ -584,14 +616,17 @@ public abstract class Tree implements Tags {
 		private Shorthand() {
 		}
 
+		@Override
 		public void apply(Visitor v) throws CompilerException {
 			v.visit(this);
 		}
 
+		@Override
 		public boolean isExpr() {
 			return true;
 		}
 
+		@Override
 		public Tree deepCopy() {
 			Shorthand t = new Shorthand();
 			deepCopyTo(t);
@@ -623,14 +658,17 @@ public abstract class Tree implements Tags {
 		private Valid() {
 		}
 
+		@Override
 		public void apply(Visitor v) throws CompilerException {
 			v.visit(this);
 		}
 
+		@Override
 		public boolean isExpr() {
 			return true;
 		}
 
+		@Override
 		public Tree deepCopy() {
 			Valid t = new Valid();
 			deepCopyTo(t);
@@ -655,14 +693,17 @@ public abstract class Tree implements Tags {
 		private If() {
 		}
 
+		@Override
 		public void apply(Visitor v) throws CompilerException {
 			v.visit(this);
 		}
 
+		@Override
 		public boolean isExpr() {
 			return true;
 		}
 
+		@Override
 		public boolean isSameAs(Tree t) {
 			if (t instanceof If) {
 				If i = (If)t;
@@ -673,6 +714,7 @@ public abstract class Tree implements Tags {
 				return false;
 		}
 		
+		@Override
 		public Tree deepCopy() {
 			If t = new If();
 			deepCopyTo(t);
@@ -697,14 +739,17 @@ public abstract class Tree implements Tags {
 		private Apply() {
 		}
 
+		@Override
 		public void apply(Visitor v) throws CompilerException {
 			v.visit(this);
 		}
 
+		@Override
 		public boolean isExpr() {
 			return true;
 		}
 
+		@Override
 		public boolean isSameAs(Tree t) {
 			if (t instanceof Apply) {
 				Apply i = (Apply)t;
@@ -713,6 +758,7 @@ public abstract class Tree implements Tags {
 				return false;
 		}
 		
+		@Override
 		public Tree deepCopy() {
 			Apply t = new Apply();
 			deepCopyTo(t);
@@ -738,14 +784,17 @@ public abstract class Tree implements Tags {
 		private New() {
 		}
 
+		@Override
 		public void apply(Visitor v) throws CompilerException {
 			v.visit(this);
 		}
 
+		@Override
 		public boolean isExpr() {
 			return true;
 		}
 
+		@Override
 		public Tree deepCopy() {
 			New t = new New();
 			deepCopyTo(t);
@@ -771,14 +820,17 @@ public abstract class Tree implements Tags {
 			this.init = init;
 		}
 
+		@Override
 		public void apply(Visitor v) throws CompilerException {
 			v.visit(this);
 		}
 
+		@Override
 		public boolean isExpr() {
 			return true;
 		}
 
+		@Override
 		public Tree deepCopy() {
 			NewArray t = new NewArray();
 			deepCopyTo(t);
@@ -804,14 +856,17 @@ public abstract class Tree implements Tags {
 			this.expr = expr;
 		}
 
+		@Override
 		public void apply(Visitor v) throws CompilerException {
 			v.visit(this);
 		}
 
+		@Override
 		public boolean isExpr() {
 			return true;
 		}
 
+		@Override
 		public boolean isSameAs(Tree t) {
 			if (t instanceof Typeop) {
 				Typeop i = (Typeop)t;
@@ -820,6 +875,7 @@ public abstract class Tree implements Tags {
 				return false;
 		}
 		
+		@Override
 		public Tree deepCopy() {
 			Typeop t = new Typeop();
 			deepCopyTo(t);
@@ -843,14 +899,17 @@ public abstract class Tree implements Tags {
 			this.arg = arg;
 		}
 
+		@Override
 		public void apply(Visitor v) throws CompilerException {
 			v.visit(this);
 		}
 
+		@Override
 		public boolean isExpr() {
 			return true;
 		}
 
+		@Override
 		public boolean isSameAs(Tree t) {
 			if (t instanceof Unop) {
 				Unop i = (Unop)t;
@@ -859,6 +918,7 @@ public abstract class Tree implements Tags {
 				return false;
 		}
 		
+		@Override
 		public Tree deepCopy() {
 			Unop t = new Unop();
 			deepCopyTo(t);
@@ -889,14 +949,17 @@ public abstract class Tree implements Tags {
 		private Binop() {
 		}
 
+		@Override
 		public void apply(Visitor v) throws CompilerException {
 			v.visit(this);
 		}
 
+		@Override
 		public boolean isExpr() {
 			return true;
 		}
 
+		@Override
 		public boolean isSameAs(Tree t) {
 			if (t instanceof Binop) {
 				Binop i = (Binop)t;
@@ -907,6 +970,7 @@ public abstract class Tree implements Tags {
 				return false;
 		}
 		
+		@Override
 		public Tree deepCopy() {
 			Binop t = new Binop();
 			deepCopyTo(t);
@@ -951,14 +1015,17 @@ public abstract class Tree implements Tags {
 		private Indexed() {
 		}
 
+		@Override
 		public void apply(Visitor v) throws CompilerException {
 			v.visit(this);
 		}
 
+		@Override
 		public boolean isExpr() {
 			return true;
 		}
 
+		@Override
 		public Tree deepCopy() {
 			Indexed t = new Indexed();
 			deepCopyTo(t);
@@ -968,6 +1035,7 @@ public abstract class Tree implements Tags {
 			return t;
 		}
 
+		@Override
 		public boolean isSameAs(Tree t) {
 			if (t instanceof Indexed) {
 				Indexed i = (Indexed)t;
@@ -976,6 +1044,7 @@ public abstract class Tree implements Tags {
 				return false;
 		}
 		
+		@Override
 		public boolean equals(Object o) {
 			if (o instanceof Indexed) {
 				Indexed oi = (Indexed) o;
@@ -987,6 +1056,7 @@ public abstract class Tree implements Tags {
 			}
 		}
 		
+		@Override
 		public int hashCode() {
 			return 42;
 		}
@@ -1007,26 +1077,32 @@ public abstract class Tree implements Tags {
 		private Select() {
 		}
 
+		@Override
 		public void apply(Visitor v) throws CompilerException {
 			v.visit(this);
 		}
 
+		@Override
 		public boolean isExpr() {
 			return qualifier.isExpr();
 		}
 
+		@Override
 		public boolean isType() {
 			return qualifier.isType();
 		}
 
+		@Override
 		public Symbol symbol() {
 			return sym;
 		}
 
+		@Override
 		public String toString() {
 			return qualifier + "." + name;
 		}
 
+		@Override
 		public Tree deepCopy() {
 			Select t = new Select();
 			deepCopyTo(t);
@@ -1036,6 +1112,7 @@ public abstract class Tree implements Tags {
 			return t;
 		}
 
+		@Override
 		public boolean isSameAs(Tree t) {
 			if (t instanceof Select) {
 				Select i = (Select)t;
@@ -1045,6 +1122,7 @@ public abstract class Tree implements Tags {
 				return false;
 		}
 		
+		@Override
 		public boolean equals(Object o) {
 			if (o instanceof Select) {
 				Select os = (Select) o;
@@ -1054,6 +1132,7 @@ public abstract class Tree implements Tags {
 			}
 		}
 		
+		@Override
 		public int hashCode() {
 			return name.hashCode();
 		}
@@ -1072,26 +1151,32 @@ public abstract class Tree implements Tags {
 		private Ident() {
 		}
 
+		@Override
 		public void apply(Visitor v) throws CompilerException {
 			v.visit(this);
 		}
 
+		@Override
 		public boolean isExpr() {
 			return true;
 		}
 
+		@Override
 		public boolean isType() {
 			return true;
 		}
 
+		@Override
 		public Symbol symbol() {
 			return sym;
 		}
 
+		@Override
 		public String toString() {
 			return name;
 		}
 
+		@Override
 		public Tree deepCopy() {
 			Ident t = new Ident();
 			deepCopyTo(t);
@@ -1100,6 +1185,7 @@ public abstract class Tree implements Tags {
 			return t;
 		}
 
+		@Override
 		public boolean isSameAs(Tree t) {
 			if (t instanceof Ident) {
 				Ident i = (Ident)t;
@@ -1108,6 +1194,7 @@ public abstract class Tree implements Tags {
 				return false;
 		}
 
+		@Override
 		public boolean equals(Object o) {
 			if (o instanceof Ident) {
 				return name.equals(((Ident) o).name);
@@ -1116,6 +1203,7 @@ public abstract class Tree implements Tags {
 			}
 		}
 		
+		@Override
 		public int hashCode() {
 			return name.hashCode();			
 		}
@@ -1133,14 +1221,17 @@ public abstract class Tree implements Tags {
 		private Self() {
 		}
 
+		@Override
 		public void apply(Visitor v) throws CompilerException {
 			v.visit(this);
 		}
 
+		@Override
 		public boolean isExpr() {
 			return true;
 		}
 
+		@Override
 		public Tree deepCopy() {
 			Self t = new Self();
 			deepCopyTo(t);
@@ -1148,6 +1239,7 @@ public abstract class Tree implements Tags {
 			return t;
 		}
 
+		@Override
 		public boolean isSameAs(Tree t) {
 			if (t instanceof Self) {
 				Self i = (Self)t;
@@ -1156,10 +1248,12 @@ public abstract class Tree implements Tags {
 				return false;
 		}
 		
+		@Override
 		public boolean equals(Object o) {
 			return o instanceof Self && stag == ((Self) o).stag;
 		}
 		
+		@Override
 		public int hashCode() {
 			return stag;
 		}
@@ -1177,14 +1271,17 @@ public abstract class Tree implements Tags {
 		private ArrayType() {
 		}
 
+		@Override
 		public void apply(Visitor v) throws CompilerException {
 			v.visit(this);
 		}
 
+		@Override
 		public boolean isType() {
 			return true;
 		}
 
+		@Override
 		public boolean isSameAs(Tree t) {
 			if (t instanceof ArrayType) {
 				ArrayType i = (ArrayType)t;
@@ -1193,6 +1290,7 @@ public abstract class Tree implements Tags {
 				return false;
 		}
 
+		@Override
 		public Tree deepCopy() {
 			ArrayType t = new ArrayType();
 			deepCopyTo(t);
@@ -1213,14 +1311,17 @@ public abstract class Tree implements Tags {
 		private PrimitiveType() {
 		}
 
+		@Override
 		public void apply(Visitor v) throws CompilerException {
 			v.visit(this);
 		}
 
+		@Override
 		public boolean isType() {
 			return true;
 		}
 
+		@Override
 		public boolean isSameAs(Tree t) {
 			if (t instanceof PrimitiveType) {
 				PrimitiveType i = (PrimitiveType)t;
@@ -1229,6 +1330,7 @@ public abstract class Tree implements Tags {
 				return false;
 		}
 		
+		@Override
 		public Tree deepCopy() {
 			PrimitiveType t = new PrimitiveType();
 			deepCopyTo(t);
@@ -1251,14 +1353,17 @@ public abstract class Tree implements Tags {
 		private Literal() {
 		}
 
+		@Override
 		public void apply(Visitor v) throws CompilerException {
 			v.visit(this);
 		}
 
+		@Override
 		public boolean isExpr() {
 			return true;
 		}
 
+		@Override
 		public Tree deepCopy() {
 			Literal t = new Literal();
 			deepCopyTo(t);
@@ -1267,6 +1372,7 @@ public abstract class Tree implements Tags {
 			return t;
 		}
 
+		@Override
 		public boolean isSameAs(Tree t) {
 			if (t instanceof Literal) {
 				Literal i = (Literal)t;
@@ -1275,6 +1381,7 @@ public abstract class Tree implements Tags {
 				return false;
 		}
 
+		@Override
 		public boolean equals(Object o) {
 			if (o instanceof Literal) {
 				Literal ol = (Literal) o;
@@ -1283,6 +1390,7 @@ public abstract class Tree implements Tags {
 			return false;
 		}
 		
+		@Override
 		public int hashCode() {
 			return ltag;
 		}

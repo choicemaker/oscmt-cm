@@ -45,6 +45,7 @@ public interface ILabelledValidator<T> {
 	 * @see AbstractValidator#equals(Object)
 	 * @see AbstractValidator#validatorEquals(ILabelledValidator,Object)
 	 */
+	@Override
 	public boolean equals(Object o);
 
 	/**
@@ -56,6 +57,7 @@ public interface ILabelledValidator<T> {
 	 * 
 	 * @see #equals(ILabelledValidator)
 	 */
+	@Override
 	public int hashCode();
 
 	/**

@@ -29,6 +29,7 @@ public class TypedValue {
 		this.isDerived = isDerived;
 	}
 
+	@Override
 	public String toString() {
 		return myValue;
 	}

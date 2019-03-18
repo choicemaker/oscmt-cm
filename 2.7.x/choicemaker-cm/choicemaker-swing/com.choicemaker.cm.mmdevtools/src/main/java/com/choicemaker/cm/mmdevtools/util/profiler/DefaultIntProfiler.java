@@ -45,6 +45,7 @@ public class DefaultIntProfiler implements FieldProfiler {
 		}
 	}
 	
+	@Override
 	public void reset() {
 		values = new IntArrayList();		
 		totalRecords = 0;
@@ -54,6 +55,7 @@ public class DefaultIntProfiler implements FieldProfiler {
 		dirty = true;
 	}
 	
+	@Override
 	public void processRecord(Record r) {
 		totalRecords++;
 		
@@ -215,10 +217,12 @@ public class DefaultIntProfiler implements FieldProfiler {
 	// Stat accessors
 	//
 
+	@Override
 	public int getScalarStatCount() {
 		return 23;
 	}
 	
+	@Override
 	public String getScalarStatName(int i) {
 		switch (i) {
 			case 0: return "Total Records";
@@ -248,6 +252,7 @@ public class DefaultIntProfiler implements FieldProfiler {
 		throw new IllegalArgumentException("Index: " + i);
 	}
 
+	@Override
 	public Object getScalarStatValue(int i) {
 		clean();
 		switch (i) {
@@ -278,6 +283,7 @@ public class DefaultIntProfiler implements FieldProfiler {
 		throw new IllegalArgumentException("Index: " + i);		
 	}
 
+	@Override
 	public boolean filterRecordForScalarStat(int i, Record r) {
 		if (i < 0 || i >= getScalarStatCount()) {
 			throw new IllegalArgumentException("Index: " + i);
@@ -285,22 +291,27 @@ public class DefaultIntProfiler implements FieldProfiler {
 		return false;
 	}
 
+	@Override
 	public int getTabularStatCount() {
 		return 0;
 	}
 	
+	@Override
 	public String getTabularStatName(int i) {
 		throw new IllegalArgumentException("Index: " + i);			
 	}
 	
+	@Override
 	public Object[] getTabularStatColumnHeaders(int i) {
 		throw new IllegalArgumentException("Index: " + i);			
 	}
 	
+	@Override
 	public Object[][] getTabularStatTableData(int i) {
 		throw new IllegalArgumentException("Index: " + i);			
 	}
 
+	@Override
 	public boolean filterRecordForTableStat(int statIndex, Set values, Record r) {
 		throw new IllegalArgumentException("Index: " + statIndex);
 	}

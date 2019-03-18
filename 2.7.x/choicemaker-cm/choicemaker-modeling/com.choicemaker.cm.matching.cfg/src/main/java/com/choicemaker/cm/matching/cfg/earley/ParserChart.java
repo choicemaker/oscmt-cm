@@ -137,6 +137,7 @@ public class ParserChart {
 		return getState(fakeRule, 1, 0, size-1);
 	}
 			
+	@Override
 	public String toString() {
 		String s = "";
 		
@@ -148,7 +149,7 @@ public class ParserChart {
 			Iterator<ParserState> states = new TreeSet<>(getStates(i)).iterator();
 
 			while (states.hasNext()) {
-				ParserState state = (ParserState) states.next();
+				ParserState state = states.next();
 				s += state.toString() + "\n";
 			}
 								
@@ -184,7 +185,7 @@ public class ParserChart {
 			tempState.start = start;
 			tempState.end = end;
 			
-			ParserState state = (ParserState) all.get(tempState);
+			ParserState state = all.get(tempState);
 			if (state == null) {
 				state = new ParserState(rule, dotPos, start, end);	
 				addState(state);
@@ -208,7 +209,7 @@ public class ParserChart {
 			tempState.start = start;
 			tempState.end = end;
 			
-			return (ParserState) all.get(tempState);	
+			return all.get(tempState);	
 		}
 		
 		public boolean hasUnexploredStates() {
@@ -216,7 +217,7 @@ public class ParserChart {
 		}
 		
 		public ParserState nextUnexploredState() {
-			return (ParserState)states.get(nextUnexplored++);
+			return states.get(nextUnexplored++);
 		}
 		
 		public List<ParserState> getIncompleteStates() {

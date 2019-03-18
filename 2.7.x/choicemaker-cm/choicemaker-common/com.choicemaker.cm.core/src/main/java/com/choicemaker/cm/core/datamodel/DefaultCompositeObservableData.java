@@ -26,14 +26,16 @@ public abstract class DefaultCompositeObservableData extends DefaultObservableDa
     /**
      * adds a Listener to Composite related Events
      */
-    public void addCompositeObservableDataListener(ObservableDataListener listener) {
+    @Override
+	public void addCompositeObservableDataListener(ObservableDataListener listener) {
         compositeListeners.put(listener, null);
     }
 
     /**
      * @return list of CompositeObservableDataListeners
      */
-    public ObservableDataListener[] getCompositeObservableDataListeners() {
+    @Override
+	public ObservableDataListener[] getCompositeObservableDataListeners() {
     	Set listeners = compositeListeners.keySet();
     	ObservableDataListener[] returnValue = new ObservableDataListener[listeners.size()];
     	listeners.toArray(returnValue);
@@ -44,7 +46,8 @@ public abstract class DefaultCompositeObservableData extends DefaultObservableDa
     /**
      * removes a Listener of Composite related Events
      */
-    public void removeCompositeObservableDataListener(ObservableDataListener listener) {
+    @Override
+	public void removeCompositeObservableDataListener(ObservableDataListener listener) {
         compositeListeners.remove(listener);
     }
     
@@ -79,7 +82,8 @@ public abstract class DefaultCompositeObservableData extends DefaultObservableDa
     /**
      * @return list of DefaultObservableData items
      */
-    public ObservableData[] getObservableData() {
+    @Override
+	public ObservableData[] getObservableData() {
     	Set data = observableData.keySet();
     	ObservableData[] returnValue = new ObservableData[data.size()];
     	data.toArray(returnValue);

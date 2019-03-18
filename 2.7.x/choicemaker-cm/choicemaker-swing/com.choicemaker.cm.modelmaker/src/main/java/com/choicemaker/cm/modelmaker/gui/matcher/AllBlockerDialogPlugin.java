@@ -30,6 +30,7 @@ public class AllBlockerDialogPlugin extends MatchDialogBlockerPlugin {
 	/**
 	 * @see com.choicemaker.cm.train.matcher.MatchDialogBlockerPlugin#getBlocker()
 	 */
+	@Override
 	public InMemoryBlocker getBlocker() {
 		return new AllBlocker();
 	}

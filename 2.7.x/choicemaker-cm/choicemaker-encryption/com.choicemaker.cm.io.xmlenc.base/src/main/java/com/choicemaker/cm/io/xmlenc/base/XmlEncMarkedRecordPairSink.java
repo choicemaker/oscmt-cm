@@ -23,7 +23,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.apache.xml.security.encryption.XMLEncryptionException;
 import org.apache.xml.security.exceptions.XMLSecurityException;
 import org.apache.xml.security.utils.XMLUtils;
 import org.w3c.dom.Document;
@@ -77,11 +76,13 @@ public class XmlEncMarkedRecordPairSink extends XmlMarkedRecordPairSink {
 		return credential.getCredentialName();
 	}
 
+	@Override
 	protected Writer createWriter() {
 		docWriter = new StringWriter();
 		return docWriter;
 	}
 
+	@Override
 	public void close() throws IOException, XmlDiagnosticException {
 		super.finishRootEntity();
 		super.getWriter().flush();

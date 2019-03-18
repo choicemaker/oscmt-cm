@@ -32,6 +32,7 @@ public class Entity<T extends Comparable<T>> implements INode<T> {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.transitivity.core.INode#getNodeId()
 	 */
+	@Override
 	public T getNodeId() {
 		return recordID;
 	}
@@ -39,6 +40,7 @@ public class Entity<T extends Comparable<T>> implements INode<T> {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.transitivity.core.INode#hasChildren()
 	 */
+	@Override
 	public boolean hasChildren() {
 		return false;
 	}
@@ -46,6 +48,7 @@ public class Entity<T extends Comparable<T>> implements INode<T> {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.transitivity.core.INode#getChildren()
 	 */
+	@Override
 	public List<INode<?>> getChildren() {
 		return Collections.emptyList();
 	}
@@ -53,6 +56,7 @@ public class Entity<T extends Comparable<T>> implements INode<T> {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.transitivity.core.INode#mark(java.lang.Integer)
 	 */
+	@Override
 	public void mark(Integer I) {
 		marking = I;
 	}
@@ -61,6 +65,7 @@ public class Entity<T extends Comparable<T>> implements INode<T> {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.transitivity.core.INode#getMarking()
 	 */
+	@Override
 	public Integer getMarking() {
 		return marking;
 	}
@@ -69,6 +74,7 @@ public class Entity<T extends Comparable<T>> implements INode<T> {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.transitivity.core.INode#getType()
 	 */
+	@Override
 	public char getType() {
 		return type;
 	}

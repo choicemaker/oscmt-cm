@@ -124,7 +124,7 @@ public final class Validators {
 	public static IValidator<?> getValidator(String name)
 		throws ValidatorCreationException {
 		@SuppressWarnings("rawtypes")
-		IValidator retVal = (IValidator) getValidators().get(name);
+		IValidator retVal = getValidators().get(name);
 		if (retVal == null) {
 			String msg = "unknown validator '" + name + "'";
 			logger.severe(msg);
@@ -192,7 +192,7 @@ public final class Validators {
 		boolean retVal = false;
 		if (name != null && value != null) {
 			@SuppressWarnings("rawtypes")
-			IValidator validator = (IValidator) getValidators().get(name);
+			IValidator validator = getValidators().get(name);
 			if (validator != null) {
 				retVal = validator.isValid(value);
 			} else {

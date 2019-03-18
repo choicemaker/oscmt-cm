@@ -44,6 +44,7 @@ public class BlockSource extends BaseFileSource<BlockSet> implements
 		super(fileName, type);
 	}
 
+	@Override
 	protected void resetNext() {
 		nextBS = null;
 	}
