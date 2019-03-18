@@ -58,7 +58,6 @@ import com.choicemaker.cm.oaba.core.IIDSetSource;
 import com.choicemaker.cm.oaba.core.ITransformer;
 import com.choicemaker.cm.oaba.core.ImmutableRecordIdTranslator;
 import com.choicemaker.cm.oaba.core.OabaEventBean;
-import com.choicemaker.cm.oaba.core.OabaProcessingConstants;
 import com.choicemaker.cm.oaba.core.RecordMatchingMode;
 import com.choicemaker.cm.oaba.utils.ControlChecker;
 import com.choicemaker.util.LongArrayList;

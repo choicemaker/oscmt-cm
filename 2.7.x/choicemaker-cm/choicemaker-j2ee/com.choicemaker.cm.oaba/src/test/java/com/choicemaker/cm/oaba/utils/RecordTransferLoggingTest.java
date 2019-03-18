@@ -1,7 +1,12 @@
 package com.choicemaker.cm.oaba.utils;
 
-import static com.choicemaker.cm.oaba.utils.RecordTransferLogging.*;
 //import static org.junit.Assert.*;
+import static com.choicemaker.cm.oaba.utils.RecordTransferLogging.FS0;
+import static com.choicemaker.cm.oaba.utils.RecordTransferLogging.FS1;
+import static com.choicemaker.cm.oaba.utils.RecordTransferLogging.FS2;
+import static com.choicemaker.cm.oaba.utils.RecordTransferLogging.logConnectionAcquisition;
+import static com.choicemaker.cm.oaba.utils.RecordTransferLogging.logRecordIdCount;
+import static com.choicemaker.cm.oaba.utils.RecordTransferLogging.logTransferRate;
 
 import java.util.logging.Logger;
 

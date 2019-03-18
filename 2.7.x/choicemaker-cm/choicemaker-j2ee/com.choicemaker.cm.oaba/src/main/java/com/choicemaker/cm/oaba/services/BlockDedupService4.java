@@ -7,7 +7,7 @@
  *******************************************************************************/
 package com.choicemaker.cm.oaba.services;
 
-import static com.choicemaker.cm.oaba.utils.RecordTransferLogging.*;
+import static com.choicemaker.cm.oaba.utils.RecordTransferLogging.CONTROL_INTERVAL;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,8 +30,8 @@ import com.choicemaker.cm.oaba.core.IBlockSink;
 import com.choicemaker.cm.oaba.core.IBlockSinkSourceFactory;
 import com.choicemaker.cm.oaba.core.IBlockSource;
 import com.choicemaker.cm.oaba.core.ISuffixTreeSink;
-import com.choicemaker.cm.oaba.core.OabaProcessingConstants;
 import com.choicemaker.cm.oaba.core.OabaEventBean;
+import com.choicemaker.cm.oaba.core.OabaProcessingConstants;
 import com.choicemaker.cm.oaba.core.SuffixTreeNode;
 import com.choicemaker.cm.oaba.data.BlockGroupWalker;
 import com.choicemaker.cm.oaba.impl.BlockGroup;

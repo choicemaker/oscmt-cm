@@ -7,14 +7,13 @@
  *******************************************************************************/
 package com.choicemaker.cm.oaba.ejb;
 
-import static javax.ejb.TransactionAttributeType.REQUIRED;
-import static javax.ejb.TransactionAttributeType.SUPPORTS;
-
 import static com.choicemaker.cm.oaba.ejb.OabaProcessingEventJPA.PN_OABAPROCESSING_DELETE_BY_JOBID_JOBID;
 import static com.choicemaker.cm.oaba.ejb.OabaProcessingEventJPA.PN_OABAPROCESSING_FIND_BY_JOBID_JOBID;
 import static com.choicemaker.cm.oaba.ejb.OabaProcessingEventJPA.QN_OABAPROCESSING_DELETE_BY_JOBID;
 import static com.choicemaker.cm.oaba.ejb.OabaProcessingEventJPA.QN_OABAPROCESSING_FIND_ALL;
 import static com.choicemaker.cm.oaba.ejb.OabaProcessingEventJPA.QN_OABAPROCESSING_FIND_BY_JOBID;
+import static javax.ejb.TransactionAttributeType.REQUIRED;
+import static javax.ejb.TransactionAttributeType.SUPPORTS;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;

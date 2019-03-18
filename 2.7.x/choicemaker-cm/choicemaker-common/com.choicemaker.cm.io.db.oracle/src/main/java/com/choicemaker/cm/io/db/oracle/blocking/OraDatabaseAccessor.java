@@ -22,8 +22,6 @@ import java.util.logging.Logger;
 
 import javax.sql.DataSource;
 
-import oracle.jdbc.OracleTypes;
-
 import com.choicemaker.cm.aba.AutomatedBlocker;
 import com.choicemaker.cm.aba.DatabaseAccessor;
 import com.choicemaker.cm.aba.IBlockingField;
@@ -38,6 +36,8 @@ import com.choicemaker.cm.io.db.base.DbAccessor;
 import com.choicemaker.cm.io.db.base.DbReaderParallel;
 import com.choicemaker.cm.io.db.base.Index;
 import com.choicemaker.cm.io.db.oracle.OracleRemoteDebugging;
+
+import oracle.jdbc.OracleTypes;
 
 public class OraDatabaseAccessor implements DatabaseAccessor {
 	private static final char BS_SEP = '^';

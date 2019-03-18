@@ -24,8 +24,8 @@ import com.choicemaker.cm.core.configure.ConfigurationUtils;
 import com.choicemaker.cm.core.xmlconf.XmlModuleInitializer;
 import com.choicemaker.cm.io.xmlenc.mgmt.InMemoryXmlEncManager;
 import com.choicemaker.cm.io.xmlenc.mgmt.XmlEncryptionManager;
-import com.choicemaker.xmlencryption.CredentialSet;
 import com.choicemaker.util.StringUtils;
+import com.choicemaker.xmlencryption.CredentialSet;
 
 /**
  * XML configuration for an in-memory XML EncryptionManager.

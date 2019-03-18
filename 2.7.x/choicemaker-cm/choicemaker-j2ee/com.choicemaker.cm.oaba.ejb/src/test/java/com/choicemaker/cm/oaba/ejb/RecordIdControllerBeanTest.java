@@ -1,7 +1,7 @@
 package com.choicemaker.cm.oaba.ejb;
 
-import static com.choicemaker.cm.oaba.ejb.RecordIdControllerBean.*;
-import static org.junit.Assert.*;
+import static com.choicemaker.cm.oaba.ejb.RecordIdControllerBean.computeBatchMultiple;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 

@@ -19,8 +19,8 @@ import com.choicemaker.cm.core.base.MatchRecord2;
 import com.choicemaker.cm.oaba.core.IMatchRecord2Sink;
 import com.choicemaker.cm.oaba.core.IMatchRecord2SinkSourceFactory;
 import com.choicemaker.cm.oaba.core.IMatchRecord2Source;
-import com.choicemaker.cm.oaba.core.OabaProcessingConstants;
 import com.choicemaker.cm.oaba.core.OabaEventBean;
+import com.choicemaker.cm.oaba.core.OabaProcessingConstants;
 import com.choicemaker.cm.oaba.utils.MemoryEstimator;
 
 /**

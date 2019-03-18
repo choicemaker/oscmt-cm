@@ -13,14 +13,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import junit.framework.TestCase;
-
 import org.junit.Test;
 
 import com.choicemaker.cm.oaba.core.IRecValSource;
-import com.choicemaker.cm.oaba.utils.RecordValuesMap;
 import com.choicemaker.cm.oaba.utils.RecordValuesMapTestTypes.Input_Output;
 import com.choicemaker.util.IntArrayList;
+
+import junit.framework.TestCase;
 
 public class RecordValuesMapTest extends TestCase {
 	

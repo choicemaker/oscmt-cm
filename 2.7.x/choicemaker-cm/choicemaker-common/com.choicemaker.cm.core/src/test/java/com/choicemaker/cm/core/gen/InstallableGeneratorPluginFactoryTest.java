@@ -3,10 +3,10 @@ package com.choicemaker.cm.core.gen;
 import java.util.List;
 import java.util.Properties;
 
-import junit.framework.TestCase;
-
 import com.choicemaker.cm.core.PropertyNames;
 import com.choicemaker.util.SystemPropertyUtils;
+
+import junit.framework.TestCase;
 
 public class InstallableGeneratorPluginFactoryTest extends TestCase {
 

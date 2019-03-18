@@ -7,9 +7,9 @@
  *******************************************************************************/
 package com.choicemaker.e2.mbd;
 
-import com.choicemaker.e2.E2Exception;
 import com.choicemaker.e2.CMPlugin;
 import com.choicemaker.e2.CMPluginDescriptor;
+import com.choicemaker.e2.E2Exception;
 import com.choicemaker.e2.mbd.runtime.CoreException;
 import com.choicemaker.e2.mbd.runtime.Plugin;
 

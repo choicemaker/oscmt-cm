@@ -7,14 +7,13 @@
  *******************************************************************************/
 package com.choicemaker.cm.transitivity.ejb;
 
-import static javax.ejb.TransactionAttributeType.REQUIRED;
-import static javax.ejb.TransactionAttributeType.SUPPORTS;
-
 import static com.choicemaker.cm.transitivity.ejb.TransitivityProcessingEventJPA.PN_TRANSPROCESSING_DELETE_BY_JOBID_JOBID;
 import static com.choicemaker.cm.transitivity.ejb.TransitivityProcessingEventJPA.PN_TRANSPROCESSING_FIND_BY_JOBID_JOBID;
 import static com.choicemaker.cm.transitivity.ejb.TransitivityProcessingEventJPA.QN_TRANSPROCESSING_DELETE_BY_JOBID;
 import static com.choicemaker.cm.transitivity.ejb.TransitivityProcessingEventJPA.QN_TRANSPROCESSING_FIND_ALL;
 import static com.choicemaker.cm.transitivity.ejb.TransitivityProcessingEventJPA.QN_TRANSPROCESSING_FIND_BY_JOBID;
+import static javax.ejb.TransactionAttributeType.REQUIRED;
+import static javax.ejb.TransactionAttributeType.SUPPORTS;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;

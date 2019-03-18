@@ -7,8 +7,8 @@
  *******************************************************************************/
 package com.choicemaker.cm.oaba.core;
 
-import com.choicemaker.cm.args.ProcessingEventBean;
 import com.choicemaker.cm.args.ProcessingEvent;
+import com.choicemaker.cm.args.ProcessingEventBean;
 
 public class OabaEventBean extends ProcessingEventBean implements
 		ProcessingEvent, OabaProcessingConstants {

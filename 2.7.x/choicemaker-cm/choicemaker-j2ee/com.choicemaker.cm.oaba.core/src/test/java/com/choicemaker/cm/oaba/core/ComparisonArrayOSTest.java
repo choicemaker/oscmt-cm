@@ -20,10 +20,6 @@ import java.util.UUID;
 
 import org.junit.Test;
 
-import com.choicemaker.cm.oaba.core.ComparisonArrayOS;
-import com.choicemaker.cm.oaba.core.ComparisonPair;
-import com.choicemaker.cm.oaba.core.RECORD_ID_TYPE;
-
 public class ComparisonArrayOSTest {
 
 	public static class SyntheticRecordIds implements Comparable<SyntheticRecordIds> {

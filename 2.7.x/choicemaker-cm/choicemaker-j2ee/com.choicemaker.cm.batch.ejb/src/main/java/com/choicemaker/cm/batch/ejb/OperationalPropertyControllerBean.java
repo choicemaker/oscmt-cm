@@ -1,8 +1,5 @@
 package com.choicemaker.cm.batch.ejb;
 
-import static javax.ejb.TransactionAttributeType.REQUIRED;
-import static javax.ejb.TransactionAttributeType.SUPPORTS;
-
 import static com.choicemaker.cm.batch.ejb.OperationalPropertyJPA.PN_OPPROP_DELETE_BY_JOB_P1;
 import static com.choicemaker.cm.batch.ejb.OperationalPropertyJPA.PN_OPPROP_FINDALL_BY_JOB_P1;
 import static com.choicemaker.cm.batch.ejb.OperationalPropertyJPA.PN_OPPROP_FIND_BY_JOB_PNAME_P1;
@@ -11,6 +8,8 @@ import static com.choicemaker.cm.batch.ejb.OperationalPropertyJPA.QN_OPPROP_DELE
 import static com.choicemaker.cm.batch.ejb.OperationalPropertyJPA.QN_OPPROP_FINDALL;
 import static com.choicemaker.cm.batch.ejb.OperationalPropertyJPA.QN_OPPROP_FINDALL_BY_JOB;
 import static com.choicemaker.cm.batch.ejb.OperationalPropertyJPA.QN_OPPROP_FIND_BY_JOB_PNAME;
+import static javax.ejb.TransactionAttributeType.REQUIRED;
+import static javax.ejb.TransactionAttributeType.SUPPORTS;
 
 import java.util.LinkedList;
 import java.util.List;

@@ -7,7 +7,7 @@
  *******************************************************************************/
 package com.choicemaker.cm.oaba.services;
 
-import static com.choicemaker.cm.oaba.utils.RecordTransferLogging.*;
+import static com.choicemaker.cm.oaba.utils.RecordTransferLogging.CONTROL_INTERVAL;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -34,8 +34,8 @@ import com.choicemaker.cm.oaba.core.IIDSet;
 import com.choicemaker.cm.oaba.core.IIDSetSource;
 import com.choicemaker.cm.oaba.core.ITransformer;
 import com.choicemaker.cm.oaba.core.ImmutableRecordIdTranslator;
-import com.choicemaker.cm.oaba.core.OabaProcessingConstants;
 import com.choicemaker.cm.oaba.core.OabaEventBean;
+import com.choicemaker.cm.oaba.core.OabaProcessingConstants;
 import com.choicemaker.cm.oaba.utils.ControlChecker;
 import com.choicemaker.util.LongArrayList;
 

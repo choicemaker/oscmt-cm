@@ -12,13 +12,13 @@ import java.util.regex.Pattern;
 
 import javax.xml.parsers.SAXParserFactory;
 
-import junit.framework.TestCase;
-
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
+
+import junit.framework.TestCase;
 
 /**
  * The ValidConverter class is difficult to test, because of the usual reasons

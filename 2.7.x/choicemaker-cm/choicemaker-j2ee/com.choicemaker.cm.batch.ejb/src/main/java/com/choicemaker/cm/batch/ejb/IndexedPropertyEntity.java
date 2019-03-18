@@ -1,6 +1,24 @@
 package com.choicemaker.cm.batch.ejb;
 
-import static com.choicemaker.cm.batch.ejb.IndexedPropertyJPA.*;
+import static com.choicemaker.cm.batch.ejb.IndexedPropertyJPA.CN_ID;
+import static com.choicemaker.cm.batch.ejb.IndexedPropertyJPA.CN_INDEX;
+import static com.choicemaker.cm.batch.ejb.IndexedPropertyJPA.CN_JOB_ID;
+import static com.choicemaker.cm.batch.ejb.IndexedPropertyJPA.CN_NAME;
+import static com.choicemaker.cm.batch.ejb.IndexedPropertyJPA.CN_VALUE;
+import static com.choicemaker.cm.batch.ejb.IndexedPropertyJPA.ID_GENERATOR_NAME;
+import static com.choicemaker.cm.batch.ejb.IndexedPropertyJPA.ID_GENERATOR_PK_COLUMN_NAME;
+import static com.choicemaker.cm.batch.ejb.IndexedPropertyJPA.ID_GENERATOR_PK_COLUMN_VALUE;
+import static com.choicemaker.cm.batch.ejb.IndexedPropertyJPA.ID_GENERATOR_TABLE;
+import static com.choicemaker.cm.batch.ejb.IndexedPropertyJPA.ID_GENERATOR_VALUE_COLUMN_NAME;
+import static com.choicemaker.cm.batch.ejb.IndexedPropertyJPA.JPQL_IDXPROP_DELETE_BY_JOB_PNAME;
+import static com.choicemaker.cm.batch.ejb.IndexedPropertyJPA.JPQL_IDXPROP_FIND_BY_JOB;
+import static com.choicemaker.cm.batch.ejb.IndexedPropertyJPA.JPQL_IDXPROP_FIND_BY_JOB_PNAME;
+import static com.choicemaker.cm.batch.ejb.IndexedPropertyJPA.JPQL_IDXPROP_FIND_BY_JOB_PNAME_INDEX;
+import static com.choicemaker.cm.batch.ejb.IndexedPropertyJPA.QN_IDXPROP_DELETE_BY_JOB_PNAME;
+import static com.choicemaker.cm.batch.ejb.IndexedPropertyJPA.QN_IDXPROP_FIND_BY_JOB;
+import static com.choicemaker.cm.batch.ejb.IndexedPropertyJPA.QN_IDXPROP_FIND_BY_JOB_PNAME;
+import static com.choicemaker.cm.batch.ejb.IndexedPropertyJPA.QN_IDXPROP_FIND_BY_JOB_PNAME_INDEX;
+import static com.choicemaker.cm.batch.ejb.IndexedPropertyJPA.TABLE_NAME;
 
 import java.util.logging.Logger;
 

@@ -7,7 +7,6 @@
  *******************************************************************************/
 package com.choicemaker.cm.modelmaker.gui.tables;
 
-import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.table.AbstractTableModel;
 

@@ -11,8 +11,6 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import com.choicemaker.cm.oaba.core.RECORD_ID_TYPE;
-
 public class RECORD_ID_TYPE_Test {
 
 	@Test

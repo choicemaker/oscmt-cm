@@ -10,9 +10,9 @@ package com.choicemaker.e2.std;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Plugin;
 
-import com.choicemaker.e2.E2Exception;
 import com.choicemaker.e2.CMPlugin;
 import com.choicemaker.e2.CMPluginDescriptor;
+import com.choicemaker.e2.E2Exception;
 
 public class PluginAdapter {
 

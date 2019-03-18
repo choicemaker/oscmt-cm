@@ -18,9 +18,6 @@ import java.util.logging.Logger;
 
 import javax.sql.DataSource;
 
-import oracle.ucp.jdbc.PoolDataSource;
-import oracle.ucp.jdbc.PoolDataSourceFactory;
-
 import org.jasypt.encryption.StringEncryptor;
 import org.jdom2.Element;
 
@@ -28,6 +25,9 @@ import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.configure.ConfigurationUtils;
 import com.choicemaker.cm.core.xmlconf.XmlConfigurator;
 import com.choicemaker.cm.io.db.base.DataSources;
+
+import oracle.ucp.jdbc.PoolDataSource;
+import oracle.ucp.jdbc.PoolDataSourceFactory;
 
 /**
  * XML configurator for Oracle Connection Cache.

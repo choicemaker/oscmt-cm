@@ -7,7 +7,9 @@
  *******************************************************************************/
 package com.choicemaker.cm.io.flatfile.base;
 
-import static java.util.logging.Level.*;
+import static java.util.logging.Level.FINEST;
+import static java.util.logging.Level.SEVERE;
+import static java.util.logging.Level.WARNING;
 
 import java.io.BufferedReader;
 import java.io.IOException;

@@ -22,7 +22,6 @@ import org.eclipse.core.runtime.IPluginPrerequisite;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.PluginVersionIdentifier;
 
-import com.choicemaker.e2.E2Exception;
 import com.choicemaker.e2.CMExtension;
 import com.choicemaker.e2.CMExtensionPoint;
 import com.choicemaker.e2.CMLibrary;
@@ -31,6 +30,7 @@ import com.choicemaker.e2.CMPlugin;
 import com.choicemaker.e2.CMPluginDescriptor;
 import com.choicemaker.e2.CMPluginPrerequisite;
 import com.choicemaker.e2.CMPluginVersionIdentifier;
+import com.choicemaker.e2.E2Exception;
 
 public class PluginDescriptorAdapter {
 

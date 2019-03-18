@@ -10,7 +10,6 @@ package com.choicemaker.cm.gui.utils.viewer;
 import java.awt.Component;
 import java.awt.Font;
 
-import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;

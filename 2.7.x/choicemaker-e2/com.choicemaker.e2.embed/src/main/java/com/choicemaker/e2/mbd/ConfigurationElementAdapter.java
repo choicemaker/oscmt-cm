@@ -8,8 +8,8 @@
 package com.choicemaker.e2.mbd;
 
 import com.choicemaker.e2.CMConfigurationElement;
-import com.choicemaker.e2.E2Exception;
 import com.choicemaker.e2.CMExtension;
+import com.choicemaker.e2.E2Exception;
 import com.choicemaker.e2.mbd.runtime.CoreException;
 import com.choicemaker.e2.mbd.runtime.IConfigurationElement;
 import com.choicemaker.e2.mbd.runtime.IExtension;

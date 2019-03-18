@@ -22,8 +22,8 @@ import com.choicemaker.cm.oaba.core.IChunkDataSinkSourceFactory;
 import com.choicemaker.cm.oaba.core.IComparisonArraySinkSourceFactory;
 import com.choicemaker.cm.oaba.core.IComparisonArraySource;
 import com.choicemaker.cm.oaba.core.IMatchRecord2Sink;
-import com.choicemaker.cm.oaba.core.OabaProcessingConstants;
 import com.choicemaker.cm.oaba.core.OabaEventBean;
+import com.choicemaker.cm.oaba.core.OabaProcessingConstants;
 import com.choicemaker.cm.oaba.utils.MemoryEstimator;
 
 /**

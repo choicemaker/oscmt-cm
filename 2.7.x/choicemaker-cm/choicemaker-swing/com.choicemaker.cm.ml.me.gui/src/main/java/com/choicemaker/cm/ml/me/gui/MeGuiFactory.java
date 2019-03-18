@@ -10,7 +10,6 @@ package com.choicemaker.cm.ml.me.gui;
 import java.util.logging.Logger;
 
 import javax.swing.DefaultCellEditor;
-import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;

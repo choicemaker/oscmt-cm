@@ -1,19 +1,17 @@
 package com.choicemaker.cm.batch.ejb;
 
-import static javax.ejb.TransactionAttributeType.REQUIRED;
-import static javax.ejb.TransactionAttributeType.SUPPORTS;
-
 import static com.choicemaker.cm.batch.ejb.IndexedPropertyJPA.PN_IDXPROP_DELETE_BY_JOB_PNAME_P1;
 import static com.choicemaker.cm.batch.ejb.IndexedPropertyJPA.PN_IDXPROP_DELETE_BY_JOB_PNAME_P2;
 import static com.choicemaker.cm.batch.ejb.IndexedPropertyJPA.PN_IDXPROP_FIND_BY_JOB_PNAME_INDEX_P1;
 import static com.choicemaker.cm.batch.ejb.IndexedPropertyJPA.PN_IDXPROP_FIND_BY_JOB_PNAME_INDEX_P2;
 import static com.choicemaker.cm.batch.ejb.IndexedPropertyJPA.PN_IDXPROP_FIND_BY_JOB_PNAME_INDEX_P3;
-import static com.choicemaker.cm.batch.ejb.IndexedPropertyJPA.QN_IDXPROP_DELETE_BY_JOB_PNAME;
-import static com.choicemaker.cm.batch.ejb.IndexedPropertyJPA.QN_IDXPROP_FIND_BY_JOB_PNAME_INDEX;
-
 import static com.choicemaker.cm.batch.ejb.IndexedPropertyJPA.PN_IDXPROP_FIND_BY_JOB_PNAME_P1;
 import static com.choicemaker.cm.batch.ejb.IndexedPropertyJPA.PN_IDXPROP_FIND_BY_JOB_PNAME_P2;
+import static com.choicemaker.cm.batch.ejb.IndexedPropertyJPA.QN_IDXPROP_DELETE_BY_JOB_PNAME;
 import static com.choicemaker.cm.batch.ejb.IndexedPropertyJPA.QN_IDXPROP_FIND_BY_JOB_PNAME;
+import static com.choicemaker.cm.batch.ejb.IndexedPropertyJPA.QN_IDXPROP_FIND_BY_JOB_PNAME_INDEX;
+import static javax.ejb.TransactionAttributeType.REQUIRED;
+import static javax.ejb.TransactionAttributeType.SUPPORTS;
 
 import java.util.HashMap;
 import java.util.List;

@@ -1,6 +1,6 @@
 package com.choicemaker.cm.oaba.ejb;
 
-import static com.choicemaker.cm.batch.ejb.BatchJobEntity.*;
+import static com.choicemaker.cm.batch.ejb.BatchJobEntity.getBatchJobType;
 
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;

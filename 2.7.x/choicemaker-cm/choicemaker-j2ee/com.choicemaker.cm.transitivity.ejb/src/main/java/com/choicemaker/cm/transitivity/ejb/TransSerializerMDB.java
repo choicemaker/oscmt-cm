@@ -7,12 +7,11 @@
  *******************************************************************************/
 package com.choicemaker.cm.transitivity.ejb;
 
-import static javax.ejb.TransactionAttributeType.REQUIRED;
-
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_TRANSITIVITY_CACHED_GROUPS_FILE;
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_TRANSITIVITY_CACHED_PAIRS_FILE;
 import static com.choicemaker.cm.args.ProcessingEventBean.DONE;
 import static com.choicemaker.cm.batch.api.BatchJobStatus.ABORT_REQUESTED;
+import static javax.ejb.TransactionAttributeType.REQUIRED;
 
 import java.io.PrintWriter;
 import java.io.Serializable;

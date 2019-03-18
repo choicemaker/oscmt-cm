@@ -7,8 +7,8 @@
  *******************************************************************************/
 package com.choicemaker.cm.transitivity.core;
 
-import com.choicemaker.cm.args.ProcessingEventBean;
 import com.choicemaker.cm.args.ProcessingEvent;
+import com.choicemaker.cm.args.ProcessingEventBean;
 
 public class TransitivityEventBean extends ProcessingEventBean implements
 		ProcessingEvent, TransitivityProcessingConstants {

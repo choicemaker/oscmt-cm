@@ -12,8 +12,8 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExecutableExtension;
 
 import com.choicemaker.e2.CMConfigurationElement;
-import com.choicemaker.e2.E2Exception;
 import com.choicemaker.e2.CMExecutableExtension;
+import com.choicemaker.e2.E2Exception;
 
 public class ExecutableExtensionAdapter {
 	

@@ -28,8 +28,8 @@ import com.choicemaker.cm.oaba.core.IComparisonSet;
 import com.choicemaker.cm.oaba.core.IComparisonSetSource;
 import com.choicemaker.cm.oaba.core.IComparisonSetSources;
 import com.choicemaker.cm.oaba.core.IMatchRecord2Sink;
-import com.choicemaker.cm.oaba.core.OabaProcessingConstants;
 import com.choicemaker.cm.oaba.core.OabaEventBean;
+import com.choicemaker.cm.oaba.core.OabaProcessingConstants;
 import com.choicemaker.cm.oaba.utils.MemoryEstimator;
 
 /**

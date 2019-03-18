@@ -7,7 +7,16 @@
  *******************************************************************************/
 package com.choicemaker.cm.oaba.services;
 
-import static com.choicemaker.cm.oaba.core.OabaEventBean.*;
+import static com.choicemaker.cm.args.BatchProcessingConstants.DELIMIT;
+import static com.choicemaker.cm.oaba.core.OabaEventBean.DEDUP_OVERSIZED;
+import static com.choicemaker.cm.oaba.core.OabaEventBean.DEDUP_OVERSIZED_EXACT;
+import static com.choicemaker.cm.oaba.core.OabaEventBean.DONE_DEDUP_OVERSIZED;
+import static com.choicemaker.cm.oaba.core.OabaEventBean.DONE_DEDUP_OVERSIZED_EXACT;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.EVT_DEDUP_OVERSIZED;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.EVT_DEDUP_OVERSIZED_EXACT;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.EVT_DONE_DEDUP_BLOCKS;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.EVT_DONE_DEDUP_OVERSIZED;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.EVT_DONE_DEDUP_OVERSIZED_EXACT;
 import static com.choicemaker.cm.oaba.utils.RecordTransferLogging.CONTROL_INTERVAL;
 
 import java.io.FileNotFoundException;

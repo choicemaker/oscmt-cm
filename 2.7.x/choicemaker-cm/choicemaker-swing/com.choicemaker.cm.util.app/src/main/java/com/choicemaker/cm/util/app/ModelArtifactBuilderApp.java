@@ -27,8 +27,8 @@ import com.choicemaker.e2.CMPlatformRunnable;
 import com.choicemaker.e2.embed.EmbeddedPlatform;
 import com.choicemaker.e2.platform.CMPlatformUtils;
 import com.choicemaker.e2.platform.InstallablePlatform;
-import com.choicemaker.util.SystemPropertyUtils;
 import com.choicemaker.util.FileUtilities;
+import com.choicemaker.util.SystemPropertyUtils;
 
 /**
  * @author Adam Winkel

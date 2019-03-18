@@ -7,11 +7,11 @@
  *******************************************************************************/
 package com.choicemaker.cm.oaba.ejb;
 
-import static com.choicemaker.cm.oaba.ejb.AbaSettingsJPA.CN_ABA_MAX_MATCHES;
-import static com.choicemaker.cm.oaba.ejb.AbaSettingsJPA.CN_ID;
 import static com.choicemaker.cm.oaba.ejb.AbaSettingsJPA.CN_ABA_LIMIT_BLOCKSET;
 import static com.choicemaker.cm.oaba.ejb.AbaSettingsJPA.CN_ABA_LIMIT_SINGLESET;
 import static com.choicemaker.cm.oaba.ejb.AbaSettingsJPA.CN_ABA_LIMIT_SINGLETABLE;
+import static com.choicemaker.cm.oaba.ejb.AbaSettingsJPA.CN_ABA_MAX_MATCHES;
+import static com.choicemaker.cm.oaba.ejb.AbaSettingsJPA.CN_ID;
 import static com.choicemaker.cm.oaba.ejb.AbaSettingsJPA.CN_TYPE;
 import static com.choicemaker.cm.oaba.ejb.AbaSettingsJPA.DISCRIMINATOR_COLUMN;
 import static com.choicemaker.cm.oaba.ejb.AbaSettingsJPA.DISCRIMINATOR_VALUE;
