@@ -7,8 +7,6 @@
  *******************************************************************************/
 package com.choicemaker.cm.oaba.ejb;
 
-import static javax.ejb.TransactionAttributeType.REQUIRED;
-
 import static com.choicemaker.cm.args.PersistableSqlRecordSource.TYPE;
 import static com.choicemaker.cm.batch.ejb.BatchJobJPA.PN_BATCHJOB_FIND_BY_JOBID_P1;
 import static com.choicemaker.cm.batch.ejb.BatchJobJPA.QN_BATCHJOB_FIND_BY_JOBID;
@@ -16,17 +14,23 @@ import static com.choicemaker.cm.oaba.ejb.AbstractParametersJPA.PN_PARAMETERS_FI
 import static com.choicemaker.cm.oaba.ejb.AbstractParametersJPA.QN_OABAPARAMETERS_FIND_ALL;
 import static com.choicemaker.cm.oaba.ejb.AbstractParametersJPA.QN_PARAMETERS_FIND_ALL;
 import static com.choicemaker.cm.oaba.ejb.AbstractParametersJPA.QN_PARAMETERS_FIND_BY_ID;
+import static com.choicemaker.util.jee.LogTransactionStatus.logTransactionStatus;
+import static com.choicemaker.util.jee.TransactionStatusEnum.STATUS_ACTIVE;
+import static javax.ejb.TransactionAttributeType.REQUIRED;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.transaction.TransactionSynchronizationRegistry;
 
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.PersistableSqlRecordSource;
@@ -36,6 +40,7 @@ import com.choicemaker.cm.oaba.api.AbstractParameters;
 import com.choicemaker.cm.oaba.api.OabaJobManager;
 import com.choicemaker.cm.oaba.api.OabaParametersController;
 import com.choicemaker.cm.oaba.api.SqlRecordSourceController;
+import com.choicemaker.util.Precondition;
 
 /**
  * An EJB used to test BatchParameter beans within container-defined
@@ -59,6 +64,21 @@ public class OabaParametersControllerBean implements OabaParametersController {
 
 	@EJB
 	private SqlRecordSourceController sqlController;
+
+	@Resource
+	TransactionSynchronizationRegistry tsr;
+
+	private boolean assertEnabled;
+
+	protected boolean isAssertEnabled() {
+		return this.assertEnabled;
+	}
+
+	@PostConstruct
+	protected void postConstruct() {
+		this.assertEnabled = false;
+		assert this.assertEnabled = true;
+	}
 
 	protected OabaJobManager getOabaJobController() {
 		return jobManager;
@@ -185,6 +205,11 @@ public class OabaParametersControllerBean implements OabaParametersController {
 
 	@Override
 	public void delete(OabaParameters p) {
+		final int status = tsr.getTransactionStatus();
+		logTransactionStatus(logger, status, STATUS_ACTIVE);
+		Precondition.assertBoolean(
+				"Transaction must be active. Invalid status: " + status,
+				STATUS_ACTIVE.equals(status));
 		if (p.isPersistent()) {
 			OabaParametersEntity bean = getBean(p);
 			bean = em.merge(bean);
