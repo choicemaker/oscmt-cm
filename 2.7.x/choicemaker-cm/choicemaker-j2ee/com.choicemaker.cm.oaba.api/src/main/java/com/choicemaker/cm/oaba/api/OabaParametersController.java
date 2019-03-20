@@ -15,6 +15,8 @@ public interface OabaParametersController {
 
 	void delete(OabaParameters p);
 
+	void delete(OabaParameters p, boolean doFlush);
+
 	void detach(OabaParameters p);
 
 	/** Find only instances of OabaParametersEntity (but no subclasses) */

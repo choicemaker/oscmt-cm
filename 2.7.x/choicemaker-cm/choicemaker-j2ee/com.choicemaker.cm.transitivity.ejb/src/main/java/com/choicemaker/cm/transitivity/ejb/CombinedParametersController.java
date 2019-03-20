@@ -45,6 +45,15 @@ public class CombinedParametersController implements OabaParametersController {
 	}
 
 	@Override
+	public void delete(OabaParameters p, boolean doFlush) {
+		if (p instanceof TransitivityParameters) {
+			t.delete((TransitivityParameters) p, doFlush);
+		} else {
+			this.o.delete(p, doFlush);
+		}
+	}
+
+	@Override
 	public void detach(OabaParameters p) {
 		if (p instanceof TransitivityParameters) {
 			t.detach((TransitivityParameters) p);
@@ -67,8 +76,8 @@ public class CombinedParametersController implements OabaParametersController {
 		OabaParameters retVal = o.findOabaParameters(id);
 		if (retVal != null) {
 			String msg = String.format(
-					"%s.%s: OABA parameters found for parameter id %d",
-					SOURCE, METHOD, id);
+					"%s.%s: OABA parameters found for parameter id %d", SOURCE,
+					METHOD, id);
 			logger.fine(msg);
 		} else {
 			retVal = t.findTransitivityParametersByBatchJobId(id);
@@ -93,23 +102,23 @@ public class CombinedParametersController implements OabaParametersController {
 		final String METHOD = "findOabaParametersByBatchJobId(long)";
 		OabaParameters retVal = o.findOabaParametersByBatchJobId(jobId);
 		if (retVal != null) {
-			String msg = String.format(
-					"%s.%s: OABA parameters found for job %d",
-					SOURCE, METHOD, jobId);
+			String msg =
+				String.format("%s.%s: OABA parameters found for job %d", SOURCE,
+						METHOD, jobId);
 			logger.fine(msg);
 		} else {
 			retVal = t.findTransitivityParametersByBatchJobId(jobId);
 			if (retVal != null) {
 				String msg = String.format(
-						"%s.%s: transivity parameters found for job %d",
-						SOURCE, METHOD, jobId);
+						"%s.%s: transivity parameters found for job %d", SOURCE,
+						METHOD, jobId);
 				logger.fine(msg);
 			}
 		}
 		if (retVal == null) {
-			String msg = String.format(
-					"%s.%s: no OABA parameters found for job %d",
-					SOURCE, METHOD, jobId);
+			String msg =
+				String.format("%s.%s: no OABA parameters found for job %d",
+						SOURCE, METHOD, jobId);
 			logger.warning(msg);
 		}
 		return retVal;

@@ -129,11 +129,18 @@ public class TransitivityParametersControllerBean
 
 	@Override
 	public void delete(TransitivityParameters p) {
+		delete(p,true);
+	}
+
+	@Override
+	public void delete(TransitivityParameters p, boolean doFlush) {
 		if (p.isPersistent()) {
 			TransitivityParametersEntity bean = getBean(p);
 			bean = em.merge(bean);
 			em.remove(bean);
-			em.flush();
+			if (doFlush) {
+				em.flush();
+			}
 		}
 	}
 

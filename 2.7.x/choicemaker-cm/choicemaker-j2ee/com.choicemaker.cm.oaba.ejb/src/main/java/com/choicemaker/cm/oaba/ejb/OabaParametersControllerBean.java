@@ -198,6 +198,11 @@ public class OabaParametersControllerBean implements OabaParametersController {
 
 	@Override
 	public void delete(OabaParameters p) {
+		delete(p,true);
+	}
+
+	@Override
+	public void delete(OabaParameters p, boolean doFlush) {
 		final int status = tsr.getTransactionStatus();
 		logTransactionStatus(logger, status, STATUS_ACTIVE);
 		Precondition.assertBoolean(
@@ -207,7 +212,9 @@ public class OabaParametersControllerBean implements OabaParametersController {
 			OabaParametersEntity bean = getBean(p);
 			bean = em.merge(bean);
 			em.remove(bean);
-			em.flush();
+			if (doFlush) {
+				em.flush();
+			}
 		}
 	}
 

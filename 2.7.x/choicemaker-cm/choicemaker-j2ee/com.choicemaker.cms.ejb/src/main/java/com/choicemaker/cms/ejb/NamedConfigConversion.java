@@ -295,11 +295,11 @@ public class NamedConfigConversion {
 	}
 
 	public static TransitivityParameters createTransitivityParameters(
-			NamedConfiguration nc, boolean isLinkage, boolean makePersistent)
+			NamedConfiguration nc, boolean isLinkage, final boolean makePersistent)
 			throws NamingException {
 
-		// HACK Create a temporary, persistent instance of OabaParameters
-		final boolean makePersistent0 = true;
+		// HACK Create a temporary instance of OabaParameters
+		final boolean makePersistent0 = makePersistent;
 		OabaParameters op =
 			createOabaParameters(nc, isLinkage, makePersistent0);
 
@@ -324,7 +324,7 @@ public class NamedConfigConversion {
 		}
 
 		// HACK Remove the temporary OABA parameters
-		{
+		if (makePersistent0) {
 			InitialContext initialContext = new InitialContext();
 
 			Object o = initialContext.lookup(JNDI_OABA_PARAMS_CTL);
