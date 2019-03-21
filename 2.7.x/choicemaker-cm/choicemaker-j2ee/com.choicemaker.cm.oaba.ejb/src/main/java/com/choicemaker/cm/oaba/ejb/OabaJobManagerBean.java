@@ -145,28 +145,15 @@ public class OabaJobManagerBean implements OabaJobManager {
 		OabaEventManager.updateStatusWithNotification(em, jmsContext,
 				oabaStatusTopic, retVal, ProcessingEventBean.INIT, new Date(),
 				null);
-
-		ProcessingEvent currentProcessingEvent;
 		BatchProcessingEvent ope =
 			OabaEventManager.getCurrentBatchProcessingEvent(em, retVal);
-		if (ope != null) {
-			currentProcessingEvent = ope.getProcessingEvent();
-		} else {
-			currentProcessingEvent = ProcessingEventBean.INIT;
-			final String msg0 =
-				"Null current processing event (expected eventId %d)";
-			String msg =
-				String.format(msg0, ProcessingEventBean.INIT.getEventId());
-			logger.fine(msg);
-		}
-		final int currentProcessingEventId =
-			currentProcessingEvent.getEventId();
-		final float currentProcessingFractionComplete =
-			currentProcessingEvent.getFractionComplete();
-		assert currentProcessingEventId == ProcessingEventBean.INIT
+		assert ope != null;
+		ProcessingEvent currentProcessingEvent = ope.getProcessingEvent();
+		assert currentProcessingEvent.getEventId() == ProcessingEventBean.INIT
 				.getEventId();
-		assert currentProcessingFractionComplete == ProcessingEventBean.INIT
-				.getFractionComplete();
+		assert currentProcessingEvent
+				.getFractionComplete() == ProcessingEventBean.INIT
+						.getFractionComplete();
 
 		// Create the working directory
 		File workingDir = BatchJobFileUtils.createWorkingDirectory(sc, retVal);
@@ -178,9 +165,10 @@ public class OabaJobManagerBean implements OabaJobManager {
 		logger.info("Oaba settings: " + settings.toString());
 		logger.info("Server configuration: " + sc.toString());
 		logger.info("Current processing event: " + currentProcessingEvent);
-		logger.info("Current processing event id: " + currentProcessingEvent);
+		logger.info("Current processing event id: "
+				+ currentProcessingEvent.getEventId());
 		logger.info("Current processing fraction complete: "
-				+ currentProcessingFractionComplete);
+				+ currentProcessingEvent.getFractionComplete());
 
 		return retVal;
 	}

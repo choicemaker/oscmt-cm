@@ -298,8 +298,8 @@ public class NamedConfigConversion {
 			NamedConfiguration nc, boolean isLinkage, final boolean makePersistent)
 			throws NamingException {
 
-		// HACK Create a temporary instance of OabaParameters
-		final boolean makePersistent0 = makePersistent;
+		// HACK Create a temporary, persistent instance of OabaParameters
+		final boolean makePersistent0 = true;
 		OabaParameters op =
 			createOabaParameters(nc, isLinkage, makePersistent0);
 

@@ -18,8 +18,6 @@ public interface TransitivityParametersController {
 
 	void delete(TransitivityParameters tp);
 
-	void delete(TransitivityParameters p, boolean doFlush);
-
 	void detach(TransitivityParameters tp);
 
 	List<TransitivityParameters> findAllTransitivityParameters();
