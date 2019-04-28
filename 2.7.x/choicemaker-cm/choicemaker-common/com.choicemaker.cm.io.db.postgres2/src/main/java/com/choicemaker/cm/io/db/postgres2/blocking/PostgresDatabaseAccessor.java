@@ -248,7 +248,7 @@ public class PostgresDatabaseAccessor<T extends Comparable<T>>
 		b.append("DO $$").append(EOL).append("BEGIN").append(EOL);
 		b.append("DROP TABLE IF EXISTS ids;").append(EOL);
 		b.append("CREATE TEMP TABLE ids(id ").append(dbr.getMasterIdType())
-				.append(");").append(EOL);
+				.append(", PRIMARY KEY(id));").append(EOL);
 		b.append("INSERT INTO ids ");
 
 		if (StringUtils.nonEmptyString(condition2)) {
