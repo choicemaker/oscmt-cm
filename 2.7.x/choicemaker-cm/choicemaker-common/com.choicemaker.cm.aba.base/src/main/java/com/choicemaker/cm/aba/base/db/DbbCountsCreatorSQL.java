@@ -532,8 +532,20 @@ public class DbbCountsCreatorSQL {
 				+ "FROM $table WHERE $column IS NOT NULL " + "GROUP BY $column "
 				+ "HAVING COUNT($uniqueId) > $minCount";
 
-	/** Instantiation of {@link #template20} */
-	public static String instance20(String fieldId, String field, String view,
+	/** Instantiation of {@link #template20} for dates */
+	public static String instance20a(DatabaseAbstraction dbAbstract,
+			String fieldId, String field, String view, String uniqueId,
+			String minCount) {
+		String retVal = template20;
+		retVal = retVal.replace("$fieldId", fieldId)
+				.replace("$column", dbAbstract.getDateFieldExpression(field))
+				.replace("$table", view).replace("$uniqueId", uniqueId)
+				.replace("$minCount", minCount);
+		return retVal;
+	}
+
+	/** Instantiation of {@link #template20} for non-dates */
+	public static String instance20b(String fieldId, String field, String view,
 			String uniqueId, String minCount) {
 		String retVal = template20;
 		retVal = retVal.replace("$fieldId", fieldId).replace("$column", field)
@@ -542,17 +554,24 @@ public class DbbCountsCreatorSQL {
 		return retVal;
 	}
 
-	static int insertFieldCounts(Connection connection, String fieldId,
-			String column, String table, String uniqueId, String minCount,
-			int columnType) throws SQLException {
+	static int insertFieldCounts(Connection connection,
+			DatabaseAbstraction dbAbstract, String fieldId, String column,
+			String table, String uniqueId, String minCount, int columnType)
+			throws SQLException {
 		int retVal = 0;
 		Statement stmt = null;
 		try {
 			boolean isDate =
 				columnType == Types.DATE || columnType == Types.TIMESTAMP;
 			logger.fine("Value column type: " + (isDate ? "date" : "non-date"));
-			String query =
-				instance20(fieldId, column, table, uniqueId, minCount);
+			String query;
+			if (isDate) {
+				query =
+						instance20a(dbAbstract, fieldId, column, table, uniqueId, minCount);
+			} else {
+				query =
+						instance20b(fieldId, column, table, uniqueId, minCount);
+			}
 			logger.info(
 					"SQL to insert field counts in TB_CMT_COUNTS: " + query);
 			stmt = connection.createStatement();

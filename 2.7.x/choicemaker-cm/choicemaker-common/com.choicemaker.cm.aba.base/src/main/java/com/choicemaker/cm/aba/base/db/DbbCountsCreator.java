@@ -540,8 +540,9 @@ public class DbbCountsCreator {
 					logger.fine(
 							TABLE_VIEW_INFO + " column type: " + columnType);
 
-					int fieldsInserted = insertFieldCounts(connection, fieldId,
-							column, table, uniqueId, minCount, columnType);
+					int fieldsInserted = insertFieldCounts(connection,
+							databaseAbstraction, fieldId, column, table,
+							uniqueId, minCount, columnType);
 					logger.info(TABLE_VIEW_INFO + " fields inserted: "
 							+ fieldsInserted);
 
