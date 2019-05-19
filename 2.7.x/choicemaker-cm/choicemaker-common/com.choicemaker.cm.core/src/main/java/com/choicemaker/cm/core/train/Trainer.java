@@ -131,13 +131,19 @@ public class Trainer /* implements ITrainer */ {
 		final String METHOD = "computeFirings";
 		++evaluationNo;
 		decisionDomainSize = model.getDecisionDomainSize();
-		ClueSet fs = model.getClueSet();
 		boolean[] cluesToEvaluate = model.getCluesToEvaluate();
 		int br = 0;
 		int idx = -1;
 		Iterator i = src.iterator();
 		while (i.hasNext()) {
 			++idx;
+
+			// Because ClueSet instances are stateful, a new instance should
+			// be initialized for each pair. (The current implementation of
+			// ImmutableProbabilityModel.getClueSet() calls a generated accessor
+			// which in turn instantiates a new ClueSet instance.)
+			ClueSet fs = model.getClueSet();
+
 			MutableMarkedRecordPair mp = (MutableMarkedRecordPair) i.next();
 			logPair(METHOD,idx,mp);
 			mp.setActiveClues(fs.getActiveClues(mp.getQueryRecord(), mp.getMatchRecord(), cluesToEvaluate));
