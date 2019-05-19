@@ -128,14 +128,18 @@ public class Trainer /* implements ITrainer */ {
 	 * @exception IOException
 	 */
 	private void computeFirings() throws OperationFailedException {
+		final String METHOD = "computeFirings";
 		++evaluationNo;
 		decisionDomainSize = model.getDecisionDomainSize();
 		ClueSet fs = model.getClueSet();
 		boolean[] cluesToEvaluate = model.getCluesToEvaluate();
 		int br = 0;
+		int idx = -1;
 		Iterator i = src.iterator();
 		while (i.hasNext()) {
+			++idx;
 			MutableMarkedRecordPair mp = (MutableMarkedRecordPair) i.next();
+			logPair(METHOD,idx,mp);
 			mp.setActiveClues(fs.getActiveClues(mp.getQueryRecord(), mp.getMatchRecord(), cluesToEvaluate));
 			if ((br = (br + 1) % 100) == 0 && Thread.currentThread().isInterrupted()) {
 				break;
@@ -289,12 +293,15 @@ public class Trainer /* implements ITrainer */ {
 	}
 
 	public void computeProbability(MutableMarkedRecordPair mrp) {
+		final String METHOD = "computeProbabilitiesAndDecisions";
 		mrp.getQueryRecord().computeValidityAndDerived();
 		mrp.getMatchRecord().computeValidityAndDerived();
 		mrp.setActiveClues(model.getClueSet().getActiveClues(mrp.getQueryRecord(), mrp.getMatchRecord(), model.getCluesToEvaluate()));
 		Evaluator e = model.getEvaluator();
+		logPairDecisionProbability(METHOD, -1, mrp, mrp.getCmDecision(), mrp.getProbability());
 		mrp.setProbability(e.getProbability(mrp.getActiveClues()));
 		mrp.setCmDecision(e.getDecision(mrp.getActiveClues(), mrp.getProbability(), lowerThreshold, upperThreshold));
+		logPairDecisionProbability(METHOD, -2, mrp, mrp.getCmDecision(), mrp.getProbability());
 	}
 
 	/**
