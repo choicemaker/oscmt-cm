@@ -448,12 +448,9 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 			boolean isStage, ImmutableProbabilityModel model,
 			ImmutableThresholds t) {
 
-		final ClueSet clueSet = model.getClueSet();
-		final boolean[] enabledClues = model.getCluesToEvaluate();
 		final float low = t.getDifferThreshold();
 		final float high = t.getMatchThreshold();
-		return MatchUtils.compareRecords(clueSet, enabledClues, model, q, m,
-				isStage, low, high);
+		return MatchUtils.compareRecords(model, q, m, isStage, low, high);
 	}
 
 	/**

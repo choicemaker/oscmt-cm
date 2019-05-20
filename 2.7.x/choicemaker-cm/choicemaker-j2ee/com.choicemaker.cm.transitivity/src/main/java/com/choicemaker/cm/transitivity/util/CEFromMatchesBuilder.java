@@ -130,12 +130,9 @@ public class CEFromMatchesBuilder {
 		Match match =
 			evaluator.getMatch(r1, r2, differThreshold, matchThreshold);
 		if (match != null) {
-			final ClueSet clueSet = model.getClueSet();
-			final boolean[] enabledClues = model.getCluesToEvaluate();
 			final boolean isStage = true;
-			retVal =
-				MatchUtils.compareRecords(clueSet, enabledClues, model, r1, r2,
-						isStage, differThreshold, matchThreshold);
+			retVal = MatchUtils.compareRecords(model, r1, r2, isStage,
+					differThreshold, matchThreshold);
 		}
 		return retVal;
 	}

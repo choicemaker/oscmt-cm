@@ -402,9 +402,7 @@ public class MatchingService3 {
 	private MatchRecord2 compareRecords(Record q, Record m, boolean isStage) {
 		MatchRecord2 mr = null;
 		if ((q != null) && (m != null)) {
-			mr =
-				MatchUtils.compareRecords(clueSet, enabledClues, model,
-						q, m, isStage, low, high);
+			mr = MatchUtils.compareRecords(model, q, m, isStage, low, high);
 		}
 		return mr;
 	}
