@@ -94,10 +94,9 @@ public class DedupMDB extends AbstractOabaBmtMDB {
 		log.info("Tree Out " + dedupService.getNumTreesOut());
 
 		// Handle oversized blocking sets
-		final IBlockSink osSpecial =
-			OabaFileUtils.getOversizedFactory(batchJob).getNextSink();
 		final IBlockSinkSourceFactory osFactory =
-			OabaFileUtils.getOversizedFactory(batchJob);
+				OabaFileUtils.getOversizedFactory(batchJob);
+		final IBlockSink osSpecial = osFactory.getNextSink();
 		final IBlockSource osSource = osFactory.getSource(osSpecial);
 		final IBlockSink osDedup = osFactory.getNextSink();
 
