@@ -174,7 +174,7 @@ public class Chunk2MDB extends AbstractOabaBmtMDB {
 
 		log.info("Number of regular chunks " + numRegularChunks);
 		getPropertyController().setJobProperty(batchJob,
-				PN_REGULAR_CHUNK_FILE_COUNT, String.valueOf(numChunks));
+				PN_REGULAR_CHUNK_FILE_COUNT, String.valueOf(numRegularChunks));
 
 		int totalComparisons = 0;
 		for (int currentChunk = 0; currentChunk < numChunks; currentChunk++) {
