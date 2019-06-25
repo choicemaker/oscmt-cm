@@ -67,6 +67,7 @@ import com.choicemaker.cm.oaba.utils.ControlChecker;
 /**
  * Common functionality of {@link MatcherMDB} and {@link TransMatcher}.
  */
+@Deprecated
 @SuppressWarnings("rawtypes")
 public abstract class AbstractMatcher implements MessageListener, Serializable {
 
