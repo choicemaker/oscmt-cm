@@ -16,6 +16,7 @@ import static com.choicemaker.cm.oaba.utils.RecordTransferLogging.CONTROL_INTERV
 import static com.choicemaker.cm.oaba.utils.RecordTransferLogging.DEBUG_INTERVAL;
 import static com.choicemaker.cm.oaba.utils.RecordTransferLogging.FM0;
 import static com.choicemaker.cm.oaba.utils.RecordTransferLogging.FM1;
+import static com.choicemaker.cm.oaba.utils.RecordTransferLogging.FM2;
 import static com.choicemaker.cm.oaba.utils.RecordTransferLogging.FS0;
 import static com.choicemaker.cm.oaba.utils.RecordTransferLogging.FS1;
 import static com.choicemaker.cm.oaba.utils.RecordTransferLogging.FS2;
@@ -635,6 +636,7 @@ public class ChunkService3 {
 			userTx.commit();
 			final long downloadMsecs =
 				System.currentTimeMillis() - startDownload;
+			final String FM = isStaging ? FS2 : FM2 ;
 			logTransferRate(log, FS2, TAG, count, downloadMsecs);
 
 		} catch (Exception ex) {
