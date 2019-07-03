@@ -117,6 +117,7 @@ public class CompositeXMLSerializer extends XMLSerializer
 		writeHeader(result, writer);
 
 		int count = 0;
+		int fileCount = 0;
 		Iterator it = result.getNodes();
 		while (it.hasNext()) {
 			StringBuffer sb = new StringBuffer();
@@ -126,23 +127,25 @@ public class CompositeXMLSerializer extends XMLSerializer
 			sb.append(writeCompositeEntity(ce, writer));
 			sb.append(NEW_LINE);
 			writer.write(sb.toString());
+			++count;
+			++fileCount;
 
-			count++;
 			if (count % INTERVAL == 0) {
 				writer.flush();
-				if (FileUtils.isFull(fileBase, fileExt, currentIndex,
-						maxFileSize)) {
-					writeFooter(writer);
-					writer.close();
+			}
+			if (fileCount >= maxFileSize) {
+				writeFooter(writer);
+				writer.flush();
+				writer.close();
 
-					currentIndex++;
-					final String fn2 =
-						FileUtils.getFileName(fileBase, fileExt, currentIndex);
-					setCurrentFileName(fn2);
-					notify(indexedFileObserver, currentIndex, fn2);
-					writer = new FileWriter(getCurrentFileName(), false);
-					writeHeader(result, writer);
-				}
+				currentIndex++;
+				final String fn2 =
+					FileUtils.getFileName(fileBase, fileExt, currentIndex);
+				setCurrentFileName(fn2);
+				fileCount = 0;
+				notify(indexedFileObserver, currentIndex, fn2);
+				writer = new FileWriter(getCurrentFileName(), false);
+				writeHeader(result, writer);
 			}
 		}
 
