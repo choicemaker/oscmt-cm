@@ -28,9 +28,9 @@ import org.junit.runner.RunWith;
 import com.choicemaker.cm.args.PersistentObject;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.api.BatchJob;
+import com.choicemaker.cm.batch.api.EventPersistenceManager;
 import com.choicemaker.cm.batch.api.OperationalProperty;
 import com.choicemaker.cm.batch.api.OperationalPropertyController;
-import com.choicemaker.cm.batch.api.EventPersistenceManager;
 import com.choicemaker.cm.oaba.api.OabaJobManager;
 import com.choicemaker.cm.oaba.api.OabaParametersController;
 import com.choicemaker.cm.oaba.api.OabaService;
@@ -47,8 +47,8 @@ import com.choicemaker.cmit.utils.j2ee.TestEntityCounts;
 @RunWith(Arquillian.class)
 public class OperationalPropertyControllerBeanIT {
 
-	private static final Logger logger = Logger
-			.getLogger(OperationalPropertyControllerBeanIT.class.getName());
+	private static final Logger logger =
+		Logger.getLogger(OperationalPropertyControllerBeanIT.class.getName());
 
 	private static final boolean TESTS_AS_EJB_MODULE = false;
 
@@ -66,7 +66,8 @@ public class OperationalPropertyControllerBeanIT {
 	 */
 	@Deployment
 	public static EnterpriseArchive createEarArchive() {
-		Class<?>[] removedClasses = { StartOabaMDB.class };
+		Class<?>[] removedClasses = {
+				StartOabaMDB.class };
 		return OabaDeploymentUtils.createEarArchive(removedClasses,
 				TESTS_AS_EJB_MODULE);
 	}
@@ -119,9 +120,8 @@ public class OperationalPropertyControllerBeanIT {
 	public void checkCounts() {
 		if (te != null) {
 			te.checkCounts(logger, em, utx, oabaManager, paramsController,
-					oabaSettingsController, serverController,
-					eventManager, opPropController, rsController,
-					ridController);
+					oabaSettingsController, serverController, eventManager,
+					opPropController, rsController, ridController);
 		} else {
 			throw new Error("Counts not initialized");
 		}
@@ -129,11 +129,9 @@ public class OperationalPropertyControllerBeanIT {
 
 	@Before
 	public void setUp() throws Exception {
-		te =
-			new TestEntityCounts(logger, oabaManager, paramsController,
-					oabaSettingsController, serverController,
-					eventManager, opPropController, rsController,
-					ridController);
+		te = new TestEntityCounts(logger, oabaManager, paramsController,
+				oabaSettingsController, serverController, eventManager,
+				opPropController, rsController, ridController);
 	}
 
 	protected OabaJobEntity createEphemeralOabaJobEntity(TestEntityCounts te,
@@ -142,8 +140,8 @@ public class OperationalPropertyControllerBeanIT {
 		if (sc == null) {
 			sc = serverController.computeGenericConfiguration();
 		}
-		return BatchJobUtils.createEphemeralOabaJobEntity(MAX_SINGLE_LIMIT,
-				utx, sc, em, te, tag, isTag);
+		return BatchJobUtils.createEphemeralOabaJobEntity(MAX_SINGLE_LIMIT, utx,
+				sc, em, te, tag, isTag);
 	}
 
 	protected ServerConfiguration getDefaultServerConfiguration() {
@@ -182,7 +180,8 @@ public class OperationalPropertyControllerBeanIT {
 			Collections.unmodifiableSet(_expectedValues);
 		assertTrue(expectedValues.size() == MAX_TEST_ITERATIONS);
 
-		List<OperationalProperty> ops = opPropController.findAllByJob(job);
+		List<OperationalProperty> ops =
+			opPropController.findOperationalProperties(job);
 		assertTrue(ops.size() == MAX_TEST_ITERATIONS);
 		int count = 0;
 		for (OperationalProperty op : ops) {
@@ -196,11 +195,13 @@ public class OperationalPropertyControllerBeanIT {
 			assertTrue(expectedNames.contains(pn));
 			assertTrue(expectedValues.contains(pv1));
 
-			final String pv2 = opPropController.getJobProperty(job, pn);
+			final String pv2 =
+				opPropController.getOperationalPropertyValue(job, pn);
 			assert (pv2 != null);
 			assertTrue(pv2.equals(pv1));
 
-			final OperationalProperty op2 = opPropController.find(pid);
+			final OperationalProperty op2 =
+				opPropController.findOperationalProperty(pid);
 			assertTrue(op2 != null);
 			assertTrue(op2.equals(op));
 
@@ -208,20 +209,24 @@ public class OperationalPropertyControllerBeanIT {
 			final String pv3 = String.valueOf(MAX_TEST_ITERATIONS + count);
 			assertTrue(!pv3.equals(pv2));
 			opPropController.setJobProperty(job, pn, pv3);
-			final String pv4 = opPropController.getJobProperty(job, pn);
+			final String pv4 =
+				opPropController.getOperationalPropertyValue(job, pn);
 			assert (pv4 != null);
 			assertTrue(pv3.equals(pv4));
 
 			opPropController.remove(op);
-			int newSize = opPropController.findAllByJob(job).size();
+			int newSize =
+				opPropController.findOperationalProperties(job).size();
 			assertTrue(newSize == MAX_TEST_ITERATIONS - count);
 
-			final OperationalProperty op5 = opPropController.find(pid);
+			final OperationalProperty op5 =
+				opPropController.findOperationalProperty(pid);
 			assertTrue(op5 == null);
-			final String pv5 = opPropController.getJobProperty(job, pn);
+			final String pv5 =
+				opPropController.getOperationalPropertyValue(job, pn);
 			assertTrue(pv5 == null);
 		}
-		assertTrue(opPropController.findAllByJob(job).isEmpty());
+		assertTrue(opPropController.findOperationalProperties(job).isEmpty());
 		checkCounts();
 	}
 
