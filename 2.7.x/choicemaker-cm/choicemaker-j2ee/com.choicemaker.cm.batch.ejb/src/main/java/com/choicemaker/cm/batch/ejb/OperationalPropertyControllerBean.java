@@ -47,8 +47,8 @@ public class OperationalPropertyControllerBean
 
 	@TransactionAttribute(SUPPORTS)
 	@Override
-	public String getJobProperty(BatchJob job, String pn) {
-		OperationalProperty op = find(job, pn);
+	public String getOperationalPropertyValue(BatchJob job, String pn) {
+		OperationalProperty op = findOperationalProperty(job, pn);
 		String retVal = op == null ? null : op.getValue();
 		return retVal;
 	}
@@ -157,7 +157,7 @@ public class OperationalPropertyControllerBean
 
 	@TransactionAttribute(SUPPORTS)
 	@Override
-	public OperationalProperty find(long propertyId) {
+	public OperationalProperty findOperationalProperty(long propertyId) {
 		return findInternal(propertyId);
 	}
 
@@ -171,7 +171,8 @@ public class OperationalPropertyControllerBean
 
 	@TransactionAttribute(SUPPORTS)
 	@Override
-	public OperationalProperty find(final BatchJob job, final String name) {
+	public OperationalProperty findOperationalProperty(final BatchJob job,
+			final String name) {
 		if (job == null || !job.isPersistent()) {
 			throw new IllegalArgumentException("invalid job: " + job);
 		}
@@ -214,7 +215,7 @@ public class OperationalPropertyControllerBean
 
 	@TransactionAttribute(SUPPORTS)
 	@Override
-	public List<OperationalProperty> findAllByJob(BatchJob job) {
+	public List<OperationalProperty> findOperationalProperties(BatchJob job) {
 		List<OperationalProperty> retVal = new LinkedList<>();
 		final long jobId = job.getId();
 		if (job.isPersistent()) {

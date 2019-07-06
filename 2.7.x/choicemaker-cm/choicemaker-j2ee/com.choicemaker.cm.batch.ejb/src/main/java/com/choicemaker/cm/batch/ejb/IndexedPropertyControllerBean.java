@@ -56,7 +56,8 @@ public class IndexedPropertyControllerBean
 
 	@TransactionAttribute(SUPPORTS)
 	@Override
-	public IndexedProperty find(BatchJob job, String name, int index) {
+	public IndexedProperty findIndexedProperty(BatchJob job, String name,
+			int index) {
 		if (job == null || !job.isPersistent()) {
 			throw new IllegalArgumentException("invalid job: " + job);
 		}
@@ -65,7 +66,8 @@ public class IndexedPropertyControllerBean
 
 	@TransactionAttribute(SUPPORTS)
 	@Override
-	public Map<Integer, String> find(BatchJob job, String name) {
+	public Map<Integer, String> findIndexedProperties(BatchJob job,
+			String name) {
 		if (job == null || !job.isPersistent()) {
 			throw new IllegalArgumentException("invalid job: " + job);
 		}
@@ -94,7 +96,7 @@ public class IndexedPropertyControllerBean
 
 	@TransactionAttribute(SUPPORTS)
 	@Override
-	public IndexedProperty find(long propertyId) {
+	public IndexedProperty findIndexedProperty(long propertyId) {
 		return findInternal(propertyId);
 	}
 
@@ -145,13 +147,13 @@ public class IndexedPropertyControllerBean
 	@TransactionAttribute(SUPPORTS)
 	@Override
 	public String getIndexedPropertyValue(BatchJob job, String pn, int index) {
-		IndexedProperty op = find(job, pn, index);
+		IndexedProperty op = findIndexedProperty(job, pn, index);
 		String retVal = op == null ? null : op.getValue();
 		return retVal;
 	}
 
 	@Override
-	public void remove(IndexedProperty property) {
+	public void removeIndexedProperty(IndexedProperty property) {
 		if (property != null) {
 			IndexedPropertyEntity p = findInternal(property.getId());
 			if (p != null) {
@@ -161,7 +163,7 @@ public class IndexedPropertyControllerBean
 	}
 
 	@Override
-	public IndexedProperty save(IndexedProperty p) {
+	public IndexedProperty saveIndexedProperty(IndexedProperty p) {
 		logger.fine("Saving " + p);
 		if (p == null) {
 			throw new IllegalArgumentException("null property");
@@ -243,7 +245,7 @@ public class IndexedPropertyControllerBean
 			throw new IllegalArgumentException("null argument");
 		}
 		IndexedProperty ip = new IndexedPropertyEntity(job, pn, index, pv);
-		save(ip);
+		saveIndexedProperty(ip);
 	}
 
 	protected IndexedPropertyEntity updateInternal(IndexedProperty p) {
@@ -260,6 +262,12 @@ public class IndexedPropertyControllerBean
 		em.flush();
 		logger.finer("DB version after flush: " + ipe);
 		return ipe;
+	}
+
+	@Override
+	public List<String> findIndexedPropertyNames(BatchJob job) {
+		// FIXME not yet implemented
+		throw new Error("not yet implemented");
 	}
 
 }

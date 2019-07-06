@@ -185,11 +185,11 @@ public class TransMatchSchedulerSingleton extends AbstractSchedulerSingleton {
 
 		// remove the data
 		final String _numChunks = getPropertyController()
-				.getJobProperty(batchJob, PN_CHUNK_FILE_COUNT);
+				.getOperationalPropertyValue(batchJob, PN_CHUNK_FILE_COUNT);
 		final int numChunks = Integer.valueOf(_numChunks);
 
 		final String _numRegularChunks = getPropertyController()
-				.getJobProperty(batchJob, PN_REGULAR_CHUNK_FILE_COUNT);
+				.getOperationalPropertyValue(batchJob, PN_REGULAR_CHUNK_FILE_COUNT);
 		final int numRegularChunks = Integer.valueOf(_numRegularChunks);
 
 		IChunkDataSinkSourceFactory stageFactory =

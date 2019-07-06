@@ -172,11 +172,11 @@ public class MatchSchedulerSingleton extends AbstractSchedulerSingleton {
 
 		// remove the data
 		final String _numChunks = getPropertyController()
-				.getJobProperty(batchJob, PN_CHUNK_FILE_COUNT);
+				.getOperationalPropertyValue(batchJob, PN_CHUNK_FILE_COUNT);
 		final int numChunks = Integer.valueOf(_numChunks);
 
 		final String _numRegularChunks = getPropertyController()
-				.getJobProperty(batchJob, PN_REGULAR_CHUNK_FILE_COUNT);
+				.getOperationalPropertyValue(batchJob, PN_REGULAR_CHUNK_FILE_COUNT);
 		final int numRegularChunks = Integer.valueOf(_numRegularChunks);
 
 		IChunkDataSinkSourceFactory stageFactory =
@@ -188,7 +188,7 @@ public class MatchSchedulerSingleton extends AbstractSchedulerSingleton {
 
 		// remove the trees
 		final String _recordIdType =
-			getPropertyController().getJobProperty(batchJob, PN_RECORD_ID_TYPE);
+			getPropertyController().getOperationalPropertyValue(batchJob, PN_RECORD_ID_TYPE);
 		final RECORD_ID_TYPE recordIdType =
 			RECORD_ID_TYPE.valueOf(_recordIdType);
 		ComparisonTreeGroupSinkSourceFactory factory =

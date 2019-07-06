@@ -188,7 +188,7 @@ public class TransSerializerMDB implements MessageListener, Serializable {
 				return;
 			}
 
-			final String cachedPairsFileName = propController.getJobProperty(
+			final String cachedPairsFileName = propController.getOperationalPropertyValue(
 					batchJob, PN_TRANSITIVITY_CACHED_PAIRS_FILE);
 			if (cachedPairsFileName == null
 					|| cachedPairsFileName.trim().isEmpty()) {

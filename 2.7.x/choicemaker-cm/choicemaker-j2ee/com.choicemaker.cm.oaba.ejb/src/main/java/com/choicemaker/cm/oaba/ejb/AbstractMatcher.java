@@ -158,7 +158,7 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 					}
 
 					final String _currentChunk = getPropertyController()
-							.getJobProperty(batchJob, PN_CURRENT_CHUNK_INDEX);
+							.getOperationalPropertyValue(batchJob, PN_CURRENT_CHUNK_INDEX);
 					final int currentChunk = Integer.valueOf(_currentChunk);
 					getLogger().fine("MatcherMDB In onMessage " + data.jobID
 							+ " " + currentChunk + " " + data.treeIndex);
@@ -392,13 +392,13 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 		BatchJob job = getOabaJobManager().findBatchJob(data.jobID);
 
 		final String _numRegularChunks = getPropertyController()
-				.getJobProperty(job, PN_REGULAR_CHUNK_FILE_COUNT);
+				.getOperationalPropertyValue(job, PN_REGULAR_CHUNK_FILE_COUNT);
 		final int numRegularChunks = Integer.valueOf(_numRegularChunks);
 
 		if (currentChunk < numRegularChunks) {
 			// regular chunks
 			final String _recordIdType =
-				getPropertyController().getJobProperty(job, PN_RECORD_ID_TYPE);
+				getPropertyController().getOperationalPropertyValue(job, PN_RECORD_ID_TYPE);
 			final RECORD_ID_TYPE recordIdType =
 				RECORD_ID_TYPE.valueOf(_recordIdType);
 			ComparisonTreeGroupSinkSourceFactory factory =

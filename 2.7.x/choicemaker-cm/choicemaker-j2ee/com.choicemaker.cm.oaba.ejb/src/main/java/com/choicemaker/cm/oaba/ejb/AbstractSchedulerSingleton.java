@@ -295,7 +295,7 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 			// STATUS_ABORTED.
 
 			final String _latestChunkProcessed = getPropertyController()
-					.getJobProperty(batchJob, PN_CURRENT_CHUNK_INDEX);
+					.getOperationalPropertyValue(batchJob, PN_CURRENT_CHUNK_INDEX);
 			final int latestChunkProcessed =
 				Integer.valueOf(_latestChunkProcessed);
 			assert latestChunkProcessed == currentChunk;
@@ -313,11 +313,11 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 			// Go on to the next chunk
 			if (countMessages == 0) {
 				final String _numChunks = getPropertyController()
-						.getJobProperty(batchJob, PN_CHUNK_FILE_COUNT);
+						.getOperationalPropertyValue(batchJob, PN_CHUNK_FILE_COUNT);
 				final int numChunks = Integer.valueOf(_numChunks);
 
 				final String _numRegularChunks = getPropertyController()
-						.getJobProperty(batchJob, PN_REGULAR_CHUNK_FILE_COUNT);
+						.getOperationalPropertyValue(batchJob, PN_REGULAR_CHUNK_FILE_COUNT);
 				final int numRegularChunks = Integer.valueOf(_numRegularChunks);
 
 				String temp = Integer.toString(numChunks) + DELIM
@@ -455,7 +455,7 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 				OabaFileUtils.getMasterDataFactory(batchJob, ipm);
 
 			final String _numChunks = getPropertyController()
-					.getJobProperty(batchJob, PN_CHUNK_FILE_COUNT);
+					.getOperationalPropertyValue(batchJob, PN_CHUNK_FILE_COUNT);
 			final int numChunks = Integer.valueOf(_numChunks);
 
 			stageRS = new RecordSource[numChunks];
