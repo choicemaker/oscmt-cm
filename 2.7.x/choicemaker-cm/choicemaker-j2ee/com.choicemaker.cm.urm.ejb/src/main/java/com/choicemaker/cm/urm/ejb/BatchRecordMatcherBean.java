@@ -10,6 +10,7 @@ package com.choicemaker.cm.urm.ejb;
 import java.net.URISyntaxException;
 import java.rmi.RemoteException;
 import java.util.Iterator;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,7 +25,9 @@ import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.oaba.api.ServerConfigurationException;
+import com.choicemaker.cm.urm.api.BatchMatchAnalyzer;
 import com.choicemaker.cm.urm.api.BatchRecordMatcher;
+import com.choicemaker.cm.urm.api.RESULT_FILE_TYPE;
 import com.choicemaker.cm.urm.api.UrmConfigurationAdapter;
 import com.choicemaker.cm.urm.base.IRecordCollection;
 import com.choicemaker.cm.urm.base.JobStatus;
@@ -62,6 +65,13 @@ public class BatchRecordMatcherBean implements BatchRecordMatcher {
 	@EJB(lookup = "java:app/com.choicemaker.cms.ejb/UrmBatchControllerBean!com.choicemaker.cms.api.UrmBatchController")
 	private UrmBatchController urmBatchController;
 
+	@EJB(lookup = "java:module/BatchMatchAnalyzerBean")
+	private BatchMatchAnalyzer batchMatchAnalyzer;
+
+	// @EJB(lookup =
+	// "java:app/com.choicemaker.cm.batch.ejb/IndexedPropertyControllerBean!com.choicemaker.cm.batch.api.IndexedPropertyController")
+	// private IndexedPropertyController idxPropController;
+
 	private UrmEjbAssist<?> assist = new UrmEjbAssist<>();
 
 	@Override
@@ -96,6 +106,65 @@ public class BatchRecordMatcherBean implements BatchRecordMatcher {
 		BatchJob urmJob = urmBatchController.findUrmJob(jobID);
 		JobStatus retVal = UrmEjbAssist.getJobStatus(urmJob);
 		return retVal;
+	}
+
+	@Override
+	public List<String> getResultFileNames(long jobID)
+			throws CmRuntimeException {
+
+		List<String> retVal = batchMatchAnalyzer.getResultFileNames(jobID,
+				RESULT_FILE_TYPE.MATCH);
+		return retVal;
+
+		// List<BatchJob> oabaJobs = new ArrayList<>();
+		// List<BatchJob> childJobs =
+		// urmBatchController.findAllLinkedByUrmId(jobID);
+		// for (BatchJob childJob : childJobs) {
+		// String type = childJob.getBatchJobType();
+		// if (OabaJobJPA.DISCRIMINATOR_VALUE.equals(type)) {
+		// oabaJobs.add(childJob);
+		// }
+		// }
+		//
+		// if (oabaJobs.size() == 0) {
+		// String msg0 = "No OABA jobs associated with URM job id '%d'";
+		// String msg = String.format(msg0, jobID);
+		// throw new CmRuntimeException(msg);
+		// } else if (oabaJobs.size() > 1) {
+		// List<Long> oabaJobIds = new ArrayList<>();
+		// for (BatchJob oabaJob : oabaJobs) {
+		// long oabaJobId = oabaJob.getId();
+		// oabaJobIds.add(oabaJobId);
+		// }
+		// String msg0 =
+		// "Multiple OABA jobs (%s) associated with URM job id '%d'";
+		// String msg = String.format(msg0, oabaJobIds.toString(), jobID);
+		// throw new CmRuntimeException(msg);
+		// }
+		// assert oabaJobs.size() == 1;
+		//
+		// final BatchJob oabaJob = oabaJobs.get(0);
+		// final long oabaJobId = oabaJob.getId();
+		// final BatchJobStatus oabaStatus = oabaJob.getStatus();
+		// if (BatchJobStatus.COMPLETED != oabaStatus) {
+		// String msg0 = "OABA job %d status ('%s') is not COMPLETED";
+		// String msg = String.format(msg0, oabaJobId, oabaStatus);
+		// throw new CmRuntimeException(msg);
+		// }
+		//
+		// String propertyName = MatchPairInfoBean.PN_OABA_MATCH_RESULT_FILE;
+		// Map<Integer, String> fileNames =
+		// idxPropController.findIndexedProperties(oabaJob, propertyName);
+		// Integer[] indices = (Integer[]) fileNames.keySet().toArray();
+		// Arrays.sort(indices);
+		//
+		// List<String> retVal = new ArrayList<>();
+		// for (int index : indices) {
+		// String fileName = fileNames.get(index);
+		// retVal.add(fileName);
+		// }
+		//
+		// return retVal;
 	}
 
 	@Override
