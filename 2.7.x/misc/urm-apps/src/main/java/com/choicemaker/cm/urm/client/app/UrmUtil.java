@@ -71,7 +71,7 @@ public class UrmUtil {
 		String jndiName = String.format(jndiTemplate, appName, moduleName,
 				distinctName, beanName, viewClassName);
 		logger.fine("JNDI lookup: " + jndiName);
-		System.out.printf("JNDI lookup: %s\n", jndiName);
+		// System.out.printf("JNDI lookup: %s\n", jndiName);
 
 		Object retVal = context.lookup(jndiName);
 		logger.finest(

@@ -11,6 +11,7 @@
 package com.choicemaker.cm.urm.client.app;
 
 import static com.choicemaker.cm.urm.client.app.URM_BMA_APP_COMMAND.*;
+import static com.choicemaker.cm.urm.client.app.APP_SERVER_VENDOR.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,8 +28,8 @@ public class UrmCommandLine {
 
 	public static final String ARG_APP_NAME = "appName";
 	public static final String DESC_APP_NAME =
-		"[REQUIRED] Name of a JEE application (i.e. the EAR file name without "
-				+ "the '.ear' extenson)";
+		"[REQUIRED] Name of a JEE application (the runtime name of an EAR file "
+				+ "without the '.ear' extenson)";
 
 	public static final String ARG_APP_COMMAND = "appCommand";
 	private static final String DESC_APP_COMMAND0 =
@@ -38,11 +39,15 @@ public class UrmCommandLine {
 				TRANSMATCH_PAIR_FILENAMES, TRANSMATCH_GROUP_FILENAMES);
 
 	public static final String ARG_APP_SERVER_VENDOR = "appServer";
+	private static final String DESC_APP_SERVER_VENDOR0 =
+		"[OPTIONAL] Name of the app server vendor, either %s or %s; "
+				+ "if no app server is specified, %s is the default";
 	public static final String DESC_APP_SERVER_VENDOR =
-		"[OPTIONAL] Name of the app server vendor, either JBoss or Weblogic; "
-				+ "if no app server is specified, JBoss is the default";
+		String.format(DESC_APP_SERVER_VENDOR0, JBOSS, WEBLOGIC, JBOSS);
 
-	public static final String COMMAND_LINE = "UrmApp";
+	public static final String COMMAND_LINE =
+		"UrmApp [options] <jobId 1> <jobId 2> ...";
+	public static final String COMMAND_HEADER = "where [options] are:";
 
 	public static Options createOptions() {
 		final boolean hasArg = true;

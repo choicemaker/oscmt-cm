@@ -10,6 +10,7 @@ package com.choicemaker.cm.urm.client.app;
 import static com.choicemaker.cm.urm.api.RESULT_FILE_TYPE.MATCH;
 import static com.choicemaker.cm.urm.api.RESULT_FILE_TYPE.TRANSGROUP;
 import static com.choicemaker.cm.urm.api.RESULT_FILE_TYPE.TRANSMATCH;
+import static com.choicemaker.cm.urm.client.app.UrmCommandLine.COMMAND_HEADER;
 import static com.choicemaker.cm.urm.client.app.UrmCommandLine.COMMAND_LINE;
 import static com.choicemaker.cm.urm.client.app.UrmUtil.getBatchMatchAnalyzer;
 
@@ -60,8 +61,10 @@ public class UrmBmaApp {
 			break;
 		case TRANSMATCH_PAIR_FILENAMES:
 			retVal = TRANSMATCH;
+			break;
 		case TRANSMATCH_GROUP_FILENAMES:
 			retVal = TRANSGROUP;
+			break;
 		default:
 			String msg = "Unexpected execution path";
 			throw new Error(msg);
@@ -139,6 +142,7 @@ public class UrmBmaApp {
 				assert up.errors != null;
 				if (up.errors.size() > 0) {
 					app.printErrors(stderr, up.errors);
+					app.printHelp(stderr);
 				} else {
 					for (long jobId : up.jobIds) {
 						app.printFileNames(stdout, up.appServer, up.appName,
@@ -167,8 +171,10 @@ public class UrmBmaApp {
 				break;
 			case TRANSMATCH_PAIR_FILENAMES:
 				fmt = "\nJob %d transMatch-pair files:\n";
+				break;
 			case TRANSMATCH_GROUP_FILENAMES:
 				fmt = "\nJob %d H3L files:\n";
+				break;
 			default:
 				String msg = "Unexpected execution path";
 				throw new Error(msg);
@@ -178,6 +184,7 @@ public class UrmBmaApp {
 
 		String sJobId = String.format(fmt, jobId);
 		pw.print(sJobId);
+		pw.flush();
 	}
 
 	public void printErrors(PrintWriter pw, List<String> errors) {
@@ -190,6 +197,7 @@ public class UrmBmaApp {
 				pw.println(error);
 			}
 		}
+		pw.flush();
 	}
 
 	public void printFileList(PrintWriter pw, List<String> fileList) {
@@ -200,6 +208,7 @@ public class UrmBmaApp {
 			pw.println(s);
 		}
 		pw.println("");
+		pw.flush();
 	}
 
 	public void printFileNames(PrintWriter pw, APP_SERVER_VENDOR appServer,
@@ -218,6 +227,7 @@ public class UrmBmaApp {
 		List<String> fileNames = getResultFileNames(bma, jobId, cmd);
 		printCommandJobId(pw, cmd, jobId);
 		printFileList(pw, fileNames);
+		pw.flush();
 	}
 
 	public void printHelp(PrintWriter pw) {
@@ -226,14 +236,14 @@ public class UrmBmaApp {
 		Options options = UrmCommandLine.createOptions();
 		HelpFormatter formatter = new HelpFormatter();
 		pw.println();
-		final String header = null;
 		final String footer = null;
-		boolean autoUsage = true;
-		formatter.printHelp(pw, formatter.getWidth(), COMMAND_LINE, header,
+		boolean autoUsage = false;
+		formatter.printHelp(pw, formatter.getWidth(), COMMAND_LINE, COMMAND_HEADER,
 				options, formatter.getLeftPadding(), formatter.getDescPadding(),
 				footer, autoUsage);
 		;
 		pw.println();
+		pw.flush();
 	}
 
 }

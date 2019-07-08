@@ -164,7 +164,8 @@ public class BatchMatchAnalyzerBean implements BatchMatchAnalyzer {
 			}
 			String msg0 =
 				"Multiple %s jobs (%s) associated with URM job id '%d'";
-			String msg = String.format(msg0, type, targetJobIds.toString(), jobID);
+			String msg =
+				String.format(msg0, type, targetJobIds.toString(), jobID);
 			throw new CmRuntimeException(msg);
 		}
 		assert targetJobs.size() == 1;
@@ -180,7 +181,9 @@ public class BatchMatchAnalyzerBean implements BatchMatchAnalyzer {
 
 		Map<Integer, String> fileNames =
 			idxPropController.findIndexedProperties(targetJob, propertyName);
-		Integer[] indices = (Integer[]) fileNames.keySet().toArray();
+		Object[] oIndices = fileNames.keySet().toArray();
+		Integer[] indices =
+			Arrays.copyOf(oIndices, oIndices.length, Integer[].class);
 		Arrays.sort(indices);
 
 		List<String> retVal = new ArrayList<>();
