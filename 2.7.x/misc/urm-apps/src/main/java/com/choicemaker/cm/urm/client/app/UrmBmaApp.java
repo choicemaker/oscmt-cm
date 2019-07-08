@@ -127,11 +127,11 @@ public class UrmBmaApp {
 	public static void main(String[] args) {
 		logger.fine("Entering main");
 		final UrmBmaApp app = new UrmBmaApp();
+		final PrintWriter stdout =
+			new PrintWriter(new OutputStreamWriter(System.out));
+		final PrintWriter stderr =
+			new PrintWriter(new OutputStreamWriter(System.out));
 		try {
-			PrintWriter stdout =
-				new PrintWriter(new OutputStreamWriter(System.out));
-			PrintWriter stderr =
-				new PrintWriter(new OutputStreamWriter(System.out));
 			if (args == null || args.length == 0) {
 				app.printHelp(stderr);
 			} else {
@@ -150,6 +150,8 @@ public class UrmBmaApp {
 			logger.severe(e.toString());
 			e.printStackTrace();
 		}
+		stdout.flush();
+		stderr.flush();
 		logger.fine("Exiting main");
 	}
 
