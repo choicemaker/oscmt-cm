@@ -14,10 +14,10 @@
 
   <artifactId>urm-apps-distrib</artifactId>
   <packaging>pom</packaging>
-  <name>ChoiceMaker CMTBlocking App Distribution</name>
+  <name>ChoiceMaker Urm Apps Distribution</name>
 
   <description><![CDATA[
-  Zip distribution of ChoiceMaker CMTBlocking application
+  Zip distribution of ChoiceMaker URM applications
   ]]>
   </description>
 
