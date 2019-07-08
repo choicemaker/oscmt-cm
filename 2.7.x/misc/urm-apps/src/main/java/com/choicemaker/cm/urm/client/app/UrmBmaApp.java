@@ -13,6 +13,7 @@ import static com.choicemaker.cm.urm.api.RESULT_FILE_TYPE.TRANSMATCH;
 import static com.choicemaker.cm.urm.client.app.UrmCommandLine.COMMAND_LINE;
 import static com.choicemaker.cm.urm.client.app.UrmUtil.getBatchMatchAnalyzer;
 
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.rmi.RemoteException;
 import java.util.List;
@@ -127,8 +128,10 @@ public class UrmBmaApp {
 		logger.fine("Entering main");
 		final UrmBmaApp app = new UrmBmaApp();
 		try {
-			PrintWriter stdout = new PrintWriter(System.out);
-			PrintWriter stderr = new PrintWriter(System.out);
+			PrintWriter stdout =
+				new PrintWriter(new OutputStreamWriter(System.out));
+			PrintWriter stderr =
+				new PrintWriter(new OutputStreamWriter(System.out));
 			if (args == null || args.length == 0) {
 				app.printHelp(stderr);
 			} else {
