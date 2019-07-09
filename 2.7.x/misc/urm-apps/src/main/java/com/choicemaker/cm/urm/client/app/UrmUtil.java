@@ -76,6 +76,7 @@ public class UrmUtil {
 		Object retVal = context.lookup(jndiName);
 		logger.finest(
 				"JNDI object: " + retVal == null ? "null" : retVal.toString());
+		context.close();
 
 		return retVal;
 	}

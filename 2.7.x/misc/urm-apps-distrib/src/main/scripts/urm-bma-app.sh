@@ -35,14 +35,14 @@ for f in $LIB/* ; do
   let count+=1
   if [ $count -eq 1 ]
   then
-    CP="$f"
+    CP="$APP_DIR/:$f"
   else
     CP="$CP:$f"
   fi
 done
 
 # Uncomment the following line to specify the logging configuration
-JAVA_OPTS="$JAVA_OPTS -Djava.util.logging.config.file=example_configs/logging.properties"
+JAVA_OPTS="$JAVA_OPTS -Djava.util.logging.config.file=$APP_DIR/logging.properties"
 
 # Uncomment the following line to enable assertions
 JAVA_OPTS="$JAVA_OPTS -ea"
