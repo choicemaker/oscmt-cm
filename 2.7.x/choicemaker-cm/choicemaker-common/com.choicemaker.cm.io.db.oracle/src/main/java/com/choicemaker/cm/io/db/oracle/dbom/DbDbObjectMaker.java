@@ -66,8 +66,8 @@ public class DbDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 	public void generateObjects(File outDir) throws IOException {
 		File outFile = new File(outDir, "Oracle_Custom_Objects.txt");
 		Writer w = new FileWriter(outFile);
-		Set alreadyHandledRetrieval = new HashSet();
-		Set alreadyHandledBlocking = new HashSet();
+		Set<String> alreadyHandledRetrieval = new HashSet<>();
+		Set<String> alreadyHandledBlocking = new HashSet<>();
 		ImmutableProbabilityModel[] iModels = PMManager.getModels();
 
 		// This sort makes the output repeatable, independent of plugin order
@@ -172,7 +172,7 @@ public class DbDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 						multi.append(" UNION ");
 					}
 					multi.append(
-						"SELECT /*+ RULE */ * FROM "
+						"SELECT * FROM "
 							+ viewName
 							+ " WHERE "
 							+ masterId
