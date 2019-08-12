@@ -1,0 +1,31 @@
+<assembly>
+	<id>distrib</id>
+	<formats>
+		<format>zip</format>
+	</formats>
+	<includeBaseDirectory>false</includeBaseDirectory>
+	<fileSets>
+		<fileSet>
+    <directory>${eclipse.application.dir}</directory>
+		<outputDirectory>/</outputDirectory>
+		<includes>
+        <include>**</include>
+		</includes>
+		</fileSet>
+		<fileSet>
+		<directory>${project.build.scriptSourceDirectory}</directory>
+		<outputDirectory>/</outputDirectory>
+		<includes>
+        <include>*.sh</include>
+        <include>*.bat</include>
+		</includes>
+		</fileSet>
+		<fileSet>
+		<directory>src/main/resources</directory>
+		<outputDirectory>/</outputDirectory>
+		<includes>
+        <include>logging.properties</include>
+		</includes>
+		</fileSet>
+	</fileSets>
+</assembly>
