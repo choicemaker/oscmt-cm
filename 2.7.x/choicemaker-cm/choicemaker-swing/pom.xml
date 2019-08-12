@@ -38,7 +38,9 @@
     <module>com.choicemaker.cm.modelmaker</module>
     <module>com.choicemaker.cm.modelmaker.std</module>
     <module>com.choicemaker.cm.module</module>
+<!--
     <module>cm-analyzer-basic</module>
+-->
   </modules>
 
   <build>
