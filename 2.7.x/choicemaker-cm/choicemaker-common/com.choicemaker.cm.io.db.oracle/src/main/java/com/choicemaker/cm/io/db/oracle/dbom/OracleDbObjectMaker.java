@@ -33,7 +33,7 @@ import com.choicemaker.cm.io.db.base.DbReaderParallel;
 import com.choicemaker.cm.io.db.base.DbView;
 import com.choicemaker.e2.CMPlatformRunnable;
 
-public class DbDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
+public class OracleDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 	private static final int SINGLE = 0;
 	private static final int SINGLE_UNION = 1;
 	private static final int MULTI = 2;
@@ -58,7 +58,7 @@ public class DbDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 		final boolean fromResource = false;
 		ProbabilityModelsXmlConf.loadProductionProbabilityModels(compiler,
 				fromResource);
-		DbDbObjectMaker dbom = new DbDbObjectMaker();
+		OracleDbObjectMaker dbom = new OracleDbObjectMaker();
 		dbom.generateObjects(new File(args[2]));
 	}
 

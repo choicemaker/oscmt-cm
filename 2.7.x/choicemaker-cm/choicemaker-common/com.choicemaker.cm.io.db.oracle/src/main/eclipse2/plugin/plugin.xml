@@ -23,7 +23,7 @@
          point="com.choicemaker.e2.applications">
       <application>
          <run
-               class="com.choicemaker.cm.io.db.oracle.dbom.DbDbObjectMaker">
+               class="com.choicemaker.cm.io.db.oracle.dbom.OracleDbObjectMaker">
          </run>
       </application>
    </extension>
@@ -31,7 +31,7 @@
          point="com.choicemaker.cm.core.objectGenerator">
       <generator
             description="Oracle Custom Objects (DDL)"
-            class="com.choicemaker.cm.io.db.oracle.dbom.DbDbObjectMaker">
+            class="com.choicemaker.cm.io.db.oracle.dbom.OracleDbObjectMaker">
       </generator>
    </extension>
    <extension
