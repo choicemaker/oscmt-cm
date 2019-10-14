@@ -34,6 +34,8 @@ import com.choicemaker.cm.core.MutableMarkedRecordPair;
 import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.Sink;
 import com.choicemaker.cm.core.base.PMManager;
+import com.choicemaker.cm.io.db.base.MarkedRecordPairSourceSpec;
+import com.choicemaker.cm.io.db.base.RecordPairRetrievalException;
 
 /**
  * @deprecated No longer used. No future use planned.

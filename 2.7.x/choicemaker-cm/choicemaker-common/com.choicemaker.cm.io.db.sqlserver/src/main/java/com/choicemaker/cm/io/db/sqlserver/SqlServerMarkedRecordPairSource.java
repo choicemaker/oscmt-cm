@@ -30,6 +30,8 @@ import com.choicemaker.cm.core.MutableMarkedRecordPair;
 import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.Sink;
 import com.choicemaker.cm.io.db.base.DataSources;
+import com.choicemaker.cm.io.db.base.MarkedRecordPairSourceSpec;
+import com.choicemaker.cm.io.db.base.RecordPairRetrievalException;
 
 /**
  * @author ajwinkel

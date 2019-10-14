@@ -32,8 +32,9 @@ import com.choicemaker.cm.core.Sink;
 import com.choicemaker.cm.io.db.base.DataSources;
 
 /**
- * @author ajwinkel
+ * Based on SqlServer class of similar name.
  *
+ * @author rphall
  */
 public class PostgresMarkedRecordPairSource implements MarkedRecordPairSource {
 
@@ -81,11 +82,8 @@ public class PostgresMarkedRecordPairSource implements MarkedRecordPairSource {
 			}
 		}
 		
-		Connection conn = null;
 		try {
-			conn = ds.getConnection();
-			conn.setReadOnly(true);
-			
+			Connection conn = null;
 			MarkedRecordPairSourceSpec spec = null;
 			try {
 				spec = createSpecFromQuery(conn, mrpsQuery);
@@ -93,20 +91,11 @@ public class PostgresMarkedRecordPairSource implements MarkedRecordPairSource {
 				throw new IOException("Problem opening MRPS: " + ex.getMessage(), ex);
 			}
 			
-			RecordSource rs = createRecordSource(conn, mrpsQuery);
-			
+			RecordSource rs = createRecordSource(dsName, mrpsQuery);
 			this.pairIterator = spec.createPairs(rs).iterator();
-		} catch (SQLException ex) {
+		} catch (Exception ex) {
 			ex.printStackTrace();
 			throw new IOException("Problem opening MRPS: " + ex.getMessage());	
-		} finally {
-			if (conn != null) {
-				try {
-					conn.close();
-				} catch (SQLException ex) {
-					ex.printStackTrace();
-				}
-			}
 		}		
 	}
 
@@ -131,10 +120,17 @@ public class PostgresMarkedRecordPairSource implements MarkedRecordPairSource {
 		return spec;
 	}
 	
-	private RecordSource createRecordSource(Connection conn, String mrpsQuery) {
+	private RecordSource createRecordSource(String dsName, String mrpsQuery) {
 		String rsQuery = createRsQuery(mrpsQuery);
 		
-		PostgresRecordSource rs = new PostgresRecordSource();
+		PostgresParallelRecordSource rs = new PostgresParallelRecordSource(
+				fileName, model, dsName, dbConfiguration, rsQuery);
+/*
+	public PostgresParallelRecordSource(String fileName,
+			ImmutableProbabilityModel model, String dsName,
+			String dbConfiguration, String idsQuery) {
+
+ */
 		rs.setModel(model);
 		rs.setConnection(conn);
 		rs.setDbConfiguration(dbConfiguration);

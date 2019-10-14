@@ -8,7 +8,7 @@
 /*
  * Created on Oct 31, 2004
  */
-package com.choicemaker.cm.io.db.sqlserver;
+package com.choicemaker.cm.io.db.base;
 
 import java.io.IOException;
 
