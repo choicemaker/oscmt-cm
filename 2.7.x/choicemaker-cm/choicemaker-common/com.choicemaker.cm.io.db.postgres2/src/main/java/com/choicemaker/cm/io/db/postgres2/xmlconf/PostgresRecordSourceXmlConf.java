@@ -22,16 +22,17 @@ import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.xmlconf.RecordSourceXmlConfigurator;
 import com.choicemaker.cm.io.db.base.xmlconf.ConnectionPoolDataSourceXmlConf;
-import com.choicemaker.cm.io.db.postgres2.PostgresRecordSource;
+import com.choicemaker.cm.io.db.postgres2.PostgresParallelRecordSource;
 import com.choicemaker.cm.io.db.postgres2.PostgresXmlUtils;
 
 /**
- * Handling of Db Marked Record Pair sources.
+ * Handling of Postgres Marked Record Pair sources.
+ * Based on SqlServer class of similar name.
  *
- * @author    Martin Buechi
+ * @author rphall
  */
 public class PostgresRecordSourceXmlConf implements RecordSourceXmlConfigurator {
-	
+
 	public static final String EXTENSION_POINT_ID = "com.choicemaker.cm.io.db.postgres2.postgresRsReader";
 
 	@Override
@@ -41,7 +42,7 @@ public class PostgresRecordSourceXmlConf implements RecordSourceXmlConfigurator 
 
 	@Override
 	public Class getHandledType() {
-		return PostgresRecordSource.class;
+		return PostgresParallelRecordSource.class;
 	}
 
 	/**
@@ -50,7 +51,7 @@ public class PostgresRecordSourceXmlConf implements RecordSourceXmlConfigurator 
 	@Override
 	public void add(RecordSource s) throws XmlConfException {
 		try {
-			PostgresRecordSource src = (PostgresRecordSource) s;
+			PostgresParallelRecordSource src = (PostgresParallelRecordSource) s;
 			String fileName = src.getFileName();
 			Element e = new Element(PostgresXmlUtils.EN_RECORDSOURCE);
 			e.setAttribute(PostgresXmlUtils.AN_RS_CLASS, EXTENSION_POINT_ID);
@@ -69,15 +70,15 @@ public class PostgresRecordSourceXmlConf implements RecordSourceXmlConfigurator 
 
 	@Override
 	public RecordSource getRecordSource(String fileName, Element e, ImmutableProbabilityModel model)
-		throws XmlConfException {
+			throws XmlConfException {
 		String dataSourceName = e.getAttributeValue(PostgresXmlUtils.AN_RS_DATASOURCENAME);
 		String dbConfiguration = e.getAttributeValue(PostgresXmlUtils.AN_RS_DBCONFIGURATION);
 		String idsQuery = e.getChildText(PostgresXmlUtils.AN_RS_IDSQUERY);
-		return new PostgresRecordSource(fileName, model, dataSourceName, dbConfiguration, idsQuery);
+		return new PostgresParallelRecordSource(fileName, model, dataSourceName, dbConfiguration, idsQuery);
 	}
-	
+
 	static {
 		ConnectionPoolDataSourceXmlConf.maybeInit();
 	}
-	
+
 }
