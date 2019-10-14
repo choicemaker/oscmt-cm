@@ -6,6 +6,8 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 import javax.ejb.EJB;
+import javax.ejb.Local;
+import javax.ejb.Remote;
 import javax.ejb.Stateless;
 
 import com.choicemaker.cm.batch.api.BatchJob;
@@ -13,8 +15,11 @@ import com.choicemaker.cm.batch.api.BatchResultsManager;
 import com.choicemaker.cm.batch.api.ProcessController;
 import com.choicemaker.cms.api.UrmBatchController;
 import com.choicemaker.cms.api.UrmJobManager;
+import com.choicemaker.cms.api.remote.UrmBatchControllerRemote;
 
 @Stateless
+@Local(UrmBatchController.class)
+@Remote(UrmBatchControllerRemote.class)
 public class UrmBatchControllerBean implements UrmBatchController {
 
 	@EJB
