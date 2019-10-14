@@ -46,9 +46,9 @@ public class SqlServerParallelRecordSource implements RecordSource {
 
 	private static Logger logger =
 		Logger.getLogger(SqlServerParallelRecordSource.class.getName());
-	
+
 	private static final String SOURCE = SqlServerParallelRecordSource.class.getSimpleName();
-	
+
 	public static String createDataViewName() {
 		String s = "CMT_DATAVIEW_" + UUID.randomUUID().toString();
 		String retVal = s.replace('-', '_');
@@ -167,8 +167,8 @@ public class SqlServerParallelRecordSource implements RecordSource {
 
 	private void getResultSets() throws SQLException {
 		Accessor accessor = getModel().getAccessor();
-		String viewBase =
-			"vw_cmt_" + accessor.getSchemaName() + "_r_" + getDbConfiguration();
+		String viewBase0 = "vw_cmt_%s_r_%s";
+		String viewBase = String.format(viewBase0, accessor.getSchemaName(), getDbConfiguration());
 		DbView[] views = getDatabaseReader().getViews();
 		String masterId = getDatabaseReader().getMasterId();
 
@@ -247,8 +247,8 @@ public class SqlServerParallelRecordSource implements RecordSource {
 					try {
 						selects[i].close();
 					} catch (SQLException e) {
-						String msg = "Problem closing statement [" + i + "]:"
-								+ e.toString();
+						String msg0 = "Problem closing statement [%d]: %s";
+						String msg = String.format(msg0, i, e.toString());
 						exceptionMessages.add(msg);
 					}
 				}
@@ -264,8 +264,8 @@ public class SqlServerParallelRecordSource implements RecordSource {
 					try {
 						results[i].close();
 					} catch (SQLException e) {
-						String msg = "Problem closing result set [" + i + "]:"
-								+ e.toString();
+						String msg0 = "Problem closing result set [%d]: %s";
+						String msg = String.format(msg0, i, e.toString());
 						exceptionMessages.add(msg);
 					}
 				}
@@ -296,7 +296,8 @@ public class SqlServerParallelRecordSource implements RecordSource {
 			final int count = exceptionMessages.size();
 			StringWriter sw = new StringWriter();
 			PrintWriter pw = new PrintWriter(sw);
-			String msg = "Problem(s) closing SqlServerParallelReader: " + count;
+			String msg0 = "Problem(s) closing %s: %d";
+			String msg = String.format(msg0, getSource(), count);
 			pw.println(msg);
 			for (int i = 0; i < count; i++) {
 				msg = exceptionMessages.get(i);
@@ -347,8 +348,7 @@ public class SqlServerParallelRecordSource implements RecordSource {
 			logger.fine(msg);
 			ds = DataSources.getDataSource(name);
 			if (ds == null) {
-				msg = String.format("No datasource registered for name '%s'",
-						name);
+				msg = String.format("No datasource registered for name '%s'", name);
 				logger.warning(msg);
 			}
 		}
@@ -376,7 +376,7 @@ public class SqlServerParallelRecordSource implements RecordSource {
 	protected String getSource() {
 		return SOURCE;
 	}
-	
+
 	private Connection getConnection() {
 		return connection;
 	}

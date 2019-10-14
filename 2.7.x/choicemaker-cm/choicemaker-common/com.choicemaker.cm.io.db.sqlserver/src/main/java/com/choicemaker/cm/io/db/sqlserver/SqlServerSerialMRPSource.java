@@ -36,9 +36,10 @@ import com.choicemaker.cm.core.Sink;
 import com.choicemaker.cm.core.base.PMManager;
 
 /**
- * @author ajwinkel
+ * @deprecated No longer used. No future use planned.
  *
  */
+@Deprecated
 public class SqlServerSerialMRPSource implements MarkedRecordPairSource, Serializable {
 
 	private static Logger logger = Logger.getLogger(SqlServerSerialMRPSource.class.getName());
