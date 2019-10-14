@@ -1,4 +1,4 @@
-package com.choicemaker.cm.io.db.postgres2;
+package com.choicemaker.cm.io.db.base;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -17,10 +17,6 @@ import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.Sink;
-import com.choicemaker.cm.io.db.base.DataSources;
-import com.choicemaker.cm.io.db.base.DbAccessor;
-import com.choicemaker.cm.io.db.base.DbReaderParallel;
-import com.choicemaker.cm.io.db.base.DbView;
 import com.choicemaker.util.Precondition;
 
 public abstract class AbstractParallelRecordSource implements RecordSource {
@@ -316,7 +312,7 @@ public abstract class AbstractParallelRecordSource implements RecordSource {
 
 	protected abstract ResultSet[] retrieveResultSets() throws SQLException;
 
-	protected void setDataSource(String name, DataSource ds) {
+	public void setDataSource(String name, DataSource ds) {
 		if (name == null) {
 			throw new IllegalArgumentException("null dsName");
 		}
