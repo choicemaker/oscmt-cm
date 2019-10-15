@@ -13,6 +13,7 @@ package com.choicemaker.cm.io.db.postgres2;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -30,39 +31,45 @@ import com.choicemaker.cm.core.MutableMarkedRecordPair;
 import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.Sink;
 import com.choicemaker.cm.io.db.base.DataSources;
+import com.choicemaker.cm.io.db.base.MarkedRecordPairSourceSpec;
+import com.choicemaker.cm.io.db.base.RecordPairRetrievalException;
 
 /**
  * Based on SqlServer class of similar name.
  *
  * @author rphall
  */
-public class PostgresMarkedRecordPairSource implements MarkedRecordPairSource {
+public class PostgresMarkedRecordPairSource<T extends Comparable<T> & Serializable>
+		implements MarkedRecordPairSource<T> {
 
 	private String fileName;
-	
+
 	private ImmutableProbabilityModel model;
 	private DataSource ds;
 	private String dsName;
 	private String dbConfiguration;
 	private String mrpsQuery;
 
-	private Iterator pairIterator;
+	private Iterator<ImmutableMarkedRecordPair> pairIterator;
 
-	public PostgresMarkedRecordPairSource() { }
+	public PostgresMarkedRecordPairSource() {
+	}
 
 	/**
-	 * mrpsQuery should be something like: 
+	 * mrpsQuery should be something like:
 	 * 
-	 *  select qid as id, mid as id_matched, decision from table where ...
+	 * select qid as id, mid as id_matched, decision from table where ...
 	 */
-	public PostgresMarkedRecordPairSource(String fileName, ImmutableProbabilityModel model, String dsName, String dbConfiguration, String mrpsQuery) {
+	public PostgresMarkedRecordPairSource(String fileName,
+			ImmutableProbabilityModel model, String dsName,
+			String dbConfiguration, String mrpsQuery) {
 		this.fileName = fileName;
 		this.model = model;
 		this.dsName = dsName;
 		this.dbConfiguration = dbConfiguration;
 		this.mrpsQuery = mrpsQuery;
 	}
-	
+
 	@Override
 	public void open() throws IOException {
 		if (model == null) {
@@ -74,78 +81,71 @@ public class PostgresMarkedRecordPairSource implements MarkedRecordPairSource {
 		} else if (mrpsQuery == null) {
 			throw new IllegalStateException("mrpsQuery is null");
 		}
-		
+
 		if (dsName != null && ds == null) {
 			ds = DataSources.getDataSource(dsName);
 			if (ds == null) {
-				throw new IOException("Unable to get data source named: " + dsName);
+				throw new IOException(
+						"Unable to get data source named: " + dsName);
 			}
 		}
-		
+
 		try {
 			Connection conn = null;
 			MarkedRecordPairSourceSpec spec = null;
 			try {
 				spec = createSpecFromQuery(conn, mrpsQuery);
 			} catch (SQLException ex) {
-				throw new IOException("Problem opening MRPS: " + ex.getMessage(), ex);
+				throw new IOException(
+						"Problem opening MRPS: " + ex.getMessage(), ex);
 			}
-			
-			RecordSource rs = createRecordSource(dsName, mrpsQuery);
+
+			RecordSource rs = new PostgresParallelRecordSource(fileName, model,
+					dsName, dbConfiguration, mrpsQuery);
 			this.pairIterator = spec.createPairs(rs).iterator();
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			throw new IOException("Problem opening MRPS: " + ex.getMessage());	
-		}		
+			throw new IOException("Problem opening MRPS: " + ex.getMessage());
+		}
 	}
 
-	private static MarkedRecordPairSourceSpec createSpecFromQuery(Connection conn, String query) throws SQLException {
+	private static MarkedRecordPairSourceSpec createSpecFromQuery(
+			Connection conn, String query) throws SQLException {
 		Statement stmt = conn.createStatement();
 		ResultSet rs = stmt.executeQuery(query);
-		
+
 		MarkedRecordPairSourceSpec spec = new MarkedRecordPairSourceSpec();
 		while (rs.next()) {
 			String qIdStr = rs.getString(1);
 			String mIdStr = rs.getString(2);
 			String dStr = rs.getString(3);
-			
+
 			Decision d = Decision.valueOf(dStr.charAt(0));
-			
+
 			spec.addMarkedPair(qIdStr, mIdStr, d);
 		}
-		
+
 		rs.close();
 		stmt.close();
-		
+
 		return spec;
 	}
-	
+
 	private RecordSource createRecordSource(String dsName, String mrpsQuery) {
 		String rsQuery = createRsQuery(mrpsQuery);
-		
+
 		PostgresParallelRecordSource rs = new PostgresParallelRecordSource(
 				fileName, model, dsName, dbConfiguration, rsQuery);
-/*
-	public PostgresParallelRecordSource(String fileName,
-			ImmutableProbabilityModel model, String dsName,
-			String dbConfiguration, String idsQuery) {
-
- */
-		rs.setModel(model);
-		rs.setConnection(conn);
-		rs.setDbConfiguration(dbConfiguration);
-		rs.setIdsQuery(rsQuery);
-		
 		return rs;
 	}
-	
+
 	private static String createRsQuery(String mrpsQuery) {
 		StringBuffer buff = new StringBuffer(mrpsQuery.length() * 4);
-		
+
 		buff.append("select id from (" + mrpsQuery + ") foo");
 		buff.append(" union ");
 		buff.append("select id_matched from (" + mrpsQuery + ") bar");
-				
+
 		return buff.toString();
 	}
 
@@ -160,15 +160,16 @@ public class PostgresMarkedRecordPairSource implements MarkedRecordPairSource {
 	}
 
 	@Override
-	public MutableMarkedRecordPair getNextMarkedRecordPair() throws IOException {
+	public MutableMarkedRecordPair getNextMarkedRecordPair()
+			throws IOException {
 		Object obj = pairIterator.next();
 		if (obj instanceof ImmutableMarkedRecordPair) {
-			return (MutableMarkedRecordPair)obj;	
+			return (MutableMarkedRecordPair) obj;
 		} else if (obj instanceof RecordPairRetrievalException) {
-			throw (RecordPairRetrievalException)obj;
+			throw (RecordPairRetrievalException) obj;
 		} else {
-			throw new IllegalStateException("pairIterator may contain only " +
-				"MarkedRecordPair objects and RecordNotFoundException objects.");	
+			throw new IllegalStateException("pairIterator may contain only "
+					+ "MarkedRecordPair objects and RecordNotFoundException objects.");
 		}
 	}
 
@@ -181,7 +182,7 @@ public class PostgresMarkedRecordPairSource implements MarkedRecordPairSource {
 	public String getName() {
 		File f = new File(fileName);
 		String name = f.getName();
-		
+
 		return name;
 	}
 
@@ -199,11 +200,11 @@ public class PostgresMarkedRecordPairSource implements MarkedRecordPairSource {
 	public ImmutableProbabilityModel getModel() {
 		return model;
 	}
-	
+
 	public void setDataSource(DataSource ds) {
 		this.ds = ds;
 	}
-	
+
 	public void setDataSourceName(String dsName) {
 		this.dsName = dsName;
 	}
@@ -211,19 +212,19 @@ public class PostgresMarkedRecordPairSource implements MarkedRecordPairSource {
 	public String getDataSourceName() {
 		return dsName;
 	}
-	
+
 	public void setDbConfiguration(String dbConfiguration) {
 		this.dbConfiguration = dbConfiguration;
 	}
-	
+
 	public String getDbConfiguration() {
 		return dbConfiguration;
 	}
-	
+
 	public void setMrpsQuery(String mrpsQuery) {
 		this.mrpsQuery = mrpsQuery;
 	}
-	
+
 	public String getMrpsQuery() {
 		return mrpsQuery;
 	}
@@ -246,5 +247,5 @@ public class PostgresMarkedRecordPairSource implements MarkedRecordPairSource {
 	public Sink getSink() {
 		throw new UnsupportedOperationException();
 	}
-	
+
 }

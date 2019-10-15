@@ -63,20 +63,18 @@ public class MarkedRecordPairSourceSpec<T extends Comparable<T> & Serializable> 
 		Precondition.assertNonNullArgument("record source must be non-null",
 				rs);
 
-		HashMap<String, Record<T>> recordMap = new HashMap<>();
-		int count = 0;
+		HashMap<T, Record<T>> recordMap = new HashMap<>();
+		int count = -1;
 		try {
 			rs.open();
 			while (rs.hasNext()) {
 				++count;
 				@SuppressWarnings("unchecked")
 				Record<T> r = rs.getNext();
+				assert r != null;
 				T id = r.getId();
-				if (id == null) {
-					logNullRecordId(count);
-				}
-				String key = id == null ? null : id.toString();
-				Record<T> previous = recordMap.put(r.getId().toString(), r);
+				assert id != null;
+				Record<T> previous = recordMap.put(id, r);
 				if (previous != null) {
 					logDuplicateRecords(count, previous, r);
 				}
@@ -100,6 +98,7 @@ public class MarkedRecordPairSourceSpec<T extends Comparable<T> & Serializable> 
 					firstException = rpre;
 				}
 				logRecordPairRetrievalException(rpre);
+
 			} else if (q != null && m == null) {
 				RecordPairRetrievalException rpre =
 					new RecordPairRetrievalException(s.getQId(), s.getMId(),
@@ -108,6 +107,7 @@ public class MarkedRecordPairSourceSpec<T extends Comparable<T> & Serializable> 
 					firstException = rpre;
 				}
 				logRecordPairRetrievalException(rpre);
+
 			} else if (q == null && m == null) {
 				RecordPairRetrievalException rpre =
 					new RecordPairRetrievalException(s.getQId(), s.getMId(),
@@ -116,6 +116,7 @@ public class MarkedRecordPairSourceSpec<T extends Comparable<T> & Serializable> 
 					firstException = rpre;
 				}
 				logRecordPairRetrievalException(rpre);
+
 			} else {
 				MutableMarkedRecordPair<T> mrp =
 					new MutableMarkedRecordPair<>();
@@ -149,15 +150,8 @@ public class MarkedRecordPairSourceSpec<T extends Comparable<T> & Serializable> 
 		String cId = idAsString(current);
 		String msg0 =
 			"Duplicate record at index %d: previousId: %s, currentId: %s";
-		String msg = String.format(msg0, count,  pId, cId);
+		String msg = String.format(msg0, count, pId, cId);
 		logger.warning(msg);
-	}
-
-	private void logNullRecordId(int count) {
-		String msg0 =
-				"Null record id at index %d";
-			String msg = String.format(msg0, count);
-			logger.warning(msg);
 	}
 
 	private void logRecordPairRetrievalException(
