@@ -50,7 +50,7 @@ public class PostgresMarkedRecordPairSource<T extends Comparable<T> & Serializab
 	private String dbConfiguration;
 	private String mrpsQuery;
 
-	private Iterator<ImmutableMarkedRecordPair> pairIterator;
+	private Iterator<ImmutableMarkedRecordPair<T>> pairIterator;
 
 	public PostgresMarkedRecordPairSource() {
 	}
@@ -92,7 +92,7 @@ public class PostgresMarkedRecordPairSource<T extends Comparable<T> & Serializab
 
 		try {
 			Connection conn = null;
-			MarkedRecordPairSourceSpec spec = null;
+			MarkedRecordPairSourceSpec<T> spec = null;
 			try {
 				spec = createSpecFromQuery(conn, mrpsQuery);
 			} catch (SQLException ex) {
@@ -109,12 +109,12 @@ public class PostgresMarkedRecordPairSource<T extends Comparable<T> & Serializab
 		}
 	}
 
-	private static MarkedRecordPairSourceSpec createSpecFromQuery(
+	private MarkedRecordPairSourceSpec<T> createSpecFromQuery(
 			Connection conn, String query) throws SQLException {
 		Statement stmt = conn.createStatement();
 		ResultSet rs = stmt.executeQuery(query);
 
-		MarkedRecordPairSourceSpec spec = new MarkedRecordPairSourceSpec();
+		MarkedRecordPairSourceSpec<T> spec = new MarkedRecordPairSourceSpec<>();
 		while (rs.next()) {
 			String qIdStr = rs.getString(1);
 			String mIdStr = rs.getString(2);

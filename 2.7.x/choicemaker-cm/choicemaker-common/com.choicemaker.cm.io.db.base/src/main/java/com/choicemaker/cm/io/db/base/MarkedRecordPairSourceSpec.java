@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import com.choicemaker.client.api.Decision;
+import com.choicemaker.cm.core.ImmutableMarkedRecordPair;
 import com.choicemaker.cm.core.MutableMarkedRecordPair;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.RecordSource;
@@ -57,7 +58,7 @@ public class MarkedRecordPairSourceSpec<T extends Comparable<T> & Serializable> 
 	 *                not be created.
 	 * 
 	 */
-	public List<MutableMarkedRecordPair<T>> createPairs(RecordSource rs)
+	public List<ImmutableMarkedRecordPair<T>> createPairs(RecordSource rs)
 			throws IOException {
 
 		Precondition.assertNonNullArgument("record source must be non-null",
@@ -84,7 +85,7 @@ public class MarkedRecordPairSourceSpec<T extends Comparable<T> & Serializable> 
 		}
 
 		RecordPairRetrievalException firstException = null;
-		List<MutableMarkedRecordPair<T>> pairs = new ArrayList<>(spec.size());
+		List<ImmutableMarkedRecordPair<T>> pairs = new ArrayList<>(spec.size());
 		for (int i = 0; i < spec.size(); i++) {
 			MarkedRecordPairSpec<T> s = spec.get(i);
 			Record<T> q = recordMap.get(s.getQId());
