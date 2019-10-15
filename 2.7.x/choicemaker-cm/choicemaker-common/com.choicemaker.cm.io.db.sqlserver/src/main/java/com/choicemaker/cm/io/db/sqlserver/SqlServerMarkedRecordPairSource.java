@@ -37,6 +37,7 @@ import com.choicemaker.cm.io.db.base.RecordPairRetrievalException;
  * @author ajwinkel
  *
  */
+@SuppressWarnings("rawtypes")
 public class SqlServerMarkedRecordPairSource implements MarkedRecordPairSource {
 
 	private String fileName;

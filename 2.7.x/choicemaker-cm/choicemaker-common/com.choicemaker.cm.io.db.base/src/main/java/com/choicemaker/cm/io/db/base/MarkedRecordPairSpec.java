@@ -11,27 +11,25 @@
  */
 package com.choicemaker.cm.io.db.base;
 
-import java.io.Serializable;
-
 import com.choicemaker.client.api.Decision;
 
-public class MarkedRecordPairSpec<T extends Comparable<T> & Serializable> {
+public class MarkedRecordPairSpec {
 	
-	private T qId;
-	private T mId;
+	private String qId;
+	private String mId;
 	private Decision d;
 	
-	public MarkedRecordPairSpec(T qId, T mId, Decision d) {
+	public MarkedRecordPairSpec(String qId, String mId, Decision d) {
 		this.qId = qId;
 		this.mId = mId;
 		this.d = d;
 	}
 	
-	public T getQId() {
+	public String getQId() {
 		return qId;
 	}
 	
-	public T getMId() {
+	public String getMId() {
 		return mId;
 	}
 	

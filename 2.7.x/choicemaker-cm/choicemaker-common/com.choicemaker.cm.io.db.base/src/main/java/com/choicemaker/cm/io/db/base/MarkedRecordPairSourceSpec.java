@@ -12,7 +12,6 @@
 package com.choicemaker.cm.io.db.base;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -26,19 +25,19 @@ import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.util.Precondition;
 
-public class MarkedRecordPairSourceSpec<T extends Comparable<T> & Serializable> {
+public class MarkedRecordPairSourceSpec {
 
 	private static final Logger logger =
 		Logger.getLogger(MarkedRecordPairSourceSpec.class.getName());
 
-	private List<MarkedRecordPairSpec<T>> spec;
+	private List<MarkedRecordPairSpec> spec;
 
 	public MarkedRecordPairSourceSpec() {
 		this.spec = new ArrayList<>();
 	}
 
-	public void addMarkedPair(T qId, T mId, Decision d) {
-		spec.add(new MarkedRecordPairSpec<T>(qId, mId, d));
+	public void addMarkedPair(String qId, String mId, Decision d) {
+		spec.add(new MarkedRecordPairSpec(qId, mId, d));
 	}
 
 	/**
@@ -58,24 +57,25 @@ public class MarkedRecordPairSourceSpec<T extends Comparable<T> & Serializable> 
 	 *                not be created.
 	 * 
 	 */
-	public List<ImmutableMarkedRecordPair<T>> createPairs(RecordSource rs)
+	@SuppressWarnings({
+			"unchecked", "rawtypes" })
+	public List<ImmutableMarkedRecordPair<?>> createPairs(RecordSource rs)
 			throws IOException {
 
 		Precondition.assertNonNullArgument("record source must be non-null",
 				rs);
 
-		HashMap<T, Record<T>> recordMap = new HashMap<>();
+		HashMap<String, Record<?>> recordMap = new HashMap<>();
 		int count = -1;
 		try {
 			rs.open();
 			while (rs.hasNext()) {
 				++count;
-				@SuppressWarnings("unchecked")
-				Record<T> r = rs.getNext();
+				Record<?> r = rs.getNext();
 				assert r != null;
-				T id = r.getId();
-				assert id != null;
-				Record<T> previous = recordMap.put(id, r);
+				String key = idAsString(r);
+				assert key != null;
+				Record<?> previous = recordMap.put(key, r);
 				if (previous != null) {
 					logDuplicateRecords(count, previous, r);
 				}
@@ -85,11 +85,11 @@ public class MarkedRecordPairSourceSpec<T extends Comparable<T> & Serializable> 
 		}
 
 		RecordPairRetrievalException firstException = null;
-		List<ImmutableMarkedRecordPair<T>> pairs = new ArrayList<>(spec.size());
+		List<ImmutableMarkedRecordPair<?>> pairs = new ArrayList<>(spec.size());
 		for (int i = 0; i < spec.size(); i++) {
-			MarkedRecordPairSpec<T> s = spec.get(i);
-			Record<T> q = recordMap.get(s.getQId());
-			Record<T> m = recordMap.get(s.getMId());
+			MarkedRecordPairSpec s = spec.get(i);
+			Record<?> q = recordMap.get(s.getQId());
+			Record<?> m = recordMap.get(s.getMId());
 
 			if (q == null && m != null) {
 				RecordPairRetrievalException rpre =
@@ -119,8 +119,8 @@ public class MarkedRecordPairSourceSpec<T extends Comparable<T> & Serializable> 
 				logRecordPairRetrievalException(rpre);
 
 			} else {
-				MutableMarkedRecordPair<T> mrp =
-					new MutableMarkedRecordPair<>();
+				MutableMarkedRecordPair mrp =
+					new MutableMarkedRecordPair();
 				mrp.setQueryRecord(q);
 				mrp.setMatchRecord(m);
 				mrp.setMarkedDecision(s.getDecision());
@@ -139,14 +139,14 @@ public class MarkedRecordPairSourceSpec<T extends Comparable<T> & Serializable> 
 		return pairs;
 	}
 
-	private String idAsString(Record<T> r) {
-		T id = r.getId();
+	private String idAsString(Record<?> r) {
+		Object id = r.getId();
 		String retVal = id == null ? null : id.toString();
 		return retVal;
 	}
 
-	private void logDuplicateRecords(int count, Record<T> previous,
-			Record<T> current) {
+	private void logDuplicateRecords(int count, Record<?> previous,
+			Record<?> current) {
 		String pId = idAsString(previous);
 		String cId = idAsString(current);
 		String msg0 =

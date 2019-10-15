@@ -13,7 +13,6 @@ package com.choicemaker.cm.io.db.postgres2;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -39,8 +38,8 @@ import com.choicemaker.cm.io.db.base.RecordPairRetrievalException;
  *
  * @author rphall
  */
-public class PostgresMarkedRecordPairSource<T extends Comparable<T> & Serializable>
-		implements MarkedRecordPairSource<T> {
+@SuppressWarnings("rawtypes")
+public class PostgresMarkedRecordPairSource implements MarkedRecordPairSource {
 
 	private String fileName;
 
@@ -50,7 +49,7 @@ public class PostgresMarkedRecordPairSource<T extends Comparable<T> & Serializab
 	private String dbConfiguration;
 	private String mrpsQuery;
 
-	private Iterator<ImmutableMarkedRecordPair<T>> pairIterator;
+	private Iterator<ImmutableMarkedRecordPair<?>> pairIterator;
 
 	public PostgresMarkedRecordPairSource() {
 	}
@@ -92,7 +91,7 @@ public class PostgresMarkedRecordPairSource<T extends Comparable<T> & Serializab
 
 		try {
 			Connection conn = null;
-			MarkedRecordPairSourceSpec<T> spec = null;
+			MarkedRecordPairSourceSpec spec = null;
 			try {
 				spec = createSpecFromQuery(conn, mrpsQuery);
 			} catch (SQLException ex) {
@@ -109,12 +108,12 @@ public class PostgresMarkedRecordPairSource<T extends Comparable<T> & Serializab
 		}
 	}
 
-	private MarkedRecordPairSourceSpec<T> createSpecFromQuery(
-			Connection conn, String query) throws SQLException {
+	private MarkedRecordPairSourceSpec createSpecFromQuery(Connection conn,
+			String query) throws SQLException {
 		Statement stmt = conn.createStatement();
 		ResultSet rs = stmt.executeQuery(query);
 
-		MarkedRecordPairSourceSpec<T> spec = new MarkedRecordPairSourceSpec<>();
+		MarkedRecordPairSourceSpec spec = new MarkedRecordPairSourceSpec();
 		while (rs.next()) {
 			String qIdStr = rs.getString(1);
 			String mIdStr = rs.getString(2);
@@ -129,24 +128,6 @@ public class PostgresMarkedRecordPairSource<T extends Comparable<T> & Serializab
 		stmt.close();
 
 		return spec;
-	}
-
-	private RecordSource createRecordSource(String dsName, String mrpsQuery) {
-		String rsQuery = createRsQuery(mrpsQuery);
-
-		PostgresParallelRecordSource rs = new PostgresParallelRecordSource(
-				fileName, model, dsName, dbConfiguration, rsQuery);
-		return rs;
-	}
-
-	private static String createRsQuery(String mrpsQuery) {
-		StringBuffer buff = new StringBuffer(mrpsQuery.length() * 4);
-
-		buff.append("select id from (" + mrpsQuery + ") foo");
-		buff.append(" union ");
-		buff.append("select id_matched from (" + mrpsQuery + ") bar");
-
-		return buff.toString();
 	}
 
 	@Override
