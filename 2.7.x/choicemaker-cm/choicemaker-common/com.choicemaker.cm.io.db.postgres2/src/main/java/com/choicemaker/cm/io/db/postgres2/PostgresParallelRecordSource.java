@@ -32,6 +32,7 @@ import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.Sink;
+import com.choicemaker.cm.io.db.base.DataSources;
 import com.choicemaker.cm.io.db.base.DbAccessor;
 import com.choicemaker.cm.io.db.base.DbReaderParallel;
 import com.choicemaker.cm.io.db.base.DbView;
@@ -93,6 +94,9 @@ public class PostgresParallelRecordSource implements RecordSource {
 		try {
 			if (getConnection() == null) {
 				connection = getDataSource().getConnection();
+				if (connection == null) {
+					throw new IOException("null connection");
+				}
 			}
 
 			// 1. Create view
@@ -323,6 +327,16 @@ public class PostgresParallelRecordSource implements RecordSource {
 	}
 
 	public DataSource getDataSource() {
+		if (ds == null) {
+			final String name = getDataSourceName();
+			String msg = String.format("Looking up JDBC datasource '%s'", name);
+			logger.fine(msg);
+			ds = DataSources.getDataSource(name);
+			if (ds == null) {
+				msg = String.format("No datasource registered for name '%s'", name);
+				logger.warning(msg);
+			}
+		}
 		if (ds == null) {
 			throw new IllegalStateException("null data source");
 		}
