@@ -46,8 +46,12 @@ public class PostgresMarkedRecordPairSource implements MarkedRecordPairSource {
 		Logger.getLogger(PostgresMarkedRecordPairSource.class.getName());
 
 	private static String createRsQuery(String mrpsQuery) {
-		String fmt = "select id from (%s) foo union "
-				+ "select id_matched from (%s) bar";
+//		String fmt = "select ID as ID from ("
+//				+ "select id as ID from (%s) foo union "
+//				+ "select id_matched as ID from (%s) bar"
+//				+ ") bas";
+		String fmt = "select id as ID from (%s) foo union "
+				+ "select id_matched as ID from (%s) bar";
 		String retVal = String.format(fmt, mrpsQuery, mrpsQuery);
 		return retVal;
 	}
@@ -122,8 +126,10 @@ public class PostgresMarkedRecordPairSource implements MarkedRecordPairSource {
 					dsName, dbConfiguration, rsQuery);
 			this.pairIterator = spec.createPairs(rs).iterator();
 		} catch (Exception ex) {
-			ex.printStackTrace();
-			throw new IOException("Problem opening MRPS: " + ex.getMessage());
+			String msg0 = "Problem opening MRPS: %s";
+			String msg = String.format(msg0, ex.toString());
+			logger.severe(msg);
+			throw new IOException(msg);
 		}
 	}
 
