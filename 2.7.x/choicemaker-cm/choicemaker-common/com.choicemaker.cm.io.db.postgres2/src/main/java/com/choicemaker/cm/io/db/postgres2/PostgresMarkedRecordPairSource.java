@@ -18,6 +18,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Iterator;
+import java.util.logging.Logger;
 
 import javax.sql.DataSource;
 
@@ -40,6 +41,16 @@ import com.choicemaker.cm.io.db.base.RecordPairRetrievalException;
  */
 @SuppressWarnings("rawtypes")
 public class PostgresMarkedRecordPairSource implements MarkedRecordPairSource {
+
+	private static final Logger logger =
+		Logger.getLogger(PostgresMarkedRecordPairSource.class.getName());
+
+	private static String createRsQuery(String mrpsQuery) {
+		String fmt = "select id from (%s) foo union "
+				+ "select id_matched from (%s) bar";
+		String retVal = String.format(fmt, mrpsQuery, mrpsQuery);
+		return retVal;
+	}
 
 	private String fileName;
 
@@ -93,14 +104,22 @@ public class PostgresMarkedRecordPairSource implements MarkedRecordPairSource {
 			Connection conn = null;
 			MarkedRecordPairSourceSpec spec = null;
 			try {
+				conn = ds.getConnection();
 				spec = createSpecFromQuery(conn, mrpsQuery);
 			} catch (SQLException ex) {
 				throw new IOException(
 						"Problem opening MRPS: " + ex.getMessage(), ex);
+			} finally {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					logger.warning(e.toString());
+				}
 			}
 
+			final String rsQuery = createRsQuery(mrpsQuery);
 			RecordSource rs = new PostgresParallelRecordSource(fileName, model,
-					dsName, dbConfiguration, mrpsQuery);
+					dsName, dbConfiguration, rsQuery);
 			this.pairIterator = spec.createPairs(rs).iterator();
 		} catch (Exception ex) {
 			ex.printStackTrace();
