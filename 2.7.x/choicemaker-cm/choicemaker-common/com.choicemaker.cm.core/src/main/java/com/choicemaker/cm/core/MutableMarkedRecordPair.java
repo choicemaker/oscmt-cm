@@ -16,14 +16,13 @@ import java.util.Date;
 import com.choicemaker.client.api.Decision;
 
 /**
- * A record pair marked with a decision. Mostly used for human
- * marked training/testing pairs.
+ * A record pair marked with a decision. Mostly used for human marked
+ * training/testing pairs.
  *
- * @author    Martin Buechi
+ * @author Martin Buechi
  */
 public class MutableMarkedRecordPair<T extends Comparable<T> & Serializable>
-	extends MutableRecordPair<T>
-	implements IMarkedRecordPair<T> {
+		extends MutableRecordPair<T> implements IMarkedRecordPair<T> {
 
 	/** A comment. */
 	private String comment;
@@ -42,22 +41,23 @@ public class MutableMarkedRecordPair<T extends Comparable<T> & Serializable>
 	/**
 	 * Constructor for a marked record pair.
 	 *
-	 * @param   q  One of the records.
-	 * @param   m  The other record.
-	 * @param   decision  The <code>Decision</code>.
-	 * @param   date  The date this decision was made/last revised.
-	 * @param   user  The user who made the decision/last revised it.
-	 * @param   src   The source of this record.
-	 * @param   comment  A comment.
+	 * @param q
+	 *            One of the records.
+	 * @param m
+	 *            The other record.
+	 * @param decision
+	 *            The <code>Decision</code>.
+	 * @param date
+	 *            The date this decision was made/last revised.
+	 * @param user
+	 *            The user who made the decision/last revised it.
+	 * @param src
+	 *            The source of this record.
+	 * @param comment
+	 *            A comment.
 	 */
-	public MutableMarkedRecordPair(
-		Record<T> q,
-		Record<T> m,
-		Decision decision,
-		Date date,
-		String user,
-		String src,
-		String comment) {
+	public MutableMarkedRecordPair(Record<T> q, Record<T> m, Decision decision,
+			Date date, String user, String src, String comment) {
 		super(q, m);
 		setMarkedDecision(decision);
 		setDateMarked(date);
@@ -79,9 +79,9 @@ public class MutableMarkedRecordPair<T extends Comparable<T> & Serializable>
 	}
 
 	/**
-	 * The <code>Decision</code> that was marked by a human reviewer about 
-	 * whether this pair matches or not. This distinct from the {@link IRecordPair#getCmDecision Decision}
-	 * that ChoiceMaker assigns.
+	 * The <code>Decision</code> that was marked by a human reviewer about
+	 * whether this pair matches or not. This distinct from the
+	 * {@link IRecordPair#getCmDecision Decision} that ChoiceMaker assigns.
 	 */
 	@Override
 	public Decision getMarkedDecision() {
@@ -107,9 +107,8 @@ public class MutableMarkedRecordPair<T extends Comparable<T> & Serializable>
 	}
 
 	/**
-	 * Set the date the decision was made or last revised.
-	 * This field is <em>not</em> updated automatically
-	 * when the decision field is modified.
+	 * Set the date the decision was made or last revised. This field is
+	 * <em>not</em> updated automatically when the decision field is modified.
 	 */
 	@Override
 	public void setDateMarked(Date date) {
@@ -117,10 +116,9 @@ public class MutableMarkedRecordPair<T extends Comparable<T> & Serializable>
 	}
 
 	/**
-	 * The mark a pair as to whether it matches or not. Marking is performed
-	 * by human reviewers, as opposed to the decision
-	 * {@link IRecordPair#setCmDecision assignments} made by
-	 * ChoiceMaker.
+	 * The mark a pair as to whether it matches or not. Marking is performed by
+	 * human reviewers, as opposed to the decision
+	 * {@link IRecordPair#setCmDecision assignments} made by ChoiceMaker.
 	 */
 	@Override
 	public void setMarkedDecision(Decision decision) {
@@ -137,6 +135,14 @@ public class MutableMarkedRecordPair<T extends Comparable<T> & Serializable>
 	@Override
 	public void setUser(String user) {
 		this.user = user;
+	}
+
+	@Override
+	public String toString() {
+		Object qId = getQueryRecord() == null ? null : getQueryRecord().getId();
+		Object mId = getMatchRecord() == null ? null : getMatchRecord().getId();
+		return "MutableMarkedRecordPair [qId=" + qId + ", mId=" + mId
+				+ ", decision=" + getMarkedDecision() + "]";
 	}
 
 }
