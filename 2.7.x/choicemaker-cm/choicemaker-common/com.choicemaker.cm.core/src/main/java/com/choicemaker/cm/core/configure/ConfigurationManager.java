@@ -28,8 +28,13 @@ public class ConfigurationManager {
 		InstallableConfigurator.getInstance().install(configurator);
 	}
 
-	private boolean isInitialized() {
-		return InstalledConfiguration.getInstance().hasDelegate();
+	public boolean isInitialized() {
+		boolean retVal = false;
+		InstalledConfiguration iconf = InstalledConfiguration.getInstance();
+		if (iconf != null) {
+			retVal = iconf.hasDelegate();
+		}
+		return retVal;
 	}
 
 	private InstalledConfiguration getConfiguration() {
