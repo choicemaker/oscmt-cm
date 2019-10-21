@@ -45,26 +45,26 @@ import com.choicemaker.e2.CMPlatformRunnable;
  */
 public class PostgresDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 
-	private static final Logger logger = Logger
-			.getLogger(PostgresDbObjectMaker.class.getName());
+	private static final Logger logger =
+		Logger.getLogger(PostgresDbObjectMaker.class.getName());
 
 	@Override
 	public Object run(Object args) throws Exception {
 		CommandLineArguments cla = new CommandLineArguments();
 		cla.addExtensions();
 		cla.addArgument("-output");
-		cla.enter((String[])args);
+		cla.enter((String[]) args);
 		main(new String[] {
 				cla.getArgument("-conf"), cla.getArgument("-log"),
 				cla.getArgument("-output") });
 		return null;
 	}
-	
+
 	public static void main(String[] args) throws Exception {
 		XmlConfigurator.getInstance().init(args[0], args[1], false, false);
 
 		// TODO FIXME replace default compiler with configurable compiler
-		CompilerFactory factory = CompilerFactory.getInstance ();
+		CompilerFactory factory = CompilerFactory.getInstance();
 		ICompiler compiler = factory.getDefaultCompiler();
 
 		final boolean fromResource = false;
@@ -75,7 +75,7 @@ public class PostgresDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 		processAllModels(unused, w, true);
 		w.close();
 	}
-	
+
 	@Override
 	public void generateObjects(File outDir) throws IOException {
 		File outFile =
@@ -85,7 +85,7 @@ public class PostgresDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 		processAllModels(unused, w, true);
 		w.close();
 	}
-	
+
 	public static String[] getAllModels(final Properties p) throws IOException {
 		StringWriter w = new StringWriter();
 		processAllModels(p, w, false);
@@ -167,7 +167,8 @@ public class PostgresDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 					String viewName = viewBase + i;
 					DbView v = views[i];
 					boolean first = i == 0 || v.number != views[i - 1].number;
-					boolean more = i + 1 < views.length && v.number == views[i + 1].number;
+					boolean more =
+						i + 1 < views.length && v.number == views[i + 1].number;
 					if (first) {
 						if (i != 0) {
 							multi.append(Constants.LINE_SEPARATOR);
@@ -218,7 +219,7 @@ public class PostgresDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 		return model.getAccessor().getSchemaName() + ":r:" + dbConfiguration
 				+ ":Postgres";
 	}
-	
+
 	public static String getMultiKey(DbReader dbReader) {
 		return dbReader.getName() + ":Postgres";
 	}
@@ -237,7 +238,8 @@ public class PostgresDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 			String viewName = viewBase + i;
 			DbView v = views[i];
 			boolean first = i == 0 || v.number != views[i - 1].number;
-			boolean more = i + 1 < views.length && v.number == views[i + 1].number;
+			boolean more =
+				i + 1 < views.length && v.number == views[i + 1].number;
 			if (first) {
 				if (i != 0) {
 					multi.append(Constants.LINE_SEPARATOR);
@@ -262,7 +264,7 @@ public class PostgresDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 		}
 		return multi.toString();
 	}
-	
+
 	private static String getOrderBy(DbView v) {
 		StringBuffer ob = new StringBuffer();
 		for (int j = 0; j < v.orderBy.length; ++j) {
