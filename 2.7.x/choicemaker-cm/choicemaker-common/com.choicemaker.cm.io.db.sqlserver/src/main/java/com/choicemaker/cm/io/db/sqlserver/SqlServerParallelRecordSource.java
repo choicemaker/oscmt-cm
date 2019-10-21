@@ -107,6 +107,9 @@ public class SqlServerParallelRecordSource implements RecordSource {
 		try {
 			if (getConnection() == null) {
 				connection = getDataSource().getConnection();
+				if (connection == null) {
+					throw new IOException("null connection");
+				}
 			}
 
 			// 1. Create view
