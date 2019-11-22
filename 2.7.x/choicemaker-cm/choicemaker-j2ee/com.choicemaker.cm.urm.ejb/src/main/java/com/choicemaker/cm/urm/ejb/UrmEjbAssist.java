@@ -376,6 +376,17 @@ class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 		return retVal;
 	}
 
+	// public CompositeMatchScore createCompositeMatchScoreFromMergeGroup(
+	// MergeGroup<T> mergeGroup) {
+	// List<MatchScore> list = new ArrayList<>();
+	// for (EvaluatedPair<T> er : mergeGroup.getGroupPairs()) {
+	// MatchScore matchScore = createMatchScore(er);
+	// list.add(matchScore);
+	// }
+	// CompositeMatchScore retVal = new CompositeMatchScore(list);
+	// return retVal;
+	// }
+
 	public NamedConfiguration createCustomizedConfiguration(
 			UrmConfigurationAdapter adapter,
 			NamedConfigurationController ncController, DbRecordCollection mRc,
@@ -389,17 +400,6 @@ class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 				matchThreshold, FIXME_oabaMaxSingle);
 		return retVal;
 	}
-
-	// public CompositeMatchScore createCompositeMatchScoreFromMergeGroup(
-	// MergeGroup<T> mergeGroup) {
-	// List<MatchScore> list = new ArrayList<>();
-	// for (EvaluatedPair<T> er : mergeGroup.getGroupPairs()) {
-	// MatchScore matchScore = createMatchScore(er);
-	// list.add(matchScore);
-	// }
-	// CompositeMatchScore retVal = new CompositeMatchScore(list);
-	// return retVal;
-	// }
 
 	public NamedConfiguration createCustomizedConfiguration(
 			UrmConfigurationAdapter adapter,
