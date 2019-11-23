@@ -263,7 +263,8 @@ public class BatchMatchAnalyzerBean implements BatchMatchAnalyzer {
 
 		NamedConfiguration cmConf =
 			assist.createCustomizedConfiguration(adapter, ncController, qRc,
-					mRc, modelName, differThreshold, matchThreshold, maxSingle);
+					mRc, modelName, differThreshold, matchThreshold, maxSingle,
+					c, serializationFormat);
 		OabaLinkageType task = assist.computeMatchingTask(qRc, mRc, cmConf);
 		boolean isLinkage = OabaLinkageType.isLinkage(task);
 

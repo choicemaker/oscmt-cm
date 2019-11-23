@@ -163,7 +163,7 @@ public class OnlineUrmBean<T extends Comparable<T> & Serializable>
 	private EvaluatedRecord[] PREFERRED_NOT_YET_WORKING_getCompositeMatchCandidates(
 			ISingleRecord<T> queryRecord, DbRecordCollection masterCollection,
 			String modelName, float differThreshold, float matchThreshold,
-			int maxNumMatches, LinkCriteria linkCriteria,
+			int UNUSED_maxNumMatches, LinkCriteria linkCriteria,
 			EvalRecordFormat resultFormat, String externalId)
 			throws ModelException, ArgumentException,
 			UrmIncompleteBlockingSetsException, UrmUnderspecifiedQueryException,
@@ -180,9 +180,10 @@ public class OnlineUrmBean<T extends Comparable<T> & Serializable>
 		Precondition.assertBoolean("invalid thresholds (differ > match)",
 				differThreshold <= matchThreshold);
 
+		final int oabaMaxSingle = Integer.MAX_VALUE;
 		NamedConfiguration cmConf = assist.createCustomizedConfiguration(
 				adapter, ncController, masterCollection, modelName,
-				differThreshold, matchThreshold, maxNumMatches);
+				differThreshold, matchThreshold, oabaMaxSingle);
 
 		TransitiveGroup<T> transitiveCandidates = null;
 		try {
