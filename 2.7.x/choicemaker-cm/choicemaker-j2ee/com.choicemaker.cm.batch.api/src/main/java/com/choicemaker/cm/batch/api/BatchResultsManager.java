@@ -4,6 +4,10 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+/**
+ * Exports results of a specified batch job to a location specifed by a Uniform
+ * Resource Identifier (URI).
+ */
 public interface BatchResultsManager {
 
 	/**

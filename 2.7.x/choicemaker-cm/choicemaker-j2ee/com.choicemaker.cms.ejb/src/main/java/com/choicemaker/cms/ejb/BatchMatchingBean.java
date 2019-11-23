@@ -453,7 +453,7 @@ public class BatchMatchingBean implements BatchMatching, WorkflowListener {
 			BatchJob urmJob) throws ServerConfigurationException {
 		long transId = transService.startTransitivity(externalId, params,
 				oabaJob, oabaSettings, serverConfig, urmJob);
-		logger.info("Started transitivity (job id: " + transId + ")");
+		logger.info("Started transitivity, job id: " + transId);
 		this.setTransitivityAnalysisPending(oabaJob.getId(), false);
 	}
 
@@ -468,7 +468,7 @@ public class BatchMatchingBean implements BatchMatching, WorkflowListener {
 		BatchJob urmJob = createAndPersistUrmJobAndTransitivityObjects(
 				externalID, tp, oabaSettings, serverConfiguration);
 		final long urmJobId = urmJob.getId();
-		logger.info("Offline batch analysis (job id: " + urmJobId + ")");
+		logger.info("Controlling URM job: " + urmJobId);
 
 		// Mark the job as started and start processing by the StartOabaMDB EJB
 		urmJob.markAsQueued();
@@ -477,7 +477,7 @@ public class BatchMatchingBean implements BatchMatching, WorkflowListener {
 
 		long transId = transService.startTransitivity(externalID, tp, oabaJob,
 				oabaSettings, serverConfiguration, urmJob);
-		logger.info("Started transitivity (job id: " + transId + ")");
+		logger.info("Started transitivity, job id: " + transId);
 		this.setTransitivityAnalysisPending(oabaJob.getId(), false);
 
 		logger.exiting(SOURCE_CLASS, METHOD, urmJobId);
@@ -489,13 +489,13 @@ public class BatchMatchingBean implements BatchMatching, WorkflowListener {
 			BatchJob oabaJob, OabaSettings oabaSettings,
 			ServerConfiguration serverConfiguration, RecordMatchingMode mode)
 			throws ServerConfigurationException {
-		final String METHOD = "startDeduplicationAndAnalysis";
+		final String METHOD = "startTransitivity";
 		logger.entering(SOURCE_CLASS, METHOD);
 
 		BatchJob urmJob = createAndPersistUrmJobAndTransitivityObjects(
 				externalID, tp, oabaSettings, serverConfiguration);
 		final long urmJobId = urmJob.getId();
-		logger.info("Offline batch analysis (job id: " + urmJobId + ")");
+		logger.info("Controlling URM job: " + urmJobId);
 
 		// Mark the job as started and start processing by the StartOabaMDB EJB
 		urmJob.markAsQueued();
@@ -504,7 +504,7 @@ public class BatchMatchingBean implements BatchMatching, WorkflowListener {
 
 		long transId = transService.startTransitivity(externalID, tp, oabaJob,
 				oabaSettings, serverConfiguration, urmJob, mode);
-		logger.info("Started transitivity (job id: " + transId + ")");
+		logger.info("Started transitivity, job id: " + transId);
 		this.setTransitivityAnalysisPending(oabaJob.getId(), false);
 
 		logger.exiting(SOURCE_CLASS, METHOD, urmJobId);
