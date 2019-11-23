@@ -462,26 +462,8 @@ public class BatchMatchingBean implements BatchMatching, WorkflowListener {
 			BatchJob oabaJob, OabaSettings oabaSettings,
 			ServerConfiguration serverConfiguration)
 			throws ServerConfigurationException {
-		final String METHOD = "startDeduplicationAndAnalysis";
-		logger.entering(SOURCE_CLASS, METHOD);
-
-		BatchJob urmJob = createAndPersistUrmJobAndTransitivityObjects(
-				externalID, tp, oabaSettings, serverConfiguration);
-		final long urmJobId = urmJob.getId();
-		logger.info("Controlling URM job: " + urmJobId);
-
-		// Mark the job as started and start processing by the StartOabaMDB EJB
-		urmJob.markAsQueued();
-		urmJob.markAsStarted();
-		urmJobManager.save(urmJob);
-
-		long transId = transService.startTransitivity(externalID, tp, oabaJob,
-				oabaSettings, serverConfiguration, urmJob);
-		logger.info("Started transitivity, job id: " + transId);
-		this.setTransitivityAnalysisPending(oabaJob.getId(), false);
-
-		logger.exiting(SOURCE_CLASS, METHOD, urmJobId);
-		return urmJobId;
+		return startTransitivity(externalID, tp, oabaJob, oabaSettings,
+				serverConfiguration, null);
 	}
 
 	@Override
