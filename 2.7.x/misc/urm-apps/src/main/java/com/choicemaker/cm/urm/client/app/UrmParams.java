@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
+import com.choicemaker.cm.urm.client.util.APP_SERVER_VENDOR;
 import com.choicemaker.util.Precondition;
 
 public class UrmParams {

@@ -12,7 +12,7 @@ import static com.choicemaker.cm.urm.api.RESULT_FILE_TYPE.TRANSGROUP;
 import static com.choicemaker.cm.urm.api.RESULT_FILE_TYPE.TRANSMATCH;
 import static com.choicemaker.cm.urm.client.app.UrmCommandLine.COMMAND_HEADER;
 import static com.choicemaker.cm.urm.client.app.UrmCommandLine.COMMAND_LINE;
-import static com.choicemaker.cm.urm.client.app.UrmUtil.getBatchMatchAnalyzer;
+import static com.choicemaker.cm.urm.client.util.UrmUtil.getBatchMatchAnalyzer;
 
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
@@ -28,6 +28,7 @@ import org.apache.commons.cli.Options;
 
 import com.choicemaker.cm.urm.api.BatchMatchAnalyzer;
 import com.choicemaker.cm.urm.api.RESULT_FILE_TYPE;
+import com.choicemaker.cm.urm.client.util.APP_SERVER_VENDOR;
 import com.choicemaker.cm.urm.exceptions.CmRuntimeException;
 import com.choicemaker.util.Precondition;
 import com.choicemaker.util.StringUtils;
@@ -98,7 +99,9 @@ public class UrmBmaApp {
 	 * Examples:
 	 * <ul>
 	 * <li>
-	 * <code>java com.choicemaker.cm.urm.client.app.UrmBmaApp -appName cm-server 1</code>
+	 * <code>java com.choicemaker.cm.urm.client.app.UrmBmaApp
+	 * -appCommand MATCH_PAIR_FILENAMES -appName epi-cm-server
+	 * -appServer JBOSS 7654</code>
 	 * <br>
 	 * Invokes <code>UrmBmaApp</code> assuming JBoss as the application server
 	 * and <code>MATCH_PAIR_FILENAMES</code> as the application command. Prints

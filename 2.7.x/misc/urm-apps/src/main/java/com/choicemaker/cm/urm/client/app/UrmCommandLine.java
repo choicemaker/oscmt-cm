@@ -11,7 +11,7 @@
 package com.choicemaker.cm.urm.client.app;
 
 import static com.choicemaker.cm.urm.client.app.URM_BMA_APP_COMMAND.*;
-import static com.choicemaker.cm.urm.client.app.APP_SERVER_VENDOR.*;
+import static com.choicemaker.cm.urm.client.util.APP_SERVER_VENDOR.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,6 +24,8 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
+import com.choicemaker.cm.urm.client.util.APP_SERVER_VENDOR;
+
 public class UrmCommandLine {
 
 	public static final String ARG_APP_NAME = "appName";
@@ -32,6 +34,7 @@ public class UrmCommandLine {
 				+ "without the '.ear' extenson)";
 
 	public static final String ARG_APP_COMMAND = "appCommand";
+
 	private static final String DESC_APP_COMMAND0 =
 		"[REQUIRED] Type of file names to print: %s, %s or %s";
 	public static final String DESC_APP_COMMAND =
@@ -39,14 +42,18 @@ public class UrmCommandLine {
 				TRANSMATCH_PAIR_FILENAMES, TRANSMATCH_GROUP_FILENAMES);
 
 	public static final String ARG_APP_SERVER_VENDOR = "appServer";
+
 	private static final String DESC_APP_SERVER_VENDOR0 =
 		"[OPTIONAL] Name of the app server vendor, either %s or %s; "
 				+ "if no app server is specified, %s is the default";
 	public static final String DESC_APP_SERVER_VENDOR =
 		String.format(DESC_APP_SERVER_VENDOR0, JBOSS, WEBLOGIC, JBOSS);
 
-	public static final String COMMAND_LINE =
-		"UrmApp [options] <jobId 1> <jobId 2> ...";
+	private static final String COMMAND_LINE0 =
+		"java %s [options] <jobId 1> <jobId 2> ...";
+	public static final String COMMAND_LINE = String.format(COMMAND_LINE0,
+			com.choicemaker.cm.urm.client.app.UrmBmaApp.class.getName());
+
 	public static final String COMMAND_HEADER = "where [options] are:";
 
 	public static Options createOptions() {
