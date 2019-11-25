@@ -118,8 +118,8 @@ public class UrmBmaApp2 {
 		logger.fine("Exiting main");
 	}
 
-	public long recomputeTransitivity(UrmParams2 up)
-			throws RemoteException, NamingException, CreateException, ServerConfigurationException {
+	public long recomputeTransitivity(UrmParams2 up) throws RemoteException,
+			NamingException, CreateException, ServerConfigurationException {
 		Precondition.assertNonNullArgument("URM params must not be null", up);
 
 		BatchJob oabaJob = getOabaBatchJob(up.appServer, up.appName, up.jobId);
@@ -139,8 +139,7 @@ public class UrmBmaApp2 {
 
 		BatchMatching bMatch = getBatchMatching(up.appServer, up.appName);
 
-		long retVal =
-				bMatch.startTransitivity("", tp, oabaJob, os, sc);
+		long retVal = bMatch.startTransitivity("", tp, oabaJob, os, sc);
 
 		return retVal;
 	}
@@ -162,12 +161,12 @@ public class UrmBmaApp2 {
 				defaultTp.getHighThreshold(), up, "HighThreshold");
 
 		PersistableRecordSource query =
-			getPersistableRecordSource(up.appServer, up.appName, up.jobId,
+			getPersistableRecordSource(up.appServer, up.appName,
 					defaultTp.getQueryRsId(), defaultTp.getQueryRsType());
 
 		PersistableRecordSource reference = getPersistableRecordSource(
-				up.appServer, up.appName, up.jobId,
-				defaultTp.getReferenceRsId(), defaultTp.getReferenceRsType());
+				up.appServer, up.appName, defaultTp.getReferenceRsId(),
+				defaultTp.getReferenceRsType());
 
 		TransitivityParameters retVal = new TransitivityParametersEntity(
 				defaultTp.getModelConfigurationName(), lowThreshold,

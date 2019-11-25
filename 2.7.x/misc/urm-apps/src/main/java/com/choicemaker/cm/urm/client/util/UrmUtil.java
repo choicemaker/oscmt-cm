@@ -21,22 +21,14 @@ import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.api.BatchJob;
-import com.choicemaker.cm.oaba.api.OabaJobManager;
-import com.choicemaker.cm.oaba.api.OabaSettingsController;
-import com.choicemaker.cm.oaba.api.RecordSourceController;
-import com.choicemaker.cm.oaba.api.ServerConfigurationController;
-import com.choicemaker.cm.transitivity.api.TransitivityParametersController;
 import com.choicemaker.cm.urm.api.BatchMatchAnalyzer;
+import com.choicemaker.cms.api.BatchJobQueries;
 import com.choicemaker.cms.api.BatchMatching;
+import com.choicemaker.cms.api.ConfigurationQueries;
 import com.choicemaker.util.Precondition;
-import com.mchange.lang.StringUtils;
+import com.choicemaker.util.StringUtils;
 
 public class UrmUtil {
-
-	public static final String OABA_MODULE_NAME = "com.choicemaker.cm.oaba.ejb";
-
-	public static final String TRANSITIVITY_MODULE_NAME =
-		"com.choicemaker.cm.transitivity.ejb";
 
 	public static final String URM_MODULE_NAME = "com.choicemaker.cm.urm.ejb";
 
@@ -101,16 +93,9 @@ public class UrmUtil {
 				appServer);
 		Precondition.assertNonEmptyString("appName must be non-empty", appName);
 
-		final String beanName = "OabaJobManagerBean";
-		final String viewClassName = OabaJobManager.class.getName();
-		Object o = getModuleBean(appServer, appName, OABA_MODULE_NAME, beanName,
-				viewClassName);
-		OabaJobManager oabaJM = (OabaJobManager) o;
-		logger.finest("OabaJobManager: " + oabaJM == null ? "null"
-				: oabaJM.toString());
-		assert oabaJM != null;
+		final BatchJobQueries bjq = getBatchJobQueriesBean(appServer, appName);
 
-		BatchJob retVal = oabaJM.findOabaJob(jobId);
+		BatchJob retVal = bjq.findOabaJob(jobId);
 		if (retVal == null) {
 			String msg0 = "Unable to find OabaBatchJob for jobId %d";
 			String msg = String.format(msg0, jobId);
@@ -129,21 +114,12 @@ public class UrmUtil {
 				appServer);
 		Precondition.assertNonEmptyString("appName must be non-empty", appName);
 
+		ConfigurationQueries cq =
+			getConfigurationQueriesBean(appServer, appName);
 		BatchJob oabaJob = getOabaBatchJob(appServer, appName, jobId);
 
-		final String beanName = "TransitivityParametersControllerBean";
-		final String viewClassName =
-			TransitivityParametersController.class.getName();
-		Object o = getModuleBean(appServer, appName, TRANSITIVITY_MODULE_NAME,
-				beanName, viewClassName);
-		TransitivityParametersController tpController =
-			(TransitivityParametersController) o;
-		logger.finest("OabaJobManager: " + tpController == null ? "null"
-				: tpController.toString());
-		assert tpController != null;
-
 		TransitivityParameters retVal =
-			tpController.findTransitivityParameters(oabaJob.getParametersId());
+			cq.findTransitivityParameters(oabaJob.getParametersId());
 		if (retVal == null) {
 			String msg0 =
 				"Unable to find transitivity parameters for OABA jobId %d";
@@ -162,19 +138,11 @@ public class UrmUtil {
 				appServer);
 		Precondition.assertNonEmptyString("appName must be non-empty", appName);
 
+		ConfigurationQueries cq =
+			getConfigurationQueriesBean(appServer, appName);
 		BatchJob oabaJob = getOabaBatchJob(appServer, appName, jobId);
 
-		final String beanName = "OabaSettingsControllerBean";
-		final String viewClassName = OabaSettingsController.class.getName();
-		Object o = getModuleBean(appServer, appName, OABA_MODULE_NAME, beanName,
-				viewClassName);
-		OabaSettingsController osController = (OabaSettingsController) o;
-		logger.finest("OabaJobManager: " + osController == null ? "null"
-				: osController.toString());
-		assert osController != null;
-
-		OabaSettings retVal =
-			osController.findOabaSettings(oabaJob.getSettingsId());
+		OabaSettings retVal = cq.findOabaSettings(oabaJob.getSettingsId());
 		if (retVal == null) {
 			String msg0 = "Unable to find OABA settings for OABA jobId %d";
 			String msg = String.format(msg0, jobId);
@@ -186,8 +154,8 @@ public class UrmUtil {
 	}
 
 	public static PersistableRecordSource getPersistableRecordSource(
-			APP_SERVER_VENDOR appServer, final String appName, long jobId,
-			long rsId, String rsType)
+			APP_SERVER_VENDOR appServer, final String appName, long rsId,
+			String rsType)
 			throws NamingException, RemoteException, CreateException {
 		Precondition.assertNonNullArgument("appServer must be non-null",
 				appServer);
@@ -195,18 +163,12 @@ public class UrmUtil {
 		Precondition.assertNonEmptyString(
 				"Record source type must be non-empty", rsType);
 
+		ConfigurationQueries cq =
+			getConfigurationQueriesBean(appServer, appName);
+
 		PersistableRecordSource retVal = null;
 		if (rsId != 0 && StringUtils.nonEmptyString(rsType)) {
-			final String beanName = "PersistableRecordSourceControllerBean";
-			final String viewClassName = RecordSourceController.class.getName();
-			Object o = getModuleBean(appServer, appName, OABA_MODULE_NAME,
-					beanName, viewClassName);
-			RecordSourceController rsController = (RecordSourceController) o;
-			logger.finest("OabaJobManager: " + rsController == null ? "null"
-					: rsController.toString());
-			assert rsController != null;
-
-			retVal = rsController.find(rsId, rsType);
+			retVal = cq.findPersistableSqlRecordSource(rsId, rsType);
 		}
 		if (retVal == null) {
 			String msg0 =
@@ -225,21 +187,12 @@ public class UrmUtil {
 				appServer);
 		Precondition.assertNonEmptyString("appName must be non-empty", appName);
 
+		ConfigurationQueries cq =
+			getConfigurationQueriesBean(appServer, appName);
 		BatchJob oabaJob = getOabaBatchJob(appServer, appName, jobId);
 
-		final String beanName = "ServerConfigurationControllerBean";
-		final String viewClassName =
-			ServerConfigurationController.class.getName();
-		Object o = getModuleBean(appServer, appName, OABA_MODULE_NAME, beanName,
-				viewClassName);
-		ServerConfigurationController scController =
-			(ServerConfigurationController) o;
-		logger.finest("OabaJobManager: " + scController == null ? "null"
-				: scController.toString());
-		assert scController != null;
-
 		ServerConfiguration retVal =
-			scController.findServerConfiguration(oabaJob.getParametersId());
+			cq.findServerConfiguration(oabaJob.getParametersId());
 		if (retVal == null) {
 			String msg0 =
 				"Unable to find server configuration for OABA jobId %d";
@@ -247,6 +200,40 @@ public class UrmUtil {
 			logger.severe(msg);
 			throw new IllegalArgumentException(msg);
 		}
+
+		return retVal;
+	}
+
+	public static BatchJobQueries getBatchJobQueriesBean(
+			APP_SERVER_VENDOR appServer, final String appName)
+			throws NamingException, RemoteException, CreateException {
+		Precondition.assertNonEmptyString("appName must be non-empty", appName);
+
+		final String beanName = "BatchJobQueriesBean";
+		final String viewClassName = BatchJobQueries.class.getName();
+		Object o = getModuleBean(appServer, appName, CMS_MODULE_NAME, beanName,
+				viewClassName);
+		BatchJobQueries retVal = (BatchJobQueries) o;
+		logger.finest("BatchJobQueries: " + retVal == null ? "null"
+				: retVal.toString());
+		assert retVal != null;
+
+		return retVal;
+	}
+
+	public static ConfigurationQueries getConfigurationQueriesBean(
+			APP_SERVER_VENDOR appServer, final String appName)
+			throws NamingException, RemoteException, CreateException {
+		Precondition.assertNonEmptyString("appName must be non-empty", appName);
+
+		final String beanName = "ConfigurationQueriesBean";
+		final String viewClassName = ConfigurationQueries.class.getName();
+		Object o = getModuleBean(appServer, appName, CMS_MODULE_NAME, beanName,
+				viewClassName);
+		ConfigurationQueries retVal = (ConfigurationQueries) o;
+		logger.finest("ConfigurationQueries: " + retVal == null ? "null"
+				: retVal.toString());
+		assert retVal != null;
 
 		return retVal;
 	}
