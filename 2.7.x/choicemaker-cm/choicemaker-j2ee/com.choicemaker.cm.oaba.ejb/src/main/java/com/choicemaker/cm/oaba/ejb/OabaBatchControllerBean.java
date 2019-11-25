@@ -6,8 +6,6 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 import javax.ejb.EJB;
-import javax.ejb.Local;
-import javax.ejb.Remote;
 import javax.ejb.Stateless;
 
 import com.choicemaker.cm.args.OabaParameters;
@@ -17,11 +15,8 @@ import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.oaba.api.OabaBatchController;
 import com.choicemaker.cm.oaba.api.OabaJobManager;
 import com.choicemaker.cm.oaba.api.ServerConfigurationException;
-import com.choicemaker.cm.oaba.api.remote.OabaBatchControllerRemote;
 
 @Stateless
-@Local(OabaBatchController.class)
-@Remote(OabaBatchControllerRemote.class)
 public class OabaBatchControllerBean implements OabaBatchController {
 
 	@EJB
