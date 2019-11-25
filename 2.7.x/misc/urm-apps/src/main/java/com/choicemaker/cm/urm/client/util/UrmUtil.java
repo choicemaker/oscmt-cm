@@ -16,14 +16,34 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import com.choicemaker.cm.args.OabaSettings;
+import com.choicemaker.cm.args.PersistableRecordSource;
+import com.choicemaker.cm.args.ServerConfiguration;
+import com.choicemaker.cm.args.TransitivityParameters;
+import com.choicemaker.cm.batch.api.BatchJob;
+import com.choicemaker.cm.oaba.api.OabaJobManager;
+import com.choicemaker.cm.oaba.api.OabaSettingsController;
+import com.choicemaker.cm.oaba.api.RecordSourceController;
+import com.choicemaker.cm.oaba.api.ServerConfigurationController;
+import com.choicemaker.cm.transitivity.api.TransitivityParametersController;
 import com.choicemaker.cm.urm.api.BatchMatchAnalyzer;
+import com.choicemaker.cms.api.BatchMatching;
 import com.choicemaker.util.Precondition;
+import com.mchange.lang.StringUtils;
 
 public class UrmUtil {
 
+	public static final String OABA_MODULE_NAME = "com.choicemaker.cm.oaba.ejb";
+
+	public static final String TRANSITIVITY_MODULE_NAME =
+		"com.choicemaker.cm.transitivity.ejb";
+
 	public static final String URM_MODULE_NAME = "com.choicemaker.cm.urm.ejb";
 
-	public static final APP_SERVER_VENDOR DEFAULT_APP_SERVER = APP_SERVER_VENDOR.JBOSS;
+	public static final String CMS_MODULE_NAME = "com.choicemaker.cms.ejb";
+
+	public static final APP_SERVER_VENDOR DEFAULT_APP_SERVER =
+		APP_SERVER_VENDOR.JBOSS;
 
 	public static final String DEFAULT_DISTINCT_NAME = "";
 
@@ -36,8 +56,8 @@ public class UrmUtil {
 	private static final Logger logger =
 		Logger.getLogger(UrmUtil.class.getName());
 
-	public static BatchMatchAnalyzer getBatchMatchAnalyzer(APP_SERVER_VENDOR appServer,
-			final String appName)
+	public static BatchMatchAnalyzer getBatchMatchAnalyzer(
+			APP_SERVER_VENDOR appServer, final String appName)
 			throws NamingException, RemoteException, CreateException {
 		Precondition.assertNonNullArgument("appServer must be non-null",
 				appServer);
@@ -45,7 +65,8 @@ public class UrmUtil {
 
 		final String beanName = "BatchMatchAnalyzerBean";
 		final String viewClassName = BatchMatchAnalyzer.class.getName();
-		Object o = getUrmBean(appServer, appName, beanName, viewClassName);
+		Object o = getModuleBean(appServer, appName, URM_MODULE_NAME, beanName,
+				viewClassName);
 		BatchMatchAnalyzer retVal = (BatchMatchAnalyzer) o;
 		logger.finest("BatchMatchAnalyzer: " + retVal == null ? "null"
 				: retVal.toString());
@@ -54,18 +75,196 @@ public class UrmUtil {
 		return retVal;
 	}
 
-	public static Object getUrmBean(APP_SERVER_VENDOR appServer, final String appName,
-			final String beanName, final String viewClassName)
+	public static BatchMatching getBatchMatching(APP_SERVER_VENDOR appServer,
+			final String appName)
+			throws NamingException, RemoteException, CreateException {
+		Precondition.assertNonNullArgument("appServer must be non-null",
+				appServer);
+		Precondition.assertNonEmptyString("appName must be non-empty", appName);
+
+		final String beanName = "BatchMatchingBean";
+		final String viewClassName = BatchMatching.class.getName();
+		Object o = getModuleBean(appServer, appName, CMS_MODULE_NAME, beanName,
+				viewClassName);
+		BatchMatching retVal = (BatchMatching) o;
+		logger.finest("BatchMatching: " + retVal == null ? "null"
+				: retVal.toString());
+
+		assert retVal != null;
+		return retVal;
+	}
+
+	public static BatchJob getOabaBatchJob(APP_SERVER_VENDOR appServer,
+			final String appName, long jobId)
+			throws NamingException, RemoteException, CreateException {
+		Precondition.assertNonNullArgument("appServer must be non-null",
+				appServer);
+		Precondition.assertNonEmptyString("appName must be non-empty", appName);
+
+		final String beanName = "OabaJobManagerBean";
+		final String viewClassName = OabaJobManager.class.getName();
+		Object o = getModuleBean(appServer, appName, OABA_MODULE_NAME, beanName,
+				viewClassName);
+		OabaJobManager oabaJM = (OabaJobManager) o;
+		logger.finest("OabaJobManager: " + oabaJM == null ? "null"
+				: oabaJM.toString());
+		assert oabaJM != null;
+
+		BatchJob retVal = oabaJM.findOabaJob(jobId);
+		if (retVal == null) {
+			String msg0 = "Unable to find OabaBatchJob for jobId %d";
+			String msg = String.format(msg0, jobId);
+			logger.severe(msg);
+			throw new IllegalArgumentException(msg);
+		}
+
+		assert retVal != null;
+		return retVal;
+	}
+
+	public static TransitivityParameters getTransitivityParameters(
+			APP_SERVER_VENDOR appServer, final String appName, long jobId)
+			throws NamingException, RemoteException, CreateException {
+		Precondition.assertNonNullArgument("appServer must be non-null",
+				appServer);
+		Precondition.assertNonEmptyString("appName must be non-empty", appName);
+
+		BatchJob oabaJob = getOabaBatchJob(appServer, appName, jobId);
+
+		final String beanName = "TransitivityParametersControllerBean";
+		final String viewClassName =
+			TransitivityParametersController.class.getName();
+		Object o = getModuleBean(appServer, appName, TRANSITIVITY_MODULE_NAME,
+				beanName, viewClassName);
+		TransitivityParametersController tpController =
+			(TransitivityParametersController) o;
+		logger.finest("OabaJobManager: " + tpController == null ? "null"
+				: tpController.toString());
+		assert tpController != null;
+
+		TransitivityParameters retVal =
+			tpController.findTransitivityParameters(oabaJob.getParametersId());
+		if (retVal == null) {
+			String msg0 =
+				"Unable to find transitivity parameters for OABA jobId %d";
+			String msg = String.format(msg0, jobId);
+			logger.severe(msg);
+			throw new IllegalArgumentException(msg);
+		}
+
+		return retVal;
+	}
+
+	public static OabaSettings getOabaSettings(APP_SERVER_VENDOR appServer,
+			final String appName, long jobId)
+			throws NamingException, RemoteException, CreateException {
+		Precondition.assertNonNullArgument("appServer must be non-null",
+				appServer);
+		Precondition.assertNonEmptyString("appName must be non-empty", appName);
+
+		BatchJob oabaJob = getOabaBatchJob(appServer, appName, jobId);
+
+		final String beanName = "OabaSettingsControllerBean";
+		final String viewClassName = OabaSettingsController.class.getName();
+		Object o = getModuleBean(appServer, appName, OABA_MODULE_NAME, beanName,
+				viewClassName);
+		OabaSettingsController osController = (OabaSettingsController) o;
+		logger.finest("OabaJobManager: " + osController == null ? "null"
+				: osController.toString());
+		assert osController != null;
+
+		OabaSettings retVal =
+			osController.findOabaSettings(oabaJob.getSettingsId());
+		if (retVal == null) {
+			String msg0 = "Unable to find OABA settings for OABA jobId %d";
+			String msg = String.format(msg0, jobId);
+			logger.severe(msg);
+			throw new IllegalArgumentException(msg);
+		}
+
+		return retVal;
+	}
+
+	public static PersistableRecordSource getPersistableRecordSource(
+			APP_SERVER_VENDOR appServer, final String appName, long jobId,
+			long rsId, String rsType)
+			throws NamingException, RemoteException, CreateException {
+		Precondition.assertNonNullArgument("appServer must be non-null",
+				appServer);
+		Precondition.assertNonEmptyString("appName must be non-empty", appName);
+		Precondition.assertNonEmptyString(
+				"Record source type must be non-empty", rsType);
+
+		PersistableRecordSource retVal = null;
+		if (rsId != 0 && StringUtils.nonEmptyString(rsType)) {
+			final String beanName = "PersistableRecordSourceControllerBean";
+			final String viewClassName = RecordSourceController.class.getName();
+			Object o = getModuleBean(appServer, appName, OABA_MODULE_NAME,
+					beanName, viewClassName);
+			RecordSourceController rsController = (RecordSourceController) o;
+			logger.finest("OabaJobManager: " + rsController == null ? "null"
+					: rsController.toString());
+			assert rsController != null;
+
+			retVal = rsController.find(rsId, rsType);
+		}
+		if (retVal == null) {
+			String msg0 =
+				"Unable to find record source for rsId %d and rsType '%s'";
+			String msg = String.format(msg0, rsId, rsType);
+			logger.warning(msg);
+		}
+
+		return retVal;
+	}
+
+	public static ServerConfiguration getServerConfiguration(
+			APP_SERVER_VENDOR appServer, final String appName, long jobId)
+			throws NamingException, RemoteException, CreateException {
+		Precondition.assertNonNullArgument("appServer must be non-null",
+				appServer);
+		Precondition.assertNonEmptyString("appName must be non-empty", appName);
+
+		BatchJob oabaJob = getOabaBatchJob(appServer, appName, jobId);
+
+		final String beanName = "ServerConfigurationControllerBean";
+		final String viewClassName =
+			ServerConfigurationController.class.getName();
+		Object o = getModuleBean(appServer, appName, OABA_MODULE_NAME, beanName,
+				viewClassName);
+		ServerConfigurationController scController =
+			(ServerConfigurationController) o;
+		logger.finest("OabaJobManager: " + scController == null ? "null"
+				: scController.toString());
+		assert scController != null;
+
+		ServerConfiguration retVal =
+			scController.findServerConfiguration(oabaJob.getParametersId());
+		if (retVal == null) {
+			String msg0 =
+				"Unable to find server configuration for OABA jobId %d";
+			String msg = String.format(msg0, jobId);
+			logger.severe(msg);
+			throw new IllegalArgumentException(msg);
+		}
+
+		return retVal;
+	}
+
+	public static Object getModuleBean(APP_SERVER_VENDOR appServer,
+			final String appName, final String moduleName, String beanName,
+			final String viewClassName)
 			throws NamingException, RemoteException, CreateException {
 		Precondition.assertNonEmptyString("appName must be non-empty", appName);
+		Precondition.assertNonEmptyString("module must be non-empty",
+				moduleName);
 		Precondition.assertNonEmptyString("beanName must be non-empty",
-				beanName);
+				moduleName);
 		Precondition.assertNonEmptyString("viewClassName must be non-empty",
 				viewClassName);
 
 		Context context = getInitialContext(appServer);
 
-		final String moduleName = URM_MODULE_NAME;
 		final String distinctName = DEFAULT_DISTINCT_NAME;
 		String jndiTemplate = "ejb:%s/%s/%s/%s!%s";
 		String jndiName = String.format(jndiTemplate, appName, moduleName,
