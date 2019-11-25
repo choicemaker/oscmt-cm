@@ -37,6 +37,7 @@ import com.choicemaker.cm.batch.api.BatchJobStatus;
 import com.choicemaker.cm.batch.api.BatchProcessingEvent;
 import com.choicemaker.cm.batch.api.EventPersistenceManager;
 import com.choicemaker.cm.batch.ejb.BatchJobFileUtils;
+import com.choicemaker.cm.batch.ejb.AbstractBatchJobManagerBean;
 import com.choicemaker.cm.oaba.api.OabaSettingsController;
 import com.choicemaker.cm.oaba.api.ServerConfigurationController;
 import com.choicemaker.cm.oaba.api.ServerConfigurationException;
@@ -51,7 +52,8 @@ import com.choicemaker.cm.transitivity.api.TransitivityParametersController;
  */
 @Stateless
 @TransactionAttribute(REQUIRED)
-public class TransitivityJobManagerBean implements TransitivityJobManager {
+public class TransitivityJobManagerBean extends AbstractBatchJobManagerBean
+		implements TransitivityJobManager {
 
 	private static final Logger logger =
 		Logger.getLogger(TransitivityJobManagerBean.class.getName());
@@ -265,20 +267,6 @@ public class TransitivityJobManagerBean implements TransitivityJobManager {
 	@Override
 	public void detach(BatchJob job) {
 		em.detach(job);
-	}
-
-	@TransactionAttribute(SUPPORTS)
-	@Override
-	public BatchJob findBatchJob(long id) {
-		BatchJob retVal = findTransitivityJob(id);
-		return retVal;
-	}
-
-	@TransactionAttribute(SUPPORTS)
-	@Override
-	public List<BatchJob> findAll() {
-		List<BatchJob> retVal = findAllTransitivityJobs();
-		return retVal;
 	}
 
 }

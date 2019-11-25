@@ -33,6 +33,9 @@ public interface BatchJobQueries {
 
 	// -- Offline Automated Blocking Algorithm (OABA) jobs
 
+	/** Find all transitivity jobs */
+	List<BatchJob> findAllOabaJobs();
+
 	/** Find an OABA batch job using the specified job id */
 	BatchJob findOabaJob(long id);
 

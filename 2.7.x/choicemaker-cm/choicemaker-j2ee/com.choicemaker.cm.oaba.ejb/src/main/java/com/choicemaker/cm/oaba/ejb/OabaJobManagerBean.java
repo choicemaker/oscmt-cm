@@ -7,8 +7,6 @@
  *******************************************************************************/
 package com.choicemaker.cm.oaba.ejb;
 
-import static com.choicemaker.cm.batch.ejb.BatchJobJPA.PN_BATCHJOB_FIND_BY_JOBID_P1;
-import static com.choicemaker.cm.batch.ejb.BatchJobJPA.QN_BATCHJOB_FIND_BY_JOBID;
 import static javax.ejb.TransactionAttributeType.REQUIRED;
 import static javax.ejb.TransactionAttributeType.SUPPORTS;
 
@@ -37,6 +35,7 @@ import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.BatchProcessingEvent;
 import com.choicemaker.cm.batch.api.EventPersistenceManager;
+import com.choicemaker.cm.batch.ejb.AbstractBatchJobManagerBean;
 import com.choicemaker.cm.batch.ejb.BatchJobFileUtils;
 import com.choicemaker.cm.oaba.api.OabaJobManager;
 import com.choicemaker.cm.oaba.api.OabaParametersController;
@@ -51,7 +50,8 @@ import com.choicemaker.cm.oaba.api.ServerConfigurationException;
  */
 @Stateless
 @TransactionAttribute(REQUIRED)
-public class OabaJobManagerBean implements OabaJobManager {
+public class OabaJobManagerBean extends AbstractBatchJobManagerBean
+		implements OabaJobManager {
 
 	private static final Logger logger =
 		Logger.getLogger(OabaJobManagerBean.class.getName());
@@ -202,7 +202,7 @@ public class OabaJobManagerBean implements OabaJobManager {
 
 	@TransactionAttribute(SUPPORTS)
 	@Override
-	public List<BatchJob> findAll() {
+	public List<BatchJob> findAllOabaJobs() {
 		Query query = em.createNamedQuery(OabaJobJPA.QN_OABAJOB_FIND_ALL);
 		@SuppressWarnings("unchecked")
 		List<BatchJob> retVal = query.getResultList();
@@ -231,26 +231,6 @@ public class OabaJobManagerBean implements OabaJobManager {
 	@Override
 	public void detach(BatchJob oabaJob) {
 		em.detach(oabaJob);
-	}
-
-	@TransactionAttribute(SUPPORTS)
-	@Override
-	public BatchJob findBatchJob(long id) {
-		Query query = em.createNamedQuery(QN_BATCHJOB_FIND_BY_JOBID);
-		query.setParameter(PN_BATCHJOB_FIND_BY_JOBID_P1, id);
-		@SuppressWarnings("unchecked")
-		List<BatchJob> entries = query.getResultList();
-		if (entries != null && entries.size() > 1) {
-			String msg = "Violates primary key constraint: " + entries.size();
-			logger.severe(msg);
-			throw new IllegalStateException(msg);
-		}
-		BatchJob retVal = null;
-		if (entries != null && !entries.isEmpty()) {
-			assert entries.size() == 1;
-			retVal = entries.get(0);
-		}
-		return retVal;
 	}
 
 }
