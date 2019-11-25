@@ -17,7 +17,7 @@ import com.choicemaker.cm.batch.api.BatchJobManager;
 import com.choicemaker.cm.oaba.api.ServerConfigurationException;
 
 /**
- * Creates and finds transitivity jobs.
+ * Creates, saves, deletes and finds transitivity jobs.
  */
 public interface TransitivityJobManager extends BatchJobManager {
 
