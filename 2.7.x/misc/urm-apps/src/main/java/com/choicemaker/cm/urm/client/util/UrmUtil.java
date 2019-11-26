@@ -25,6 +25,9 @@ import com.choicemaker.cm.urm.api.BatchMatchAnalyzer;
 import com.choicemaker.cms.api.BatchJobQueries;
 import com.choicemaker.cms.api.BatchMatching;
 import com.choicemaker.cms.api.ConfigurationQueries;
+import com.choicemaker.cms.api.remote.BatchJobQueriesRemote;
+import com.choicemaker.cms.api.remote.BatchMatchingRemote;
+import com.choicemaker.cms.api.remote.ConfigurationQueriesRemote;
 import com.choicemaker.util.Precondition;
 import com.choicemaker.util.StringUtils;
 
@@ -75,7 +78,7 @@ public class UrmUtil {
 		Precondition.assertNonEmptyString("appName must be non-empty", appName);
 
 		final String beanName = "BatchMatchingBean";
-		final String viewClassName = BatchMatching.class.getName();
+		final String viewClassName = BatchMatchingRemote.class.getName();
 		Object o = getModuleBean(appServer, appName, CMS_MODULE_NAME, beanName,
 				viewClassName);
 		BatchMatching retVal = (BatchMatching) o;
@@ -210,7 +213,7 @@ public class UrmUtil {
 		Precondition.assertNonEmptyString("appName must be non-empty", appName);
 
 		final String beanName = "BatchJobQueriesBean";
-		final String viewClassName = BatchJobQueries.class.getName();
+		final String viewClassName = BatchJobQueriesRemote.class.getName();
 		Object o = getModuleBean(appServer, appName, CMS_MODULE_NAME, beanName,
 				viewClassName);
 		BatchJobQueries retVal = (BatchJobQueries) o;
@@ -227,7 +230,7 @@ public class UrmUtil {
 		Precondition.assertNonEmptyString("appName must be non-empty", appName);
 
 		final String beanName = "ConfigurationQueriesBean";
-		final String viewClassName = ConfigurationQueries.class.getName();
+		final String viewClassName = ConfigurationQueriesRemote.class.getName();
 		Object o = getModuleBean(appServer, appName, CMS_MODULE_NAME, beanName,
 				viewClassName);
 		ConfigurationQueries retVal = (ConfigurationQueries) o;
