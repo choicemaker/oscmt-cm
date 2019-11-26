@@ -27,7 +27,7 @@ import com.choicemaker.cms.api.remote.ConfigurationQueriesRemote;
 @Stateless
 @Local(ConfigurationQueries.class)
 @Remote(ConfigurationQueriesRemote.class)
-public class ConfigurationQueriesBean implements ConfigurationQueries {
+public class ConfigurationQueriesBean implements ConfigurationQueriesRemote {
 
 	@EJB
 	private NamedConfigurationController ncController;

@@ -8,17 +8,16 @@ import javax.ejb.Remote;
 import javax.ejb.Stateless;
 
 import com.choicemaker.cm.batch.api.BatchJob;
-import com.choicemaker.cm.batch.api.BatchJobManager;
 import com.choicemaker.cm.oaba.api.OabaJobManager;
 import com.choicemaker.cm.transitivity.api.TransitivityJobManager;
 import com.choicemaker.cms.api.BatchJobQueries;
 import com.choicemaker.cms.api.UrmJobManager;
-import com.choicemaker.cms.api.remote.BatchMatchingRemote;
+import com.choicemaker.cms.api.remote.BatchJobQueriesRemote;
 
 @Stateless
 @Local(BatchJobQueries.class)
-@Remote(BatchMatchingRemote.class)
-public class BatchJobQueriesBean implements BatchJobQueries {
+@Remote(BatchJobQueriesRemote.class)
+public class BatchJobQueriesBean implements BatchJobQueriesRemote {
 
 	// private static final String SOURCE_CLASS =
 	// BatchJobQueriesBean.class.getSimpleName();
@@ -34,9 +33,6 @@ public class BatchJobQueriesBean implements BatchJobQueries {
 
 	@EJB
 	private OabaJobManager oabaJobManager;
-
-	@EJB
-	private BatchJobManager batchJobManager;
 
 	// Top-level URM jobs
 
@@ -88,12 +84,12 @@ public class BatchJobQueriesBean implements BatchJobQueries {
 
 	@Override
 	public List<BatchJob> findAll() {
-		return batchJobManager.findAll();
+		return urmJobManager.findAll();
 	}
 
 	@Override
 	public BatchJob findBatchJob(long id) {
-		return batchJobManager.findBatchJob(id);
+		return urmJobManager.findBatchJob(id);
 	}
 
 }
