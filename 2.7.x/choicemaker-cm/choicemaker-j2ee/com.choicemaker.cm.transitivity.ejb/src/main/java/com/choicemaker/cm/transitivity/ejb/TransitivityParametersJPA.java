@@ -8,10 +8,11 @@
 package com.choicemaker.cm.transitivity.ejb;
 
 import com.choicemaker.cm.oaba.ejb.AbstractParametersJPA;
+import com.choicemaker.cm.transitivity.pojo.TransitivityParametersBean;
 
 public interface TransitivityParametersJPA extends AbstractParametersJPA {
 
-	String DV_TRANS = "TRANS";
+	String DV_TRANS = TransitivityParametersBean.DV_TRANS;
 
 	/**
 	 * Name of the query that finds all persistent Transitivity instances
