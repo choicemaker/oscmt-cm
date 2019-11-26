@@ -152,9 +152,9 @@ public class TransitivityJobManagerBean extends AbstractBatchJobManagerBean
 		}
 
 		// Save the parameters
-		paramsController.save(params);
-		settingsController.save(settings);
-		serverManager.save(sc);
+		params = paramsController.save(params);
+		settings = settingsController.save(settings);
+		sc = serverManager.save(sc);
 
 		TransitivityJobEntity retVal = new TransitivityJobEntity(params,
 				settings, sc, batchJob, urmJob, externalID);
