@@ -12,7 +12,6 @@ import static com.choicemaker.cm.urm.client.app.UrmCommandLine.COMMAND_LINE;
 import static com.choicemaker.cm.urm.client.util.UrmUtil.getBatchMatching;
 import static com.choicemaker.cm.urm.client.util.UrmUtil.getOabaBatchJob;
 import static com.choicemaker.cm.urm.client.util.UrmUtil.getOabaSettings;
-import static com.choicemaker.cm.urm.client.util.UrmUtil.getPersistableRecordSource;
 import static com.choicemaker.cm.urm.client.util.UrmUtil.getServerConfiguration;
 import static com.choicemaker.cm.urm.client.util.UrmUtil.getTransitivityParameters;
 
@@ -29,12 +28,11 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 
 import com.choicemaker.cm.args.OabaSettings;
-import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.oaba.api.ServerConfigurationException;
-import com.choicemaker.cm.transitivity.ejb.TransitivityParametersEntity;
+import com.choicemaker.cm.transitivity.pojo.TransitivityParametersBean;
 import com.choicemaker.cms.api.BatchMatching;
 import com.choicemaker.util.Precondition;
 import com.choicemaker.util.StringUtils;
@@ -106,7 +104,12 @@ public class UrmBmaApp2 {
 					app.printErrors(stderr, up.errors);
 					app.printHelp(stderr);
 				} else {
-					app.recomputeTransitivity(up);
+					long jobId = app.recomputeTransitivity(up);
+					String msg0 =
+						"Started URM jobId %d to recompute "
+						+ "transitivity for OABA jobId %d";
+					String msg = String.format(msg0, jobId, up.jobId);
+					System.out.println(msg);
 				}
 			}
 		} catch (Exception e) {
@@ -160,22 +163,11 @@ public class UrmBmaApp2 {
 		final float highThreshold = getThresholdOverride(
 				defaultTp.getHighThreshold(), up, "HighThreshold");
 
-		PersistableRecordSource query =
-			getPersistableRecordSource(up.appServer, up.appName,
-					defaultTp.getQueryRsId(), defaultTp.getQueryRsType());
-
-		PersistableRecordSource reference = getPersistableRecordSource(
-				up.appServer, up.appName, defaultTp.getReferenceRsId(),
-				defaultTp.getReferenceRsType());
-
-		TransitivityParameters retVal = new TransitivityParametersEntity(
-				defaultTp.getModelConfigurationName(), lowThreshold,
-				highThreshold, defaultTp.getBlockingConfiguration(), query,
-				defaultTp.isQueryRsDeduplicated(),
-				defaultTp.getQueryRsDatabaseConfiguration(), reference,
-				defaultTp.getReferenceRsDatabaseConfiguration(),
-				defaultTp.getOabaLinkageType(),
-				defaultTp.getAnalysisResultFormat(), graph);
+		TransitivityParametersBean retVal =
+			new TransitivityParametersBean(defaultTp);
+		retVal.setGraph(graph);
+		retVal.setLowThreshold(lowThreshold);
+		retVal.setHighThreshold(highThreshold);
 
 		assert retVal != null;
 		return retVal;

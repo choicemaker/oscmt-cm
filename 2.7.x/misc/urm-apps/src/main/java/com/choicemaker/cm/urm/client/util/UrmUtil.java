@@ -156,32 +156,32 @@ public class UrmUtil {
 		return retVal;
 	}
 
-	public static PersistableRecordSource getPersistableRecordSource(
-			APP_SERVER_VENDOR appServer, final String appName, long rsId,
-			String rsType)
-			throws NamingException, RemoteException, CreateException {
-		Precondition.assertNonNullArgument("appServer must be non-null",
-				appServer);
-		Precondition.assertNonEmptyString("appName must be non-empty", appName);
-		Precondition.assertNonEmptyString(
-				"Record source type must be non-empty", rsType);
-
-		ConfigurationQueries cq =
-			getConfigurationQueriesBean(appServer, appName);
-
-		PersistableRecordSource retVal = null;
-		if (rsId != 0 && StringUtils.nonEmptyString(rsType)) {
-			retVal = cq.findPersistableSqlRecordSource(rsId, rsType);
-		}
-		if (retVal == null) {
-			String msg0 =
-				"Unable to find record source for rsId %d and rsType '%s'";
-			String msg = String.format(msg0, rsId, rsType);
-			logger.warning(msg);
-		}
-
-		return retVal;
-	}
+//	public static PersistableRecordSource getPersistableRecordSource(
+//			APP_SERVER_VENDOR appServer, final String appName, long rsId,
+//			String rsType)
+//			throws NamingException, RemoteException, CreateException {
+//		Precondition.assertNonNullArgument("appServer must be non-null",
+//				appServer);
+//		Precondition.assertNonEmptyString("appName must be non-empty", appName);
+//		Precondition.assertNonEmptyString(
+//				"Record source type must be non-empty", rsType);
+//
+//		ConfigurationQueries cq =
+//			getConfigurationQueriesBean(appServer, appName);
+//
+//		PersistableRecordSource retVal = null;
+//		if (rsId != 0 && StringUtils.nonEmptyString(rsType)) {
+//			retVal = cq.findPersistableSqlRecordSource(rsId, rsType);
+//		}
+//		if (retVal == null) {
+//			String msg0 =
+//				"Unable to find record source for rsId %d and rsType '%s'";
+//			String msg = String.format(msg0, rsId, rsType);
+//			logger.warning(msg);
+//		}
+//
+//		return retVal;
+//	}
 
 	public static ServerConfiguration getServerConfiguration(
 			APP_SERVER_VENDOR appServer, final String appName, long jobId)
@@ -195,7 +195,7 @@ public class UrmUtil {
 		BatchJob oabaJob = getOabaBatchJob(appServer, appName, jobId);
 
 		ServerConfiguration retVal =
-			cq.findServerConfiguration(oabaJob.getParametersId());
+			cq.findServerConfiguration(oabaJob.getServerId());
 		if (retVal == null) {
 			String msg0 =
 				"Unable to find server configuration for OABA jobId %d";
