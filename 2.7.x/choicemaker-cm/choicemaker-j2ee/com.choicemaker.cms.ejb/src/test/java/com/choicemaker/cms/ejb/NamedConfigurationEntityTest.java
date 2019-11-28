@@ -95,9 +95,9 @@ public class NamedConfigurationEntityTest {
 				randomInt(DEFAULT_OABAINTERVAL));
 		setProperty(nc0, int.class, "ServerMaxThreads",
 				randomInt(DEFAULT_SERVERMAXTHREADS));
-		setProperty(nc0, int.class, "ServerMaxChunkSize",
+		setProperty(nc0, int.class, "ServerMaxFileEntries",
 				randomInt(DEFAULT_SERVERMAXFILEENTRIES));
-		setProperty(nc0, int.class, "ServerMaxChunkCount",
+		setProperty(nc0, int.class, "ServerMaxFilesCount",
 				randomInt(DEFAULT_SERVERMAXFILESCOUNT));
 		setProperty(nc0, String.class, "ServerFileURI", randomString());
 
@@ -302,13 +302,13 @@ public class NamedConfigurationEntityTest {
 	@Test
 	public void testServerMaxChunkSize() {
 		testProperty(new NamedConfigurationEntity(), int.class,
-				"ServerMaxChunkSize", randomInt(DEFAULT_SERVERMAXFILEENTRIES));
+				"ServerMaxFileEntries", randomInt(DEFAULT_SERVERMAXFILEENTRIES));
 	}
 
 	@Test
 	public void testServerMaxChunkCount() {
 		testProperty(new NamedConfigurationEntity(), int.class,
-				"ServerMaxChunkCount", randomInt(DEFAULT_SERVERMAXFILESCOUNT));
+				"ServerMaxFilesCount", randomInt(DEFAULT_SERVERMAXFILESCOUNT));
 	}
 
 	@Test
