@@ -11,14 +11,21 @@ import java.util.UUID;
 
 import com.choicemaker.client.api.GraphPropertyBean;
 import com.choicemaker.client.api.IGraphProperty;
+import com.choicemaker.client.api.WellKnownGraphProperties;
 import com.choicemaker.cm.args.AnalysisResultFormat;
 import com.choicemaker.cm.args.OabaLinkageType;
+import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.TransitivityParameters;
 
 public class TransitivityParametersBean implements TransitivityParameters {
 
-	// Copied from TransitivityParametersJPA
 	public static final String DV_TRANS = "TRANS";
+
+	public static final String DEFAULT_ANALYSIS_RESULT_FORMAT =
+		AnalysisResultFormat.SORT_BY_HOLD_GROUP.name();
+
+	public static final String DEFAULT_GRAPH_PROPERTY =
+		WellKnownGraphProperties.GPN_SCM;
 
 	private static final long serialVersionUID = 271L;
 
@@ -58,10 +65,10 @@ public class TransitivityParametersBean implements TransitivityParameters {
 
 	protected String uuid = UUID.randomUUID().toString();
 
-	public TransitivityParametersBean(String modelConfigurationName, float lowThreshold,
-			float highThreshold, String blocking, long sId, String sType,
-			boolean qIsDeduplicated, String queryRsDbConfig, Long mId,
-			String mType, String refRsDbConfig, String taskType,
+	public TransitivityParametersBean(String modelConfigurationName,
+			float lowThreshold, float highThreshold, String blocking, long sId,
+			String sType, boolean qIsDeduplicated, String queryRsDbConfig,
+			Long mId, String mType, String refRsDbConfig, String taskType,
 			String format, String graph) {
 
 		this.type = DV_TRANS;
@@ -89,8 +96,21 @@ public class TransitivityParametersBean implements TransitivityParameters {
 				tp.getQueryRsDatabaseConfiguration(), tp.getReferenceRsId(),
 				tp.getReferenceRsType(),
 				tp.getReferenceRsDatabaseConfiguration(),
-				tp.getOabaLinkageType().name(), tp.getAnalysisResultFormat().name(),
+				tp.getOabaLinkageType().name(),
+				tp.getAnalysisResultFormat().name(),
 				tp.getGraphProperty().getName());
+	}
+
+	public TransitivityParametersBean(OabaParameters op) {
+		this(op.getModelConfigurationName(), op.getLowThreshold(),
+				op.getHighThreshold(), op.getBlockingConfiguration(),
+				op.getQueryRsId(), op.getQueryRsType(),
+				op.isQueryRsDeduplicated(),
+				op.getQueryRsDatabaseConfiguration(), op.getReferenceRsId(),
+				op.getReferenceRsType(),
+				op.getReferenceRsDatabaseConfiguration(),
+				op.getOabaLinkageType().name(), DEFAULT_ANALYSIS_RESULT_FORMAT,
+				DEFAULT_GRAPH_PROPERTY);
 	}
 
 	public AnalysisResultFormat getAnalysisResultFormat() {
