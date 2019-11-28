@@ -71,7 +71,7 @@ public class CombinedParametersController implements OabaParametersController {
 					SOURCE, METHOD, id);
 			logger.fine(msg);
 		} else {
-			retVal = t.findTransitivityParametersByBatchJobId(id);
+			retVal = t.findTransitivityParameters(id);
 			if (retVal != null) {
 				String msg = String.format(
 						"%s.%s: transivity parameters found for parameter id %d",
