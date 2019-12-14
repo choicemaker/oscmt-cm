@@ -63,7 +63,7 @@ public class MessageBeanUtils {
 		jobManager.save(batchJob);
 
 		final String _clearResources =
-			propController.getJobProperty(batchJob, PN_CLEAR_RESOURCES);
+			propController.getOperationalPropertyValue(batchJob, PN_CLEAR_RESOURCES);
 		boolean clearResources = Boolean.valueOf(_clearResources);
 
 		if (clearResources) {

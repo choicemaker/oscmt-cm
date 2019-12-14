@@ -83,8 +83,8 @@ public class CompositeTextSerializer extends TextSerializer
 	 * @throws IOException
 	 */
 	@Override
-	public void serialize(TransitivityResult result, String fileBase,
-			int maxFileSize) throws IOException {
+	public void serialize(final TransitivityResult result, final String fileBase,
+			final int maxFileSize) throws IOException {
 		if (result == null) {
 			throw new IllegalArgumentException("null transivity result");
 		}
@@ -120,22 +120,25 @@ public class CompositeTextSerializer extends TextSerializer
 
 		// third, write them out.
 		int s = recs.length;
+		int fileCount = 0;
 		for (int i = 0; i < s; i++) {
 			TransitivityResultSerializer.Record r =
 				(TransitivityResultSerializer.Record) recs[i];
 			writer.write(printRecord(r));
+			++fileCount;
 			if (i % INTERVAL == 0) {
 				writer.flush();
-				if (FileUtils.isFull(fileBase, fileExt, currentIndex,
-						maxFileSize)) {
-					writer.close();
-					currentIndex++;
-					final String fn2 =
-						FileUtils.getFileName(fileBase, fileExt, currentIndex);
-					setCurrentFileName(fn2);
-					notify(indexedFileObserver,currentIndex,fn2);
-					writer = new FileWriter(getCurrentFileName(), false);
-				}
+			}
+			if (fileCount >= maxFileSize) {
+				writer.flush();
+				writer.close();
+				currentIndex++;
+				final String fn2 =
+					FileUtils.getFileName(fileBase, fileExt, currentIndex);
+				setCurrentFileName(fn2);
+				fileCount = 0;
+				notify(indexedFileObserver,currentIndex,fn2);
+				writer = new FileWriter(getCurrentFileName(), false);
 			}
 		} // end for
 

@@ -7,12 +7,18 @@
  *******************************************************************************/
 package com.choicemaker.cm.oaba.api;
 
+import java.util.List;
+
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.BatchJobManager;
 
+/**
+ * Creates, saves, deletes and finds Offline Automated Batch Algorithm (OABA)
+ * jobs.
+ */
 public interface OabaJobManager extends BatchJobManager {
 
 	BatchJob createPersistentOabaJob(String externalID, OabaParameters params,
@@ -26,6 +32,6 @@ public interface OabaJobManager extends BatchJobManager {
 
 	BatchJob findOabaJob(long id);
 
-	// List<BatchJob> findAllOabaJobs();
+	List<BatchJob> findAllOabaJobs();
 
 }

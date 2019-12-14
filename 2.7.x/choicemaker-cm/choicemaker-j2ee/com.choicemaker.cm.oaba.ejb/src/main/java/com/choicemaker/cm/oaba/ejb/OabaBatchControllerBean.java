@@ -91,4 +91,9 @@ public class OabaBatchControllerBean implements OabaBatchController {
 		oabaProcessController.restartBatchJob(batchJob);
 	}
 
+	@Override
+	public List<BatchJob> findAllOabaJobs() {
+		return oabaJobManager.findAllOabaJobs();
+	}
+
 }

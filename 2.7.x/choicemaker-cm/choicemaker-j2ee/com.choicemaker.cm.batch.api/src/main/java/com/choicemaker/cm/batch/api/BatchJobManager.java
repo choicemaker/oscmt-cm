@@ -9,6 +9,10 @@ package com.choicemaker.cm.batch.api;
 
 import java.util.List;
 
+/*
+ * Saves, deletes and finds batch jobs. (Job creation is defined by derived
+ * interfaces.)
+ */
 public interface BatchJobManager {
 
 	void delete(BatchJob batchJob);

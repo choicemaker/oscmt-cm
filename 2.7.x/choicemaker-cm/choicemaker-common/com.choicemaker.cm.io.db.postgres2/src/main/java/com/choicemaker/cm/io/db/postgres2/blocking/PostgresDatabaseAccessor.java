@@ -148,8 +148,6 @@ public class PostgresDatabaseAccessor<T extends Comparable<T>>
 		try {
 			query = getQuery(getProperties(), blocker, dbr);
 			connection = getDataSource().getConnection();
-			// connection.setAutoCommit(false); // 2015-04-01a EJB3 CHANGE
-			// rphall
 			stmt = connection.createStatement();
 			stmt.setFetchSize(100);
 			logger.fine(query);
@@ -177,7 +175,6 @@ public class PostgresDatabaseAccessor<T extends Comparable<T>>
 				}
 				isResultSet = stmt.getMoreResults();
 			} while (isResultSet || count != -1);
-			// END BUGFIX
 			rs.setFetchSize(100);
 			dbr.open(rs, stmt);
 		} catch (SQLException ex) {

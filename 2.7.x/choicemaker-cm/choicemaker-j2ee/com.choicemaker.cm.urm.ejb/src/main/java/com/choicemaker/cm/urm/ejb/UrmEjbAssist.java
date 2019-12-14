@@ -28,6 +28,8 @@ import com.choicemaker.client.api.MatchGroup;
 import com.choicemaker.client.api.MergeGroup;
 import com.choicemaker.client.api.QueryCandidatePair;
 import com.choicemaker.client.api.TransitiveGroup;
+import com.choicemaker.client.api.WellKnownGraphProperties;
+import com.choicemaker.cm.args.AnalysisResultFormat;
 import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.BatchJobStatus;
@@ -376,20 +378,6 @@ class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 		return retVal;
 	}
 
-	public NamedConfiguration createCustomizedConfiguration(
-			UrmConfigurationAdapter adapter,
-			NamedConfigurationController ncController, DbRecordCollection mRc,
-			String modelName, float differThreshold, float matchThreshold,
-			/* FIXME maxNumMatches */int FIXME_unused) throws ConfigException {
-
-		final IRecordCollection qRc = null;
-		final int /* FIXME maxNumMatches */ FIXME_oabaMaxSingle = 0;
-		NamedConfiguration retVal = createCustomizedConfiguration(adapter,
-				ncController, qRc, mRc, modelName, differThreshold,
-				matchThreshold, FIXME_oabaMaxSingle);
-		return retVal;
-	}
-
 	// public CompositeMatchScore createCompositeMatchScoreFromMergeGroup(
 	// MergeGroup<T> mergeGroup) {
 	// List<MatchScore> list = new ArrayList<>();
@@ -400,12 +388,46 @@ class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 	// CompositeMatchScore retVal = new CompositeMatchScore(list);
 	// return retVal;
 	// }
+	
+	public static final LinkCriteria DEFAULT_LINK_CRITERIA =
+			new LinkCriteria(WellKnownGraphProperties.GP_SCM, true);
+	
+	public static final AnalysisResultFormat DEFAULT_ANALYSIS_RESULT_FORMAT = 
+			AnalysisResultFormat.SORT_BY_HOLD_GROUP;
+
+	public NamedConfiguration createCustomizedConfiguration(
+			UrmConfigurationAdapter adapter,
+			NamedConfigurationController ncController, DbRecordCollection mRc,
+			String modelName, float differThreshold, float matchThreshold,
+			int oabaMaxSingle) throws ConfigException {
+
+		final IRecordCollection qRc = null;
+		NamedConfiguration retVal = createCustomizedConfiguration(adapter,
+				ncController, qRc, mRc, modelName, differThreshold,
+				matchThreshold, oabaMaxSingle, DEFAULT_LINK_CRITERIA,
+				DEFAULT_ANALYSIS_RESULT_FORMAT);
+		return retVal;
+	}
 
 	public NamedConfiguration createCustomizedConfiguration(
 			UrmConfigurationAdapter adapter,
 			NamedConfigurationController ncController, IRecordCollection qRc,
 			RefRecordCollection mRc, String modelName, float differThreshold,
-			float matchThreshold, /* FIXME maxNumMatches */int FIXME_unused)
+			float matchThreshold, int oabaMaxSingle)
+			throws ConfigException {
+		NamedConfiguration retVal = createCustomizedConfiguration(adapter,
+				ncController, qRc, mRc, modelName, differThreshold,
+				matchThreshold, oabaMaxSingle, DEFAULT_LINK_CRITERIA,
+				DEFAULT_ANALYSIS_RESULT_FORMAT);
+		return retVal;
+	}
+
+	public NamedConfiguration createCustomizedConfiguration(
+			UrmConfigurationAdapter adapter,
+			NamedConfigurationController ncController, IRecordCollection qRc,
+			RefRecordCollection mRc, String modelName, float differThreshold,
+			float matchThreshold, int oabaMaxSingle, LinkCriteria c,
+			AnalysisResultFormat serializationFormat)
 			throws ConfigException {
 
 		assert adapter != null;
@@ -444,7 +466,9 @@ class UrmEjbAssist<T extends Comparable<T> & Serializable> {
 		NamedConfigurationEntity retVal = new NamedConfigurationEntity(nc);
 		retVal.setLowThreshold(differThreshold);
 		retVal.setHighThreshold(matchThreshold);
-		retVal.setOabaMaxSingle(/* FIXME maxNumMatches */ FIXME_unused);
+		retVal.setOabaMaxSingle(oabaMaxSingle);
+		retVal.setTransitivityGraph(c.getGraphPropType().getName());
+		retVal.setTransitivityFormat(serializationFormat.getDisplayName());
 
 		String jndiQuerySource = null;
 		if (qRc instanceof DbRecordCollection) {

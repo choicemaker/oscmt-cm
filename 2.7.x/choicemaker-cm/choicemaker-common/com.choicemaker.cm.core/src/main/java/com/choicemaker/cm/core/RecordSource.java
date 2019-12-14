@@ -8,6 +8,7 @@
 package com.choicemaker.cm.core;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 /**
  * Source of records.
@@ -15,12 +16,12 @@ import java.io.IOException;
  * @author    Martin Buechi
  */
 
-public interface RecordSource extends Source {
+public interface RecordSource<T extends Comparable<T> & Serializable> extends Source {
 	/**
 	 * Returns the next record.
 	 *
 	 * @return  The next record.
 	 * @throws  IOException  if there is a problem retrieving the data.
 	 */
-	Record getNext() throws IOException;
+	Record<T> getNext() throws IOException;
 }

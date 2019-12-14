@@ -249,7 +249,6 @@ public class LogPartitionerApp {
 		formatter.printHelp(pw, formatter.getWidth(), COMMAND_LINE, header,
 				options, formatter.getLeftPadding(),
 				formatter.getDescPadding(), footer, autoUsage);
-		;
 		pw.println();
 	}
 

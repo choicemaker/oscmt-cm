@@ -47,23 +47,23 @@ public class C3P0_DataSource {
 	public static final int DEFAULT_CHECKOUT_TIME =
 		DEFAULT_ACQUIRE_RETRY_ATTEMPTS * DEFAULT_AQUIRE_RETRY_DELAY;
 
-	public static final String PN_POOLNAME = "poolName";
-	public static final String PN_MODELNAME = "modelName";
-	public static final String PN_DATABASECONFIGURATION =
-		"databaseConfiguration";
-	public static final String PN_SQLSELECTION = "sqlSelection";
-
-	public static final String PN_JDBC_POOLGROWBLOCK =
-		"com.microsoft.sqlserver.jdbc.SQLServerDriver";
-	public static final String PN_JDBC_CREATEWAITTIME = "jdbcCreateWaitTime";
-
-	public static final String DEFAULT_JDBC_DRIVER = "jdbcDriver";
+	public static final String DEFAULT_JDBC_DRIVER =
+			"com.microsoft.sqlserver.jdbc.SQLServerDriver";
 	public static final String DEFAULT_JDBC_POOLINITIALSIZE = "1";
 	public static final String DEFAULT_JDBC_POOLMAXSIZE = "1";
 	public static final String DEFAULT_JDBC_POOLGROWBLOCK = "1";
 	public static final String DEFAULT_JDBC_CREATEWAITTIME =
 		String.valueOf(DEFAULT_CHECKOUT_TIME);
 	public static final String DEFAULT_CONNECTION_AUTOCOMMIT = "false";
+
+	public static final String PN_JDBC_CREATEWAITTIME = "jdbcCreateWaitTime";
+	public static final String PN_JDBC_DRIVER = "jdbcDriver";
+	public static final String PN_JDBC_POOLGROWBLOCK = "growBlock";
+	public static final String PN_POOLNAME = "poolName";
+	public static final String PN_MODELNAME = "modelName";
+	public static final String PN_DATABASECONFIGURATION =
+		"databaseConfiguration";
+	public static final String PN_SQLSELECTION = "sqlSelection";
 
 	private static Logger logger =
 		Logger.getLogger(C3P0_DataSource.class.getName());

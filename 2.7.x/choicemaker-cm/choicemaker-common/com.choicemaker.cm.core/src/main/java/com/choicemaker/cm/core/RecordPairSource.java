@@ -8,18 +8,21 @@
 package com.choicemaker.cm.core;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 /**
  * Source of record pairs.
  *
- * @author    Martin Buechi
+ * @author Martin Buechi
  */
-public interface RecordPairSource extends Source {
+public interface RecordPairSource<T extends Comparable<T> & Serializable>
+		extends Source {
 	/**
 	 * Returns the next record pair.
 	 *
-	 * @return  The next record pair.
-	 * @throws  IOException  if there is a problem retrieving the data.
+	 * @return The next record pair.
+	 * @throws IOException
+	 *             if there is a problem retrieving the data.
 	 */
-	ImmutableRecordPair getNext() throws IOException;
+	ImmutableRecordPair<T> getNext() throws IOException;
 }

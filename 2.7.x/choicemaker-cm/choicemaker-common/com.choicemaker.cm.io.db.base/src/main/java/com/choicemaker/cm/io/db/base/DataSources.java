@@ -14,7 +14,7 @@ import java.util.Map;
 import javax.sql.DataSource;
 
 public class DataSources {
-	private static Map sources = new HashMap();
+	private static Map<String, DataSource> sources = new HashMap<>();
 
 	public static void addDataSource(String name, DataSource ds) {
 		sources.put(name, ds);
@@ -24,7 +24,7 @@ public class DataSources {
 		return (DataSource) sources.get(name);
 	}
 
-	public static Collection getDataSourceNames() {
+	public static Collection<String> getDataSourceNames() {
 		return sources.keySet();
 	}
 }

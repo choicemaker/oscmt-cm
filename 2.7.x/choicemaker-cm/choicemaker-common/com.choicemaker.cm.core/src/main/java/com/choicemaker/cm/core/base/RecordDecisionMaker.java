@@ -105,12 +105,12 @@ public class RecordDecisionMaker {
 		List<Match> matches = new ArrayList<>();
 		try {
 			src.open();
-			Evaluator eval = model.getEvaluator();
-			ClueSet cs = model.getClueSet();
-			boolean[] toEval = model.getCluesToEvaluate();
+			final Evaluator eval = model.getEvaluator();
+			final boolean[] toEval = model.getCluesToEvaluate();
 			while (src.hasNext()) {
 				++numMatched;
 				Record m = src.getNext();
+				ClueSet cs = model.getClueSet();
 				ActiveClues a = cs.getActiveClues(q, m, toEval);
 				float p = eval.getProbability(a);
 				Decision d = eval.getDecision(a, p, lt, ut);

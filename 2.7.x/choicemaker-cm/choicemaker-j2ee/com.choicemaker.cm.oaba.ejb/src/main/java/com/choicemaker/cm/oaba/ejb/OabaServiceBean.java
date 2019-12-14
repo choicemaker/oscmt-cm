@@ -280,7 +280,7 @@ public class OabaServiceBean implements OabaService {
 		BatchJob job = jobManager.findBatchJob(jobID);
 
 		final String _clearResources =
-			propController.getJobProperty(job, PN_CLEAR_RESOURCES);
+			propController.getOperationalPropertyValue(job, PN_CLEAR_RESOURCES);
 		boolean clearResources = Boolean.valueOf(_clearResources);
 
 		boolean isCompleted = job.getStarted().equals(BatchJobStatus.COMPLETED);
@@ -335,7 +335,7 @@ public class OabaServiceBean implements OabaService {
 			throw new IllegalStateException("The job has not completed.");
 		} else {
 			final String cachedResultsFileName = propController
-					.getJobProperty(batchJob, PN_OABA_CACHED_RESULTS_FILE);
+					.getOperationalPropertyValue(batchJob, PN_OABA_CACHED_RESULTS_FILE);
 			logger.info("Cached OABA results file: " + cachedResultsFileName);
 			mrs = new MatchRecord2Source(cachedResultsFileName,
 					EXTERNAL_DATA_FORMAT.STRING);

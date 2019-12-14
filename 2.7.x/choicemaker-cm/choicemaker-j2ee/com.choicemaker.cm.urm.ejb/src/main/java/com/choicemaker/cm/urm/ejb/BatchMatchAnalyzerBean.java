@@ -9,7 +9,11 @@ package com.choicemaker.cm.urm.ejb;
 
 import java.net.URISyntaxException;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -25,8 +29,15 @@ import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.BatchJobRigor;
+import com.choicemaker.cm.batch.api.BatchJobStatus;
+import com.choicemaker.cm.batch.api.IndexedPropertyController;
+import com.choicemaker.cm.oaba.api.MatchPairInfoBean;
 import com.choicemaker.cm.oaba.api.ServerConfigurationException;
+import com.choicemaker.cm.oaba.ejb.OabaJobJPA;
+import com.choicemaker.cm.transitivity.ejb.TransitiveGroupInfoBean;
+import com.choicemaker.cm.transitivity.ejb.TransitivityJobJPA;
 import com.choicemaker.cm.urm.api.BatchMatchAnalyzer;
+import com.choicemaker.cm.urm.api.RESULT_FILE_TYPE;
 import com.choicemaker.cm.urm.api.UrmConfigurationAdapter;
 import com.choicemaker.cm.urm.base.IRecordCollection;
 import com.choicemaker.cm.urm.base.JobStatus;
@@ -43,6 +54,7 @@ import com.choicemaker.cms.api.NamedConfigurationController;
 import com.choicemaker.cms.api.UrmBatchController;
 import com.choicemaker.cms.ejb.NamedConfigConversion;
 import com.choicemaker.util.Precondition;
+import com.choicemaker.util.StringUtils;
 
 /**
  * Delegates to CMS BatchMatching bean.
@@ -67,6 +79,9 @@ public class BatchMatchAnalyzerBean implements BatchMatchAnalyzer {
 
 	@EJB(lookup = "java:app/com.choicemaker.cms.ejb/UrmBatchControllerBean!com.choicemaker.cms.api.UrmBatchController")
 	private UrmBatchController urmBatchController;
+
+	@EJB(lookup = "java:app/com.choicemaker.cm.batch.ejb/IndexedPropertyControllerBean!com.choicemaker.cm.batch.api.IndexedPropertyController")
+	private IndexedPropertyController idxPropController;
 
 	private UrmEjbAssist<?> assist = new UrmEjbAssist<>();
 
@@ -97,6 +112,86 @@ public class BatchMatchAnalyzerBean implements BatchMatchAnalyzer {
 			ConfigException, CmRuntimeException, RemoteException {
 		BatchJob urmJob = urmBatchController.findUrmJob(jobID);
 		JobStatus retVal = UrmEjbAssist.getJobStatus(urmJob);
+		return retVal;
+	}
+
+	@Override
+	public List<String> getResultFileNames(long jobID, RESULT_FILE_TYPE type)
+			throws CmRuntimeException {
+		Precondition.assertNonNullArgument("result file type can not be null",
+				type);
+
+		String jpaType;
+		String propertyName;
+		switch (type) {
+		case MATCH:
+			jpaType = OabaJobJPA.DISCRIMINATOR_VALUE;
+			propertyName = MatchPairInfoBean.PN_OABA_MATCH_RESULT_FILE;
+			break;
+		case TRANSMATCH:
+			jpaType = TransitivityJobJPA.DISCRIMINATOR_VALUE;
+			propertyName = TransitiveGroupInfoBean.PN_TRANSMATCH_PAIR_FILE;
+			break;
+		case TRANSGROUP:
+			jpaType = TransitivityJobJPA.DISCRIMINATOR_VALUE;
+			propertyName = TransitiveGroupInfoBean.PN_TRANSMATCH_GROUP_FILE;
+			break;
+		default:
+			throw new Error("unexpected result file type: " + type);
+		}
+		assert StringUtils.nonEmptyString(jpaType);
+		assert StringUtils.nonEmptyString(propertyName);
+
+		List<BatchJob> targetJobs = new ArrayList<>();
+		List<BatchJob> childJobs =
+			urmBatchController.findAllLinkedByUrmId(jobID);
+		for (BatchJob childJob : childJobs) {
+			String sType = childJob.getBatchJobType();
+			if (jpaType.equals(sType)) {
+				targetJobs.add(childJob);
+			}
+		}
+
+		if (targetJobs.size() == 0) {
+			String msg0 = "No %s jobs associated with URM job id '%d'";
+			String msg = String.format(msg0, type, jobID);
+			throw new CmRuntimeException(msg);
+		} else if (targetJobs.size() > 1) {
+			List<Long> targetJobIds = new ArrayList<>();
+			for (BatchJob targetJob : targetJobs) {
+				long targetJobId = targetJob.getId();
+				targetJobIds.add(targetJobId);
+			}
+			String msg0 =
+				"Multiple %s jobs (%s) associated with URM job id '%d'";
+			String msg =
+				String.format(msg0, type, targetJobIds.toString(), jobID);
+			throw new CmRuntimeException(msg);
+		}
+		assert targetJobs.size() == 1;
+
+		final BatchJob targetJob = targetJobs.get(0);
+		final long targetJobId = targetJob.getId();
+		final BatchJobStatus targetStatus = targetJob.getStatus();
+		if (BatchJobStatus.COMPLETED != targetStatus) {
+			String msg0 = "%s job %d status ('%s') is not COMPLETED";
+			String msg = String.format(msg0, type, targetJobId, targetStatus);
+			throw new CmRuntimeException(msg);
+		}
+
+		Map<Integer, String> fileNames =
+			idxPropController.findIndexedProperties(targetJob, propertyName);
+		Object[] oIndices = fileNames.keySet().toArray();
+		Integer[] indices =
+			Arrays.copyOf(oIndices, oIndices.length, Integer[].class);
+		Arrays.sort(indices);
+
+		List<String> retVal = new ArrayList<>();
+		for (int index : indices) {
+			String fileName = fileNames.get(index);
+			retVal.add(fileName);
+		}
+
 		return retVal;
 	}
 
@@ -168,7 +263,8 @@ public class BatchMatchAnalyzerBean implements BatchMatchAnalyzer {
 
 		NamedConfiguration cmConf =
 			assist.createCustomizedConfiguration(adapter, ncController, qRc,
-					mRc, modelName, differThreshold, matchThreshold, maxSingle);
+					mRc, modelName, differThreshold, matchThreshold, maxSingle,
+					c, serializationFormat);
 		OabaLinkageType task = assist.computeMatchingTask(qRc, mRc, cmConf);
 		boolean isLinkage = OabaLinkageType.isLinkage(task);
 

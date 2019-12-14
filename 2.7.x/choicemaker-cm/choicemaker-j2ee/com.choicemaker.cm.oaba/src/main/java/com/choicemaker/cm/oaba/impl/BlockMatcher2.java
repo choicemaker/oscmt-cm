@@ -213,9 +213,6 @@ public class BlockMatcher2<T extends Comparable<T>> implements
 
 		List<MatchRecord2<T>> list = new ArrayList<>();
 
-		ClueSet clueSet = model.getClueSet();
-		boolean[] enabledClues = model.getCluesToEvaluate();
-
 		List<T> stageList = cg.getStagingIDs();
 		List<T> masterList = cg.getMasterIDs();
 
@@ -235,8 +232,7 @@ public class BlockMatcher2<T extends Comparable<T>> implements
 				}
 
 				MatchRecord2<T> mr =
-					compareRecords(clueSet, enabledClues, model, q, m, true,
-							low, high);
+					compareRecords(model, q, m, true, low, high);
 				if (mr != null) {
 					list.add(mr);
 					this.matches++;
@@ -269,8 +265,7 @@ public class BlockMatcher2<T extends Comparable<T>> implements
 				}
 
 				MatchRecord2<T> mr =
-					compareRecords(clueSet, enabledClues, model, q, m, false,
-							low, high);
+					compareRecords(model, q, m, false, low, high);
 				if (mr != null) {
 					list.add(mr);
 					this.matches++;
@@ -372,8 +367,7 @@ public class BlockMatcher2<T extends Comparable<T>> implements
 				log.fine("Round robin s " + c1.toString() + " " + c2.toString());
 
 				MatchRecord2<T> mr =
-					compareRecords(clueSet, enabledClues, model, q, m, true,
-							low, high);
+					compareRecords(model, q, m, true, low, high);
 
 				if (mr != null)
 					list.add(mr);
@@ -396,8 +390,7 @@ public class BlockMatcher2<T extends Comparable<T>> implements
 				log.fine("TStage with S " + c1.toString() + " " + c2.toString());
 
 				MatchRecord2<T> mr =
-					compareRecords(clueSet, enabledClues, model, q, m, true,
-							low, high);
+					compareRecords(model, q, m, true, low, high);
 				if (mr != null)
 					list.add(mr);
 			}
@@ -419,8 +412,7 @@ public class BlockMatcher2<T extends Comparable<T>> implements
 						+ c1.toString());
 
 				MatchRecord2<T> mr =
-					compareRecords(clueSet, enabledClues, model, q, m, false,
-							low, high);
+					compareRecords(model, q, m, false, low, high);
 				if (mr != null)
 					list.add(mr);
 			}
@@ -443,8 +435,7 @@ public class BlockMatcher2<T extends Comparable<T>> implements
 							+ c1.toString());
 
 					MatchRecord2<T> mr =
-						compareRecords(clueSet, enabledClues, model, q, m,
-								false, low, high);
+						compareRecords(model, q, m, false, low, high);
 					if (mr != null)
 						list.add(mr);
 				}
@@ -463,8 +454,7 @@ public class BlockMatcher2<T extends Comparable<T>> implements
 							+ c1.toString());
 
 					MatchRecord2<T> mr =
-						compareRecords(clueSet, enabledClues, model, q, m,
-								false, low, high);
+						compareRecords(model, q, m, false, low, high);
 					if (mr != null)
 						list.add(mr);
 				}
@@ -493,8 +483,7 @@ public class BlockMatcher2<T extends Comparable<T>> implements
 			log.fine("TStage random i+1 " + c1.toString() + " " + c2.toString());
 
 			MatchRecord2<T> mr =
-				compareRecords(clueSet, enabledClues, model, q, m, true, low,
-						high);
+				compareRecords(model, q, m, true, low, high);
 			if (mr != null)
 				list.add(mr);
 
@@ -512,19 +501,13 @@ public class BlockMatcher2<T extends Comparable<T>> implements
 					if (ids[j] >= TStage.size()) {
 						c2 = TMaster.get(ids[j] - TStage.size());
 						m = master.get(c2);
-						mr =
-							compareRecords(clueSet, enabledClues, model, q, m,
-									false, low, high);
-
+						mr = compareRecords(model, q, m, false, low, high);
 						log.fine("TStage random " + c1.toString() + " "
 								+ c2.toString());
 					} else {
 						c2 = TStage.get(ids[j]);
 						m = stage.get(c2);
-						mr =
-							compareRecords(clueSet, enabledClues, model, q, m,
-									true, low, high);
-
+						mr = compareRecords(model, q, m, true, low, high);
 						log.fine("TStage random " + c1.toString() + " "
 								+ c2.toString());
 					}
@@ -590,12 +573,10 @@ public class BlockMatcher2<T extends Comparable<T>> implements
 	 * @param isStage
 	 *            - indicates if the second record is staging or master
 	 */
-	private MatchRecord2<T> compareRecords(ClueSet clueSet,
-			boolean[] enabledClues, ImmutableProbabilityModel model, Record q,
-			Record m, boolean isStage, float low, float high) {
+	private MatchRecord2<T> compareRecords(ImmutableProbabilityModel model,
+			Record q, Record m, boolean isStage, float low, float high) {
 		this.compares++;
-		return MatchUtils.compareRecords(clueSet, enabledClues, model, q,
-				m, isStage, low, high);
+		return MatchUtils.compareRecords(model, q, m, isStage, low, high);
 	}
 
 	/**

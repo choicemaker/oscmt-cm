@@ -12,6 +12,9 @@ import java.util.List;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.api.BatchJobManager;
 
+/**
+ * Creates, saves, deletes and finds top-level URM jobs.
+ */
 public interface UrmJobManager extends BatchJobManager {
 
 	BatchJob createPersistentUrmJob(String externalID);

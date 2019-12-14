@@ -40,7 +40,6 @@ import com.choicemaker.cm.batch.api.OperationalPropertyController;
 import com.choicemaker.cm.batch.api.ProcessingEventLog;
 import com.choicemaker.cm.batch.ejb.BatchJobControl;
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.core.ClueSet;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.ImmutableThresholds;
 import com.choicemaker.cm.core.Record;
@@ -52,14 +51,20 @@ import com.choicemaker.cm.oaba.api.OabaParametersController;
 import com.choicemaker.cm.oaba.api.OabaSettingsController;
 import com.choicemaker.cm.oaba.api.ServerConfigurationController;
 import com.choicemaker.cm.oaba.core.ComparisonPair;
+import com.choicemaker.cm.oaba.core.IComparisonArraySource;
 import com.choicemaker.cm.oaba.core.IComparisonSet;
 import com.choicemaker.cm.oaba.core.IComparisonSetSource;
+import com.choicemaker.cm.oaba.core.IComparisonTreeSource;
 import com.choicemaker.cm.oaba.core.RECORD_ID_TYPE;
 import com.choicemaker.cm.oaba.ejb.data.ChunkDataStore;
 import com.choicemaker.cm.oaba.ejb.data.MatchWriterMessage;
 import com.choicemaker.cm.oaba.ejb.data.OabaJobMessage;
 import com.choicemaker.cm.oaba.ejb.util.LoggingUtils;
 import com.choicemaker.cm.oaba.ejb.util.MessageBeanUtils;
+import com.choicemaker.cm.oaba.impl.ComparisonArrayGroupSinkSourceFactory;
+import com.choicemaker.cm.oaba.impl.ComparisonSetOSSource;
+import com.choicemaker.cm.oaba.impl.ComparisonTreeGroupSinkSourceFactory;
+import com.choicemaker.cm.oaba.impl.ComparisonTreeSetSource;
 import com.choicemaker.cm.oaba.utils.ControlChecker;
 
 /**
@@ -180,7 +185,7 @@ public abstract class AbstractMatcherBmt
 					}
 
 					final String _currentChunk = getPropertyController()
-							.getJobProperty(batchJob, PN_CURRENT_CHUNK_INDEX);
+							.getOperationalPropertyValue(batchJob, PN_CURRENT_CHUNK_INDEX);
 					final int currentChunk = Integer.valueOf(_currentChunk);
 					getLogger().fine("MatcherMDB In onMessage " + data.jobID
 							+ " " + currentChunk + " " + data.treeIndex);
@@ -411,21 +416,92 @@ public abstract class AbstractMatcherBmt
 	protected final IComparisonSetSource getSource(OabaJobMessage data,
 			final int numProcessors, final int maxBlockSize,
 			final int currentChunk) throws BlockingException {
+		final Logger logger = getLogger();
 
 		BatchJob job = getOabaJobManager().findBatchJob(data.jobID);
 
 		final String _numRegularChunks = getPropertyController()
-				.getJobProperty(job, PN_REGULAR_CHUNK_FILE_COUNT);
+				.getOperationalPropertyValue(job, PN_REGULAR_CHUNK_FILE_COUNT);
 		final int numRegularChunks = Integer.valueOf(_numRegularChunks);
 
-		final String _recordIdType =
-			getPropertyController().getJobProperty(job, PN_RECORD_ID_TYPE);
-		final RECORD_ID_TYPE recordIdType = _recordIdType == null ? null
-				: RECORD_ID_TYPE.valueOf(_recordIdType);
+		if (logger.isLoggable(Level.FINE)) {
+			String msg0 = "numProcessors: %d";
+			String msg = String.format(msg0, numProcessors);
+			logger.fine(msg);
 
-		IComparisonSetSource retVal = OabaFileUtils.getComparisonSetSource(job,
-				currentChunk, data.treeIndex, recordIdType, numRegularChunks,
-				numProcessors, maxBlockSize);
+			msg0 = "maxBlockSize: %d";
+			msg = String.format(msg0, maxBlockSize);
+			logger.fine(msg);
+
+			msg0 = "currentChunk: %d";
+			msg = String.format(msg0, currentChunk);
+			logger.fine(msg);
+
+			msg0 = "numRegularChunks: %d";
+			msg = String.format(msg0, numRegularChunks);
+			logger.fine(msg);
+		}
+
+		IComparisonSetSource retVal = null;
+		if (currentChunk < numRegularChunks) {
+			// regular chunks
+			final String _recordIdType =
+				getPropertyController().getOperationalPropertyValue(job, PN_RECORD_ID_TYPE);
+			logger.finer(String.format("record-id type: %s", _recordIdType));
+
+			final RECORD_ID_TYPE recordIdType =
+				RECORD_ID_TYPE.valueOf(_recordIdType);
+
+			ComparisonTreeGroupSinkSourceFactory factory =
+				OabaFileUtils.getComparisonTreeGroupFactory(job, recordIdType,
+						numProcessors);
+			logger.finer(String.format("factory class: %s",
+					factory.getClass().getName()));
+
+			IComparisonTreeSource source =
+				factory.getSource(currentChunk, data.treeIndex);
+			logger.finer(
+					String.format("source: %s", source.getClass().getName()));
+
+			if (source.exists()) {
+				logger.finer("Regular source exists");
+				@SuppressWarnings("unchecked")
+				IComparisonSetSource setSource =
+					new ComparisonTreeSetSource(source);
+				retVal = setSource;
+			} else {
+				throw new BlockingException(
+						"Could not get regular source " + source.getInfo());
+			}
+
+		} else {
+			// over-sized chunks
+			int i = currentChunk - numRegularChunks;
+			logger.fine(String.format("osIndex: %d", i));
+
+			ComparisonArrayGroupSinkSourceFactory factoryOS = OabaFileUtils
+					.getComparisonArrayGroupFactoryOS(job, numProcessors);
+			logger.finer(String.format("factory class: %s",
+					factoryOS.getClass().getName()));
+
+			IComparisonArraySource sourceOS =
+				factoryOS.getSource(i, data.treeIndex);
+			logger.finer(
+					String.format("source: %s", sourceOS.getClass().getName()));
+
+			if (sourceOS.exists()) {
+				logger.finer("Oversized source exists");
+				@SuppressWarnings("unchecked")
+				IComparisonSetSource setSource =
+					new ComparisonSetOSSource(sourceOS, maxBlockSize);
+				retVal = setSource;
+			} else {
+				throw new BlockingException(
+						"Could not get oversized source " + sourceOS.getInfo());
+			}
+		}
+
+		assert retVal != null;
 		return retVal;
 	}
 
@@ -443,12 +519,9 @@ public abstract class AbstractMatcherBmt
 			boolean isStage, ImmutableProbabilityModel model,
 			ImmutableThresholds t) {
 
-		final ClueSet clueSet = model.getClueSet();
-		final boolean[] enabledClues = model.getCluesToEvaluate();
 		final float low = t.getDifferThreshold();
 		final float high = t.getMatchThreshold();
-		return MatchUtils.compareRecords(clueSet, enabledClues, model, q, m,
-				isStage, low, high);
+		return MatchUtils.compareRecords(model, q, m, isStage, low, high);
 	}
 
 	/**

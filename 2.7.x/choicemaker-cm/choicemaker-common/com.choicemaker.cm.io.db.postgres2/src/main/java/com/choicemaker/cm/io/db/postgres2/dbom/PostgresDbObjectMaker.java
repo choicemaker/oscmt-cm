@@ -14,7 +14,9 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
@@ -37,6 +39,7 @@ import com.choicemaker.cm.io.db.base.DbReader;
 import com.choicemaker.cm.io.db.base.DbReaderSequential;
 import com.choicemaker.cm.io.db.base.DbView;
 import com.choicemaker.e2.CMPlatformRunnable;
+import com.choicemaker.util.Precondition;
 
 /**
  * Writes a Sql Server script (Postgres_Custom_Objects.txt) that creates DB
@@ -45,24 +48,30 @@ import com.choicemaker.e2.CMPlatformRunnable;
  */
 public class PostgresDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 
-	private static final Logger logger = Logger
-			.getLogger(PostgresDbObjectMaker.class.getName());
+	private static final Logger logger =
+		Logger.getLogger(PostgresDbObjectMaker.class.getName());
+
+	public static final String VIEW_NAME_TEMPLATE = "vw_cmt_%s_r_%s";
+
+	public static final String MULTIKEY_TEMPLATE = "%s:r:%s:Postgres";
 
 	@Override
 	public Object run(Object args) throws Exception {
 		CommandLineArguments cla = new CommandLineArguments();
 		cla.addExtensions();
 		cla.addArgument("-output");
-		cla.enter((String[])args);
-		main(new String[] {cla.getArgument("-conf"), cla.getArgument("-log"), cla.getArgument("-output")});
+		cla.enter((String[]) args);
+		main(new String[] {
+				cla.getArgument("-conf"), cla.getArgument("-log"),
+				cla.getArgument("-output") });
 		return null;
 	}
-	
+
 	public static void main(String[] args) throws Exception {
 		XmlConfigurator.getInstance().init(args[0], args[1], false, false);
 
 		// TODO FIXME replace default compiler with configurable compiler
-		CompilerFactory factory = CompilerFactory.getInstance ();
+		CompilerFactory factory = CompilerFactory.getInstance();
 		ICompiler compiler = factory.getDefaultCompiler();
 
 		final boolean fromResource = false;
@@ -73,20 +82,22 @@ public class PostgresDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 		processAllModels(unused, w, true);
 		w.close();
 	}
-	
+
 	@Override
 	public void generateObjects(File outDir) throws IOException {
-		File outFile = new File(outDir, "Postgres_Custom_Objects.txt").getAbsoluteFile();
+		File outFile =
+			new File(outDir, "Postgres_Custom_Objects.txt").getAbsoluteFile();
 		Writer w = new FileWriter(outFile);
 		Properties unused = new Properties();
 		processAllModels(unused, w, true);
 		w.close();
 	}
-	
+
 	public static String[] getAllModels(final Properties p) throws IOException {
 		StringWriter w = new StringWriter();
 		processAllModels(p, w, false);
-		StringTokenizer st = new StringTokenizer(w.toString(), Constants.LINE_SEPARATOR);
+		StringTokenizer st =
+			new StringTokenizer(w.toString(), Constants.LINE_SEPARATOR);
 		String[] res = new String[st.countTokens()];
 		for (int i = 0; i < res.length; i++) {
 			res[i] = st.nextToken() + ";";
@@ -101,21 +112,39 @@ public class PostgresDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 		// This sort makes the output repeatable, independent of plugin order
 		ModelUtils.sort(models);
 
+		// Create just one view definition for each unique combination
+		// of schema name and database configuration
+		Set<String> uniqueKeys = new LinkedHashSet<>();
+
 		for (int i = 0; i < models.length; i++) {
-			ImmutableProbabilityModel model = models[i];
-			DbAccessor dbAccessor = (DbAccessor) model.getAccessor();
-			Set uniqueNames = new LinkedHashSet();
+			final ImmutableProbabilityModel model = models[i];
+			final DbAccessor dbAccessor = (DbAccessor) model.getAccessor();
+			final String schemaName = model.getAccessor().getSchemaName();
 			String[] dbcNames = dbAccessor.getDbConfigurations();
 			Arrays.sort(dbcNames);
 			for (int j = 0; j < dbcNames.length; j++) {
 				String dbcName = dbcNames[j];
-				boolean isUnique = uniqueNames.add(dbcName);
+				String multiKey = createMultiKey(schemaName, dbcName);
+				boolean isUnique = uniqueKeys.add(multiKey);
 				if (isUnique) {
+					logger.fine("defining DB objects for " + multiKey);
 					createObjects(p, w, model, dbcName, insertGo);
+				} else {
+					logger.fine("DB objects already defined for " + multiKey);
 				}
 			}
 		}
 		return p;
+	}
+
+	public static String createViewBaseName(String schemaName,
+			String databaseConfigurationName) {
+		Precondition.assertNonEmptyString(schemaName);
+		Precondition.assertNonEmptyString(databaseConfigurationName);
+
+		String retVal = String.format(VIEW_NAME_TEMPLATE, schemaName,
+				databaseConfigurationName);
+		return retVal;
 	}
 
 	/**
@@ -150,12 +179,10 @@ public class PostgresDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 		} else {
 			Accessor accessor = model.getAccessor();
 			if (accessor instanceof DbAccessor) {
-				String viewBase = "vw_cmt_" + accessor.getSchemaName() + "_r_" + dbConfiguration;
-				String dbConf = accessor.getSchemaName() + ":r:" + dbConfiguration;
-				// 		w.write("DELETE FROM TB_CMT_CURSORS WHERE config = '" +
-				// 			dbConf + "'" + Constants.LINE_SEPARATOR);
-				// 		w.write("Go" + Constants.LINE_SEPARATOR);
-				DbReaderSequential dbr = ((DbAccessor) accessor).getDbReaderSequential(dbConfiguration);
+				String viewBase = createViewBaseName(accessor.getSchemaName(),
+						dbConfiguration);
+				DbReaderSequential dbr = ((DbAccessor) accessor)
+						.getDbReaderSequential(dbConfiguration);
 				DbView[] views = dbr.getViews();
 				String masterId = dbr.getMasterId();
 				StringBuffer multi = new StringBuffer(4000);
@@ -163,7 +190,8 @@ public class PostgresDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 					String viewName = viewBase + i;
 					DbView v = views[i];
 					boolean first = i == 0 || v.number != views[i - 1].number;
-					boolean more = i + 1 < views.length && v.number == views[i + 1].number;
+					boolean more =
+						i + 1 < views.length && v.number == views[i + 1].number;
 					if (first) {
 						if (i != 0) {
 							multi.append(Constants.LINE_SEPARATOR);
@@ -174,7 +202,8 @@ public class PostgresDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 					} else {
 						multi.append(" UNION ");
 					}
-					multi.append("SELECT * FROM " + viewName + " WHERE " + masterId + " IN " + "(SELECT ID FROM ids)");
+					multi.append("SELECT * FROM " + viewName + " WHERE "
+							+ masterId + " IN " + "(SELECT ID FROM ids)");
 					if (!more) {
 						if (!first) {
 							multi.append(") AS A");
@@ -185,13 +214,8 @@ public class PostgresDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 						}
 						multi.append(";");
 					}
-					w.write(
-						"IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = '"
-							+ viewName
-							+ "') DROP VIEW "
-							+ viewName
-							+ Constants.LINE_SEPARATOR + (insertGo ? "Go" + Constants.LINE_SEPARATOR : ""));
-					w.write("CREATE VIEW dbo." + viewName + " AS SELECT ");
+					w.write("CREATE OR REPLACE VIEW <CHANGEME_SCHEMA>."
+							+ viewName + " AS SELECT ");
 					for (int j = 0; j < v.fields.length; ++j) {
 						DbField f = v.fields[j];
 						if (j != 0)
@@ -203,29 +227,46 @@ public class PostgresDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 					w.write(" FROM " + v.from);
 					if (v.where != null)
 						w.write(" WHERE " + v.where);
-					w.write(Constants.LINE_SEPARATOR + (insertGo ? "Go" + Constants.LINE_SEPARATOR : ""));
+					w.write(Constants.LINE_SEPARATOR + (insertGo
+							? "Go" + Constants.LINE_SEPARATOR : ""));
 				}
-				String multiStr = multi.toString();
-				//w.write("INSERT INTO TB_CMT_CURSORS VALUES('" + dbConf + "','" + multiStr + "');" + Constants.LINE_SEPARATOR);
-				p.setProperty(dbConf + ":Postgres", multiStr);
+				String multiKey =
+					createMultiKey(accessor.getSchemaName(), dbConfiguration);
+				String multiStrValue = multi.toString();
+				p.setProperty(multiKey, multiStrValue);
 			}
 		}
 		return p;
 	}
 
-	public static String getMultiKey(ImmutableProbabilityModel model, String dbConfiguration) {
-		return model.getAccessor().getSchemaName() + ":r:" + dbConfiguration + ":Postgres";
+	public static String getMultiKey(ImmutableProbabilityModel model,
+			String dbConfiguration) {
+		String retVal = createMultiKey(model.getAccessor().getSchemaName(),
+				dbConfiguration);
+		return retVal;
 	}
-	
+
 	public static String getMultiKey(DbReader dbReader) {
 		return dbReader.getName() + ":Postgres";
+	}
+
+	public static String createMultiKey(String schemaName,
+			String databaseConfigurationName) {
+		Precondition.assertNonEmptyString(schemaName);
+		Precondition.assertNonEmptyString(databaseConfigurationName);
+
+		String retVal = String.format(MULTIKEY_TEMPLATE, schemaName,
+				databaseConfigurationName);
+		return retVal;
 	}
 
 	public static String getMultiQuery(ImmutableProbabilityModel model,
 			String dbConfiguration) {
 		Accessor accessor = model.getAccessor();
-		DbReaderSequential dbr = ((DbAccessor)accessor).getDbReaderSequential(dbConfiguration);
-		String viewBase = "vw_cmt_" + accessor.getSchemaName() + "_r_" + dbConfiguration;
+		DbReaderSequential dbr =
+			((DbAccessor) accessor).getDbReaderSequential(dbConfiguration);
+		String viewBase =
+			createViewBaseName(accessor.getSchemaName(), dbConfiguration);
 		DbView[] views = dbr.getViews();
 		String masterId = dbr.getMasterId();
 		StringBuffer multi = new StringBuffer(4000);
@@ -233,7 +274,8 @@ public class PostgresDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 			String viewName = viewBase + i;
 			DbView v = views[i];
 			boolean first = i == 0 || v.number != views[i - 1].number;
-			boolean more = i + 1 < views.length && v.number == views[i + 1].number;
+			boolean more =
+				i + 1 < views.length && v.number == views[i + 1].number;
 			if (first) {
 				if (i != 0) {
 					multi.append(Constants.LINE_SEPARATOR);
@@ -244,7 +286,8 @@ public class PostgresDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 			} else {
 				multi.append(" UNION ");
 			}
-			multi.append("SELECT * FROM " + viewName + " WHERE " + masterId + " IN (SELECT ID FROM ids)");
+			multi.append("SELECT * FROM " + viewName + " WHERE " + masterId
+					+ " IN (SELECT ID FROM ids)");
 			if (!more) {
 				if (!first) {
 					multi.append(") AS A");
@@ -257,7 +300,7 @@ public class PostgresDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 		}
 		return multi.toString();
 	}
-	
+
 	private static String getOrderBy(DbView v) {
 		StringBuffer ob = new StringBuffer();
 		for (int j = 0; j < v.orderBy.length; ++j) {

@@ -89,7 +89,7 @@ public class BlockingMDB extends AbstractOabaBmtMDB {
 		OABABlockingService blockingService;
 		try {
 			final String _numBlockFields = getPropertyController()
-					.getJobProperty(batchJob, PN_BLOCKING_FIELD_COUNT);
+					.getOperationalPropertyValue(batchJob, PN_BLOCKING_FIELD_COUNT);
 			final int numBlockFields = Integer.valueOf(_numBlockFields);
 			final BatchJobControl control =
 				new BatchJobControl(this.getJobController(), batchJob);

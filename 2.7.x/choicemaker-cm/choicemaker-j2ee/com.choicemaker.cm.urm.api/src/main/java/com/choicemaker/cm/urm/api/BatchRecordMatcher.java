@@ -9,6 +9,7 @@ package com.choicemaker.cm.urm.api;
 
 import java.rmi.RemoteException;
 import java.util.Iterator;
+import java.util.List;
 
 import com.choicemaker.cm.urm.base.IRecordCollection;
 import com.choicemaker.cm.urm.base.RefRecordCollection;
@@ -38,5 +39,7 @@ public interface BatchRecordMatcher extends BatchBase {
 			int maxSingle, String trackingId)
 			throws ModelException, RecordCollectionException, ConfigException,
 			ArgumentException, CmRuntimeException, RemoteException;
+
+	List<String> getResultFileNames(long jobID) throws CmRuntimeException;
 
 }

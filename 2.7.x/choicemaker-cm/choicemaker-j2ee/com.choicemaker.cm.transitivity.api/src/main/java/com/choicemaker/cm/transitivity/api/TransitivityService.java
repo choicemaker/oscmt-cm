@@ -18,7 +18,8 @@ import com.choicemaker.cm.oaba.core.RecordMatchingMode;
 
 /**
  * This session bean allows the user to start, query, and get result from the
- * TE. It is to be used with the OABA.
+ * Transitivity Engine. It is to be used with the Offline Automated Blocking
+ * Algorithm (OABA).
  * 
  * @author pcheung
  *
@@ -34,7 +35,11 @@ public interface TransitivityService {
 	 * OABA job must have completed successfully. Record matching is performed
 	 * in the same mode as was used for the OABA job.
 	 * 
-	 * @oabaJob may not be null
+	 * See
+	 * {@link #startTransitivity(String, TransitivityParameters, BatchJob, OabaSettings, ServerConfiguration, BatchJob, RecordMatchingMode)
+	 * below} for explanation of the parameters, return value, and thrown
+	 * exception.
+	 * 
 	 */
 	long startTransitivity(String externalID,
 			TransitivityParameters batchParams, BatchJob oabaJob,
@@ -45,7 +50,26 @@ public interface TransitivityService {
 	 * This method starts transitivity analysis of the specified OABA job, but
 	 * allows a different record-matching mode to be specified.
 	 * 
-	 * @oabaJob may not be null
+	 * @param externalID
+	 *            an optional String used to tag a batch job for external
+	 *            tracking.
+	 * @param batchParams
+	 *            a required reference to commonly adjusted parameters that
+	 *            control transitive analysis.
+	 * @param oabaJob
+	 *            a required reference to the OABA job that will be analyzed for
+	 *            transitive groupings.
+	 * @param settings
+	 *            a required reference to less commonly adjusted parameters that
+	 *            control transitive analysis.
+	 * @param serverConfiguration
+	 *            a required reference to host-specific parameters that control
+	 *            how transitive analysis is performed
+	 * @param urmJob
+	 *            a required reference to the URM job that initiated transitive
+	 *            analysis.
+	 * @return a identifier use to track the transitive analysis job
+	 * @throws ServerConfigurationException
 	 */
 	long startTransitivity(String externalID,
 			TransitivityParameters batchParams, BatchJob oabaJob,
@@ -53,6 +77,11 @@ public interface TransitivityService {
 			BatchJob urmJob, RecordMatchingMode mode)
 			throws ServerConfigurationException;
 
+	/**
+	 * Returns a reference to the transitive analysis job identified by the
+	 * specified id. The return value is null if the identifier does not
+	 * correspond to a known job.
+	 */
 	public BatchJob getTransitivityJob(long jobId);
 
 }

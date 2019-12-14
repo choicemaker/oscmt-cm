@@ -29,7 +29,14 @@ import com.choicemaker.cm.batch.api.BatchJobInfo;
 import com.choicemaker.cm.batch.api.BatchJobManager;
 import com.choicemaker.cm.batch.api.BatchMonitoring;
 import com.choicemaker.cm.batch.api.BatchMonitoringRemote;
+import com.choicemaker.cm.batch.api.IndexedProperty;
 import com.choicemaker.cm.batch.api.IndexedPropertyController;
+import com.choicemaker.cm.batch.api.IndexedPropertyMonitoring;
+import com.choicemaker.cm.batch.api.IndexedPropertyMonitoringRemote;
+import com.choicemaker.cm.batch.api.OperationalProperty;
+import com.choicemaker.cm.batch.api.OperationalPropertyController;
+import com.choicemaker.cm.batch.api.OperationalPropertyMonitoring;
+import com.choicemaker.cm.batch.api.OperationalPropertyMonitoringRemote;
 import com.choicemaker.cm.batch.ejb.BatchJobInfoBean;
 import com.choicemaker.cm.oaba.api.MatchPairInfo;
 import com.choicemaker.cm.oaba.api.MatchPairInfoBean;
@@ -53,9 +60,14 @@ import com.choicemaker.util.Precondition;
 //@Singleton
 @Stateless
 @TransactionAttribute(REQUIRED)
-@Local(BatchMonitoring.class)
-@Remote(BatchMonitoringRemote.class)
-public class BatchMonitoringBean implements BatchMonitoring {
+@Local({
+		BatchMonitoring.class, IndexedPropertyMonitoring.class,
+		OperationalPropertyMonitoring.class })
+@Remote({
+		BatchMonitoringRemote.class, IndexedPropertyMonitoringRemote.class,
+		OperationalPropertyMonitoringRemote.class })
+public class BatchMonitoringBean implements BatchMonitoring,
+		IndexedPropertyMonitoring, OperationalPropertyMonitoring {
 
 	private static final Logger logger =
 		Logger.getLogger(BatchMonitoringBean.class.getName());
@@ -75,6 +87,9 @@ public class BatchMonitoringBean implements BatchMonitoring {
 
 	@EJB
 	private IndexedPropertyController idxPropController;
+
+	@EJB
+	private OperationalPropertyController opPropController;
 
 	@EJB
 	private OabaJobManager jobManager;
@@ -219,7 +234,7 @@ public class BatchMonitoringBean implements BatchMonitoring {
 		final int matchCount = -1;
 		final int pairCount = -1;
 		final Map<Integer, String> mapPairFileURIs =
-			getIndexedPropertyController().find(oabaJob,
+			getIndexedPropertyController().findIndexedProperties(oabaJob,
 					MatchPairInfoBean.PN_OABA_MATCH_RESULT_FILE);
 		final List<String> pairFileURIs = mapToValueSortedList(mapPairFileURIs);
 		BATCH_RESULTS_PERSISTENCE_SCHEME persistenceScheme = null;
@@ -238,7 +253,8 @@ public class BatchMonitoringBean implements BatchMonitoring {
 		final int matchCount = -1;
 		final int pairCount = -1;
 		final Map<Integer, String> mapPairFileURIs =
-			getIndexedPropertyController().find(transitivityJob,
+			getIndexedPropertyController().findIndexedProperties(
+					transitivityJob,
 					TransitiveGroupInfoBean.PN_TRANSMATCH_PAIR_FILE);
 		final List<String> pairFileURIs = mapToValueSortedList(mapPairFileURIs);
 		BATCH_RESULTS_PERSISTENCE_SCHEME persistenceScheme = null;
@@ -253,7 +269,8 @@ public class BatchMonitoringBean implements BatchMonitoring {
 			BatchJob transitivityJob) {
 		// FIXME
 		final Map<Integer, String> mapGroupFileURIs =
-			getIndexedPropertyController().find(transitivityJob,
+			getIndexedPropertyController().findIndexedProperties(
+					transitivityJob,
 					TransitiveGroupInfoBean.PN_TRANSMATCH_GROUP_FILE);
 		final List<String> groupFileURIs =
 			mapToValueSortedList(mapGroupFileURIs);
@@ -278,6 +295,60 @@ public class BatchMonitoringBean implements BatchMonitoring {
 
 	public UrmJobInfo computeUrmJobInfo(BatchJob urmJob) {
 		throw new Error("not yet implemented");
+	}
+
+	@Override
+	public String getOperationalPropertyValue(BatchJob job, String pn) {
+		return opPropController.getOperationalPropertyValue(job, pn);
+	}
+
+	@Override
+	public OperationalProperty findOperationalProperty(long propertyId) {
+		return opPropController.findOperationalProperty(propertyId);
+	}
+
+	@Override
+	public OperationalProperty findOperationalProperty(BatchJob job,
+			String name) {
+		return opPropController.findOperationalProperty(job, name);
+	}
+
+	@Override
+	public List<OperationalProperty> findOperationalProperties(BatchJob job) {
+		return opPropController.findOperationalProperties(job);
+	}
+
+	@Deprecated
+	@Override
+	public List<OperationalProperty> findAllOperationalProperties() {
+		return opPropController.findAllOperationalProperties();
+	}
+
+	@Override
+	public String getIndexedPropertyValue(BatchJob job, String pn, int index) {
+		return idxPropController.getIndexedPropertyValue(job, pn, index);
+	}
+
+	@Override
+	public IndexedProperty findIndexedProperty(long propertyId) {
+		return idxPropController.findIndexedProperty(propertyId);
+	}
+
+	@Override
+	public IndexedProperty findIndexedProperty(BatchJob job, String name,
+			int index) {
+		return idxPropController.findIndexedProperty(job, name, index);
+	}
+
+	@Override
+	public Map<Integer, String> findIndexedProperties(BatchJob job,
+			String name) {
+		return idxPropController.findIndexedProperties(job, name);
+	}
+
+	@Override
+	public List<String> findIndexedPropertyNames(BatchJob job) {
+		return idxPropController.findIndexedPropertyNames(job);
 	}
 
 }

@@ -47,12 +47,17 @@ public class XmlMarkedRecordPairSink implements MarkedRecordPairSink {
 			encoding = "UTF-8";
 		}
 	}
-	
+
 	public static String getEncoding() {
 		return encoding;
 	}
 
-	public XmlMarkedRecordPairSink(String name, String rawXmlFileName, ImmutableProbabilityModel model) {
+	protected XmlMarkedRecordPairSink(ImmutableProbabilityModel model) {
+		setModel(model);
+	}
+
+	public XmlMarkedRecordPairSink(String name, String rawXmlFileName,
+			ImmutableProbabilityModel model) {
 		this.name = name;
 		setRawXmlFileName(rawXmlFileName);
 		setModel(model);
@@ -60,7 +65,8 @@ public class XmlMarkedRecordPairSink implements MarkedRecordPairSink {
 	
 	public void setRawXmlFileName(String fn) {
 		this.rawXmlFileName = fn;
-		this.xmlFileName = FileUtilities.getAbsoluteFile(new File(name).getParentFile(), fn).toString();
+		this.xmlFileName = FileUtilities
+				.getAbsoluteFile(new File(name).getParentFile(), fn).toString();
 	}
 
 	public String getRawXmlFileName() {
@@ -87,12 +93,13 @@ public class XmlMarkedRecordPairSink implements MarkedRecordPairSink {
 
 	@Override
 	public void open() throws IOException {
-		recordOutputter = ((XmlAccessor) model.getAccessor()).getXmlRecordOutputter();
+		setRecordOutputter(((XmlAccessor) getModel().getAccessor()).getXmlRecordOutputter());
 		FileOutputStream fos = createFileOutputStream();
 		setOutputStream(fos);
 		Writer w = createWriter();
 		setWriter(w);
-		getWriter().write("<?xml version=\"1.0\" encoding=\"" + encoding + "\"?>" + Constants.LINE_SEPARATOR);
+		getWriter().write("<?xml version=\"1.0\" encoding=\"" + getEncoding()
+				+ "\"?>" + Constants.LINE_SEPARATOR);
 		startRootEntity();
 		getWriter().flush();
 	}
@@ -106,6 +113,14 @@ public class XmlMarkedRecordPairSink implements MarkedRecordPairSink {
 		finishRootEntity();
 		getWriter().flush();
 		getOutputStream().close();
+	}
+
+	protected XmlRecordOutputter getRecordOutputter() {
+		return recordOutputter;
+	}
+
+	protected void setRecordOutputter(XmlRecordOutputter recordOutputter) {
+		this.recordOutputter = recordOutputter;
 	}
 
 	@Override
@@ -142,6 +157,7 @@ public class XmlMarkedRecordPairSink implements MarkedRecordPairSink {
 		return writer;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void put(ImmutableRecordPair r) throws IOException {
 		putMarkedRecordPair((ImmutableMarkedRecordPair) r);
@@ -155,6 +171,7 @@ public class XmlMarkedRecordPairSink implements MarkedRecordPairSink {
 		getWriter().write("</MarkedRecordPair>" + Constants.LINE_SEPARATOR);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void putMarkedRecordPair(ImmutableMarkedRecordPair r) throws IOException {
 		startRecordPairEntity();
@@ -165,8 +182,8 @@ public class XmlMarkedRecordPairSink implements MarkedRecordPairSink {
 		XmlOutput.writeAttribute(getWriter(), "comment", r.getComment());
 		putAdditionalAttributes(r);
 		getWriter().write(">" + Constants.LINE_SEPARATOR);
-		recordOutputter.put(getWriter(), r.getQueryRecord());
-		recordOutputter.put(getWriter(), r.getMatchRecord());
+		getRecordOutputter().put(getWriter(), r.getQueryRecord());
+		getRecordOutputter().put(getWriter(), r.getMatchRecord());
 		finishRecordPairEntity();
 	}
 
@@ -174,7 +191,9 @@ public class XmlMarkedRecordPairSink implements MarkedRecordPairSink {
 	 * Callback for subclasses
 	 * @param mrp Non-null marked record pair
 	 */
-	protected void putAdditionalAttributes(ImmutableMarkedRecordPair mrp)  throws IOException {
+	@SuppressWarnings("rawtypes")
+	protected void putAdditionalAttributes(ImmutableMarkedRecordPair mrp)
+			throws IOException {
 	}
 
 	@Override

@@ -105,6 +105,15 @@ public interface BatchJobJPA {
 	String ID_GENERATOR_VALUE_COLUMN_NAME = "SEQ_COUNT";
 
 	/**
+	 * Name of the query that finds all persistent batch job instances
+	 */
+	String QN_BATCH_FIND_ALL = "batchFindAll";
+
+	/** JPQL used to implement {@link #QN_BATCH_FIND_ALL} */
+	String JPQL_BATCH_FIND_ALL =
+		"Select job from BatchJobEntity job";
+
+	/**
 	 * Name of the query that finds a persistent batch job of any type with a
 	 * specified job id
 	 */

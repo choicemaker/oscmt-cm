@@ -119,7 +119,7 @@ public class Chunk2MDB extends AbstractOabaBmtMDB {
 
 		// create the tree transformer.
 		final String _recordIdType =
-			getPropertyController().getJobProperty(batchJob, PN_RECORD_ID_TYPE);
+			getPropertyController().getOperationalPropertyValue(batchJob, PN_RECORD_ID_TYPE);
 		final RECORD_ID_TYPE recordIdType =
 			RECORD_ID_TYPE.valueOf(_recordIdType);
 		final TreeTransformer tTransformer = new TreeTransformer(translator,
@@ -174,7 +174,7 @@ public class Chunk2MDB extends AbstractOabaBmtMDB {
 
 		log.info("Number of regular chunks " + numRegularChunks);
 		getPropertyController().setJobProperty(batchJob,
-				PN_REGULAR_CHUNK_FILE_COUNT, String.valueOf(numChunks));
+				PN_REGULAR_CHUNK_FILE_COUNT, String.valueOf(numRegularChunks));
 
 		int totalComparisons = 0;
 		for (int currentChunk = 0; currentChunk < numChunks; currentChunk++) {

@@ -50,7 +50,7 @@ public class BatchExportUtils {
 		// FIXME Use results from DB
 		// FIXME This method falls apart if there are several result files
 		final String resultFileName =
-			propController.getJobProperty(batchJob, propertyName);
+			propController.getOperationalPropertyValue(batchJob, propertyName);
 		logger.finer("OABA result file: " + resultFileName);
 		if (!StringUtils.nonEmptyString(resultFileName)) {
 			String msg = "Invalid result file name: '" + resultFileName + "'";

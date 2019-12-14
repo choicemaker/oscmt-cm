@@ -23,6 +23,7 @@ import javax.persistence.Query;
 
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.api.BatchJob;
+import com.choicemaker.cm.oaba.api.OabaJobManager;
 import com.choicemaker.cm.transitivity.api.TransitivityJobManager;
 import com.choicemaker.cm.transitivity.api.TransitivityParametersController;
 
@@ -45,10 +46,10 @@ public class TransitivityParametersControllerBean
 	private EntityManager em;
 
 	@EJB
-	private TransitivityJobManager jobManager;
+	private TransitivityJobManager transJobManager;
 
 	protected TransitivityJobManager getTransJobController() {
-		return jobManager;
+		return transJobManager;
 	}
 
 	protected TransitivityParametersEntity getBean(TransitivityParameters p) {

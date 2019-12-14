@@ -56,8 +56,6 @@ public class DefaultPairSampler implements PairSampler {
 	private static final double LOG2 = Math.log(2);
 
 	private final ImmutableProbabilityModel model;
-	private final ClueSet clueSet;
-	private final boolean[] enabledClues;
 	private final int target;
 
 	private boolean initialized = false;
@@ -88,8 +86,6 @@ public class DefaultPairSampler implements PairSampler {
 	 */
 	public DefaultPairSampler(ImmutableProbabilityModel model, int target) {
 		this.model = model;
-		this.clueSet = model.getClueSet();
-		this.enabledClues = model.getCluesToEvaluate();
 		this.target = target;
 
 		// Postconditions
@@ -173,7 +169,10 @@ public class DefaultPairSampler implements PairSampler {
 
 		// Check whether the pair has active clues computed
 		if (pair.getActiveClues() == null) {
-			pair.setActiveClues(this.clueSet.getActiveClues(pair.getQueryRecord(), pair.getMatchRecord(), this.enabledClues));
+			final ClueSet clueSet = model.getClueSet();
+			final boolean[] enabledClues = model.getCluesToEvaluate();
+			pair.setActiveClues(clueSet.getActiveClues(pair.getQueryRecord(),
+					pair.getMatchRecord(), enabledClues));
 		}
 
 		float score = getScore(pair, false);

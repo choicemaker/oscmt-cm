@@ -2,8 +2,8 @@
 <!DOCTYPE plugin>
 <plugin
    id="com.choicemaker.cm.io.db.postgres2"
-   name="MS Postgres DB Plug-in"
-   version="2.5.0"
+   name="Postgres DB Plug-in"
+   version="2.7.0"
    provider-name="ChoiceMaker">
 
    <runtime>

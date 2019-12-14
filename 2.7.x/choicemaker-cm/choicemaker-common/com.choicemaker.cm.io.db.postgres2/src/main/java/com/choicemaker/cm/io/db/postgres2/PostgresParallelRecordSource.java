@@ -23,6 +23,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 import javax.sql.DataSource;
@@ -32,23 +33,33 @@ import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.Sink;
+import com.choicemaker.cm.io.db.base.DataSources;
 import com.choicemaker.cm.io.db.base.DbAccessor;
 import com.choicemaker.cm.io.db.base.DbReaderParallel;
 import com.choicemaker.cm.io.db.base.DbView;
+import com.choicemaker.util.Precondition;
 
 /**
  * @author pcheung
  */
 public class PostgresParallelRecordSource implements RecordSource {
 
-	private static Logger logger = Logger
-			.getLogger(PostgresParallelRecordSource.class.getName());
+	private static Logger logger =
+		Logger.getLogger(PostgresParallelRecordSource.class.getName());
+
+	private static final String SOURCE = PostgresParallelRecordSource.class.getSimpleName();
+
+	public static String createDataViewName() {
+		String s = "CMT_DATAVIEW_" + UUID.randomUUID().toString();
+		String retVal = s.replace('-', '_');
+		return retVal;
+	}
 
 	private final String fileName;
 	private final String dbConfiguration;
+	private ImmutableProbabilityModel model;
 	private final String idsQuery;
 
-	private ImmutableProbabilityModel model;
 	private String dsName;
 	private DataSource ds;
 	private Connection connection;
@@ -57,7 +68,7 @@ public class PostgresParallelRecordSource implements RecordSource {
 	private Statement[] selects;
 	private ResultSet[] results;
 
-	private static final String DATA_VIEW = "DATAVIEW_1001";
+	private final String dataViewName;
 
 	public PostgresParallelRecordSource(String fileName,
 			ImmutableProbabilityModel model, String dsName,
@@ -67,13 +78,15 @@ public class PostgresParallelRecordSource implements RecordSource {
 				+ " " + dbConfiguration + " " + idsQuery);
 
 		if (fileName == null) {
-			logger.fine("Null file name for PostgresParallelRecordSource");
+			logger.fine("Null file name for " + getSource());
 		}
 		if (dbConfiguration == null || dbConfiguration.trim().isEmpty()) {
-			throw new IllegalArgumentException("null or blank database configuration name");
+			throw new IllegalArgumentException(
+					"null or blank database configuration name");
 		}
 		if (!isValidQuery(idsQuery)) {
-			throw new IllegalArgumentException("idsQuery must contain ' AS ID '.");
+			throw new IllegalArgumentException(
+					"idsQuery must contain ' AS ID '.");
 		}
 
 		// Don't use public modifiers here -- preconditions may not apply
@@ -82,6 +95,7 @@ public class PostgresParallelRecordSource implements RecordSource {
 		this.dsName = dsName;
 		this.dbConfiguration = dbConfiguration;
 		this.idsQuery = idsQuery;
+		this.dataViewName = createDataViewName();
 	}
 
 	@Override
@@ -93,6 +107,9 @@ public class PostgresParallelRecordSource implements RecordSource {
 		try {
 			if (getConnection() == null) {
 				connection = getDataSource().getConnection();
+				if (connection == null) {
+					throw new IOException("null connection");
+				}
 			}
 
 			// 1. Create view
@@ -113,11 +130,11 @@ public class PostgresParallelRecordSource implements RecordSource {
 
 	private void createView(Connection conn) throws SQLException {
 		Statement view = conn.createStatement();
-		String s = "DROP VIEW IF EXISTS " + DATA_VIEW;
+		String s = "DROP VIEW IF EXISTS " + getDataView();
 		logger.fine(s);
 		view.execute(s);
 
-		s = "create view " + DATA_VIEW + " as " + getIdsQuery();
+		s = "create view " + getDataView() + " as " + getIdsQuery();
 		logger.fine(s);
 		view.execute(s);
 		view.close();
@@ -125,7 +142,7 @@ public class PostgresParallelRecordSource implements RecordSource {
 
 	private void dropView(Connection conn) throws SQLException {
 		Statement view = conn.createStatement();
-		String s = "DROP VIEW IF EXISTS " + DATA_VIEW;
+		String s = "DROP VIEW IF EXISTS " + getDataView();
 		logger.fine(s);
 		view.execute(s);
 		view.close();
@@ -140,7 +157,7 @@ public class PostgresParallelRecordSource implements RecordSource {
 	 *   from CORPORATE where primary_name like 'A%'
 	 * </pre>
 	 */
-	private static boolean isValidQuery(String s) {
+	static boolean isValidQuery(String s) {
 		if (s == null || s.toUpperCase().indexOf(" AS ID ") == -1)
 			return false;
 		else
@@ -149,8 +166,8 @@ public class PostgresParallelRecordSource implements RecordSource {
 
 	private void getResultSets() throws SQLException {
 		Accessor accessor = getModel().getAccessor();
-		String viewBase =
-			"vw_cmt_" + accessor.getSchemaName() + "_r_" + getDbConfiguration();
+		String viewBase0 = "vw_cmt_%s_r_%s";
+		String viewBase = String.format(viewBase0, accessor.getSchemaName(), getDbConfiguration());
 		DbView[] views = getDatabaseReader().getViews();
 		String masterId = getDatabaseReader().getMasterId();
 
@@ -169,7 +186,7 @@ public class PostgresParallelRecordSource implements RecordSource {
 			sb.append(" where ");
 			sb.append(masterId);
 			sb.append(" in (select id from ");
-			sb.append(DATA_VIEW);
+			sb.append(getDataView());
 			sb.append(")");
 
 			if (v.orderBy.length > 0) {
@@ -190,7 +207,8 @@ public class PostgresParallelRecordSource implements RecordSource {
 		}
 	}
 
-	private static String getOrderBy(DbView v) {
+	public static String getOrderBy(DbView v) {
+		Precondition.assertNonNullArgument(v);
 		StringBuffer ob = new StringBuffer();
 		for (int j = 0; j < v.orderBy.length; ++j) {
 			if (j != 0)
@@ -206,6 +224,7 @@ public class PostgresParallelRecordSource implements RecordSource {
 	}
 
 	@Override
+	@SuppressWarnings("rawtypes")
 	public Record getNext() throws IOException {
 		Record r = null;
 		try {
@@ -217,9 +236,9 @@ public class PostgresParallelRecordSource implements RecordSource {
 	}
 
 	@Override
-	public void close() /* throws IOException */{
+	public void close() /* throws IOException */ {
 
-		List exceptionMessages = new ArrayList();
+		List<String> exceptionMessages = new ArrayList<>();
 		if (selects != null) {
 			int s = selects.length;
 			for (int i = 0; i < s; i++) {
@@ -227,9 +246,8 @@ public class PostgresParallelRecordSource implements RecordSource {
 					try {
 						selects[i].close();
 					} catch (SQLException e) {
-						String msg =
-							"Problem closing statement [" + i + "]:"
-									+ e.toString();
+						String msg0 = "Problem closing statement [%d]: %s";
+						String msg = String.format(msg0, i, e.toString());
 						exceptionMessages.add(msg);
 					}
 				}
@@ -245,9 +263,8 @@ public class PostgresParallelRecordSource implements RecordSource {
 					try {
 						results[i].close();
 					} catch (SQLException e) {
-						String msg =
-							"Problem closing result set [" + i + "]:"
-									+ e.toString();
+						String msg0 = "Problem closing result set [%d]: %s";
+						String msg = String.format(msg0, i, e.toString());
 						exceptionMessages.add(msg);
 					}
 				}
@@ -278,10 +295,11 @@ public class PostgresParallelRecordSource implements RecordSource {
 			final int count = exceptionMessages.size();
 			StringWriter sw = new StringWriter();
 			PrintWriter pw = new PrintWriter(sw);
-			String msg = "Problem(s) closing PostgresParallelReader: " + count;
+			String msg0 = "Problem(s) closing %s: %d";
+			String msg = String.format(msg0, getSource(), count);
 			pw.println(msg);
-			for (int i=0; i<count; i++) {
-				msg = (String) exceptionMessages.get(i);
+			for (int i = 0; i < count; i++) {
+				msg = exceptionMessages.get(i);
 				pw.println(msg);
 			}
 			msg = sw.toString();
@@ -293,7 +311,7 @@ public class PostgresParallelRecordSource implements RecordSource {
 		assert results == null;
 		assert getConnection() == null;
 	}
-	
+
 	@Override
 	protected void finalize() {
 		close();
@@ -324,6 +342,16 @@ public class PostgresParallelRecordSource implements RecordSource {
 
 	public DataSource getDataSource() {
 		if (ds == null) {
+			final String name = getDataSourceName();
+			String msg = String.format("Looking up JDBC datasource '%s'", name);
+			logger.fine(msg);
+			ds = DataSources.getDataSource(name);
+			if (ds == null) {
+				msg = String.format("No datasource registered for name '%s'", name);
+				logger.warning(msg);
+			}
+		}
+		if (ds == null) {
 			throw new IllegalStateException("null data source");
 		}
 		return ds;
@@ -338,6 +366,14 @@ public class PostgresParallelRecordSource implements RecordSource {
 		}
 		this.dsName = name;
 		this.ds = ds;
+	}
+
+	public String getDataView() {
+		return dataViewName;
+	}
+
+	protected String getSource() {
+		return SOURCE;
 	}
 
 	private Connection getConnection() {
@@ -386,8 +422,10 @@ public class PostgresParallelRecordSource implements RecordSource {
 	@Override
 	public String toString() {
 		return "PostgresParallelRecordSource [fileName=" + getFileName()
-				+ ", model=" + getModel() + ", dbConfiguration=" + getDbConfiguration()
-				+ ", idsQuery=" + getIdsQuery() + ", dsName=" + getDataSourceName() + "]";
+				+ ", model=" + getModel() + ", dbConfiguration="
+				+ getDbConfiguration() + ", idsQuery=" + getIdsQuery()
+				+ ", dsName=" + getDataSourceName()
+				+ ", dataView=" + getDataView() + "]";
 	}
 
 }

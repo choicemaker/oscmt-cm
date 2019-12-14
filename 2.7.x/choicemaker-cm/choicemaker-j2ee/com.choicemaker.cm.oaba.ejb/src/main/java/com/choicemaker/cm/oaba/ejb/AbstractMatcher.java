@@ -37,7 +37,6 @@ import com.choicemaker.cm.batch.api.OperationalPropertyController;
 import com.choicemaker.cm.batch.api.ProcessingEventLog;
 import com.choicemaker.cm.batch.ejb.BatchJobControl;
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.core.ClueSet;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.ImmutableThresholds;
 import com.choicemaker.cm.core.Record;
@@ -68,6 +67,7 @@ import com.choicemaker.cm.oaba.utils.ControlChecker;
 /**
  * Common functionality of {@link MatcherMDB} and {@link TransMatcher}.
  */
+@Deprecated
 @SuppressWarnings("rawtypes")
 public abstract class AbstractMatcher implements MessageListener, Serializable {
 
@@ -158,7 +158,7 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 					}
 
 					final String _currentChunk = getPropertyController()
-							.getJobProperty(batchJob, PN_CURRENT_CHUNK_INDEX);
+							.getOperationalPropertyValue(batchJob, PN_CURRENT_CHUNK_INDEX);
 					final int currentChunk = Integer.valueOf(_currentChunk);
 					getLogger().fine("MatcherMDB In onMessage " + data.jobID
 							+ " " + currentChunk + " " + data.treeIndex);
@@ -392,13 +392,13 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 		BatchJob job = getOabaJobManager().findBatchJob(data.jobID);
 
 		final String _numRegularChunks = getPropertyController()
-				.getJobProperty(job, PN_REGULAR_CHUNK_FILE_COUNT);
+				.getOperationalPropertyValue(job, PN_REGULAR_CHUNK_FILE_COUNT);
 		final int numRegularChunks = Integer.valueOf(_numRegularChunks);
 
 		if (currentChunk < numRegularChunks) {
 			// regular chunks
 			final String _recordIdType =
-				getPropertyController().getJobProperty(job, PN_RECORD_ID_TYPE);
+				getPropertyController().getOperationalPropertyValue(job, PN_RECORD_ID_TYPE);
 			final RECORD_ID_TYPE recordIdType =
 				RECORD_ID_TYPE.valueOf(_recordIdType);
 			ComparisonTreeGroupSinkSourceFactory factory =
@@ -448,12 +448,9 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 			boolean isStage, ImmutableProbabilityModel model,
 			ImmutableThresholds t) {
 
-		final ClueSet clueSet = model.getClueSet();
-		final boolean[] enabledClues = model.getCluesToEvaluate();
 		final float low = t.getDifferThreshold();
 		final float high = t.getMatchThreshold();
-		return MatchUtils.compareRecords(clueSet, enabledClues, model, q, m,
-				isStage, low, high);
+		return MatchUtils.compareRecords(model, q, m, isStage, low, high);
 	}
 
 	/**

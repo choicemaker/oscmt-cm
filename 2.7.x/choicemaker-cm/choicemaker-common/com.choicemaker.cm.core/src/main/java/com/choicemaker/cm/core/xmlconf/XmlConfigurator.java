@@ -600,10 +600,10 @@ public class XmlConfigurator implements ChoiceMakerConfigurator,
 	 *             if any error occurs.
 	 */
 	@Override
-	public ChoiceMakerConfiguration init(String fn, String logConfName,
+	public ChoiceMakerConfiguration init(String fn, String unusedLogConfName,
 			boolean reload, boolean initGui) throws XmlConfException {
-		if (logConfName != null && !logConfName.trim().isEmpty()) {
-			logger.warning("Ignoring log configuration name: " + logConfName);
+		if (unusedLogConfName != null && !unusedLogConfName.trim().isEmpty()) {
+			logger.warning("Ignoring log configuration name: " + unusedLogConfName);
 
 		}
 		return init(fn, reload, initGui, null);

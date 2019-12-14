@@ -117,17 +117,25 @@ public class TransitivityServiceBean implements TransitivityService {
 	@Inject
 	private JMSContext context;
 
+	/**
+	 * Functionally the same as invoking
+	 * {@link #startTransitivity(String, TransitivityParameters, BatchJob, OabaSettings, ServerConfiguration, BatchJob, RecordMatchingMode)
+	 * the seven-parameter version} with a null record-matching mode.
+	 */
 	@Override
 	public long startTransitivity(String externalID,
 			TransitivityParameters batchParams, BatchJob batchJob,
 			OabaSettings settings, ServerConfiguration serverConfiguration,
 			BatchJob urmJob) throws ServerConfigurationException {
-		RecordMatchingMode mode =
-			BatchJobUtils.getRecordMatchingMode(propController, batchJob);
 		return startTransitivity(externalID, batchParams, batchJob, settings,
-				serverConfiguration, urmJob, mode);
+				serverConfiguration, urmJob, null);
 	}
 
+	/**
+	 * If the record-matching mode is null, looks up a mode from the operational
+	 * properties for the associated OABA job; if a mode is not found, an
+	 * illegal arguments exception is thrown.
+	 */
 	@Override
 	public long startTransitivity(String externalID,
 			TransitivityParameters batchParams, BatchJob batchJob,
@@ -137,6 +145,11 @@ public class TransitivityServiceBean implements TransitivityService {
 
 		final String METHOD = "startTransitivity";
 		log.entering(SOURCE_CLASS, METHOD);
+
+		if (mode == null) {
+			mode =
+				BatchJobUtils.getRecordMatchingMode(propController, batchJob);
+		}
 
 		validateStartParameters(externalID, batchParams, batchJob,
 				serverConfiguration, mode);

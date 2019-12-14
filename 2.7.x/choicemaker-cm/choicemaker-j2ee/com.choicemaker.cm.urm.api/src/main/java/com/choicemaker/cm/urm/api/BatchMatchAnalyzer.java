@@ -9,6 +9,7 @@ package com.choicemaker.cm.urm.api;
 
 import java.rmi.RemoteException;
 import java.util.Iterator;
+import java.util.List;
 
 import com.choicemaker.cm.args.AnalysisResultFormat;
 import com.choicemaker.cm.batch.api.BatchJobRigor;
@@ -51,5 +52,8 @@ public interface BatchMatchAnalyzer extends BatchBase {
 			throws RecordCollectionException, ArgumentException,
 			ConfigException, ModelException, CmRuntimeException,
 			RemoteException;
+
+	public List<String> getResultFileNames(long jobId, RESULT_FILE_TYPE type)
+			throws CmRuntimeException;
 
 }

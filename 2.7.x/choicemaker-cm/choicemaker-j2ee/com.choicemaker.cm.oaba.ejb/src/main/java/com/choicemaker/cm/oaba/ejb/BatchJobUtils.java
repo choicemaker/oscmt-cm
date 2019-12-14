@@ -36,8 +36,8 @@ public class BatchJobUtils {
 
 		} else {
 			assert mode != existing;
-			OperationalProperty opProp =
-				opPropController.find(job, PN_RECORD_MATCHING_MODE);
+			OperationalProperty opProp = opPropController
+					.findOperationalProperty(job, PN_RECORD_MATCHING_MODE);
 			opPropController.remove(opProp);
 			opPropController.setJobProperty(job, PN_RECORD_MATCHING_MODE,
 					newValue);
@@ -56,8 +56,8 @@ public class BatchJobUtils {
 		if (job == null) {
 			throw new IllegalArgumentException("null batch job");
 		}
-		final String value =
-			opPropController.getJobProperty(job, PN_RECORD_MATCHING_MODE);
+		final String value = opPropController.getOperationalPropertyValue(job,
+				PN_RECORD_MATCHING_MODE);
 		RecordMatchingMode retVal = null;
 		if (value == null) {
 			retVal = null;
@@ -108,7 +108,8 @@ public class BatchJobUtils {
 			throw new IllegalArgumentException("null batch job");
 		}
 		String pname = PN_MAX_TEMP_PAIRWISE_INDEX;
-		String pvalue = opPropController.getJobProperty(job, pname);
+		String pvalue =
+			opPropController.getOperationalPropertyValue(job, pname);
 		int retVal = -1;
 		try {
 			retVal = Integer.parseInt(pvalue);
