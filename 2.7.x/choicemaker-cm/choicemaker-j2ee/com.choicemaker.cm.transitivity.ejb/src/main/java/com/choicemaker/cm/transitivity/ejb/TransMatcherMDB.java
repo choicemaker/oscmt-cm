@@ -83,7 +83,7 @@ public class TransMatcherMDB extends AbstractMatcherBmt
 	@EJB
 	TransitivityParametersController transitivityParametersController;
 
-	@EJB
+	@EJB(beanName = "TransitivityEventManager")
 	private EventPersistenceManager eventManager;
 
 	@EJB

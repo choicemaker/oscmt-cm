@@ -111,7 +111,7 @@ public class SettingsControllerBeanIT {
 	@EJB
 	private OabaSettingsController oabaSettingsController;
 
-	@EJB
+	@EJB (beanName = "OabaEventManager")
 	private EventPersistenceManager eventManager;
 
 	@EJB

@@ -107,7 +107,7 @@ public class TransitivityServiceBean implements TransitivityService {
 	@EJB
 	private OperationalPropertyController propController;
 
-	@EJB
+	@EJB(beanName = "TransitivityEventManager")
 	private EventPersistenceManager eventManager;
 
 	@Resource(name = "jms/transitivityQueue",

@@ -27,12 +27,14 @@ public class UrmBatchControllerBean implements UrmBatchController {
 
 	// @EJB(lookup =
 	// "java:app/com.choicemaker.cms.ejb/UrmProcessControllerBean!com.choicemaker.cm.batch.api.ProcessController")
-	@EJB(lookup = "java:app/com.choicemaker.cms.ejb/UrmProcessControllerBean")
+	// @EJB(lookup = "java:app/com.choicemaker.cms.ejb/UrmProcessControllerBean")
+	@EJB (beanName = "UrmProcessControllerBean")
 	ProcessController urmProcessController;
 
 	// @EJB(lookup =
 	// "java:app/com.choicemaker.cms.ejb/UrmResultsManagerBean!com.choicemaker.cm.batch.api.BatchResultsManager")
-	@EJB(lookup = "java:app/com.choicemaker.cms.ejb/UrmResultsManagerBean")
+	// @EJB(lookup = "java:app/com.choicemaker.cms.ejb/UrmResultsManagerBean")
+	@EJB (beanName = "UrmResultsManagerBean")
 	BatchResultsManager urmResultsManager;
 
 	@Override

@@ -70,7 +70,7 @@ public class TransitivityJobManagerBean extends AbstractBatchJobManagerBean
 	@EJB
 	private ServerConfigurationController serverManager;
 
-	@EJB
+	@EJB(beanName = "TransitivityEventManager")
 	private EventPersistenceManager eventManager;
 
 	@Inject

@@ -70,7 +70,7 @@ public class OabaServiceBean implements OabaService {
 	@EJB
 	private OperationalPropertyController propController;
 
-	@EJB
+	@EJB (beanName = "OabaEventManager")
 	private EventPersistenceManager eventManager;
 
 	@Resource(name = "jms/startQueue",

@@ -95,7 +95,7 @@ public class TransSerializerMDB implements MessageListener, Serializable {
 	@EJB
 	private TransitivityParametersController paramsController;
 
-	@EJB
+	@EJB(beanName = "TransitivityEventManager")
 	private EventPersistenceManager eventManager;
 
 	@EJB

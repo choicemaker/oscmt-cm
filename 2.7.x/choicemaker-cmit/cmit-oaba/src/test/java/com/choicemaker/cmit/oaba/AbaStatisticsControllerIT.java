@@ -90,7 +90,7 @@ public class AbaStatisticsControllerIT {
 	@EJB
 	private OabaSettingsController oabaSettingsController;
 
-	@EJB
+	@EJB (beanName = "OabaEventManager")
 	private EventPersistenceManager eventManager;
 
 	@EJB

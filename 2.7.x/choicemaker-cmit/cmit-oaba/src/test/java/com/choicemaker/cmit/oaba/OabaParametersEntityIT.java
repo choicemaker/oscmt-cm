@@ -70,7 +70,7 @@ public class OabaParametersEntityIT {
 	@EJB
 	private OabaSettingsController oabaSettingsController;
 
-	@EJB
+	@EJB (beanName = "OabaEventManager")
 	private EventPersistenceManager eventManager;
 
 	@EJB

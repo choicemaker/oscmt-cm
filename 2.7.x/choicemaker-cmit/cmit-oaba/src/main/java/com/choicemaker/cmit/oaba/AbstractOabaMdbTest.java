@@ -101,7 +101,7 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 	@EJB
 	private ServerConfigurationController serverController;
 
-	@EJB(beanName = "OabaProcessingControllerBean")
+	@EJB (beanName = "OabaEventManager")
 	private EventPersistenceManager eventManager;
 
 	@EJB

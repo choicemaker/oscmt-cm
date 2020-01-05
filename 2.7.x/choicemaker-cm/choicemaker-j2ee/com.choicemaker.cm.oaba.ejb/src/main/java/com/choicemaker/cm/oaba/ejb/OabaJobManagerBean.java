@@ -68,7 +68,7 @@ public class OabaJobManagerBean extends AbstractBatchJobManagerBean
 	@EJB
 	private ServerConfigurationController serverManager;
 
-	@EJB
+	@EJB (beanName = "OabaEventManager")
 	private EventPersistenceManager eventManager;
 
 	@Inject

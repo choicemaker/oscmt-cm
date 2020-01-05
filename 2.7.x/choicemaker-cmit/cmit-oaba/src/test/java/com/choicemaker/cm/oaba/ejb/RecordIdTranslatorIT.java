@@ -244,7 +244,7 @@ public class RecordIdTranslatorIT {
 	@EJB
 	private OabaSettingsController oabaSettingsController;
 
-	@EJB
+	@EJB (beanName = "OabaEventManager")
 	private EventPersistenceManager eventManager;
 
 	@EJB

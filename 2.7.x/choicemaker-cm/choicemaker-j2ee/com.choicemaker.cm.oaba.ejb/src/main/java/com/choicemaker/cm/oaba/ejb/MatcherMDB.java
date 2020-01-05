@@ -80,7 +80,7 @@ public class MatcherMDB extends AbstractMatcherBmt {
 	@EJB
 	private OabaParametersController paramsController;
 
-	@EJB
+	@EJB (beanName = "OabaEventManager")
 	private EventPersistenceManager eventManager;
 
 	@EJB

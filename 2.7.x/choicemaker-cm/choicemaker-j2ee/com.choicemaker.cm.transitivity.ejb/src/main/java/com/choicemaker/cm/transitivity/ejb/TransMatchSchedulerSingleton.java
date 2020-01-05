@@ -78,7 +78,7 @@ public class TransMatchSchedulerSingleton extends AbstractSchedulerSingleton {
 	@EJB
 	private OperationalPropertyController propertyController;
 
-	@EJB
+	@EJB(beanName = "TransitivityEventManager")
 	private EventPersistenceManager eventManager;
 
 	@Resource(lookup = "java:/choicemaker/urm/jms/matcherQueue")

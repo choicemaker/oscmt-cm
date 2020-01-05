@@ -12,6 +12,8 @@ import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.api.BatchJob;
+import com.choicemaker.cm.batch.api.BatchResultsManager;
+import com.choicemaker.cm.batch.api.ProcessController;
 import com.choicemaker.cm.oaba.api.OabaBatchController;
 import com.choicemaker.cm.oaba.api.OabaJobManager;
 import com.choicemaker.cm.oaba.api.ServerConfigurationException;
@@ -22,11 +24,13 @@ public class OabaBatchControllerBean implements OabaBatchController {
 	@EJB
 	OabaJobManager oabaJobManager;
 
-	@EJB(lookup = "java:app/com.choicemaker.cm.oaba.ejb/OabaProcessControllerBean!com.choicemaker.cm.batch.api.ProcessController")
-	OabaProcessControllerBean oabaProcessController;
+	// @EJB(lookup = "java:app/com.choicemaker.cm.oaba.ejb/OabaProcessControllerBean!com.choicemaker.cm.batch.api.ProcessController")
+	@EJB(beanName = "OabaProcessControllerBean")
+	ProcessController oabaProcessController;
 
-	@EJB(lookup = "java:app/com.choicemaker.cm.oaba.ejb/OabaResultsManagerBean!com.choicemaker.cm.batch.api.BatchResultsManager")
-	OabaResultsManagerBean oabaResultsManager;
+	// @EJB(lookup = "java:app/com.choicemaker.cm.oaba.ejb/OabaResultsManagerBean!com.choicemaker.cm.batch.api.BatchResultsManager")
+	@EJB(beanName = "OabaResultsManagerBean")
+	BatchResultsManager oabaResultsManager;
 
 	@Override
 	public void exportResults(BatchJob batchJob, URI container)

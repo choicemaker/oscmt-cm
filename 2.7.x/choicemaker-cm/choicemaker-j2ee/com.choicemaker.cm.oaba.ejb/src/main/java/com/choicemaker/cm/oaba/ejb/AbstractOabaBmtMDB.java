@@ -73,7 +73,7 @@ public abstract class AbstractOabaBmtMDB
 	@EJB
 	private OabaParametersController paramsController;
 
-	@EJB
+	@EJB (beanName = "OabaEventManager")
 	private EventPersistenceManager eventManager;
 
 	@EJB

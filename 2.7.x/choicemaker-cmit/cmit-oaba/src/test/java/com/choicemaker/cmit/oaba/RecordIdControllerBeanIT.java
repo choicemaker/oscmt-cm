@@ -131,7 +131,7 @@ public class RecordIdControllerBeanIT {
 	@EJB
 	private OabaSettingsController oabaSettingsController;
 
-	@EJB
+	@EJB (beanName = "OabaEventManager")
 	private EventPersistenceManager eventManager;
 
 	@EJB

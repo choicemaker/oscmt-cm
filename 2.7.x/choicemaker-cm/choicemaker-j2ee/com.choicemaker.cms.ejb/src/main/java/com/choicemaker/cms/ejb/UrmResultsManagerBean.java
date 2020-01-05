@@ -30,11 +30,13 @@ public class UrmResultsManagerBean implements BatchResultsManager {
 	@EJB
 	private UrmJobManager urmJobManager;
 
-	@EJB(lookup = "java:app/com.choicemaker.cm.oaba.ejb/OabaResultsManagerBean!com.choicemaker.cm.batch.api.BatchResultsManager")
-	private OabaResultsManagerBean oabaResultsManager;
+	// @EJB(lookup = "java:app/com.choicemaker.cm.oaba.ejb/OabaResultsManagerBean!com.choicemaker.cm.batch.api.BatchResultsManager")
+	@EJB(beanName = "OabaResultsManagerBean")
+	private BatchResultsManager oabaResultsManager;
 
-	@EJB(lookup = "java:app/com.choicemaker.cm.transitivity.ejb/TransitivityResultsManagerBean!com.choicemaker.cm.batch.api.BatchResultsManager")
-	private TransitivityResultsManagerBean transitivityResultsManager;
+	// @EJB(lookup = "java:app/com.choicemaker.cm.transitivity.ejb/TransitivityResultsManagerBean!com.choicemaker.cm.batch.api.BatchResultsManager")
+	@EJB(beanName = "TransitivityResultsManagerBean")
+	private BatchResultsManager transitivityResultsManager;
 
 	@Override
 	public void exportResults(BatchJob batchJob, URI container)

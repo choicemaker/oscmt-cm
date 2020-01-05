@@ -12,6 +12,8 @@ import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.api.BatchJob;
+import com.choicemaker.cm.batch.api.BatchResultsManager;
+import com.choicemaker.cm.batch.api.ProcessController;
 import com.choicemaker.cm.oaba.api.ServerConfigurationException;
 import com.choicemaker.cm.transitivity.api.TransitivityBatchController;
 import com.choicemaker.cm.transitivity.api.TransitivityJobManager;
@@ -23,11 +25,13 @@ public class TransitivityBatchControllerBean
 	@EJB
 	TransitivityJobManager transitivityJobManager;
 
-	@EJB(lookup = "java:app/com.choicemaker.cm.transitivity.ejb/TransitivityProcessControllerBean!com.choicemaker.cm.batch.api.ProcessController")
-	TransitivityProcessControllerBean transitivityProcessController;
+	//@EJB(lookup = "java:app/com.choicemaker.cm.transitivity.ejb/TransitivityProcessControllerBean!com.choicemaker.cm.batch.api.ProcessController")
+	@EJB(beanName = "TransitivityProcessControllerBean")
+	ProcessController transitivityProcessController;
 
-	@EJB(lookup = "java:app/com.choicemaker.cm.transitivity.ejb/TransitivityResultsManagerBean!com.choicemaker.cm.batch.api.BatchResultsManager")
-	TransitivityResultsManagerBean transitivityResultsManager;
+	// @EJB(lookup = "java:app/com.choicemaker.cm.transitivity.ejb/TransitivityResultsManagerBean!com.choicemaker.cm.batch.api.BatchResultsManager")
+	@EJB(beanName = "TransitivityResultsManagerBean")
+	BatchResultsManager transitivityResultsManager;
 
 	@Override
 	public void exportResults(BatchJob batchJob, URI container)

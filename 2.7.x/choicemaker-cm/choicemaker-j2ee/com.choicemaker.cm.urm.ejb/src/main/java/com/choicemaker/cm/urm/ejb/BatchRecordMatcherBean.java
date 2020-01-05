@@ -53,19 +53,24 @@ public class BatchRecordMatcherBean implements BatchRecordMatcher {
 	private static final Logger logger =
 		Logger.getLogger(BatchRecordMatcherBean.class.getName());
 
-	@EJB(lookup = "java:app/com.choicemaker.cms.ejb/BatchMatchingBean!com.choicemaker.cms.api.BatchMatching")
+	// @EJB(lookup = "java:app/com.choicemaker.cms.ejb/BatchMatchingBean!com.choicemaker.cms.api.BatchMatching")
+	@EJB(beanName = "BatchMatchingBean")
 	private BatchMatching delegate;
 
-	@EJB(lookup = "java:module/UrmConfigurationSingleton")
+	// @EJB(lookup = "java:module/UrmConfigurationSingleton")
+	@EJB(beanName = "UrmConfigurationSingleton")
 	private UrmConfigurationAdapter adapter;
 
-	@EJB(lookup = "java:app/com.choicemaker.cms.ejb/NamedConfigurationControllerBean!com.choicemaker.cms.api.NamedConfigurationController")
+	// @EJB(lookup = "java:app/com.choicemaker.cms.ejb/NamedConfigurationControllerBean!com.choicemaker.cms.api.NamedConfigurationController")
+	@EJB(beanName = "NamedConfigurationControllerBean")
 	private NamedConfigurationController ncController;
 
-	@EJB(lookup = "java:app/com.choicemaker.cms.ejb/UrmBatchControllerBean!com.choicemaker.cms.api.UrmBatchController")
+	// @EJB(lookup = "java:app/com.choicemaker.cms.ejb/UrmBatchControllerBean!com.choicemaker.cms.api.UrmBatchController")
+	@EJB(beanName = "UrmBatchControllerBean")
 	private UrmBatchController urmBatchController;
 
-	@EJB(lookup = "java:module/BatchMatchAnalyzerBean")
+	// @EJB(lookup = "java:module/BatchMatchAnalyzerBean")
+	@EJB(beanName = "BatchMatchAnalyzerBean")
 	private BatchMatchAnalyzer batchMatchAnalyzer;
 
 	// @EJB(lookup =

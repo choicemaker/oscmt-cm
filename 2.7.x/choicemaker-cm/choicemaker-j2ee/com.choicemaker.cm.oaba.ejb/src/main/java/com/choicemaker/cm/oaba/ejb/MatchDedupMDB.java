@@ -99,7 +99,7 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 	@EJB
 	private OabaParametersController paramsController;
 
-	@EJB
+	@EJB (beanName = "OabaEventManager")
 	private EventPersistenceManager eventManager;
 
 	@EJB

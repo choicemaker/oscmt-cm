@@ -61,16 +61,20 @@ public class OnlineUrmBean<T extends Comparable<T> & Serializable>
 		Logger.getLogger(OnlineUrmBean.class.getName());
 
 	// This implementation depends on a local interface
-	@EJB(lookup = "java:app/com.choicemaker.cms.ejb/OnlineMatchingBean!com.choicemaker.cms.api.OnlineMatching")
+	//@EJB(lookup = "java:app/com.choicemaker.cms.ejb/OnlineMatchingBean!com.choicemaker.cms.api.OnlineMatching")
+	@EJB(beanName = "OnlineMatchingBean")
 	private OnlineMatching<T> delegate;
 
-	@EJB(lookup = "java:app/com.choicemaker.cm.oaba.ejb/AbaStatisticsSingleton!com.choicemaker.cm.oaba.api.AbaStatisticsController")
+	//@EJB(lookup = "java:app/com.choicemaker.cm.oaba.ejb/AbaStatisticsSingleton!com.choicemaker.cm.oaba.api.AbaStatisticsController")
+	@EJB(beanName = "AbaStatisticsSingleton")
 	private AbaStatisticsController statsController;
 
-	@EJB(lookup = "java:module/UrmConfigurationSingleton")
+	//@EJB(lookup = "java:module/UrmConfigurationSingleton")
+	@EJB(beanName = "UrmConfigurationSingleton")
 	private UrmConfigurationAdapter adapter;
 
-	@EJB(lookup = "java:app/com.choicemaker.cms.ejb/NamedConfigurationControllerBean!com.choicemaker.cms.api.NamedConfigurationController")
+	//@EJB(lookup = "java:app/com.choicemaker.cms.ejb/NamedConfigurationControllerBean!com.choicemaker.cms.api.NamedConfigurationController")
+	@EJB(beanName = "NamedConfigurationControllerBean")
 	private NamedConfigurationController ncController;
 
 	private UrmEjbAssist<T> assist = new UrmEjbAssist<>();

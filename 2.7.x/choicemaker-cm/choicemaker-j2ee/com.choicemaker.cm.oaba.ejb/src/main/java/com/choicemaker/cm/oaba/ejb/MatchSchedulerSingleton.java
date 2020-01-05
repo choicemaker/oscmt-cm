@@ -81,7 +81,7 @@ public class MatchSchedulerSingleton extends AbstractSchedulerSingleton {
 	@EJB
 	private OperationalPropertyController propertyController;
 
-	@EJB
+	@EJB (beanName = "OabaEventManager")
 	private EventPersistenceManager eventManager;
 
 	@Resource(lookup = "java:/choicemaker/urm/jms/matchDedupQueue")
