@@ -25,8 +25,10 @@ import javax.sql.DataSource;
  *
  * @author pcheung
  * @author rphall (migration to EJB3)
+ * @deprecated not used
  *
  */
+@Deprecated
 public class EJBConfiguration implements Serializable {
 
 	private static final long serialVersionUID = 271;
