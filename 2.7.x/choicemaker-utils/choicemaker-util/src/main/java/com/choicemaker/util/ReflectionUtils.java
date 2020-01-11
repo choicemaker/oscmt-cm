@@ -1,12 +1,18 @@
 package com.choicemaker.util;
 
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 @SuppressWarnings({
 		"rawtypes", "unchecked" })
 public class ReflectionUtils {
+
+	private static final Logger logger =
+		Logger.getLogger(ReflectionUtils.class.getName());
 
 	private static final Random random = new Random();
 
@@ -54,7 +60,8 @@ public class ReflectionUtils {
 		fail(msg);
 	}
 
-	static void fail(String context, Object nce, Class p, String pn, Exception x) {
+	static void fail(String context, Object nce, Class p, String pn,
+			Exception x) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Context: ").append(context);
 		sb.append(", target: ").append(nce == null ? "null" : nce.toString());
@@ -158,7 +165,8 @@ public class ReflectionUtils {
 		Method retVal = null;
 		try {
 			final String manipulatorName = SET + pn;
-			retVal = c.getDeclaredMethod(manipulatorName, new Class[] { p });
+			retVal = c.getDeclaredMethod(manipulatorName, new Class[] {
+					p });
 		} catch (Exception e) {
 			fail(METHOD, c, p, _pn, e);
 		}
@@ -210,7 +218,8 @@ public class ReflectionUtils {
 			}
 
 			// Set the new property value in the configuration
-			manipulator.invoke(nce, new Object[] { pv });
+			manipulator.invoke(nce, new Object[] {
+					pv });
 		} catch (Exception e) {
 			fail(METHOD, nce, p, pn, pv, e);
 		}
@@ -238,6 +247,64 @@ public class ReflectionUtils {
 		} catch (Exception e) {
 			fail(METHOD, nce, p, pn, pv, e);
 		}
+	}
+
+	/**
+	 * Returns a map of "get" methods to "set" methods for the specified class.
+	 * Same as invoking {@code settableGetters(setterClass, setterClass)}.
+	 */
+	public static Map<Method, Method> settableGetters(
+			final Class<?> setterClass) {
+		return settableGetters(setterClass, setterClass);
+	}
+
+	/**
+	 * Returns a map of declared, accessible "get" methods (possibly defined on
+	 * an interface or base class) to declared "set" methods. The
+	 * {@code getterClass} must be assignable from the {@code setterClass}.
+	 * <p/>
+	 * If a {@code get} method is not accessible -- for example, because of
+	 * security constraint -- a warning is logged but no exception is thrown.
+	 * 
+	 * @param setterClass
+	 *            -- non-null
+	 * @param getterClass
+	 *            -- non-null and assignable from the
+	 *            {@code setterClass) @return
+	 */
+	public static Map<Method, Method> settableGetters(
+			final Class<?> setterClass, Class<?> getterClass) {
+
+		Precondition.assertNonNullArgument("setter class must be non-null",
+				setterClass);
+		Precondition.assertNonNullArgument("getter class must be non-null",
+				getterClass);
+		Precondition.assertBoolean(
+				"getterClass} must be assignable from the setterClass",
+				getterClass.isAssignableFrom(setterClass));
+
+		Method[] nceMethods = setterClass.getDeclaredMethods();
+		Map<Method, Method> retVal = new HashMap<>();
+		for (Method m : nceMethods) {
+			final String mName = m.getName();
+			if (mName.startsWith("set")) {
+				final String mStem = mName.substring(3);
+				final String gName = "get" + mStem;
+				Method g = null;
+				 try {
+				g = getterClass.getDeclaredMethod(gName, (Class<?>[]) null);
+				} catch (NoSuchMethodException | SecurityException e) {
+					String msg0 = "Failed to get declared method '%s' "
+							+ "on class 'NamedConfiguration': %s";
+					String msg = String.format(msg0, gName, e.toString());
+					logger.warning(msg);
+				}
+				if (g != null) {
+					retVal.put(g, m);
+				}
+			}
+		}
+		return retVal;
 	}
 
 }
