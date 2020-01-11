@@ -47,6 +47,7 @@ import javax.persistence.DiscriminatorType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -197,7 +198,7 @@ public abstract class BatchJobEntity extends AbstractPersistentObject
 	@Column(name = CN_STATUS)
 	protected String status;
 
-	@ElementCollection
+	@ElementCollection(fetch=FetchType.EAGER)
 	@MapKeyColumn(name = CN_TIMESTAMP)
 	@MapKeyTemporal(TemporalType.TIMESTAMP)
 	@Column(name = CN_STATUS)
