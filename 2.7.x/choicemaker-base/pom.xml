@@ -827,6 +827,11 @@
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
+        <artifactId>com.choicemaker.cms.webapp</artifactId>
+        <version>${choicemaker.release.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cms.webui</artifactId>
         <version>${choicemaker.release.version}</version>
       </dependency>
@@ -1060,7 +1065,7 @@
       <dependency>
         <groupId>javax</groupId>
         <artifactId>javaee-api</artifactId>
-        <version>7.0</version>
+        <version>8.0</version>
         <scope>provided</scope>
       </dependency>
       <dependency>
