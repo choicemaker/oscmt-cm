@@ -1,8 +1,19 @@
 package com.choicemaker.cms.web.util;
 
+import java.util.logging.Logger;
+
+/**
+ * @deprecated see com.choicemaker.cms.webapp.util.PropertyNameType
+ */
+@Deprecated
 public final class PropertyNameType {
+
+	private static final Logger logger =
+		Logger.getLogger(PropertyNameType.class.getName());
+
 	public final String name;
 	public Class<?> type;
+
 	public PropertyNameType(String pn, Class<?> pt) {
 		if (pn == null || !pn.equals(pn.trim()) || pn.isEmpty()) {
 			String msg = "invalid property name '" + pn + "'";
@@ -17,6 +28,7 @@ public final class PropertyNameType {
 		this.name = pn;
 		this.type = pt;
 	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -25,6 +37,7 @@ public final class PropertyNameType {
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
@@ -53,8 +66,10 @@ public final class PropertyNameType {
 		}
 		return true;
 	}
+
 	@Override
 	public String toString() {
 		return "PropertyNameType [" + name + ", " + type + "]";
 	}
+
 }

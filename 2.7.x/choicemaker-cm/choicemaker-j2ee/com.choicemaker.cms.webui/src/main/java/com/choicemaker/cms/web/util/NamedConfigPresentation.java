@@ -5,6 +5,10 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.logging.Logger;
 
+/**
+ * @deprecated see com.choicemaker.cms.webapp.util.NamedConfigPresentation
+ */
+@Deprecated
 public class NamedConfigPresentation {
 
 	static final Logger logger = Logger.getLogger(NamedConfigPresentation.class
