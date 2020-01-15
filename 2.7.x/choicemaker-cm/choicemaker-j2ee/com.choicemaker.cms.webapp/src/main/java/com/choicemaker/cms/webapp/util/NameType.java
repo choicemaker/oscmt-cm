@@ -1,26 +1,17 @@
 package com.choicemaker.cms.webapp.util;
 
-import java.util.logging.Logger;
+import com.choicemaker.util.Precondition;
 
-public final class PropertyNameType {
-
-	private static final Logger logger =
-		Logger.getLogger(PropertyNameType.class.getName());
+/** @deprecated moved to cm-server-web4 module*/
+@Deprecated
+public final class NameType {
 
 	private final String name;
 	private final Class<?> type;
 
-	public PropertyNameType(String pn, Class<?> pt) {
-		if (pn == null || !pn.equals(pn.trim()) || pn.isEmpty()) {
-			String msg = "invalid property name '" + pn + "'";
-			logger.severe(msg);
-			throw new IllegalArgumentException(msg);
-		}
-		if (pt == null) {
-			String msg = "null property type";
-			logger.severe(msg);
-			throw new IllegalArgumentException(msg);
-		}
+	public NameType(String pn, Class<?> pt) {
+		Precondition.assertNonEmptyString("invalid name", pn);
+		Precondition.assertNonNullArgument("type must be non-null", pt);
 		this.name = pn;
 		this.type = pt;
 	}
@@ -37,8 +28,10 @@ public final class PropertyNameType {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((getName() == null) ? 0 : getName().hashCode());
-		result = prime * result + ((getType() == null) ? 0 : getType().hashCode());
+		result =
+			prime * result + ((getName() == null) ? 0 : getName().hashCode());
+		result =
+			prime * result + ((getType() == null) ? 0 : getType().hashCode());
 		return result;
 	}
 
@@ -53,7 +46,7 @@ public final class PropertyNameType {
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		PropertyNameType other = (PropertyNameType) obj;
+		NameType other = (NameType) obj;
 		if (getName() == null) {
 			if (other.getName() != null) {
 				return false;
@@ -73,7 +66,7 @@ public final class PropertyNameType {
 
 	@Override
 	public String toString() {
-		return "PropertyNameType [" + getName() + ", " + getType() + "]";
+		return "NameType [" + getName() + ", " + getType() + "]";
 	}
 
 }

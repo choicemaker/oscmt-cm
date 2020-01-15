@@ -32,6 +32,8 @@ import com.choicemaker.cms.webapp.model.NamedConfigurationBean;
 import com.choicemaker.util.Precondition;
 import com.choicemaker.util.ReflectionUtils;
 
+/** @deprecated moved to cm-server-web4 module*/
+@Deprecated
 @Named
 @RequestScoped
 public class BatchMatch {

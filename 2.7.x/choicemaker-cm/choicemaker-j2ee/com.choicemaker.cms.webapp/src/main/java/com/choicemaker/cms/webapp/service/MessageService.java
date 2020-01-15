@@ -9,6 +9,8 @@ import javax.persistence.TypedQuery;
 
 import com.choicemaker.cms.webapp.model.Message;
 
+/** @deprecated moved to cm-server-web4 module*/
+@Deprecated
 @Stateless
 public class MessageService {
 

@@ -9,6 +9,8 @@ import javax.inject.Named;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cms.api.UrmBatchController;
 
+/** @deprecated moved to cm-server-web4 module*/
+@Deprecated
 @Named
 @RequestScoped
 public class BatchJobs {

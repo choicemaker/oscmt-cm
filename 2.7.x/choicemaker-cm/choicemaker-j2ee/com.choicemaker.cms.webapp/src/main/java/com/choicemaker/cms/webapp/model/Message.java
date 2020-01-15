@@ -2,15 +2,16 @@ package com.choicemaker.cms.webapp.model;
 
 import java.io.Serializable;
 
-//@Entity
+/** @deprecated moved to cm-server-web4 module*/
+@Deprecated
 public class Message implements Serializable {
 
-	
+
 	private static final long serialVersionUID = 1L;
 
 	//@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
-	
+
 	//@Column(nullable = false) @Lob
 	private /*@NotNull*/ String text = "";
 
