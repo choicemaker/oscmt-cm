@@ -274,21 +274,24 @@ public class SqlServerFetchOffsetRecordSource
 					String q;
 					if (i == 0) {
 						String t0 = "SELECT [%s] FROM [%s] WHERE [%s] IN "
-								+ "(SELECT [ID] FROM [%s]) ORDER BY [%s] "
+								// + "(SELECT [ID] FROM [%s]) ORDER BY [%s] "
+								+ "(SELECT [ID] FROM [%s]) ORDER BY %s "
 								+ "OFFSET %d ROWS FETCH NEXT %d ROWS ONLY";
 						q0 = String.format(t0, masterId, viewName, masterId,
 								getDataView(), getOrderBy(v), offset.get(),
 								fetch);
 						logger.fine("q0: " + q0);
 						String t = "SELECT * FROM [%s] WHERE [%s] IN "
-								+ "(SELECT [ID] FROM [%s]) ORDER BY [%s] "
+								// + "(SELECT [ID] FROM [%s]) ORDER BY [%s] "
+								+ "(SELECT [ID] FROM [%s]) ORDER BY %s "
 								+ "OFFSET %d ROWS FETCH NEXT %d ROWS ONLY";
 						q = String.format(t, viewName, masterId, getDataView(),
 								getOrderBy(v), offset.get(), fetch);
 					} else {
 						assert q0 != null;
 						String t = "SELECT * FROM [%s] WHERE [%s] IN "
-								+ "(%s) ORDER BY [%s]";
+								// + "(%s) ORDER BY [%s]";
+								+ "(%s) ORDER BY %s";
 						q = String.format(t, viewName, masterId, q0,
 								getOrderBy(v));
 					}
@@ -429,8 +432,8 @@ public class SqlServerFetchOffsetRecordSource
 
 	@Override
 	public boolean hasNext() throws IOException {
-		boolean retVal = !records.isEmpty();
-		if (retVal == false) {
+		boolean _hasNext = !records.isEmpty();
+		if (_hasNext == false) {
 			try (Connection conn = getDataSource().getConnection()) {
 				fillQueue(conn);
 			} catch (SQLException ex) {
@@ -438,9 +441,9 @@ public class SqlServerFetchOffsetRecordSource
 				logger.severe(ex.toString());
 				throw new IOException(ex.toString(), ex);
 			}
-			retVal = !records.isEmpty();
+			_hasNext = !records.isEmpty();
 		}
-		return retVal;
+		return _hasNext;
 	}
 
 	@Override
