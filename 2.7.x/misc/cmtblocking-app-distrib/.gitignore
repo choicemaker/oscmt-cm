@@ -2,3 +2,4 @@ bin
 *.script
 *_local.properties
 /tmp*
+/effective-pom.xml
