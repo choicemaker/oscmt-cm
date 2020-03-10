@@ -132,13 +132,22 @@ public class ConfigurationManager {
 		init(fn, null, reload, initGui, null);
 	}
 
+	/** @deprecated Use {@link #init(String, boolean, boolean)} */
+	@Deprecated
 	public void init(String fn, String unusedLogName, boolean reload,
 			boolean initGui) throws XmlConfException {
-		init(fn, unusedLogName, reload, initGui, null);
+		init(fn, reload, initGui, null);
 	}
 
+	/** @deprecated Use {@link #init(String, boolean, boolean, char[])} */
+	@Deprecated
 	public void init(String fn, String unusedLogName, boolean reload,
 			boolean initGui, char[] password) throws XmlConfException {
+		init(fn, reload, initGui, null);
+	}
+
+	public void init(String fn, boolean reload, boolean initGui, char[] password)
+			throws XmlConfException {
 		if (isInitialized()) {
 			logger.warning("Already initialized");
 		}
