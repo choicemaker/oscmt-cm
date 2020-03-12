@@ -16,6 +16,7 @@ target*
 PmjbApp
 CM-Analyzer
 pom.xml.versionsBackup
+effective-pom.xml
 /.metadata
 /example_models
 /work
