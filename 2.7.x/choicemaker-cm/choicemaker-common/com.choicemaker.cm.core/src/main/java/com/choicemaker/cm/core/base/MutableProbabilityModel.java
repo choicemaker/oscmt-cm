@@ -727,7 +727,7 @@ public class MutableProbabilityModel implements IProbabilityModel {
 
 	@Override
 	public String getSchemaName() {
-		return this.getAccessor().getSchemaFileName();
+		return this.getAccessor().getSchemaName();
 	}
 
 	@Override
