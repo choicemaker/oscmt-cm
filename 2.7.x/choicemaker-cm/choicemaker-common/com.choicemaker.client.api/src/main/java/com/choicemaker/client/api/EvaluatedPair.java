@@ -11,7 +11,11 @@ public class EvaluatedPair<T extends Comparable<T> & Serializable>
 
 	public static char DEFAULT_DELIMITER = ' ';
 
-	/** Valid probabilities are in the range 0.0f to 1.0f, inclusive */
+	/**
+	 * Valid probabilities are in the range 0.0f to 1.0f, inclusive
+	 * @param p the probability
+	 * @return true if between 0.0 and 1.0, inclusive, false otherwise
+	 */
 	public static boolean isValidProbability(float p) {
 		boolean retVal = (p >= 0.0f) && (p <= 1.0f);
 		return retVal;

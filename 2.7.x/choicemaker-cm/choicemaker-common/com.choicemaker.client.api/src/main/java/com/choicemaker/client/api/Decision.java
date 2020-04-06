@@ -127,13 +127,13 @@ public class Decision implements Serializable, Comparable<Decision> {
 	/**
 	 * Returns the corresponding <code>Decision</code>.
 	 * 
-	 * @param <code>no</code>
+	 * @param no
 	 *            must be <code>0 (differ)</code>, <code>1 (match)</code> or
 	 *            <code>2 (hold)</code> (case insensitive)
 	 * @return The corresponding <code>Decision</code>.
 	 * @throws IndexOutOfBoundsException
 	 *             if <code>no</code> is out of the range
-	 *             <code>(no < 0 || no >= NUM_DECISIONS)</code>.
+	 *             <code>(no &lt; 0 || no &gt;= NUM_DECISIONS)</code>.
 	 */
 	public static Decision valueOf(int no) {
 		return vals[no];

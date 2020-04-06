@@ -18,36 +18,42 @@ public interface ServerConfiguration extends Serializable {
 	/**
 	 * A memorable name for a configuration. A configuration name must be unique
 	 * within the database used to store configuration information.
+	 * @return the name of this configuration
 	 */
 	String getName();
 
 	/**
 	 * A universally, unique identifier for a configuration, automatically
 	 * assigned.
+	 * @return the unique id for this configuration
 	 */
 	String getUUID();
 
-	/** The host machine or logical domain to which a configuration applies */
+	/** @return The host machine or logical domain to which a configuration applies */
 	String getHostName();
 
 	/**
-	 * The maximum number of ChoiceMaker tasks that should be run in parallel
+	 * @return The maximum number of ChoiceMaker tasks that should be run in parallel
 	 */
 	int getMaxChoiceMakerThreads();
 
-	/** The maximum number of entries in an OABA or Transitivity result file */
+	/** @return The maximum number of entries in an OABA or Transitivity result file */
 	int getMaxFileEntries();
 
-	/** A deprecated alias for {@link #getMaxFileEntries()} */
+	/** @return A deprecated alias for {@link #getMaxFileEntries()}
+	 * @deprecated
+	 */
 	@Deprecated
 	int getMaxOabaChunkFileRecords();
 
-	/** A (fuzzy) maximum number of result files produced during matching or
+	/** @return A (fuzzy) maximum number of result files produced during matching or
 	 * transitivity analysis
 	 */
 	int getMaxFilesCount();
 
-	/** A deprecated alias for {@link #getMaxFilesCount()} */
+	/** @return A deprecated alias for {@link #getMaxFilesCount()}
+	 * @deprecated
+	 */
 	@Deprecated
 	int getMaxOabaChunkFileCount();
 
@@ -58,6 +64,7 @@ public interface ServerConfiguration extends Serializable {
 	 * the context in which it was first saved, but be invalid in a subsequent
 	 * context when it is retrieved (for example, on a completely different
 	 * host).
+	 * @return true if the working directory is valid, false otherwise
 	 */
 	boolean isWorkingDirectoryLocationValid();
 

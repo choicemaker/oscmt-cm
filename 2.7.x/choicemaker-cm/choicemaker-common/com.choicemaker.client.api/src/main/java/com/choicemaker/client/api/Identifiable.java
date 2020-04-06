@@ -13,6 +13,8 @@ public interface Identifiable<T extends Comparable<T>> {
 	 * Returns a key that uniquely identifies an entity. If two records have
 	 * different identifiers, then they represent different entities (in the
 	 * absence of duplicates).
+	 *
+	 * @return the key that identifies this instance
 	 */
 	T getId();
 

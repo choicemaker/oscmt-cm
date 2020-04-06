@@ -14,10 +14,10 @@ package com.choicemaker.cm.args;
  * A type that defines how the result of the batch analysis will be organized
  * for output:
  * <ul>
- * <li>XML - as xml file,
- * <li>H3L as a list of triplets &lt; i,j,k> where i is a connected (by hold or
+ * <li>XML - as an xml file,
+ * <li>H3L as a list of triplets &lt; i,j,k&gt; where i is a connected (by hold or
  * match) record set ID, j is a linked record set ID, k is a record ID.
- * <li>R3L as a list of triplets &lt; j,j,k> where i is a record ID, j is a
+ * <li>R3L as a list of triplets &lt; j,j,k&gt; where i is a record ID, j is a
  * linked record set ID, k is a connected record set ID.
  * </ul>
  * <p>
@@ -60,6 +60,7 @@ public enum AnalysisResultFormat {
 	}
 
 	/**
+	 * @param ext a file extension (excluding the leadning '.')
 	 * @return may be null if <code>ext</code> is null
 	 * @throws IllegalArgumentException
 	 *             if <code>ext</code> is not recognized
