@@ -1029,8 +1029,10 @@ public class StringUtils {
 	}
 
 	/**
-	 * Same functionality as {@link #removeLeadingZeros(String). All leading
+	 * Same functionality as {@link #removeLeadingZeros(String)}. All leading
 	 * zeros, even if it is also the last character in the String, are removed.
+	 * @param s the String to be trimmed
+	 * @return the trimmed value
 	 */
 	public static String trimLeadingZeros(String s) {
 		return removeLeadingZeros(s);

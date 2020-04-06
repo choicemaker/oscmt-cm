@@ -236,6 +236,8 @@ public class MessageUtil {
 	 * 
 	 * @param fileName
 	 *            any file name
+	 * @param endLength
+	 *            the maximum length of a file path
 	 * @return null if the input is null, otherwise an elided substring of the
 	 *         file name broken at some file separator if possible, or the
 	 *         entire base file name if base name is too long
