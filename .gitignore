@@ -12,6 +12,7 @@ tmp
 .settings
 _err[0-9]*
 _out[0-9]*
+javadoc*log*
 target*
 PmjbApp
 CM-Analyzer
