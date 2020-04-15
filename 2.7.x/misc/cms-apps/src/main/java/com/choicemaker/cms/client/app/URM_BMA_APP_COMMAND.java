@@ -1,0 +1,5 @@
+package com.choicemaker.cms.client.app;
+
+public enum URM_BMA_APP_COMMAND {
+	MATCH_PAIR_FILENAMES, TRANSMATCH_PAIR_FILENAMES, TRANSMATCH_GROUP_FILENAMES
+}
