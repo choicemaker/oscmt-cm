@@ -70,9 +70,6 @@ public class BooleanActiveClues extends ActiveClues {
 	
 	/**
 	 * Returns the indices of all active clues and rules.
-	 * <p>
-	 * The parameter <code>model</code> is needed to efficiently support
-	 * clues that are used for decision making and as rules.
 	 *
 	 * @return   The indices of all active clues and rules.
 	 */
