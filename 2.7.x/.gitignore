@@ -19,3 +19,5 @@ build.xml
 pom_non-rc*.xml
 *_local.properties
 *_local.xml
+
+/work
