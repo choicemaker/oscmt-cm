@@ -32,6 +32,6 @@ public interface OabaJobJPA extends BatchJobJPA {
 	String QN_OABAJOB_FIND_ALL = "oabaJobFindAll";
 
 	/** JPQL used to implement {@link #QN_OABAJOB_FIND_ALL} */
-	String JPQL_OABAJOB_FIND_ALL = "Select job from OabaJobEntity job";
+	String JPQL_OABAJOB_FIND_ALL = "Select job from OabaJobEntity job order by job.id";
 
 }

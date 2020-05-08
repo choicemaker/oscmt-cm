@@ -22,6 +22,10 @@ public class ImmutableThresholds implements Cloneable {
 
 	public static final double MIN_VALUE = 0.0f;
 
+	public static final float DEFAULT_MATCH_THRESHOLD = 1.00f;
+
+	public static final float DEFAULT_DIFFER_THRESHOLD = 0.0f;
+
 	/**
 	 * Checks that both thresholds are valid, and that the low threshold
 	 * is not greater than the high threshold. If any of these constraints

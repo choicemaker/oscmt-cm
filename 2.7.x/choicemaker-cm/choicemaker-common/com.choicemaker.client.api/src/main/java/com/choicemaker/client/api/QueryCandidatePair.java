@@ -16,7 +16,7 @@ import java.io.Serializable;
  * 
  * @author rphall
  *
- * @param <T>
+ * @param <T> The Java type of record ids
  */
 public /* final */ class QueryCandidatePair<T extends Comparable<T> & Serializable>
 		extends EvaluatedPair<T> {

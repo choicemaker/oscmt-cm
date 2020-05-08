@@ -252,6 +252,8 @@ public class ReflectionUtils {
 	/**
 	 * Returns a map of "get" methods to "set" methods for the specified class.
 	 * Same as invoking {@code settableGetters(setterClass, setterClass)}.
+	 * @param setterClass the class to be inspected
+	 * @return a map of "get" methods to "set" methods
 	 */
 	public static Map<Method, Method> settableGetters(
 			final Class<?> setterClass) {
@@ -262,7 +264,7 @@ public class ReflectionUtils {
 	 * Returns a map of declared, accessible "get" methods (possibly defined on
 	 * an interface or base class) to declared "set" methods. The
 	 * {@code getterClass} must be assignable from the {@code setterClass}.
-	 * <p/>
+	 * <p>
 	 * If a {@code get} method is not accessible -- for example, because of
 	 * security constraint -- a warning is logged but no exception is thrown.
 	 * 
@@ -270,7 +272,8 @@ public class ReflectionUtils {
 	 *            -- non-null
 	 * @param getterClass
 	 *            -- non-null and assignable from the
-	 *            {@code setterClass) @return
+	 *            {@code setterClass}
+	 * @return a map of declared accessors to setters
 	 */
 	public static Map<Method, Method> settableGetters(
 			final Class<?> setterClass, Class<?> getterClass) {

@@ -24,38 +24,27 @@ import com.choicemaker.client.api.Decision;
 public class MutableMarkedRecordPair<T extends Comparable<T> & Serializable>
 		extends MutableRecordPair<T> implements IMarkedRecordPair<T> {
 
-	/** A comment. */
 	private String comment;
-
 	private Date date;
-
 	private Decision decision;
-
 	private String src;
-
 	private String user;
 
 	public MutableMarkedRecordPair() {
 	}
 
 	/**
-	 * Constructor for a marked record pair.
+	 * Copy constructor for a marked record pair.
 	 *
-	 * @param q
-	 *            One of the records.
-	 * @param m
-	 *            The other record.
-	 * @param decision
-	 *            The <code>Decision</code>.
-	 * @param date
-	 *            The date this decision was made/last revised.
-	 * @param user
-	 *            The user who made the decision/last revised it.
-	 * @param src
-	 *            The source of this record.
-	 * @param comment
-	 *            A comment.
+	 * @param imrp
+	 *            A non-null marked record pair
 	 */
+	public MutableMarkedRecordPair(ImmutableMarkedRecordPair<T> imrp) {
+		this(imrp.getQueryRecord(), imrp.getMatchRecord(),
+				imrp.getMarkedDecision(), imrp.getDateMarked(), imrp.getUser(),
+				imrp.getSource(), imrp.getComment());
+	}
+
 	public MutableMarkedRecordPair(Record<T> q, Record<T> m, Decision decision,
 			Date date, String user, String src, String comment) {
 		super(q, m);

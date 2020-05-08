@@ -14,16 +14,18 @@ public interface PersistentObject {
 
 	public static final long NONPERSISTENT_ID = 0L;
 
-	/** Physical key */
+	/** @return Physical key */
 	public long getId();
 
-	/** Logical key */
+	/** @return Logical key */
 	public String getUUID();
 
-	/** Optimistic locking */
+	/** @return Optimistic locking */
 	public int getOptLock();
 
-	/** Checks if an instance has been persisted to the database */
+	/** @return true if an instance has been persisted to the database,
+	 * false otherwise
+	 */
 	public boolean isPersistent();
 
 }

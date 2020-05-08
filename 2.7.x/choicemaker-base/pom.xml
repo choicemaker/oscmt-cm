@@ -84,7 +84,7 @@
     <plugin.maven-help.version>2.2</plugin.maven-help.version>
     <plugin.maven-jar.version>2.4</plugin.maven-jar.version>
     <!-- plugin.maven-jar.version>3.0.2</plugin.maven-jar.version -->
-    <plugin.maven-javadoc.version>2.10.3</plugin.maven-javadoc.version>
+    <plugin.maven-javadoc.version>3.1.1</plugin.maven-javadoc.version>
     <plugin.maven-jxr.version>2.3</plugin.maven-jxr.version>
     <!-- plugin.maven-pmd.version>2.7.1</plugin.maven-pmd.version -->
     <plugin.maven-pmd.version>3.0.1</plugin.maven-pmd.version>
