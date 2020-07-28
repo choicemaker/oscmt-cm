@@ -10,18 +10,23 @@ package com.choicemaker.cm.oaba.core;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Random;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
 /**
  * This object contains a group of record IDs belonging to a block that need to
  * be compared against all the other record IDs in the group.
  *
- * This represents an oversized block. The oversized blocks are compared as
- * follows:
+ * The records arranged in over-sized blocks. This class overrides simpler
+ * methods of {@link ComparisonArray the base class} to compare records in an
+ * approximate manner that is optimized for speed at the expense of some
+ * accuracy. The records within an over-sized blocks are compared as follows:
  * <ul>
- * <li>STEP 1. create a random set, RStaging, consisting of maxBlockSize ids from
- * staging.</li>
+ * <li>STEP 1. create a random set, RStaging, consisting of maxBlockSize ids
+ * from staging.</li>
  * <li>STEP 2. the rest of the ids from staging go into set TStage.</li>
  * <li>STEP 3. master ids go into set TMaster.</li>
  * <li>STEP 4. perform round robin comparison on RStaging.</li>
@@ -31,17 +36,36 @@ import java.util.logging.Logger;
  * <li>STEP 8. for each TStage record, compare with its i+1 neighbor and 3
  * random TStage records</li>
  * </ul>
+ * To check the effect on accuracy, the simpler and rigorous methods of the base
+ * class can be used in place of the optimized methods by setting the System
+ * property {@link #PN_USE_BASE_METHODS oaba.comparisonArrayOS.useBaseMethods}
+ * to true.
  *
  * @author pcheung
  *
  */
-public class ComparisonArrayOS<T extends Comparable<T>> extends
-		ComparisonArray<T> {
+public class ComparisonArrayOS<T extends Comparable<T>>
+		extends ComparisonArray<T> {
+
+	/**
+	 * The name of a system property that can be set to "true" to revert to
+	 * methods of the base class
+	 */
+	public static final String PN_USE_BASE_METHODS =
+		"oaba.comparisonArrayOS.useBaseMethods";
+
+	/** Checks the system property {@link #PN_USE_BASE_METHODS} */
+	public static boolean useBaseMethods() {
+		String value = System.getProperty(PN_USE_BASE_METHODS, "false");
+		Boolean _useBaseMethods = Boolean.valueOf(value);
+		boolean retVal = _useBaseMethods.booleanValue();
+		return retVal;
+	}
 
 	private static final long serialVersionUID = 1L;
 
-	private static final Logger log = Logger.getLogger(ComparisonArrayOS.class
-			.getName());
+	private static final Logger log =
+		Logger.getLogger(ComparisonArrayOS.class.getName());
 
 	protected static final int STEP_4 = 0;
 	protected static final int STEP_5 = 1;
@@ -49,21 +73,59 @@ public class ComparisonArrayOS<T extends Comparable<T>> extends
 	protected static final int STEP_7 = 3;
 	protected static final int STEP_8 = 4;
 
-	// this keeps track of in which step of the algorithm we are at.
+	/**
+	 * Flag that controls whether base methods are used instead of approximate,
+	 * optimized methods
+	 */
+	private final boolean useBaseMethods = useBaseMethods();
+
+	/**
+	 * State variable that determines how records are compared
+	 */
 	private int step = STEP_4;
 
-	// This is true if in the step 8, we have already check TStage with its i+1
-	// record.
+	/**
+	 * State variable that indicates whether next-neighbor ("i+1") comparisons
+	 * are complete in step 8
+	 */
 	private boolean checkedNext = false;
 
-	// the is the actual index of i+1
+	/**
+	 * State variable that tracks the index ("i+1") of next-neighbor comparisons
+	 * in step 8
+	 */
 	private int n;
 
+	/** Array parameter: maxium size of a regular blocking set */
 	private int maxBlockSize;
+
+	/** Operational variable: a random number generator */
 	private Random random;
+
+	/**
+	 * A list of staging ids that are treated as a regular blocking set (of size
+	 * <code>maxBlockSize</code> or less)
+	 */
 	private List<T> RStaging = null;
+
+	/**
+	 * A list of "overflow" staging ids that are handled by optimized comparison
+	 * methods
+	 */
 	private List<T> TStage = null;
+
+	/**
+	 * Operational variable: that holds 4 or fewer randomly selected ids from
+	 * the list of "overflow" staging ids (TStage)
+	 */
 	private int[] randomStage = null;
+
+	/**
+	 * Operation variable: a set used to deduplicate the pairs returned by this
+	 * instance
+	 */
+	private final Set<ComparisonPair<T>> uniquePairs =
+		ConcurrentHashMap.newKeySet();
 
 	/**
 	 * This constructor takes in a ComparisonArray and an integer representing
@@ -73,19 +135,18 @@ public class ComparisonArrayOS<T extends Comparable<T>> extends
 	 * @param maxBlockSize
 	 */
 	public ComparisonArrayOS(ComparisonArray<T> ca, int maxBlockSize) {
-		this(ca.getStagingIDs(), ca.getMasterIDs(), ca.getStagingIDsType(), ca
-				.getMasterIDsType(), maxBlockSize);
+		this(ca.getStagingIDs(), ca.getMasterIDs(), ca.getStagingIDsType(),
+				ca.getMasterIDsType(), maxBlockSize);
 	}
 
 	public ComparisonArrayOS(List<T> stagingIDs, List<T> masterIDs,
 			RECORD_ID_TYPE stagingIdType, RECORD_ID_TYPE masterIdType,
 			int maxBlockSize) {
-		this.setStagingIDs(stagingIDs);
-		this.setMasterIDs(masterIDs);
-		this.setStagingIDType(stagingIdType);
-		this.setMasterIDType(masterIdType);
+		super(stagingIDs, masterIDs, stagingIdType, masterIdType);
 		this.maxBlockSize(maxBlockSize);
-		init();
+		if (!this.useBaseMethods) {
+			init();
+		}
 	}
 
 	/**
@@ -93,6 +154,7 @@ public class ComparisonArrayOS<T extends Comparable<T>> extends
 	 *
 	 */
 	protected void init() {
+
 		// seed the random number generator
 		int s = getStagingIDs().size() + getMasterIDs().size();
 		random(new Random(s));
@@ -296,8 +358,8 @@ public class ComparisonArrayOS<T extends Comparable<T>> extends
 				ret.setId2(getMasterIDs().get(get_sID1()));
 				ret.isStage = false;
 
-				log.fine("TMaster random " + ret.getId1().toString()
-						+ " " + ret.getId2().toString());
+				log.fine("TMaster random " + ret.getId1().toString() + " "
+						+ ret.getId2().toString());
 
 				set_sID2(get_sID2() + 1);
 				if (get_sID2() == s1) {
@@ -322,8 +384,8 @@ public class ComparisonArrayOS<T extends Comparable<T>> extends
 				ret.setId2(getMasterIDs().get(get_sID1()));
 				ret.isStage = false;
 
-				log.fine("TMaster random " + ret.getId1().toString()
-						+ " " + ret.getId2().toString());
+				log.fine("TMaster random " + ret.getId1().toString() + " "
+						+ ret.getId2().toString());
 
 				set_sID2(get_sID2() + 1);
 				if (get_sID2() == 4) {
@@ -362,8 +424,8 @@ public class ComparisonArrayOS<T extends Comparable<T>> extends
 				ret.setId2(TStage().get(index()));
 				ret.isStage = true;
 
-				log.fine("TStage random i+1 " + ret.getId1().toString()
-						+ " " + ret.getId2().toString());
+				log.fine("TStage random i+1 " + ret.getId1().toString() + " "
+						+ ret.getId2().toString());
 
 				checkedNext(true);
 
@@ -385,16 +447,16 @@ public class ComparisonArrayOS<T extends Comparable<T>> extends
 					ret.setId1(TStage().get(get_sID1()));
 
 					if (randomStage()[get_sID2()] >= s1) {
-						ret.setId2(getMasterIDs().get(
-								randomStage()[get_sID2()] - s1));
+						ret.setId2(getMasterIDs()
+								.get(randomStage()[get_sID2()] - s1));
 						ret.isStage = false;
 					} else {
 						ret.setId2(TStage().get(randomStage()[get_sID2()]));
 						ret.isStage = true;
 					}
 
-					log.fine("TStage random " + ret.getId1().toString()
-							+ " " + ret.getId2().toString());
+					log.fine("TStage random " + ret.getId1().toString() + " "
+							+ ret.getId2().toString());
 
 					set_sID2(get_sID2() + 1);
 					set_mID1(get_mID1() + 1);
@@ -412,7 +474,7 @@ public class ComparisonArrayOS<T extends Comparable<T>> extends
 		return ret;
 	}
 
-	protected ComparisonPair<T> readNext() {
+	protected ComparisonPair<T> optimizedReadNext() {
 		ComparisonPair<T> ret = null;
 		try {
 			switch (step()) {
@@ -443,52 +505,98 @@ public class ComparisonArrayOS<T extends Comparable<T>> extends
 		return ret;
 	}
 
-	@Override
-	public boolean hasNextPair() {
-		if (this.get_nextPair() == null) {
-			this.set_nextPair(readNext());
+	protected ComparisonPair<T> readNext() {
+		ComparisonPair<T> retVal;
+		if (this.useBaseMethods) {
+			retVal = super.readNext();
+		} else {
+			retVal = this.optimizedReadNext();
 		}
-		return this.get_nextPair() != null;
+		return retVal;
+	}
+
+	private ComparisonPair<T> readNextUniquePair() {
+		this.set_nextPair(readNext());
+		ComparisonPair<T> test = this.get_nextPair();
+		while (test != null && !this.uniquePairs.add(test)) {
+			this.set_nextPair(readNext());
+			test = this.get_nextPair();
+		}
+		return test;
+	}
+
+	private boolean optimizedHasNextPair() {
+		ComparisonPair<T> test = this.get_nextPair();
+		if (test == null) {
+			test = readNextUniquePair();
+		}
+		return test != null;
 	}
 
 	@Override
-	public ComparisonPair<T> getNextPair() {
-		if (this.get_nextPair() == null) {
-			this.set_nextPair(readNext());
+	public boolean hasNextPair() {
+		boolean retVal;
+		if (this.useBaseMethods) {
+			retVal = super.hasNextPair();
+		} else {
+			retVal = this.optimizedHasNextPair();
 		}
+		return retVal;
+	}
+
+	private ComparisonPair<T> optimizedGetNextPair() {
 		ComparisonPair<T> retVal = this.get_nextPair();
+		if (retVal == null) {
+			retVal = readNextUniquePair();
+		}
+
+		// Check that there is a pair to be returned
+		if (retVal == null) {
+			throw new NoSuchElementException();
+		}
+
+		// Remove the returned pair from the next-pair cache
 		this.set_nextPair(null);
 
 		return retVal;
 	}
 
 	@Override
+	public ComparisonPair<T> getNextPair() {
+		ComparisonPair<T> retVal;
+		if (this.useBaseMethods) {
+			retVal = super.getNextPair();
+		} else {
+			retVal = this.optimizedGetNextPair();
+		}
+		return retVal;
+	}
+
+	@Override
 	public String toString() {
 		int logicalStep = step() + 4;
-		return "ComparisonArrayOS [logicalStep="
-				+ logicalStep
-				+ ", maxBlockSize="
-				+ maxBlockSize()
-				+ ", master ID count: "
-				+ (getMasterIDs() == null ? null : String
-						.valueOf(getMasterIDs().size()))
-				+ ", staging ID count:"
-				+ (getStagingIDs() == null ? null : String
-						.valueOf(getStagingIDs().size())) + "]";
+		return "ComparisonArrayOS [useBaseMehods=" + this.useBaseMethods
+				+ ", logicalStep=" + logicalStep + ", maxBlockSize="
+				+ maxBlockSize() + ", master ID count: "
+				+ (getMasterIDs() == null ? null
+						: String.valueOf(getMasterIDs().size()))
+				+ ", staging ID count:" + (getStagingIDs() == null ? null
+						: String.valueOf(getStagingIDs().size()))
+				+ "]";
 	}
 
 	public String dump() {
 		int logicalStep = step() + 4;
-		return "ComparisonArrayOS [logicalStep=" + logicalStep
-				+ ", checkedNext=" + checkedNext() + ", n=" + index()
-				+ ", maxBlockSize=" + maxBlockSize() + ", random=" + random()
-				+ ", RStaging=" + RStaging() + ", TStage=" + TStage()
-				+ ", randomStage=" + Arrays.toString(randomStage())
-				+ ", get_mID1()=" + get_mID1() + ", get_mID2()=" + get_mID2()
-				+ ", get_s1()=" + get_s1() + ", get_s2()=" + get_s2()
-				+ ", get_sID1()=" + get_sID1() + ", get_sID2()=" + get_sID2()
-				+ ", getMasterIDs()=" + getMasterIDs()
-				+ ", getMasterIDsType()=" + getMasterIDsType()
+		return "ComparisonArrayOS [useBaseMehods=" + this.useBaseMethods
+				+ ", logicalStep=" + logicalStep + ", checkedNext="
+				+ checkedNext() + ", n=" + index() + ", maxBlockSize="
+				+ maxBlockSize() + ", random=" + random() + ", RStaging="
+				+ RStaging() + ", TStage=" + TStage() + ", randomStage="
+				+ Arrays.toString(randomStage()) + ", get_mID1()=" + get_mID1()
+				+ ", get_mID2()=" + get_mID2() + ", get_s1()=" + get_s1()
+				+ ", get_s2()=" + get_s2() + ", get_sID1()=" + get_sID1()
+				+ ", get_sID2()=" + get_sID2() + ", getMasterIDs()="
+				+ getMasterIDs() + ", getMasterIDsType()=" + getMasterIDsType()
 				+ ", getStagingIDs()=" + getStagingIDs()
 				+ ", getStagingIDsType()=" + getStagingIDsType() + ", size()="
 				+ size() + "]";

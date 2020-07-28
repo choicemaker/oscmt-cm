@@ -248,7 +248,7 @@ public class ComparisonArray<T extends Comparable<T>> implements
 		return this.get_nextPair() != null;
 	}
 
-	private ComparisonPair<T> readNext() {
+	protected ComparisonPair<T> readNext() {
 		ComparisonPair<T> ret = null;
 		if (get_sID1() < get_s1()) {
 			if (get_sID2() < get_s1()) {
