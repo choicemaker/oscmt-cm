@@ -29,7 +29,7 @@ import java.util.logging.Logger;
  * <li>STEP 6. for each element in TMaster compare to all in RStaging.</li>
  * <li>STEP 7. for each TMaster compare with 4 random TStage.</li>
  * <li>STEP 8. for each TStage record, compare with its i+1 neighbor and 3
- * random T records</li>
+ * random TStage records</li>
  * </ul>
  *
  * @author pcheung
