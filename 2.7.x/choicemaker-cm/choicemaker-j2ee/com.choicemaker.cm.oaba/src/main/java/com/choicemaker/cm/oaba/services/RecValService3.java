@@ -28,8 +28,10 @@ import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import javax.transaction.HeuristicMixedException;
@@ -131,7 +133,7 @@ public class RecValService3 {
 	 * to files, one file per field. Records are represented by translated,
 	 * int-valued identifiers. Values are represented by their hashed values.
 	 * Fields may be stacked (i.e. multi-valued).
-	 * 
+	 *
 	 * <pre>
 	 * File 1: Blocking field 1
 	 *   Translated id 356: value hash, value hash
@@ -656,8 +658,8 @@ public class RecValService3 {
 		assert recordId != null : "null database record id";
 		final int internal = mutableTranslator.translate((Comparable) recordId);
 
-		HashSet seen = new HashSet(); // stores field value it has seen
-		Hashtable values = new Hashtable(); // stores values per field
+		Set seen = new HashSet(); // stores field value it has seen
+		Map<Integer,IntArrayList> values = new HashMap(); // values per field
 
 		int blockingValueIdx = -1;
 		try {
@@ -677,7 +679,7 @@ public class RecValService3 {
 				if (!seen.contains(key)) {
 					seen.add(key);
 
-					IntArrayList list = (IntArrayList) values.get(C);
+					IntArrayList list = values.get(C);
 					if (list == null) {
 						list = new IntArrayList(1);
 					}
@@ -688,17 +690,26 @@ public class RecValService3 {
 
 			} // end for
 
-			Enumeration e = values.keys();
-			while (e.hasMoreElements()) {
-				Integer C = (Integer) e.nextElement();
-				sinks[C.intValue()].writeRecordValue((long) internal,
-						(IntArrayList) values.get(C));
-
+			for (Integer key : values.keySet()) {
+				sinks[key].writeRecordValue((long) internal, values.get(key));
 				if (internal % DEBUG_INTERVAL == 0) {
 					log.finest(
-							"id " + internal + " C " + C + " " + values.get(C));
+							"id " + internal + " key " + key + " " + values.get(key));
 				}
 			}
+
+//			Enumeration e = values.keys();
+//			while (e.hasMoreElements()) {
+//				Integer C = (Integer) e.nextElement();
+//				sinks[C.intValue()].writeRecordValue((long) internal,
+//						(IntArrayList) values.get(C));
+//
+//				if (internal % DEBUG_INTERVAL == 0) {
+//					log.finest(
+//							"id " + internal + " C " + C + " " + values.get(C));
+//				}
+//			}
+
 		} catch (RuntimeException | Error | BlockingException x) {
 			final String CONTEXT = "[BlockingValue index: " + blockingValueIdx
 					+ ", BlockingField index: " + blockingValueIdx + "]: ";
