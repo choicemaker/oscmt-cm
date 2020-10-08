@@ -38,12 +38,12 @@ import com.choicemaker.util.Precondition;
 import com.choicemaker.util.StringUtils;
 
 /**
- * @author pcheung
+ * A fetch-offset record source that uses Fetch-Offset queries
  */
 public class SqlServerFetchOffsetRecordSource
 		implements RecordSource, AutoCloseable {
 
-	private static final int CLOSED_OFFSET = -1;
+	protected static final int CLOSED_OFFSET = -1;
 
 	public static final int DEFAULT_FETCH = 1000;
 
