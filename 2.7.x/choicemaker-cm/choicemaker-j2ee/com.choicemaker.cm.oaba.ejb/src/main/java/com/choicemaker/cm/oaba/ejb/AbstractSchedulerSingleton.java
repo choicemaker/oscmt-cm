@@ -328,6 +328,7 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 
 				getLogger().info("Chunk " + latestChunkProcessed + " is done.");
 
+				ChunkDataStore.getInstance().cleanUp();
 				currentChunk++;
 
 				if (currentChunk < numChunks) {
