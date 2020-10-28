@@ -13,6 +13,7 @@ import static com.choicemaker.cm.args.OperationalPropertyNames.PN_RECORD_ID_TYPE
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_REGULAR_CHUNK_FILE_COUNT;
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_TOTAL_CHUNK_COMPARISONS;
 
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -136,31 +137,51 @@ public class Chunk2MDB extends AbstractOabaBmtMDB {
 		try {
 			staging = getRecordSourceController().getStageRs(oabaParams);
 			master = getRecordSourceController().getMasterRs(oabaParams);
+
+			assert staging != null;
+
+			final RecordMatchingMode mode = getRecordMatchingMode(batchJob);
+
+			final BatchJobControl control =
+				new BatchJobControl(this.getJobController(), batchJob);
+
+			ChunkService3 chunkService = new ChunkService3(
+					OabaFileUtils.getTreeSetSource(batchJob), source2, staging,
+					master, model, OabaFileUtils.getChunkIDFactory(batchJob),
+					OabaFileUtils.getStageDataFactory(batchJob, model),
+					OabaFileUtils.getMasterDataFactory(batchJob, model), translator,
+					tTransformer, transformerO, maxChunk, maxChunkFiles,
+					processingLog, control, mode, getUserTx());
+			log.info("Chunk service: " + chunkService);
+			chunkService.runService();
+			log.info("Done creating chunks " + chunkService.getTimeElapsed());
+
+			final int numChunks = chunkService.getNumChunks();
+			final int numRegularChunks = chunkService.getNumRegularChunks();
+			recordChunkProperties(batchJob, numChunks, numRegularChunks,
+					recordIdType, numProcessors, maxBlockSize);
+
 		} catch (Exception e) {
 			throw new BlockingException(e.toString());
+
+		} finally {
+			if (staging != null) {
+				try {
+					staging.close();
+				} catch (IOException e) {
+					log.warning("Unable to close staging source: " + e.toString());
+				}
+				staging = null;
+			}
+			if (master != null) {
+				try {
+					master.close();
+				} catch (IOException e) {
+					log.warning("Unable to close master source: " + e.toString());
+				}
+				master = null;
+			}
 		}
-		assert staging != null;
-
-		final RecordMatchingMode mode = getRecordMatchingMode(batchJob);
-
-		final BatchJobControl control =
-			new BatchJobControl(this.getJobController(), batchJob);
-
-		ChunkService3 chunkService = new ChunkService3(
-				OabaFileUtils.getTreeSetSource(batchJob), source2, staging,
-				master, model, OabaFileUtils.getChunkIDFactory(batchJob),
-				OabaFileUtils.getStageDataFactory(batchJob, model),
-				OabaFileUtils.getMasterDataFactory(batchJob, model), translator,
-				tTransformer, transformerO, maxChunk, maxChunkFiles,
-				processingLog, control, mode, getUserTx());
-		log.info("Chunk service: " + chunkService);
-		chunkService.runService();
-		log.info("Done creating chunks " + chunkService.getTimeElapsed());
-
-		final int numChunks = chunkService.getNumChunks();
-		final int numRegularChunks = chunkService.getNumRegularChunks();
-		recordChunkProperties(batchJob, numChunks, numRegularChunks,
-				recordIdType, numProcessors, maxBlockSize);
 	}
 
 	protected void recordChunkProperties(final BatchJob batchJob,

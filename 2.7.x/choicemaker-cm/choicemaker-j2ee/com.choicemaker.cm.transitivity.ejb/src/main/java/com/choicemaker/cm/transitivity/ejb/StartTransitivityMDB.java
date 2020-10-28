@@ -14,6 +14,7 @@ import static com.choicemaker.cm.oaba.core.RecordMatchingMode.SRM;
 import static com.choicemaker.cm.transitivity.core.TransitivityEventBean.DONE_CREATE_CHUNK_DATA;
 import static com.choicemaker.cm.transitivity.core.TransitivityEventBean.DONE_TRANS_DEDUP_OVERSIZED;
 
+import java.io.IOException;
 import java.util.logging.Logger;
 
 import javax.annotation.Resource;
@@ -157,6 +158,8 @@ public class StartTransitivityMDB extends AbstractTransitivityBmtMDB {
 			OabaSettings oabaSettings, ServerConfiguration serverConfig)
 			throws BlockingException {
 
+		ISerializableRecordSource staging = null;
+		ISerializableRecordSource master = null;
 		try {
 			// Get the parent/predecessor OABA job
 			final long oabaJobId = transJob.getBatchParentId();
@@ -246,7 +249,6 @@ public class StartTransitivityMDB extends AbstractTransitivityBmtMDB {
 							numProcessors));
 
 			// Set the source for the staging records
-			ISerializableRecordSource staging = null;
 			try {
 				staging = this.getRecordSourceController().getStageRs(params);
 			} catch (Exception e) {
@@ -256,7 +258,6 @@ public class StartTransitivityMDB extends AbstractTransitivityBmtMDB {
 			}
 
 			// Set the source for the master records
-			ISerializableRecordSource master = null;
 			try {
 				master = this.getRecordSourceController().getMasterRs(params);
 			} catch (Exception e) {
@@ -320,6 +321,7 @@ public class StartTransitivityMDB extends AbstractTransitivityBmtMDB {
 			}
 			log.severe(x.toString());
 			throw x;
+
 		} catch (SecurityException | IllegalStateException x) {
 			// Probably arrived here because of a transaction exception
 			// so rolling back the transaction is probably hopeless.
@@ -340,6 +342,24 @@ public class StartTransitivityMDB extends AbstractTransitivityBmtMDB {
 			}
 			log.severe(x.toString());
 			throw new BlockingException(x.toString());
+
+		} finally {
+			if (staging != null) {
+				try {
+					staging.close();
+				} catch (IOException e) {
+					log.warning("Unable to close staging source: " + e.toString());
+				}
+				staging = null;
+			}
+			if (master != null) {
+				try {
+					master.close();
+				} catch (IOException e) {
+					log.warning("Unable to close master source: " + e.toString());
+				}
+				master = null;
+			}
 		}
 	}
 
