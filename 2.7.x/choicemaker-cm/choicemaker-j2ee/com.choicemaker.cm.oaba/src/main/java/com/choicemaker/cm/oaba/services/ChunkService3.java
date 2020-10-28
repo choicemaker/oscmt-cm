@@ -386,22 +386,6 @@ public class ChunkService3 {
 				} else {
 					createEmptySinks(masterRecordSinks);
 				}
-				
-				// Close the sinks after the files are populated
-				assert masterRecordSinks.length == stageRecordSinks.length ;
-				for (int i=0; i<stageRecordSinks.length; i++) {
-					RecordSink rs = stageRecordSinks[i];
-					assert rs != null ;
-					rs.flush();
-					rs.close();
-					stageRecordSinks[i] = null;
-
-					rs = masterRecordSinks[i];
-					assert rs != null ;
-					rs.flush();
-					rs.close();
-					masterRecordSinks[i] = null;
-				}
 
 			} else {
 				while (start < numChunks) {
@@ -415,21 +399,6 @@ public class ChunkService3 {
 								isStaging, master, model);
 					} else {
 						createEmptySinks(masterRecordSinks);
-					}
-
-					// Close the sinks after the files are populated
-					for (int i=start; i<end; i++) {
-						RecordSink rs = stageRecordSinks[i];
-						assert rs != null ;
-						rs.flush();
-						rs.close();
-						stageRecordSinks[i] = null;
-
-						rs = masterRecordSinks[i];
-						assert rs != null ;
-						rs.flush();
-						rs.close();
-						masterRecordSinks[i] = null;
 					}
 
 					start = end;
