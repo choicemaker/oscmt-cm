@@ -386,7 +386,7 @@ public class ChunkService3 {
 				} else {
 					createEmptySinks(masterRecordSinks);
 				}
-				
+
 				// Close the sinks after the files are populated
 				assert masterRecordSinks.length == stageRecordSinks.length ;
 				for (int i=0; i<stageRecordSinks.length; i++) {
@@ -525,14 +525,18 @@ public class ChunkService3 {
 		// close sinks and sources
 		for (int i = start; i < end; i++) {
 			try {
-				recordSinks[i].close();
+				if (recordSinks[i] != null) {
+					recordSinks[i].flush();
+					recordSinks[i].close();
+					recordSinks[i] = null;;
+				}
 			} catch (Exception e) {
 				throw new BlockingException(e.getMessage(), e);
 			}
 			if (crSets[i].isDebugEnabled()) {
 				logUncheckedIndices(crSets[i]);
 			}
-			crSets[i].close(); // close the record id sources
+			crSets[i].close(); // close the id sources (they may be reopened)
 		}
 
 	}
