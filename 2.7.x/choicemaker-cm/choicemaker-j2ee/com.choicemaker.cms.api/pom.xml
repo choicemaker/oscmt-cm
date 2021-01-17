@@ -13,7 +13,7 @@
     <artifactId>com.choicemaker.cms.api</artifactId>
     <packaging>jar</packaging>
 
-    <name>CM Server API</name>
+    <name>CM Server EJB API</name>
 
     <dependencies>
         <dependency>
