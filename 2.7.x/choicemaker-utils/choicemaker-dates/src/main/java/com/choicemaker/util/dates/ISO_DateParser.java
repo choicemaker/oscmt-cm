@@ -20,6 +20,12 @@ public final class ISO_DateParser extends AbstractDateParser {
 	private static AtomicReference<Pattern> ISO_PATTERN = new AtomicReference<>(
 			null);
 
+	private static final ISO_DateParser defaultParser = new ISO_DateParser();
+
+	public static final ISO_DateParser getDefaultParser() {
+		return defaultParser;
+	}
+
 	public ISO_DateParser() {
 		super(REGEX_ISO, ISO_GROUP_YEAR, ISO_GROUP_MONTH, ISO_GROUP_DAY);
 	}
