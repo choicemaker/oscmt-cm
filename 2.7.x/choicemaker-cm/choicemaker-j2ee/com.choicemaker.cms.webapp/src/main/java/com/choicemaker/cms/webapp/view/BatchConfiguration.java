@@ -1,5 +1,6 @@
 package com.choicemaker.cms.webapp.view;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -9,36 +10,58 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Logger;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.naming.NamingException;
 
+import com.choicemaker.cm.oaba.api.ServerConfigurationException;
 import com.choicemaker.cms.api.NamedConfiguration;
 import com.choicemaker.cms.api.NamedConfigurationController;
 import com.choicemaker.cms.webapp.util.NameType;
 import com.choicemaker.cms.webapp.util.NameValue;
+import com.choicemaker.cms.webapp.util.NameValueComparison;
 import com.choicemaker.cms.webapp.util.NamedConfigPresentation;
 import com.choicemaker.util.ReflectionUtils;
 
-/** @deprecated moved to cm-server-web4 module*/
-@Deprecated
 @Named
 @RequestScoped
-public class BatchConfigurations {
+public class BatchConfiguration {
 
 	private static final Logger logger =
-		Logger.getLogger(BatchConfigurations.class.getName());
+		Logger.getLogger(BatchConfiguration.class.getName());
 
 	private static final AtomicReference<Map<String, Class<?>>> mapPropertyNameType =
 		new AtomicReference<>();
 
 	private Long namedConfigurationId;
+	private Long comparisonConfigurationId;
+	private List<SelectItem> configurations;
 
 	@Inject
 	private NamedConfigurationController ncController;
 
 	private final NamedConfigPresentation presentation =
 		new NamedConfigPresentation();
+
+	@PostConstruct
+	public void init() {
+		this.configurations = new ArrayList<>();
+		List<NamedConfiguration> ncs =
+			ncController.findAllNamedConfigurations();
+		for (NamedConfiguration nc : ncs) {
+			SelectItem si =
+				new SelectItem(nc.getId(), nc.getConfigurationName());
+			this.configurations.add(si);
+		}
+	}
+
+	public void submit() throws NamingException, ServerConfigurationException,
+			URISyntaxException {
+		logger.info("NOP");
+	}
 
 	public List<NamedConfiguration> getBatchConfigurations() {
 		List<NamedConfiguration> retVal =
@@ -54,16 +77,31 @@ public class BatchConfigurations {
 		this.namedConfigurationId = namedConfigurationId;
 	}
 
+	public Long getComparisonConfigurationId() {
+		return comparisonConfigurationId;
+	}
+
+	public void setComparisonConfigurationId(Long comparisonConfigurationId) {
+		this.comparisonConfigurationId = comparisonConfigurationId;
+	}
+
+	public List<SelectItem> getConfigurations() {
+		return configurations;
+	}
+
+	public void setConfigurations(List<SelectItem> configurations) {
+		this.configurations = configurations;
+	}
+
 	public Map<String, Class<?>> getOrderedConfigurationTypeMap() {
 		Map<String, Class<?>> retVal = mapPropertyNameType.get();
 		if (retVal == null) {
 			Set<NameType> nameTypes = presentation.getNCPropertyNameTypes();
 			Map<String, Class<?>> update = new LinkedHashMap<>();
 			for (NameType nameType : nameTypes) {
-				update.put(nameType.getName(),nameType.getClass());
+				update.put(nameType.getName(), nameType.getClass());
 			}
-			boolean updated =
-			mapPropertyNameType.compareAndSet(null, update);
+			boolean updated = mapPropertyNameType.compareAndSet(null, update);
 			if (updated) {
 
 			} else {
@@ -86,22 +124,11 @@ public class BatchConfigurations {
 		return Collections.unmodifiableList(retVal);
 	}
 
-	public List<NameType> getOrderedConfigurationPropertyNameTypes() {
-		Set<NameType> nameTypes = presentation.getNCPropertyNameTypes();
-
-		List<NameType> retVal = new ArrayList<>();
-		for (NameType nameType : nameTypes) {
-			retVal.add(nameType);
-		}
-
-		return Collections.unmodifiableList(retVal);
-	}
-
 	public List<NameValue> getOrderedConfigurationNameValues(Long id) {
 		List<NameValue> retVal = new ArrayList<>();
 		for (String name : getOrderedConfigurationPropertyNames()) {
 			String value = getConfigurationValue(id, name);
-			NameValue nameValue = new NameValue(name,value);
+			NameValue nameValue = new NameValue(name, value);
 			retVal.add(nameValue);
 		}
 
@@ -110,6 +137,23 @@ public class BatchConfigurations {
 
 	public List<NameValue> getOrderedConfigurationNameValues() {
 		return getOrderedConfigurationNameValues(getNamedConfigurationId());
+	}
+
+	public List<NameValueComparison> getOrderedNameValueComparisons(Long id, Long compareId) {
+		List<NameValueComparison> retVal = new ArrayList<>();
+		for (String name : getOrderedConfigurationPropertyNames()) {
+			String value = getConfigurationValue(id, name);
+			String comparison = getConfigurationValue(compareId, name);
+			NameValueComparison nvc = new NameValueComparison(name, value, comparison);
+			retVal.add(nvc);
+		}
+
+		return Collections.unmodifiableList(retVal);
+	}
+
+	public List<NameValueComparison> getOrderedNameValueComparisons() {
+		return getOrderedNameValueComparisons(getNamedConfigurationId(),
+				getComparisonConfigurationId());		
 	}
 
 	public String getConfigurationValue(Long id, String propertyName) {

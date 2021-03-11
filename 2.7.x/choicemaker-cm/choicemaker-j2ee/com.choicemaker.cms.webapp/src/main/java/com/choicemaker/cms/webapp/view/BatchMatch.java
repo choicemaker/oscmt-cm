@@ -1,5 +1,9 @@
 package com.choicemaker.cms.webapp.view;
 
+import static com.choicemaker.cm.args.PersistentObject.NONPERSISTENT_ID;
+import static com.choicemaker.cm.core.ImmutableThresholds.DEFAULT_DIFFER_THRESHOLD;
+import static com.choicemaker.cm.core.ImmutableThresholds.DEFAULT_MATCH_THRESHOLD;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URISyntaxException;
@@ -16,7 +20,6 @@ import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.naming.NamingException;
-import javax.validation.constraints.NotNull;
 
 import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.args.OabaParameters;
@@ -32,14 +35,14 @@ import com.choicemaker.cms.webapp.model.NamedConfigurationBean;
 import com.choicemaker.util.Precondition;
 import com.choicemaker.util.ReflectionUtils;
 
-/** @deprecated moved to cm-server-web4 module*/
-@Deprecated
 @Named
 @RequestScoped
 public class BatchMatch {
 
 	private static final Logger logger =
 		Logger.getLogger(BatchMatch.class.getName());
+
+	public static final Long INVALID_CONFIGURATION_ID = NONPERSISTENT_ID;
 
 	protected static final Map<Method, Method> settableNCGetters =
 		Collections.unmodifiableMap(ReflectionUtils.settableGetters(
@@ -71,7 +74,20 @@ public class BatchMatch {
 
 		this.extId = (new Date()).toString();
 		this.override = new NamedConfigurationBean();
+		this.override.setLowThreshold(DEFAULT_DIFFER_THRESHOLD);
+		this.override.setHighThreshold(DEFAULT_MATCH_THRESHOLD);
 		this.doTransitivityAnalysis = true;
+	}
+
+	public void onConfigurationChange() {
+		NamedConfiguration nc = lookupConfiguration(configurationId);
+		if (nc != null) {
+			override.setHighThreshold(nc.getHighThreshold());
+			override.setLowThreshold(nc.getLowThreshold());
+		} else {
+			override.setLowThreshold(DEFAULT_DIFFER_THRESHOLD);
+			override.setHighThreshold(DEFAULT_MATCH_THRESHOLD);
+		}
 	}
 
 	public NamedConfiguration override(NamedConfiguration baseConfiguration,
@@ -155,13 +171,17 @@ public class BatchMatch {
 		return retVal;
 	}
 
+	public NamedConfiguration lookupConfiguration(Long id) {
+		NamedConfiguration retVal = null;
+		if (id != null && !INVALID_CONFIGURATION_ID.equals(id)) {
+			retVal = ncController.findNamedConfiguration(configurationId);
+		}
+		return retVal;
+	}
+
 	public void submit() throws NamingException, ServerConfigurationException,
 			URISyntaxException {
-		NamedConfiguration configuration = null;
-		if (configurationId != null) {
-			configuration =
-				ncController.findNamedConfiguration(configurationId);
-		}
+		NamedConfiguration configuration = lookupConfiguration(configurationId);
 		if (configuration != null) {
 
 			NamedConfiguration updated = override(configuration, override);
@@ -203,6 +223,10 @@ public class BatchMatch {
 		}
 	}
 
+	public static Long getInvalidConfigurationId() {
+		return INVALID_CONFIGURATION_ID;
+	}
+
 	public Boolean getDoTransitivityAnalysis() {
 		return doTransitivityAnalysis;
 	}
@@ -231,7 +255,7 @@ public class BatchMatch {
 		return configurationId;
 	}
 
-	public void setConfigurationId(@NotNull Long configurationId) {
+	public void setConfigurationId(/* @NotNull */ Long configurationId) {
 		this.configurationId = configurationId;
 	}
 

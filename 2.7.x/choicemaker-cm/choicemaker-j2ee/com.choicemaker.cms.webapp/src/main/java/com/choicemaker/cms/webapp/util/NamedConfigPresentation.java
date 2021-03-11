@@ -5,8 +5,6 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.logging.Logger;
 
-/** @deprecated moved to cm-server-web4 module*/
-@Deprecated
 public class NamedConfigPresentation {
 
 	static final Logger logger = Logger.getLogger(NamedConfigPresentation.class

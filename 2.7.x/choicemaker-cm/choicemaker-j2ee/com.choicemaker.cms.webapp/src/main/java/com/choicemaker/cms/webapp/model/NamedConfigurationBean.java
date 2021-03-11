@@ -4,8 +4,6 @@ import java.io.Serializable;
 
 import com.choicemaker.cms.api.NamedConfiguration;
 
-/** @deprecated moved to cm-server-web4 module*/
-@Deprecated
 public class NamedConfigurationBean
 		implements Serializable, NamedConfiguration {
 

@@ -2,8 +2,6 @@ package com.choicemaker.cms.webapp.util;
 
 import com.choicemaker.util.Precondition;
 
-/** @deprecated moved to cm-server-web4 module*/
-@Deprecated
 public final class NameType {
 
 	private final String name;
