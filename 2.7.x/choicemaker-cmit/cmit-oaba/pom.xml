@@ -24,8 +24,6 @@
     <version.org.jboss.as.plugins.maven.plugin>7.3.Final</version.org.jboss.as.plugins.maven.plugin>
     <version.org.jboss.spec.jboss.javaee.7.0>1.0.0.Final</version.org.jboss.spec.jboss.javaee.7.0>
     <version.wildfly>8.2.0.Final</version.wildfly>
-    <!-- other plugin versions -->
-    <version.ejb.plugin>2.3</version.ejb.plugin>
   </properties>
 
   <build>
@@ -116,10 +114,12 @@
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.oaba.ejb</artifactId>
+      <type>ejb</type>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.e2</groupId>
       <artifactId>com.choicemaker.e2.ejb</artifactId>
+      <type>ejb</type>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>

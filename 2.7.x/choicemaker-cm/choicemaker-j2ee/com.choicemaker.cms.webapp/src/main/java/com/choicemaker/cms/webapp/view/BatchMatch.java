@@ -179,12 +179,12 @@ public class BatchMatch {
 		return retVal;
 	}
 
-	public void submit() throws NamingException, ServerConfigurationException,
+	public static Long startJob(BatchMatching bma, NamedConfiguration updated,
+			String extId, boolean doTransitivityAnalysis)
+			throws NamingException, ServerConfigurationException,
 			URISyntaxException {
-		NamedConfiguration configuration = lookupConfiguration(configurationId);
-		if (configuration != null) {
-
-			NamedConfiguration updated = override(configuration, override);
+		Long retVal = null;
+		if (updated != null) {
 
 			OabaSettings oabaSettings =
 				NamedConfigConversion.createOabaSettings(updated);
@@ -202,23 +202,69 @@ public class BatchMatch {
 				TransitivityParameters tp = NamedConfigConversion
 						.createTransitivityParameters(updated, isLinkage);
 				if (isLinkage) {
-					this.jobId = bma.startLinkageAndAnalysis(extId, tp,
+					retVal = bma.startLinkageAndAnalysis(extId, tp,
 							oabaSettings, serverConfig);
 				} else {
-					this.jobId = bma.startDeduplicationAndAnalysis(extId, tp,
+					retVal = bma.startDeduplicationAndAnalysis(extId, tp,
 							oabaSettings, serverConfig);
 				}
 			} else {
 				OabaParameters op = NamedConfigConversion
 						.createOabaParameters(updated, isLinkage);
 				if (isLinkage) {
-					this.jobId =
+					retVal =
 						bma.startLinkage(extId, op, oabaSettings, serverConfig);
 				} else {
-					this.jobId = bma.startDeduplication(extId, op, oabaSettings,
+					retVal = bma.startDeduplication(extId, op, oabaSettings,
 							serverConfig);
 				}
 			}
+
+		}
+		return retVal;
+	}
+
+	public void submit() throws NamingException, ServerConfigurationException,
+			URISyntaxException {
+		NamedConfiguration configuration = lookupConfiguration(configurationId);
+		if (configuration != null) {
+
+			NamedConfiguration updated = override(configuration, override);
+			this.jobId = startJob(bma,updated,extId,doTransitivityAnalysis);
+
+//			OabaSettings oabaSettings =
+//				NamedConfigConversion.createOabaSettings(updated);
+//			ServerConfiguration serverConfig =
+//				NamedConfigConversion.createServerConfiguration(updated);
+//
+//			boolean isLinkage = false;
+//			OabaLinkageType linkageType =
+//				OabaLinkageType.valueOf(updated.getTask());
+//			if (linkageType != null) {
+//				isLinkage = OabaLinkageType.isLinkage(linkageType);
+//			}
+//
+//			if (doTransitivityAnalysis) {
+//				TransitivityParameters tp = NamedConfigConversion
+//						.createTransitivityParameters(updated, isLinkage);
+//				if (isLinkage) {
+//					this.jobId = bma.startLinkageAndAnalysis(extId, tp,
+//							oabaSettings, serverConfig);
+//				} else {
+//					this.jobId = bma.startDeduplicationAndAnalysis(extId, tp,
+//							oabaSettings, serverConfig);
+//				}
+//			} else {
+//				OabaParameters op = NamedConfigConversion
+//						.createOabaParameters(updated, isLinkage);
+//				if (isLinkage) {
+//					this.jobId =
+//						bma.startLinkage(extId, op, oabaSettings, serverConfig);
+//				} else {
+//					this.jobId = bma.startDeduplication(extId, op, oabaSettings,
+//							serverConfig);
+//				}
+//			}
 
 		}
 	}

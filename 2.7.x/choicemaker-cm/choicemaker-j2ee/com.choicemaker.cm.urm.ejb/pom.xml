@@ -16,54 +16,7 @@
   <packaging>jar</packaging>
   <name>ChoiceMaker URM EJB Plug-in</name>
 
-  <properties>
-    <eclipse.plugin.runtime.library.name>urm-ejb.jar</eclipse.plugin.runtime.library.name>
-    <eclipse.plugin.src.zip.name>urm-ejbsrc.zip</eclipse.plugin.src.zip.name>
-  </properties>
-
-  <build>
-    <plugins>
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <source>1.7</source>
-          <target>1.7</target>
-        </configuration>
-      </plugin>
-      
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-source-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>attach-sources</id>
-            <phase>package</phase>
-            <goals>
-              <goal>jar-no-fork</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-assembly-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>javadoc</id>
-            <phase>package</phase>
-            <configuration />
-            <goals>
-              <goal>jar</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
+  <build/>
 
   <dependencies>
     <dependency>
@@ -105,6 +58,7 @@
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cms.ejb</artifactId>
+      <type>ejb</type>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
@@ -113,6 +67,7 @@
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.oaba.ejb</artifactId>
+      <type>ejb</type>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
@@ -141,6 +96,7 @@
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.transitivity.ejb</artifactId>
+      <type>ejb</type>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>

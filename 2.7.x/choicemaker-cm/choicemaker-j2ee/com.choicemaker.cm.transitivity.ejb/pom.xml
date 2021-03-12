@@ -16,55 +16,7 @@
   <packaging>jar</packaging>
   <name>ChoiceMaker Offline Matching (Transitivity EJB)</name>
 
-  <properties>
-    <eclipse.plugin.runtime.library.name>transitivity-ejb.jar</eclipse.plugin.runtime.library.name>
-    <eclipse.plugin.src.zip.name>transitivity-ejbsrc.zip</eclipse.plugin.src.zip.name>
-  </properties>
-
-  <build>
-    <plugins>
-
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <source>1.8</source>
-          <target>1.8</target>
-        </configuration>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-source-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>attach-sources</id>
-            <phase>package</phase>
-            <goals>
-              <goal>jar-no-fork</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-assembly-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>javadoc</id>
-            <phase>package</phase>
-            <configuration />
-            <goals>
-              <goal>jar</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
+  <build/>
 
   <dependencies>
     <dependency>
@@ -98,6 +50,7 @@
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.oaba.ejb</artifactId>
+      <type>ejb</type>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
@@ -114,7 +67,6 @@
     <dependency>
       <groupId>org.eclipse.persistence</groupId>
       <artifactId>javax.persistence</artifactId>
-      <version>2.1.0</version>
     </dependency>
     <dependency>
       <groupId>javax</groupId>

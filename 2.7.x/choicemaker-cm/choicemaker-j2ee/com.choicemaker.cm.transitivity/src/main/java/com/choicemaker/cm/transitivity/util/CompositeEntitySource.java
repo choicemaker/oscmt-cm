@@ -31,7 +31,7 @@ public class CompositeEntitySource<T extends Comparable<T>> implements
 		ISource<CompositeEntity> {
 
 	private IMatchRecord2Source<T> source;
-	private MatchRecord2<T> separator = null;
+	private MatchRecord2<?> separator = null;
 
 	private CompositeEntity nextCE = null;
 

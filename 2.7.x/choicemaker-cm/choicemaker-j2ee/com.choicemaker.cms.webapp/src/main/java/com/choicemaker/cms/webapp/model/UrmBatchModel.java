@@ -3,8 +3,11 @@ package com.choicemaker.cms.webapp.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 import com.choicemaker.cm.batch.api.BatchJob;
 
+@XmlRootElement()
 public class UrmBatchModel extends BaseBatchModel {
 
 	private static final long serialVersionUID = 271L;

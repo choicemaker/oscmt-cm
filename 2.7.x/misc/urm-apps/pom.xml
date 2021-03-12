@@ -56,6 +56,7 @@
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.urm.ejb</artifactId>
+      <type>ejb</type>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>

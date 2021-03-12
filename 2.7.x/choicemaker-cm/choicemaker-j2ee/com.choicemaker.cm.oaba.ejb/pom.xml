@@ -13,72 +13,10 @@
   </parent>
 
   <artifactId>com.choicemaker.cm.oaba.ejb</artifactId>
-  <packaging>jar</packaging>
+  <packaging>ejb</packaging>
   <name>ChoiceMaker Offline Matching (OABA EJB)</name>
 
-  <properties>
-		<!-- JBoss dependency versions -->
-    <version.org.jboss.as.plugins.maven.plugin>7.3.Final</version.org.jboss.as.plugins.maven.plugin>
-    <version.org.jboss.spec.jboss.javaee.6.0>3.0.0.Final</version.org.jboss.spec.jboss.javaee.6.0>
-
-		<!-- other plugin versions -->
-    <plugin.ejb.version>2.3</plugin.ejb.version>
-    <version.org.jboss.spec.jboss.javaee.7.0>1.0.0.Final</version.org.jboss.spec.jboss.javaee.7.0>
-
-    <!-- Eclipse 2 plugin parameters -->
-    <eclipse.plugin.runtime.library.name>oaba-ejb.jar</eclipse.plugin.runtime.library.name>
-    <eclipse.plugin.src.zip.name>oaba-ejbsrc.zip</eclipse.plugin.src.zip.name>
-  </properties>
-
-  <build>
-    <plugins>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-source-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>attach-sources</id>
-            <phase>package</phase>
-            <goals>
-              <goal>jar-no-fork</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-assembly-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>javadoc</id>
-            <phase>package</phase>
-            <configuration />
-            <goals>
-              <goal>jar</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
-
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.jboss.spec</groupId>
-        <artifactId>jboss-javaee-7.0</artifactId>
-        <version>
-        ${version.org.jboss.spec.jboss.javaee.7.0}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
+  <build/>
 
   <dependencies>
     <dependency>
@@ -104,6 +42,7 @@
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.batch.ejb</artifactId>
+      <type>ejb</type>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
@@ -144,7 +83,6 @@
     <dependency>
       <groupId>org.eclipse.persistence</groupId>
       <artifactId>javax.persistence</artifactId>
-      <version>2.1.0</version>
     </dependency>
     <dependency>
       <groupId>javax</groupId>
@@ -156,20 +94,6 @@
       <artifactId>junit</artifactId>
       <scope>test</scope>
     </dependency>
-<!-- HACK -->
-    <dependency>
-      <groupId>org.jboss.spec</groupId>
-      <artifactId>jboss-javaee-7.0</artifactId>
-      <version>${version.org.jboss.spec.jboss.javaee.7.0}</version>
-      <type>pom</type>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.jboss.ironjacamar</groupId>
-      <artifactId>ironjacamar-jdbc</artifactId>
-      <version>${version.org.jboss.spec.jboss.javaee.7.0}</version>
-    </dependency>
-<!-- END HACK -->
   </dependencies>
 
 </project>

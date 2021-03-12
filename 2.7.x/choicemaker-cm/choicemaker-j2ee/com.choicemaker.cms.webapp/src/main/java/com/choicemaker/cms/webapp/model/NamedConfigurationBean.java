@@ -2,8 +2,11 @@ package com.choicemaker.cms.webapp.model;
 
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 import com.choicemaker.cms.api.NamedConfiguration;
 
+@XmlRootElement(name="Configuration")
 public class NamedConfigurationBean
 		implements Serializable, NamedConfiguration {
 
@@ -50,6 +53,7 @@ public class NamedConfigurationBean
 	}
 
 	public NamedConfigurationBean(NamedConfiguration nc) {
+		this.configurationId = nc.getId();
 		this.setConfigurationName(nc.getConfigurationName());
 		this.setConfigurationDescription(nc.getConfigurationDescription());
 		this.setModelName(nc.getModelName());

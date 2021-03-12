@@ -23,14 +23,16 @@ public class BatchLifeCycle {
 
 	public static boolean isTerminalStatus(BatchJobStatus status) {
 		boolean retVal = false;
-		switch (status) {
-		case COMPLETED:
-		case FAILED:
-		case ABORTED:
-			retVal = true;
-			break;
-		default:
-			retVal = false;
+		if (status != null) {
+			switch (status) {
+			case COMPLETED:
+			case FAILED:
+			case ABORTED:
+				retVal = true;
+				break;
+			default:
+				retVal = false;
+			}
 		}
 		return retVal;
 	}

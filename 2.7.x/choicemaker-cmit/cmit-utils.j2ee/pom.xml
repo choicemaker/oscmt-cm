@@ -22,26 +22,7 @@
     <version.org.jboss.as.plugins.maven.plugin>7.3.Final</version.org.jboss.as.plugins.maven.plugin>
     <version.org.jboss.spec.jboss.javaee.7.0>1.0.0.Final</version.org.jboss.spec.jboss.javaee.7.0>
     <version.wildfly>8.2.0.Final</version.wildfly>
-    <!-- other plugin versions -->
-    <version.ejb.plugin>2.3</version.ejb.plugin>
   </properties>
-
-  <build>
-    <plugins>
-      <!--
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <compilerVersion>1.7</compilerVersion>
-          <source>1.7</source>
-          <target>1.7</target>
-          <compilerArgument>-g</compilerArgument>
-        </configuration>
-      </plugin>
-      -->
-    </plugins>
-  </build>
 
   <dependencyManagement>
     <dependencies>
@@ -71,6 +52,7 @@
     <dependency>
       <groupId>com.choicemaker.e2</groupId>
       <artifactId>com.choicemaker.e2.ejb</artifactId>
+      <type>ejb</type>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
@@ -79,6 +61,7 @@
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.oaba.ejb</artifactId>
+      <type>ejb</type>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
@@ -87,6 +70,7 @@
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.transitivity.ejb</artifactId>
+      <type>ejb</type>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>

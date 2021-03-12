@@ -31,7 +31,6 @@
         <dependency>
             <groupId>com.choicemaker.e2</groupId>
             <artifactId>com.choicemaker.e2.ejb</artifactId>
-            <version>2.7.1-SNAPSHOT</version>
             <type>ejb</type>
         </dependency>
         <dependency>
@@ -41,7 +40,6 @@
         <dependency>
             <groupId>com.choicemaker.cm</groupId>
             <artifactId>com.choicemaker.cm.batch.ejb</artifactId>
-            <version>2.7.1-SNAPSHOT</version>
             <type>ejb</type>
         </dependency>
         <dependency>
@@ -51,30 +49,24 @@
         <dependency>
             <groupId>com.choicemaker.cm</groupId>
             <artifactId>com.choicemaker.cm.oaba.ejb</artifactId>
-            <version>2.7.1-SNAPSHOT</version>
             <type>ejb</type>
         </dependency>
         <dependency>
             <groupId>com.choicemaker.cm</groupId>
             <artifactId>com.choicemaker.cm.transitivity.api</artifactId>
-            <version>2.7.1-SNAPSHOT</version>
-            <type>ejb</type>
         </dependency>
         <dependency>
             <groupId>com.choicemaker.cm</groupId>
             <artifactId>com.choicemaker.cm.transitivity.ejb</artifactId>
-            <version>2.7.1-SNAPSHOT</version>
             <type>ejb</type>
         </dependency>
         <dependency>
             <groupId>com.choicemaker.cm</groupId>
             <artifactId>com.choicemaker.cm.transitivity</artifactId>
-            <version>2.7.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.choicemaker.cm</groupId>
             <artifactId>com.choicemaker.cm.transitivity.core</artifactId>
-            <version>2.7.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>
@@ -96,17 +88,6 @@
 
     </dependencies>
 
-    <build>
-        <finalName>${project.artifactId}</finalName>
-        <plugins>
-            <plugin>
-                <artifactId>maven-ejb-plugin</artifactId>
-                <version>${version.ejb.plugin}</version>
-                <configuration>
-                    <ejbVersion>3.1</ejbVersion>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+    <build/>
 
 </project>

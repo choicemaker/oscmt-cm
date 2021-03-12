@@ -17,6 +17,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <!-- Build options -->
     <checkstyle.skip>true</checkstyle.skip>
     <cobertura.skip>true</cobertura.skip>
@@ -103,7 +104,7 @@
 
     <plugin.sonatype-install4j.version>1.0.6</plugin.sonatype-install4j.version>
 
-    <version.ejb.plugin>2.3</version.ejb.plugin>
+    <version.ejb.plugin>3.1.0</version.ejb.plugin>
 
   </properties>
   <!-- <scm> <url>http://sourceforge.net/p/oscmt/cm/ci/master/tree/2.7.x/</url> 
@@ -294,6 +295,11 @@
         </plugin>
 
         <plugin>
+          <artifactId>maven-ejb-plugin</artifactId>
+          <version>${version.ejb.plugin}</version>
+        </plugin>
+
+        <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-source-plugin</artifactId>
           <version>${plugin.maven-source.version}</version>
@@ -474,6 +480,7 @@
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.batch.ejb</artifactId>
         <version>${choicemaker.release.version}</version>
+        <type>ejb</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
@@ -539,6 +546,7 @@
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.oaba.ejb</artifactId>
         <version>${choicemaker.release.version}</version>
+        <type>ejb</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
@@ -764,6 +772,7 @@
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.transitivity.ejb</artifactId>
         <version>${choicemaker.release.version}</version>
+        <type>ejb</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
@@ -794,6 +803,7 @@
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.urm.ejb</artifactId>
         <version>${choicemaker.release.version}</version>
+        <type>ejb</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
@@ -824,6 +834,7 @@
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cms.ejb</artifactId>
         <version>${choicemaker.release.version}</version>
+        <type>ejb</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
@@ -959,6 +970,7 @@
         <groupId>com.choicemaker.e2</groupId>
         <artifactId>com.choicemaker.e2.ejb</artifactId>
         <version>${choicemaker.release.version}</version>
+        <type>ejb</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.e2</groupId>
@@ -979,6 +991,7 @@
         <groupId>com.choicemaker.e2it</groupId>
         <artifactId>com.choicemaker.e2it.ejb</artifactId>
         <version>${choicemaker.release.version}</version>
+        <type>ejb</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.e2it</groupId>
@@ -1066,6 +1079,11 @@
           <groupId>commons-logging</groupId>
           <artifactId>commons-logging</artifactId>
           <version>${apache-commons-logging.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.persistence</groupId>
+        <artifactId>javax.persistence</artifactId>
+        <version>2.1.0</version>
       </dependency>
       <dependency>
         <groupId>javax</groupId>

@@ -106,6 +106,7 @@
     <dependency>
       <groupId>com.choicemaker.e2</groupId>
       <artifactId>com.choicemaker.e2.ejb</artifactId>
+      <type>ejb</type>
       <scope>test</scope>
     </dependency>
 
