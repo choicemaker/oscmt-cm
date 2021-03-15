@@ -86,8 +86,13 @@ public class NamedConfigurationBean
 		this.setOabaMinFields(nc.getOabaMinFields());
 		this.setOabaInterval(nc.getOabaInterval());
 		this.setServerMaxThreads(nc.getServerMaxThreads());
+		
 		this.setServerMaxChunkSize(nc.getServerMaxFileEntries());
-		this.setServerMaxChunkCount(nc.getServerMaxFilesCount());
+		// Redundent setServerMaxFileEntries(nc.getServerMaxFileEntries());
+
+		this.setServerMaxFilesCount(nc.getServerMaxFilesCount());
+		// Redundent setServerMaxChunkCount(nc.getServerMaxFilesCount());
+		
 		this.setServerFileURI(nc.getServerFileURI());
 		this.setReferenceDatabaseReader(nc.getReferenceDatabaseReader());
 	}

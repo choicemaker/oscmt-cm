@@ -23,6 +23,47 @@ import java.util.StringTokenizer;
 public class StringUtils {
 
 	/**
+	 * Returns a String with the initial, non-whitespace character converted to
+	 * lower case. Returns nulls and empty strings as appropriate to the input.
+	 * <ol>
+	 * <li>If <code>s</code> is null, return it.
+	 * <li>Trim whitespace from <code>s</code>.
+	 * <li>If the trimmed value of <code>s</code> is empty, return it.
+	 * <li>If the initial character of the trimmed value is lower case, return
+	 * the trimmed value.
+	 * <li>Otherwise, convert the initial character to lower-case, and return
+	 * the modified, trimmed value
+	 * </ol>
+	 * 
+	 * @param s
+	 *            may be null or empty
+	 * @return a null, empty or trimmed and camel-cased version of the input.
+	 * @see #titleCase(String)
+	 */
+	public static final String camelCase(String s) {
+		String retVal;
+		if (s == null) {
+			retVal = s;
+		} else {
+			s = s.trim();
+			if (s.isEmpty()) {
+				retVal = s;
+			} else {
+				final char c = s.charAt(0);
+				if (Character.isLowerCase(c)) {
+					retVal = s;
+				} else {
+					retVal = String.valueOf(Character.toLowerCase(c));
+					if (s.length() > 1) {
+						retVal += s.substring(1);
+					}
+				}
+			}
+		}
+		return retVal;
+	}
+
+	/**
 	 * Returns true iff <code>s</code> is non-null and contains at least one
 	 * letter.
 	 * 
@@ -1029,9 +1070,52 @@ public class StringUtils {
 	}
 
 	/**
+	 * Returns a String with the initial, non-whitespace character converted to
+	 * upper case. Returns nulls and empty strings as appropriate to the input.
+	 * <ol>
+	 * <li>If <code>s</code> is null, return it.
+	 * <li>Trim whitespace from <code>s</code>.
+	 * <li>If the trimmed value of <code>s</code> is empty, return it.
+	 * <li>If the initial character of the trimmed value is upper case, return
+	 * the trimmed value.
+	 * <li>Otherwise, convert the initial character to upper-case, and return
+	 * the modified, trimmed value
+	 * </ol>
+	 * 
+	 * @param s
+	 *            may be null or empty
+	 * @return a null, empty or trimmed and title-cased version of the input.
+	 * @see #camelCase(String)
+	 */
+	public static final String titleCase(String s) {
+		String retVal;
+		if (s == null) {
+			retVal = s;
+		} else {
+			s = s.trim();
+			if (s.isEmpty()) {
+				retVal = s;
+			} else {
+				final char c = s.charAt(0);
+				if (Character.isUpperCase(c)) {
+					retVal = s;
+				} else {
+					retVal = String.valueOf(Character.toUpperCase(c));
+					if (s.length() > 1) {
+						retVal += s.substring(1);
+					}
+				}
+			}
+		}
+		return retVal;
+	}
+
+	/**
 	 * Same functionality as {@link #removeLeadingZeros(String)}. All leading
 	 * zeros, even if it is also the last character in the String, are removed.
-	 * @param s the String to be trimmed
+	 * 
+	 * @param s
+	 *            the String to be trimmed
 	 * @return the trimmed value
 	 */
 	public static String trimLeadingZeros(String s) {

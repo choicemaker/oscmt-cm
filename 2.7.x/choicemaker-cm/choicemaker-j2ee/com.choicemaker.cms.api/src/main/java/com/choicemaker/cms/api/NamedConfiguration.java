@@ -3,6 +3,12 @@ package com.choicemaker.cms.api;
 import static com.choicemaker.client.api.WellKnownGraphProperties.GPN_SCM;
 import static com.choicemaker.cm.args.AnalysisResultFormat.SORT_BY_HOLD_GROUP;
 
+import java.lang.reflect.Method;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.args.PersistableSqlRecordSource;
 import com.choicemaker.cm.args.PersistentObject;
@@ -10,126 +16,133 @@ import com.choicemaker.cm.batch.api.BatchJobRigor;
 
 public interface NamedConfiguration {
 
-	public static final long DEFAULT_CONFIGURATIONID =
-		PersistentObject.NONPERSISTENT_ID;
-	public static final String DEFAULT_CONFIGURATIONNAME = "";
-	public static final String DEFAULT_CONFIGURATIONDESC = "";
-	public static final String DEFAULT_MODELNAME = "";
-	public static final float DEFAULT_LOWTHRESHOLD = 0.20f;
-	public static final float DEFAULT_HIGHTHRESHOLD = 0.80f;
-	public static final String DEFAULT_TASK =
-		OabaLinkageType.STAGING_TO_MASTER_LINKAGE.name();
-	public static final String DEFAULT_RIGOR = BatchJobRigor.COMPUTED.name();
-	public static final String DEFAULT_RS_TYPE =
-		PersistableSqlRecordSource.TYPE;
-	public static final String DEFAULT_DATASOURCE =
-		"/choicemaker/urm/jdbc/ChoiceMakerEjb";
-	public static final String DEFAULT_JDBCDRIVERCLASSNAME =
-		"com.choicemaker.cm.io.db.sqlserver.SQLServerSerializableParallelSerialRecordSource";
-	public static final String DEFAULT_BLOCKINGCONFIGURATION =
-		"defaultAutomated";
-	public static final String DEFAULT_QUERYSELECTION =
-		"select id as ID from Staging";
-	public static final String DEFAULT_QUERYDATABASECONFIGURATION =
-		"defaultQuery";
-	public static final boolean DEFAULT_QUERYISDEDUPLICATED = false;
-	public static final String DEFAULT_REFERENCESELECTION =
-		"select id as ID from Staging";
-	public static final String DEFAULT_REFERENCEDATABASECONFIGURATION =
-		"defaultReference";
-	public static final String DEFAULT_REFERENCEDATABASEACCESSOR =
-		"defaultAccessor";
-	public static final String DEFAULT_REFERENCEDATABASEREADER =
-		"defaultReader";
-	public static final String DEFAULT_TRANSITIVITYFORMAT =
-		SORT_BY_HOLD_GROUP.name();
-	public static final String DEFAULT_TRANSITIVITYGRAPH = GPN_SCM;
-	public static final int DEFAULT_ABAMAXMATCHES = 0;
-	public static final int DEFAULT_ABALIMITPERBLOCKINGSET = 50;
-	public static final int DEFAULT_ABALIMITSINGLEBLOCKINGSET = 100;
-	public static final int DEFAULT_ABASINGLETABLEBLOCKINGSETGRACELIMIT = 200;
-	public static final int DEFAULT_OABAMAXSINGLE = 0;
-	public static final int DEFAULT_OABAMAXBLOCKSIZE = 100;
-	public static final int DEFAULT_OABAMAXCHUNKSIZE = 100000;
-	public static final int DEFAULT_OABAMAXOVERSIZED = 1000;
-	public static final int DEFAULT_OABAMAXMATCHES = 500000;
-	public static final int DEFAULT_OABAMINFIELDS = 3;
-	public static final int DEFAULT_OABAINTERVAL = 100;
-	public static final int DEFAULT_SERVERMAXTHREADS = 1;
-	public static final int DEFAULT_SERVERMAXFILEENTRIES = 1000000;
-	public static final int DEFAULT_SERVERMAXFILESCOUNT = 2000;
-	public static final String DEFAULT_SERVERFILEURI = "";
+	// -- Configuration identity
+	String DEFAULT_CONFIGURATIONDESC = "";
+	long DEFAULT_CONFIGURATIONID = PersistentObject.NONPERSISTENT_ID;
+	String DEFAULT_CONFIGURATIONNAME = "";
 
-	long getId();
+	// -- Online parameters
+	int DEFAULT_ABALIMITPERBLOCKINGSET = 50;
+	int DEFAULT_ABALIMITSINGLEBLOCKINGSET = 100;
+	int DEFAULT_ABAMAXMATCHES = 0;
+	int DEFAULT_ABASINGLETABLEBLOCKINGSETGRACELIMIT = 200;
+	String DEFAULT_DATABASEACCESSOR = "<dbAccessor>";
+	String DEFAULT_DATABASEREADER = "<dbReader>";
 
-	String getConfigurationName();
+	// -- SQL parameters
+	String DEFAULT_RS_TYPE = PersistableSqlRecordSource.TYPE;
+	String DEFAULT_DATASOURCE = "/choicemaker/urm/jdbc/ChoiceMakerBlocking";
+	String DEFAULT_JDBCDRIVERCLASSNAME =
+		"com.choicemaker.cm.io.db.postgres2.PostgresSerializableRecordSource";
 
-	String getConfigurationDescription();
+	// -- Blocking and scoring parameters
+	String DEFAULT_BLOCKINGCONFIGURATION = "<blockingConfig>";
+	float DEFAULT_LOWTHRESHOLD = 0.20f;
+	float DEFAULT_HIGHTHRESHOLD = 0.80f;
+	String DEFAULT_MODELNAME = "<modelName>";
+	String DEFAULT_TASK = OabaLinkageType.STAGING_TO_MASTER_LINKAGE.name();
 
-	String getModelName();
+	// -- Offline batch parameters
+	int DEFAULT_OABAINTERVAL = 100;
+	int DEFAULT_OABAMAXBLOCKSIZE = 100;
+	int DEFAULT_OABAMAXCHUNKSIZE = 100000;
+	int DEFAULT_OABAMAXMATCHES = 500000;
+	int DEFAULT_OABAMAXOVERSIZED = 1000;
+	int DEFAULT_OABAMAXSINGLE = 0;
+	int DEFAULT_OABAMINFIELDS = 3;
 
-	float getLowThreshold();
+	// -- Query-record parameters
+	String DEFAULT_QUERYDATABASECONFIGURATION = "<queryDBConfig>";
+	boolean DEFAULT_QUERYISDEDUPLICATED = false;
+	String DEFAULT_QUERYSELECTION = "select <id> as ID from <querySource>";
 
-	float getHighThreshold();
+	// -- Reference-record parameters
+	String DEFAULT_REFERENCEDATABASECONFIGURATION = "<referenceDbConfig>";
+	String DEFAULT_REFERENCEDATABASEACCESSOR = DEFAULT_DATABASEACCESSOR;
+	String DEFAULT_REFERENCEDATABASEREADER = DEFAULT_DATABASEREADER;
+	String DEFAULT_REFERENCESELECTION = "select <id> as ID from <referenceSource>";
+	String DEFAULT_RIGOR = BatchJobRigor.COMPUTED.name();
 
-	String getTask();
+	// -- Server parameters
+	String DEFAULT_SERVERFILEURI = "<fileUri>";
+	int DEFAULT_SERVERMAXFILEENTRIES = 1000000;
+	int DEFAULT_SERVERMAXFILESCOUNT = 2000;
+	int DEFAULT_SERVERMAXTHREADS = 1;
 
-	String getRigor();
-
-	String getRecordSourceType();
-
-	String getDataSource();
-
-	String getJdbcDriverClassName();
-
-	String getBlockingConfiguration();
-
-	String getQuerySelection();
-
-	String getQueryDatabaseConfiguration();
-
-	boolean isQueryDeduplicated();
-
-	String getReferenceSelection();
-
-	String getReferenceDatabaseConfiguration();
-
-	String getReferenceDatabaseAccessor();
-
-	String getReferenceDatabaseReader();
-
-	String getTransitivityFormat();
-
-	String getTransitivityGraph();
-
-	int getAbaMaxMatches();
+	// -- Transitivity parameters
+	String DEFAULT_TRANSITIVITYFORMAT = SORT_BY_HOLD_GROUP.name();
+	String DEFAULT_TRANSITIVITYGRAPH = GPN_SCM;
 
 	int getAbaLimitPerBlockingSet();
 
 	int getAbaLimitSingleBlockingSet();
 
+	int getAbaMaxMatches();
+
 	int getAbaSingleTableBlockingSetGraceLimit();
 
-	int getOabaMaxSingle();
+	String getBlockingConfiguration();
+
+	String getConfigurationDescription();
+
+	String getConfigurationName();
+
+	String getDataSource();
+
+	float getHighThreshold();
+
+	long getId();
+
+	String getJdbcDriverClassName();
+
+	float getLowThreshold();
+
+	String getModelName();
+
+	int getOabaInterval();
 
 	int getOabaMaxBlockSize();
 
 	int getOabaMaxChunkSize();
 
+	int getOabaMaxMatches();
+
 	int getOabaMaxOversized();
 
-	int getOabaMaxMatches();
+	int getOabaMaxSingle();
 
 	int getOabaMinFields();
 
-	int getOabaInterval();
+	String getQueryDatabaseConfiguration();
 
-	int getServerMaxThreads();
+	String getQuerySelection();
+
+	String getRecordSourceType();
+
+	String getReferenceDatabaseAccessor();
+
+	String getReferenceDatabaseConfiguration();
+
+	String getReferenceDatabaseReader();
+
+	String getReferenceSelection();
+
+	String getRigor();
+
+	String getServerFileURI();
 
 	int getServerMaxFileEntries();
 
 	int getServerMaxFilesCount();
 
-	String getServerFileURI();
+	int getServerMaxThreads();
+
+	String getTask();
+
+	String getTransitivityFormat();
+
+	String getTransitivityGraph();
+
+	boolean isQueryDeduplicated();
 
 }

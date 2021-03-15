@@ -16,6 +16,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
@@ -23,19 +24,21 @@ import javax.ws.rs.core.UriInfo;
 import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.oaba.api.ServerConfigurationException;
 import com.choicemaker.cms.api.BatchMatching;
+import com.choicemaker.cms.api.ExtensibleConfiguration;
 import com.choicemaker.cms.api.NamedConfiguration;
 import com.choicemaker.cms.api.NamedConfigurationController;
 import com.choicemaker.cms.api.UrmBatchController;
 import com.choicemaker.cms.webapp.model.NamedConfigurationBean;
 import com.choicemaker.cms.webapp.model.UrmBatchModel;
 import com.choicemaker.cms.webapp.view.BatchMatch;
+import com.choicemaker.util.TypedValue;
 
 @Path("urmjobs")
 public class UrmJobsResource {
 
 	private static final Logger logger =
 		Logger.getLogger(UrmJobsResource.class.getName());
-
+	
 	@EJB
 	private NamedConfigurationController ncController;
 
@@ -66,20 +69,31 @@ public class UrmJobsResource {
 
 	@POST
 	@Path("matchAnalysis/{configId}")
-	// public Response startMatchAnalyze(@Context UriInfo info) {
-	// public Long startMatchAnalyze(@PathParam("id") long configId) {
 	public Response startMatchAnalyze(@Context UriInfo info,
 			@PathParam("configId") long configId) {
 
 		NamedConfiguration nc = ncController.findNamedConfiguration(configId);
-		NamedConfigurationBean ncb = new NamedConfigurationBean(nc);
+		ExtensibleConfiguration ec = new ExtensibleConfiguration(nc);
 
 		boolean doTransitivity = false;
-		String extId = new Date().toString();
+		MultivaluedMap<String, String> queryParams = info.getQueryParameters();
+		if (!queryParams.isEmpty()) {
+			for (String key : queryParams.keySet()) {
+				String value = queryParams.getFirst(key);
+				TypedValue<?> tv;
+				if (ExtensibleConfiguration.isWellknownAttributeName(key)) {
+					tv = ExtensibleConfiguration.createTypedValue(key, value);
+				} else {
+					tv = new TypedValue<String>(String.class,value);
+				}
+				ec.setTypedAttribute(key, tv);
+			}
+		}
+		String extId = "REST: " + new Date().toString();
 
 		Long jobId = null;
 		try {
-			jobId = BatchMatch.startJob(bma, ncb, extId, doTransitivity);
+			jobId = BatchMatch.startJob(bma, ec, extId, doTransitivity);
 		} catch (NamingException | ServerConfigurationException
 				| URISyntaxException e) {
 			// TODO Auto-generated catch block
@@ -93,8 +107,8 @@ public class UrmJobsResource {
 		logger.info("UrmJobsResource.startMatchAnalyze requestPath: "
 				+ requestPath);
 
-		String responsePath = requestPath.replace(
-				"urmjobs/matchAnalysis/" + configId, "urmjob/" + jobId);
+		String responsePath = requestPath.replaceAll(
+				"urmjobs/matchAnalysis/.*$", "urmjob/" + jobId);
 		logger.info("UrmJobsResource.startMatchAnalyze responsePath: "
 				+ responsePath);
 

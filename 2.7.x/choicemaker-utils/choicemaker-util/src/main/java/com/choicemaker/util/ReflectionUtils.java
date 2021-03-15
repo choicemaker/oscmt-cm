@@ -85,6 +85,14 @@ public class ReflectionUtils {
 		fail(msg);
 	}
 
+	/**
+	 * Essentially just a stringent variation on
+	 * {@link StringUtils#titleCase(String)}
+	 * 
+	 * @param pn
+	 *            non-null, non-blank, and trimmed String
+	 * @return title-cased String
+	 */
 	public static String standardizePropertyName(String pn) {
 		assertTrue("Property name must be non-null", pn != null);
 		assertTrue("Property name must not be blank", !pn.isEmpty());
@@ -98,6 +106,8 @@ public class ReflectionUtils {
 		}
 		char c2 = Character.toUpperCase(c);
 		String retVal = c2 + s;
+
+		assert retVal == StringUtils.titleCase(pn);
 		return retVal;
 	}
 
@@ -252,7 +262,9 @@ public class ReflectionUtils {
 	/**
 	 * Returns a map of "get" methods to "set" methods for the specified class.
 	 * Same as invoking {@code settableGetters(setterClass, setterClass)}.
-	 * @param setterClass the class to be inspected
+	 * 
+	 * @param setterClass
+	 *            the class to be inspected
 	 * @return a map of "get" methods to "set" methods
 	 */
 	public static Map<Method, Method> settableGetters(
@@ -271,8 +283,7 @@ public class ReflectionUtils {
 	 * @param setterClass
 	 *            -- non-null
 	 * @param getterClass
-	 *            -- non-null and assignable from the
-	 *            {@code setterClass}
+	 *            -- non-null and assignable from the {@code setterClass}
 	 * @return a map of declared accessors to setters
 	 */
 	public static Map<Method, Method> settableGetters(
@@ -294,8 +305,8 @@ public class ReflectionUtils {
 				final String mStem = mName.substring(3);
 				final String gName = "get" + mStem;
 				Method g = null;
-				 try {
-				g = getterClass.getDeclaredMethod(gName, (Class<?>[]) null);
+				try {
+					g = getterClass.getDeclaredMethod(gName, (Class<?>[]) null);
 				} catch (NoSuchMethodException | SecurityException e) {
 					String msg0 = "Failed to get declared method '%s' "
 							+ "on class 'NamedConfiguration': %s";
@@ -306,6 +317,21 @@ public class ReflectionUtils {
 					retVal.put(g, m);
 				}
 			}
+		}
+		return retVal;
+	}
+
+	public static boolean isAccessor(Method m) {
+		boolean retVal = false;
+		if (m != null && m.getParameterCount() == 0) {
+			final String mName = m.getName();
+			if ((mName.startsWith("get") && mName.length() > 3)
+					|| (mName.startsWith("is") && mName.length() > 2)) {
+				if (!(m.getReturnType().equals(Void.class))) {
+					retVal = true;
+				}
+			}
+			retVal = true;
 		}
 		return retVal;
 	}
