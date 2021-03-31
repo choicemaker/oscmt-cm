@@ -12,6 +12,9 @@ import com.choicemaker.cm.oaba.core.ImmutableRecordIdTranslator;
 import com.choicemaker.cm.oaba.core.RECORD_ID_TYPE;
 import com.choicemaker.util.Precondition;
 
+// WHACK THIS CLASS -- NOT IMPLEMENTED, NOT USED
+/** @Deprecated not implemented */
+@Deprecated
 public class SqlServerRecordIdTranslator2<T extends Comparable<T>> implements
 		MutableRecordIdTranslatorLocal<T>, ImmutableRecordIdTranslatorLocal<T> {
 

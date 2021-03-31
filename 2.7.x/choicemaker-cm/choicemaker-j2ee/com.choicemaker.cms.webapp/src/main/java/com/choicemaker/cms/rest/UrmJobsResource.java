@@ -50,11 +50,6 @@ public class UrmJobsResource {
 
 	private Random random = new Random();
 
-	Long createRandomId() {
-		Long retVal = Math.abs(random.nextLong());
-		return retVal;
-	}
-
 	@GET
 	@Produces("application/json")
 	public List<UrmBatchModel> getUrmJobs() {
@@ -68,6 +63,68 @@ public class UrmJobsResource {
 	}
 
 	@POST
+	@Path("match/{configId}")
+	public Response startMatch(@Context UriInfo info,
+			@PathParam("configId") long configId) {
+
+		// FIXME STUBBED IMPLEMENTATION
+		Long jobId = 0L;
+		
+		// Construct the URI for the newly created resource and put in into the
+		// Location header of the response (assumes that there is only one
+		// occurrence of matchAnalysis in the request)
+		String requestPath = info.getAbsolutePath().getRawPath();
+		logger.info("UrmJobsResource.startMatch requestPath: "
+				+ requestPath);
+
+		String responsePath = requestPath.replaceAll(
+				"urmjobs/match/.*$", "urmjob/" + jobId);
+		logger.info("UrmJobsResource.startMatch responsePath: "
+				+ responsePath);
+
+		UriBuilder uriBuilder =
+			info.getAbsolutePathBuilder().replacePath(responsePath);
+		URI uri = uriBuilder.build();
+		logger.info("UrmJobsResource.startMatch uri: " + uri);
+
+		Response retVal = Response.created(uri).build();
+		logger.info("UrmJobsResource.startMatch response: " + retVal);
+
+		return retVal;
+	}
+
+	@POST
+	@Path("analysis/{jobId}")
+	public Response startAnalyze(@Context UriInfo info,
+			@PathParam("configId") long configId) {
+
+		// FIXME STUBBED IMPLEMENTATION
+		Long jobId = 0L;
+		
+		// Construct the URI for the newly created resource and put in into the
+		// Location header of the response (assumes that there is only one
+		// occurrence of matchAnalysis in the request)
+		String requestPath = info.getAbsolutePath().getRawPath();
+		logger.info("UrmJobsResource.startAnalyze requestPath: "
+				+ requestPath);
+
+		String responsePath = requestPath.replaceAll(
+				"urmjobs/analysis/.*$", "urmjob/" + jobId);
+		logger.info("UrmJobsResource.startAnalyze responsePath: "
+				+ responsePath);
+
+		UriBuilder uriBuilder =
+			info.getAbsolutePathBuilder().replacePath(responsePath);
+		URI uri = uriBuilder.build();
+		logger.info("UrmJobsResource.startAnalyze uri: " + uri);
+
+		Response retVal = Response.created(uri).build();
+		logger.info("UrmJobsResource.startAnalyze response: " + retVal);
+
+		return retVal;
+	}
+
+	@POST
 	@Path("matchAnalysis/{configId}")
 	public Response startMatchAnalyze(@Context UriInfo info,
 			@PathParam("configId") long configId) {
@@ -75,11 +132,15 @@ public class UrmJobsResource {
 		NamedConfiguration nc = ncController.findNamedConfiguration(configId);
 		ExtensibleConfiguration ec = new ExtensibleConfiguration(nc);
 
-		boolean doTransitivity = false;
+		boolean doTransitivity = true;
 		MultivaluedMap<String, String> queryParams = info.getQueryParameters();
 		if (!queryParams.isEmpty()) {
+			String value = queryParams.getFirst("transitivity");
+			if (value != null) {
+				doTransitivity = Boolean.parseBoolean(value);
+			}
 			for (String key : queryParams.keySet()) {
-				String value = queryParams.getFirst(key);
+				value = queryParams.getFirst(key);
 				TypedValue<?> tv;
 				if (ExtensibleConfiguration.isWellknownAttributeName(key)) {
 					tv = ExtensibleConfiguration.createTypedValue(key, value);
@@ -121,7 +182,6 @@ public class UrmJobsResource {
 		logger.info("UrmJobsResource.startMatchAnalyze response: " + retVal);
 
 		return retVal;
-		// return jobId;
 	}
 
 }
