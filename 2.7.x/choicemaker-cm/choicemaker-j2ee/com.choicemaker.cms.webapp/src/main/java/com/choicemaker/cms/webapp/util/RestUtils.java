@@ -14,7 +14,7 @@ public class RestUtils {
 	private static String SEP = ": ";
 	private static String NULL = "null";
 
-	public static void logMultivaluedMapStringString(Logger logger, Level p,
+	public static void logMultivaluedStringMap(Logger logger, Level p,
 			String contextMessage, MultivaluedMap<String, String> map) {
 
 		boolean createMessage = false;
@@ -24,6 +24,10 @@ public class RestUtils {
 		} else if (logger == null || p == null) {
 			// Something is wrong, so log to standard error instead
 			createMessage = true;
+		} else {
+			// The only time a message isn't created is if a level is
+			// is not loggable
+			assert logger != null && p != null && !logger.isLoggable(p) ;
 		}
 
 		if (createMessage) {
@@ -43,6 +47,12 @@ public class RestUtils {
 					sb.append(BOL).append(key).append(SEP).append(s)
 							.append(EOL);
 				}
+			}
+			if (logger != null) {
+				assert logger.isLoggable(p);
+				logger.log(p, sb.toString());
+			} else {
+				System.err.println(sb.toString());
 			}
 		}
 	}

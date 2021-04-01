@@ -5,7 +5,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.ejb.EJB;
@@ -28,8 +28,8 @@ import com.choicemaker.cms.api.ExtensibleConfiguration;
 import com.choicemaker.cms.api.NamedConfiguration;
 import com.choicemaker.cms.api.NamedConfigurationController;
 import com.choicemaker.cms.api.UrmBatchController;
-import com.choicemaker.cms.webapp.model.NamedConfigurationBean;
 import com.choicemaker.cms.webapp.model.UrmBatchModel;
+import com.choicemaker.cms.webapp.util.RestUtils;
 import com.choicemaker.cms.webapp.view.BatchMatch;
 import com.choicemaker.util.TypedValue;
 
@@ -48,8 +48,6 @@ public class UrmJobsResource {
 	@EJB
 	private BatchMatching bma;
 
-	private Random random = new Random();
-
 	@GET
 	@Produces("application/json")
 	public List<UrmBatchModel> getUrmJobs() {
@@ -66,6 +64,11 @@ public class UrmJobsResource {
 	@Path("match/{configId}")
 	public Response startMatch(@Context UriInfo info,
 			@PathParam("configId") long configId) {
+
+		logger.info("configId: " + configId);
+		final MultivaluedMap<String, String> queryParams = info.getQueryParameters();
+		final String METHOD = "match";
+		RestUtils.logMultivaluedStringMap(logger, Level.INFO, METHOD, queryParams);
 
 		// FIXME STUBBED IMPLEMENTATION
 		Long jobId = 0L;
@@ -96,10 +99,15 @@ public class UrmJobsResource {
 	@POST
 	@Path("analysis/{jobId}")
 	public Response startAnalyze(@Context UriInfo info,
-			@PathParam("configId") long configId) {
+			@PathParam("jobId") long jobId) {
+
+		logger.info("jobId: " + jobId);
+		final MultivaluedMap<String, String> queryParams = info.getQueryParameters();
+		final String METHOD = "analysis";
+		RestUtils.logMultivaluedStringMap(logger, Level.INFO, METHOD, queryParams);
 
 		// FIXME STUBBED IMPLEMENTATION
-		Long jobId = 0L;
+		Long analysisJobId = 0L;
 		
 		// Construct the URI for the newly created resource and put in into the
 		// Location header of the response (assumes that there is only one
@@ -109,7 +117,7 @@ public class UrmJobsResource {
 				+ requestPath);
 
 		String responsePath = requestPath.replaceAll(
-				"urmjobs/analysis/.*$", "urmjob/" + jobId);
+				"urmjobs/analysis/.*$", "urmjob/" + analysisJobId);
 		logger.info("UrmJobsResource.startAnalyze responsePath: "
 				+ responsePath);
 
@@ -129,11 +137,15 @@ public class UrmJobsResource {
 	public Response startMatchAnalyze(@Context UriInfo info,
 			@PathParam("configId") long configId) {
 
+		logger.info("configId: " + configId);
+		final MultivaluedMap<String, String> queryParams = info.getQueryParameters();
+		final String METHOD = "matchAnalysis";
+		RestUtils.logMultivaluedStringMap(logger, Level.INFO, METHOD, queryParams);
+
 		NamedConfiguration nc = ncController.findNamedConfiguration(configId);
 		ExtensibleConfiguration ec = new ExtensibleConfiguration(nc);
 
 		boolean doTransitivity = true;
-		MultivaluedMap<String, String> queryParams = info.getQueryParameters();
 		if (!queryParams.isEmpty()) {
 			String value = queryParams.getFirst("transitivity");
 			if (value != null) {
