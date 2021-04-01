@@ -107,7 +107,8 @@ public class ReflectionUtils {
 		char c2 = Character.toUpperCase(c);
 		String retVal = c2 + s;
 
-		assert retVal == StringUtils.titleCase(pn);
+		assert retVal != null
+				&& retVal.contentEquals(StringUtils.titleCase(pn));
 		return retVal;
 	}
 
