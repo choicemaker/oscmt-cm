@@ -100,14 +100,17 @@ public class BaseBatchModel implements Serializable {
 
 	public Duration getDuration() {
 		Duration retVal = Duration.ZERO;
-		if (getCreationTimestamp() != null) {
-			Instant endTimestamp;
+		Instant start = getCreationTimestamp();
+		if (start != null) {
+			Instant end;
 			if (isTerminated()) {
-				endTimestamp = getStatusTimestamp();
+				end = getStatusTimestamp();
 			} else {
-				endTimestamp = Instant.now();
+				end = Instant.now();
 			}
-			retVal = Duration.between(getCreationTimestamp(), endTimestamp);
+			if (end != null && start.compareTo(end) < 0) {
+				retVal = Duration.between(start, end);
+			}
 		}
 		return retVal;
 	}
