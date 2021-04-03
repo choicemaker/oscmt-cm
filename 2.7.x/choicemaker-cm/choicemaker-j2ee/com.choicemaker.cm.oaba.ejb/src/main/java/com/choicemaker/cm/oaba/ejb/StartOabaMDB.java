@@ -216,15 +216,16 @@ public class StartOabaMDB extends AbstractOabaMDB {
 						model, blockingConfiguration, queryConfiguration,
 						referenceConfiguration, recvalFactory, ric, translator,
 						processingEntry, control, mode, userTx);
-				
+
 				// Manages its own user transactions
 				rvService.runService();
 				getLogger().info("Done creating rec_id, val_id files: "
 						+ rvService.getTimeElapsed());
 
+				// rvService.run() creates the immutable translator for this job
 				@SuppressWarnings("rawtypes")
 				ImmutableRecordIdTranslator immutableTranslator =
-					ric.toImmutableTranslator(translator);
+					ric.findRecordIdTranslator(batchJob);
 				final RECORD_ID_TYPE recordIdType =
 					immutableTranslator.getRecordIdType();
 
@@ -315,7 +316,8 @@ public class StartOabaMDB extends AbstractOabaMDB {
 	 *         threshold
 	 * @throws OABABlockingException
 	 */
-	private boolean isMoreThanThreshold(RecordSource rs,
+	private boolean isMoreThanThreshold(
+			@SuppressWarnings("rawtypes") RecordSource rs,
 			ImmutableProbabilityModel model, int threshold)
 			throws BlockingException {
 
@@ -331,8 +333,8 @@ public class StartOabaMDB extends AbstractOabaMDB {
 		}
 
 		boolean retVal = false;
-		getLogger()
-				.info("Checking if the number of records is more than the maxSingle threshold: "
+		getLogger().info(
+				"Checking if the number of records is more than the maxSingle threshold: "
 						+ threshold);
 		if (threshold <= 0) {
 			getLogger().info("The threshold shortcuts further checking");
