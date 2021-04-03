@@ -27,7 +27,6 @@ import java.io.LineNumberReader;
 import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -567,10 +566,10 @@ public class RecValService3 {
 			}
 			log.finest(TAG + "sinks closed: " + sinks.length);
 
-			// FIXME: is this service responsible for converting the
-			// translator to immutable? The service client (StartOaba)
-			// also does this (idempotent) conversion. Two conversions
-			// are harmless but time consuming.
+			// This service responsible for persisting the mutable translator.
+			// The side effect is to create an immutable translator, which
+			// isn't used here, but is used later by other objects during a
+			// batch job.
 			log.finest(TAG + "converting translator to immutable");
 			ImmutableRecordIdTranslator usedLater = null;
 			userTx.begin();

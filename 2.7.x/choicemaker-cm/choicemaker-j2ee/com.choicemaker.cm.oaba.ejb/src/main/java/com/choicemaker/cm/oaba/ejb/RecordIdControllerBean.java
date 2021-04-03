@@ -249,7 +249,7 @@ public class RecordIdControllerBean implements RecordIdController {
 
 	@Override
 	public MutableRecordIdTranslator<?> createMutableRecordIdTranslator(
-			BatchJob job, DbRecordIdTranslator dbrit) throws BlockingException {
+			BatchJob job, DbRecordIdTranslator unused) throws BlockingException {
 
 		logger.entering("createMutableRecordIdTranslator", job.toString());
 
@@ -426,7 +426,9 @@ public class RecordIdControllerBean implements RecordIdController {
 			throw new IllegalArgumentException("null OABA job");
 		}
 
-		// This method requires EclipseLink (it won't work for Hibernate)
+		// This method requires EclipseLink (it won't work for Hibernate).
+		// It should be redesigned to use a RecordIdInfo class to metadata
+		// about record ids, and the RecordIdInfo class should be persistent
 		RECORD_ID_TYPE retVal = null;
 		em.getTransaction().begin();
 		Connection connection = null;
