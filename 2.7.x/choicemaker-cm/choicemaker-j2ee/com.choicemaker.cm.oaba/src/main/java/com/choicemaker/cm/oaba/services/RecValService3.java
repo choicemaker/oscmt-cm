@@ -570,13 +570,23 @@ public class RecValService3 {
 			// The side effect is to create an immutable translator, which
 			// isn't used here, but is used later by other objects during a
 			// batch job.
-			log.finest(TAG + "converting translator to immutable");
-			ImmutableRecordIdTranslator usedLater = null;
+			//
+			// This stretch of code, particularly 'userTx.commit()' tends to
+			// be a bottleneck, so it is traced step-by-step.
+			log.finest(TAG + "converting translator to immutable...");
+			log.finest(
+					TAG + "mutable record-id translator: " + mutableTranslator);
+
 			userTx.begin();
-			usedLater = recidFactory.toImmutableTranslator(mutableTranslator);
+			log.finest(TAG + "record-id translator tx: begun");
+
+			ImmutableRecordIdTranslator usedLater =
+				recidFactory.toImmutableTranslator(mutableTranslator);
+			log.info(TAG + "immutable record-id translator: " + usedLater);
+
 			userTx.commit();
-			log.info("Converted record-id translator to immutable: "
-					+ usedLater);
+			log.finest(TAG + "record-id translator tx: committed");
+			log.finest(TAG + "... converted translator to immutable");
 
 		} catch (Exception e) {
 			final String msg =
@@ -658,7 +668,7 @@ public class RecValService3 {
 		final int internal = mutableTranslator.translate((Comparable) recordId);
 
 		Set seen = new HashSet(); // stores field value it has seen
-		Map<Integer,IntArrayList> values = new HashMap(); // values per field
+		Map<Integer, IntArrayList> values = new HashMap(); // values per field
 
 		int blockingValueIdx = -1;
 		try {
@@ -692,22 +702,22 @@ public class RecValService3 {
 			for (Integer key : values.keySet()) {
 				sinks[key].writeRecordValue((long) internal, values.get(key));
 				if (internal % DEBUG_INTERVAL == 0) {
-					log.finest(
-							"id " + internal + " key " + key + " " + values.get(key));
+					log.finest("id " + internal + " key " + key + " "
+							+ values.get(key));
 				}
 			}
 
-//			Enumeration e = values.keys();
-//			while (e.hasMoreElements()) {
-//				Integer C = (Integer) e.nextElement();
-//				sinks[C.intValue()].writeRecordValue((long) internal,
-//						(IntArrayList) values.get(C));
-//
-//				if (internal % DEBUG_INTERVAL == 0) {
-//					log.finest(
-//							"id " + internal + " C " + C + " " + values.get(C));
-//				}
-//			}
+			// Enumeration e = values.keys();
+			// while (e.hasMoreElements()) {
+			// Integer C = (Integer) e.nextElement();
+			// sinks[C.intValue()].writeRecordValue((long) internal,
+			// (IntArrayList) values.get(C));
+			//
+			// if (internal % DEBUG_INTERVAL == 0) {
+			// log.finest(
+			// "id " + internal + " C " + C + " " + values.get(C));
+			// }
+			// }
 
 		} catch (RuntimeException | Error | BlockingException x) {
 			final String CONTEXT = "[BlockingValue index: " + blockingValueIdx
