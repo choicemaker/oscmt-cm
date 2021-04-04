@@ -91,6 +91,9 @@ public class RecValService3 {
 	private static final Logger log =
 		Logger.getLogger(RecValService3.class.getName());
 
+	private static final Logger log2 =
+			Logger.getLogger(RecValService3.class.getName() + ".createFiles");
+
 	private static final String SOURCE = RecValService3.class.getSimpleName();
 	private static final String TX_FAILURE_MSG =
 		"%s.%s: transaction failed: %s";
@@ -573,20 +576,20 @@ public class RecValService3 {
 			//
 			// This stretch of code, particularly 'userTx.commit()' tends to
 			// be a bottleneck, so it is traced step-by-step.
-			log.finest(TAG + "converting translator to immutable...");
-			log.finest(
+			log2.fine(TAG + "converting translator to immutable...");
+			log2.fine(
 					TAG + "mutable record-id translator: " + mutableTranslator);
 
 			userTx.begin();
-			log.finest(TAG + "record-id translator tx: begun");
+			log2.fine(TAG + "record-id translator tx: begun");
 
 			ImmutableRecordIdTranslator usedLater =
 				recidFactory.toImmutableTranslator(mutableTranslator);
-			log.info(TAG + "immutable record-id translator: " + usedLater);
+			log2.info(TAG + "immutable record-id translator: " + usedLater);
 
 			userTx.commit();
-			log.finest(TAG + "record-id translator tx: committed");
-			log.finest(TAG + "... converted translator to immutable");
+			log2.fine(TAG + "record-id translator tx: committed");
+			log2.fine(TAG + "... converted translator to immutable");
 
 		} catch (Exception e) {
 			final String msg =
