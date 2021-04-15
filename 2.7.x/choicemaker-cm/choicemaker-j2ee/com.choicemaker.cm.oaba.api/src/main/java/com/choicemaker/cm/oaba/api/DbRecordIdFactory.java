@@ -1,8 +1,11 @@
 package com.choicemaker.cm.oaba.api;
 
+import com.choicemaker.cm.core.BlockingException;
+import com.choicemaker.cm.oaba.core.ImmutableRecordIdTranslator;
+import com.choicemaker.cm.oaba.core.MutableRecordIdTranslator;
 import com.choicemaker.cm.oaba.core.RECORD_ID_TYPE;
 
-public interface DbRecordIdTranslator {
+public interface DbRecordIdFactory {
 
 	/**
 	 * Returns a code representing the Java type of the record key for the
@@ -30,5 +33,10 @@ public interface DbRecordIdTranslator {
 	 */
 	int computeRecordIdTranslations(long jobId, RECORD_ID_TYPE recordIdType,
 			String queryIdSelection, String referenceIdSelection);
+
+	<T extends Comparable<T>> ImmutableRecordIdTranslator<T> createImmutableTranslator(
+			long jobId, RECORD_ID_TYPE recordIdType,
+			String queryIdSelection, String referenceIdSelection)
+			throws BlockingException;
 
 }

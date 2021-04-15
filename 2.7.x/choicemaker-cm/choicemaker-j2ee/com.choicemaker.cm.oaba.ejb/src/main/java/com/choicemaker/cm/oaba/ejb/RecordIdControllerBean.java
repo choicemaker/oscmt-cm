@@ -41,7 +41,7 @@ import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cm.batch.ejb.BatchJobFileUtils;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.base.RECORD_SOURCE_ROLE;
-import com.choicemaker.cm.oaba.api.DbRecordIdTranslator;
+import com.choicemaker.cm.oaba.api.DbRecordIdFactory;
 import com.choicemaker.cm.oaba.api.ImmutableRecordIdTranslatorLocal;
 import com.choicemaker.cm.oaba.api.OabaJobManager;
 import com.choicemaker.cm.oaba.api.OabaParametersController;
@@ -242,14 +242,15 @@ public class RecordIdControllerBean implements RecordIdController {
 	private boolean keepFiles = isKeepFilesRequested();
 
 	@Override
+	@Deprecated
 	public MutableRecordIdTranslator<?> createMutableRecordIdTranslator(
-			BatchJob job) throws BlockingException {
-		return createMutableRecordIdTranslator(job, null);
+			BatchJob job, DbRecordIdFactory unused) throws BlockingException {
+		return createMutableRecordIdTranslator(job);
 	}
 
 	@Override
 	public MutableRecordIdTranslator<?> createMutableRecordIdTranslator(
-			BatchJob job, DbRecordIdTranslator unused) throws BlockingException {
+			BatchJob job) throws BlockingException {
 
 		logger.entering("createMutableRecordIdTranslator", job.toString());
 

@@ -55,7 +55,7 @@ public interface RecordIdController extends IRecordIdFactory {
 			throws BlockingException;
 
 	MutableRecordIdTranslator<?> createMutableRecordIdTranslator(BatchJob job,
-			DbRecordIdTranslator dbrit) throws BlockingException;
+			DbRecordIdFactory dbrit) throws BlockingException;
 
 	<T extends Comparable<T>> List<RecordIdTranslation<T>> findAllRecordIdTranslations();
 
