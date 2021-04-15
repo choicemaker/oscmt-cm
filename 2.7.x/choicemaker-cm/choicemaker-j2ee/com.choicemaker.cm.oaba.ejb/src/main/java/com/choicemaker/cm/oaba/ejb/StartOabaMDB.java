@@ -14,6 +14,7 @@ import static com.choicemaker.cm.args.OperationalPropertyNames.PN_RECORD_MATCHIN
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.lang.ref.WeakReference;
 import java.util.Date;
 import java.util.logging.Logger;
 
@@ -198,8 +199,10 @@ public class StartOabaMDB extends AbstractOabaMDB {
 				}
 
 				final RecordIdController ric = getRecordIdController();
-				MutableRecordIdTranslator<?> translator =
-					ric.createMutableRecordIdTranslator(batchJob);
+				@SuppressWarnings("rawtypes")
+				WeakReference<MutableRecordIdTranslator> translator =
+					new WeakReference<>(
+							ric.createMutableRecordIdTranslator(batchJob));
 
 				// create rec_id, val_id files
 				String blockingConfiguration =

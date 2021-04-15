@@ -27,6 +27,7 @@ import java.io.LineNumberReader;
 import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -92,7 +93,7 @@ public class RecValService3 {
 		Logger.getLogger(RecValService3.class.getName());
 
 	private static final Logger log2 =
-			Logger.getLogger(RecValService3.class.getName() + ".createFiles");
+		Logger.getLogger(RecValService3.class.getName() + ".createFiles");
 
 	private static final String SOURCE = RecValService3.class.getSimpleName();
 	private static final String TX_FAILURE_MSG =
@@ -110,7 +111,7 @@ public class RecValService3 {
 
 	private final IRecordIdFactory recidFactory;
 
-	private final MutableRecordIdTranslator mutableTranslator;
+	private MutableRecordIdTranslator mutableTranslator;
 
 	private final ProcessingEventLog status;
 
@@ -164,7 +165,8 @@ public class RecValService3 {
 	public RecValService3(RecordSource queryRS, RecordSource refRS,
 			ImmutableProbabilityModel model, String blockName, String queryConf,
 			String refConf, IRecValSinkSourceFactory rvFactory,
-			IRecordIdFactory recidFactory, MutableRecordIdTranslator translator,
+			IRecordIdFactory recidFactory,
+			WeakReference<MutableRecordIdTranslator> translator,
 			ProcessingEventLog status, IControl control,
 			RecordMatchingMode mode, UserTransaction tx) {
 
@@ -176,7 +178,7 @@ public class RecValService3 {
 		this.blockingConfiguration = blockName;
 		this.queryConfiguration = queryConf;
 		this.referenceConfiguration = refConf;
-		this.mutableTranslator = translator;
+		this.mutableTranslator = translator.get();
 		this.rvFactory = rvFactory;
 		this.recidFactory = recidFactory;
 		this.status = status;
@@ -586,6 +588,11 @@ public class RecValService3 {
 			ImmutableRecordIdTranslator usedLater =
 				recidFactory.toImmutableTranslator(mutableTranslator);
 			log2.info(TAG + "immutable record-id translator: " + usedLater);
+
+			log2.info("null mutable and immutable translators");
+			this.mutableTranslator = null;
+			usedLater = null;
+			System.gc();
 
 			userTx.commit();
 			log2.fine(TAG + "record-id translator tx: committed");
