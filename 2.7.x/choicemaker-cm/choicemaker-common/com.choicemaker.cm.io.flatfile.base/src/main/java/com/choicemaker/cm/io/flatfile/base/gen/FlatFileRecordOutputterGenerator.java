@@ -68,6 +68,7 @@ public class FlatFileRecordOutputterGenerator implements GeneratorPlugin {
 	public static FlatFileRecordOutputterGenerator instance =
 		new FlatFileRecordOutputterGenerator(false);
 
+	@Override
 	public void generate(IGenerator g) throws GenException {
 		String className = g.getSchemaName();
 		String packageName = g.getPackage();

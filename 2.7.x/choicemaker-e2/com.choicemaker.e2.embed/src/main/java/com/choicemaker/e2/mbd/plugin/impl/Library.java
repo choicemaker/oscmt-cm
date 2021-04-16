@@ -18,11 +18,13 @@ public class Library extends LibraryModel implements ILibrary {
   {
 	super();
   }  
+@Override
 public String[] getContentFilters() {
 	if (!isExported() || isFullyExported())
 		return null;
 	return getExports();
 }
+@Override
 public IPath getPath() {
 	return new Path(getName());
 }

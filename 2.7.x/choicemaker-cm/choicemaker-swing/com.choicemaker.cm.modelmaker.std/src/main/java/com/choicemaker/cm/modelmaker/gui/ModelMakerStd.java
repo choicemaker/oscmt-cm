@@ -40,6 +40,7 @@ public class ModelMakerStd extends ModelMaker implements IPlatformRunnable {
 	 * parent method}, then configures System properties that specify
 	 * the standard Eclipse 2 platform and plugin discovery classes.
 	 */
+	@Override
 	protected void _setEclipse2ConfigurationProperties() {
 		super._setEclipse2ConfigurationProperties();
 
@@ -63,6 +64,7 @@ public class ModelMakerStd extends ModelMaker implements IPlatformRunnable {
 	 * @return the exit code that was specified when programExit(int) was
 	 *         invoked.
 	 */
+	@Override
 	public Object run(Object args2) {
 		return super.run(args2);
 	}

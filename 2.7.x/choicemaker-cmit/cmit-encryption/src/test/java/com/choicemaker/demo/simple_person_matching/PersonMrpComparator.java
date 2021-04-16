@@ -1,6 +1,6 @@
 package com.choicemaker.demo.simple_person_matching;
 
-import com.choicemaker.cm.core.Decision;
+import com.choicemaker.client.api.Decision;
 import com.choicemaker.cm.core.ImmutableRecordPair;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.demo.simple_person_matching.gendata.gend.Person.PersonBase;

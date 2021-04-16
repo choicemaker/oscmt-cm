@@ -1,7 +1,7 @@
 package com.choicemaker.cmit.trans;
 
-import static com.choicemaker.cm.args.BatchProcessing.EVT_INIT;
-import static com.choicemaker.cm.args.BatchProcessing.PCT_INIT;
+import static com.choicemaker.cm.args.BatchProcessingConstants.EVT_INIT;
+import static com.choicemaker.cm.args.BatchProcessingConstants.PCT_INIT;
 
 import java.util.logging.Logger;
 
@@ -12,8 +12,8 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
 import org.junit.runner.RunWith;
 
-import com.choicemaker.cm.batch.BatchJob;
-import com.choicemaker.cm.transitivity.server.impl.StartTransitivityMDB;
+import com.choicemaker.cm.batch.api.BatchJob;
+import com.choicemaker.cm.transitivity.ejb.StartTransitivityMDB;
 import com.choicemaker.cmit.testconfigs.SimplePersonSqlServerTestConfiguration;
 import com.choicemaker.cmit.trans.util.TransitivityDeploymentUtils;
 import com.choicemaker.cmit.utils.j2ee.BatchProcessingPhase;

@@ -14,7 +14,7 @@ import java.beans.PropertyChangeListener;
 
 import javax.swing.JInternalFrame;
 
-import com.choicemaker.cm.core.base.RecordData;
+import com.choicemaker.cm.core.RecordData;
 
 /**
  * .
@@ -68,6 +68,7 @@ public abstract class InternalFrame extends JInternalFrame {
 		this.recordPairFrameModel = recordPairFrameModel;
 
 		modelChangeListener = new PropertyChangeListener() {
+			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				setIgnoreUpdateFromView(true);
 				updateFromModel();
@@ -84,6 +85,7 @@ public abstract class InternalFrame extends JInternalFrame {
 			/**
 			 * @see java.awt.event.ComponentListener#componentMoved(java.awt.event.ComponentEvent)
 			 */
+			@Override
 			public void componentMoved(ComponentEvent e) {
 				setBounds();
 			}
@@ -91,6 +93,7 @@ public abstract class InternalFrame extends JInternalFrame {
 			/**
 			 * @see java.awt.event.ComponentListener#componentResized(java.awt.event.ComponentEvent)
 			 */
+			@Override
 			public void componentResized(ComponentEvent e) {
 				setBounds();
 			}

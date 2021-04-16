@@ -20,6 +20,7 @@ import com.choicemaker.cm.core.gen.IGenerator;
  * @author    Martin Buechi
  */
 public class XmlGenerator implements GeneratorPlugin {
+	@Override
 	public void generate(IGenerator g) throws GenException {
 		g.addAccessorImport("import com.choicemaker.cm.io.xml.base.*;" + Constants.LINE_SEPARATOR);
 		g.addAccessorImport("import " + g.getPackage() + ".xml.*;" + Constants.LINE_SEPARATOR);

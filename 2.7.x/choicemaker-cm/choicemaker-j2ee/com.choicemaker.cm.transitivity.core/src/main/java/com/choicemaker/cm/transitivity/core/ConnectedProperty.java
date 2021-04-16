@@ -26,6 +26,7 @@ public class ConnectedProperty implements SubGraphProperty {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.transitivity.core.SubGraphProperty#hasProperty(com.choicemaker.cm.transitivity.core.CompositeEntity)
 	 */
+	@Override
 	public boolean hasProperty(CompositeEntity ce) {
 		List children = ce.getChildren();
 		INode firstChild = (INode) children.get(0);

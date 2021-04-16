@@ -47,14 +47,17 @@ public class XmlWriter extends Writer {
 		this(w, null);
 	}
 
+	@Override
 	public void close() throws IOException {
 		w.close();
 	}
 
+	@Override
 	public void flush() throws IOException {
 		w.flush();
 	}
 
+	@Override
 	public void write(char[] cbuf, int off, int len) throws IOException {
 		w.write(cbuf, off, len);
 	}

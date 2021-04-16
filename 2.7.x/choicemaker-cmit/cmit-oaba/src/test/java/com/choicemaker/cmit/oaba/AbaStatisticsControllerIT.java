@@ -18,25 +18,25 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import com.choicemaker.cm.aba.AbaStatistics;
 import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.PersistableRecordSource;
-import com.choicemaker.cm.batch.OperationalPropertyController;
-import com.choicemaker.cm.batch.ProcessingController;
+import com.choicemaker.cm.batch.api.OperationalPropertyController;
+import com.choicemaker.cm.batch.api.EventPersistenceManager;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
-import com.choicemaker.cm.io.blocking.automated.AbaStatistics;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.AbaStatisticsController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordIdController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.MatchDedupMDB;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
+import com.choicemaker.cm.oaba.api.AbaStatisticsController;
+import com.choicemaker.cm.oaba.api.OabaJobManager;
+import com.choicemaker.cm.oaba.api.OabaParametersController;
+import com.choicemaker.cm.oaba.api.OabaService;
+import com.choicemaker.cm.oaba.api.OabaSettingsController;
+import com.choicemaker.cm.oaba.api.RecordIdController;
+import com.choicemaker.cm.oaba.api.RecordSourceController;
+import com.choicemaker.cm.oaba.api.ServerConfigurationController;
+import com.choicemaker.cm.oaba.api.ServerConfigurationException;
+import com.choicemaker.cm.oaba.ejb.MatchDedupMDB;
+import com.choicemaker.cm.oaba.ejb.OabaParametersEntity;
 import com.choicemaker.cmit.oaba.util.OabaDeploymentUtils;
 import com.choicemaker.cmit.oaba.util.OabaMdbTestProcedures;
 import com.choicemaker.cmit.testconfigs.SimplePersonSqlServerTestConfiguration;
@@ -79,10 +79,10 @@ public class AbaStatisticsControllerIT {
 	private EntityManager em;
 
 	@EJB
-	private OabaJobController oabaController;
+	private OabaJobManager oabaManager;
 
 	@EJB(beanName = "OabaJobControllerBean")
-	private OabaJobController jobController;
+	private OabaJobManager jobManager;
 
 	@EJB
 	private OabaParametersController paramsController;
@@ -90,8 +90,8 @@ public class AbaStatisticsControllerIT {
 	@EJB
 	private OabaSettingsController oabaSettingsController;
 
-	@EJB
-	private ProcessingController processingController;
+	@EJB (beanName = "OabaEventManager")
+	private EventPersistenceManager eventManager;
 
 	@EJB
 	private OabaService oabaService;
@@ -155,16 +155,16 @@ public class AbaStatisticsControllerIT {
 
 	@Before
 	public void setUp() throws Exception {
-		te = new TestEntityCounts(logger, oabaController, paramsController,
-				oabaSettingsController, serverController, processingController,
+		te = new TestEntityCounts(logger, oabaManager, paramsController,
+				oabaSettingsController, serverController, eventManager,
 				opPropController, rsController, ridController);
 	}
 
 	public void checkCounts() {
 		if (te != null) {
-			te.checkCounts(logger, em, utx, oabaController, paramsController,
+			te.checkCounts(logger, em, utx, oabaManager, paramsController,
 					oabaSettingsController, serverController,
-					processingController, opPropController, rsController,
+					eventManager, opPropController, rsController,
 					ridController);
 		} else {
 			throw new Error("Counts not initialized");

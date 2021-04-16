@@ -25,6 +25,7 @@ public class EclipseObjectInputStream extends ObjectInputStream {
 		super(in);
 	}
 
+	@Override
 	protected Class<?> resolveClass(ObjectStreamClass desc) throws IOException, ClassNotFoundException {
 		try {
 			return super.resolveClass(desc);
@@ -33,6 +34,7 @@ public class EclipseObjectInputStream extends ObjectInputStream {
 		}
 	}
 
+	@Override
 	protected Class<?> resolveProxyClass(String[] interfaces) throws IOException, ClassNotFoundException {
 		try {
 			return super.resolveProxyClass(interfaces);

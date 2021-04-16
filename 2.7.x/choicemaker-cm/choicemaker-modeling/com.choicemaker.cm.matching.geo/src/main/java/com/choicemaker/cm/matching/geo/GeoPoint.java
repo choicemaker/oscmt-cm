@@ -62,9 +62,9 @@ public class GeoPoint {
 	@Deprecated
 	public GeoPoint(int lat, int lon) {
 		this.lat = lat;
-		this.latitude = (float) (((float) lat) / 10000f);
+		this.latitude = (lat) / 10000f;
 		this.lon = lon;
-		this.longitude = (float) (((float) lon) / 10000f);
+		this.longitude = (lon) / 10000f;
 	}
 
 	@Override

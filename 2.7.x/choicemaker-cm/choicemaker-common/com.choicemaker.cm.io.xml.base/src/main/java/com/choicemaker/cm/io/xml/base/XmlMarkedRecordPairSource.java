@@ -22,13 +22,13 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLFilterImpl;
 
-import com.choicemaker.cm.core.Decision;
+import com.choicemaker.client.api.Decision;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.ImmutableRecordPair;
 import com.choicemaker.cm.core.MarkedRecordPairSource;
+import com.choicemaker.cm.core.MutableMarkedRecordPair;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.Sink;
-import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
 import com.choicemaker.cm.core.util.DateHelper;
 import com.choicemaker.cm.core.util.NameUtils;
 import com.choicemaker.cm.core.xmlconf.XmlParserFactory;
@@ -99,6 +99,7 @@ public class XmlMarkedRecordPairSource extends XMLFilterImpl implements
 		this.report = v;
 	}
 
+	@Override
 	public void open() {
 		try {
 			setThrown(null);
@@ -126,6 +127,7 @@ public class XmlMarkedRecordPairSource extends XMLFilterImpl implements
 		}
 	}
 
+	@Override
 	public synchronized boolean hasNext() throws IOException {
 		try {
 			while (getSize() == 0 && isMayHaveMore()) {
@@ -141,6 +143,7 @@ public class XmlMarkedRecordPairSource extends XMLFilterImpl implements
 		}
 	}
 
+	@Override
 	public synchronized MutableMarkedRecordPair getNextMarkedRecordPair() throws IOException {
 		if (getThrown() != null) {
 			throw new IOException(getThrown());
@@ -159,10 +162,12 @@ public class XmlMarkedRecordPairSource extends XMLFilterImpl implements
 		return r;
 	}
 
+	@Override
 	public ImmutableRecordPair getNext() throws IOException {
 		return getNextMarkedRecordPair();
 	}
 
+	@Override
 	public void run() {
 		InputStream is = this.getInputStream();
 		try {
@@ -212,6 +217,7 @@ public class XmlMarkedRecordPairSource extends XMLFilterImpl implements
 	 *            an exception during processing.
 	 * @see org.xml.sax.ContentHandler#startElement
 	 */
+	@Override
 	public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
 		qName = qName.intern();
 		++depth;
@@ -281,6 +287,7 @@ public class XmlMarkedRecordPairSource extends XMLFilterImpl implements
 	 *            an exception during processing.
 	 * @see org.xml.sax.ContentHandler#endElement
 	 */
+	@Override
 	public void endElement(String uri, String localName, String qName) throws SAXException {
 		qName = qName.intern();
 		--depth;
@@ -320,6 +327,7 @@ public class XmlMarkedRecordPairSource extends XMLFilterImpl implements
 		}
 	}
 
+	@Override
 	public void handleRecord(Record r) throws SAXException {
 		if (report) {
 			if (loc == QR) {
@@ -337,6 +345,7 @@ public class XmlMarkedRecordPairSource extends XMLFilterImpl implements
 		}
 	}
 
+	@Override
 	public synchronized void close() {
 		setReadMore(false);
 		setMayHaveMore(false);
@@ -387,6 +396,7 @@ public class XmlMarkedRecordPairSource extends XMLFilterImpl implements
 	 * Get the value of name.
 	 * @return value of name.
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -395,6 +405,7 @@ public class XmlMarkedRecordPairSource extends XMLFilterImpl implements
 	 * Set the value of name.
 	 * @param v  Value to assign to name.
 	 */
+	@Override
 	public void setName(String v) {
 		this.name = v;
 	}
@@ -436,26 +447,32 @@ public class XmlMarkedRecordPairSource extends XMLFilterImpl implements
 		setName(NameUtils.getNameFromFilePath(fileName));
 	}
 
+	@Override
 	public String getFileName() {
 		return fileName;
 	}
 
+	@Override
 	public void setModel(ImmutableProbabilityModel model) {
 		this.model = model;
 	}
 
+	@Override
 	public ImmutableProbabilityModel getModel() {
 		return model;
 	}
 
+	@Override
 	public String toString() {
 		return name;
 	}
 
+	@Override
 	public boolean hasSink() {
 		return true;
 	}
 
+	@Override
 	public Sink getSink() {
 		return new XmlMarkedRecordPairSink(fileName, getXmlFileName(), model);
 	}

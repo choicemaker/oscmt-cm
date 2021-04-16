@@ -20,14 +20,13 @@ import com.choicemaker.cm.core.base.MatchRecord2;
  *
  * ChoiceMaker Technologies Inc.
  */
-@SuppressWarnings({"rawtypes" })
 public class Link<T extends Comparable<T>> {
 
 	private INode<T> node1;
 	private INode<T> node2;
 	
-	/* This list contains all the MatchRecord2 objects that make up this Link.
-	 * 
+	/**
+	 * This list contains all the MatchRecord2 objects that make up this Link. 
 	 */
 	private List<MatchRecord2<T>> matchRecords;
 
@@ -50,7 +49,7 @@ public class Link<T extends Comparable<T>> {
 	 * 
 	 * @return INode
 	 */
-	public INode getNode1 () {
+	public INode<T> getNode1 () {
 		return node1;
 	}
 	
@@ -59,7 +58,7 @@ public class Link<T extends Comparable<T>> {
 	 * 
 	 * @return INode
 	 */
-	public INode getNode2 () {
+	public INode<T> getNode2 () {
 		return node2;
 	}
 	
@@ -70,6 +69,53 @@ public class Link<T extends Comparable<T>> {
 	 */
 	public List<MatchRecord2<T>> getLinkDefinition () {
 		return Collections.unmodifiableList(matchRecords);
+	}
+
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((matchRecords == null) ? 0 : matchRecords.hashCode());
+		result = prime * result + ((node1 == null) ? 0 : node1.hashCode());
+		result = prime * result + ((node2 == null) ? 0 : node2.hashCode());
+		return result;
+	}
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		@SuppressWarnings("rawtypes")
+		Link other = (Link) obj;
+		if (matchRecords == null) {
+			if (other.matchRecords != null)
+				return false;
+		} else if (!matchRecords.equals(other.matchRecords))
+			return false;
+		if (node1 == null) {
+			if (other.node1 != null)
+				return false;
+		} else if (!node1.equals(other.node1))
+			return false;
+		if (node2 == null) {
+			if (other.node2 != null)
+				return false;
+		} else if (!node2.equals(other.node2))
+			return false;
+		return true;
+	}
+
+
+	@Override
+	public String toString() {
+		return "Link [node1=" + node1 + ", node2=" + node2 + "]";
 	}
 
 }

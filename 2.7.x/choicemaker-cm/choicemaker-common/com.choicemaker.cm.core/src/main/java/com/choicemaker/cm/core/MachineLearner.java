@@ -9,7 +9,6 @@ package com.choicemaker.cm.core;
 
 import java.util.Collection;
 
-import com.choicemaker.cm.core.base.Evaluator;
 import com.choicemaker.cm.core.xmlconf.MlModelConf;
 
 /**

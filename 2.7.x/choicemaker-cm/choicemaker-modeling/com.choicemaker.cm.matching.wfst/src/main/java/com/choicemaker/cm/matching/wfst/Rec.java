@@ -22,7 +22,8 @@ class Rec {
 	return no == rec.no && outs.equals(rec.outs);
     }
 
-    public String toString() {
+    @Override
+	public String toString() {
 	return "no=" + no + ", outs=" + outs;
     }
 

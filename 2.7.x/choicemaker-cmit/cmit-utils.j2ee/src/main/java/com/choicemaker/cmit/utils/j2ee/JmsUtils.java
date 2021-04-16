@@ -1,6 +1,6 @@
 package com.choicemaker.cmit.utils.j2ee;
 
-import static com.choicemaker.cm.args.BatchProcessing.*;
+import static com.choicemaker.cm.args.BatchProcessingConstants.*;
 import static org.junit.Assert.fail;
 
 import java.util.logging.Logger;
@@ -10,10 +10,10 @@ import javax.jms.JMSContext;
 import javax.jms.Queue;
 import javax.jms.Topic;
 
-import com.choicemaker.cm.batch.BatchJob;
-import com.choicemaker.cm.batch.BatchProcessingNotification;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
-import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
+import com.choicemaker.cm.batch.api.BatchJob;
+import com.choicemaker.cm.batch.api.BatchProcessingNotification;
+import com.choicemaker.cm.oaba.ejb.data.OabaJobMessage;
+import com.choicemaker.cm.oaba.ejb.util.MessageBeanUtils;
 
 public class JmsUtils {
 
@@ -162,7 +162,7 @@ public class JmsUtils {
 		} catch (Exception x) {
 			fail(x.toString());
 		}
-		logger.info("Received object: " + o);
+		logger.fine("Received object: " + o);
 		if (o != null && !(o instanceof BatchProcessingNotification)) {
 			fail("Received invalid object type from status topic: "
 					+ o.getClass().getName());

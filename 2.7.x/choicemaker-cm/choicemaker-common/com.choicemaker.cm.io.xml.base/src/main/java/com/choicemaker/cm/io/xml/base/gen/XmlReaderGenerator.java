@@ -36,6 +36,7 @@ public class XmlReaderGenerator implements GeneratorPlugin {
 	private static DerivedSource src = DerivedSource.valueOf("xml");
 	public static XmlReaderGenerator instance = new XmlReaderGenerator();
 
+	@Override
 	public void generate(IGenerator g) throws GenException {
 		String className = g.getSchemaName() + "XmlReader";
 		String packageName = g.getPackage() + ".xml";

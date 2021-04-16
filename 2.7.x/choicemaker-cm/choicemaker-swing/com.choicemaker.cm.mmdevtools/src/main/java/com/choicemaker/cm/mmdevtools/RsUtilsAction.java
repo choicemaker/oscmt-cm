@@ -28,6 +28,7 @@ public class RsUtilsAction extends AbstractAction {
 		super("Record Source Utils");
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e) { }
 
 	public static class RsSplitAction extends ToolAction {
@@ -35,6 +36,7 @@ public class RsUtilsAction extends AbstractAction {
 		public RsSplitAction() {
 			super("Split...");
 		}
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			SourceSplitDialog.showRsSplitDialog(modelMaker);
 		}
@@ -45,6 +47,7 @@ public class RsUtilsAction extends AbstractAction {
 		public RsDerivedFieldComputerAction() {
 			super("Derived Fields Computer...");
 		}
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			try {
 				DerivedFieldsComputerDialog.showDerivedFieldsComputerDialog(modelMaker, DerivedFieldsComputerDialog.RS);
@@ -59,6 +62,7 @@ public class RsUtilsAction extends AbstractAction {
 		public OpenRsAsMrpsAction() {
 			super("Open RS as MRPS...");
 		}
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			try {
 				new OpenRsAsMrpsDialog(modelMaker).setVisible(true);

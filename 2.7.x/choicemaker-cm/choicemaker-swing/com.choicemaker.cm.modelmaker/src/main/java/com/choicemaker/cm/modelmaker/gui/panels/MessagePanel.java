@@ -18,6 +18,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.text.Document;
 
@@ -44,31 +45,41 @@ public class MessagePanel extends JPanel {
 		accumulator = new Accumulator();
 		buildPanel();
 		w = new Writer() {
+			@Override
 			public void close() {
 			}
+			@Override
 			public void flush() {
 			}
+			@Override
 			public void write(char[] cbuf, int off, int len) {
 				postMessage(new String(cbuf, off, len));
 			}
+			@Override
 			public void write(int c) {
 				postMessage(String.valueOf((char) c));
 			}
+			@Override
 			public void write(String str) {
 				postMessage(str);
 			}
 		};
 		os = new OutputStream() {
+			@Override
 			public void close() {
 			}
+			@Override
 			public void flush() {
 			}
+			@Override
 			public void write(byte[] b) {
 				postMessage(new String(b));
 			}
+			@Override
 			public void write(byte[] b, int off, int len) {
 				postMessage(new String(b, off, len));
 			}
+			@Override
 			public void write(int b) {
 				postMessage(String.valueOf((char) b));
 			}
@@ -99,7 +110,7 @@ public class MessagePanel extends JPanel {
 
 		//build the JScrollPane that the status text will live inside
 		statusTextAreaScrollPane = new JScrollPane(statusTextArea);
-		statusTextAreaScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		statusTextAreaScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
 		statusTextAreaScrollPane.setBorder(
 			BorderFactory.createCompoundBorder(
@@ -122,6 +133,7 @@ public class MessagePanel extends JPanel {
 		private StringBuffer buf = new StringBuffer();
 		private boolean queued;
 		
+		@Override
 		public void run() {
 			synchronized(this) {
 				statusTextArea.append(buf.toString());

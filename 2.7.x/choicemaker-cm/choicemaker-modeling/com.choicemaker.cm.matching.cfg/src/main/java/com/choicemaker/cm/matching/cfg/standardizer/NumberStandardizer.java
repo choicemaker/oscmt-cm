@@ -30,6 +30,7 @@ class NumberStandardizer extends DefaultStandardizer {
 		this.toOrd = toOrd;
 	}
 
+	@Override
 	public void standardize(ParseTreeNode node, ParsedData addr) {
 		String num = extractNumber(node);
 		if (toOrd) {

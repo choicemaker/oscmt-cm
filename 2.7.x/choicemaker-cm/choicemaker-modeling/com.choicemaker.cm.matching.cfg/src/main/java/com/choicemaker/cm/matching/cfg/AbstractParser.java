@@ -57,22 +57,27 @@ public abstract class AbstractParser implements Parser {
 		setParsedDataClass(c != null ? c : ParsedData.class);		
 	}
 
+	@Override
 	public void setName(String name) {
 		this.name = name;
 	}
 	
+	@Override
 	public String getName() {
 		return name;
 	}
 
+	@Override
 	public void setSymbolFactory(SymbolFactory sf) {
 		this.symbolFactory = sf;
 	}
 	
+	@Override
 	public SymbolFactory getSymbolFactory() {
 		return symbolFactory;
 	}
 
+	@Override
 	public void addTokenizer(Tokenizer t) {
 		Tokenizer[] cur = this.tokenizers;
 		tokenizers = new Tokenizer[cur.length + 1];
@@ -80,6 +85,7 @@ public abstract class AbstractParser implements Parser {
 		tokenizers[cur.length] = t;
 	}
 
+	@Override
 	public void setTokenizer(Tokenizer t) {
 		this.tokenizers = new Tokenizer[] {t};
 	}
@@ -89,36 +95,44 @@ public abstract class AbstractParser implements Parser {
 		System.arraycopy(t, 0, tokenizers, 0, t.length);
 	}
 	
+	@Override
 	public Tokenizer[] getTokenizers() {
 		Tokenizer[] t = new Tokenizer[tokenizers.length];
 		System.arraycopy(tokenizers, 0, t, 0, t.length);
 		return t;
 	}
 	
+	@Override
 	public void setGrammar(ContextFreeGrammar g) {
 		this.grammar = g;
 	}
 	
+	@Override
 	public ContextFreeGrammar getGrammar() {
 		return grammar;
 	}
 	
+	@Override
 	public void setStandardizer(ParseTreeNodeStandardizer s) {
 		this.standardizer = s;
 	}
 	
+	@Override
 	public ParseTreeNodeStandardizer getStandardizer() {
 		return standardizer;
 	}
 	
+	@Override
 	public void setParsedDataClass(Class<? extends ParsedData> cls) {
 		this.parsedDataClass = cls;
 	}
 	
+	@Override
 	public Class<? extends ParsedData> getParsedDataClass() {
 		return parsedDataClass;
 	}
 
+	@Override
 	public ParsedData getBestParse(String s) {
 		ParseTreeNode best = getBestParseTree(s);
 		if (best != null) {
@@ -130,6 +144,7 @@ public abstract class AbstractParser implements Parser {
 		}
 	}
 	
+	@Override
 	public ParsedData getBestParse(String[] s) {
 		ParseTreeNode best = getBestParseTree(s);
 		if (best != null) {
@@ -141,6 +156,7 @@ public abstract class AbstractParser implements Parser {
 		}
 	}
 	
+	@Override
 	public ParsedData[] getAllParses(String s) {
 		Set<ParsedData> parsedDataHash = new HashSet<>();
 
@@ -156,12 +172,13 @@ public abstract class AbstractParser implements Parser {
 		Iterator<ParsedData> itParsedData = parsedDataHash.iterator();
 		int i = 0;
 		while (itParsedData.hasNext()) {
-			ret[i++] = (ParsedData) itParsedData.next();	
+			ret[i++] = itParsedData.next();	
 		}
 		CfgUtils.sortParsedDataHolders(ret);
 		return ret;
 	}		
 		
+	@Override
 	public ParsedData[] getAllParses(String[] s) {
 		Set<ParsedData> parsedDataHash = new HashSet<>();
 
@@ -177,7 +194,7 @@ public abstract class AbstractParser implements Parser {
 		Iterator<ParsedData> itParsedData = parsedDataHash.iterator();
 		int i = 0;
 		while (itParsedData.hasNext()) {
-			ret[i++] = (ParsedData) itParsedData.next();	
+			ret[i++] = itParsedData.next();	
 		}
 		CfgUtils.sortParsedDataHolders(ret);
 		return ret;
@@ -186,7 +203,7 @@ public abstract class AbstractParser implements Parser {
 	
 	protected ParsedData getParsedDataInstance() {
 		try {
-			return (ParsedData)parsedDataClass.newInstance();
+			return parsedDataClass.newInstance();
 		} catch (IllegalAccessException ex) {
 			Logger.getLogger(getClass().getName()).severe(ex.toString());
 			return null;
@@ -200,6 +217,7 @@ public abstract class AbstractParser implements Parser {
 	// *********************** Public tokenization methods *************
 	//
 	
+	@Override
 	public ParseTreeNode getBestParseTree(String s) {
 		List<Token>[] tokens = getAllTokenizations(s);
 
@@ -218,6 +236,7 @@ public abstract class AbstractParser implements Parser {
 		return best;
 	}
 	
+	@Override
 	public ParseTreeNode getBestParseTree(String[] s) {
 		List<Token>[] tokens = getAllTokenizations(s);
 
@@ -236,6 +255,7 @@ public abstract class AbstractParser implements Parser {
 		return best;
 	}
 	
+	@Override
 	public ParseTreeNode[] getAllParseTrees(String s) {
 		Set<ParseTreeNode> parseTreeHash = new LinkedHashSet<>();
 		
@@ -251,13 +271,14 @@ public abstract class AbstractParser implements Parser {
 		Iterator<ParseTreeNode> itTrees = parseTreeHash.iterator();
 		int i = 0;
 		while (itTrees.hasNext()) {
-			ret[i++] = (ParseTreeNode)itTrees.next();
+			ret[i++] = itTrees.next();
 		}
 		CfgUtils.sortParseTrees(ret);
 		
 		return ret;
 	}
 	
+	@Override
 	public ParseTreeNode[] getAllParseTrees(String[] s) {
 		Set<ParseTreeNode> parseTreeHash = new LinkedHashSet<>();
 		
@@ -296,6 +317,7 @@ public abstract class AbstractParser implements Parser {
 		return tokenizers[0].tokenize(s);
 	}
 
+	@Override
 	public List<Token>[] getAllTokenizations(String s) {
 		Set<List<Token>> tokenizations = new LinkedHashSet<>();
 		for (int i = 0; i < tokenizers.length; i++) {
@@ -319,6 +341,7 @@ public abstract class AbstractParser implements Parser {
 	 * Returns all <b>unique</b> tokenizations produced by all the 
 	 * the tokenizers, that is, an array of Lists of Strings.
 	 */
+	@Override
 	public List<Token>[] getAllTokenizations(String[] s) {
 		Set<List<Token>> tokenizations = new LinkedHashSet<>();
 		for (int i = 0; i < tokenizers.length; i++) {

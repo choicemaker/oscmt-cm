@@ -77,6 +77,7 @@ public class PiecewiseSqlServerRecordSource implements RecordSource {
 		reset();
 	}
 
+	@Override
 	public void open() throws IOException {
 		if (!open) {
 			advancePiece();
@@ -112,6 +113,7 @@ public class PiecewiseSqlServerRecordSource implements RecordSource {
 		}
 	}
 
+	@Override
 	public boolean hasNext() throws IOException {
 		if (!open) {
 			throw new IllegalStateException("RecordSource is not open.");
@@ -119,6 +121,7 @@ public class PiecewiseSqlServerRecordSource implements RecordSource {
 		return currentPiece <= lastPiece && pieceRs.hasNext();
 	}
 
+	@Override
 	public Record getNext() throws IOException {
 		if (!open) {
 			throw new IllegalStateException("RecordSource is not open.");
@@ -135,6 +138,7 @@ public class PiecewiseSqlServerRecordSource implements RecordSource {
 		}
 	}
 
+	@Override
 	public void close() throws IOException {
 		if (pieceRs != null) {
 			pieceRs.close();
@@ -144,34 +148,42 @@ public class PiecewiseSqlServerRecordSource implements RecordSource {
 		reset();
 	}
 
+	@Override
 	public ImmutableProbabilityModel getModel() {
 		return model;
 	}
 
+	@Override
 	public void setModel(ImmutableProbabilityModel m) {
 		this.model = m;
 	}
 
+	@Override
 	public String getName() {
 		throw new UnsupportedOperationException("No reason for you to be calling this...");
 	}
 
+	@Override
 	public void setName(String name) {
 		throw new UnsupportedOperationException("Use setId(int) instead.");
 	}
 
+	@Override
 	public boolean hasSink() {
 		throw new UnsupportedOperationException("No reason for you to be calling this...");
 	}
 
+	@Override
 	public Sink getSink() {
 		throw new UnsupportedOperationException("No sink.");
 	}
 
+	@Override
 	public String getFileName() {
 		throw new UnsupportedOperationException("No reason for you to be calling this...");
 	}
 
+	@Override
 	public String toString() {
 		return "PiecewiseSqlServerRecordSource [model=" + model
 				+ ", dbConfiguration=" + dbConfiguration + ", tableName="

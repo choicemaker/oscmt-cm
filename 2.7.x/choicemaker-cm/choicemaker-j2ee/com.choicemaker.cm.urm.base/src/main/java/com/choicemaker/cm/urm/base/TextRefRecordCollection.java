@@ -53,10 +53,12 @@ public class TextRefRecordCollection extends RefRecordCollection { //implements 
 		this.format = format;
 	}
 	
+	@Override
 	public void accept(IRecordCollectionVisitor ext)throws RecordCollectionException{
 		ext.visit(this);
 	}
 	
+	@Override
 	public String toString() {
 		return super.toString()+"|"+this.format.toString();
 	}

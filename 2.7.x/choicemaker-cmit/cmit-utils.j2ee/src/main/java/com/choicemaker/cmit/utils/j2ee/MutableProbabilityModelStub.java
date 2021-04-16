@@ -6,12 +6,12 @@ import java.util.Date;
 import java.util.UUID;
 import java.util.logging.Logger;
 
+import com.choicemaker.client.api.Decision;
 import com.choicemaker.cm.core.Accessor;
 import com.choicemaker.cm.core.ClueSet;
-import com.choicemaker.cm.core.Decision;
+import com.choicemaker.cm.core.Evaluator;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.MachineLearner;
-import com.choicemaker.cm.core.base.Evaluator;
 import com.choicemaker.cm.core.report.Report;
 import com.choicemaker.cm.core.util.Signature;
 import com.choicemaker.util.SystemPropertyUtils;

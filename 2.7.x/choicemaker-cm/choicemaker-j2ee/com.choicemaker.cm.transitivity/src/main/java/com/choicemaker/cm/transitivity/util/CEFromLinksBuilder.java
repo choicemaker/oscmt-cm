@@ -12,10 +12,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.TreeSet;
 
+import com.choicemaker.cm.args.TransitivityException;
 import com.choicemaker.cm.transitivity.core.CompositeEntity;
 import com.choicemaker.cm.transitivity.core.INode;
 import com.choicemaker.cm.transitivity.core.Link;
-import com.choicemaker.cm.transitivity.core.TransitivityException;
+import com.choicemaker.util.UniqueSequence;
 
 /**
  * This object takes a List of Links

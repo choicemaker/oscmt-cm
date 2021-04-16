@@ -44,13 +44,13 @@ import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.event.EventListenerList;
 
+import com.choicemaker.client.api.Decision;
 import com.choicemaker.cm.analyzer.filter.BooleanFilterCondition;
 import com.choicemaker.cm.analyzer.filter.FilterCondition;
 import com.choicemaker.cm.analyzer.filter.RuleFilterCondition;
 import com.choicemaker.cm.compiler.impl.CompilerFactory;
 import com.choicemaker.cm.core.ClueDesc;
 import com.choicemaker.cm.core.Constants;
-import com.choicemaker.cm.core.Decision;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.MachineLearner;
@@ -59,14 +59,14 @@ import com.choicemaker.cm.core.MarkedRecordPairSource;
 import com.choicemaker.cm.core.ModelConfigurationException;
 import com.choicemaker.cm.core.OperationFailedException;
 import com.choicemaker.cm.core.PropertyNames;
+import com.choicemaker.cm.core.Repository;
 import com.choicemaker.cm.core.RepositoryChangeEvent;
 import com.choicemaker.cm.core.RepositoryChangeListener;
+import com.choicemaker.cm.core.Thresholds;
 import com.choicemaker.cm.core.WellKnownPropertyValues;
 import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.base.DoNothingMachineLearning;
 import com.choicemaker.cm.core.base.MarkedRecordPairBinder;
-import com.choicemaker.cm.core.base.Repository;
-import com.choicemaker.cm.core.base.Thresholds;
 import com.choicemaker.cm.core.compiler.CompilationArguments;
 import com.choicemaker.cm.core.compiler.CompilerException;
 import com.choicemaker.cm.core.compiler.ICompiler;
@@ -193,26 +193,32 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 
 	// Delegates
 	final private IUserMessages userMessages = new IUserMessages() {
+		@Override
 		public Writer getWriter() {
 			return ModelMaker.this.getMessagePanel().getWriter();
 		}
 
+		@Override
 		public OutputStream getOutputStream() {
 			return ModelMaker.this.getMessagePanel().getOutputStream();
 		}
 
+		@Override
 		public PrintStream getPrintStream() {
 			return ModelMaker.this.getMessagePanel().getPrintStream();
 		}
 
+		@Override
 		public void postMessage(final String s) {
 			ModelMaker.this.getMessagePanel().getPrintStream().println(s);
 		}
 
+		@Override
 		public void clearMessages() {
 			ModelMaker.this.getMessagePanel().clearMessages();
 		}
 
+		@Override
 		public void postInfo(String s) {
 			String displayString =
 				_msgs.formatMessage("train.gui.modelmaker.message.info", s)
@@ -497,6 +503,7 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 	private void addListeners() {
 
 		aboutItem.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent ev) {
 				String title =
 					_msgs.formatMessage("train.gui.modelmaker.title");
@@ -521,6 +528,7 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 		});
 
 		exitItem.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				programExit(EXIT_OK);
 			}
@@ -1209,7 +1217,7 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 
 			// Display the error
 			final String shortName =
-				ChoiceMakerCoreMessages.elideFileName(fullName, 50);
+				MessageUtil.elideFileName(fullName, 50);
 			final String shortSummary =
 				new LoggingObject("CM-100602", shortName).getFormattedMessage();
 			postError(shortSummary, ex, true);
@@ -1259,6 +1267,7 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 		}
 		long t0 = System.currentTimeMillis();
 		final Thread t = new Thread() {
+			@Override
 			public void run() {
 				try {
 					if (!currentThread().isInterrupted()) {
@@ -1364,6 +1373,7 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 		probabilityModel.setFiringThreshold(firingThreshold);
 
 		final Thread t = new Thread() {
+			@Override
 			public void run() {
 				try {
 					if (!currentThread().isInterrupted()) {
@@ -1833,7 +1843,7 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 
 			// Display the error
 			final String shortConf =
-				ChoiceMakerCoreMessages.elideFileName(conf, 50);
+				MessageUtil.elideFileName(conf, 50);
 			final String shortSummary =
 				_msgs.formatMessage(
 						"train.gui.modelmaker.configurationfile.invalid.error",
@@ -1864,6 +1874,7 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 	 * @return the exit code that was specified when programExit(int) was
 	 *         invoked.
 	 */
+	@Override
 	public Object run(Object args2) {
 
 		// Get this instance ready to display a GUI

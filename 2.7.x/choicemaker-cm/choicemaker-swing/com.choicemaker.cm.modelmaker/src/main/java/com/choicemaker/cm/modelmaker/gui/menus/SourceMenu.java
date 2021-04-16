@@ -39,6 +39,7 @@ import com.choicemaker.cm.modelmaker.gui.dialogs.SourceTypeSelectorDialog;
 import com.choicemaker.cm.modelmaker.gui.listeners.EvaluationEvent;
 import com.choicemaker.cm.modelmaker.gui.listeners.EvaluationListener;
 import com.choicemaker.util.ExceptionInfo;
+import com.choicemaker.util.MessageUtil;
 
 /**
  * The menu from which a MarkedRecordPairSource is selected.
@@ -78,10 +79,12 @@ public class SourceMenu extends JMenu {
 			setEnabled(parent.haveSourceList());
 		}
 
+		@Override
 		public void evaluated(EvaluationEvent evt) {
 			setEnabled();
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			Source source = new SourceTypeSelectorDialog(parent, true).define();
 			if (source != null) {
@@ -103,7 +106,7 @@ public class SourceMenu extends JMenu {
 
 					// Display the error
 					final String shortName =
-						ChoiceMakerCoreMessages.elideFileName(fullName, 50);
+						MessageUtil.elideFileName(fullName, 50);
 					final String shortSummary =
 						new LoggingObject("CM-100602", shortName)
 								.getFormattedMessage();
@@ -129,24 +132,29 @@ public class SourceMenu extends JMenu {
 			setEnabled(saveableSource && parent.haveSourceList());
 		}
 
+		@Override
 		public void setChanged(RepositoryChangeEvent evt) {
 			setEnabled();
 		}
 
+		@Override
 		public void recordDataChanged(RepositoryChangeEvent evt) {
 			setEnabled();
 		}
 
+		@Override
 		public void markupDataChanged(RepositoryChangeEvent evt) {
 			setEnabled();
 		}
 
+		@Override
 		public void propertyChange(PropertyChangeEvent e) {
 			MarkedRecordPairSource src = parent.getMarkedRecordPairSource();
 			saveableSource = src != null && src.hasSink();
 			setEnabled();
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			boolean d = true;
 			if (!parent.isIncludeHolds()) {
@@ -178,10 +186,12 @@ public class SourceMenu extends JMenu {
 			setEnabled(parent.haveSourceList());
 		}
 
+		@Override
 		public void evaluated(EvaluationEvent e) {
 			setEnabled();
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			parent.getFilter().reset();
 			parent.getFilter().setCollection(parent.getChecked());
@@ -202,10 +212,12 @@ public class SourceMenu extends JMenu {
 			setEnabled(parent.haveSourceList());
 		}
 
+		@Override
 		public void evaluated(EvaluationEvent evt) {
 			setEnabled();
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			Source source = new SourceTypeSelectorDialog(parent, true).define();
 			if (source != null) {
@@ -227,7 +239,7 @@ public class SourceMenu extends JMenu {
 
 					// Display the error
 					final String shortName =
-						ChoiceMakerCoreMessages.elideFileName(fullName, 50);
+						MessageUtil.elideFileName(fullName, 50);
 					final String shortSummary =
 						new LoggingObject("CM-100602", shortName)
 								.getFormattedMessage();
@@ -251,10 +263,12 @@ public class SourceMenu extends JMenu {
 			setEnabled(parent.haveSourceList());
 		}
 
+		@Override
 		public void evaluated(EvaluationEvent evt) {
 			setEnabled();
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			if(check) {
 				parent.checkAll();
@@ -276,6 +290,7 @@ public class SourceMenu extends JMenu {
 		JMenuItem swapSourcesItem = add(new AbstractAction("Swap sources") {
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				parent.swapSources();
 				opened(0);
@@ -295,6 +310,7 @@ public class SourceMenu extends JMenu {
 
 		final JCheckBoxMenuItem keepBothInMemory = new JCheckBoxMenuItem("Keep both sources in memory  ");
 		keepBothInMemory.addItemListener(new ItemListener() {
+			@Override
 			public void itemStateChanged(ItemEvent e) {
 				parent.setKeepAllSourcesInMemory(keepBothInMemory.isSelected());
 			}

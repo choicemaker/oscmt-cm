@@ -20,10 +20,12 @@ public class ExactBlockerToolkit implements BlockerToolkit {
 	/**
 	 * @see com.choicemaker.cm.train.matcher.BlockerToolkit#getDialogPlugin(com.choicemaker.cm.core.base.ProbabilityModel)
 	 */
+	@Override
 	public MatchDialogBlockerPlugin getDialogPlugin(ImmutableProbabilityModel model) {
 		return new ExactBlockerDialogPlugin(model);
 	}
 
+	@Override
 	public String toString() {
 		return "Exact Blocker";
 	}

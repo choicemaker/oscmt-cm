@@ -36,26 +36,32 @@ public class RecordConnection implements Serializable, IRecordConnection {
 		recordIndex2 = i2;
 	}
 
+	@Override
 	public IMatchScore getMatchScore() {
 		return matchScore;
 	}
 
+	@Override
 	public int getRecordIndex1() {
 		return recordIndex1;
 	}
 
+	@Override
 	public int getRecordIndex2() {
 		return recordIndex2;
 	}
 
+	@Override
 	public void setMatchScore(IMatchScore score) {
 		matchScore = score;
 	}
 
+	@Override
 	public void setRecordIndex1(int i) {
 		recordIndex1 = i;
 	}
 
+	@Override
 	public void setRecordIndex2(int i) {
 		recordIndex2 = i;
 	}

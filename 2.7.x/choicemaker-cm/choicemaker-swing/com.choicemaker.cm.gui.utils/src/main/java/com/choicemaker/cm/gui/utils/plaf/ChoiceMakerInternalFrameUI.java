@@ -64,6 +64,7 @@ public class ChoiceMakerInternalFrameUI extends MetalInternalFrameUI {
 	/**
 	 * Overridden to actually add the JComponent... For some reason they commented that code out in the BasicInternalFrameUI.
 	 */
+	@Override
 	public void setWestPane(JComponent c) {
 		replacePane(westPane, c);
 		super.setWestPane(c);
@@ -73,6 +74,7 @@ public class ChoiceMakerInternalFrameUI extends MetalInternalFrameUI {
 	 * Overridden because for some reason  - David Kloba and Rich Schiavi - decided to
 	 * make parentBounds private and not use an accessor to access the variable from within their inner class.
 	 */
+	@Override
 	protected void installListeners() {
 		super.installListeners();
 		
@@ -85,8 +87,10 @@ public class ChoiceMakerInternalFrameUI extends MetalInternalFrameUI {
 	 * Overridden because for some reason  - David Kloba and Rich Schiavi - decided to
 	 * make parentBounds private and not use an accessor to access the variable from within their inner class.
 	 */
+	@Override
 	protected PropertyChangeListener createPropertyChangeListener() {
 		return new InternalFramePropertyChangeListener() {
+			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				super.propertyChange(evt);
 
@@ -106,6 +110,7 @@ public class ChoiceMakerInternalFrameUI extends MetalInternalFrameUI {
 	/**
 	 * Overridden to introcude a new implementation of the Inner Class.
 	 */
+	@Override
 	protected MouseInputAdapter createBorderListener(JInternalFrame w) {
 		return new AdjustedBorderListener();
 	}
@@ -143,6 +148,7 @@ public class ChoiceMakerInternalFrameUI extends MetalInternalFrameUI {
 
 		int resizeCornerSize = 16;
 
+		@Override
 		public void mouseClicked(MouseEvent e) {
             if(e.getClickCount() > 1 && e.getSource() == getNorthPane()) {
 				if (frame.isIconifiable() && frame.isIcon()) {
@@ -164,6 +170,7 @@ public class ChoiceMakerInternalFrameUI extends MetalInternalFrameUI {
 			}
 		}
 
+		@Override
 		public void mouseReleased(MouseEvent e) {
 			if (discardRelease) {
 				discardRelease = false;
@@ -197,6 +204,7 @@ public class ChoiceMakerInternalFrameUI extends MetalInternalFrameUI {
 			resizeDir = _RESIZE_NONE;
 		}
 
+		@Override
 		public void mousePressed(MouseEvent e) {
 			Point p = SwingUtilities.convertPoint((Component) e.getSource(), e.getX(), e.getY(), null);
 			__x = e.getX();
@@ -306,6 +314,7 @@ public class ChoiceMakerInternalFrameUI extends MetalInternalFrameUI {
 			}
 		}
 
+		@Override
 		public void mouseDragged(MouseEvent e) {
 
 			if (startingBounds == null) {
@@ -508,6 +517,7 @@ public class ChoiceMakerInternalFrameUI extends MetalInternalFrameUI {
 			getDesktopManager().resizeFrame(frame, newX, newY, newW, newH);
 		}
 
+		@Override
 		public void mouseMoved(MouseEvent e) {
 
 			if (!frame.isResizable())
@@ -551,6 +561,7 @@ public class ChoiceMakerInternalFrameUI extends MetalInternalFrameUI {
 			frame.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		}
 
+		@Override
 		public void mouseExited(MouseEvent e) {
 			frame.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		}
@@ -558,10 +569,12 @@ public class ChoiceMakerInternalFrameUI extends MetalInternalFrameUI {
 
 	//************************ Overridden MetalInternalFrameUI Methods
 
+	@Override
 	protected JComponent createNorthPane(JInternalFrame w) {
 		return null;
 	}
 
+	@Override
 	protected JComponent createWestPane(JInternalFrame w) {
 		return new ChoiceMakerInternalFrameTitlePane(w);
 	}
@@ -570,6 +583,8 @@ public class ChoiceMakerInternalFrameUI extends MetalInternalFrameUI {
 	 * overridden to avoid confusion.
 	 * @deprecated DO NOT USE... it has been deactivated.
 	 */
+	@Deprecated
+	@Override
 	public void setPalette(boolean isPalette) {
 		//DO NOTHING
 	}

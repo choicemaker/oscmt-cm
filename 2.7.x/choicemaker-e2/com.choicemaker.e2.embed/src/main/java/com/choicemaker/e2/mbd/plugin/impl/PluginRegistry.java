@@ -51,10 +51,10 @@ public void accept(IPluginVisitor visitor, boolean activeOnly) {
 		// loop over the dependents list.  For each entry, if there are no dependents, visit
 		// the plugin and remove it from the list.  Make a copy of the keys so we don't end up
 		// with concurrent accesses (since we are deleting the values as we go)
-		PluginDescriptor[] keys = (PluginDescriptor[]) dependents.keySet().toArray(new PluginDescriptor[dependents.size()]);
+		PluginDescriptor[] keys = dependents.keySet().toArray(new PluginDescriptor[dependents.size()]);
 		for (int i = 0; i < keys.length; i++) {
 			PluginDescriptor descriptor = keys[i];
-			Integer entry = (Integer) dependents.get(descriptor);
+			Integer entry = dependents.get(descriptor);
 			if (entry != null && entry.intValue() <= 0) {
 				visitor.visit(descriptor);
 				dependents.remove(descriptor);
@@ -64,7 +64,7 @@ public void accept(IPluginVisitor visitor, boolean activeOnly) {
 				for (int j = 0; j < reqSize; j++) {
 					String id = ((PluginPrerequisite) requires[j]).getUniqueIdentifier();
 					PluginDescriptor prereq = (PluginDescriptor) getPlugin(id);
-					Integer count = (Integer) dependents.get(prereq);
+					Integer count = dependents.get(prereq);
 					if (count != null)
 						dependents.put(prereq, new Integer(count.intValue() - 1));
 				}
@@ -72,6 +72,7 @@ public void accept(IPluginVisitor visitor, boolean activeOnly) {
 		}
 	}
 }
+@Override
 public IConfigurationElement[] getConfigurationElementsFor(String uniqueId) {
 	IExtensionPoint point = getExtensionPoint(uniqueId);
 	if (point == null)
@@ -79,6 +80,7 @@ public IConfigurationElement[] getConfigurationElementsFor(String uniqueId) {
 	IConfigurationElement[] result = point.getConfigurationElements();
 	return result == null ? new IConfigurationElement[0] : result;
 }
+@Override
 public IConfigurationElement[] getConfigurationElementsFor(String pluginId, String pointId) {
 	IExtensionPoint point = getExtensionPoint(pluginId, pointId);
 	if (point == null)
@@ -86,6 +88,7 @@ public IConfigurationElement[] getConfigurationElementsFor(String pluginId, Stri
 	IConfigurationElement[] result = point.getConfigurationElements();
 	return result == null ? new IConfigurationElement[0] : result;
 }
+@Override
 public IConfigurationElement[] getConfigurationElementsFor(String pluginId, String pointId, String extensionId) {
 	IExtension extension = getExtension(pluginId, pointId, extensionId);
 	if (extension == null)
@@ -108,7 +111,7 @@ private Map<IPluginDescriptor,Integer> getDependentCounts(boolean activeOnly) {
 		if (activeOnly && !descriptors[i].isPluginActivated())
 			continue;
 		// ensure there is an entry for this descriptor (otherwise it will not be visited)
-		Integer entry = (Integer) dependents.get(descriptors[i]);
+		Integer entry = dependents.get(descriptors[i]);
 		if (entry == null)
 			dependents.put(descriptors[i], new Integer(0));
 		PluginPrerequisiteModel[] requires = ((PluginDescriptor) descriptors[i]).getRequires();
@@ -118,13 +121,14 @@ private Map<IPluginDescriptor,Integer> getDependentCounts(boolean activeOnly) {
 			PluginDescriptor prereq = (PluginDescriptor) getPlugin(id);
 			if (prereq == null || activeOnly && !prereq.isPluginActivated())
 				continue;
-			entry = (Integer) dependents.get(prereq);
+			entry = dependents.get(prereq);
 			entry = entry == null ? new Integer(1) : new Integer(entry.intValue() + 1);
 			dependents.put(prereq, entry);
 		}
 	}
 	return dependents;
 }
+@Override
 public IExtension getExtension(String xptUniqueId, String extUniqueId) {
 
 	int lastdot = xptUniqueId.lastIndexOf('.');
@@ -132,24 +136,28 @@ public IExtension getExtension(String xptUniqueId, String extUniqueId) {
 	return getExtension(xptUniqueId.substring(0,lastdot), xptUniqueId.substring(lastdot+1), extUniqueId); 
 	
 }
+@Override
 public IExtension getExtension(String pluginId, String xptSimpleId, String extId) {
 
 	IExtensionPoint xpt = getExtensionPoint(pluginId, xptSimpleId);
 	if (xpt == null) return null;
 	return xpt.getExtension(extId);
 }
+@Override
 public IExtensionPoint getExtensionPoint(String  xptUniqueId) {
 
 	int lastdot = xptUniqueId.lastIndexOf('.');
 	if (lastdot == -1) return null;
 	return getExtensionPoint(xptUniqueId.substring(0,lastdot), xptUniqueId.substring(lastdot+1)); 
 }
+@Override
 public IExtensionPoint getExtensionPoint(String plugin, String xpt) {
 
 	IPluginDescriptor pd = getPluginDescriptor(plugin);
 	if (pd == null) return null;
 	return pd.getExtensionPoint(xpt);
 }
+@Override
 public IExtensionPoint[] getExtensionPoints() {
 	PluginDescriptorModel[] list = getPlugins();
 	if (list == null)
@@ -162,8 +170,9 @@ public IExtensionPoint[] getExtensionPoints() {
 				result.add(pointList[j]);
 		}
 	}
-	return (IExtensionPoint[]) result.toArray(new IExtensionPoint[result.size()]);
+	return result.toArray(new IExtensionPoint[result.size()]);
 }
+@Override
 public IPluginDescriptor getPluginDescriptor(String plugin) {
 	return (IPluginDescriptor) getPlugin(plugin);
 }
@@ -181,6 +190,7 @@ public IPluginDescriptor getPluginDescriptor(String pluginId, PluginVersionIdent
 	}
 	return null;
 }
+@Override
 public IPluginDescriptor[] getPluginDescriptors() {
 	PluginDescriptorModel[] plugins = getPlugins();
 	if (plugins==null)
@@ -190,6 +200,7 @@ public IPluginDescriptor[] getPluginDescriptors() {
 		result[i] = (IPluginDescriptor) plugins[i];
 	return result;
 }
+@Override
 public IPluginDescriptor[] getPluginDescriptors(String plugin) {
 	PluginDescriptorModel[] plugins = getPlugins(plugin);
 	if (plugins==null)
@@ -214,8 +225,10 @@ public void shutdown(IProgressMonitor progress) {
 }
 private void shutdownPlugins() {
 	IPluginVisitor visitor = new IPluginVisitor() {
+		@Override
 		public void visit(final IPluginDescriptor descriptor) {
 			ISafeRunnable code = new ISafeRunnable() {
+				@Override
 				public void run() throws Exception {
 					if (!descriptor.isPluginActivated())
 						return;
@@ -226,6 +239,7 @@ private void shutdownPlugins() {
 						((PluginDescriptor) descriptor).doPluginDeactivation();
 					}
 				}
+				@Override
 				public void handleException(Throwable e) {
 					// do nothing as the exception has already been logged.
 				}

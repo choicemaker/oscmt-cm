@@ -85,10 +85,12 @@ public class ScopeEntry {
 
 	/** compute the hash code
 	 */
+	@Override
 	public int hashCode() {
 		return sym.hashCode();
 	}
 	
+	@Override
 	public boolean equals(Object o) {
 		boolean b = false;
 		if (o != null)
@@ -101,6 +103,7 @@ public class ScopeEntry {
 
 	/** return a string representation
 	 */
+	@Override
 	public String toString() {
 		return sym.toString();
 	}

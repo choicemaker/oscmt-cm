@@ -7,6 +7,8 @@
  *******************************************************************************/
 package com.choicemaker.cm.urm.base;
 
+import java.io.Serializable;
+
 /**
  * A record in a referenced record collection (database, file) that represented by its ID.
  * <p>  
@@ -14,15 +16,14 @@ package com.choicemaker.cm.urm.base;
  * @author emoussikaev
  * @see
  */
-public class GlobalRecordRef implements ISingleRecord{
+public class GlobalRecordRef<T extends Comparable<T> & Serializable> implements ISingleRecord<T> {
 	
-	/** As of 2010-11-12 */
-	static final long serialVersionUID = -612416872534337942L;
+	private static final long serialVersionUID = -612416872534337942L;
 
-	private Comparable          id;
+	private T id;
 	private RefRecordCollection recCollRef;
 		
-	public GlobalRecordRef(Comparable id, RefRecordCollection recColl) {
+	public GlobalRecordRef(T id, RefRecordCollection recColl) {
 		super();
 		this.id = id;
 		this.recCollRef = recColl;
@@ -33,7 +34,8 @@ public class GlobalRecordRef implements ISingleRecord{
 	 * 
 	 * @return
 	 */
-	public Comparable getId() {
+	@Override
+	public T getId() {
 		return id;
 	}
 
@@ -53,7 +55,7 @@ public class GlobalRecordRef implements ISingleRecord{
 	 * 
 	 * @param comparable
 	 */
-	public void setId(Comparable comparable) {
+	public void setId(T comparable) {
 		id = comparable;
 	}
 
@@ -67,6 +69,7 @@ public class GlobalRecordRef implements ISingleRecord{
 		recCollRef = collection;
 	}
 
+	@Override
 	public void accept(IRecordVisitor ext){
 		ext.visit(this);
 	}	

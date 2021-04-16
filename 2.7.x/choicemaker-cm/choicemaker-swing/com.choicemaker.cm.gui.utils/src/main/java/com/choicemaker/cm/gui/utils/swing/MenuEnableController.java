@@ -37,6 +37,7 @@ public class MenuEnableController implements PropertyChangeListener {
 		/**
 		 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
 		 */
+		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
 			menu.setEnabled(isAnyReviewActionEnabled());
 		}

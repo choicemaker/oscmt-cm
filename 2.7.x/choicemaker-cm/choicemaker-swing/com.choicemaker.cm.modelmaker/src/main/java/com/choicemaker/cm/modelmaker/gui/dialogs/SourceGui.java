@@ -19,12 +19,14 @@ import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.WindowConstants;
 
 import com.choicemaker.cm.core.Source;
 import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.core.util.LoggingObject;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.util.ExceptionInfo;
+import com.choicemaker.util.MessageUtil;
 
 /**
  * Superclass of the different types of MRPSGuis associated
@@ -68,6 +70,7 @@ public abstract class SourceGui extends JDialog {
 		this.parent = parent;
 		isNewSource = true;
 		addWindowListener(new WindowAdapter() {
+			@Override
 			public void windowClosing(WindowEvent evt) {
 				setSource(null);
 			}
@@ -80,7 +83,7 @@ public abstract class SourceGui extends JDialog {
 		setContentPane(content);
 		buildContent();
 		addContentListeners();
-		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		pack();
 		setLocationRelativeTo(parent);
 	}
@@ -122,6 +125,7 @@ public abstract class SourceGui extends JDialog {
 	protected void addContentListeners() {
 		//okayButton
 		okayButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent ev) {
 				if (mode == CREATE) {
 					create();
@@ -138,7 +142,7 @@ public abstract class SourceGui extends JDialog {
 
 						// Display the error
 						final String shortName =
-							ChoiceMakerCoreMessages.elideFileName(fullName, 50);
+							MessageUtil.elideFileName(fullName, 50);
 						final String shortSummary = info + shortName;
 						parent.postError(shortSummary, e, true);
 					}
@@ -148,6 +152,7 @@ public abstract class SourceGui extends JDialog {
 
 		//cancelButton
 		cancelButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent ev) {
 				setSource(null);
 				dispose();

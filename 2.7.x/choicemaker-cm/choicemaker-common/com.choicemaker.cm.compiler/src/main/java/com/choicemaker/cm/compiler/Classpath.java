@@ -132,6 +132,7 @@ public class Classpath {
 
 	/** return string representation of all components
 	 */
+	@Override
 	public String toString() {
 		if (components.length == 0)
 			return "";

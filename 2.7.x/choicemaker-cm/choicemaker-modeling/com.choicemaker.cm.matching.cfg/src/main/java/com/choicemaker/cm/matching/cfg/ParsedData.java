@@ -70,7 +70,7 @@ public class ParsedData implements Serializable {
 	 * @return the value at the specified key.
 	 */
 	public String get(String key) {
-		return (String)data.get(key);	
+		return data.get(key);	
 	}
 
 	/**
@@ -163,6 +163,7 @@ public class ParsedData implements Serializable {
 	 * <li>v1.equals(v2) == true
 	 * </ol>
 	 */
+	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof ParsedData))
 			return false;
@@ -174,7 +175,7 @@ public class ParsedData implements Serializable {
 			
 		Iterator<String> itKeys = data.keySet().iterator();
 		while (itKeys.hasNext()) {
-			String key = (String) itKeys.next();
+			String key = itKeys.next();
 			String v1 = get(key);	
 			String v2 = holder.get(key);
 			
@@ -192,6 +193,7 @@ public class ParsedData implements Serializable {
 	/**
 	 * Returns a hash code for this ParsedDataHolder.
 	 */
+	@Override
 	public int hashCode() {
 		return data.hashCode();
 	}

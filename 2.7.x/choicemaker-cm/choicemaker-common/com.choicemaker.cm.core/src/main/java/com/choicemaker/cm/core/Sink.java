@@ -33,6 +33,7 @@ public interface Sink extends AutoCloseable {
 	 *
 	 * @throws  Exception  if there is a problem closing the sink.
 	 */
+	@Override
 	void close() throws Exception;
 
 	/**

@@ -67,10 +67,12 @@ public class SubsetDbRecordCollection extends DbRecordCollection {//implements I
 		return idsQuery;
 	}
 
+	@Override
 	public void accept(IRecordCollectionVisitor ext)throws RecordCollectionException{
 		ext.visit(this);
 	}
 
+	@Override
 	public String toString() {
 		return super.toString()+"|"+this.getIdsQuery();
 	}

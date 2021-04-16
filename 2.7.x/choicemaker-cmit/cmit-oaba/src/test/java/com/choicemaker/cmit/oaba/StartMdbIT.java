@@ -1,7 +1,7 @@
 package com.choicemaker.cmit.oaba;
 
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.EVT_DONE_REC_VAL;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_DONE_REC_VAL;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.EVT_DONE_REC_VAL;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.PCT_DONE_REC_VAL;
 
 import java.util.logging.Logger;
 
@@ -12,9 +12,9 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
 import org.junit.runner.RunWith;
 
-import com.choicemaker.cm.batch.BatchJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BlockingMDB;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.SingleRecordMatchMDB;
+import com.choicemaker.cm.batch.api.BatchJob;
+import com.choicemaker.cm.oaba.ejb.BlockingMDB;
+import com.choicemaker.cm.oaba.ejb.SingleRecordMatchMDB;
 import com.choicemaker.cmit.oaba.util.OabaDeploymentUtils;
 import com.choicemaker.cmit.testconfigs.SimplePersonSqlServerTestConfiguration;
 import com.choicemaker.cmit.utils.j2ee.BatchProcessingPhase;

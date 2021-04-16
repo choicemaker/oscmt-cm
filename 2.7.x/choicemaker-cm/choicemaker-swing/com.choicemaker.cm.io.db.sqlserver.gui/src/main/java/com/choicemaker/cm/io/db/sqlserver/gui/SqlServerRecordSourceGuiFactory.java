@@ -22,34 +22,42 @@ import com.choicemaker.cm.modelmaker.gui.sources.SourceGuiFactory;
  */
 public class SqlServerRecordSourceGuiFactory implements SourceGuiFactory {
 
+	@Override
 	public String getName() {
 		return "SQL Server";
 	}
 
+	@Override
 	public SourceGui createGui(ModelMaker parent, Source s) {
 		return new SqlServerRecordSourceGui(parent, (SqlServerRecordSource)s);
 	}
 
+	@Override
 	public SourceGui createGui(ModelMaker parent) {
 		return createGui(parent, new SqlServerRecordSource());
 	}
 
+	@Override
 	public boolean hasSink() {
 		return false;
 	}
 
+	@Override
 	public SourceGui createSaveGui(ModelMaker parent) {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
 	public Object getHandler() {
 		return this;
 	}
 
+	@Override
 	public Class getHandledType() {
 		return SqlServerRecordSource.class;
 	}
 
+	@Override
 	public String toString() {
 		return "SQL Server RS";
 	}

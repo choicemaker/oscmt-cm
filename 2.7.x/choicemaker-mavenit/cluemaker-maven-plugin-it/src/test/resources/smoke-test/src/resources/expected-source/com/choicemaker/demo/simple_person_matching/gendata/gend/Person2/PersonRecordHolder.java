@@ -313,7 +313,7 @@ this.zip = __v;
  * Returns the ID of the record holder. 
  * @return  Returns the ID of the node.
 */
-public java.lang.Comparable getId() {
+public Integer getId() {
 return new Integer(recordId);
 }
 /** Copy constructor. Performs a deep copy of the nodes, but not the values.

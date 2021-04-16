@@ -93,6 +93,7 @@ public class AsymmetricThresholdVsAccuracyPlotPanel extends JPanel {
 		return chart;
 	}
 
+	@Override
 	public void setVisible(boolean b) {
 		super.setVisible(b);
 		if (b && dirty) {

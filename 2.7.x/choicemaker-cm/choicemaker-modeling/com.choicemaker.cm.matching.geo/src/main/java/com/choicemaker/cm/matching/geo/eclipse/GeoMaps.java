@@ -19,7 +19,6 @@ import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.util.ConvUtils;
 import com.choicemaker.cm.matching.geo.GeoMap;
-import com.choicemaker.cm.matching.geo.GeoMap.KeyField;
 import com.choicemaker.cm.matching.geo.GeoPoint;
 import com.choicemaker.e2.CMConfigurationElement;
 import com.choicemaker.e2.CMExtension;
@@ -121,7 +120,7 @@ public class GeoMaps {
 	 *
 	 */
 	public static GeoMap getMap(String geoEntityType) {
-		GeoMap map = (GeoMap) maps.get(geoEntityType);
+		GeoMap map = maps.get(geoEntityType);
 		return map;
 	}
 
@@ -150,11 +149,11 @@ public class GeoMaps {
 	 */
 	public static GeoPoint geoPoint(String geoEntityType,
 			int geoEntityDescription) {
-		GeoMap map = (GeoMap) maps.get(geoEntityType);
+		GeoMap map = maps.get(geoEntityType);
 		if (map == null)
 			return null;
 		if (map.keyType.intern() == "int") {
-			return (GeoPoint) map.getMap()
+			return map.getMap()
 					.get(new Integer(geoEntityDescription));
 		} else {
 			try {
@@ -162,7 +161,7 @@ public class GeoMaps {
 					(new Integer(geoEntityDescription)).toString();
 				Object key =
 					ConvUtils.convertString2Object(keyString, map.getKeyType());
-				return (GeoPoint) map.getMap().get(key);
+				return map.getMap().get(key);
 			} catch (IllegalArgumentException _e) {
 				String msg = "Error looking up geoPoint for geoType '"
 						+ geoEntityType + "', geoEntityDesc "
@@ -194,7 +193,7 @@ public class GeoMaps {
 
 	public static GeoPoint geoPoint(String geoEntityType,
 			String geoEntityDescription) {
-		GeoMap map = (GeoMap) maps.get(geoEntityType);
+		GeoMap map = maps.get(geoEntityType);
 		if (map == null)
 			return null;
 		try {
@@ -209,7 +208,7 @@ public class GeoMaps {
 			}
 			Object key = ConvUtils.convertString2Object(geoEntityDescription,
 					map.getKeyType());
-			return (GeoPoint) map.getMap().get(key);
+			return map.getMap().get(key);
 		} catch (IllegalArgumentException _e) {
 			String msg = "Error looking up geoPoint for geoType '"
 					+ geoEntityType + "', geoEntityDesc " + geoEntityDescription

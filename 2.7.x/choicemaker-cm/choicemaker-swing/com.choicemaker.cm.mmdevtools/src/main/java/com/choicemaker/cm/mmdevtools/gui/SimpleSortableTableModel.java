@@ -44,6 +44,7 @@ public class SimpleSortableTableModel extends SortableTableModel {
 		setSortedColumnIndex(-1);
 	}
 
+	@Override
 	public void sort() {
 		int index = getSortedColumnIndex();
 		if (index < 0) {
@@ -53,19 +54,23 @@ public class SimpleSortableTableModel extends SortableTableModel {
 		fireTableDataChanged();
 	}
 
+	@Override
 	public int getColumnCount() {
 		return headers.length;
 	}
 
+	@Override
 	public int getRowCount() {
 		return data.length;
 	}
 
+	@Override
 	public Object getValueAt(int row, int col) {
 		int dataRow = rowMap[row].intValue();
 		return data[dataRow][col];
 	}
 
+	@Override
 	public String getColumnName(int col) {
 		if (getSortedColumnIndex() != col) {
 			return headers[col].toString();
@@ -79,6 +84,7 @@ public class SimpleSortableTableModel extends SortableTableModel {
 		}
 	}
 
+	@Override
 	public Class getColumnClass(int col) {
 		return columnClasses[col];
 	}
@@ -148,6 +154,7 @@ public class SimpleSortableTableModel extends SortableTableModel {
 	}
 
 	private class RowComparator implements Comparator {
+		@Override
 		public int compare(Object obj1, Object obj2) {
 			int i1 = ((Integer)obj1).intValue();
 			int i2 = ((Integer)obj2).intValue();

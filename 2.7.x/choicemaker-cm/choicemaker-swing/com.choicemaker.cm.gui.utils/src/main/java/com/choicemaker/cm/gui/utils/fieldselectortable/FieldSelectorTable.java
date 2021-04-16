@@ -20,6 +20,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
@@ -57,12 +58,14 @@ public class FieldSelectorTable extends JTable{
 		setDefaultEditor(String.class, textEditor);
 		
 		textField.addFocusListener(new FocusAdapter() {
+			@Override
 			public void focusLost(FocusEvent e) {
 				textEditor.stopCellEditing();
 			}
 		});
 	
 		getTableHeader().addMouseListener(new MouseAdapter() {
+			@Override
 			public void mouseClicked(MouseEvent e) {
 				TableColumnModel colModel = getColumnModel();
 				int columnModelIndex = colModel.getColumnIndexAtX(e.getX());
@@ -78,6 +81,7 @@ public class FieldSelectorTable extends JTable{
 	public void setModel(RecordTableColumnModel model){
 		if (tableListener == null) {
 			tableListener = new TableModelListener() {
+				@Override
 				public void tableChanged(TableModelEvent e) {
 					getTableHeader().repaint();
 				}
@@ -96,10 +100,11 @@ public class FieldSelectorTable extends JTable{
 	private class VisibilityHeaderRenderer extends JCheckBox implements TableCellRenderer {
 		private static final long serialVersionUID = 1L;
 		public VisibilityHeaderRenderer() {
-			setHorizontalAlignment(JCheckBox.CENTER);
+			setHorizontalAlignment(SwingConstants.CENTER);
 			setMargin(new Insets(0, 0, 0, 0));
 			setBorderPainted(true);
 		}
+		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 			FieldSelectorTableModel fstm = (FieldSelectorTableModel)table.getModel();
 			setText(value.toString());

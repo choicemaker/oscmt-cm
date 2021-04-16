@@ -40,6 +40,7 @@ public class EquivalenceClass implements Comparable {
 		return Collections.unmodifiableSortedSet(members);
 	}
 			
+	@Override
 	public final boolean equals(Object obj) {
 		// return super.equals(obj);
 		boolean retVal = false;
@@ -50,6 +51,7 @@ public class EquivalenceClass implements Comparable {
 		return retVal;
 	}
 
+	@Override
 	public final int compareTo(Object obj) {
 		
 		// May throw ClassCastException per spec
@@ -80,6 +82,7 @@ public class EquivalenceClass implements Comparable {
 		return Collections.unmodifiableSortedSet(members);
 	}
 	
+	@Override
 	public int hashCode() {
 		return this.members.hashCode();
 	}

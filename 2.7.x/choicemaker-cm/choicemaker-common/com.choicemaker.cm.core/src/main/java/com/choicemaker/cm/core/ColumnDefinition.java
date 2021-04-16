@@ -32,6 +32,7 @@ public class ColumnDefinition implements Serializable {
 	/**
 	 * @deprecated ONLY USED TO MAKE THE CLASS SERIALIZABLE!
 	 */
+	@Deprecated
 	public ColumnDefinition(){
 	}
 

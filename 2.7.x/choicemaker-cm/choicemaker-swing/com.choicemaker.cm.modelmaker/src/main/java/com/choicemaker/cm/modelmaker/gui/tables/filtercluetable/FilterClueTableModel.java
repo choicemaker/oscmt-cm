@@ -81,10 +81,12 @@ public class FilterClueTableModel extends SortableTableModel {
 	 * The COL_PARAMETERS is not sortable.
 	 * The COL_CONDITION is not sortable.
 	 */
+	@Override
 	public boolean isColumnSortable(int column) {
 		return (column != COL_PARAMETERS && column != COL_CONDITION);
 	}
 
+	@Override
 	public void sort() {
 		//logger.debug("Sorting called. sortCol = " + sortCol + " sort order = " + sortAsc);
 		Collections.sort(rows, new ClueDataComparator(sortCol, sortAsc));
@@ -134,6 +136,7 @@ public class FilterClueTableModel extends SortableTableModel {
 	 * @return the number of columns in the model
 	 * @see #getRowCount
 	 */
+	@Override
 	public int getColumnCount() {
 		return columns.length;
 	}
@@ -146,10 +149,12 @@ public class FilterClueTableModel extends SortableTableModel {
 	 * @return the number of rows in the model
 	 * @see #getColumnCount
 	 */
+	@Override
 	public int getRowCount() {
 		return numClues;
 	}
 
+	@Override
 	public String getColumnName(int col) {
 		String str = columns[col].getName();
 		if (col == sortCol) {
@@ -158,6 +163,7 @@ public class FilterClueTableModel extends SortableTableModel {
 		return str;
 	}
 
+	@Override
 	public boolean isCellEditable(int nRow, int nCol) {
 		return refersToFilterCondition(nCol) && !isNullConditionParameters(nRow, nCol);
 	}
@@ -172,6 +178,7 @@ public class FilterClueTableModel extends SortableTableModel {
 	 *                 the column whose value is to be queried
 	 * @return the value Object at the specified cell
 	 */
+	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		if (isEmpty || (rowIndex < 0) || (rowIndex >= getRowCount())) {
 			return "";
@@ -204,6 +211,7 @@ public class FilterClueTableModel extends SortableTableModel {
 	 * translates between the public perception of the Model and the model as is stored in the FilterCluesTableRow.
 	 * NOTE: only columns that refer to FilterConditions are editable.
 	 */
+	@Override
 	public void setValueAt(Object value, int nRow, int nCol) {
 		if (refersToFilterCondition(nCol)) {
 			setFilterConditionAt((FilterCondition) value, nRow);

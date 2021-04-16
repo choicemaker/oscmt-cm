@@ -10,9 +10,9 @@ package com.choicemaker.cm.modelmaker.gui.tables;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 
 public class AccuracyTable extends JTable {
@@ -25,9 +25,10 @@ public class AccuracyTable extends JTable {
 		setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		setCellSelectionEnabled(true);
 		DefaultTableCellRenderer tcr = (DefaultTableCellRenderer) getDefaultRenderer(Object.class);
-		tcr.setHorizontalAlignment(JLabel.RIGHT);
+		tcr.setHorizontalAlignment(SwingConstants.RIGHT);
 
 		addMouseListener(new MouseAdapter() {
+			@Override
 			public void mousePressed(MouseEvent e) {
 				//                 Point origin = e.getPoint();
 				//                 int row = rowAtPoint(origin);

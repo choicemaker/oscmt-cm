@@ -26,13 +26,15 @@ class Trans implements Cloneable {
 	this(f, t, i, n, 0);
     }
     
-    public Object clone() {
+    @Override
+	public Object clone() {
     	String i = new String(this.in);
     	String o = new String(this.out);
     	return new Trans(this.from,this.to,i,o,this.weight);
     }
 
-    public String toString() {
+    @Override
+	public String toString() {
 	return "" + " " + from + " " + to + " " + in + " " + out + " " + weight;
     }
 

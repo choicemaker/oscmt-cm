@@ -34,10 +34,12 @@ public class SqlServerRecordSourceXmlConf implements RecordSourceXmlConfigurator
 	
 	public static final String EXTENSION_POINT_ID = "com.choicemaker.cm.io.db.sqlserver.sqlServerRsReader";
 
+	@Override
 	public Object getHandler() {
 		return this;
 	}
 
+	@Override
 	public Class getHandledType() {
 		return SqlServerRecordSource.class;
 	}
@@ -45,6 +47,7 @@ public class SqlServerRecordSourceXmlConf implements RecordSourceXmlConfigurator
 	/**
 	 * Add a Db record source to the configuration.
 	 */
+	@Override
 	public void add(RecordSource s) throws XmlConfException {
 		try {
 			SqlServerRecordSource src = (SqlServerRecordSource) s;
@@ -64,6 +67,7 @@ public class SqlServerRecordSourceXmlConf implements RecordSourceXmlConfigurator
 		}
 	}
 
+	@Override
 	public RecordSource getRecordSource(String fileName, Element e, ImmutableProbabilityModel model)
 		throws XmlConfException {
 		String dataSourceName = e.getAttributeValue(SqlServerXmlUtils.AN_RS_DATASOURCENAME);

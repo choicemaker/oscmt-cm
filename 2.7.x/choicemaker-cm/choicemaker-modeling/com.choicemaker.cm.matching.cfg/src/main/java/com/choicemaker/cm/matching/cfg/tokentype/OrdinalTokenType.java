@@ -26,6 +26,7 @@ public class OrdinalTokenType extends SetTokenType {
 	/**
 	 * 
 	 */
+	@Override
 	protected String getStandardToken(String tok) {
 		String num = ordinalToNumber(tok);
 		return numberToOrdinal(num);

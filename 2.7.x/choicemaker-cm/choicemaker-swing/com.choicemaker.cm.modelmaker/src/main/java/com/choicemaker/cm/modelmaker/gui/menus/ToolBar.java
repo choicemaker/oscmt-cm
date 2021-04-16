@@ -20,11 +20,12 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
+import javax.swing.SwingConstants;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.base.Thresholds;
+import com.choicemaker.cm.core.Thresholds;
 import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.modelmaker.ModelMakerEventNames;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
@@ -60,7 +61,7 @@ public class ToolBar extends JToolBar implements PropertyChangeListener, Enable 
 		add(l);
 		differThreshold = new JTextField(5);
 		thresholdComponents[1] = differThreshold;
-		differThreshold.setHorizontalAlignment(JTextField.RIGHT);
+		differThreshold.setHorizontalAlignment(SwingConstants.RIGHT);
 		Dimension size = new Dimension(50, 20);
 		differThreshold.setPreferredSize(size);
 		differThreshold.setMaximumSize(size);
@@ -71,7 +72,7 @@ public class ToolBar extends JToolBar implements PropertyChangeListener, Enable 
 		add(l);
 		matchThreshold = new JTextField(5);
 		thresholdComponents[3] = matchThreshold; 
-		matchThreshold.setHorizontalAlignment(JTextField.RIGHT);
+		matchThreshold.setHorizontalAlignment(SwingConstants.RIGHT);
 		matchThreshold.setPreferredSize(size);
 		matchThreshold.setMaximumSize(size);
 		add(matchThreshold);
@@ -91,6 +92,7 @@ public class ToolBar extends JToolBar implements PropertyChangeListener, Enable 
 	private void addListeners() {
 		//mergePointsListener
 		ActionListener mergePointsListener = new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				boolean success = getMatchPoints();
 				setButton.setEnabled(!success);
@@ -109,6 +111,7 @@ public class ToolBar extends JToolBar implements PropertyChangeListener, Enable 
 		matchThreshold.getDocument().addDocumentListener(dl);
 	}
 
+	@Override
 	public void setEnabledness() {
 		setButton.setEnabled(true);
 	}
@@ -145,6 +148,7 @@ public class ToolBar extends JToolBar implements PropertyChangeListener, Enable 
 		return true;
 	}
 
+	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		String propertyName = evt.getPropertyName();
 		Object source = evt.getSource();

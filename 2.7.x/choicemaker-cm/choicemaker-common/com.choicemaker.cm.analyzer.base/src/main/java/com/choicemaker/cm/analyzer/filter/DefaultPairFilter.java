@@ -12,7 +12,7 @@ package com.choicemaker.cm.analyzer.filter;
 
 import java.util.logging.Logger;
 
-import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
+import com.choicemaker.cm.core.MutableMarkedRecordPair;
 
 /**
  * A stripped down Filter implementation that only limits the
@@ -95,6 +95,7 @@ public class DefaultPairFilter implements Filter {
 		checkSanity();
 	}
 
+	@Override
 	public boolean satisfy(MutableMarkedRecordPair mrp) {
 		checkSanity();
 		return fromPercentage <= mrp.getProbability()
@@ -104,6 +105,7 @@ public class DefaultPairFilter implements Filter {
 	/**
 	 * Does nothing
 	 */
+	@Override
 	public void resetLimiters() {
 	}
 

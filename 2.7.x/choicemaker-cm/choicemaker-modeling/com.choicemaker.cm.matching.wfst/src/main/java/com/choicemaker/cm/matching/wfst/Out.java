@@ -21,7 +21,8 @@ public class Out {
 	return list.equals(out.list);
     }
 
-    public String toString() {
+    @Override
+	public String toString() {
 	return "weight=" + weight + ", list=" + list;
     }
 

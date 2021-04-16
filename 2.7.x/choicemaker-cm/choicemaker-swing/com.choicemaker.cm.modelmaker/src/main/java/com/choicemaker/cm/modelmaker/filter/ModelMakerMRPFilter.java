@@ -27,6 +27,7 @@ public class ModelMakerMRPFilter extends MarkedRecordPairFilter implements
 		reset();
 	}
 
+	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		String propertyName = evt.getPropertyName();
 		Object source = evt.getSource();

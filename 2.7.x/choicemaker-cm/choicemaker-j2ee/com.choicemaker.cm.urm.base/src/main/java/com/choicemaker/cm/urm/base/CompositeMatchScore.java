@@ -7,6 +7,10 @@
  *******************************************************************************/
 package com.choicemaker.cm.urm.base;
 
+import java.util.List;
+
+import com.choicemaker.util.Precondition;
+
 /**
  * A matching score between a single and a composite record that consists of the
  * scores between the single record and records included in the composite record. 
@@ -27,7 +31,12 @@ public class CompositeMatchScore implements IMatchScore {
 	}
 
 	public CompositeMatchScore(MatchScore[] is) {
+		Precondition.assertNonNullArgument(is);
 		this.innerScores = is;
+	}
+
+	public CompositeMatchScore(List<MatchScore> is) {
+		this(is.toArray(new MatchScore[is.size()]));
 	}
 
 	public MatchScore[] getInnerScores() {
@@ -35,7 +44,6 @@ public class CompositeMatchScore implements IMatchScore {
 	}
 
 	public Decision3 getConservativeDecision() {
-		//TODO:impl
 		return null;
 	}
 
@@ -47,13 +55,20 @@ public class CompositeMatchScore implements IMatchScore {
 		return  avProb/this.innerScores.length; 
 	}
 
+	@Override
 	public Decision3 getDecision() {
 		return getConservativeDecision(); 
 	}
 
 
+	@Override
 	public float getProbability() {
 		return getAverageProbability();
+	}
+
+	@Override
+	public String getNote() {
+		return new String().intern();
 	}
 
 }

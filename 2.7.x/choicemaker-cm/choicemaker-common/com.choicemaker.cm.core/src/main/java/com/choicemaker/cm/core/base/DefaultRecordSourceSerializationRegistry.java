@@ -102,6 +102,7 @@ public class DefaultRecordSourceSerializationRegistry
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.base.IRecordSourceSerializer#hasSerializer(com.choicemaker.cm.core.base.RecordSource)
 	 */
+	@Override
 	public boolean hasSerializer(RecordSource rs) {
 		boolean retVal = false;
 		for (Iterator i = this.serializerRegistry.iterator();
@@ -116,6 +117,7 @@ public class DefaultRecordSourceSerializationRegistry
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.base.IRecordSourceSerializer#hasSerializer(java.lang.String)
 	 */
+	@Override
 	public boolean hasSerializer(String url) {
 		boolean retVal = false;
 		for (Iterator i = this.serializerRegistry.iterator();
@@ -130,6 +132,7 @@ public class DefaultRecordSourceSerializationRegistry
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.base.IRecordSourceSerializationRegistry#getPrioritizedInstanceSerializers()
 	 */
+	@Override
 	public PrioritizedSerializer[] getPrioritizedSerializers() {
 		PrioritizedSerializer[] retVal =
 			new PrioritizedSerializer[this.serializerRegistry.size()];
@@ -141,6 +144,7 @@ public class DefaultRecordSourceSerializationRegistry
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.base.IRecordSourceSerializer#getSerializableRecordSource(com.choicemaker.cm.core.base.RecordSource)
 	 */
+	@Override
 	public IRecordSourceSerializer getRecordSourceSerializer(RecordSource rs)
 		throws NotSerializableException {
 		Precondition.assertNonNullArgument("null record source", rs);
@@ -168,6 +172,7 @@ public class DefaultRecordSourceSerializationRegistry
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.base.IRecordSourceSerializer#getSerializableRecordSource(java.lang.String)
 	 */
+	@Override
 	public IRecordSourceSerializer getRecordSourceSerializer(String recordsourceURI)
 		throws NotSerializableException {
 		Precondition.assertNonEmptyString(recordsourceURI);
@@ -320,6 +325,7 @@ public class DefaultRecordSourceSerializationRegistry
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.base.IRecordSourceSerializationRegistry#registerRecordSourceSerializer(com.choicemaker.cm.core.base.IRecordSourceSerializer, int)
 	 */
+	@Override
 	public void registerRecordSourceSerializer(
 		IRecordSourceSerializer serializer,
 		int priority) {

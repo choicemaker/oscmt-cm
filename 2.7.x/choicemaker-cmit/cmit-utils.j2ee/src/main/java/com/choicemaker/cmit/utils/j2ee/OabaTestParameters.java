@@ -10,15 +10,15 @@ import javax.persistence.EntityManager;
 import javax.transaction.UserTransaction;
 
 import com.choicemaker.cm.args.OabaLinkageType;
-import com.choicemaker.cm.batch.OperationalPropertyController;
-import com.choicemaker.cm.batch.ProcessingController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordIdController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
+import com.choicemaker.cm.batch.api.OperationalPropertyController;
+import com.choicemaker.cm.batch.api.EventPersistenceManager;
+import com.choicemaker.cm.oaba.api.OabaJobManager;
+import com.choicemaker.cm.oaba.api.OabaParametersController;
+import com.choicemaker.cm.oaba.api.OabaService;
+import com.choicemaker.cm.oaba.api.OabaSettingsController;
+import com.choicemaker.cm.oaba.api.RecordIdController;
+import com.choicemaker.cm.oaba.api.RecordSourceController;
+import com.choicemaker.cm.oaba.api.ServerConfigurationController;
 import com.choicemaker.e2.ejb.EjbPlatform;
 
 public interface OabaTestParameters {
@@ -43,11 +43,11 @@ public interface OabaTestParameters {
 
 	Queue getMatchSchedulerQueue();
 
-	OabaJobController getOabaJobController();
+	OabaJobManager getOabaJobManager();
 
 	OabaParametersController getOabaParamsController();
 
-	ProcessingController getOabaProcessingController();
+	EventPersistenceManager getOabaProcessingController();
 
 	OabaService getOabaService();
 

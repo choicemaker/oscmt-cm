@@ -4,7 +4,7 @@
  */
 package com.choicemaker.cm.io.db.jdbc.blocking;
 
-import com.choicemaker.cm.io.blocking.automated.base.db.DatabaseAbstraction;
+import com.choicemaker.cm.aba.base.db.DatabaseAbstraction;
 
 /**
  * @author pcheung

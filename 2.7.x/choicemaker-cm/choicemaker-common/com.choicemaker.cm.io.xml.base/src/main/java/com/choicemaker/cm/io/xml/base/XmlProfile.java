@@ -42,10 +42,12 @@ public class XmlProfile implements Profile {
 		return profile;
 	}
 	
+	@Override
 	public String toString() {
 		return profile;
 	}
 	
+	@Override
 	public Record getRecord(ImmutableProbabilityModel model) throws InvalidProfileException {
 		try {
 			return XmlSingleRecordReader.getRecord(model, getProfile());

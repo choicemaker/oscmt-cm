@@ -38,6 +38,7 @@ public class ClueTableCellListener extends MouseAdapter {
 	/**
 	 * Invoked when the mouse has been clicked on a component.
 	 */
+	@Override
 	public void mousePressed(MouseEvent e) {
 		Point origin = e.getPoint();
 		int row = table.rowAtPoint(origin);

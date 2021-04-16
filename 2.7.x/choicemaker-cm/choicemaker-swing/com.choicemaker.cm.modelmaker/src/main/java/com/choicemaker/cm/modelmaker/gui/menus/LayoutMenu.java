@@ -69,6 +69,7 @@ public class LayoutMenu extends LastUsedMenu {
 			setEnabled(getEnabled());
 		}
 
+		@Override
 		public void propertyChange(PropertyChangeEvent e) {
 			String propertyName = e.getPropertyName();
 			if (dependsModel && propertyName == ModelMakerEventNames.PROBABILITY_MODEL) {
@@ -81,6 +82,7 @@ public class LayoutMenu extends LastUsedMenu {
 		Action newAction = new LayoutAction(ChoiceMakerCoreMessages.m.formatMessage("new"), null, true) {
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				parent.setDefaultLayout();
 			}
@@ -90,6 +92,7 @@ public class LayoutMenu extends LastUsedMenu {
 		Action openAction = new LayoutAction(ChoiceMakerCoreMessages.m.formatMessage("open.elipsis"), null, true) {
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				File file = FileChooserFactory.selectLayoutFile(parent);
 				if (file != null) {
@@ -102,6 +105,7 @@ public class LayoutMenu extends LastUsedMenu {
 		Action saveAction = new LayoutAction(ChoiceMakerCoreMessages.m.formatMessage("save"), null, true) {
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				CompositePaneModel layout = parent.getCurrentLayout();
 				if (layout.getFileName() == null) {
@@ -120,6 +124,7 @@ public class LayoutMenu extends LastUsedMenu {
 		Action saveAsAction = new LayoutAction(ChoiceMakerCoreMessages.m.formatMessage("saveas.elipsis"), null, true) {
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				saveAs();
 			}
@@ -161,6 +166,7 @@ public class LayoutMenu extends LastUsedMenu {
 		}
 	}
 
+	@Override
 	public void open(String fileName) {
 		try {
 			CompositePaneModel layout = RecordPairViewerXmlConf.readLayout(fileName, parent.getModelMaker().getProbabilityModel().getAccessor().getDescriptor());

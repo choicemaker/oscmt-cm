@@ -22,9 +22,11 @@ import com.choicemaker.cm.io.db.base.DatabaseAbstractionManager;
  * @author rphall
  * @deprecated
  */
+@Deprecated
 public class OraDatabaseAbstractionManager
 		implements DatabaseAbstractionManager {
 
+	@Override
 	public DatabaseAbstraction lookupDatabaseAbstraction(DataSource ds)
 			throws DatabaseException {
 

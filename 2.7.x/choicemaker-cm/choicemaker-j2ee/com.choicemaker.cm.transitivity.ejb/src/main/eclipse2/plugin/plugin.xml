@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plugin>
+<plugin
+   id="com.choicemaker.cm.transitivity.ejb"
+   name="com.choicemaker.cm.transitivity.ejb"
+   version="2.5.0">
+
+   <runtime>
+      <library name="transitivity-ejb.jar">
+         <export name="*"/>
+      </library>
+   </runtime>
+   <requires>
+      <import plugin="com.choicemaker.cm.oaba.api"/>
+      <import plugin="com.choicemaker.cm.core"/>
+      <import plugin="com.choicemaker.cm.oaba.core"/>
+      <import plugin="com.choicemaker.cm.oaba"/>
+      <import plugin="com.choicemaker.cm.transitivity.core"/>
+      <import plugin="com.choicemaker.cm.transitivity"/>
+      <import plugin="com.choicemaker.cm.aba.base"/>
+   </requires>
+
+
+</plugin>

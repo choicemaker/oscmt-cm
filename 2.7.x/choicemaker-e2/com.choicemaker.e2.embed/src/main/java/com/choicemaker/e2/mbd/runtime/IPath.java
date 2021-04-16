@@ -124,6 +124,7 @@ public Object clone();
  * @return <code>true</code> if the paths are equivalent,
  *    and <code>false</code> if they are not
  */
+@Override
 public boolean equals(Object obj);
 /**
  * Returns the device id for this path, or <code>null</code> if this
@@ -429,6 +430,7 @@ public String toOSString();
  * @return a string representation of this path
  * @see Path
  */
+@Override
 public String toString();
 /**
  * Returns a copy of this path truncated after the

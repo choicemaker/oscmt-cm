@@ -35,10 +35,12 @@ public class NamedEventSupport implements INamedEventControl {
 				throw new IllegalArgumentException("null listener");
 			}
 		}
+		@Override
 		public void update(Observable src, Object evt) {
 			// assert src instance of IClusterControlSupport.this ;
 			this.namedEventListener.eventOccurred((INamedEvent) evt);
 		}
+		@Override
 		public boolean equals(Object o) {
 			boolean retVal = false;
 			if (o instanceof IModule) {
@@ -46,6 +48,7 @@ public class NamedEventSupport implements INamedEventControl {
 			}
 			return retVal;
 		}
+		@Override
 		public int hashCode() {
 			return this.namedEventListener.hashCode();
 		}
@@ -59,10 +62,12 @@ public class NamedEventSupport implements INamedEventControl {
 		}
 	}
 	
+	@Override
 	public void addEventListener(INamedEventListener l) {
 		this.delegate.addObserver(new NamedEventObserver(l));
 	}
 
+	@Override
 	public void removeEventListener(INamedEventListener l) {
 		this.delegate.deleteObserver(new NamedEventObserver(l));
 	}

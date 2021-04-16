@@ -7,6 +7,7 @@
  *******************************************************************************/
 package com.choicemaker.cm.urm.base;
 
+import java.io.Serializable;
 
 /**
  * A record represented by an identifier. It is assumed that the real location
@@ -16,12 +17,11 @@ package com.choicemaker.cm.urm.base;
  * @author emoussikaev
  * @see
  */
-public class RecordRef implements ISingleRecord {
+public class RecordRef<T extends Comparable<T> & Serializable> implements ISingleRecord<T> {
 
-	/** As of 2010-11-12 */
-	static final long serialVersionUID = -4347784657257638692L;
+	private static final long serialVersionUID = 271;
 
-	protected Comparable	id;
+	protected T id;
 	
 	/**
 	 * Constructs a <code>RecordRef</code> with unknown (null) identifier.
@@ -36,7 +36,7 @@ public class RecordRef implements ISingleRecord {
 	 * 
 	 * @param id
 	 */
-	public RecordRef(Comparable id) {
+	public RecordRef(T id) {
 		this.id = id;
 	}
 
@@ -46,7 +46,8 @@ public class RecordRef implements ISingleRecord {
 	 * 
 	 * @return
 	 */
-	public Comparable getId() {
+	@Override
+	public T getId() {
 		return id;
 	}
 
@@ -56,10 +57,11 @@ public class RecordRef implements ISingleRecord {
 	 * 
 	 * @param id
 	 */
-	public void setId(Comparable id) {
+	public void setId(T id) {
 		this.id = id;
 	}
 
+	@Override
 	public void accept(IRecordVisitor ext){
 		ext.visit(this);
 	}

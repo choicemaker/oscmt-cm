@@ -29,16 +29,20 @@ public class DoNothingMachineLearningPersistance implements MlModelConf {
 	public DoNothingMachineLearningPersistance() {
 	}
 
+	@Override
 	public MachineLearner readMachineLearner(Element e, Accessor acc, List<?> clues, int[] oldClueNums) {
 		return new DoNothingMachineLearning();
 	}
 
+	@Override
 	public void saveClue(Element e, int clueNum) {
 	}
 
+	@Override
 	public void saveMachineLearner(Element e) {
 	}
 
+	@Override
 	public String getExtensionPointId() {
 		return "com.choicemaker.cm.core.none";
 	}

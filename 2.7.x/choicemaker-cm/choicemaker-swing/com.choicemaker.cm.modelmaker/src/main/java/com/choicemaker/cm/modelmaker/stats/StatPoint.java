@@ -37,6 +37,7 @@ public class StatPoint {
 		correlation = Float.NaN;
 	}
 
+	@Override
 	public boolean equals(Object o) {
 		// Super equals Method
 		//return super.equals(o);
@@ -51,6 +52,7 @@ public class StatPoint {
 		return retVal;
 	}
 
+	@Override
 	public int hashCode() {
 		// Super hashCode Method
 		//return super.hashCode();

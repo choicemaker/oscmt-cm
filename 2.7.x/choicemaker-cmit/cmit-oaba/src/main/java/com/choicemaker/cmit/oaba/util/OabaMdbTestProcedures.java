@@ -14,13 +14,13 @@ import javax.jms.Queue;
 
 import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.args.OabaParameters;
-import com.choicemaker.cm.batch.BatchJob;
-import com.choicemaker.cm.batch.BatchProcessingNotification;
-import com.choicemaker.cm.batch.ProcessingController;
-import com.choicemaker.cm.batch.ProcessingEventLog;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
+import com.choicemaker.cm.batch.api.BatchJob;
+import com.choicemaker.cm.batch.api.BatchProcessingNotification;
+import com.choicemaker.cm.batch.api.EventPersistenceManager;
+import com.choicemaker.cm.batch.api.ProcessingEventLog;
+import com.choicemaker.cm.oaba.api.OabaParametersController;
+import com.choicemaker.cm.oaba.api.ServerConfigurationException;
+import com.choicemaker.cm.oaba.ejb.data.OabaJobMessage;
 import com.choicemaker.cmit.oaba.AbstractOabaMdbTest;
 import com.choicemaker.cmit.utils.j2ee.BatchProcessingPhase;
 import com.choicemaker.cmit.utils.j2ee.EntityManagerUtils;
@@ -200,10 +200,10 @@ public class OabaMdbTestProcedures {
 		}
 
 		// Find the entry in the processing history updated by the OABA
-		final ProcessingController processingController =
+		final EventPersistenceManager eventManager =
 			otp.getOabaProcessingController();
 		ProcessingEventLog processingEntry =
-			processingController.getProcessingLog(batchJob);
+			eventManager.getProcessingLog(batchJob);
 
 		// Validate that processing entry is correct for this stage of the OABA
 		assertTrue(processingEntry != null);

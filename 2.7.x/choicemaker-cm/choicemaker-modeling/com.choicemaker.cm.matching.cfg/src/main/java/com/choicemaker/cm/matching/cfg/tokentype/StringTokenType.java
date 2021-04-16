@@ -37,6 +37,7 @@ public class StringTokenType extends TokenType {
 	/**
 	 * Returns <code>value.equals(token)</code>.
 	 */
+	@Override
 	public boolean canHaveToken(String token) {
 		return value.equals(token);
 	}
@@ -45,6 +46,7 @@ public class StringTokenType extends TokenType {
 	 * Return 1, as there is only one Token that can take on this
 	 * TokenType.
 	 */
+	@Override
 	protected double getTokenProbability(String token) {
 		return 1.0;
 	}

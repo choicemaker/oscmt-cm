@@ -11,7 +11,7 @@
       </library>
    </runtime>
    <requires>
-      <import plugin="com.choicemaker.cm.io.blocking.automated.offline.core"/>
+      <import plugin="com.choicemaker.cm.oaba.core"/>
       <import plugin="com.choicemaker.cm.transitivity.core"/>
       <import plugin="com.choicemaker.cm.core"/>
    </requires>

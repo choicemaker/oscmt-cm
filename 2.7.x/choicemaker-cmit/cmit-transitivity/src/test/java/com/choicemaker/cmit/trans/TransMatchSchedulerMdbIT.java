@@ -1,7 +1,7 @@
 package com.choicemaker.cmit.trans;
 
-import static com.choicemaker.cm.transitivity.core.TransitivityProcessing.EVT_DONE_MATCHING_DATA;
-import static com.choicemaker.cm.transitivity.core.TransitivityProcessing.PCT_DONE_MATCHING_DATA;
+import static com.choicemaker.cm.transitivity.core.TransitivityProcessingConstants.EVT_DONE_MATCHING_DATA;
+import static com.choicemaker.cm.transitivity.core.TransitivityProcessingConstants.PCT_DONE_MATCHING_DATA;
 
 import java.util.logging.Logger;
 
@@ -12,8 +12,8 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
 import org.junit.runner.RunWith;
 
-import com.choicemaker.cm.batch.BatchJob;
-import com.choicemaker.cm.transitivity.server.impl.TransMatchDedupMDB;
+import com.choicemaker.cm.batch.api.BatchJob;
+import com.choicemaker.cm.transitivity.ejb.TransMatchDedupMDB;
 import com.choicemaker.cmit.testconfigs.SimplePersonSqlServerTestConfiguration;
 import com.choicemaker.cmit.trans.util.TransitivityDeploymentUtils;
 import com.choicemaker.cmit.utils.j2ee.BatchProcessingPhase;

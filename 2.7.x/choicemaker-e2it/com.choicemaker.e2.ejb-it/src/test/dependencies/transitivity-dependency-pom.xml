@@ -23,17 +23,17 @@
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.io.blocking.automated.offline</artifactId>
+      <artifactId>com.choicemaker.cm.oaba</artifactId>
       <version>2.7.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.io.blocking.automated.offline.core</artifactId>
+      <artifactId>com.choicemaker.cm.oaba.core</artifactId>
       <version>2.7.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.io.blocking.automated.offline.server</artifactId>
+      <artifactId>com.choicemaker.cm.oaba.server</artifactId>
       <version>2.7.1-SNAPSHOT</version>
     </dependency>
     <dependency>

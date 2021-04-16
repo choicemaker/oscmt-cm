@@ -341,6 +341,7 @@ public abstract class Plugin {
 	 * Returns a string representation of the plug-in, suitable 
 	 * for debugging purposes only.
 	 */
+	@Override
 	public String toString() {
 		return descriptor.toString();
 	}

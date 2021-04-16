@@ -80,6 +80,7 @@ public class CompositePaneModel extends DefaultCompositeObservableData {
 		return descriptor;
 	}
 
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -88,6 +89,7 @@ public class CompositePaneModel extends DefaultCompositeObservableData {
 		return result;
 	}
 
+	@Override
 	public boolean equals(Object o){
 		if (o instanceof CompositePaneModel){
 			CompositePaneModel other = (CompositePaneModel)o;

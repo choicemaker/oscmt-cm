@@ -31,11 +31,13 @@ public class FieldLengthHistogramStat extends AbstractTableStat {
 	// DataProfiler interface
 	//
 
+	@Override
 	public void reset() {
 		lengthCounts = new IntValuedHashMap();
 		totalRows = 0;
 	}
 
+	@Override
 	public void processRecord(Record r) {
 		int numRows = fa.getRowCount(r);
 		totalRows += numRows;
@@ -52,14 +54,17 @@ public class FieldLengthHistogramStat extends AbstractTableStat {
 		}		
 	}
 
+	@Override
 	public String getName() {
 		return "Length Histogram";
 	}
 
+	@Override
 	public Object[] getColumnHeaders() {
 		return new Object[] {"Length", "Count", "Percentage"};
 	}
 
+	@Override
 	public Object[][] getData() {
 		int len = lengthCounts.size();
 
@@ -78,6 +83,7 @@ public class FieldLengthHistogramStat extends AbstractTableStat {
 		return data;
 	}
 
+	@Override
 	public boolean filterRecord(Set values, Record r) {
 		int numRows = fa.getRowCount(r);
 		for (int i = 0; i < numRows; i++) {

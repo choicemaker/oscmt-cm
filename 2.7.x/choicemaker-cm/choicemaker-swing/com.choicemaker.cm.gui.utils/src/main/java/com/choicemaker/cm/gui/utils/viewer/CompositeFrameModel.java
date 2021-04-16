@@ -50,6 +50,7 @@ public class CompositeFrameModel extends DefaultObservableData implements Intern
 	 * Returns the descriptor.
 	 * @return Descriptor
 	 */
+	@Override
 	public Descriptor getDescriptor() {
 		return descriptor;
 	}
@@ -58,6 +59,7 @@ public class CompositeFrameModel extends DefaultObservableData implements Intern
 	 * Sets the descriptor.
 	 * @param descriptor The descriptor to set
 	 */
+	@Override
 	public void setDescriptor(Descriptor newValue) {
 		Descriptor oldValue = descriptor;
 		descriptor = newValue;
@@ -68,6 +70,7 @@ public class CompositeFrameModel extends DefaultObservableData implements Intern
 	 * Returns the alias.
 	 * @return String
 	 */
+	@Override
 	public String getAlias() {
 		return alias;
 	}
@@ -76,6 +79,7 @@ public class CompositeFrameModel extends DefaultObservableData implements Intern
 	 * Sets the alias.
 	 * @param alias The alias to set
 	 */
+	@Override
 	public void setAlias(String newValue) {
 		String oldValue = alias;
 		alias = newValue;
@@ -86,6 +90,7 @@ public class CompositeFrameModel extends DefaultObservableData implements Intern
 	 * Returns the bounds.
 	 * @return Rectangle
 	 */
+	@Override
 	public Rectangle getBounds() {
 		return bounds;
 	}
@@ -94,12 +99,14 @@ public class CompositeFrameModel extends DefaultObservableData implements Intern
 	 * Sets the bounds.
 	 * @param bounds The bounds to set
 	 */
+	@Override
 	public void setBounds(Rectangle newValue) {
 		Rectangle oldValue = bounds;
 		bounds = newValue;
 		firePropertyChange(BOUNDS, oldValue, newValue);
 	}
 
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -114,6 +121,7 @@ public class CompositeFrameModel extends DefaultObservableData implements Intern
 		return result;
 	}
 
+	@Override
 	public boolean equals(Object o){
 		if (o instanceof CompositeFrameModel){
 			CompositeFrameModel other = (CompositeFrameModel)o;
@@ -142,6 +150,7 @@ public class CompositeFrameModel extends DefaultObservableData implements Intern
 	/**
 	 * @return boolean
 	 */
+	@Override
 	public boolean isEnableEditing() {
 		return enableEditing;
 	}
@@ -150,6 +159,7 @@ public class CompositeFrameModel extends DefaultObservableData implements Intern
 	 * Recursively sets the enableEditing property in the whole Model.
 	 * @param enableEditing The enableEditing to set
 	 */
+	@Override
 	public void setEnableEditing(boolean newValue) {
 		Boolean oldValue = new Boolean(enableEditing);
 		enableEditing = newValue;

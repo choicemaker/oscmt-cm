@@ -43,24 +43,24 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import com.choicemaker.client.api.Decision;
+import com.choicemaker.cm.aba.AbaStatistics;
+import com.choicemaker.cm.aba.AbaStatisticsCache;
+import com.choicemaker.cm.aba.AutomatedBlocker;
+import com.choicemaker.cm.aba.DatabaseAccessor;
+import com.choicemaker.cm.aba.base.Blocker2;
+import com.choicemaker.cm.aba.util.BlockingConfigurationUtils;
 import com.choicemaker.cm.args.AbaSettings;
 import com.choicemaker.cm.core.DatabaseException;
-import com.choicemaker.cm.core.Decision;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.MarkedRecordPairSource;
+import com.choicemaker.cm.core.Match;
+import com.choicemaker.cm.core.MutableMarkedRecordPair;
 import com.choicemaker.cm.core.Record;
+import com.choicemaker.cm.core.Thresholds;
 import com.choicemaker.cm.core.base.MarkedRecordPairBinder;
-import com.choicemaker.cm.core.base.Match;
-import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
 import com.choicemaker.cm.core.base.RecordDecisionMaker;
-import com.choicemaker.cm.core.base.Thresholds;
 import com.choicemaker.cm.gui.utils.dialogs.ErrorDialog;
-import com.choicemaker.cm.io.blocking.automated.AbaStatistics;
-import com.choicemaker.cm.io.blocking.automated.AbaStatisticsCache;
-import com.choicemaker.cm.io.blocking.automated.AutomatedBlocker;
-import com.choicemaker.cm.io.blocking.automated.DatabaseAccessor;
-import com.choicemaker.cm.io.blocking.automated.base.Blocker2;
-import com.choicemaker.cm.io.blocking.automated.util.BlockingConfigurationUtils;
 import com.choicemaker.cm.io.db.base.DataSources;
 import com.choicemaker.cm.io.db.sqlserver.SqlServerXmlUtils;
 import com.choicemaker.cm.io.db.sqlserver.dbom.SqlDbObjectMaker;
@@ -263,12 +263,14 @@ public class SqlServerIdSearchDialog extends JDialog {
 //		});
 
 		dataSource.addItemListener(new ItemListener() {
+			@Override
 			public void itemStateChanged(ItemEvent e) {
 				updateEnabledness();
 			}
 		});
 
 		blockingParametersPanel.addPropertyChangeListener(new PropertyChangeListener() {
+			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				if (BlockingParametersPanel.BLOCKING_PARAMETERS_PROPERTY.equals(evt.getPropertyName())) {
 					updateEnabledness();
@@ -277,18 +279,23 @@ public class SqlServerIdSearchDialog extends JDialog {
 		});
 
 		qId.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
 			public void insertUpdate(DocumentEvent e) { updateEnabledness(); }
+			@Override
 			public void removeUpdate(DocumentEvent e) { updateEnabledness(); }
+			@Override
 			public void changedUpdate(DocumentEvent e) { updateEnabledness(); }
 		});
 
 		cancel.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				dispose();
 			}
 		});
 
 		ok.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				findMatches();
 			}
@@ -395,7 +402,7 @@ public class SqlServerIdSearchDialog extends JDialog {
 		List<MutableMarkedRecordPair> pairs = new ArrayList<>(matches.size());
 		Iterator<Match> it = matches.iterator();
 		while (it.hasNext()) {
-			Match match = (Match) it.next();
+			Match match = it.next();
 			Record m = match.m;
 			if (!actualId.equals(m.getId())) {
 				pairs.add(new MutableMarkedRecordPair(q, m, Decision.HOLD,

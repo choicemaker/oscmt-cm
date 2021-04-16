@@ -15,7 +15,7 @@
       <import plugin="com.choicemaker.cm.core"/>
       <import plugin="com.choicemaker.cm.compiler"/>
       <import plugin="com.choicemaker.cm.io.db.base"/>
-      <import plugin="com.choicemaker.cm.io.blocking.automated.base"/>
+      <import plugin="com.choicemaker.cm.aba.base"/>
       <import plugin="com.choicemaker.cm.io.composite.base"/>
    </requires>
 
@@ -40,7 +40,7 @@
    <extension
          id="sqlServerDatabaseAccessor"
          name="sqlServerDatabaseAccessor"
-         point="com.choicemaker.cm.io.blocking.automated.base.databaseAccessor">
+         point="com.choicemaker.cm.aba.base.databaseAccessor">
       <databaseAccessor
             class="com.choicemaker.cm.io.db.sqlserver.blocking.SqlDatabaseAccessor">
       </databaseAccessor>

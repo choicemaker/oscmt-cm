@@ -30,26 +30,31 @@ public final class DoNothingCompiler implements ICompiler {
 
 	public DoNothingCompiler() {}
 
+	@Override
 	public int generateJavaCode(CompilationArguments arguments,
 			Writer statusOutput) throws CompilerException {
 		throw new CompilerException("DoNothingCompiler method 'compile' not implemented");
 	}
 
+	@Override
 	public String compile(CompilationArguments arguments, Writer statusOutput)
 		throws CompilerException {
 		throw new CompilerException("DoNothingCompiler method 'generateJavaCode' not implemented");
 	}
 
+	@Override
 	public ImmutableProbabilityModel compile(ProbabilityModelSpecification model, Writer statusOutput)
 		throws CompilerException {
 			throw new CompilerException("DoNothingCompiler method 'compile' not implemented");
 	}
 
+	@Override
 	public boolean compile(IProbabilityModel model, Writer statusOutput)
 			throws CompilerException {
 		throw new CompilerException("DoNothingCompiler method 'compile' not implemented");
 	}
 
+	@Override
 	public Properties getFeatures() {
 		return new Properties();
 	}

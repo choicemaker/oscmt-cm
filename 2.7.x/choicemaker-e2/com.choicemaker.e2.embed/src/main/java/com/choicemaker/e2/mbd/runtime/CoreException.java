@@ -47,6 +47,7 @@ public final IStatus getStatus() {
  * any nested exception that it may have embedded in
  * its Status object.
  */
+@Override
 public void printStackTrace() {
 	printStackTrace(System.err);
 }
@@ -55,6 +56,7 @@ public void printStackTrace() {
  * any nested exception that it may have embedded in
  * its Status object.
  */
+@Override
 public void printStackTrace(PrintStream output) {
 	synchronized (output) {
 		if (status.getException() != null) {
@@ -69,6 +71,7 @@ public void printStackTrace(PrintStream output) {
  * any nested exception that it may have embedded in
  * its Status object.
  */
+@Override
 public void printStackTrace(PrintWriter output) {
 	synchronized (output) {
 		if (status.getException() != null) {

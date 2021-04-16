@@ -7,34 +7,39 @@
  *******************************************************************************/
 package com.choicemaker.cm.urm.base;
 
-
-
+import java.io.Serializable;
+import java.util.List;
 
 /**
- * A group of matching together and denoting the same physical entity. 
- * <p>  
+ * A group of matching together and denoting the same physical entity.
+ * <p>
  *
  * @author emoussikaev
  * @see
  */
-public class LinkedRecordSet extends CompositeRecord {
+public class LinkedRecordSet<T extends Comparable<T> & Serializable>
+		extends CompositeRecord<T> {
 
-	/** As of 2010-11-12 */
-	static final long serialVersionUID = -8988092145857498700L;
+	private static final long serialVersionUID = -8988092145857498700L;
 
-	LinkCriteria 	   criteria;
-	
-	public LinkedRecordSet(Comparable id, IRecord[] r, LinkCriteria c) {
-		super(id,r);
+	private LinkCriteria criteria;
+
+	public LinkedRecordSet(T id, IRecord<T>[] r, LinkCriteria c) {
+		super(id, r);
 		this.criteria = c;
 	}
-	
-	
+
+	public LinkedRecordSet(T id, List<? extends IRecord<T>> r, LinkCriteria c) {
+		super(id, r);
+		this.criteria = c;
+	}
+
 	public LinkCriteria getCriteria() {
 		return criteria;
 	}
-	
-	public void accept(IRecordVisitor ext){
+
+	@Override
+	public void accept(IRecordVisitor ext) {
 		ext.visit(this);
 	}
 

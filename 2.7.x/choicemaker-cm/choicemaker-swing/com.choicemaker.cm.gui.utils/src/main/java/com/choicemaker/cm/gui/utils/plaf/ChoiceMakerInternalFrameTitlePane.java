@@ -93,7 +93,8 @@ public class ChoiceMakerInternalFrameTitlePane  extends BasicInternalFrameTitleP
         super( f );
     }
 
-    public void addNotify() {
+    @Override
+	public void addNotify() {
         super.addNotify();
         // This is done here instead of in installDefaults as I was worried
         // that the BasicInternalFrameUI might not be fully initialized, and
@@ -102,7 +103,8 @@ public class ChoiceMakerInternalFrameTitlePane  extends BasicInternalFrameTitleP
         updateOptionPaneState();
     }
 
-    protected void installDefaults() {
+    @Override
+	protected void installDefaults() {
         super.installDefaults();
         setFont( UIManager.getFont("InternalFrame.titleFont") );
         paletteTitleHeight
@@ -112,14 +114,16 @@ public class ChoiceMakerInternalFrameTitlePane  extends BasicInternalFrameTitleP
         selectedForegroundKey = selectedBackgroundKey = null;
     }
     
-    protected void uninstallDefaults() {
+    @Override
+	protected void uninstallDefaults() {
         super.uninstallDefaults();
         if (wasClosable != frame.isClosable()) {
             frame.setClosable(wasClosable);
         }
     }
 
-    protected void createButtons() {
+    @Override
+	protected void createButtons() {
         super.createButtons();
 
         Boolean paintActive = frame.isSelected() ? Boolean.TRUE:Boolean.FALSE;
@@ -148,36 +152,42 @@ public class ChoiceMakerInternalFrameTitlePane  extends BasicInternalFrameTitleP
      * Override the parent's method to do nothing. Metal frames do not 
      * have system menus.
      */
-    protected void assembleSystemMenu() {}
+    @Override
+	protected void assembleSystemMenu() {}
 
     /**
      * Override the parent's method to do nothing. Metal frames do not 
      * have system menus.
      */
-    protected void addSystemMenuItems(JMenu systemMenu) {}
+    @Override
+	protected void addSystemMenuItems(JMenu systemMenu) {}
 
     /**
      * Override the parent's method avoid creating a menu bar. Metal frames
      * do not have system menus.
      */
-    protected void addSubComponents() {
+    @Override
+	protected void addSubComponents() {
         add(iconButton);
         add(maxButton);
         add(closeButton);
     }
 
-    protected PropertyChangeListener createPropertyChangeListener() {
+    @Override
+	protected PropertyChangeListener createPropertyChangeListener() {
         return new ChoiceMakerPropertyChangeHandler();
     }
     
-    protected LayoutManager createLayout() {
+    @Override
+	protected LayoutManager createLayout() {
         return new ChoiceMakerTitlePaneLayout();
     }
 
     class ChoiceMakerPropertyChangeHandler
         extends BasicInternalFrameTitlePane.PropertyChangeHandler
     {
-        public void propertyChange(PropertyChangeEvent evt) {
+        @Override
+		public void propertyChange(PropertyChangeEvent evt) {
 	    String prop = evt.getPropertyName();
             if( prop.equals(JInternalFrame.IS_SELECTED_PROPERTY) ) {
                 Boolean b = (Boolean)evt.getNewValue();
@@ -194,13 +204,17 @@ public class ChoiceMakerInternalFrameTitlePane  extends BasicInternalFrameTitleP
     }
 
     class ChoiceMakerTitlePaneLayout extends TitlePaneLayout {    
-        public void addLayoutComponent(String name, Component c) {}
-        public void removeLayoutComponent(Component c) {}   
-        public Dimension preferredLayoutSize(Container c)  {
+        @Override
+		public void addLayoutComponent(String name, Component c) {}
+        @Override
+		public void removeLayoutComponent(Component c) {}   
+        @Override
+		public Dimension preferredLayoutSize(Container c)  {
             return minimumLayoutSize(c);
         }
 
-        public Dimension minimumLayoutSize(Container c) {
+        @Override
+		public Dimension minimumLayoutSize(Container c) {
         	Dimension returnValue = SUPERminimumLayoutSize(c);
         	return new Dimension(returnValue.height, returnValue.width);
         }
@@ -252,7 +266,8 @@ public class ChoiceMakerInternalFrameTitlePane  extends BasicInternalFrameTitleP
             return new Dimension(width, height);
         } 
     
-        public void layoutContainer(Container c) {
+        @Override
+		public void layoutContainer(Container c) {
             boolean leftToRight = ChoiceMakerUtils.isLeftToRight(frame);
        
             int w = getWidth();
@@ -306,6 +321,7 @@ public class ChoiceMakerInternalFrameTitlePane  extends BasicInternalFrameTitleP
 		return super.getWidth();
 	}
 	
+	@Override
 	public void paintChildren(Graphics g){
 		Graphics2D g2d = (Graphics2D)g;
 		
@@ -319,6 +335,7 @@ public class ChoiceMakerInternalFrameTitlePane  extends BasicInternalFrameTitleP
 	/**
 	 * 
 	 */
+	@Override
 	public void paintComponent(Graphics g){
 		Graphics2D g2d = (Graphics2D)g;
 		

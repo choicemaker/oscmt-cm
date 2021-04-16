@@ -69,6 +69,7 @@ public String getPlugin() {
  * @return the unique identifier of the plug-in related to this model
  *		(e.g. <code>"com.example"</code>) or <code>null</code>. 
  */
+@Override
 public String getPluginId() {
 	return getPlugin();
 }

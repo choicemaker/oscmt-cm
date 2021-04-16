@@ -1,7 +1,7 @@
 package com.choicemaker.cmit.trans.util;
 
-import static com.choicemaker.cm.args.BatchProcessing.EVT_DONE;
-import static com.choicemaker.cm.args.BatchProcessing.PCT_DONE;
+import static com.choicemaker.cm.args.BatchProcessingConstants.EVT_DONE;
+import static com.choicemaker.cm.args.BatchProcessingConstants.PCT_DONE;
 import static com.choicemaker.cm.args.PersistentObject.NONPERSISTENT_ID;
 import static com.choicemaker.cmit.utils.j2ee.JmsUtils.LONG_TIMEOUT_MILLIS;
 import static com.choicemaker.cmit.utils.j2ee.JmsUtils.SHORT_TIMEOUT_MILLIS;
@@ -21,22 +21,22 @@ import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
-import com.choicemaker.cm.batch.BatchJob;
-import com.choicemaker.cm.batch.BatchJobStatus;
-import com.choicemaker.cm.batch.BatchProcessingNotification;
-import com.choicemaker.cm.batch.ProcessingController;
-import com.choicemaker.cm.batch.ProcessingEventLog;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.DefaultServerConfiguration;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntity;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationControllerBean;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationEntity;
-import com.choicemaker.cm.transitivity.server.ejb.TransitivityJobController;
-import com.choicemaker.cm.transitivity.server.ejb.TransitivityService;
-import com.choicemaker.cm.transitivity.server.impl.TransitivityParametersEntity;
+import com.choicemaker.cm.batch.api.BatchJob;
+import com.choicemaker.cm.batch.api.BatchJobStatus;
+import com.choicemaker.cm.batch.api.BatchProcessingNotification;
+import com.choicemaker.cm.batch.api.EventPersistenceManager;
+import com.choicemaker.cm.batch.api.ProcessingEventLog;
+import com.choicemaker.cm.oaba.api.DefaultServerConfiguration;
+import com.choicemaker.cm.oaba.api.OabaParametersController;
+import com.choicemaker.cm.oaba.api.OabaSettingsController;
+import com.choicemaker.cm.oaba.api.ServerConfigurationException;
+import com.choicemaker.cm.oaba.ejb.OabaJobEntity;
+import com.choicemaker.cm.oaba.ejb.ServerConfigurationControllerBean;
+import com.choicemaker.cm.oaba.ejb.ServerConfigurationEntity;
+import com.choicemaker.cm.oaba.ejb.data.OabaJobMessage;
+import com.choicemaker.cm.transitivity.api.TransitivityJobManager;
+import com.choicemaker.cm.transitivity.api.TransitivityService;
+import com.choicemaker.cm.transitivity.ejb.TransitivityParametersEntity;
 import com.choicemaker.cmit.trans.AbstractTransitivityMdbTest;
 import com.choicemaker.cmit.utils.j2ee.BatchProcessingPhase;
 import com.choicemaker.cmit.utils.j2ee.EntityManagerUtils;
@@ -209,7 +209,7 @@ public class TransitivityMdbTestProcedures {
 		assertTrue(jobId != NONPERSISTENT_ID);
 
 		// Find the transitivity job
-		final TransitivityJobController transJobController =
+		final TransitivityJobManager transJobController =
 			ta.getTransJobController();
 		BatchJob transJob = transJobController.findTransitivityJob(jobId);
 		assertTrue(transJob != null);
@@ -288,10 +288,10 @@ public class TransitivityMdbTestProcedures {
 		}
 
 		// Find the entry in the processing history updated by Transitivity
-		final ProcessingController processingController =
+		final EventPersistenceManager eventManager =
 			tp.getTransitivityProcessingController();
 		ProcessingEventLog processingEntry =
-			processingController.getProcessingLog(transJob);
+			eventManager.getProcessingLog(transJob);
 
 		// Validate that processing entry is correct
 		assertTrue(processingEntry != null);

@@ -10,7 +10,7 @@ package com.choicemaker.cm.gui.utils.viewer;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 
-import com.choicemaker.cm.core.base.RecordData;
+import com.choicemaker.cm.core.RecordData;
 
 
 /**
@@ -35,6 +35,7 @@ public class CompositeFrame extends InternalFrame{
 		getContentPane().setLayout(new BorderLayout());
 	}
 	
+	@Override
 	public void destroy() {
 		super.destroy();
 		pane.destroy();
@@ -44,6 +45,7 @@ public class CompositeFrame extends InternalFrame{
 	 * Sets the recordPairFrameModel.
 	 * @param recordPairFrameModel The recordPairFrameModel to set
 	 */
+	@Override
 	public void initInternalFrameModel() {
 		
 		pane = new CompositePane(pair, contentEditable);
@@ -53,6 +55,7 @@ public class CompositeFrame extends InternalFrame{
 	}
 	
 
+	@Override
 	public void setRecordData(RecordData recordData) {
 		pane.setRecordData(recordData);
 	}

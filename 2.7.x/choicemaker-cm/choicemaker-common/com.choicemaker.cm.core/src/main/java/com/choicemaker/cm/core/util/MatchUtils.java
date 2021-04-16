@@ -7,24 +7,36 @@
  *******************************************************************************/
 package com.choicemaker.cm.core.util;
 
-import static com.choicemaker.cm.core.Decision.HOLD;
-import static com.choicemaker.cm.core.Decision.MATCH;
+import static com.choicemaker.client.api.Decision.HOLD;
+import static com.choicemaker.client.api.Decision.MATCH;
 import static com.choicemaker.cm.core.base.RECORD_SOURCE_ROLE.MASTER;
 import static com.choicemaker.cm.core.base.RECORD_SOURCE_ROLE.STAGING;
 
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import com.choicemaker.client.api.Decision;
+import com.choicemaker.cm.core.ActiveClues;
 import com.choicemaker.cm.core.ClueSet;
-import com.choicemaker.cm.core.Decision;
+import com.choicemaker.cm.core.Evaluator;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
-import com.choicemaker.cm.core.base.ActiveClues;
-import com.choicemaker.cm.core.base.Evaluator;
 import com.choicemaker.cm.core.base.MatchRecord2;
 import com.choicemaker.cm.core.base.RECORD_SOURCE_ROLE;
+import com.choicemaker.util.Precondition;
 
 public class MatchUtils {
+
+	/**
+	 * @deprecated use {@link #compareRecords(ImmutableProbabilityModel, Record, Record, boolean, float, float)}
+	 */
+	@Deprecated
+	public static <T extends Comparable<T>> MatchRecord2<T> compareRecords(
+			ClueSet ignored, boolean[] ignored2,
+			ImmutableProbabilityModel model, Record q, Record m,
+			boolean isStage, float low, float high) {
+		return compareRecords(model, q, m, isStage, low, high);
+	}
 
 	/**
 	 * This method compares two records and returns a MatchRecord2 object.
@@ -37,13 +49,16 @@ public class MatchUtils {
 	 *            - indicates if the second record is staging or master
 	 */
 	public static <T extends Comparable<T>> MatchRecord2<T> compareRecords(
-			ClueSet clueSet, boolean[] enabledClues,
-			ImmutableProbabilityModel model, Record q, Record m,
-			boolean isStage, float low, float high) {
+			ImmutableProbabilityModel model, Record q,
+			Record m, boolean isStage, float low, float high) {
+
+		Precondition.assertNonNullArgument("model must be non-null", model);
 
 		MatchRecord2<T> retVal = null;
 		if ((q != null) && (m != null)) {
 			final Evaluator e = model.getEvaluator();
+			final ClueSet clueSet = model.getClueSet();
+			final boolean[] enabledClues = model.getCluesToEvaluate();
 			final ActiveClues ac = clueSet.getActiveClues(q, m, enabledClues);
 			float p = e.getProbability(ac);
 			final Decision d = e.getDecision(ac, p, low, high);

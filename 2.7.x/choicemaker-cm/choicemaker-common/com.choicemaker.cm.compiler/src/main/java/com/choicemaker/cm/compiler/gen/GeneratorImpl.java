@@ -141,14 +141,17 @@ public class GeneratorImpl implements IGenerator {
 	 * @return   The package of the generated code.
 	 * @throws   GenException  if the data cannot be read.
 	 */
+	@Override
 	public String getPackage() {
 		return pckage;
 	}
 
+	@Override
 	public String getExternalPackage() {
 		return externalPackage;
 	}
 
+	@Override
 	public boolean isIntern() {
 		return intern;
 	}
@@ -164,6 +167,7 @@ public class GeneratorImpl implements IGenerator {
 	 * @return   The root directory for the generated source code.
 	 * @throws   GenException  if the data cannot be read.
 	 */
+	@Override
 	public String getSourceCodeRoot() throws GenException {
 		return ConfigurationManager.getInstance().getGeneratedSourceRoot();
 	}
@@ -174,6 +178,7 @@ public class GeneratorImpl implements IGenerator {
 	 * @return   The directory for the generated source code.
 	 * @throws   GenException  if the data cannot be read.
 	 */
+	@Override
 	public String getSourceCodePackageRoot() throws GenException {
 		if (sourceCodePackageRoot == null) {
 			sourceCodePackageRoot =
@@ -183,6 +188,7 @@ public class GeneratorImpl implements IGenerator {
 		return sourceCodePackageRoot;
 	}
 
+	@Override
 	public String getExternalSourceCodePackageRoot() throws GenException {
 		if (externalSourceCodePackageRoot == null) {
 			externalSourceCodePackageRoot =
@@ -197,10 +203,12 @@ public class GeneratorImpl implements IGenerator {
 	 *
 	 * @return   The name of the clue set.
 	 */
+	@Override
 	public String getClueSetName() {
 		return clueSetName;
 	}
 
+	@Override
 	public String getSchemaName() {
 		return schemaName;
 	}
@@ -210,6 +218,7 @@ public class GeneratorImpl implements IGenerator {
 	 *
 	 * @return  The JDOM Document representing the ChoiceMaker schema.
 	 */
+	@Override
 	public Document getDocument() {
 		return document;
 	}
@@ -219,6 +228,7 @@ public class GeneratorImpl implements IGenerator {
 	 *
 	 * @return  The root element of the JDOM Document representing the ChoiceMaker schema.
 	 */
+	@Override
 	public Element getRootElement() {
 		return document.getRootElement();
 	}
@@ -228,6 +238,7 @@ public class GeneratorImpl implements IGenerator {
 	 *
 	 * @return  The root record of the ChoiceMaker schema.
 	 */
+	@Override
 	public Element getRootRecord() {
 		return getRootElement().getChild(CoreTags.NODE_TYPE);
 	}
@@ -241,6 +252,7 @@ public class GeneratorImpl implements IGenerator {
 	 *
 	 * @return   The maximal record stacking depth.
 	 */
+	@Override
 	public int getStackingDepth() {
 		return stackingDepth;
 	}
@@ -250,13 +262,14 @@ public class GeneratorImpl implements IGenerator {
 	 *
 	 * @return   The import statements to be added to generated code.
 	 */
+	@Override
 	public String getImports() {
 		if (imports == null) {
 			StringBuffer b = new StringBuffer();
-			List imp = getRootElement().getChildren("import");
-			Iterator i = imp.iterator();
+			List<Element> imp = getRootElement().getChildren("import");
+			Iterator<Element> i = imp.iterator();
 			while (i.hasNext()) {
-				b.append("import " + ((Element) i.next()).getText() + ";" + Constants.LINE_SEPARATOR);
+				b.append("import " + i.next().getText() + ";" + Constants.LINE_SEPARATOR);
 			}
 			imports = b.toString();
 		}
@@ -268,22 +281,27 @@ public class GeneratorImpl implements IGenerator {
 	 *
 	 * @param  fileName  The fully qualified file name of the Java source file.
 	 */
+	@Override
 	public void addGeneratedFile(String fileName) {
 		cu.addGeneratedJavaSourceFile(fileName);
 	}
 
+	@Override
 	public void error(String message) {
 		logger.severe(message);
 	}
 
+	@Override
 	public void warning(String message) {
 		logger.warning(message);
 	}
 
+	@Override
 	public void info(String message) {
 		logger.info(message);
 	}
 
+	@Override
 	public boolean hasErrors() {
 		return cu.getErrors() > 0;
 	}
@@ -309,6 +327,7 @@ public class GeneratorImpl implements IGenerator {
 	 * 
 	 * @throws CompilerException if generation fails
 	 */
+	@Override
 	public void generate() throws CompilerException {
 		boolean validate = XmlParserFactory.connected();
 		SAXBuilder builder = XmlParserFactory.createSAXBuilder(validate);
@@ -343,32 +362,67 @@ public class GeneratorImpl implements IGenerator {
 	}
 
 	private class SaxErrorHandler implements org.xml.sax.ErrorHandler {
+		@Override
 		public void error(SAXParseException ex) {
 			logger.severe("XML error in schema file " + schemaFileName + Constants.LINE_SEPARATOR + ex);
 		}
 
+		@Override
 		public void fatalError(SAXParseException ex) {
 			logger.severe("XML error in schema file " + schemaFileName + Constants.LINE_SEPARATOR + ex);
 		}
 
+		@Override
 		public void warning(SAXParseException ex) {
 			logger.severe("XML error in schema file " + schemaFileName + Constants.LINE_SEPARATOR + ex);
 		}
+	}
+
+	private static class KeyFieldInfo {
+		public final String keyFieldName;
+		public final String keyFieldType;
+		public final String keyFieldObjectType;
+		KeyFieldInfo(String n, String t, String o) {
+			keyFieldName = n;
+			keyFieldType = t;
+			keyFieldObjectType = o;
+		}
+	}
+
+	private static KeyFieldInfo getKeyFieldInfo(Element r) {
+		final List<Element> fields = r.getChildren("field");
+		Iterator<Element>i = fields.iterator();
+		String n=null;
+		String t=null;
+		while (i.hasNext()) {
+			Element e = i.next();
+			String typeName = e.getAttributeValue("type");
+			String fieldName = e.getAttributeValue("name");
+			if ("true".equals(e.getAttributeValue("key"))){
+				n =	fieldName;
+				t =	typeName;
+				break;
+			}
+		}
+		String o=GeneratorHelper.getObjectType(t);
+		KeyFieldInfo retVal = new KeyFieldInfo(n,t,o);
+		return retVal;
 	}
 
 	private void process() throws GenException {
 		precompute();
 		Element rootRecord = getRootRecord();
 		identifierCheck(rootRecord.getAttributeValue("name"), null);
-		createInterfaceClasses(rootRecord, null);
+		final KeyFieldInfo kfi = getKeyFieldInfo(rootRecord);
+		createInterfaceClasses(rootRecord, null, kfi);
 		createInterfacePackage();
 		createHolderClasses(rootRecord, null);
 		createAccessor();
 		IGeneratorPluginFactory factory = InstallableGeneratorPluginFactory
 				.getInstance();
-		List generatorPlugins = factory.lookupGeneratorPlugins();
-		for (Iterator i = generatorPlugins.iterator(); i.hasNext();) {
-			GeneratorPlugin gp = (GeneratorPlugin) i.next();
+		List<GeneratorPlugin> generatorPlugins = factory.lookupGeneratorPlugins();
+		for (Iterator<GeneratorPlugin> i = generatorPlugins.iterator(); i.hasNext();) {
+			GeneratorPlugin gp = i.next();
 			logger.info("Generator: '" + gp.toString() + "'");
 			gp.generate(this);
 			// BUG never checks if GeneratorPlugin produces errors
@@ -415,15 +469,15 @@ public class GeneratorImpl implements IGenerator {
 		r.setAttribute(CoreTags.FQ_NAME, fqName);
 		cu.addClassType(className);
 		r.setAttribute(CoreTags.RECORD_NUMBER, String.valueOf(recordNumber++));
-		List nestedRecords = r.getChildren(CoreTags.NODE_TYPE);
+		List<Element> nestedRecords = r.getChildren(CoreTags.NODE_TYPE);
 		if (nestedRecords.isEmpty()) {
 			r.setAttribute("isLeafRecord", "true");
 		} else {
 			r.setAttribute("isLeafRecord", "false");
 		}
-		Iterator i = nestedRecords.iterator();
+		Iterator<Element> i = nestedRecords.iterator();
 		while (i.hasNext()) {
-			nameRecords((Element) i.next(), className, separator, level + 1, fqName + ".");
+			nameRecords(i.next(), className, separator, level + 1, fqName + ".");
 		}
 	}
 
@@ -611,53 +665,63 @@ public class GeneratorImpl implements IGenerator {
 				+ "*/"
 				+ Constants.LINE_SEPARATOR);
 	}
-	private void createInterfaceClasses(Element r, Element outer) throws GenException {
+
+	private void createInterfaceClasses(final Element r, final Element outer,
+			final KeyFieldInfo kfi) throws GenException {
 		try {
-			String thisRecordName = r.getAttributeValue(CoreTags.NAME);
-			String className = r.getAttributeValue(CoreTags.HOLDER_CLASS_NAME);
-			String urmClassName = r.getAttributeValue(CoreTags.URM_HOLDER_CLASS_NAME);
-			String baseInterfaceName = r.getAttributeValue(CoreTags.BASE_INTERFACE_NAME);
-			String urmBaseInterfaceName = r.getAttributeValue(CoreTags.URM_BASE_INTERFACE_NAME);
-			String interfaceName = r.getAttributeValue(CoreTags.INTERFACE_NAME);
-			String fileName = getExternalSourceCodePackageRoot() + File.separator + className + ".java";
-			String urmFileName = getExternalSourceCodePackageRoot() + File.separator + urmClassName + ".java";
-			String interfaceFileName = getExternalSourceCodePackageRoot() + File.separator + interfaceName + ".java";
-			String baseInterfaceFileName =
+			final String thisRecordName = r.getAttributeValue(CoreTags.NAME);
+			final String className = r.getAttributeValue(CoreTags.HOLDER_CLASS_NAME);
+			final String urmClassName = r.getAttributeValue(CoreTags.URM_HOLDER_CLASS_NAME);
+			final String baseInterfaceName = r.getAttributeValue(CoreTags.BASE_INTERFACE_NAME);
+			final String urmBaseInterfaceName = r.getAttributeValue(CoreTags.URM_BASE_INTERFACE_NAME);
+			final String interfaceName = r.getAttributeValue(CoreTags.INTERFACE_NAME);
+			final String fileName = getExternalSourceCodePackageRoot() + File.separator + className + ".java";
+			final String urmFileName = getExternalSourceCodePackageRoot() + File.separator + urmClassName + ".java";
+			final String interfaceFileName = getExternalSourceCodePackageRoot() + File.separator + interfaceName + ".java";
+			final String baseInterfaceFileName =
 				getExternalSourceCodePackageRoot() + File.separator + baseInterfaceName + ".java";
-			String urmBaseInterfaceFileName =
+			final String urmBaseInterfaceFileName =
 							getExternalSourceCodePackageRoot() + File.separator + urmBaseInterfaceName + ".java";
+
+			final String keyFieldName=kfi.keyFieldName;
+			final String keyFieldType=kfi.keyFieldType;
+			final String keyFieldObjectType=kfi.keyFieldObjectType;
 
 			addGeneratedFile(fileName);
 			addGeneratedFile(interfaceFileName);
 			addGeneratedFile(baseInterfaceFileName);
 
-			FileOutputStream fs = new FileOutputStream(new File(fileName).getAbsoluteFile());
-			FileOutputStream ifs = new FileOutputStream(new File(interfaceFileName).getAbsoluteFile());
-			FileOutputStream bifs = new FileOutputStream(new File(baseInterfaceFileName).getAbsoluteFile());
-			FileOutputStream ufs = null;
-			FileOutputStream ubifs = null;
+			final FileOutputStream fs = new FileOutputStream(new File(fileName).getAbsoluteFile());
+			final FileOutputStream ifs = new FileOutputStream(new File(interfaceFileName).getAbsoluteFile());
+			final FileOutputStream bifs = new FileOutputStream(new File(baseInterfaceFileName).getAbsoluteFile());
 
-			Writer w1 = new OutputStreamWriter(new BufferedOutputStream(fs));
-			Writer iw = new OutputStreamWriter(new BufferedOutputStream(ifs));
-			Writer biw = new OutputStreamWriter(new BufferedOutputStream(bifs));
-			Writer uw = null;
+			final Writer w1 = new OutputStreamWriter(new BufferedOutputStream(fs));
+			final Writer iw = new OutputStreamWriter(new BufferedOutputStream(ifs));
+			final Writer biw = new OutputStreamWriter(new BufferedOutputStream(bifs));
 
-
-			DoubleWriter w;
-			Writer 		 ubiw = null;
-
+			FileOutputStream _ufs = null;
+			FileOutputStream _ubifs = null;
+			Writer _uw = null;
+			DoubleWriter _w = null;
+			Writer _ubiw = null;
 			if(outer == null && version.isDefined()){
-				ufs = new FileOutputStream(new File(urmFileName).getAbsoluteFile());
-				ubifs = new FileOutputStream(new File(urmBaseInterfaceFileName).getAbsoluteFile());
+				_ufs = new FileOutputStream(new File(urmFileName).getAbsoluteFile());
+				_ubifs = new FileOutputStream(new File(urmBaseInterfaceFileName).getAbsoluteFile());
 				addGeneratedFile(urmFileName);
 				addGeneratedFile(urmBaseInterfaceFileName);
-				uw = new OutputStreamWriter(new BufferedOutputStream(ufs));
-				w =  new DoubleWriter(w1,uw);
-				ubiw = new OutputStreamWriter(new BufferedOutputStream(ubifs));
+				_uw = new OutputStreamWriter(new BufferedOutputStream(_ufs));
+				_w =  new DoubleWriter(w1,_uw);
+				_ubiw = new OutputStreamWriter(new BufferedOutputStream(_ubifs));
 			}
 			else {
-				w = new DoubleWriter(w1,null);
+				_w = new DoubleWriter(w1,null);
 			}
+
+			final FileOutputStream ufs = _ufs;
+			final FileOutputStream ubifs = _ubifs;
+			final Writer uw = _uw;
+			final DoubleWriter w = _w;
+			final Writer ubiw = _ubiw;
 
 			w.write("// Generated by ChoiceMaker. Do not edit." + Constants.LINE_SEPARATOR);
 			iw.write("// Generated by ChoiceMaker. Do not edit." + Constants.LINE_SEPARATOR);
@@ -722,7 +786,14 @@ public class GeneratorImpl implements IGenerator {
 						+ Constants.LINE_SEPARATOR
 						+ " */"
 						+ Constants.LINE_SEPARATOR);
-				ubiw.write("public interface " + urmBaseInterfaceName+" extends com.choicemaker.cm.urm.base.IRecordHolder, "+baseInterfaceName+" {");
+				ubiw.write(
+					"public interface "
+						+ urmBaseInterfaceName
+						+ " extends com.choicemaker.cm.urm.base.IRecordHolder<"
+						+ keyFieldObjectType
+						+ ">, "
+						+ baseInterfaceName
+						+ " {");
 			}
 
 			iw.write(
@@ -742,14 +813,19 @@ public class GeneratorImpl implements IGenerator {
 					+ " {"
 					+ Constants.LINE_SEPARATOR);
 
-			List embeddedRecords = r.getChildren(CoreTags.NODE_TYPE);
+			List<Element> embeddedRecords = r.getChildren(CoreTags.NODE_TYPE);
 			w.write(
 				"/** Default constructor. Initializes all all arrays for nested record to zero length arrays and all other values to their defaults (0/null). */");
 			w1.write("public " + className + "() {" + Constants.LINE_SEPARATOR);
-			if(outer == null && version.isDefined())
-				uw.write("public " + urmClassName + "() {" + Constants.LINE_SEPARATOR);
-			for (Iterator iEmbeddedRecords = embeddedRecords.iterator(); iEmbeddedRecords.hasNext();) {
-				Element e = (Element) iEmbeddedRecords.next();
+			if(outer == null && version.isDefined()) {
+				uw.write(
+					"public "
+						+ urmClassName
+						+ "() {"
+						+ Constants.LINE_SEPARATOR);
+			}
+			for (Iterator<Element> iEmbeddedRecords = embeddedRecords.iterator(); iEmbeddedRecords.hasNext();) {
+				Element e = iEmbeddedRecords.next();
 				w.write(
 					e.getAttributeValue(CoreTags.NAME)
 						+ " = "
@@ -758,10 +834,14 @@ public class GeneratorImpl implements IGenerator {
 						+ Constants.LINE_SEPARATOR);
 			}
 			w.write("}" + Constants.LINE_SEPARATOR);
-			if(version.isDefined()&& outer == null)
-				w.write("public void accept(com.choicemaker.cm.urm.base.IRecordVisitor ext){	ext.visit((com.choicemaker.cm.urm.base.IRecordHolder)this); }"+ Constants.LINE_SEPARATOR);
+			if (version.isDefined() && outer == null) {
+//				w.write("public void accept(com.choicemaker.cm.urm.base.IRecordVisitor ext){	ext.visit((com.choicemaker.cm.urm.base.IRecordHolder)this); }"
+//						+ Constants.LINE_SEPARATOR);
+				uw.write(
+						"public void accept(com.choicemaker.cm.urm.base.IRecordVisitor ext){	ext.visit((com.choicemaker.cm.urm.base.IRecordHolder)this); }"
+								+ Constants.LINE_SEPARATOR);
+			}
 
-			List fields = r.getChildren("field");
 			if (outer != null) {
 				w.write("/** Zero length array to be used by outer node class. */" + Constants.LINE_SEPARATOR);
 				w.write(
@@ -794,18 +874,14 @@ public class GeneratorImpl implements IGenerator {
 				biw.write("public void setOuter(" + iface + " outer);" + Constants.LINE_SEPARATOR);
 
 			}
-			Iterator i = fields.iterator();
+
+			final List<Element> fields = r.getChildren("field");
+			Iterator<Element> i = fields.iterator();
 			DerivedSource beanSource = DerivedSource.valueOf("bean");
-			String keyFiledName=null;
-			String keyFiledType=null;
 			while (i.hasNext()) {
-				Element e = (Element) i.next();
+				Element e = i.next();
 				String typeName = e.getAttributeValue("type");
 				String fieldName = e.getAttributeValue("name");
-				if ("true".equals(e.getAttributeValue("key"))){
-					keyFiledName =	fieldName;
-					keyFiledType =	typeName;
-				}
 
 				boolean trans = "true".equals(e.getAttributeValue("transient"));
 				boolean derived = GeneratorHelper.isDerived(e, beanSource);
@@ -840,42 +916,42 @@ public class GeneratorImpl implements IGenerator {
 					iw.write(getMethod + ";" + Constants.LINE_SEPARATOR);
 				}
 			}
-			if(outer == null && version.isDefined() && keyFiledName != null){
+			if(outer == null && version.isDefined() && keyFieldName != null){
 				writeGetIdJavaDoc(uw);
-				uw.write("public java.lang.Comparable getId() {" + Constants.LINE_SEPARATOR);
+				uw.write("public " + keyFieldObjectType + " getId() {" + Constants.LINE_SEPARATOR);
 				String retResval = null;
 				boolean isString = false;
-				if (keyFiledType.equals("byte"))
+				if (keyFieldType.equals("byte"))
 					retResval = "new Byte(";
-				else if (keyFiledType.equals("short"))
+				else if (keyFieldType.equals("short"))
 					retResval = "new Short(";
-				else if (keyFiledType.equals("char"))
+				else if (keyFieldType.equals("char"))
 				retResval = "new Char(";
-				else if (keyFiledType.equals("int"))
+				else if (keyFieldType.equals("int"))
 				retResval = "new Integer(";
-				else if (keyFiledType.equals("long"))
+				else if (keyFieldType.equals("long"))
 				retResval = "new Long(";
-				else if (keyFiledType.equals("float"))
+				else if (keyFieldType.equals("float"))
 				retResval = "new Float(";
-				else if (keyFiledType.equals("double"))
+				else if (keyFieldType.equals("double"))
 				retResval = "new Double(";
-				else if (keyFiledType.equals("boolean"))
+				else if (keyFieldType.equals("boolean"))
 				retResval = "new Boolean(";
-				else if (keyFiledType.equals("String"))
+				else if (keyFieldType.equals("String"))
 					isString = true;
 				else
 					throw new GenException("Invalid data type");
 				//TODO check the list of valid data types and test
 				if(isString)
-					uw.write("return "+keyFiledName+";" + Constants.LINE_SEPARATOR);
+					uw.write("return "+keyFieldName+";" + Constants.LINE_SEPARATOR);
 				else
-					uw.write("return "+retResval+keyFiledName+");" + Constants.LINE_SEPARATOR);
+					uw.write("return "+retResval+keyFieldName+");" + Constants.LINE_SEPARATOR);
 				uw.write("}" + Constants.LINE_SEPARATOR);
 			}
 
 			i = embeddedRecords.iterator();
 			while (i.hasNext()) {
-				Element e = (Element) i.next();
+				Element e = i.next();
 				String typeName = e.getAttributeValue(CoreTags.BASE_INTERFACE_NAME);
 				String recordName = e.getAttributeValue("name");
 				w.write(addArrayField(typeName, recordName, PROTECTED));
@@ -928,11 +1004,23 @@ public class GeneratorImpl implements IGenerator {
 					+ Constants.LINE_SEPARATOR
 					+ "*/"
 					+ Constants.LINE_SEPARATOR);
-			w1.write("public " + className + "(" + baseInterfaceName + " __o) {" + Constants.LINE_SEPARATOR);
-			if(outer == null && version.isDefined())
-				uw.write("public " + urmClassName + "(" + baseInterfaceName + " __o) {" + Constants.LINE_SEPARATOR);
-			for (Iterator iFields = fields.iterator(); iFields.hasNext();) {
-				Element field = (Element) iFields.next();
+			w1.write(
+				"public "
+					+ className
+					+ "("
+					+ baseInterfaceName
+					+ " __o) {"
+					+ Constants.LINE_SEPARATOR);
+			if(outer == null && version.isDefined()) {
+				uw.write(
+					"public "
+						+ urmClassName
+						+ "("
+						+ baseInterfaceName
+						+ " __o) {" + Constants.LINE_SEPARATOR);
+			}
+			for (Iterator<Element> iFields = fields.iterator(); iFields.hasNext();) {
+				Element field = iFields.next();
 				String name = field.getAttributeValue(CoreTags.NAME);
 				String methodStem = Character.toUpperCase(name.charAt(0)) + name.substring(1);
 				if (!GeneratorHelper.isDerived(field, beanSource)) {
@@ -940,8 +1028,8 @@ public class GeneratorImpl implements IGenerator {
 					w.write(name + "Valid = __o.is" + methodStem + "Valid();" + Constants.LINE_SEPARATOR);
 				}
 			}
-			for (Iterator iEmbeddedRecords = embeddedRecords.iterator(); iEmbeddedRecords.hasNext();) {
-				Element record = (Element) iEmbeddedRecords.next();
+			for (Iterator<Element> iEmbeddedRecords = embeddedRecords.iterator(); iEmbeddedRecords.hasNext();) {
+				Element record = iEmbeddedRecords.next();
 				String name = record.getAttributeValue(CoreTags.NAME);
 				String iface = record.getAttributeValue(CoreTags.BASE_INTERFACE_NAME);
 				w.write(
@@ -986,16 +1074,19 @@ public class GeneratorImpl implements IGenerator {
 			bifs.close();
 			i = embeddedRecords.iterator();
 			while (i.hasNext()) {
-				createInterfaceClasses((Element) i.next(), r);
+				final Element embedded = i.next();
+				final KeyFieldInfo embeddedKFI = getKeyFieldInfo(embedded);
+				createInterfaceClasses(embedded, r, embeddedKFI);
 			}
 		} catch (IOException ex) {
 			throw new GenException("Problem writing file.", ex);
 		}
 	}
 
-	private void createHolderClasses(Element r, Element outer) throws GenException {
+	private void createHolderClasses(final Element r, final Element outer)
+			throws GenException {
 		try {
-			Set identifiers = new HashSet();
+			Set<String> identifiers = new HashSet<>();
 			SrcNames srcNames = new SrcNames();
 			String className = r.getAttributeValue("className");
 			String interfaceName = r.getAttributeValue(CoreTags.INTERFACE_NAME);
@@ -1007,6 +1098,7 @@ public class GeneratorImpl implements IGenerator {
 			DerivedSource beanSource = DerivedSource.valueOf("bean");
 			w.write("// Generated by ChoiceMaker. Do not edit." + Constants.LINE_SEPARATOR);
 			w.write("package " + getPackage() + ";" + Constants.LINE_SEPARATOR);
+			w.write("import com.choicemaker.client.api.*;" + Constants.LINE_SEPARATOR);
 			w.write("import com.choicemaker.cm.core.*;" + Constants.LINE_SEPARATOR);
 			w.write("import com.choicemaker.cm.core.base.*;" + Constants.LINE_SEPARATOR);
 			w.write("import java.util.logging.*;" + Constants.LINE_SEPARATOR);
@@ -1028,7 +1120,7 @@ public class GeneratorImpl implements IGenerator {
 					+ className
 					+ ".class.getName());"
 					+ Constants.LINE_SEPARATOR);
-			List fields = r.getChildren("field");
+			List<Element> fields = r.getChildren("field");
 			if (outer == null) {
 				cu.setBaseType(className);
 				w.write("private com.choicemaker.cm.core.DerivedSource __src;" + Constants.LINE_SEPARATOR);
@@ -1040,21 +1132,23 @@ public class GeneratorImpl implements IGenerator {
 				w.write("resetValidityAndDerived(__src);" + Constants.LINE_SEPARATOR);
 				w.write("computeValidityAndDerived(__src);" + Constants.LINE_SEPARATOR);
 				w.write("}" + Constants.LINE_SEPARATOR);
-				w.write("public Comparable getId() {" + Constants.LINE_SEPARATOR);
-				w.write("return ");
-				Iterator i = fields.iterator();
+				Iterator<Element> i = fields.iterator();
 				boolean keyDefd = false;
 				while (i.hasNext()) {
-					Element e = (Element) i.next();
+					Element e = i.next();
 					if ("true".equals(e.getAttributeValue("key"))) {
+						final String type = e.getAttributeValue("type");
+						String t = GeneratorHelper.getObjectType(type);
+						w.write("public " + t + " getId() {" + Constants.LINE_SEPARATOR);
+						w.write("return ");
 						String s =
-							GeneratorHelper.getObjectExpr(e.getAttributeValue("type"), e.getAttributeValue("name"));
+							GeneratorHelper.getObjectExpr(type, e.getAttributeValue("name"));
 						w.write(s + ";" + Constants.LINE_SEPARATOR);
+						w.write("}" + Constants.LINE_SEPARATOR);
 						keyDefd = true;
 						break;
 					}
 				}
-				w.write("}" + Constants.LINE_SEPARATOR);
 				if (!keyDefd) {
 					error("Root record must define key field");
 				}
@@ -1076,16 +1170,16 @@ public class GeneratorImpl implements IGenerator {
 				w.write("this.outer = (" + ocn + ")outer;" + Constants.LINE_SEPARATOR);
 				w.write("}" + Constants.LINE_SEPARATOR);
 			}
-			Iterator i = fields.iterator();
+			Iterator<Element> i = fields.iterator();
 			while (i.hasNext()) {
-				Element field = (Element) i.next();
+				Element field = i.next();
 				if (!GeneratorHelper.isNodeInitScope(field)) {
 					w.write(addField("boolean", "__v_" + (field).getAttributeValue("name"), false, PUBLIC));
 				}
 			}
 			i = fields.iterator();
 			while (i.hasNext()) {
-				Element e = (Element) i.next();
+				Element e = i.next();
 				if (GeneratorHelper.isNodeInitScope(e)) {
 					if (!derivedAll(e)) {
 						error("Field with nodeInit scope must be derived for all sources.");
@@ -1108,10 +1202,10 @@ public class GeneratorImpl implements IGenerator {
 					w.write("}" + Constants.LINE_SEPARATOR);
 				}
 			}
-			List embeddedRecords = r.getChildren(CoreTags.NODE_TYPE);
+			List<Element> embeddedRecords = r.getChildren(CoreTags.NODE_TYPE);
 			i = embeddedRecords.iterator();
 			while (i.hasNext()) {
-				Element e = (Element) i.next();
+				Element e = i.next();
 				String typeName = e.getAttributeValue("className");
 				String recordName = e.getAttributeValue("name");
 				String iface = e.getAttributeValue(CoreTags.BASE_INTERFACE_NAME);
@@ -1130,16 +1224,16 @@ public class GeneratorImpl implements IGenerator {
 			}
 
 			w.write("public " + className + "(" + baseInterfaceName + " __o) {" + Constants.LINE_SEPARATOR);
-			for (Iterator iFields = fields.iterator(); iFields.hasNext();) {
-				Element field = (Element) iFields.next();
+			for (Iterator<Element> iFields = fields.iterator(); iFields.hasNext();) {
+				Element field = iFields.next();
 				if (!GeneratorHelper.isDerived(field, beanSource)) {
 					String name = field.getAttributeValue(CoreTags.NAME);
 					String methodStem = Character.toUpperCase(name.charAt(0)) + name.substring(1);
 					w.write(name + " = " + "__o.get" + methodStem + "();" + Constants.LINE_SEPARATOR);
 				}
 			}
-			for (Iterator iEmbeddedRecords = embeddedRecords.iterator(); iEmbeddedRecords.hasNext();) {
-				Element record = (Element) iEmbeddedRecords.next();
+			for (Iterator<Element> iEmbeddedRecords = embeddedRecords.iterator(); iEmbeddedRecords.hasNext();) {
+				Element record = iEmbeddedRecords.next();
 				String name = record.getAttributeValue(CoreTags.NAME);
 				String ncn = record.getAttributeValue(CoreTags.CLASS_NAME);
 				String iface = record.getAttributeValue(CoreTags.BASE_INTERFACE_NAME);
@@ -1177,7 +1271,7 @@ public class GeneratorImpl implements IGenerator {
 			w.write("try {" + Constants.LINE_SEPARATOR);
 			i = fields.iterator();
 			while (i.hasNext()) {
-				Element field = (Element) i.next();
+				Element field = i.next();
 				Element d = field.getChild("derived");
 				if (d != null) {
 					boolean nodeInitScope = GeneratorHelper.isNodeInitScope(field);
@@ -1227,7 +1321,7 @@ public class GeneratorImpl implements IGenerator {
 			// NEED A CALLBACK HERE FOR ITERATED NODES
 			i = embeddedRecords.iterator();
 			while (i.hasNext()) {
-				Element e = (Element) i.next();
+				Element e = i.next();
 				String eName = e.getAttributeValue(CoreTags.NAME);
 				// FIXME DEFINE CoreTags: iteratedNode and assigned
 				Element iteratedNodeType = GeneratorHelper.getNodeTypeExt(e,"iterated");
@@ -1288,7 +1382,7 @@ public class GeneratorImpl implements IGenerator {
 			w.write("public void resetValidityAndDerived(DerivedSource __src) {" + Constants.LINE_SEPARATOR);
 			i = fields.iterator();
 			while (i.hasNext()) {
-				Element field = (Element) i.next();
+				Element field = i.next();
 				Element d = field.getChild("derived");
 				if (d != null && !GeneratorHelper.isNodeInitScope(field)) {
 					String fieldName = field.getAttributeValue("name");
@@ -1306,7 +1400,7 @@ public class GeneratorImpl implements IGenerator {
 			}
 			i = embeddedRecords.iterator();
 			while (i.hasNext()) {
-				Element e = (Element) i.next();
+				Element e = i.next();
 				String eName = e.getAttributeValue(CoreTags.NAME);
 				// FIXME DEFINE CoreTags: iteratedNode and assigned
 				Element iteratedNodeType = GeneratorHelper.getNodeTypeExt(e,"iterated");
@@ -1332,7 +1426,7 @@ public class GeneratorImpl implements IGenerator {
 			w.write(className + " tmpInstance = new " + className + "();" + Constants.LINE_SEPARATOR);
 			i = embeddedRecords.iterator();
 			while (i.hasNext()) {
-				Element e = (Element) i.next();
+				Element e = i.next();
 				String eName = e.getAttributeValue("name");
 				String eClassName = e.getAttributeValue("className");
 				w.write("tmpInstance." + eName + " = new " + eClassName + "[0];" + Constants.LINE_SEPARATOR);
@@ -1340,10 +1434,10 @@ public class GeneratorImpl implements IGenerator {
 			w.write("return tmpInstance;" + Constants.LINE_SEPARATOR);
 			w.write("}" + Constants.LINE_SEPARATOR);
 
-			List methodsTags = r.getChildren("method");
-			Iterator methIter = methodsTags.iterator();
+			List<Element> methodsTags = r.getChildren("method");
+			Iterator<Element> methIter = methodsTags.iterator();
 			while (methIter.hasNext()) {
-				Element e = (Element) methIter.next();
+				Element e = methIter.next();
 				String methodCode = e.getText();
 				w.write(methodCode + Constants.LINE_SEPARATOR);
 			}
@@ -1354,7 +1448,7 @@ public class GeneratorImpl implements IGenerator {
 			fs.close();
 			i = embeddedRecords.iterator();
 			while (i.hasNext()) {
-				createHolderClasses((Element) i.next(), r);
+				createHolderClasses(i.next(), r);
 			}
 		} catch (GenException ex) {
 			throw ex;
@@ -1400,7 +1494,7 @@ public class GeneratorImpl implements IGenerator {
 		return modifier + " " + typeName + "[] " + fieldName + ";" + Constants.LINE_SEPARATOR;
 	}
 
-	private boolean identifierCheck(String name, Set identifiers) {
+	private boolean identifierCheck(String name, Set<String> identifiers) {
 		if (name == null || name.length() == 0) {
 			error("No or empty name.");
 			return false;
@@ -1449,6 +1543,7 @@ public class GeneratorImpl implements IGenerator {
 			w.write("// Generated by ChoiceMaker. Do not edit." + Constants.LINE_SEPARATOR);
 			w.write("package " + getPackage() + ";" + Constants.LINE_SEPARATOR);
 			w.write("import java.io.Serializable;" + Constants.LINE_SEPARATOR);
+			w.write("import com.choicemaker.client.api.*;" + Constants.LINE_SEPARATOR);
 			w.write("import com.choicemaker.cm.core.*;" + Constants.LINE_SEPARATOR);
 			w.write("import com.choicemaker.cm.core.base.*;" + Constants.LINE_SEPARATOR);
 			w.write(accessorImports.toString());
@@ -1522,6 +1617,7 @@ public class GeneratorImpl implements IGenerator {
 	 *
 	 * @param   imp  The text to be added to the import section.
 	 */
+	@Override
 	public void addAccessorImport(String imp) {
 		accessorImports.append(imp);
 	}
@@ -1532,6 +1628,7 @@ public class GeneratorImpl implements IGenerator {
 	 * @param   imp  The text to be added to the implements list.
 	 *            Must start with a comma, e.g., <code>", OraAccessor"</code>.
 	 */
+	@Override
 	public void addAccessorImplements(String imp) {
 //		accessorImplements.append(imp);
 	}
@@ -1541,6 +1638,7 @@ public class GeneratorImpl implements IGenerator {
 	 *
 	 * @param   decls  The text to be added to the body section.
 	 */
+	@Override
 	public void addAccessorBody(String decls) {
 		accessorBody.append(decls);
 	}

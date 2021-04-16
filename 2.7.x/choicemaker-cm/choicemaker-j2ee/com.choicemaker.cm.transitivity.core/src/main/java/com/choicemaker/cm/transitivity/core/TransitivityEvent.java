@@ -7,58 +7,58 @@
  *******************************************************************************/
 package com.choicemaker.cm.transitivity.core;
 
-import static com.choicemaker.cm.args.BatchProcessing.EVT_INIT;
-import static com.choicemaker.cm.args.BatchProcessing.PCT_INIT;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.EVT_ALLOCATE_CHUNKS;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.EVT_BLOCK_BY_ONE_COLUMN;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.EVT_CREATE_CHUNK_IDS;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.EVT_CREATE_CHUNK_OVERSIZED_IDS;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.EVT_CREATE_REC_VAL;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.EVT_DEDUP_BLOCKS;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.EVT_DEDUP_OVERSIZED;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.EVT_DEDUP_OVERSIZED_EXACT;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.EVT_DONE_ALLOCATE_CHUNKS;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.EVT_DONE_BLOCK_BY_ONE_COLUMN;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.EVT_DONE_CREATE_CHUNK_DATA;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.EVT_DONE_CREATE_CHUNK_IDS;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.EVT_DONE_DEDUP_BLOCKS;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.EVT_DONE_DEDUP_MATCHES;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.EVT_DONE_DEDUP_OVERSIZED_EXACT;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.EVT_DONE_MATCHING_DATA;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.EVT_DONE_OVERSIZED_TRIMMING;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.EVT_DONE_REC_VAL;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.EVT_DONE_REVERSE_TRANSLATE_BLOCK;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.EVT_DONE_REVERSE_TRANSLATE_OVERSIZED;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.EVT_MATCHING_DATA;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.EVT_MERGE_DEDUP_MATCHES;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.EVT_OUTPUT_DEDUP_MATCHES;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.EVT_OVERSIZED_TRIMMING;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_ALLOCATE_CHUNKS;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_BLOCK_BY_ONE_COLUMN;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_CREATE_CHUNK_IDS;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_CREATE_CHUNK_OVERSIZED_IDS;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_CREATE_REC_VAL;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_DEDUP_BLOCKS;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_DEDUP_OVERSIZED;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_DEDUP_OVERSIZED_EXACT;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_DONE_ALLOCATE_CHUNKS;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_DONE_BLOCK_BY_ONE_COLUMN;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_DONE_CREATE_CHUNK_DATA;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_DONE_CREATE_CHUNK_IDS;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_DONE_DEDUP_BLOCKS;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_DONE_DEDUP_MATCHES;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_DONE_DEDUP_OVERSIZED_EXACT;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_DONE_MATCHING_DATA;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_DONE_OVERSIZED_TRIMMING;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_DONE_REC_VAL;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_DONE_REVERSE_TRANSLATE_BLOCK;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_DONE_REVERSE_TRANSLATE_OVERSIZED;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_MATCHING_DATA;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_MERGE_DEDUP_MATCHES;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_OUTPUT_DEDUP_MATCHES;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_OVERSIZED_TRIMMING;
+import static com.choicemaker.cm.args.BatchProcessingConstants.EVT_INIT;
+import static com.choicemaker.cm.args.BatchProcessingConstants.PCT_INIT;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.EVT_ALLOCATE_CHUNKS;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.EVT_BLOCK_BY_ONE_COLUMN;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.EVT_CREATE_CHUNK_IDS;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.EVT_CREATE_CHUNK_OVERSIZED_IDS;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.EVT_CREATE_REC_VAL;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.EVT_DEDUP_BLOCKS;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.EVT_DEDUP_OVERSIZED;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.EVT_DEDUP_OVERSIZED_EXACT;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.EVT_DONE_ALLOCATE_CHUNKS;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.EVT_DONE_BLOCK_BY_ONE_COLUMN;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.EVT_DONE_CREATE_CHUNK_DATA;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.EVT_DONE_CREATE_CHUNK_IDS;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.EVT_DONE_DEDUP_BLOCKS;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.EVT_DONE_DEDUP_MATCHES;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.EVT_DONE_DEDUP_OVERSIZED_EXACT;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.EVT_DONE_MATCHING_DATA;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.EVT_DONE_OVERSIZED_TRIMMING;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.EVT_DONE_REC_VAL;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.EVT_DONE_REVERSE_TRANSLATE_BLOCK;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.EVT_DONE_REVERSE_TRANSLATE_OVERSIZED;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.EVT_MATCHING_DATA;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.EVT_MERGE_DEDUP_MATCHES;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.EVT_OUTPUT_DEDUP_MATCHES;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.EVT_OVERSIZED_TRIMMING;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.PCT_ALLOCATE_CHUNKS;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.PCT_BLOCK_BY_ONE_COLUMN;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.PCT_CREATE_CHUNK_IDS;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.PCT_CREATE_CHUNK_OVERSIZED_IDS;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.PCT_CREATE_REC_VAL;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.PCT_DEDUP_BLOCKS;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.PCT_DEDUP_OVERSIZED;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.PCT_DEDUP_OVERSIZED_EXACT;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.PCT_DONE_ALLOCATE_CHUNKS;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.PCT_DONE_BLOCK_BY_ONE_COLUMN;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.PCT_DONE_CREATE_CHUNK_DATA;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.PCT_DONE_CREATE_CHUNK_IDS;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.PCT_DONE_DEDUP_BLOCKS;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.PCT_DONE_DEDUP_MATCHES;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.PCT_DONE_DEDUP_OVERSIZED_EXACT;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.PCT_DONE_MATCHING_DATA;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.PCT_DONE_OVERSIZED_TRIMMING;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.PCT_DONE_REC_VAL;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.PCT_DONE_REVERSE_TRANSLATE_BLOCK;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.PCT_DONE_REVERSE_TRANSLATE_OVERSIZED;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.PCT_MATCHING_DATA;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.PCT_MERGE_DEDUP_MATCHES;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.PCT_OUTPUT_DEDUP_MATCHES;
+import static com.choicemaker.cm.oaba.core.OabaProcessingConstants.PCT_OVERSIZED_TRIMMING;
 
-import com.choicemaker.cm.args.BatchProcessing;
+import com.choicemaker.cm.args.BatchProcessingConstants;
 
 /**
  * Enumeration of transitivity events and completion estimates
@@ -67,7 +67,7 @@ import com.choicemaker.cm.args.BatchProcessing;
  */
 enum TransitivityEvent {
 
-	INIT(EVT_INIT, PCT_INIT), CREATE_REC_VAL(EVT_CREATE_REC_VAL,
+	QUEUED(EVT_INIT, PCT_INIT), CREATE_REC_VAL(EVT_CREATE_REC_VAL,
 			PCT_CREATE_REC_VAL), DONE_REC_VAL(EVT_DONE_REC_VAL,
 			PCT_DONE_REC_VAL), BLOCK_BY_ONE_COLUMN(EVT_BLOCK_BY_ONE_COLUMN,
 			PCT_BLOCK_BY_ONE_COLUMN), DONE_BLOCK_BY_ONE_COLUMN(
@@ -83,8 +83,8 @@ enum TransitivityEvent {
 			EVT_DEDUP_OVERSIZED, PCT_DEDUP_OVERSIZED),
 
 	DONE_TRANS_DEDUP_OVERSIZED(
-			TransitivityProcessing.EVT_DONE_TRANS_DEDUP_OVERSIZED,
-			TransitivityProcessing.PCT_DONE_TRANS_DEDUP_OVERSIZED),
+			TransitivityProcessingConstants.EVT_DONE_TRANS_DEDUP_OVERSIZED,
+			TransitivityProcessingConstants.PCT_DONE_TRANS_DEDUP_OVERSIZED),
 
 	DONE_REVERSE_TRANSLATE_BLOCK(EVT_DONE_REVERSE_TRANSLATE_BLOCK,
 			PCT_DONE_REVERSE_TRANSLATE_BLOCK),
@@ -108,15 +108,15 @@ enum TransitivityEvent {
 	DONE_DEDUP_MATCHES(EVT_DONE_DEDUP_MATCHES, PCT_DONE_DEDUP_MATCHES),
 
 	DONE_TRANSITIVITY_PAIRWISE(
-			TransitivityProcessing.EVT_TRANSITIVITY_PAIRWISE,
-			TransitivityProcessing.PCT_TRANSITIVITY_PAIRWISE);
+			TransitivityProcessingConstants.EVT_TRANSITIVITY_PAIRWISE,
+			TransitivityProcessingConstants.PCT_TRANSITIVITY_PAIRWISE);
 
 	private final int eventId;
 	private final float percentComplete;
 
 	TransitivityEvent(int evtId, float pct) {
-		if (pct < BatchProcessing.MINIMUM_FRACTION_COMPLETE
-				|| pct > BatchProcessing.MAXIMUM_FRACTION_COMPLETE) {
+		if (pct < BatchProcessingConstants.MINIMUM_FRACTION_COMPLETE
+				|| pct > BatchProcessingConstants.MAXIMUM_FRACTION_COMPLETE) {
 			throw new IllegalArgumentException("invalid percentage: " + pct);
 		}
 		this.eventId = evtId;

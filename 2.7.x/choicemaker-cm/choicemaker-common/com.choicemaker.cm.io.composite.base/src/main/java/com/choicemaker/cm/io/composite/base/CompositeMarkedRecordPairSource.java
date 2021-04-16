@@ -10,7 +10,7 @@ package com.choicemaker.cm.io.composite.base;
 import java.io.IOException;
 
 import com.choicemaker.cm.core.MarkedRecordPairSource;
-import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
+import com.choicemaker.cm.core.MutableMarkedRecordPair;
 
 /**
  * Composite source of marked record pairs.
@@ -26,6 +26,7 @@ public class CompositeMarkedRecordPairSource extends CompositeRecordPairSource i
 	 * @throws  NullPointerException if there are no more marked record pairs.
 	 * @return  The next marked record pair. 
 	 */
+	@Override
 	public MutableMarkedRecordPair getNextMarkedRecordPair() throws java.io.IOException {
 		MutableMarkedRecordPair r = ((MarkedRecordPairSource) getCurSource()).getNextMarkedRecordPair();
 		nextValid();

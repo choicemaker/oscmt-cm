@@ -253,6 +253,7 @@ public abstract class AbstractRecordSourceSerializer
 		this.handledClasses = handledClasses;
 	}
 
+	@Override
 	public boolean canSerialize(RecordSource rs) {
 		boolean retVal = false;
 		Class[] classes = this.handledClasses;
@@ -264,6 +265,7 @@ public abstract class AbstractRecordSourceSerializer
 		return retVal;
 	}
 
+	@Override
 	public boolean canSerialize(String uri) {
 		boolean retVal = false;
 		if (this.getUriPattern() != null && uri != null) {

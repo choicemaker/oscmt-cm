@@ -63,7 +63,7 @@ public class ParseTreeNode {
 		
 		this.probability = rule.getProbability();
 		for (int i = 0; i < children.size(); i++) {
-			this.probability *=	((ParseTreeNode)children.get(i)).getProbability();
+			this.probability *=	children.get(i).getProbability();
 		}
 	}
 
@@ -95,7 +95,7 @@ public class ParseTreeNode {
 	 * Returns the subtree of this parse tree at the specified index.
 	 */
 	public ParseTreeNode getChild(int index) {
-		return (ParseTreeNode) children.get(index);
+		return children.get(index);
 	}
 	
 	/**
@@ -116,6 +116,7 @@ public class ParseTreeNode {
 	/**
 	 * Returns a non-pretty-printed String representation of this ParseTreeNode.
 	 */
+	@Override
 	public String toString() {
 		String s  = "";
 		
@@ -179,6 +180,7 @@ public class ParseTreeNode {
 		return sBuff.toString();
 	}
 
+	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof ParseTreeNode)) {
 			return false;	
@@ -201,6 +203,7 @@ public class ParseTreeNode {
 		return rule.equals(node.getRule()) && children.equals(node.getChildren());
 	}
 
+	@Override
 	public int hashCode() {
 		return rule.hashCode() + children.hashCode();
 	}

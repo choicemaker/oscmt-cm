@@ -89,6 +89,7 @@ public class ObjectMakerDialog extends JDialog implements Enable {
 		}
 	}
 
+	@Override
 	public void setEnabledness() {
 		File outDir = getOutDir();
 		if (outDir == null || outDir.isFile()) {
@@ -114,6 +115,7 @@ public class ObjectMakerDialog extends JDialog implements Enable {
 		}
 
 		final Thread t = new Thread() {
+			@Override
 			public void run() {
 				try {
 					ModelArtifactBuilder
@@ -175,7 +177,7 @@ public class ObjectMakerDialog extends JDialog implements Enable {
 		pw.println(status);
 		if (errorMsgs != null && errorMsgs.size() > 0) {
 			for (int i=0; i<errorMsgs.size(); i++) {
-				String s = (String) errorMsgs.get(i);
+				String s = errorMsgs.get(i);
 				pw.println(INDENT + s);
 			}
 		}
@@ -204,7 +206,7 @@ public class ObjectMakerDialog extends JDialog implements Enable {
 		if (errorMsgs != null && errorMsgs.size() > 0) {
 			sb.append("<blockQuote>");
 			for (int i=0; i<errorMsgs.size(); i++) {
-				String e = (String) errorMsgs.get(i);
+				String e = errorMsgs.get(i);
 				sb.append("<br/>").append(e);
 			}
 			sb.append("</blockQuote>");
@@ -227,6 +229,7 @@ public class ObjectMakerDialog extends JDialog implements Enable {
 		c.gridy = 1;
 		d.getContentPane().add(dOk, c);
 		dOk.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				d.dispose();
 			}
@@ -356,6 +359,7 @@ public class ObjectMakerDialog extends JDialog implements Enable {
 		dirField.getDocument().addDocumentListener(dl);
 
 		dirBrowse.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				File f = new File(dirField.getText());
 				Component c = ObjectMakerDialog.this;
@@ -367,6 +371,7 @@ public class ObjectMakerDialog extends JDialog implements Enable {
 		});
 
 		ChangeListener boxListener = new ChangeListener() {
+			@Override
 			public void stateChanged(ChangeEvent e) {
 				setEnabledness();
 			}
@@ -376,12 +381,14 @@ public class ObjectMakerDialog extends JDialog implements Enable {
 		}
 
 		ok.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				generateObjects();
 			}
 		});
 
 		cancel.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				dispose();
 			}

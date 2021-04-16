@@ -243,6 +243,7 @@ public class EmbeddedPluginDiscovery implements PluginDiscovery {
 			this.u = u;
 		}
 
+		@Override
 		public void startElement(String uri, String localName, String qName,
 				Attributes attributes) throws SAXException {
 			qName = qName.intern();
@@ -307,6 +308,7 @@ public class EmbeddedPluginDiscovery implements PluginDiscovery {
 			this.loader = loader;
 		}
 
+		@Override
 		public boolean hasNext() {
 			if (nextURL != null) {
 				return true;
@@ -332,6 +334,7 @@ public class EmbeddedPluginDiscovery implements PluginDiscovery {
 			return true;
 		}
 
+		@Override
 		public URL next() {
 			if (!hasNext()) {
 				throw new NoSuchElementException();
@@ -341,6 +344,7 @@ public class EmbeddedPluginDiscovery implements PluginDiscovery {
 			return cn;
 		}
 
+		@Override
 		public void remove() {
 			throw new UnsupportedOperationException();
 		}

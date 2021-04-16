@@ -39,6 +39,7 @@ public abstract class RefRecordCollection implements IRecordCollection{
 		url = string;
 	}
 
+	@Override
 	public String toString() {
 		return this.url;
 	}

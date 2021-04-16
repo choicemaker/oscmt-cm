@@ -7,8 +7,6 @@
  *******************************************************************************/
 package com.choicemaker.cm.core;
 
-import com.choicemaker.cm.core.base.RecordData;
-
 /**
  * The clues (and rules) that are triggered by a pair of records within the
  * context of some probability model. This interface makes sense only within the

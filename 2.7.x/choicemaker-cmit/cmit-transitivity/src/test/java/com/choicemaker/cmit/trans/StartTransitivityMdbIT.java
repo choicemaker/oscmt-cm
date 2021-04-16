@@ -1,6 +1,6 @@
 package com.choicemaker.cmit.trans;
 
-import static com.choicemaker.cm.transitivity.core.TransitivityProcessing.*;
+import static com.choicemaker.cm.transitivity.core.TransitivityProcessingConstants.*;
 
 import java.util.logging.Logger;
 
@@ -11,9 +11,9 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
 import org.junit.runner.RunWith;
 
-import com.choicemaker.cm.batch.BatchJob;
-import com.choicemaker.cm.transitivity.server.impl.TransMatchSchedulerMDB;
-import com.choicemaker.cm.transitivity.server.impl.TransMatchSchedulerSingleton;
+import com.choicemaker.cm.batch.api.BatchJob;
+import com.choicemaker.cm.transitivity.ejb.TransMatchSchedulerMDB;
+import com.choicemaker.cm.transitivity.ejb.TransMatchSchedulerSingleton;
 import com.choicemaker.cmit.testconfigs.SimplePersonSqlServerTestConfiguration;
 import com.choicemaker.cmit.trans.util.TransitivityDeploymentUtils;
 import com.choicemaker.cmit.utils.j2ee.BatchProcessingPhase;

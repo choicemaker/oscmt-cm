@@ -33,6 +33,7 @@ public interface Source extends AutoCloseable {
 	 *
 	 * @throws  IOException  if there is a problem accessing the data.
 	 */
+	@Override
 	void close() throws IOException;
 
 	/**

@@ -23,7 +23,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.base.Thresholds;
+import com.choicemaker.cm.core.Thresholds;
 import com.choicemaker.cm.mmdevtools.util.CrossValidator;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 
@@ -140,13 +140,17 @@ public class CrossValidatorDialog extends JDialog {
 	private void createListeners() {
 		
 		DocumentListener dl = new DocumentListener() {
+			@Override
 			public void changedUpdate(DocumentEvent e) { updateEnabled(); }
+			@Override
 			public void insertUpdate(DocumentEvent e) { updateEnabled(); }
+			@Override
 			public void removeUpdate(DocumentEvent e) { updateEnabled(); }			
 		};
 		numPieces.getDocument().addDocumentListener(dl);
 		
 		runButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				ImmutableProbabilityModel model = modelMaker.getProbabilityModel();
 				Thresholds t = modelMaker.getThresholds();
@@ -161,6 +165,7 @@ public class CrossValidatorDialog extends JDialog {
 		});
 		
 		closeButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				dispose();
 			}

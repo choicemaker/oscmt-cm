@@ -7,7 +7,9 @@
  *******************************************************************************/
 package com.choicemaker.cm.io.flatfile.base;
 
-import static java.util.logging.Level.*;
+import static java.util.logging.Level.FINEST;
+import static java.util.logging.Level.SEVERE;
+import static java.util.logging.Level.WARNING;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -83,7 +85,7 @@ public class Tokenizer {
 	 *            flag indicating whether input consists of fixed-width tokens
 	 *            (without char separators)
 	 * @param separator
-	 *            if not fixed width, the charactor that separates tokens
+	 *            if not fixed width, the character that separates tokens
 	 * @param tagged
 	 *            indicates whether input lines are prefaced with a tag
 	 * @param tagWidth
@@ -106,6 +108,12 @@ public class Tokenizer {
 		this.separator = separator;
 		this.tagged = tagged;
 		this.tagWidth = tagWidth;
+	}
+
+	public void closeBufferedReader() throws IOException {
+		if (reader != null) {
+			reader.close();
+		}
 	}
 
 	/**

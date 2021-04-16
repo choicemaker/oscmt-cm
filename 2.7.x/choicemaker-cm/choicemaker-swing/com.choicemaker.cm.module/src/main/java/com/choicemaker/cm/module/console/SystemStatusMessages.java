@@ -19,26 +19,32 @@ import com.choicemaker.cm.module.IUserMessages;
  */
 public class SystemStatusMessages implements IUserMessages {
 
+	@Override
 	public Writer getWriter() {
 		return new OutputStreamWriter(System.err);
 	}
 
+	@Override
 	public OutputStream getOutputStream() {
 		return System.err;
 	}
 
+	@Override
 	public PrintStream getPrintStream() {
 		return new PrintStream(System.err);
 	}
 
+	@Override
 	public void postMessage(final String s) {
 		System.err.println(s);
 	}
 
+	@Override
 	public void clearMessages() {
 	}
 
 	/** Displays a message to the user */
+	@Override
 	public void postInfo(String s) {
 		postMessage(s);
 	}

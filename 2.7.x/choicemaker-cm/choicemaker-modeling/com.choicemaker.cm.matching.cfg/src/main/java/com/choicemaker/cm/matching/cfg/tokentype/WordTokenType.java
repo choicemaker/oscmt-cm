@@ -94,6 +94,7 @@ public class WordTokenType extends SetTokenType {
 	 * a letter, and whose length is greater than the minimum for this WordTokenType,
 	 * can take on this TokenType.
 	 */
+	@Override
 	public boolean canHaveToken(String token) {
 		return token != null && 
 			token.length() >= minLength && 

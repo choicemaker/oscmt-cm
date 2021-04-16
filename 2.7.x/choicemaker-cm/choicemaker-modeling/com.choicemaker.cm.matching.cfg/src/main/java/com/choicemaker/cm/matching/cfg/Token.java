@@ -53,6 +53,7 @@ public class Token extends Symbol {
 	 * @return true if obj is non-null, is a Token, and has a String representation 
 	 * equal to that of this Token's
 	 */
+	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof Token) {
 			Token t = (Token) obj;

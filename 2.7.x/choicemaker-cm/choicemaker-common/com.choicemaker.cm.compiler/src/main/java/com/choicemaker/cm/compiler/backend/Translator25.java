@@ -13,6 +13,7 @@ package com.choicemaker.cm.compiler.backend;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.choicemaker.client.api.Decision;
 import com.choicemaker.cm.compiler.ICompilationUnit;
 import com.choicemaker.cm.compiler.Location;
 import com.choicemaker.cm.compiler.Modifiers;
@@ -63,7 +64,6 @@ import com.choicemaker.cm.compiler.backend.TargetTree.Try;
 import com.choicemaker.cm.compiler.parser.TreeList;
 import com.choicemaker.cm.core.ClueDesc;
 import com.choicemaker.cm.core.ClueSetType;
-import com.choicemaker.cm.core.Decision;
 import com.choicemaker.cm.core.ExtDecision;
 import com.choicemaker.cm.core.compiler.CompilerException;
 import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
@@ -191,7 +191,7 @@ public class Translator25 extends TreeGen implements TargetTags, Modifiers, ITra
 	}
     
 	protected Tree decision_ident(int pos) {
-		return qualid(pos, "com.choicemaker.cm.core.Decision");
+		return qualid(pos, "com.choicemaker.client.api.Decision");
 	}
     
 	protected Tree ext_decision_ident(int pos) {
@@ -211,15 +211,15 @@ public class Translator25 extends TreeGen implements TargetTags, Modifiers, ITra
 	}
     
 	protected Tree active_clues_ident(int pos) {
-		return qualid(pos, "com.choicemaker.cm.core.base.ActiveClues");
+		return qualid(pos, "com.choicemaker.cm.core.ActiveClues");
 	}
     
 	protected Tree boolean_active_clues_ident(int pos) {
-		return qualid(pos, "com.choicemaker.cm.core.base.BooleanActiveClues");
+		return qualid(pos, "com.choicemaker.cm.core.BooleanActiveClues");
 	}
     
 	protected Tree int_active_clues_ident(int pos) {
-		return qualid(pos, "com.choicemaker.cm.core.base.IntActiveClues");
+		return qualid(pos, "com.choicemaker.cm.core.IntActiveClues");
 	}
     
 	protected Tree record_ident(int pos) {
@@ -395,11 +395,13 @@ public class Translator25 extends TreeGen implements TargetTags, Modifiers, ITra
 		}
 	}
 
+	@Override
 	public void translate() throws CompilerException {
 		toJava();
 		targetPrinter.printUnit(unit);
 	}
 	
+	@Override
 	public void toJava() throws CompilerException {
 		vars = new ArrayList();
 		baseClassType = new Ident(Location.NOPOS, unit.getBaseClass().toString());
@@ -413,6 +415,7 @@ public class Translator25 extends TreeGen implements TargetTags, Modifiers, ITra
 		unit.setTarget(target.toArray());
 	}
 		
+	@Override
 	public void visit(PackageDecl t) {
 		target.append(
 			new PackageDecl(
@@ -420,10 +423,12 @@ public class Translator25 extends TreeGen implements TargetTags, Modifiers, ITra
 				new Select(Location.NOPOS, new Select(Location.NOPOS, t.pckage, "internal"), unit.getSchemaName())));
 	}
 
+	@Override
 	public void visit(ImportDecl t) {
 		target.append(t);
 	}
 
+	@Override
 	public void visit(ClueSetDecl t) throws CompilerException {
 		hasDecision = t.decision;
 		try {
@@ -623,10 +628,12 @@ public class Translator25 extends TreeGen implements TargetTags, Modifiers, ITra
 		body.append(get_clue_desc(t.pos));
 	}
 
+	@Override
 	public void visit(MethodDecl t) {
 		body.append(t);
 	}
 
+	@Override
 	public void visit(ClueDecl t) throws CompilerException { // separate procedure only needed if referenced elsewhere
 		String clueName = "Clue " + t.name;
 		Tree clueNameNumException;
@@ -908,6 +915,7 @@ public class Translator25 extends TreeGen implements TargetTags, Modifiers, ITra
 		}
 	}
 
+	@Override
 	public void visit(Tree t) {
 		if (t.isExpr()) {
 			res = t;
@@ -973,6 +981,7 @@ public class Translator25 extends TreeGen implements TargetTags, Modifiers, ITra
 		res.type = t.type;
 	}
 */
+	@Override
 	public void visit(Quantified t) throws CompilerException {
 		if (insideShorthand)
 			unit.error(t.pos, ChoiceMakerCoreMessages.m.formatMessage("compiler.translator.no.quant.inside.limitation"));
@@ -1154,6 +1163,7 @@ public class Translator25 extends TreeGen implements TargetTags, Modifiers, ITra
 		res.type = t.type;
 	}
 	
+	@Override
 	public void visit(Index t) throws CompilerException {
 		t.tpe.apply(this);
 		t.tpe = res;
@@ -1162,6 +1172,7 @@ public class Translator25 extends TreeGen implements TargetTags, Modifiers, ITra
 		res = t;
 	}
 
+	@Override
 	public void visit(VarDecl t) throws CompilerException {
 		t.initializer.apply(this);
 		t.initializer = res;
@@ -1178,6 +1189,7 @@ public class Translator25 extends TreeGen implements TargetTags, Modifiers, ITra
 		}
 	}
 
+	@Override
 	public void visit(Let t) throws CompilerException {
 		if (insideShorthand)
 			unit.error(t.pos, ChoiceMakerCoreMessages.m.formatMessage("compiler.translator.no.let.inside.limitation"));
@@ -1229,6 +1241,7 @@ public class Translator25 extends TreeGen implements TargetTags, Modifiers, ITra
 		}
 	}
 
+	@Override
 	public void visit(Shorthand t) throws CompilerException {
 		if (t.form == COMPARE) {
 			Shorthand sameShorthand = (Shorthand) t.deepCopy();
@@ -1492,6 +1505,7 @@ public class Translator25 extends TreeGen implements TargetTags, Modifiers, ITra
 		return t;
 	}
 
+	@Override
 	public void visit(If t) throws CompilerException {
 		t.cond.apply(this);
 		t.cond = res;
@@ -1502,6 +1516,7 @@ public class Translator25 extends TreeGen implements TargetTags, Modifiers, ITra
 		res = t;
 	}
 
+	@Override
 	public void visit(Apply t) throws CompilerException {
 		t.fun.apply(this);
 		t.fun = res;
@@ -1514,6 +1529,7 @@ public class Translator25 extends TreeGen implements TargetTags, Modifiers, ITra
 		res = t;
 	}
 
+	@Override
 	public void visit(New t) throws CompilerException {
 		t.clazz.apply(this);
 		t.clazz = res;
@@ -1526,6 +1542,7 @@ public class Translator25 extends TreeGen implements TargetTags, Modifiers, ITra
 		res = t;
 	}
 
+	@Override
 	public void visit(NewArray t) throws CompilerException {
 		t.clazz.apply(this);
 		t.clazz = res;
@@ -1544,6 +1561,7 @@ public class Translator25 extends TreeGen implements TargetTags, Modifiers, ITra
 		res = t;
 	}
 
+	@Override
 	public void visit(Typeop t) throws CompilerException {
 		t.tpe.apply(this);
 		t.tpe = res;
@@ -1552,6 +1570,7 @@ public class Translator25 extends TreeGen implements TargetTags, Modifiers, ITra
 		res = t;
 	}
 
+	@Override
 	public void visit(Unop t) throws CompilerException {
 		t.arg.apply(this);
 		t.arg = res;
@@ -1567,6 +1586,7 @@ public class Translator25 extends TreeGen implements TargetTags, Modifiers, ITra
 				&& (((Select) t).sym.getOwner().getModifiers() & SCHEMA) != 0);
 	}
 
+	@Override
 	public void visit(Binop t) throws CompilerException {
 		t.left.apply(this);
 		t.left = res;
@@ -1585,6 +1605,7 @@ public class Translator25 extends TreeGen implements TargetTags, Modifiers, ITra
 		}
 	}
 
+	@Override
 	public void visit(Indexed t) throws CompilerException {
 		if (t.multiClue != null) {
 			if (/* t.multiClue.multiClue.sym.type */ cluesetType == ClueSetType.BOOLEAN) {
@@ -1657,6 +1678,7 @@ public class Translator25 extends TreeGen implements TargetTags, Modifiers, ITra
 				new Literal(t.pos, INT, new Integer(t.multiClue.indexNum))));
 	}
 
+	@Override
 	public void visit(Select t) throws CompilerException {
 		Tree tmp = t;
 		t.qualifier.apply(this);
@@ -1698,6 +1720,7 @@ public class Translator25 extends TreeGen implements TargetTags, Modifiers, ITra
 		}
 	}
 
+	@Override
 	public void visit(Ident t) throws CompilerException {
 		if (t.sym instanceof ClueSymbol) {
 			ClueDecl clue = ((ClueSymbol)t.sym).decl;
@@ -1710,6 +1733,7 @@ public class Translator25 extends TreeGen implements TargetTags, Modifiers, ITra
 			res = t;
 	}
 
+	@Override
 	public void visit(Self t) throws CompilerException {
 		res = t;
 		if (t.stag == Tags.R) {
@@ -1724,6 +1748,7 @@ public class Translator25 extends TreeGen implements TargetTags, Modifiers, ITra
 		}
 	}
 
+	@Override
 	public void visit(Valid t) throws CompilerException {
 		if (insideShorthand)
 			unit.error(t.pos, ChoiceMakerCoreMessages.m.formatMessage("compiler.translator.no.valid.inside.limitation"));
@@ -1733,16 +1758,19 @@ public class Translator25 extends TreeGen implements TargetTags, Modifiers, ITra
 		res.type = Type.BOOLEAN;
 	}
 
+	@Override
 	public void visit(ArrayType t) throws CompilerException {
 		t.tpe.apply(this);
 		t.tpe = res;
 		res = t;
 	}
 
+	@Override
 	public void visit(PrimitiveType t) {
 		res = t;
 	}
 
+	@Override
 	public void visit(Literal t) {
 		res = t;
 	}

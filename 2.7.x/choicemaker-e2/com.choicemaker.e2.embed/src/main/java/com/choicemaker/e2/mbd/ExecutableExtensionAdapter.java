@@ -8,8 +8,8 @@
 package com.choicemaker.e2.mbd;
 
 import com.choicemaker.e2.CMConfigurationElement;
-import com.choicemaker.e2.E2Exception;
 import com.choicemaker.e2.CMExecutableExtension;
+import com.choicemaker.e2.E2Exception;
 import com.choicemaker.e2.mbd.runtime.CoreException;
 import com.choicemaker.e2.mbd.runtime.IConfigurationElement;
 import com.choicemaker.e2.mbd.runtime.IExecutableExtension;
@@ -66,6 +66,7 @@ public class ExecutableExtensionAdapter {
 			this.delegate = o;
 		}
 
+		@Override
 		public void setInitializationData(CMConfigurationElement config,
 				String propertyName, Object data) throws E2Exception {
 			try {
@@ -90,6 +91,7 @@ public class ExecutableExtensionAdapter {
 			this.delegate = o;
 		}
 
+		@Override
 		public void setInitializationData(IConfigurationElement config,
 				String propertyName, Object data) throws CoreException {
 			try {

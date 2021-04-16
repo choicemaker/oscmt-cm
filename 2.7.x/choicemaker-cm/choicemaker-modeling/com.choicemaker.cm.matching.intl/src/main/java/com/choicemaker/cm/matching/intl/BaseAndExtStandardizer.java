@@ -33,6 +33,7 @@ public class BaseAndExtStandardizer extends DefaultStandardizer {
 		this.baseLen = baseLen;
 	}
 
+	@Override
 	public void standardize(ParseTreeNode node, ParsedData holder) {
 		String s = joinTokens(node);
 		

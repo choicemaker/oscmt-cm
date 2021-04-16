@@ -22,6 +22,7 @@ import com.choicemaker.cm.core.Record;
  * @author   Martin Buechi
  * @deprecated Never used
  */
+@Deprecated
 public class GenericRecord implements Record, Cloneable {
 	private static final long serialVersionUID = 1L;
 	private String id;
@@ -29,14 +30,15 @@ public class GenericRecord implements Record, Cloneable {
 	private boolean[] validity;
 	private GenericRecord[][] children;
 	
+	@Override
 	public Object clone() {
 		return new GenericRecord(this);
 	}
 	
 	public GenericRecord(GenericRecord from) {
 		id = from.id;
-		values = (String[])from.values.clone();
-		validity = (boolean[])from.validity.clone();
+		values = from.values.clone();
+		validity = from.validity.clone();
 		children = new GenericRecord[from.children.length][];
 		for (int i = 0; i < children.length; i++) {
 			children[i] = new GenericRecord[from.children[i].length];
@@ -115,22 +117,27 @@ public class GenericRecord implements Record, Cloneable {
 		return (BaseRecord) baseClass.getMethod("instance", new Class[0]).invoke(baseClass, new Object[0]);
 	}
 
+	@Override
 	public Comparable getId() {
 		return id;
 	}
 
+	@Override
 	public void computeValidityAndDerived() {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
 	public DerivedSource getDerivedSource() {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
 	public void computeValidityAndDerived(DerivedSource src) {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
 	public void resetValidityAndDerived(DerivedSource src) {
 		throw new UnsupportedOperationException();
 	}

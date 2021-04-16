@@ -110,6 +110,7 @@ public class NameStandardizer extends RecursiveStandardizer {
 		public BracketedStandardizer(String fieldName, int policy) {
 			super(fieldName, policy);
 		}
+		@Override
 		protected String joinTokens(ParseTreeNode tree) {
 			String s = super.joinTokens(tree);
 			if (s.length() > 2) {
@@ -128,6 +129,7 @@ public class NameStandardizer extends RecursiveStandardizer {
 		public CompoundLastNameStandardizer() {
 			super(null);	
 		}
+		@Override
 		public void standardize(ParseTreeNode tree, ParsedData holder) {
 			int numKids = tree.getNumChildren();
 			if (numKids < 2) {

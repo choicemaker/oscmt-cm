@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 
 import javax.sql.DataSource;
 
-import com.choicemaker.cm.core.Decision;
+import com.choicemaker.client.api.Decision;
 
 /**
  * Client proxy of taking a snapshot of a record pair.

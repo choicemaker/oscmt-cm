@@ -26,17 +26,17 @@ import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
-import com.choicemaker.cm.batch.BatchJob;
-import com.choicemaker.cm.batch.impl.BatchJobEntity;
-import com.choicemaker.cm.core.base.Thresholds;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntity;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsEntity;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationControllerBean;
-import com.choicemaker.cm.transitivity.server.impl.TransitivityJobEntity;
-import com.choicemaker.cm.transitivity.server.impl.TransitivityParametersEntity;
+import com.choicemaker.cm.batch.api.BatchJob;
+import com.choicemaker.cm.batch.ejb.BatchJobEntity;
+import com.choicemaker.cm.core.Thresholds;
+import com.choicemaker.cm.oaba.api.OabaParametersController;
+import com.choicemaker.cm.oaba.api.ServerConfigurationController;
+import com.choicemaker.cm.oaba.ejb.OabaJobEntity;
+import com.choicemaker.cm.oaba.ejb.OabaParametersEntity;
+import com.choicemaker.cm.oaba.ejb.OabaSettingsEntity;
+import com.choicemaker.cm.oaba.ejb.ServerConfigurationControllerBean;
+import com.choicemaker.cm.transitivity.ejb.TransitivityJobEntity;
+import com.choicemaker.cm.transitivity.ejb.TransitivityParametersEntity;
 
 /** Utility methods used in tests of OabaJobEntity and TransitivityJobEntity */
 public class BatchJobUtils {

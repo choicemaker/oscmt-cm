@@ -27,13 +27,13 @@
       <id>choicemaker_releases</id>
       <name>ChoiceMaker Enterprise Releases</name>
       <url>
-      https://dev.choicemaker.com:8443/nexus/content/repositories/choicemaker_releases/</url>
+      https://dev2.choicemaker.com:8443/nexus/content/repositories/choicemaker_releases/</url>
     </repository>
     <snapshotRepository>
       <id>choicemaker_snapshots</id>
       <name>ChoiceMaker Enterprise Snapshots</name>
       <url>
-      https://dev.choicemaker.com:8443/nexus/content/repositories/choicemaker_snapshots/</url>
+      https://dev2.choicemaker.com:8443/nexus/content/repositories/choicemaker_snapshots/</url>
     </snapshotRepository>
   </distributionManagement>
 
@@ -85,7 +85,7 @@
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.io.blocking.automated.base</artifactId>
+      <artifactId>com.choicemaker.cm.aba.base</artifactId>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>

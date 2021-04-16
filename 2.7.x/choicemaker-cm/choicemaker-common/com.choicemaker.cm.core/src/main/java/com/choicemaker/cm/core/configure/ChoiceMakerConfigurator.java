@@ -46,7 +46,7 @@ public interface ChoiceMakerConfigurator {
 	 *
 	 * @param fn
 	 *            path to an XML configuration file
-	 * @param logConfName
+	 * @param unusedLogConfName
 	 *            ignored with a warning message
 	 * @param reload
 	 * @param initGui
@@ -57,7 +57,7 @@ public interface ChoiceMakerConfigurator {
 	 * @throws XmlConfException
 	 *             if a valid configuration can not be created and initialized
 	 */
-	ChoiceMakerConfiguration init(String fn, String logConfName,
+	ChoiceMakerConfiguration init(String fn, String unusedLogConfName,
 			boolean reload, boolean initGui) throws XmlConfException;
 
 	ChoiceMakerConfiguration init(String fn, boolean reload, boolean initGui,

@@ -13,21 +13,21 @@
     <class>com.choicemaker.cm.batch.impl.BatchJobEntity</class>
     <class>com.choicemaker.cm.batch.impl.BatchProcessingEventEntity</class>
     <class>com.choicemaker.cm.batch.impl.OperationalPropertyEntity</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbaSettingsEntity</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersEntity</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractRecordIdTranslationEntity</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.BaseRecordSourceEntity</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultServerConfigurationEntity</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultSettingsEntity</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntity</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingEventEntity</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsEntity</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.RecordIdIntegerTranslation</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.RecordIdLongTranslation</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.RecordIdStringTranslation</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationEntity</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.SqlRecordSourceEntity</class>
+    <class>com.choicemaker.cm.oaba.server.impl.AbaSettingsEntity</class>
+    <class>com.choicemaker.cm.oaba.server.impl.AbstractParametersEntity</class>
+    <class>com.choicemaker.cm.oaba.server.impl.AbstractRecordIdTranslationEntity</class>
+    <class>com.choicemaker.cm.oaba.server.impl.BaseRecordSourceEntity</class>
+    <class>com.choicemaker.cm.oaba.server.impl.DefaultServerConfigurationEntity</class>
+    <class>com.choicemaker.cm.oaba.server.impl.DefaultSettingsEntity</class>
+    <class>com.choicemaker.cm.oaba.server.impl.OabaJobEntity</class>
+    <class>com.choicemaker.cm.oaba.server.impl.OabaParametersEntity</class>
+    <class>com.choicemaker.cm.oaba.server.impl.OabaProcessingEventEntity</class>
+    <class>com.choicemaker.cm.oaba.server.impl.OabaSettingsEntity</class>
+    <class>com.choicemaker.cm.oaba.server.impl.RecordIdIntegerTranslation</class>
+    <class>com.choicemaker.cm.oaba.server.impl.RecordIdLongTranslation</class>
+    <class>com.choicemaker.cm.oaba.server.impl.RecordIdStringTranslation</class>
+    <class>com.choicemaker.cm.oaba.server.impl.ServerConfigurationEntity</class>
+    <class>com.choicemaker.cm.oaba.server.impl.SqlRecordSourceEntity</class>
     <class>com.choicemaker.cm.transitivity.server.impl.TransitivityJobEntity</class>
     <class>com.choicemaker.cm.transitivity.server.impl.TransitivityParametersEntity</class>
     <class>com.choicemaker.cm.transitivity.server.impl.TransitivityProcessingEventEntity</class>    
@@ -54,21 +54,21 @@
     <class>com.choicemaker.cm.batch.impl.BatchJobEntity</class>
     <class>com.choicemaker.cm.batch.impl.BatchProcessingEventEntity</class>
     <class>com.choicemaker.cm.batch.impl.OperationalPropertyEntity</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbaSettingsEntity</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersEntity</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractRecordIdTranslationEntity</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.BaseRecordSourceEntity</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultServerConfigurationEntity</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultSettingsEntity</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntity</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingEventEntity</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsEntity</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.RecordIdIntegerTranslation</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.RecordIdLongTranslation</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.RecordIdStringTranslation</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationEntity</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.SqlRecordSourceEntity</class>
+    <class>com.choicemaker.cm.oaba.server.impl.AbaSettingsEntity</class>
+    <class>com.choicemaker.cm.oaba.server.impl.AbstractParametersEntity</class>
+    <class>com.choicemaker.cm.oaba.server.impl.AbstractRecordIdTranslationEntity</class>
+    <class>com.choicemaker.cm.oaba.server.impl.BaseRecordSourceEntity</class>
+    <class>com.choicemaker.cm.oaba.server.impl.DefaultServerConfigurationEntity</class>
+    <class>com.choicemaker.cm.oaba.server.impl.DefaultSettingsEntity</class>
+    <class>com.choicemaker.cm.oaba.server.impl.OabaJobEntity</class>
+    <class>com.choicemaker.cm.oaba.server.impl.OabaParametersEntity</class>
+    <class>com.choicemaker.cm.oaba.server.impl.OabaProcessingEventEntity</class>
+    <class>com.choicemaker.cm.oaba.server.impl.OabaSettingsEntity</class>
+    <class>com.choicemaker.cm.oaba.server.impl.RecordIdIntegerTranslation</class>
+    <class>com.choicemaker.cm.oaba.server.impl.RecordIdLongTranslation</class>
+    <class>com.choicemaker.cm.oaba.server.impl.RecordIdStringTranslation</class>
+    <class>com.choicemaker.cm.oaba.server.impl.ServerConfigurationEntity</class>
+    <class>com.choicemaker.cm.oaba.server.impl.SqlRecordSourceEntity</class>
     <class>com.choicemaker.cm.transitivity.server.impl.TransitivityJobEntity</class>
     <class>com.choicemaker.cm.transitivity.server.impl.TransitivityParametersEntity</class>
     <class>com.choicemaker.cm.transitivity.server.impl.TransitivityProcessingEventEntity</class>    

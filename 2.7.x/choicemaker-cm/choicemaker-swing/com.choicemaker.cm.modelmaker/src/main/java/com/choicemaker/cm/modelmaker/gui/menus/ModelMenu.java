@@ -86,6 +86,7 @@ public class ModelMenu extends LastUsedMenu {
 			setEnabled(getEnabled());
 		}
 
+		@Override
 		public void propertyChange(PropertyChangeEvent e) {
 			String propertyName = e.getPropertyName();
 			if (dependsSource
@@ -109,14 +110,17 @@ public class ModelMenu extends LastUsedMenu {
 				true);
 			parent.getProbabilityModelEventMultiplexer().addPropertyChangeListener(this);
 		}
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			parent.evaluateClues();
 		}
 
+		@Override
 		protected boolean getEnabled() {
 			return super.getEnabled() && parent.getProbabilityModel().canEvaluate();
 		}
 
+		@Override
 		public void propertyChange(PropertyChangeEvent e) {
 			String propertyName = e.getPropertyName();
 			if (ImmutableProbabilityModel.MACHINE_LEARNER == propertyName
@@ -133,6 +137,7 @@ public class ModelMenu extends LastUsedMenu {
 		Action newAction = new ModelAction(ChoiceMakerCoreMessages.m.formatMessage("new.elipsis"), null, false, false, true) {
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				ModelBuilderDialog builder = new ModelBuilderDialog(parent);
 				builder.newModel();
@@ -148,6 +153,7 @@ public class ModelMenu extends LastUsedMenu {
 		Action openAction = new AbstractAction(ChoiceMakerCoreMessages.m.formatMessage("open.elipsis")) {
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				File file = FileChooserFactory.selectModelFile(parent);
 				if (file != null) {
@@ -172,6 +178,7 @@ public class ModelMenu extends LastUsedMenu {
 				true) {
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				parent.postProbabilityModelInfo();
 			}
@@ -187,6 +194,7 @@ public class ModelMenu extends LastUsedMenu {
 		Action editAction = new ModelAction(ChoiceMakerCoreMessages.m.formatMessage("edit.elipsis"), null, true, false, true) {
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				ModelBuilderDialog builder = new ModelBuilderDialog(parent);
 				IProbabilityModel pm = parent.getProbabilityModel();
@@ -212,6 +220,7 @@ public class ModelMenu extends LastUsedMenu {
 				true) {
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				parent.buildProbabilityModel(parent.getProbabilityModel());
 			}
@@ -233,6 +242,7 @@ public class ModelMenu extends LastUsedMenu {
 				true) {
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				parent.reloadProbabilityModel();
 			}
@@ -252,6 +262,7 @@ public class ModelMenu extends LastUsedMenu {
 				true) {
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				File f = new File(GeneratorXmlConf.getCodeRoot()).getAbsoluteFile();
 				if(f.exists()) {
@@ -275,6 +286,7 @@ public class ModelMenu extends LastUsedMenu {
 				true) {
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				parent.setAllCluesOrRules(ModelMaker.CLUES, true);
 			}
@@ -298,6 +310,7 @@ public class ModelMenu extends LastUsedMenu {
 				true) {
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				parent.setAllCluesOrRules(ModelMaker.CLUES, false);
 			}
@@ -321,6 +334,7 @@ public class ModelMenu extends LastUsedMenu {
 				true) {
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				parent.setAllCluesOrRules(ModelMaker.RULES, true);
 			}
@@ -344,6 +358,7 @@ public class ModelMenu extends LastUsedMenu {
 				true) {
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				parent.setAllCluesOrRules(ModelMaker.RULES, false);
 			}
@@ -387,6 +402,7 @@ public class ModelMenu extends LastUsedMenu {
 				true) {
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				parent.saveActiveModel();
 			}
@@ -408,6 +424,7 @@ public class ModelMenu extends LastUsedMenu {
 				true) {
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				ExportClueTableDialog builder = new ExportClueTableDialog(parent);
 				// builder.newModel();
@@ -435,6 +452,7 @@ public class ModelMenu extends LastUsedMenu {
 				true) {
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				new TrainDialog(parent, false).setVisible(true);
 			}
@@ -461,6 +479,7 @@ public class ModelMenu extends LastUsedMenu {
 				true) {
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				new TrainDialog(parent, true).setVisible(true);
 			}
@@ -489,6 +508,7 @@ public class ModelMenu extends LastUsedMenu {
 
 	private void addListeners() {
 		parent.addPropertyChangeListener(new PropertyChangeListener() {
+			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				if (evt.getPropertyName().equals(ModelMakerEventNames.PROBABILITY_MODEL)) {
 					ImmutableProbabilityModel model = parent.getProbabilityModel();
@@ -500,6 +520,7 @@ public class ModelMenu extends LastUsedMenu {
 		});
 	}
 
+	@Override
 	public void open(String fileName) {
 		try {
 			parent.setProbabilityModel(fileName, false);

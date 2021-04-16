@@ -49,9 +49,9 @@ import javax.swing.event.ListSelectionListener;
 import com.choicemaker.cm.core.Descriptor;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.MarkedRecordPairSource;
+import com.choicemaker.cm.core.MutableMarkedRecordPair;
 import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.base.MarkedRecordPairBinder;
-import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
 import com.choicemaker.cm.core.xmlconf.MarkedRecordPairSourceXmlConf;
 import com.choicemaker.cm.core.xmlconf.RecordSourceXmlConf;
 import com.choicemaker.cm.gui.utils.dialogs.ErrorDialog;
@@ -268,6 +268,7 @@ public class DataProfilerDialog extends JDialog {
 
 	private class Dispatcher implements Runnable {
 		public Exception ex;
+		@Override
 		public void run() {
 			ImmutableProbabilityModel model = modelMaker.getProbabilityModel();
 
@@ -436,6 +437,7 @@ public class DataProfilerDialog extends JDialog {
 		public ComputeAction() {
 			super("Compute");
 		}
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			dispatch();
 		}
@@ -446,6 +448,7 @@ public class DataProfilerDialog extends JDialog {
 		public CloseAction() {
 			super("Close");
 		}
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			dispose();
 		}
@@ -456,6 +459,7 @@ public class DataProfilerDialog extends JDialog {
 		public MrpsBrowseAction() {
 			super("Browse");
 		}
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			File f = FileChooserFactory.selectMrpsFile(modelMaker);
 			if (f != null) {
@@ -469,6 +473,7 @@ public class DataProfilerDialog extends JDialog {
 		public RsBrowseAction() {
 			super("Browse");
 		}
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			File f = FileChooserFactory.selectRsFile(modelMaker);
 			if (f != null) {
@@ -483,8 +488,10 @@ public class DataProfilerDialog extends JDialog {
 			super("Create Files");
 			setEnabled(false);
 		}
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			SwingUtilities.invokeLater(new Runnable() {
+				@Override
 				public void run() {
 					JDialog createFilesDialog = new CreateFilesDialog();
 					createFilesDialog.setVisible(true);
@@ -497,6 +504,7 @@ public class DataProfilerDialog extends JDialog {
 		public TextFileSelector(String label) {
 			super(label);
 		}
+		@Override
 		protected File selectFile() {
 			return FileChooserFactory.selectFlatFile(modelMaker);
 		}
@@ -516,6 +524,7 @@ public class DataProfilerDialog extends JDialog {
 			table.getSelectionModel().addListSelectionListener(this);
 		}
 
+		@Override
 		public void valueChanged(ListSelectionEvent e) {
 			if (!(rs instanceof MrpsToRsAdapter)) {
 				return;
@@ -585,6 +594,7 @@ public class DataProfilerDialog extends JDialog {
 			table.getSelectionModel().addListSelectionListener(this);
 		}
 
+		@Override
 		public void valueChanged(ListSelectionEvent e) {
 			if (!(rs instanceof MrpsToRsAdapter)) {
 				return;
@@ -767,14 +777,18 @@ public class DataProfilerDialog extends JDialog {
 
 		private void createListeners() {
 			tfs.addDocumentListener(new DocumentListener() {
+				@Override
 				public void changedUpdate(DocumentEvent e) {
 					create.setEnabled(tfs.hasFile());
 				}
+				@Override
 				public void insertUpdate(DocumentEvent e) { changedUpdate(e); }
+				@Override
 				public void removeUpdate(DocumentEvent e) { changedUpdate(e); }
 			});
 
 			create.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					File outputFile = tfs.getFile();
 					if (outputFile == null) {
@@ -815,12 +829,14 @@ public class DataProfilerDialog extends JDialog {
 			});
 
 			cancel.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					dispose();
 				}
 			});
 
 			addWindowListener(new WindowAdapter() {
+				@Override
 				public void windowClosing(WindowEvent e) {
 					dispose();
 				}

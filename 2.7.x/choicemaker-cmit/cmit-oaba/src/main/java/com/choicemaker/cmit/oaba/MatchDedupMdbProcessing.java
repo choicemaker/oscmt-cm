@@ -1,13 +1,13 @@
 package com.choicemaker.cmit.oaba;
 
-import static com.choicemaker.cm.args.BatchProcessing.EVT_DONE;
-import static com.choicemaker.cm.args.BatchProcessing.PCT_DONE;
+import static com.choicemaker.cm.args.BatchProcessingConstants.EVT_DONE;
+import static com.choicemaker.cm.args.BatchProcessingConstants.PCT_DONE;
 
 import java.util.logging.Logger;
 
 import javax.jms.Queue;
 
-import com.choicemaker.cm.batch.BatchJob;
+import com.choicemaker.cm.batch.api.BatchJob;
 import com.choicemaker.cmit.testconfigs.SimplePersonSqlServerTestConfiguration;
 import com.choicemaker.cmit.utils.j2ee.BatchProcessingPhase;
 

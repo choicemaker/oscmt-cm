@@ -108,6 +108,7 @@ public Path(String device, String path) {
 /* (Intentionally not included in javadoc)
  * @see IPath#addFileExtension
  */
+@Override
 public IPath addFileExtension(String extension) {
 	if (isRoot() || isEmpty() || hasTrailingSeparator())
 		return this;
@@ -120,6 +121,7 @@ public IPath addFileExtension(String extension) {
 /* (Intentionally not included in javadoc)
  * @see IPath#addTrailingSeparator
  */
+@Override
 public IPath addTrailingSeparator() {
 	if (hasTrailingSeparator() || isRoot()) {
 		return this;
@@ -133,6 +135,7 @@ public IPath addTrailingSeparator() {
 /* (Intentionally not included in javadoc)
  * @see IPath#append(java.lang.String)
  */
+@Override
 public IPath append(String tail) {
 	//optimize addition of a single segment
 	if (tail.indexOf(SEPARATOR) == -1 && tail.indexOf("\\") == -1) { //$NON-NLS-1$
@@ -163,6 +166,7 @@ public IPath append(String tail) {
 /* (Intentionally not included in javadoc)
  * @see IPath#append(IPath)
  */
+@Override
 public IPath append(IPath tail) {
 	//optimize some easy cases
 	if (tail == null || tail.isEmpty() || tail.isRoot())
@@ -218,6 +222,7 @@ private boolean canonicalize() {
 /* (Intentionally not included in javadoc)
  * Clones this object.
  */
+@Override
 public Object clone() {
 	try {
 		return super.clone();
@@ -397,6 +402,7 @@ private String[] computeSegments(String path) {
 /* (Intentionally not included in javadoc)
  * Compares objects for equality.
  */
+@Override
 public boolean equals(Object obj) {
 	if (this == obj)
 		return true;
@@ -422,12 +428,14 @@ public boolean equals(Object obj) {
 /* (Intentionally not included in javadoc)
  * @see IPath#getDevice
  */
+@Override
 public String getDevice() {
 	return device;
 }
 /* (Intentionally not included in javadoc)
  * @see IPath#getFileExtension
  */
+@Override
 public String getFileExtension() {
 	if (hasTrailingSeparator()) {
 		return null;
@@ -445,6 +453,7 @@ public String getFileExtension() {
 /* (Intentionally not included in javadoc)
  * Computes the hash code for this object.
  */
+@Override
 public int hashCode() {
 	return separators & HASH_MASK;
 }
@@ -452,6 +461,7 @@ public int hashCode() {
 /* (Intentionally not included in javadoc)
  * @see IPath#hasTrailingSeparator
  */
+@Override
 public boolean hasTrailingSeparator() {
 	return (separators & HAS_TRAILING) != 0;
 }
@@ -502,6 +512,7 @@ private void initialize(String device, String fullPath) {
 /* (Intentionally not included in javadoc)
  * @see IPath#isAbsolute
  */
+@Override
 public boolean isAbsolute() {
 	//it's absolute if it has a leading separator
 	return (separators & HAS_LEADING) != 0;
@@ -509,6 +520,7 @@ public boolean isAbsolute() {
 /* (Intentionally not included in javadoc)
  * @see IPath#isEmpty
  */
+@Override
 public boolean isEmpty() {
 	//true if no segments and no leading prefix
 	return segments.length == 0 && ((separators & HAS_LEADING) == 0);
@@ -516,6 +528,7 @@ public boolean isEmpty() {
 /* (Intentionally not included in javadoc)
  * @see IPath#isPrefixOf
  */
+@Override
 public boolean isPrefixOf(IPath anotherPath) {
 	Assert.isNotNull(anotherPath);
 	if (device == null) {
@@ -543,6 +556,7 @@ public boolean isPrefixOf(IPath anotherPath) {
 /* (Intentionally not included in javadoc)
  * @see IPath#isRoot
  */
+@Override
 public boolean isRoot() {
 	//must have no segments, a leading separator, and not be a UNC path.
 	return this == ROOT || (segments.length == 0 && ((separators & ALL_SEPARATORS) == HAS_LEADING));
@@ -550,6 +564,7 @@ public boolean isRoot() {
 /* (Intentionally not included in javadoc)
  * @see IPath#isUNC
  */
+@Override
 public boolean isUNC() {
 	if (device != null) 
 		return false;
@@ -558,6 +573,7 @@ public boolean isUNC() {
 /* (Intentionally not included in javadoc)
  * @see IPath#isValidPath
  */
+@Override
 public boolean isValidPath(String path) {
 	// We allow "//" at the beginning for UNC paths
 	if (path.indexOf("//") > 0) { //$NON-NLS-1$
@@ -575,6 +591,7 @@ public boolean isValidPath(String path) {
 /* (Intentionally not included in javadoc)
  * @see IPath#isValidSegment
  */
+@Override
 public boolean isValidSegment(String segment) {
 	int size = segment.length();
 	if (size == 0) {
@@ -594,6 +611,7 @@ public boolean isValidSegment(String segment) {
 /* (Intentionally not included in javadoc)
  * @see IPath#lastSegment
  */
+@Override
 public String lastSegment() {
 	int len = segments.length;
 	return len == 0 ? null : segments[len-1];
@@ -601,6 +619,7 @@ public String lastSegment() {
 /* (Intentionally not included in javadoc)
  * @see IPath#makeAbsolute
  */
+@Override
 public IPath makeAbsolute() {
 	if (isAbsolute()) {
 		return this;
@@ -618,6 +637,7 @@ public IPath makeAbsolute() {
 /* (Intentionally not included in javadoc)
  * @see IPath#makeRelative
  */
+@Override
 public IPath makeRelative() {
 	if (!isAbsolute()) {
 		return this;
@@ -627,6 +647,7 @@ public IPath makeRelative() {
 /* (Intentionally not included in javadoc)
  * @see IPath#makeUNC
  */
+@Override
 public IPath makeUNC(boolean toUNC) {
 	// if we are already in the right form then just return
 	if (!(toUNC ^ isUNC()))
@@ -644,6 +665,7 @@ public IPath makeUNC(boolean toUNC) {
 /* (Intentionally not included in javadoc)
  * @see IPath#matchingFirstSegments
  */
+@Override
 public int matchingFirstSegments(IPath anotherPath) {
 	Assert.isNotNull(anotherPath);
 	int anotherPathLen = anotherPath.segmentCount();
@@ -660,6 +682,7 @@ public int matchingFirstSegments(IPath anotherPath) {
 /* (Intentionally not included in javadoc)
  * @see IPath#removeFileExtension
  */
+@Override
 public IPath removeFileExtension() {
 	String extension = getFileExtension();
 	if (extension == null || extension.equals("")) { //$NON-NLS-1$
@@ -672,6 +695,7 @@ public IPath removeFileExtension() {
 /* (Intentionally not included in javadoc)
  * @see IPath#removeFirstSegments
  */
+@Override
 public IPath removeFirstSegments(int count) {
 	if (count == 0)
 		return this;
@@ -689,6 +713,7 @@ public IPath removeFirstSegments(int count) {
 /* (Intentionally not included in javadoc)
  * @see IPath#removeLastSegments
  */
+@Override
 public IPath removeLastSegments(int count) {
 	if (count == 0)
 		return this;
@@ -705,6 +730,7 @@ public IPath removeLastSegments(int count) {
 /* (Intentionally not included in javadoc)
  * @see IPath#removeTrailingSeparator
  */
+@Override
 public IPath removeTrailingSeparator() {
 	if (!hasTrailingSeparator()) {
 		return this;
@@ -714,6 +740,7 @@ public IPath removeTrailingSeparator() {
 /* (Intentionally not included in javadoc)
  * @see IPath#segment
  */
+@Override
 public String segment(int index) {
 	if (index >= segments.length)
 		return null;
@@ -722,12 +749,14 @@ public String segment(int index) {
 /* (Intentionally not included in javadoc)
  * @see IPath#segmentCount
  */
+@Override
 public int segmentCount() {
 	return segments.length;
 }
 /* (Intentionally not included in javadoc)
  * @see IPath#segments
  */
+@Override
 public String[] segments() {
 	String[] segmentCopy = new String[segments.length];
 	System.arraycopy(segments, 0, segmentCopy, 0, segments.length);
@@ -736,6 +765,7 @@ public String[] segments() {
 /* (Intentionally not included in javadoc)
  * @see IPath#setDevice
  */
+@Override
 public IPath setDevice(String value) {
 	if (value != null) {
 		Assert.isTrue(value.indexOf(IPath.DEVICE_SEPARATOR) == (value.length() - 1), "Last character should be the device separator"); //$NON-NLS-1$
@@ -749,12 +779,14 @@ public IPath setDevice(String value) {
 /* (Intentionally not included in javadoc)
  * @see IPath#toFile
  */
+@Override
 public File toFile() {
 	return new File(toOSString());
 }
 /* (Intentionally not included in javadoc)
  * @see IPath#toOSString
  */
+@Override
 public String toOSString() {
 	//Note that this method is identical to toString except
 	//it uses the OS file separator instead of the path separator
@@ -794,6 +826,7 @@ public String toOSString() {
 /* (Intentionally not included in javadoc)
  * @see IPath#toString
  */
+@Override
 public String toString() {
 	int resultSize = computeLength();
 	if (resultSize <= 0)
@@ -830,6 +863,7 @@ public String toString() {
 /* (Intentionally not included in javadoc)
  * @see IPath#uptoSegment
  */
+@Override
 public IPath uptoSegment(int count) {
 	if (count == 0)
 		return Path.EMPTY;

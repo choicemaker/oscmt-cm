@@ -18,6 +18,7 @@ import com.choicemaker.cm.core.DatabaseException;
 import com.choicemaker.cm.io.db.base.DatabaseAbstraction;
 import com.choicemaker.cm.io.db.base.DatabaseAbstractionManager;
 import com.choicemaker.cm.io.db.oracle.blocking.OraDatabaseAbstraction;
+import com.choicemaker.cm.io.db.postgres2.blocking.PostgresDatabaseAbstraction;
 import com.choicemaker.cm.io.db.sqlserver.blocking.SqlDatabaseAbstraction;
 
 /**
@@ -29,6 +30,7 @@ import com.choicemaker.cm.io.db.sqlserver.blocking.SqlDatabaseAbstraction;
  * @author rphall
  * @deprecated
  */
+@Deprecated
 public class JBossDatabaseAbstractionManager implements
 		DatabaseAbstractionManager {
 
@@ -41,6 +43,9 @@ public class JBossDatabaseAbstractionManager implements
 
 	public static final String SQLSERVER_SIGNATURE = "sqlserver";
 
+	public static final String POSTGRES_SIGNATURE = "sqlserver";
+
+	@Override
 	public DatabaseAbstraction lookupDatabaseAbstraction(DataSource ds)
 			throws DatabaseException {
 
@@ -72,6 +77,11 @@ public class JBossDatabaseAbstractionManager implements
 				} else if (className.toLowerCase().contains("oracle")) {
 					logger.fine("OraDatabaseAbstraction");
 					retVal = new OraDatabaseAbstraction();
+
+				} else if (className.toLowerCase().contains("postgresql")
+						|| className.toLowerCase().contains("pgconnection")) {
+					logger.fine("PostgresDatabaseAbstraction");
+					retVal = new PostgresDatabaseAbstraction();
 
 				} else {
 					String s = ds.getClass().getName();

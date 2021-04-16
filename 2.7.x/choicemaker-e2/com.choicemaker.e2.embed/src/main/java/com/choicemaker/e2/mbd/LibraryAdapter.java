@@ -63,26 +63,32 @@ public class LibraryAdapter {
 			this.delegate = o;
 		}
 
+		@Override
 		public String[] getContentFilters() {
 			return delegate.getContentFilters();
 		}
 
+		@Override
 		public CMPath getPath() {
 			return PathAdapter.convert(delegate.getPath());
 		}
 
+		@Override
 		public String getType() {
 			return delegate.getType();
 		}
 
+		@Override
 		public boolean isExported() {
 			return delegate.isExported();
 		}
 
+		@Override
 		public boolean isFullyExported() {
 			return delegate.isFullyExported();
 		}
 
+		@Override
 		public String[] getPackagePrefixes() {
 			return delegate.getPackagePrefixes();
 		}
@@ -100,26 +106,32 @@ public class LibraryAdapter {
 			this.delegate = o;
 		}
 
+		@Override
 		public String[] getContentFilters() {
 			return delegate.getContentFilters();
 		}
 
+		@Override
 		public IPath getPath() {
 			return PathAdapter.convert(delegate.getPath());
 		}
 
+		@Override
 		public String getType() {
 			return delegate.getType();
 		}
 
+		@Override
 		public boolean isExported() {
 			return delegate.isExported();
 		}
 
+		@Override
 		public boolean isFullyExported() {
 			return delegate.isFullyExported();
 		}
 
+		@Override
 		public String[] getPackagePrefixes() {
 			return delegate.getPackagePrefixes();
 		}

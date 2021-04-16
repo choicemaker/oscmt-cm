@@ -32,6 +32,7 @@ public interface IProbabilityModel extends AccessProvider,
 	 *            The translator accessors.
 	 * @throws ModelConfigurationException
 	 */
+	@Override
 	void setAccessor(Accessor newAcc) throws ModelConfigurationException;
 
 	/**

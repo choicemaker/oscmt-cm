@@ -11,6 +11,7 @@
 package com.choicemaker.cm.core.base;
 
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.Match;
 
 
 /**
@@ -47,6 +48,7 @@ public class BeanMatchCandidate extends MatchCandidate {
 	 * 
 	 * @return  The Java bean representation of the match record.
 	 */
+	@Override
 	public Object getProfile() {
 		return profile;
 	}

@@ -101,13 +101,14 @@ public class AddressTokenizer extends SimpleTokenizer {
 	 * Overrides the SimpleTokenizer's implementation to break up &quot;smushed&quot;
 	 * Strings.
 	 */
+	@Override
 	protected List<Token> createTokens(List<String> strings) {
 		int max = strings.size();
 		
 		List<Token> tokens = new ArrayList<>(max);
 		for (int i = 0; i < max; i++) {
 			
-			String s = ((String)strings.get(i)).trim();
+			String s = strings.get(i).trim();
 			if (s.length() == 0)
 				continue;
 				

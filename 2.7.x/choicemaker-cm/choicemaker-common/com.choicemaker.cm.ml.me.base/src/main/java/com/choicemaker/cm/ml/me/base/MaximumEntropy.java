@@ -13,9 +13,9 @@ import java.util.logging.Logger;
 import com.choicemaker.cm.core.Accessor;
 import com.choicemaker.cm.core.ClueSet;
 import com.choicemaker.cm.core.ClueSetType;
+import com.choicemaker.cm.core.Evaluator;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.MachineLearner;
-import com.choicemaker.cm.core.base.Evaluator;
 import com.choicemaker.cm.core.util.LoggingObject;
 import com.choicemaker.cm.core.xmlconf.MlModelConf;
 import com.choicemaker.cm.ml.me.xmlconf.MeModelConf;
@@ -32,14 +32,17 @@ public class MaximumEntropy implements MachineLearner {
 	private int trainingIterations = 4000;
 	private ImmutableProbabilityModel model;
 
+	@Override
 	public Evaluator getEvaluator() {
 		return new MeEvaluator(model, weights);
 	}
 
+	@Override
 	public void setProbabilityModel(ImmutableProbabilityModel model) {
 		this.model = model;
 	}
 
+	@Override
 	public void changedAccessor(Accessor oldAccessor, Accessor newAccessor,
 			int[] oldClueNums) {
 		int size = oldClueNums.length;
@@ -114,6 +117,7 @@ public class MaximumEntropy implements MachineLearner {
 		this.trainingIterations = v;
 	}
 
+	@Override
 	public Object train(Collection src, double[] firingPercentages) {
 		try {
 			MeEstimator estimator =
@@ -128,26 +132,32 @@ public class MaximumEntropy implements MachineLearner {
 		}
 	}
 
+	@Override
 	public MlModelConf getModelConf() {
 		return new MeModelConf(this);
 	}
 
+	@Override
 	public boolean canEvaluate() {
 		return true;
 	}
 
+	@Override
 	public boolean canTrain() {
 		return true;
 	}
 
+	@Override
 	public boolean canUse(ClueSet cs) {
 		return cs.hasDecision() && cs.getType() == ClueSetType.BOOLEAN;
 	}
 
+	@Override
 	public boolean isRegression() {
 		return true;
 	}
 
+	@Override
 	public String getModelInfo() {
 		return "Training iterations: " + trainingIterations;
 	}

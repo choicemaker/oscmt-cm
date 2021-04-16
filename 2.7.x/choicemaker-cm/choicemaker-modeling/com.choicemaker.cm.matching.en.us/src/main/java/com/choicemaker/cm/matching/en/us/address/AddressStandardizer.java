@@ -76,6 +76,7 @@ public class AddressStandardizer extends RecursiveStandardizer {
 			super(fieldName);
 		}
 
+		@Override
 		public void standardize(ParseTreeNode node, ParsedData addr) {
 			String value = StringUtils.removeNonDigitsLetters(joinTokens(node));
 			addr.put(fieldName, value);
@@ -92,6 +93,7 @@ public class AddressStandardizer extends RecursiveStandardizer {
 			super(null);
 		}
 
+		@Override
 		public void standardize(ParseTreeNode node, ParsedData addr) {
 			TokenType type = (TokenType)node.getRule().getLhs();
 			Token tok = (Token)node.getRule().getRhsSymbol(0);
@@ -123,6 +125,7 @@ public class AddressStandardizer extends RecursiveStandardizer {
 			super(fieldName);
 		}
 
+		@Override
 		public void standardize(ParseTreeNode node, ParsedData addr) {
 			String sn = joinStreetTokens(node);
 			addr.put(fieldName, sn);
@@ -170,6 +173,7 @@ public class AddressStandardizer extends RecursiveStandardizer {
 			super(fieldName);
 		}
 
+		@Override
 		public void standardize(ParseTreeNode node, ParsedData addr) {
 			String co = joinCoTokens(node);
 			addr.put(fieldName, co);

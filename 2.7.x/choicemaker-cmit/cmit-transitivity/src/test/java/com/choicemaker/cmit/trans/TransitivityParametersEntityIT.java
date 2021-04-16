@@ -27,18 +27,18 @@ import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.args.TransitivityParameters;
-import com.choicemaker.cm.batch.OperationalPropertyController;
-import com.choicemaker.cm.batch.ProcessingController;
-import com.choicemaker.cm.core.base.Thresholds;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordIdController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
-import com.choicemaker.cm.transitivity.server.ejb.TransitivityParametersController;
-import com.choicemaker.cm.transitivity.server.impl.TransitivityParametersEntity;
+import com.choicemaker.cm.batch.api.OperationalPropertyController;
+import com.choicemaker.cm.batch.api.EventPersistenceManager;
+import com.choicemaker.cm.core.Thresholds;
+import com.choicemaker.cm.oaba.api.OabaJobManager;
+import com.choicemaker.cm.oaba.api.OabaService;
+import com.choicemaker.cm.oaba.api.OabaSettingsController;
+import com.choicemaker.cm.oaba.api.RecordIdController;
+import com.choicemaker.cm.oaba.api.RecordSourceController;
+import com.choicemaker.cm.oaba.api.ServerConfigurationController;
+import com.choicemaker.cm.oaba.ejb.OabaParametersEntity;
+import com.choicemaker.cm.transitivity.api.TransitivityParametersController;
+import com.choicemaker.cm.transitivity.ejb.TransitivityParametersEntity;
 import com.choicemaker.cmit.trans.util.TransitivityDeploymentUtils;
 import com.choicemaker.cmit.utils.j2ee.EntityManagerUtils;
 import com.choicemaker.cmit.utils.j2ee.FakePersistableRecordSource;
@@ -68,7 +68,7 @@ public class TransitivityParametersEntityIT {
 	private EntityManager em;
 
 	@EJB
-	private OabaJobController oabaJobController;
+	private OabaJobManager oabaJobController;
 
 	@EJB
 	private TransitivityParametersController transParamsController;
@@ -77,10 +77,10 @@ public class TransitivityParametersEntityIT {
 	private OabaSettingsController oabaSettingsController;
 
 	@EJB(beanName = "OabaProcessingControllerBean")
-	private ProcessingController oabaProcessingController;
+	private EventPersistenceManager oabaProcessingController;
 
 	@EJB(beanName = "TransitivityProcessingControllerBean")
-	private ProcessingController transProcessingController;
+	private EventPersistenceManager transProcessingController;
 
 	@EJB
 	private OabaService oabaService;

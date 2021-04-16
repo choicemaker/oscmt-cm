@@ -34,6 +34,7 @@ public class JdomElement implements IElement {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.base.configure.IElement#getName()
 	 */
+	@Override
 	public String getName() {
 		return this.getElement().getName();
 	}
@@ -41,6 +42,7 @@ public class JdomElement implements IElement {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.base.configure.IElement#getChildren()
 	 */
+	@Override
 	public List getChildren() {
 		List retVal = new LinkedList();
 		List jdomChildren = this.getElement().getChildren();
@@ -55,6 +57,7 @@ public class JdomElement implements IElement {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.base.configure.IElement#getChildren(java.lang.String)
 	 */
+	@Override
 	public List getChildren(String name) {
 		List retVal = new LinkedList();
 		List jdomChildren = this.getElement().getChildren(name);
@@ -69,6 +72,7 @@ public class JdomElement implements IElement {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.base.configure.IElement#getChild(java.lang.String)
 	 */
+	@Override
 	public IElement getChild(String name) {
 		Element child = this.getElement().getChild(name);
 		IElement retVal = new JdomElement(child);
@@ -78,6 +82,7 @@ public class JdomElement implements IElement {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.base.configure.IElement#getAttributeValue(java.lang.String)
 	 */
+	@Override
 	public String getAttributeValue(String name) {
 		return this.getElement().getAttributeValue(name);
 	}

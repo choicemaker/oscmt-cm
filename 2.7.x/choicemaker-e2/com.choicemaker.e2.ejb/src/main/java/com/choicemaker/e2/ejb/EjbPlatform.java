@@ -12,8 +12,8 @@ import javax.ejb.Local;
 import com.choicemaker.e2.CMPlatform;
 
 /**
- * A singleton implementation that uses an embedded Eclipse2 implementation to implement
- * CMPlatform methods.
+ * A singleton implementation that uses an embedded Eclipse2 implementation to
+ * implement CMPlatform methods.
  *
  * @author rphall
  *

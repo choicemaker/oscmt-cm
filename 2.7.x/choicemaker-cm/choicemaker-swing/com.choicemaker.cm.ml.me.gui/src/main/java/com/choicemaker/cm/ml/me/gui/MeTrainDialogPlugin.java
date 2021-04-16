@@ -41,12 +41,14 @@ public class MeTrainDialogPlugin extends TrainDialogPlugin {
 		add(trainingIterations);
 	}
 	
+	@Override
 	public void setTrainDialog(TrainDialog trainDialog) {
 //		this.trainDialog = trainDialog;
 		EnablednessGuard dl = new EnablednessGuard(trainDialog);
 		trainingIterations.getDocument().addDocumentListener(dl);
 	}
 	
+	@Override
 	public boolean isParametersValid() {
 		try {
 			return Integer.parseInt(trainingIterations.getText()) > 0;
@@ -56,6 +58,7 @@ public class MeTrainDialogPlugin extends TrainDialogPlugin {
 		return false;
 	}
 
+	@Override
 	public void set() {
 		me.setTrainingIterations(Integer.parseInt(trainingIterations.getText()));
 	}

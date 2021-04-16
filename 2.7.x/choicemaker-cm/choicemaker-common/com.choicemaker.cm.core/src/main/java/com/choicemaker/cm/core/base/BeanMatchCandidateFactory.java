@@ -11,6 +11,7 @@
 package com.choicemaker.cm.core.base;
 
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.Match;
 
 /**
  * Comment
@@ -18,6 +19,7 @@ import com.choicemaker.cm.core.ImmutableProbabilityModel;
  * @author   Martin Buechi
  */
 public class BeanMatchCandidateFactory extends MatchCandidateFactory {
+	@Override
 	public MatchCandidate createMatchCandidate(Match match, ImmutableProbabilityModel model) {
 		return new BeanMatchCandidate(match, model);
 	}

@@ -84,12 +84,14 @@ public void addAll(IStatus status) {
 /* (Intentionally not javadoc'd)
  * Implements the corresponding method on <code>IStatus</code>.
  */
+@Override
 public IStatus[] getChildren() {
 	return children;
 }
 /* (Intentionally not javadoc'd)
  * Implements the corresponding method on <code>IStatus</code>.
  */
+@Override
 public boolean isMultiStatus() {
 	return true;
 }
@@ -116,6 +118,7 @@ public void merge(IStatus status) {
  * Returns a string representation of the status, suitable 
  * for debugging purposes only.
  */
+@Override
 public String toString() {
 	StringBuffer buf = new StringBuffer(super.toString());
 	buf.append(" children=["); //$NON-NLS-1$

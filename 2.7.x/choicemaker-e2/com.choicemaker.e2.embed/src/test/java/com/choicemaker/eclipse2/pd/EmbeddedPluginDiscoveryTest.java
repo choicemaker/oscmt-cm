@@ -28,7 +28,7 @@ import com.choicemaker.e2.mbd.plugin.EmbeddedPluginDiscovery;
 public class EmbeddedPluginDiscoveryTest {
 
 	public void compare(Set<URL> discovered, List<String> expected) {
-		assertTrue(discovered.size() == expected.size());
+		assertTrue("discovered.size() != expected.size()", discovered.size() == expected.size());
 		for (URL url : discovered) {
 			String s = url.toString();
 			int index = s.indexOf(PREFIX) + PREFIX.length();

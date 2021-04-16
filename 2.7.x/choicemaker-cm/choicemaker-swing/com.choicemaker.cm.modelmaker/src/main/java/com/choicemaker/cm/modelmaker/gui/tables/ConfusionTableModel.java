@@ -83,6 +83,7 @@ public class ConfusionTableModel extends AbstractTableModel {
 	 * @return the number of columns in the model
 	 * @see #getRowCount
 	 */
+	@Override
 	public int getColumnCount() {
 		return 5;
 	}
@@ -95,14 +96,17 @@ public class ConfusionTableModel extends AbstractTableModel {
 	 * @return the number of rows in the model
 	 * @see #getColumnCount
 	 */
+	@Override
 	public int getRowCount() {
 		return 4;
 	}
 
+	@Override
 	public String getColumnName(int col) {
 		return columns[col].getName();
 	}
 
+	@Override
 	public boolean isCellEditable(int nRow, int nCol) {
 		return false;
 	}
@@ -117,6 +121,7 @@ public class ConfusionTableModel extends AbstractTableModel {
 	 *                 the column whose value is to be queried
 	 * @return the value Object at the specified cell
 	 */
+	@Override
 	public Object getValueAt(int iRow, int iCol) {
 		Object thing = null;
 

@@ -5,9 +5,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.logging.Logger;
 
-import junit.framework.TestCase;
-
 import com.choicemaker.cm.core.PropertyNames;
+
+import junit.framework.TestCase;
 
 /**
  * This test is assumed to run in an E2 context in which no installable

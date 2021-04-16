@@ -23,15 +23,26 @@ import java.io.Serializable;
  */
 public interface AbaSettings extends Serializable {
 
+	/**
+	 * The default value for {@link #getAbaMaxMatches()}. The value 0 (zero)
+	 * indicates no maximum.
+	 */
+	int DEFAULT_ABA_MAX_MATCHES = 0;
+
+	/** The default value for {@link #getLimitPerBlockingSet()} */
 	int DEFAULT_LIMIT_PER_BLOCKING_SET = 50;
+
+	/** The default values for {@link #getLimitSingleBlockingSet()} */
 	int DEFAULT_LIMIT_SINGLE_BLOCKING_SET = 100;
+
+	/** The default value for {@link #getSingleTableBlockingSetGraceLimit()} */
 	int DEFAULT_SINGLE_TABLE_GRACE_LIMIT = 200;
 
 	/** Default id value for non-persistent settings */
 	long NONPERSISTENT_ABA_SETTINGS_ID = 0;
 
 	/**
-	 * The persistence identifier for an instance. If the value is
+	 * @return The persistence identifier for an instance. If the value is
 	 * {@link #NONPERSISTENT_ABA_SETTINGS_ID}, then the settings are not
 	 * persistent.
 	 */
@@ -40,20 +51,29 @@ public interface AbaSettings extends Serializable {
 	boolean isPersistent();
 
 	/**
-	 * The maximum of size of a blocking set before it must be refined by
+	 * @return The maximum number of matches returned by Online matching. The value 0
+	 * (zero) indicates no maximum; that is, no limit to the number of matches
+	 * returned.
+	 */
+	int getAbaMaxMatches();
+
+	/**
+	 * @return The maximum of size of a blocking set before it must be refined by
 	 * qualifying it with additional blocking values.
 	 */
 	int getLimitPerBlockingSet();
 
 	/**
-	 * A special exemption to the {@link #getLimitPerBlockingSet() general limit
-	 * on blocking set size}
+	 * @return A special exemption to the {@link #getLimitPerBlockingSet() general limit
+	 * on blocking set size}. If only one blocking set is formed, then its size is
+	 * limited by this value.
 	 */
 	int getLimitSingleBlockingSet();
 
 	/**
-	 * Another special exemption to the {@link #getLimitPerBlockingSet() general
-	 * limit on blocking set size}
+	 * @return Another special exemption to the {@link #getLimitPerBlockingSet() general
+	 * limit on blocking set size}. If a blocking does not require joins between tables,
+	 * then its size is limited by this value.
 	 */
 	int getSingleTableBlockingSetGraceLimit();
 

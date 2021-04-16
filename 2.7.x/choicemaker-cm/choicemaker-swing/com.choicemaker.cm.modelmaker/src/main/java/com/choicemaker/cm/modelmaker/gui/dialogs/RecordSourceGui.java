@@ -25,10 +25,12 @@ public abstract class RecordSourceGui extends SourceGui {
 	/**
 	 * @see com.choicemaker.cm.train.gui.dialogs.SourceGui#getCustomFileFilter()
 	 */
+	@Override
 	protected String getFileTypeDescription() {
 		return "Record source descriptors (*.rs)";
 	}
 	
+	@Override
 	protected String getExtension() {
 		return Constants.RS_EXTENSION;
 	}

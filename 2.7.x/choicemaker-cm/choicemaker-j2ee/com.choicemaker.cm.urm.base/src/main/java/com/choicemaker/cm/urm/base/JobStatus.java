@@ -35,6 +35,8 @@ public class JobStatus implements Serializable {
 	protected String trackingId;
 	protected long stepId;
 	protected String status;
+	protected Date startDate;
+	protected Date finishDate;
 	protected Date statusDate;
 	protected Date abortRequestDate;
 	protected int fractionComplete;
@@ -63,6 +65,10 @@ public class JobStatus implements Serializable {
 		return statusDate;
 	}
 
+	public Date getStartDate() {
+		return startDate;
+	}
+
 	public String getStatus() {
 		return status;
 	}
@@ -72,13 +78,18 @@ public class JobStatus implements Serializable {
 		return stepDescription;
 	}
 
+	public Date getFinishDate() {
+		return finishDate;
+	}
+
 	public void setStepDescription(String string) {
 		stepDescription = string;
 	}
 
-	/**
-	 * @param l
-	 */
+	public void setFinishDate(Date date) {
+		finishDate = date;
+	}
+
 	public void setJobId(long l) {
 		jobId = l;
 	}

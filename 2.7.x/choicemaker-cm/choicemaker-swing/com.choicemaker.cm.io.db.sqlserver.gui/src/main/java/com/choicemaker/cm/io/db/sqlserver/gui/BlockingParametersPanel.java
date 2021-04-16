@@ -137,6 +137,7 @@ public class BlockingParametersPanel extends JPanel {
 //		fireEvent();
 //	}
 
+	@Override
 	public void setEnabled(boolean enabled) {
 		blockingConfiguration.setEnabled(enabled);
 		dbConfiguration.setEnabled(enabled);
@@ -236,6 +237,7 @@ public class BlockingParametersPanel extends JPanel {
 
 	private void createListeners() {
 		ItemListener il = new ItemListener() {
+			@Override
 			public void itemStateChanged(ItemEvent e) {
 				fireEvent();
 			}
@@ -245,8 +247,11 @@ public class BlockingParametersPanel extends JPanel {
 		blockingConfiguration.addItemListener(il);
 
 		DocumentListener dl = new DocumentListener() {
+			@Override
 			public void insertUpdate(DocumentEvent e) { fireEvent(); }
+			@Override
 			public void removeUpdate(DocumentEvent e) { fireEvent(); }
+			@Override
 			public void changedUpdate(DocumentEvent e) { fireEvent(); }
 		};
 

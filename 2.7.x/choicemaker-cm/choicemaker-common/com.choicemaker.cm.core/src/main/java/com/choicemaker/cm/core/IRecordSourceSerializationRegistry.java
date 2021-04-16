@@ -31,6 +31,7 @@ public interface IRecordSourceSerializationRegistry {
 			this.serializer = irss;
 			this.priority = p;
 		}
+		@Override
 		public int compareTo(Object o) {
 			if (o == null) {
 				throw new IllegalArgumentException("null object for comparison");

@@ -61,6 +61,7 @@ public class ValueRecordCollection implements IRecordCollection {
 		records = holders;
 	}
 
+	@Override
 	public void accept(IRecordCollectionVisitor ext) throws RecordCollectionException{
 		ext.visit(this);
 	}

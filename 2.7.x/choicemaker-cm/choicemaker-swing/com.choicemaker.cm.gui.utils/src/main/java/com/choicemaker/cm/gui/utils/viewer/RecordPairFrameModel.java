@@ -86,6 +86,7 @@ public class RecordPairFrameModel extends DefaultCompositeObservableData impleme
 	 * Returns the descriptor.
 	 * @return Descriptor
 	 */
+	@Override
 	public Descriptor getDescriptor() {
 		return descriptor;
 	}
@@ -102,6 +103,7 @@ public class RecordPairFrameModel extends DefaultCompositeObservableData impleme
 	 * Sets the descriptor.
 	 * @param descriptor The descriptor to set
 	 */
+	@Override
 	public void setDescriptor(Descriptor newValue) {
 		Descriptor oldValue = descriptor;
 		descriptor = newValue;
@@ -122,6 +124,7 @@ public class RecordPairFrameModel extends DefaultCompositeObservableData impleme
 	 * Returns the alias.
 	 * @return String
 	 */
+	@Override
 	public String getAlias() {
 		return alias;
 	}
@@ -130,6 +133,7 @@ public class RecordPairFrameModel extends DefaultCompositeObservableData impleme
 	 * Sets the alias.
 	 * @param alias The alias to set
 	 */
+	@Override
 	public void setAlias(String newValue) {
 		String oldValue = alias;
 		alias = newValue;
@@ -140,6 +144,7 @@ public class RecordPairFrameModel extends DefaultCompositeObservableData impleme
 	 * Returns the bounds.
 	 * @return Rectangle
 	 */
+	@Override
 	public Rectangle getBounds() {
 		return bounds;
 	}
@@ -148,12 +153,14 @@ public class RecordPairFrameModel extends DefaultCompositeObservableData impleme
 	 * Sets the bounds.
 	 * @param bounds The bounds to set
 	 */
+	@Override
 	public void setBounds(Rectangle newValue) {
 		Rectangle oldValue = bounds;
 		bounds = newValue;
 		firePropertyChange(BOUNDS, oldValue, newValue);
 	}
 
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -165,6 +172,7 @@ public class RecordPairFrameModel extends DefaultCompositeObservableData impleme
 		return result;
 	}
 	
+	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
@@ -197,6 +205,7 @@ public class RecordPairFrameModel extends DefaultCompositeObservableData impleme
 	 * Obsolete method for {@link #equals(Object)}. Used for testing only.
 	 * @deprecated
 	 */
+	@Deprecated
 	public boolean equals_00(Object o){
 		if (o instanceof RecordPairFrameModel){
 			RecordPairFrameModel other = (RecordPairFrameModel)o;
@@ -217,6 +226,7 @@ public class RecordPairFrameModel extends DefaultCompositeObservableData impleme
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.train.gui.viewer.InternalFrameModel#isEnableEditing()
 	 */
+	@Override
 	public boolean isEnableEditing() {
 		return enableEditing;
 	}
@@ -224,6 +234,7 @@ public class RecordPairFrameModel extends DefaultCompositeObservableData impleme
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.train.gui.viewer.InternalFrameModel#setEnableEditing(boolean)
 	 */
+	@Override
 	public void setEnableEditing(boolean newValue) {
 		Boolean oldValue = new Boolean(enableEditing);
 		enableEditing = newValue;

@@ -27,8 +27,8 @@ import com.choicemaker.e2.CMPlatformRunnable;
 import com.choicemaker.e2.embed.EmbeddedPlatform;
 import com.choicemaker.e2.platform.CMPlatformUtils;
 import com.choicemaker.e2.platform.InstallablePlatform;
-import com.choicemaker.util.SystemPropertyUtils;
 import com.choicemaker.util.FileUtilities;
+import com.choicemaker.util.SystemPropertyUtils;
 
 /**
  * @author Adam Winkel
@@ -83,6 +83,7 @@ public class ModelArtifactBuilderApp implements CMPlatformRunnable {
 	 *            This command should be typed on a single line; it is broken
 	 *            across multiple lines here for readability.
 	 */
+	@Override
 	public Object run(Object args) throws Exception {
 
 		CommandLineArguments cla = new CommandLineArguments(true);
@@ -124,7 +125,7 @@ public class ModelArtifactBuilderApp implements CMPlatformRunnable {
 			}
 		}
 		ObjectMaker[] objectMakers =
-			(ObjectMaker[]) omList.toArray(new ObjectMaker[omList.size()]);
+			omList.toArray(new ObjectMaker[omList.size()]);
 		ModelArtifactBuilder pmjb = new ModelArtifactBuilder();
 		pmjb.run(conf, outDir, objectMakers);
 

@@ -22,6 +22,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.WindowConstants;
 
 import com.choicemaker.cm.core.Constants;
 import com.choicemaker.cm.core.IProbabilityModel;
@@ -72,7 +73,7 @@ public class ModelBuilderDialog extends JDialog implements Enable {
 		layoutContent();
 		addContentListeners();
 		setContentPane(content);
-		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		pack();
 		setLocationRelativeTo(parent);
 	}
@@ -95,6 +96,7 @@ public class ModelBuilderDialog extends JDialog implements Enable {
 		setEnabledness();
 	}
 
+	@Override
 	public void setEnabledness() {
 		buildButton.setEnabled(modelFileNameField.getText().length() > 0 && cluesFileNameField.getText().length() > 0);
 	}
@@ -156,6 +158,7 @@ public class ModelBuilderDialog extends JDialog implements Enable {
 	private void addContentListeners() {
 		//buildButton
 		buildButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (buildModel()) {
 					dispose();
@@ -165,6 +168,7 @@ public class ModelBuilderDialog extends JDialog implements Enable {
 
 		//modelsFileNameBrowseButton
 		modelFileNameBrowseButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent ev) {
 				File file = FileChooserFactory.selectModelFile(parent);
 				if (file != null) {
@@ -175,6 +179,7 @@ public class ModelBuilderDialog extends JDialog implements Enable {
 
 		//cluesFileNameBrowseButton
 		cluesFileNameBrowseButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent ev) {
 				File file = FileChooserFactory.selectCluesFile(parent);
 				if (file != null) {
@@ -185,6 +190,7 @@ public class ModelBuilderDialog extends JDialog implements Enable {
 
 		//cancelButton
 		cancelButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				dispose();
 			}

@@ -75,6 +75,7 @@ public class DerivedFieldsComputerDialog extends JDialog {
 	
 	protected void computeDerivedFields() {
 		Runnable doer = new Runnable() {
+			@Override
 			public void run() {
 				try {
 					actuallyDoIt();
@@ -236,12 +237,15 @@ public class DerivedFieldsComputerDialog extends JDialog {
 	
 	protected void createListeners() {
 		DocumentListener dl = new DocumentListener() {
+			@Override
 			public void changedUpdate(DocumentEvent e) {
 				updateEnabledness();
 			}
+			@Override
 			public void insertUpdate(DocumentEvent e) {
 				updateEnabledness();
 			}
+			@Override
 			public void removeUpdate(DocumentEvent e) {
 				updateEnabledness();
 			}
@@ -253,12 +257,14 @@ public class DerivedFieldsComputerDialog extends JDialog {
 		sinkModelSelector.addDocumentListener(dl);
 		
 		ok.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				computeDerivedFields();
 			}
 		});
 		
 		cancel.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				dispose();
 			}
@@ -276,6 +282,7 @@ public class DerivedFieldsComputerDialog extends JDialog {
 		public RsFileSelector(String label) {
 			super(label);
 		}
+		@Override
 		public File selectFile() {
 			return FileChooserFactory.selectRsFile(modelMaker);
 		}
@@ -285,6 +292,7 @@ public class DerivedFieldsComputerDialog extends JDialog {
 		public MrpsFileSelector(String label) {
 			super(label);
 		}
+		@Override
 		public File selectFile() {
 			return FileChooserFactory.selectMrpsFile(modelMaker);
 		}
@@ -294,6 +302,7 @@ public class DerivedFieldsComputerDialog extends JDialog {
 		public ModelFileSelector(String label) {
 			super(label);
 		}
+		@Override
 		public File selectFile() {
 			return FileChooserFactory.selectModelFile(modelMaker);
 		}

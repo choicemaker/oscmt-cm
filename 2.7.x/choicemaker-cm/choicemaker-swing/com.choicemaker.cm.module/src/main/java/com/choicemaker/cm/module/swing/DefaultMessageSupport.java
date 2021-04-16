@@ -37,6 +37,7 @@ public class DefaultMessageSupport implements IMessageSupport {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.module.IMessageSupport#formatMessage(java.lang.String)
 	 */
+	@Override
 	public String formatMessage(String messageKey) {
 		return this.choiceMakerCoreMessages.formatMessage(messageKey);
 	}
@@ -44,6 +45,7 @@ public class DefaultMessageSupport implements IMessageSupport {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.module.IMessageSupport#formatMessage(java.lang.String, java.lang.Object[])
 	 */
+	@Override
 	public String formatMessage(String messageKey, Object[] args) {
 		return this.choiceMakerCoreMessages.formatMessage(messageKey,args);
 	}
@@ -51,6 +53,7 @@ public class DefaultMessageSupport implements IMessageSupport {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.module.IMessageSupport#formatMessage(java.lang.String, java.lang.Object)
 	 */
+	@Override
 	public String formatMessage(String messageKey, Object arg0) {
 		return this.choiceMakerCoreMessages.formatMessage(messageKey,arg0);
 	}
@@ -58,6 +61,7 @@ public class DefaultMessageSupport implements IMessageSupport {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.module.IMessageSupport#formatMessage(java.lang.String, java.lang.Object, java.lang.Object)
 	 */
+	@Override
 	public String formatMessage(String messageKey, Object arg0, Object arg1) {
 		return this.choiceMakerCoreMessages.formatMessage(messageKey,arg0,arg1);
 	}
@@ -65,6 +69,7 @@ public class DefaultMessageSupport implements IMessageSupport {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.module.IMessageSupport#formatMessage(java.lang.String, java.lang.Object, java.lang.Object, java.lang.Object)
 	 */
+	@Override
 	public String formatMessage(
 		String messageKey,
 		Object arg0,
@@ -76,6 +81,7 @@ public class DefaultMessageSupport implements IMessageSupport {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.module.IMessageSupport#formatMessage(java.lang.String, java.lang.Object, java.lang.Object, java.lang.Object, java.lang.Object)
 	 */
+	@Override
 	public String formatMessage(
 		String messageKey,
 		Object arg0,

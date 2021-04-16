@@ -72,7 +72,7 @@ public class EarleyParserChart extends ParserChart {
 	protected void predictor(ParserState state) {
 		List<Rule> rules = grammar.getRules((Variable)state.getNextSymbol());
 		for (int i = 0; i < rules.size(); i++) {
-			Rule rule = (Rule) rules.get(i);
+			Rule rule = rules.get(i);
 			enqueue(rule, 0, state.getEndIndex(), state.getEndIndex());
 		}
 	}
@@ -86,7 +86,7 @@ public class EarleyParserChart extends ParserChart {
 		TokenType type = (TokenType) state.getNextSymbol();
 		int end = state.getEndIndex();
 		
-		Token tok = (Token) tokens.get(end);
+		Token tok = tokens.get(end);
 		if (type.canHaveToken(tok)) {
 			Rule lexRule = new Rule(type, tok);
 			enqueue(lexRule, 1, end, end+1);
@@ -105,7 +105,7 @@ public class EarleyParserChart extends ParserChart {
 
 		List<ParserState> incomplete = getIncompleteStates(start);
 		for (int i = 0; i < incomplete.size(); i++) {
-			ParserState oldState = (ParserState) incomplete.get(i);
+			ParserState oldState = incomplete.get(i);
 			
 			if (oldState.getNextSymbol().equals(lhs)) {								
 				ParserState newState = enqueue(oldState.getRule(), 

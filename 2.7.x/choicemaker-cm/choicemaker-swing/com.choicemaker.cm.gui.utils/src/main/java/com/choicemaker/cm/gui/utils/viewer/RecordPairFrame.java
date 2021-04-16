@@ -13,10 +13,11 @@ import java.beans.PropertyChangeListener;
 
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.table.JTableHeader;
 
 import com.choicemaker.cm.core.Descriptor;
-import com.choicemaker.cm.core.base.RecordData;
+import com.choicemaker.cm.core.RecordData;
 import com.choicemaker.cm.gui.utils.viewer.event.ColumnDragListener;
 import com.choicemaker.cm.gui.utils.viewer.event.RecordPairFramePopupManager;
 
@@ -62,6 +63,7 @@ public class RecordPairFrame extends InternalFrame {
 		}
 	}
 	
+	@Override
 	public void destroy() {
 		super.destroy();
 		((RecordPairFrameModel) getInternalFrameModel()).getRecordTableColumnModel().removeColumnModelListener(drA);
@@ -73,6 +75,7 @@ public class RecordPairFrame extends InternalFrame {
 	 * Sets the recordPairFrameModel.
 	 * @param recordPairFrameModel The recordPairFrameModel to set
 	 */
+	@Override
 	public void initInternalFrameModel() {
 		RecordPairFrameModel recordPairFrameModel = (RecordPairFrameModel) getInternalFrameModel();
 
@@ -90,15 +93,16 @@ public class RecordPairFrame extends InternalFrame {
 
 		boolean stackable = descriptor.isStackable();
 		topPane.setVerticalScrollBarPolicy(
-			stackable ? JScrollPane.VERTICAL_SCROLLBAR_ALWAYS : JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+			stackable ? ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS : ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 		bottomPane.setVerticalScrollBarPolicy(
-			stackable ? JScrollPane.VERTICAL_SCROLLBAR_ALWAYS : JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+			stackable ? ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS : ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 		topPaneFrameManager = new RecordPairFramePopupManager(topTable, recordPairFrameModel);
 		topPane.addMouseListener(topPaneFrameManager);
 		bottomPaneFrameManager = new RecordPairFramePopupManager(bottomTable, recordPairFrameModel);
 		bottomPane.addMouseListener(bottomPaneFrameManager);
 
 		splitPane.addPropertyChangeListener(new PropertyChangeListener() {
+			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				if (JSplitPane.DIVIDER_LOCATION_PROPERTY == evt.getPropertyName()) {
 					if (!isIgnoreUpdateFromView())
@@ -112,6 +116,7 @@ public class RecordPairFrame extends InternalFrame {
 	/**
 	 * Overridden to update the splitPane position and to enable and disable the Layout changes.
 	 */
+	@Override
 	public void updateFromModel() {
 		super.updateFromModel();
 
@@ -128,6 +133,7 @@ public class RecordPairFrame extends InternalFrame {
 		splitPane.setEnabled(enableEditing);
 	}
 
+	@Override
 	public void setRecordData(RecordData recordData) {
 		topTable.setRecordData(recordData);
 		if (pair) {

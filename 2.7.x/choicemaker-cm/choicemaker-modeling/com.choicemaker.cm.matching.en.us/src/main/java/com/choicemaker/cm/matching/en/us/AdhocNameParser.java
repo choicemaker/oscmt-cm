@@ -483,6 +483,7 @@ public class AdhocNameParser {
 		}
 	}
 
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -495,6 +496,7 @@ public class AdhocNameParser {
 		return result;
 	}
 
+	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
 			return true;
@@ -573,6 +575,7 @@ public class AdhocNameParser {
 		return retVal;
 	}
 
+	@Override
 	public String toString() {
 		return "AdhocNameParser [name=" + name + ", genericFirstNames="
 				+ toShortString(gfn) + ", childOfIndicators="

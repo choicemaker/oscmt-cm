@@ -8,7 +8,7 @@
 package com.choicemaker.cm.io.xml.base;
 
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.base.Match;
+import com.choicemaker.cm.core.Match;
 import com.choicemaker.cm.core.base.MatchCandidate;
 
 /**
@@ -45,6 +45,7 @@ public class XmlMatchCandidate extends MatchCandidate {
 	 * 
 	 * @return  The XML representation of the match record.
 	 */
+	@Override
 	public Object getProfile() {
 		return profile;
 	}

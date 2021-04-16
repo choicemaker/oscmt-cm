@@ -68,7 +68,8 @@ public class CompositeMarkedRecordPairSourceGui extends MarkedRecordPairSourceGu
         init(s);
     }
 
-    public void setVisible(boolean b) {
+    @Override
+	public void setVisible(boolean b) {
 			if (b) {
         setFields();
         setEnabledness();
@@ -92,11 +93,13 @@ public class CompositeMarkedRecordPairSourceGui extends MarkedRecordPairSourceGu
         }
     }
 
-    public void setEnabledness() {
+    @Override
+	public void setEnabledness() {
         okayButton.setEnabled(sourceFileName.getText().length() > 0 && sourcesTable.getRowCount() > 0);
     }
 
-    public void buildSource() {
+    @Override
+	public void buildSource() {
         CompositeMarkedRecordPairSource compSource = (CompositeMarkedRecordPairSource) getSource();
         compSource.removeAll();
         compSource.setFileName(getSourceFileName());
@@ -116,7 +119,8 @@ public class CompositeMarkedRecordPairSourceGui extends MarkedRecordPairSourceGu
     /**
      * Executed by the superclass constructor to build the panel.
      */
-    public void buildContent() {
+    @Override
+	public void buildContent() {
         sourceNameLabel = new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.dialog.source.name"));
         sourceFileName = new JTextField(35);
         sourceFileBrowseButton = new JButton(ChoiceMakerCoreMessages.m.formatMessage("browse.elipsis"));
@@ -128,6 +132,7 @@ public class CompositeMarkedRecordPairSourceGui extends MarkedRecordPairSourceGu
         DefaultTableModel model = new DefaultTableModel() {
         	private static final long serialVersionUID = 1L;
 
+			@Override
 			public boolean isCellEditable(int row, int column) {
         		return column == 1;
         	}
@@ -157,11 +162,13 @@ public class CompositeMarkedRecordPairSourceGui extends MarkedRecordPairSourceGu
         layoutContent();
     }
 
-    public void addContentListeners() {
+    @Override
+	public void addContentListeners() {
         super.addContentListeners();
 
 		//sourceFileBrowseButton
 		sourceFileBrowseButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent ev) {
 				File f = FileChooserFactory.selectMrpsFile(parent);
 				if (f != null) {
@@ -172,7 +179,8 @@ public class CompositeMarkedRecordPairSourceGui extends MarkedRecordPairSourceGu
 
         // removeButton
         removeButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ev) {
+            @Override
+			public void actionPerformed(ActionEvent ev) {
                 DefaultTableModel m = (DefaultTableModel) sourcesTable.getModel();
                 int[] si = sourcesTable.getSelectedRows();
                 for (int i = si.length - 1; i >= 0; i--) {
@@ -184,7 +192,8 @@ public class CompositeMarkedRecordPairSourceGui extends MarkedRecordPairSourceGu
 
         //addButton
         addButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ev) {
+            @Override
+			public void actionPerformed(ActionEvent ev) {
 				DefaultTableModel m = (DefaultTableModel) sourcesTable.getModel();
 				File[] fs = FileChooserFactory.selectMrpsFiles(parent);
                 for (int i = 0; i < fs.length; i++) {

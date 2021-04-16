@@ -26,6 +26,7 @@ public class CompositeRecordSource extends CompositeSource implements RecordSour
 	 * @throws  NullPointerException if there are no more records.
 	 * @return  the next record. 
 	 */
+	@Override
 	public Record getNext() throws java.io.IOException {
 		Record r = ((RecordSource) getCurSource()).getNext();
 		nextValid();

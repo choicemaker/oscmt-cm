@@ -10,7 +10,7 @@ package com.choicemaker.cm.mmdevtools.util;
 import java.util.Random;
 
 import com.choicemaker.cm.core.Record;
-import com.choicemaker.cm.core.base.RecordData;
+import com.choicemaker.cm.core.RecordData;
 
 /**
  *
@@ -36,10 +36,12 @@ public class RandomFilter implements Filter {
 		}
 	}
 
+	@Override
 	public boolean satisfy(Record r) {
 		return getRandom().nextFloat() < prob;
 	}
 
+	@Override
 	public boolean satisfy(RecordData r) {
 		return getRandom().nextFloat() < prob;
 	}

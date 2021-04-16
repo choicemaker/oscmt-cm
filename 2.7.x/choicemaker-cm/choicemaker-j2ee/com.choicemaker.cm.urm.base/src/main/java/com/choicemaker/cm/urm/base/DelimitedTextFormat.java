@@ -24,6 +24,7 @@ public class DelimitedTextFormat implements ITextFormat {
 	public DelimitedTextFormat(char separator){
 		this.separator = separator;
 	}
+	@Override
 	public void accept(ITextFormatVisitor ext) {
 		ext.visit(this);
 	}

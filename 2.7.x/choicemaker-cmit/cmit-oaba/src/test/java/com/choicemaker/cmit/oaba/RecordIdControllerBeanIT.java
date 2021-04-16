@@ -26,25 +26,26 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.choicemaker.cm.batch.BatchJob;
-import com.choicemaker.cm.batch.OperationalPropertyController;
-import com.choicemaker.cm.batch.ProcessingController;
+import com.choicemaker.cm.batch.api.BatchJob;
+import com.choicemaker.cm.batch.api.OperationalPropertyController;
+import com.choicemaker.cm.batch.api.EventPersistenceManager;
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSink;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSource;
-import com.choicemaker.cm.io.blocking.automated.offline.core.ImmutableRecordIdTranslator;
-import com.choicemaker.cm.io.blocking.automated.offline.core.MutableRecordIdTranslator;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ImmutableRecordIdTranslatorLocal;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordIdController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.RecordIdSink;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.RecordIdTranslatorIT;
+import com.choicemaker.cm.oaba.api.ImmutableRecordIdTranslatorLocal;
+import com.choicemaker.cm.oaba.api.OabaJobManager;
+import com.choicemaker.cm.oaba.api.OabaParametersController;
+import com.choicemaker.cm.oaba.api.OabaService;
+import com.choicemaker.cm.oaba.api.OabaSettingsController;
+import com.choicemaker.cm.oaba.api.RecordIdController;
+import com.choicemaker.cm.oaba.api.RecordSourceController;
+import com.choicemaker.cm.oaba.api.ServerConfigurationController;
+import com.choicemaker.cm.oaba.api.ServerConfigurationException;
+import com.choicemaker.cm.oaba.api.ImmutableRecordIdTranslatorLocal;
+import com.choicemaker.cm.oaba.core.IRecordIdSink;
+import com.choicemaker.cm.oaba.core.IRecordIdSource;
+import com.choicemaker.cm.oaba.core.ImmutableRecordIdTranslator;
+import com.choicemaker.cm.oaba.core.MutableRecordIdTranslator;
+import com.choicemaker.cm.oaba.ejb.RecordIdSink;
+import com.choicemaker.cm.oaba.ejb.RecordIdTranslatorIT;
 import com.choicemaker.cmit.oaba.util.OabaDeploymentUtils;
 import com.choicemaker.cmit.utils.j2ee.OabaTestUtils;
 import com.choicemaker.cmit.utils.j2ee.TestEntityCounts;
@@ -119,10 +120,10 @@ public class RecordIdControllerBeanIT {
 	private EntityManager em;
 
 	@EJB
-	private OabaJobController oabaController;
+	private OabaJobManager oabaManager;
 
 	@EJB(beanName = "OabaJobControllerBean")
-	private OabaJobController jobController;
+	private OabaJobManager jobManager;
 
 	@EJB
 	private OabaParametersController paramsController;
@@ -130,8 +131,8 @@ public class RecordIdControllerBeanIT {
 	@EJB
 	private OabaSettingsController oabaSettingsController;
 
-	@EJB
-	private ProcessingController processingController;
+	@EJB (beanName = "OabaEventManager")
+	private EventPersistenceManager eventManager;
 
 	@EJB
 	private OabaService oabaService;
@@ -196,7 +197,7 @@ public class RecordIdControllerBeanIT {
 		WellKnownTestConfiguration c = getTestConfiguration();
 		return OabaTestUtils.createPersistentOabaJob(c, e2service,
 				rsController, oabaSettingsController, serverController,
-				jobController, te);
+				jobManager, te);
 	}
 
 	MutableRecordIdTranslator<?> createEmptyTranslator(String tag)
@@ -210,17 +211,17 @@ public class RecordIdControllerBeanIT {
 	@Before
 	public void setUp() throws Exception {
 		te =
-			new TestEntityCounts(logger, oabaController, paramsController,
+			new TestEntityCounts(logger, oabaManager, paramsController,
 					oabaSettingsController, serverController,
-					processingController, opPropController, rsController,
+					eventManager, opPropController, rsController,
 					ridController);
 	}
 
 	public void checkCounts() {
 		if (te != null) {
-			te.checkCounts(logger, em, utx, oabaController, paramsController,
+			te.checkCounts(logger, em, utx, oabaManager, paramsController,
 					oabaSettingsController, serverController,
-					processingController, opPropController, rsController,
+					eventManager, opPropController, rsController,
 					ridController);
 		} else {
 			throw new Error("Counts not initialized");

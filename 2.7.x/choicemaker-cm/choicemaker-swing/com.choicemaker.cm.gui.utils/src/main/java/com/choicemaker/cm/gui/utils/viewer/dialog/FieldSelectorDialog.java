@@ -23,6 +23,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.WindowConstants;
 
 import com.choicemaker.cm.gui.utils.JavaHelpUtils;
 import com.choicemaker.cm.gui.utils.fieldselectortable.FieldSelectorTable;
@@ -49,7 +50,7 @@ public class FieldSelectorDialog extends JDialog {
 		buildPanel();
 		addListeners();
 		layoutPanel();
-		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		
 		pack();
 		setLocationRelativeTo(frame);
@@ -83,18 +84,21 @@ public class FieldSelectorDialog extends JDialog {
 		JavaHelpUtils.enableHelpKey(this, "train.gui.dialog.fieldselector");
 		
 		frameAlias.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				FieldSelectorDialog.this.recordPairFrameModel.setAlias(frameAlias.getText());
 			}
 		});
 		
 		frameAlias.addFocusListener(new FocusAdapter() {
+			@Override
 			public void focusLost(FocusEvent e) {
 				FieldSelectorDialog.this.recordPairFrameModel.setAlias(frameAlias.getText());
 			}
 		});
 		
 		set.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 //				set();
 				dispose();

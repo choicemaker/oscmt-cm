@@ -57,6 +57,7 @@ public interface XmlSpecification extends XmlConfigurable {
 	 * &lt;/configurable&gt;
 	 * </pre>
 	 */
+	@Override
 	String toXML();
 
 	/**

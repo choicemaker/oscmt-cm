@@ -24,8 +24,8 @@ import com.choicemaker.cm.core.configure.ConfigurationUtils;
 import com.choicemaker.cm.core.xmlconf.XmlModuleInitializer;
 import com.choicemaker.cm.io.xmlenc.mgmt.InMemoryXmlEncManager;
 import com.choicemaker.cm.io.xmlenc.mgmt.XmlEncryptionManager;
-import com.choicemaker.xmlencryption.CredentialSet;
 import com.choicemaker.util.StringUtils;
+import com.choicemaker.xmlencryption.CredentialSet;
 
 /**
  * XML configuration for an in-memory XML EncryptionManager.
@@ -94,7 +94,7 @@ public class XmlEncInitializer implements XmlModuleInitializer {
 					Element ep = cs.getChild("properties");
 					DocType dt = new DocType("properties",
 							"http://java.sun.com/dtd/properties.dtd");
-					Document d = new Document((Element) ep.clone(), dt);
+					Document d = new Document(ep.clone(), dt);
 					XMLOutputter outp = new XMLOutputter();
 					String s = outp.outputString(d);
 

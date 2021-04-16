@@ -17,7 +17,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
-import java.io.IOException;
 import java.util.logging.Logger;
 
 import javax.swing.DefaultListModel;
@@ -113,6 +112,7 @@ public class FlatFileMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui
 		init(s);
 	}
 
+	@Override
 	public void setVisible(boolean b) {
 		if (b) {
 			setFields();
@@ -179,6 +179,7 @@ public class FlatFileMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui
 		}
 	}
 
+	@Override
 	public void setEnabledness() {
 		boolean ok =
 			fileName.getText().length() > 0
@@ -211,6 +212,7 @@ public class FlatFileMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui
 		}
 	}
 
+	@Override
 	public void buildSource() {
 		FlatFileMarkedRecordPairSource ffSource = (FlatFileMarkedRecordPairSource) getSource();
 		ffSource.setFileName(getSourceFileName());
@@ -241,6 +243,7 @@ public class FlatFileMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui
 	/**
 	 * Executed by the superclass constructor to build the panel.
 	 */
+	@Override
 	public void buildContent() {
 		sourceNameLabel = new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.dialog.source.name"));
 		sourceFileName = new JTextField(35);
@@ -300,12 +303,14 @@ public class FlatFileMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui
 		layoutContent();
 	}
 
+	@Override
 	public void addContentListeners() {
 		super.addContentListeners();
 		EnablednessGuard dl = new EnablednessGuard(this);
 
 		//sourceFileBrowseButton
 		sourceFileBrowseButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent ev) {
 				File f = FileChooserFactory.selectMrpsFile(parent);
 				if (f != null) {
@@ -316,6 +321,7 @@ public class FlatFileMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui
 
 		//browsebutton
 		browseButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent ev) {
 				File file = FileChooserFactory.selectFlatFile(parent);
 				if (file != null) {
@@ -325,6 +331,7 @@ public class FlatFileMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui
 		});
 
 		ItemListener il = new ItemListener() {
+			@Override
 			public void itemStateChanged(ItemEvent e) {
 				setEnabledness();
 			}
@@ -337,6 +344,7 @@ public class FlatFileMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui
 		if (!save) {
 			// removeButton
 			removeButton.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent ev) {
 					DefaultListModel m = (DefaultListModel) sourcesList.getModel();
 					int[] si = sourcesList.getSelectedIndices();
@@ -349,6 +357,7 @@ public class FlatFileMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui
 
 			//addButton
 			addButton.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent ev) {
 					File[] fs = FileChooserFactory.selectMrpsFiles(parent);
 					DefaultListModel m = (DefaultListModel) sourcesList.getModel();
@@ -360,6 +369,7 @@ public class FlatFileMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui
 			});
 
 			modeButton.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent ev) {
 					if (mode == CREATE) {
 						mode = GENERATE;
@@ -377,6 +387,7 @@ public class FlatFileMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui
 			});
 
 			sourcesList.addListSelectionListener(new ListSelectionListener() {
+				@Override
 				public void valueChanged(ListSelectionEvent e) {
 					setEnabledness();
 				}
@@ -389,6 +400,7 @@ public class FlatFileMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui
 		fileName.getDocument().addDocumentListener(dl);
 		separator.getDocument().addDocumentListener(dl);
 		separatorList.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				setEnabledness();
 			}
@@ -397,6 +409,7 @@ public class FlatFileMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui
 		JavaHelpUtils.enableHelpKey(this, "io.gui.flatfile.mrps");
 	}
 
+	@Override
 	protected void generate() {
 		Object[] sources = ((DefaultListModel) sourcesList.getModel()).toArray();
 		String[] sourceNames = new String[sources.length];

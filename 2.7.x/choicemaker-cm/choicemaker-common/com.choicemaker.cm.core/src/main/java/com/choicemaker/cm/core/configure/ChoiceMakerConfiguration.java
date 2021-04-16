@@ -1,10 +1,7 @@
 package com.choicemaker.cm.core.configure;
 
 import java.io.File;
-import java.util.List;
 
-import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.MachineLearner;
 import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.compiler.ICompiler;
 

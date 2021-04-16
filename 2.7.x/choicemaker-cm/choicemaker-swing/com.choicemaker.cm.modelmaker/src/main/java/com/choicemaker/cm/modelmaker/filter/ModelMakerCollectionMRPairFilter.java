@@ -39,6 +39,7 @@ public class ModelMakerCollectionMRPairFilter extends
 		setAcceptedPairs(pairs);
 	}
 
+	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		String propertyName = evt.getPropertyName();
 		Object source = evt.getSource();

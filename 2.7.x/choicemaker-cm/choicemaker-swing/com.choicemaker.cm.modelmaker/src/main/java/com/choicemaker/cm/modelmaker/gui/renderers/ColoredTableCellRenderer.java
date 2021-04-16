@@ -35,7 +35,8 @@ public class ColoredTableCellRenderer extends DefaultTableCellRenderer {
         return instance;
     }
 
-    public Component getTableCellRendererComponent(JTable table, Object value, boolean selected, boolean focused, int row, int column) {
+    @Override
+	public Component getTableCellRendererComponent(JTable table, Object value, boolean selected, boolean focused, int row, int column) {
         setEnabled(table == null || table.isEnabled()); // see question above
         if (backgroundColor != null) {
             setBackground(backgroundColor[row][column]);

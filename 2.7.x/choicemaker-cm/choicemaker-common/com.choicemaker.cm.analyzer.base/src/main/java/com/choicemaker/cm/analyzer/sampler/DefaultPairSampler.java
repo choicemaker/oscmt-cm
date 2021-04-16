@@ -16,11 +16,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
+import com.choicemaker.cm.core.ActiveClues;
+import com.choicemaker.cm.core.BooleanActiveClues;
 import com.choicemaker.cm.core.ClueSet;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.base.ActiveClues;
-import com.choicemaker.cm.core.base.BooleanActiveClues;
-import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
+import com.choicemaker.cm.core.MutableMarkedRecordPair;
 import com.choicemaker.util.IntArrayList;
 import com.choicemaker.util.IntValuedHashMap;
 
@@ -56,8 +56,6 @@ public class DefaultPairSampler implements PairSampler {
 	private static final double LOG2 = Math.log(2);
 
 	private final ImmutableProbabilityModel model;
-	private final ClueSet clueSet;
-	private final boolean[] enabledClues;
 	private final int target;
 
 	private boolean initialized = false;
@@ -88,8 +86,6 @@ public class DefaultPairSampler implements PairSampler {
 	 */
 	public DefaultPairSampler(ImmutableProbabilityModel model, int target) {
 		this.model = model;
-		this.clueSet = model.getClueSet();
-		this.enabledClues = model.getCluesToEvaluate();
 		this.target = target;
 
 		// Postconditions
@@ -112,6 +108,7 @@ public class DefaultPairSampler implements PairSampler {
 	/**
 	 * Returns the number of pairs that have been retained to this point.
 	 */
+	@Override
 	public int getNumRetained() {
 		return numRetained;
 	}
@@ -135,6 +132,7 @@ public class DefaultPairSampler implements PairSampler {
 	/**
 	 * Returns a List containing the retained pairs.
 	 */
+	@Override
 	public List getRetainedPairs() {
 		List ret = null;
 		if (retained!=null) {
@@ -165,12 +163,16 @@ public class DefaultPairSampler implements PairSampler {
 	/**
 	 * Process an incoming pair.
 	 */
+	@Override
 	public void processPair(MutableMarkedRecordPair pair) {
 		maybeInit();
 
 		// Check whether the pair has active clues computed
 		if (pair.getActiveClues() == null) {
-			pair.setActiveClues(this.clueSet.getActiveClues(pair.getQueryRecord(), pair.getMatchRecord(), this.enabledClues));
+			final ClueSet clueSet = model.getClueSet();
+			final boolean[] enabledClues = model.getCluesToEvaluate();
+			pair.setActiveClues(clueSet.getActiveClues(pair.getQueryRecord(),
+					pair.getMatchRecord(), enabledClues));
 		}
 
 		float score = getScore(pair, false);
@@ -524,6 +526,7 @@ public class DefaultPairSampler implements PairSampler {
 			}
 		}
 
+		@Override
 		public boolean equals(Object other) {
 			IntArrayWrapper w = (IntArrayWrapper) other;
 			if (wrappee.length == w.wrappee.length) {
@@ -538,6 +541,7 @@ public class DefaultPairSampler implements PairSampler {
 			return false;
 		}
 
+		@Override
 		public int hashCode() {
 			int ret = 0;
 			for (int i = 0, n = wrappee.length; i < n; i++) {
@@ -558,6 +562,7 @@ public class DefaultPairSampler implements PairSampler {
 			this.index = index;
 			this.score = score;
 		}
+		@Override
 		public int compareTo(Object other) {
 			float diff = score - ((MrpWrapper)other).score;
 			return diff < 0 ? -1 :

@@ -70,47 +70,56 @@ public class PluginRegistryAdapter {
 			this.delegate = o;
 		}
 
+		@Override
 		public CMConfigurationElement[] getConfigurationElementsFor(
 				String extensionPointId) {
 			return ConfigurationElementAdapter.convert(delegate.getConfigurationElementsFor(extensionPointId));
 		}
 
+		@Override
 		public CMConfigurationElement[] getConfigurationElementsFor(
 				String pluginId, String extensionPointName) {
 			return ConfigurationElementAdapter.convert(delegate.getConfigurationElementsFor(pluginId,
 					extensionPointName));
 		}
 
+		@Override
 		public CMConfigurationElement[] getConfigurationElementsFor(
 				String pluginId, String extensionPointName, String extensionId) {
 			return ConfigurationElementAdapter.convert(delegate.getConfigurationElementsFor(pluginId,
 					extensionPointName, extensionId));
 		}
 
+		@Override
 		public CMExtension getExtension(String extensionPointId,
 				String extensionId) {
 			return ExtensionAdapter.convert(delegate.getExtension(extensionPointId, extensionId));
 		}
 
+		@Override
 		public CMExtension getExtension(String pluginId,
 				String extensionPointName, String extensionId) {
 			return ExtensionAdapter.convert(delegate.getExtension(pluginId, extensionPointName,
 					extensionId));
 		}
 
+		@Override
 		public CMExtensionPoint getExtensionPoint(String extensionPointId) {
 			return ExtensionPointAdapter.convert(delegate.getExtensionPoint(extensionPointId));
 		}
 
+		@Override
 		public CMExtensionPoint getExtensionPoint(String pluginId,
 				String extensionPointName) {
 			return ExtensionPointAdapter.convert(delegate.getExtensionPoint(pluginId, extensionPointName));
 		}
 
+		@Override
 		public CMExtensionPoint[] getExtensionPoints() {
 			return ExtensionPointAdapter.convert(delegate.getExtensionPoints());
 		}
 
+		@Override
 		public CMPluginDescriptor getPluginDescriptor(String pluginId) {
 			return PluginDescriptorAdapter.convert(delegate.getPluginDescriptor(pluginId));
 		}
@@ -120,10 +129,12 @@ public class PluginRegistryAdapter {
 			throw new Error("not implemented");
 		}
 
+		@Override
 		public CMPluginDescriptor[] getPluginDescriptors() {
 			return PluginDescriptorAdapter.convert(delegate.getPluginDescriptors());
 		}
 
+		@Override
 		public CMPluginDescriptor[] getPluginDescriptors(String pluginId) {
 			return PluginDescriptorAdapter.convert(delegate.getPluginDescriptors(pluginId));
 		}
@@ -141,47 +152,56 @@ public class PluginRegistryAdapter {
 			this.delegate = o;
 		}
 
+		@Override
 		public IConfigurationElement[] getConfigurationElementsFor(
 				String extensionPointId) {
 			return ConfigurationElementAdapter.convert(delegate.getConfigurationElementsFor(extensionPointId));
 		}
 
+		@Override
 		public IConfigurationElement[] getConfigurationElementsFor(
 				String pluginId, String extensionPointName) {
 			return ConfigurationElementAdapter.convert(delegate.getConfigurationElementsFor(pluginId,
 					extensionPointName));
 		}
 
+		@Override
 		public IConfigurationElement[] getConfigurationElementsFor(
 				String pluginId, String extensionPointName, String extensionId) {
 			return ConfigurationElementAdapter.convert(delegate.getConfigurationElementsFor(pluginId,
 					extensionPointName, extensionId));
 		}
 
+		@Override
 		public IExtension getExtension(String extensionPointId,
 				String extensionId) {
 			return ExtensionAdapter.convert(delegate.getExtension(extensionPointId, extensionId));
 		}
 
+		@Override
 		public IExtension getExtension(String pluginId,
 				String extensionPointName, String extensionId) {
 			return ExtensionAdapter.convert(delegate.getExtension(pluginId, extensionPointName,
 					extensionId));
 		}
 
+		@Override
 		public IExtensionPoint getExtensionPoint(String extensionPointId) {
 			return ExtensionPointAdapter.convert(delegate.getExtensionPoint(extensionPointId));
 		}
 
+		@Override
 		public IExtensionPoint getExtensionPoint(String pluginId,
 				String extensionPointName) {
 			return ExtensionPointAdapter.convert(delegate.getExtensionPoint(pluginId, extensionPointName));
 		}
 
+		@Override
 		public IExtensionPoint[] getExtensionPoints() {
 			return ExtensionPointAdapter.convert(delegate.getExtensionPoints());
 		}
 
+		@Override
 		public IPluginDescriptor getPluginDescriptor(String pluginId) {
 			return PluginDescriptorAdapter.convert(delegate.getPluginDescriptor(pluginId));
 		}
@@ -191,10 +211,12 @@ public class PluginRegistryAdapter {
 			throw new Error("not implemented");
 		}
 
+		@Override
 		public IPluginDescriptor[] getPluginDescriptors() {
 			return PluginDescriptorAdapter.convert(delegate.getPluginDescriptors());
 		}
 
+		@Override
 		public IPluginDescriptor[] getPluginDescriptors(String pluginId) {
 			return PluginDescriptorAdapter.convert(delegate.getPluginDescriptors(pluginId));
 		}

@@ -30,9 +30,9 @@ public class DbRecordCollection extends RefRecordCollection {
 	 * Constructs a <code>DbRecordCollection</code> using the data source JNDI name, user name, password and the query that provides a list of records ids.
 	 * The record collection will consist of the records with the specified IDs.
 	 *
-	 * @param   dbConfig
-	 * @param 	idsQuery The query that provides a list of records ids.
-	 * @param	maxSize
+	 * @param   url
+	 * @param 	name
+	 * @param	bufferSize
 
 	 */
 	public DbRecordCollection(String url, String name, int bufferSize) throws RecordCollectionException{
@@ -68,6 +68,7 @@ public class DbRecordCollection extends RefRecordCollection {
 		name = n;
 	}
 
+	@Override
 	public void accept(IRecordCollectionVisitor ext)throws RecordCollectionException{
 		ext.visit(this);
 	}
@@ -87,6 +88,7 @@ public class DbRecordCollection extends RefRecordCollection {
 			bufferSize = sz;
 	}
 
+	@Override
 	public String toString() {
 		return super.toString()+"|"+this.name;
 	}

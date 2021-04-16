@@ -55,12 +55,14 @@ public class ToolsMenu extends JMenu {
 			setEnabled(false);
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			new MatcherDialog(modelMaker).setVisible(true);
 		}
 		/**
 		 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
 		 */
+		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
 			ImmutableProbabilityModel model = modelMaker.getProbabilityModel();
 			setEnabled(model != null && model.canEvaluate());
@@ -77,12 +79,14 @@ public class ToolsMenu extends JMenu {
 			setEnabled(false);
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			new GeoFunctionsDialog(modelMaker).setVisible(true);
 		}
 		/**
 		 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
 		 */
+		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
 			ImmutableProbabilityModel model = modelMaker.getProbabilityModel();
 			setEnabled(model != null);
@@ -102,10 +106,12 @@ public class ToolsMenu extends JMenu {
 			setEnabled(false);
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			new ExportProbabilitiesDialog(modelMaker).setVisible(true);
 		}
 
+		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
 			setEnabled(modelMaker.haveSourceList());
 		}
@@ -120,6 +126,7 @@ public class ToolsMenu extends JMenu {
 		AbstractAction stringComparator = new AbstractAction("String Comparison Functions...") {
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public void actionPerformed(ActionEvent ev) {
 				new StringComparator(modelMaker).setVisible(true);
 			}
@@ -131,6 +138,7 @@ public class ToolsMenu extends JMenu {
 		AbstractAction collections = new AbstractAction("Collections Lookup...") {
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				new CollectionsDialog(modelMaker).setVisible(true);
 			}
@@ -140,6 +148,7 @@ public class ToolsMenu extends JMenu {
 		AbstractAction buildModelsJar = new AbstractAction("Build Holder Classes and DB Objects...") {
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				new ObjectMakerDialog(modelMaker).setVisible(true);
 			};

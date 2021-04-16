@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plugin>
+<plugin
+   id="com.choicemaker.cm.aba.inmemory"
+   name="Inmemory Plug-in"
+   version="2.7.0"
+   provider-name="ChoiceMaker">
+
+   <runtime>
+      <library name="inmemory.jar">
+         <export name="*"/>
+      </library>
+   </runtime>
+   <requires>
+      <import plugin="com.choicemaker.cm.core"/>
+      <import plugin="com.choicemaker.cm.io.db.base"/>
+      <import plugin="com.choicemaker.cm.aba.base"/>
+   </requires>
+
+
+</plugin>

@@ -20,10 +20,12 @@ import com.choicemaker.cm.io.xml.base.SimpleXmlMarkedRecordPairSource;
  */
 public class SimpleXmlMarkedRecordPairSourceXmlConf extends XmlMarkedRecordPairSourceXmlConf {
 
+	@Override
 	public void add(MarkedRecordPairSource src) throws XmlConfException {
 		throw new XmlConfException("Can't create a new SimpleXmlMarkedRecordPairSource!");
 	}
 	
+	@Override
 	public MarkedRecordPairSource getMarkedRecordPairSource(String fileName, Element e, ImmutableProbabilityModel model) {
 		return new SimpleXmlMarkedRecordPairSource(fileName, model);
 	}

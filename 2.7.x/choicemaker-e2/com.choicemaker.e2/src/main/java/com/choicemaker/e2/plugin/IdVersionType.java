@@ -9,7 +9,9 @@ package com.choicemaker.e2.plugin;
 
 public class IdVersionType {
 
-	public static enum TYPE { plugin, fragment };
+	public static enum TYPE {
+		plugin, fragment
+	};
 
 	public final String id;
 	public final String version;
@@ -17,8 +19,8 @@ public class IdVersionType {
 
 	@Override
 	public String toString() {
-		return "IdVersionType [id=" + id + ", version=" + version
-				+ ", type=" + type + "]";
+		return "IdVersionType [id=" + id + ", version=" + version + ", type="
+				+ type + "]";
 	}
 
 	@Override

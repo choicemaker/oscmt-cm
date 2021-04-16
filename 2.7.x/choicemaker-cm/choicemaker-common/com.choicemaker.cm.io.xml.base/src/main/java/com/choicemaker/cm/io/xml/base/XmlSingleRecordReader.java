@@ -54,6 +54,7 @@ public class XmlSingleRecordReader implements RecordHandler {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.io.xml.RecordHandler#handleRecord(com.choicemaker.cm.core.Record)
 	 */
+	@Override
 	public void handleRecord(Record r) throws SAXException {
 		record = r;
 	}

@@ -7,9 +7,9 @@ import com.choicemaker.e2.CMPluginDescriptor;
 import com.choicemaker.e2.CMPluginRegistry;
 
 public class DoNothingRegistry implements CMPluginRegistry {
-	
+
 	private static final DoNothingRegistry instance = new DoNothingRegistry();
-	
+
 	public static final DoNothingRegistry getInstance() {
 		return instance;
 	}
@@ -24,19 +24,20 @@ public class DoNothingRegistry implements CMPluginRegistry {
 	}
 
 	@Override
-	public CMConfigurationElement[] getConfigurationElementsFor(
-			String pluginId, String extensionPointName) {
+	public CMConfigurationElement[] getConfigurationElementsFor(String pluginId,
+			String extensionPointName) {
 		return new CMConfigurationElement[0];
 	}
 
 	@Override
-	public CMConfigurationElement[] getConfigurationElementsFor(
-			String pluginId, String extensionPointName, String extensionId) {
+	public CMConfigurationElement[] getConfigurationElementsFor(String pluginId,
+			String extensionPointName, String extensionId) {
 		return new CMConfigurationElement[0];
 	}
 
 	@Override
-	public CMExtension getExtension(String extensionPointId, String extensionId) {
+	public CMExtension getExtension(String extensionPointId,
+			String extensionId) {
 		return null;
 	}
 

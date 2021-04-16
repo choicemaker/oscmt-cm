@@ -22,6 +22,7 @@ public class JdomXmlSpecificationParser
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.base.configure.AbstractXmlSpecificationParser#getBuilder()
 	 */
+	@Override
 	public IBuilder getBuilder() {
 		return new JdomBuilder();
 	}

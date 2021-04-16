@@ -34,6 +34,7 @@ public class CompositeEntityIterator implements Iterator {
 		}
 	}
 	
+	@Override
 	public void finalize () {
 		try {
 			source.close();
@@ -46,6 +47,7 @@ public class CompositeEntityIterator implements Iterator {
 	/* (non-Javadoc)
 	 * @see java.util.Iterator#remove()
 	 */
+	@Override
 	public void remove() {
 		throw new RuntimeException ("This method is not implemented.");
 	}
@@ -53,6 +55,7 @@ public class CompositeEntityIterator implements Iterator {
 	/* (non-Javadoc)
 	 * @see java.util.Iterator#hasNext()
 	 */
+	@Override
 	public boolean hasNext() {
 		boolean ret = false;
 		try {
@@ -66,6 +69,7 @@ public class CompositeEntityIterator implements Iterator {
 	/* (non-Javadoc)
 	 * @see java.util.Iterator#next()
 	 */
+	@Override
 	public Object next() {
 		Object o = null;
 		try {

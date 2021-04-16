@@ -269,24 +269,21 @@ public class ProbabilityModelsXmlConf {
 			boolean[] cluesToEvaluate =
 				ArrayHelper.getTrueArray(clueDesc.length);
 			List<Element> cl = m.getChildren("clue");
-			int[] oldClueNums = new int[cl.size()];
+			int[] clueNums = new int[cl.size()];
 			int i = 0;
 			Iterator<Element> iCl = cl.iterator();
 			while (iCl.hasNext()) {
-				Element c = (Element) iCl.next();
+				Element c = iCl.next();
 				String name = c.getAttributeValue("name");
 				Object o = cm.get(name);
-				if (o == null) {
-					o = getByOldName(clueDesc, name);
-				}
 				if (o != null) {
 					int index = ((Integer) o).intValue();
-					oldClueNums[i] = index;
+					clueNums[i] = index;
 					cluesToEvaluate[index] =
 						Boolean.valueOf(c.getAttributeValue("evaluate"))
 								.booleanValue();
 				} else {
-					oldClueNums[i] = -1;
+					clueNums[i] = -1;
 				}
 				++i;
 			}
@@ -296,7 +293,7 @@ public class ProbabilityModelsXmlConf {
 			MlModelConf mc =
 				(MlModelConf) ExtensionPointMapper.getInstance(
 						ChoiceMakerExtensionPoint.CM_CORE_MACHINELEARNER, name);
-			ml = mc.readMachineLearner(mle, accessor, cl, oldClueNums);
+			ml = mc.readMachineLearner(mle, accessor, cl, clueNums);
 			retVal =
 				new MutableProbabilityModel(fileName, clueFileName, accessor, ml,
 						cluesToEvaluate, trainingSource, trainedWithHolds,
@@ -310,29 +307,6 @@ public class ProbabilityModelsXmlConf {
 		}
 		assert retVal != null;
 		return retVal;
-	}
-
-	private static Integer getByOldName(ClueDesc[] clueDescs, String name) {
-		int u = name.lastIndexOf('_');
-		if (u != -1 && u < name.length() - 1) {
-			try {
-				int num = Integer.parseInt(name.substring(u + 1));
-				String prefix = name.substring(0, u) + "[";
-				int i = 0;
-				while (i < clueDescs.length
-					&& !clueDescs[i].name.startsWith(prefix)) {
-					++i;
-				}
-				i += num;
-				if (i < clueDescs.length
-					&& clueDescs[i].name.startsWith(prefix)) {
-					return new Integer(i);
-				}
-			} catch (NumberFormatException ex) {
-				logger.info("Caught NumberFormatException: " + ex);
-			}
-		}
-		return null;
 	}
 
 	public static void loadProductionProbabilityModels(ICompiler compiler,
@@ -387,7 +361,7 @@ public class ProbabilityModelsXmlConf {
 					String modelName = name.trim();
 					if (!modelName.isEmpty()) {
 						assert m instanceof MutableProbabilityModel;
-						((MutableProbabilityModel) m).setModelName(modelName);
+						m.setModelName(modelName);
 					}
 				}
 

@@ -29,6 +29,7 @@ class AccessorInvocationHandler implements InvocationHandler {
 			methodMap.put(methods[i].getName(), methods[i]);
 		}
 	}
+	@Override
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 		Method targetMethod = (Method) methodMap.get(method.getName());
 		try {

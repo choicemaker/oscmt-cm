@@ -132,6 +132,7 @@ public class ParsedDataWriter extends XmlWriter {
 		endElement();
 	}
 
+	@Override
 	public void close() throws IOException {
 		endElement();
 		super.close();

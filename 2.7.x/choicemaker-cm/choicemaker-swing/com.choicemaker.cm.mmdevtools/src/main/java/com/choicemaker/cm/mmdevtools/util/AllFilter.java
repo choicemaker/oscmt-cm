@@ -8,16 +8,18 @@
 package com.choicemaker.cm.mmdevtools.util;
 
 import com.choicemaker.cm.core.Record;
-import com.choicemaker.cm.core.base.RecordData;
+import com.choicemaker.cm.core.RecordData;
 
 /**
  * @author Owner
  *
  */
 public class AllFilter implements Filter {
+	@Override
 	public boolean satisfy(Record r) {
 		return true;	
 	}
+	@Override
 	public boolean satisfy(RecordData rd) {
 		return true;
 	}

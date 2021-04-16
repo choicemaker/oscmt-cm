@@ -14,7 +14,7 @@
    <requires>
       <import plugin="com.choicemaker.cm.core"/>
       <import plugin="com.choicemaker.cm.io.db.base"/>
-      <import plugin="com.choicemaker.cm.io.blocking.automated.base"/>
+      <import plugin="com.choicemaker.cm.aba.base"/>
    </requires>
 
 
@@ -23,7 +23,7 @@
          point="com.choicemaker.e2.applications">
       <application>
          <run
-               class="com.choicemaker.cm.io.db.oracle.dbom.DbDbObjectMaker">
+               class="com.choicemaker.cm.io.db.oracle.dbom.OracleDbObjectMaker">
          </run>
       </application>
    </extension>
@@ -31,13 +31,13 @@
          point="com.choicemaker.cm.core.objectGenerator">
       <generator
             description="Oracle Custom Objects (DDL)"
-            class="com.choicemaker.cm.io.db.oracle.dbom.DbDbObjectMaker">
+            class="com.choicemaker.cm.io.db.oracle.dbom.OracleDbObjectMaker">
       </generator>
    </extension>
    <extension
          id="oracleDatabaseAccessor"
          name="oracleDatabaseAccessor"
-         point="com.choicemaker.cm.io.blocking.automated.base.databaseAccessor">
+         point="com.choicemaker.cm.aba.base.databaseAccessor">
       <databaseAccessor
             class="com.choicemaker.cm.io.db.oracle.blocking.OraDatabaseAccessor">
       </databaseAccessor>

@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Stack;
 import java.util.logging.Logger;
 
+import com.choicemaker.cm.args.TransitivityException;
+
 /**
  * This checks to see if the input graph is a biconnected component.
  * 
@@ -41,6 +43,7 @@ public class BiConnectedProperty implements SubGraphProperty {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.transitivity.core.SubGraphProperty#hasProperty(com.choicemaker.cm.transitivity.core.CompositeEntity)
 	 */
+	@Override
 	public boolean hasProperty(CompositeEntity cluster) {
 		//initialize values
 		nodeInfoMap = new HashMap ();

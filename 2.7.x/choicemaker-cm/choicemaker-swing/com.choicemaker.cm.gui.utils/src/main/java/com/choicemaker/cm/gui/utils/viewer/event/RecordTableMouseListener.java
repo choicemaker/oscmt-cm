@@ -46,6 +46,7 @@ public class RecordTableMouseListener extends MouseAdapter {
 	private void buildMenu() {
 		popup = new JPopupMenu();
 		ActionListener rowListener = new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent ev) {
 				JMenuItem item = (JMenuItem) (ev.getSource());
 				String selection = item.getText();
@@ -71,12 +72,14 @@ public class RecordTableMouseListener extends MouseAdapter {
 		popup.add(deleteRow);
 	}
 
+	@Override
 	public void mousePressed(MouseEvent e) {
 		if (e.isPopupTrigger()) {
 			displayPopup(e);
 		}
 	}
 
+	@Override
 	public void mouseReleased(MouseEvent e) {
 		if (e.isPopupTrigger()) {
 			displayPopup(e);

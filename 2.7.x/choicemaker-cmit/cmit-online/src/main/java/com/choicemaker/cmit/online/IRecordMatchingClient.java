@@ -3,7 +3,7 @@
  */
 package com.choicemaker.cmit.online;
 
-import com.choicemaker.cm.core.base.Match;
+import com.choicemaker.cm.core.Match;
 import com.choicemaker.cm.core.Record;
 
 /**

@@ -24,35 +24,44 @@ public class InternalFactory extends Factory {
 public InternalFactory(MultiStatus status) {
 	super(status);
 }
+@Override
 public ConfigurationElementModel createConfigurationElement() {
 	return new ConfigurationElement();
 }
+@Override
 public ConfigurationPropertyModel createConfigurationProperty() {
 	return new ConfigurationProperty();
 }
+@Override
 public ExtensionModel createExtension() {
 	return new Extension();
 }
+@Override
 public ExtensionPointModel createExtensionPoint() {
 	return new ExtensionPoint();
 }
 
 
 
+@Override
 public LibraryModel createLibrary() {
 	return new Library();
 }
+@Override
 public PluginDescriptorModel createPluginDescriptor() {
 	return new PluginDescriptor();
 }
 
+@Override
 public PluginFragmentModel createPluginFragment() {
 	return new FragmentDescriptor();
 }
 
+@Override
 public PluginPrerequisiteModel createPluginPrerequisite() {
 	return new PluginPrerequisite();
 }
+@Override
 public PluginRegistryModel createPluginRegistry() {
 	return new PluginRegistry();
 }

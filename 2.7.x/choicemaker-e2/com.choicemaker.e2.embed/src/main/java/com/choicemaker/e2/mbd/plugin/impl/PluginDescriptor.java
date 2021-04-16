@@ -146,6 +146,7 @@ synchronized void doPluginDeactivation() {
 /**
  * @see IPluginDescriptor
  */
+@Override
 public IExtension getExtension(String id) {
 	if (id == null)
 		return null;
@@ -161,6 +162,7 @@ public IExtension getExtension(String id) {
 /**
  * @see IPluginDescriptor
  */
+@Override
 public IExtensionPoint getExtensionPoint(String extensionPointId) {
 	if (extensionPointId == null)
 		return null;
@@ -176,6 +178,7 @@ public IExtensionPoint getExtensionPoint(String extensionPointId) {
 /**
  * @see IPluginDescriptor
  */
+@Override
 public IExtensionPoint[] getExtensionPoints() {
 	ExtensionPointModel[] list = getDeclaredExtensionPoints();
 	if (list == null)
@@ -187,6 +190,7 @@ public IExtensionPoint[] getExtensionPoints() {
 /**
  * @see IPluginDescriptor
  */
+@Override
 public IExtension[] getExtensions() {
 	ExtensionModel[] list = getDeclaredExtensions();
 	if (list == null)
@@ -198,6 +202,7 @@ public IExtension[] getExtensions() {
 /**
  * @see IPluginDescriptor
  */
+@Override
 public URL getInstallURL() {
 //	try {
 //		URL pluginXmlUrl = Platform.getPluginDescriptorUrl(getId(), getVersion(), Platform.PLUGIN_DESCRIPTOR_FILE);
@@ -218,6 +223,7 @@ public URL getInstallURLInternal() {
 /**
  * @see IPluginDescriptor
  */
+@Override
 public String getLabel() {
 	String s = getName();
 	if (s == null)
@@ -230,6 +236,7 @@ public String getLabel() {
 /**
  * @see IPluginDescriptor
  */
+@Override
 public Plugin getPlugin() throws CoreException {
 	if (pluginObject == null)
 		doPluginActivation();
@@ -238,6 +245,7 @@ public Plugin getPlugin() throws CoreException {
 /**
  * @see IPluginDescriptor
  */
+@Override
 public ClassLoader getPluginClassLoader() {
 	return getPluginClassLoader(true);
 }
@@ -282,6 +290,7 @@ public String getFileFromURL(URL target) {
 /**
  * @see IPluginDescriptor
  */
+@Override
 public IPluginPrerequisite[] getPluginPrerequisites() {
 	PluginPrerequisiteModel[] list = getRequires();
 	if (list == null)
@@ -296,6 +305,7 @@ public PluginRegistry getPluginRegistry() {
 /**
  * @see IPluginDescriptor
  */
+@Override
 public String getProviderName() {
 	String s = super.getProviderName();
 	if (s == null)
@@ -308,6 +318,7 @@ public String getProviderName() {
 /**
  * @see IPluginDescriptor
  */
+@Override
 public ResourceBundle getResourceBundle() throws MissingResourceException {
 	return getResourceBundle(Locale.getDefault());
 }
@@ -357,12 +368,14 @@ public ResourceBundle getResourceBundle(Locale targetLocale) throws MissingResou
 /**
  * @see IPluginDescriptor
  */
+@Override
 public String getResourceString(String value) {
 	return getResourceString(value, null);
 }
 /**
  * @see IPluginDescriptor
  */
+@Override
 public String getResourceString(String value, ResourceBundle b) {
 	String s = value.trim();
 	if (!s.startsWith(KEY_PREFIX)) return s;
@@ -403,6 +416,7 @@ public String getResourceString(String value, ResourceBundle b) {
 /**
  * @see IPluginDescriptor
  */
+@Override
 public String getUniqueIdentifier() {
 	return getId();
 }
@@ -416,6 +430,7 @@ public static String getUniqueIdentifierFromString(String pluginString) {
 /**
  * @see IPluginDescriptor
  */
+@Override
 public PluginVersionIdentifier getVersionIdentifier() {
 	String version = getVersion();
 	if (version == null)
@@ -455,7 +470,7 @@ public IPluginPrerequisite[] getPluginResolvedPrerequisites() {
 	}
 	if (resolvedPrerequisites.isEmpty())
 		return new IPluginPrerequisite[0];
-	return (IPluginPrerequisite[]) resolvedPrerequisites.toArray(new IPluginPrerequisite[resolvedPrerequisites.size()]);
+	return resolvedPrerequisites.toArray(new IPluginPrerequisite[resolvedPrerequisites.size()]);
 }
 
 private void internalDoPluginActivation() throws CoreException {
@@ -510,6 +525,7 @@ private void internalDoPluginActivation() throws CoreException {
 /**
  * @see IPluginDescriptor
  */
+@Override
 public synchronized boolean isPluginActivated() {
 	//note that this method is synchronized for good reason.  
 	//During plugin activation, neither true nor false would be valid
@@ -561,6 +577,7 @@ private void throwException(String message, Throwable exception) throws CoreExce
  * @see #getUniqueIdentifierFromString
  * @see #getVersionIdentifierFromString
  */
+@Override
 public String toString() {
 	return getUniqueIdentifier()+VERSION_SEPARATOR + getVersionIdentifier().toString();
 }

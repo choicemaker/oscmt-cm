@@ -117,6 +117,7 @@ public abstract class AbstractXmlSpecification implements XmlSpecification {
 	/* (non-Javadoc)
 	 * @see java.lang.Cloneable
 	 */
+	@Override
 	public Object clone()
 		throws
 			CloneNotSupportedException,
@@ -130,6 +131,7 @@ public abstract class AbstractXmlSpecification implements XmlSpecification {
 		return retVal;
 	}
 
+	@Override
 	public boolean equals(Object o) {
 		boolean retVal = false;
 		if (o instanceof XmlSpecification) {
@@ -148,6 +150,7 @@ public abstract class AbstractXmlSpecification implements XmlSpecification {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.base.configure.Configurable#getProperties()
 	 */
+	@Override
 	public Properties getProperties() {
 		Properties retVal = (Properties) this.properties.clone();
 		return retVal;
@@ -156,6 +159,7 @@ public abstract class AbstractXmlSpecification implements XmlSpecification {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.base.configure.Configurable#getProperty(java.lang.String)
 	 */
+	@Override
 	public String getProperty(String propertyName) {
 		return this.properties.getProperty(propertyName);
 	}
@@ -171,6 +175,7 @@ public abstract class AbstractXmlSpecification implements XmlSpecification {
 		return 0L;
 	}
 
+	@Override
 	public int hashCode() {
 		int retVal = this.getProperties().hashCode();
 		return retVal;
@@ -204,6 +209,7 @@ public abstract class AbstractXmlSpecification implements XmlSpecification {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.base.configure.Configurable#removeProperty(java.lang.String)
 	 */
+	@Override
 	public void removeProperty(String propertyName)
 		throws IncompleteSpecificationException {
 		if (propertyName == null) {
@@ -221,6 +227,7 @@ public abstract class AbstractXmlSpecification implements XmlSpecification {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.base.configure.Configurable#setProperties(java.util.Properties)
 	 */
+	@Override
 	public void setAllProperties(Properties p)
 		throws
 			IncompleteSpecificationException,
@@ -239,6 +246,7 @@ public abstract class AbstractXmlSpecification implements XmlSpecification {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.base.configure.Configurable#setProperties(java.util.Properties)
 	 */
+	@Override
 	public void setProperties(Properties p)
 		throws InvalidPropertyNameException, InvalidPropertyValueException {
 		for (Iterator i = p.keySet().iterator(); i.hasNext();) {
@@ -251,6 +259,7 @@ public abstract class AbstractXmlSpecification implements XmlSpecification {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.base.configure.Configurable#setProperty(java.lang.String, java.lang.String)
 	 */
+	@Override
 	public void setProperty(String propertyName, String propertyValue)
 		throws InvalidPropertyNameException, InvalidPropertyValueException {
 		if (propertyName == null) {
@@ -273,6 +282,7 @@ public abstract class AbstractXmlSpecification implements XmlSpecification {
 		this.properties.setProperty(propertyName, propertyValue);
 	}
 
+	@Override
 	public String toXML() {
 			StringBuffer sb = new StringBuffer().append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>") //$NON-NLS-1$
 		.append("<") //$NON-NLS-1$

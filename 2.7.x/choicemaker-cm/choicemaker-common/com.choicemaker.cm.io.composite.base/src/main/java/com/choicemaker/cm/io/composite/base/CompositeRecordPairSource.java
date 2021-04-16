@@ -27,6 +27,7 @@ public class CompositeRecordPairSource extends CompositeSource implements Record
 	 * @throws  NullPointerException if there are no more record pairs.
 	 * @return  the next record pair. 
 	 */
+	@Override
 	public ImmutableRecordPair getNext() throws java.io.IOException {
 		ImmutableRecordPair r = ((RecordPairSource) getCurSource()).getNext();
 		nextValid();

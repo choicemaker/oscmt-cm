@@ -30,10 +30,12 @@ import com.choicemaker.cm.io.flatfile.base.FlatFileMarkedRecordPairSource;
 public class FlatFileMarkedRecordPairSourceXmlConf implements MarkedRecordPairSourceXmlConfigurator {
 	public static final String EXTENSION_POINT_ID = "com.choicemaker.cm.io.flatfile.base.flatfileMrpsReader";
 
+	@Override
 	public Object getHandler() {
 		return this;
 	}
 
+	@Override
 	public Class getHandledType() {
 		return FlatFileMarkedRecordPairSource.class;
 	}
@@ -41,6 +43,7 @@ public class FlatFileMarkedRecordPairSourceXmlConf implements MarkedRecordPairSo
 	/**
 	 * Add a FlatFile marked record pair source to the configuration.
 	 */
+	@Override
 	public void add(MarkedRecordPairSource s) throws XmlConfException {
 		try {
 			FlatFileMarkedRecordPairSource src = (FlatFileMarkedRecordPairSource) s;
@@ -64,6 +67,7 @@ public class FlatFileMarkedRecordPairSourceXmlConf implements MarkedRecordPairSo
 		}
 	}
 
+	@Override
 	public MarkedRecordPairSource getMarkedRecordPairSource(String fileName, Element e, ImmutableProbabilityModel model)
 		throws XmlConfException {
 		String fileNamePrefix = e.getChildText("fileNamePrefix");

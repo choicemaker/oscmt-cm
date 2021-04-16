@@ -22,6 +22,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
 import com.choicemaker.cm.core.RepositoryChangeEvent;
 import com.choicemaker.cm.core.RepositoryChangeListener;
@@ -100,6 +101,7 @@ public class TestingControlPanel
 		parent.addMarkedRecordPairDataChangeListener(this);
 	}
 
+	@Override
 	public void setVisible(boolean b) {
 		super.setVisible(b);
 		if (b && dirty) {
@@ -122,45 +124,45 @@ public class TestingControlPanel
 				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.test.statistics.label")));
 
 		falsePositivesLabel =
-			new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.test.false.positives"), JLabel.RIGHT);
+			new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.test.false.positives"), SwingConstants.RIGHT);
 		falsePositives = new JTextField(5);
-		falsePositives.setHorizontalAlignment(JTextField.RIGHT);
+		falsePositives.setHorizontalAlignment(SwingConstants.RIGHT);
 		falsePositives.setEditable(false);
 		falseNegativesLabel =
-			new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.test.false.negatives"), JLabel.RIGHT);
+			new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.test.false.negatives"), SwingConstants.RIGHT);
 		falseNegatives = new JTextField(5);
 		falseNegatives.setMinimumSize(falseNegatives.getPreferredSize());
-		falseNegatives.setHorizontalAlignment(JTextField.RIGHT);
+		falseNegatives.setHorizontalAlignment(SwingConstants.RIGHT);
 		falseNegatives.setEditable(false);
 		differRecallLabel =
-			new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.test.differ.recall"), JLabel.RIGHT);
+			new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.test.differ.recall"), SwingConstants.RIGHT);
 		differRecall = new JTextField(5);
 		differRecall.setMinimumSize(differRecall.getPreferredSize());
-		differRecall.setHorizontalAlignment(JTextField.RIGHT);
+		differRecall.setHorizontalAlignment(SwingConstants.RIGHT);
 		differRecall.setEditable(false);
 		matchRecallLabel =
-			new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.test.match.recall"), JLabel.RIGHT);
+			new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.test.match.recall"), SwingConstants.RIGHT);
 		matchRecall = new JTextField(5);
-		matchRecall.setHorizontalAlignment(JTextField.RIGHT);
+		matchRecall.setHorizontalAlignment(SwingConstants.RIGHT);
 		matchRecall.setEditable(false);
 		humanReviewsLabel =
-			new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.test.humanreview"), JLabel.RIGHT);
+			new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.test.humanreview"), SwingConstants.RIGHT);
 		humanReviews = new JTextField(5);
-		humanReviews.setHorizontalAlignment(JTextField.RIGHT);
+		humanReviews.setHorizontalAlignment(SwingConstants.RIGHT);
 		humanReviews.setEditable(false);
 //		precisionLabel =
 //			new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.test.precision"), JLabel.RIGHT);
 		precision = new JTextField(5);
-		precision.setHorizontalAlignment(JTextField.RIGHT);
+		precision.setHorizontalAlignment(SwingConstants.RIGHT);
 		precision.setEditable(false);
 //		recallLabel = new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.test.recall"), JLabel.RIGHT);
 		recall = new JTextField(5);
-		recall.setHorizontalAlignment(JTextField.RIGHT);
+		recall.setHorizontalAlignment(SwingConstants.RIGHT);
 		recall.setEditable(false);
 		correlationLabel =
-			new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.test.correlation"), JLabel.RIGHT);
+			new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.test.correlation"), SwingConstants.RIGHT);
 		correlation = new JTextField(5);
-		correlation.setHorizontalAlignment(JTextField.RIGHT);
+		correlation.setHorizontalAlignment(SwingConstants.RIGHT);
 		correlation.setEditable(false);
 
 		confusionTable = new ConfusionTable(this, new ConfusionTableModel());
@@ -188,6 +190,7 @@ public class TestingControlPanel
 		plotPanel.addTab(CALC, calculator);
 	}
 
+	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		String propertyName = evt.getPropertyName();
 		Object source = evt.getSource();
@@ -215,6 +218,7 @@ public class TestingControlPanel
 		asymmetricHoldVsAccuracyPlotPanel.setEnabled(b);
 	}
 
+	@Override
 	public void evaluated(EvaluationEvent evt) {
 		if (evt.isEvaluated()) {
 			setDirty();
@@ -240,14 +244,17 @@ public class TestingControlPanel
 		}
 	}
 
+	@Override
 	public void setChanged(RepositoryChangeEvent evt) {
 		reset();
 	}
 
+	@Override
 	public void recordDataChanged(RepositoryChangeEvent evt) {
 		dataChanged();
 	}
 
+	@Override
 	public void markupDataChanged(RepositoryChangeEvent evt) {
 		dataChanged();
 	}

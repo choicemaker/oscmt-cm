@@ -23,6 +23,7 @@ import com.choicemaker.util.StringUtils;
  * @author   Rick Hall (removed dependence on javax.mail)
  * @deprecated
  */
+@Deprecated
 public final class Email {
 
 	private Email() { }

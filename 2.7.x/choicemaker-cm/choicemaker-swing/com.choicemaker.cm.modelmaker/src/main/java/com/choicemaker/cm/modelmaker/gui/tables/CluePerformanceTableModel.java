@@ -7,12 +7,12 @@
  *******************************************************************************/
 package com.choicemaker.cm.modelmaker.gui.tables;
 
-import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 import javax.swing.table.AbstractTableModel;
 
+import com.choicemaker.client.api.Decision;
 import com.choicemaker.cm.core.ClueSet;
 import com.choicemaker.cm.core.ColumnDefinition;
-import com.choicemaker.cm.core.Decision;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.train.Trainer;
 import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
@@ -32,16 +32,16 @@ public class CluePerformanceTableModel extends AbstractTableModel {
 	public static final ColumnDefinition[] columns;
 	static {
 		columns = new ColumnDefinition[Decision.NUM_DECISIONS + 2];
-		columns[0] = new ColumnDefinition("", 150, JLabel.CENTER);
+		columns[0] = new ColumnDefinition("", 150, SwingConstants.CENTER);
 		for (int i = 0; i < Decision.NUM_DECISIONS; ++i) {
 			columns[i + 1] =
-				new ColumnDefinition(ChoiceMakerCoreMessages.m.formatMessage(Decision.valueOf(i).toString()), 100, JLabel.RIGHT);
+				new ColumnDefinition(ChoiceMakerCoreMessages.m.formatMessage(Decision.valueOf(i).toString()), 100, SwingConstants.RIGHT);
 		}
 		columns[Decision.NUM_DECISIONS + 1] =
 			new ColumnDefinition(
 				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.table.performance.total"),
 				100,
-				JLabel.RIGHT);
+				SwingConstants.RIGHT);
 	};
 
 	public CluePerformanceTableModel() {
@@ -101,10 +101,12 @@ public class CluePerformanceTableModel extends AbstractTableModel {
 		return ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.table.performance.label");
 	}
 
+	@Override
 	public int getColumnCount() {
 		return columns.length;
 	}
 
+	@Override
 	public int getRowCount() {
 		if (rows == null) {
 			return 0;
@@ -112,14 +114,17 @@ public class CluePerformanceTableModel extends AbstractTableModel {
 		return rows.length;
 	}
 
+	@Override
 	public String getColumnName(int col) {
 		return columns[col].getName();
 	}
 
+	@Override
 	public boolean isCellEditable(int nRow, int nCol) {
 		return false;
 	}
 
+	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		if (isEmpty || (rowIndex < 0) || (rowIndex >= getRowCount())) {
 			return "";

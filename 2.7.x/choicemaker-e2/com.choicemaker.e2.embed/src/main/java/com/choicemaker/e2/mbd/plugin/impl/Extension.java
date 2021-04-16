@@ -20,6 +20,7 @@ public class Extension extends ExtensionModel implements IExtension {
 	// is this extension already fully loaded?
 	private boolean fullyLoaded = true;
 
+@Override
 public IConfigurationElement[] getConfigurationElements() {
 	ConfigurationElementModel[] list = getSubElements();
 	if (list == null)
@@ -28,12 +29,15 @@ public IConfigurationElement[] getConfigurationElements() {
 	System.arraycopy(list, 0, newValues, 0, list.length);
 	return newValues;
 }
+@Override
 public IPluginDescriptor getDeclaringPluginDescriptor() {
 	return (IPluginDescriptor) getParentPluginDescriptor();
 }
+@Override
 public String getExtensionPointUniqueIdentifier() {
 	return getExtensionPoint();
 }
+@Override
 public String getLabel() {
 	String s = getName();
 	if (s == null)
@@ -43,15 +47,18 @@ public String getLabel() {
 		setLocalizedName(localized);
 	return localized;
 }
+@Override
 public String getSimpleIdentifier() {
 	return getId();
 }
+@Override
 public String getUniqueIdentifier() {
 	String simple = getSimpleIdentifier();
 	if (simple == null)
 		return null;
 	return getParentPluginDescriptor().getId() + "." + simple; //$NON-NLS-1$
 }
+@Override
 public String toString() {
 	return getParent().getPluginId() + "." + getSimpleIdentifier(); //$NON-NLS-1$
 }
@@ -83,6 +90,7 @@ public void setFullyLoaded(boolean fullyLoaded) {
  * extensions.
  * @see com.choicemaker.e2.mbd.runtime.model.PluginModelObject#assertIsWriteable
  */
+@Override
 protected void assertIsWriteable() {
 	if (fullyLoaded)
 		super.assertIsWriteable();

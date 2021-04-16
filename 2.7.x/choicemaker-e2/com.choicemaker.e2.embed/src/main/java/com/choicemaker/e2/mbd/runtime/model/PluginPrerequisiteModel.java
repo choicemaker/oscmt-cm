@@ -52,6 +52,7 @@ public boolean getExport() {
  * @return whether or not this pre-requisite requires an exact match
  * @deprecated - use getMatchByte
  */
+@Deprecated
 public boolean getMatch() {
 	return (match == PREREQ_MATCH_EQUIVALENT);
 }
@@ -121,6 +122,7 @@ public void setExport(boolean value) {
  * @param value whether or not this pre-requisite requires an exact match
  * @deprecated use setMatchByte
  */
+@Deprecated
 public void setMatch(boolean value) {
 	assertIsWriteable();
 	if (value) {

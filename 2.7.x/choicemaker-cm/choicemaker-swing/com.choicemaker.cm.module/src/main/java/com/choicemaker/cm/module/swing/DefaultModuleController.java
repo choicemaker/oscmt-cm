@@ -50,9 +50,11 @@ public class DefaultModuleController implements IModuleController {
 		this.ium = new Accumulator(d);
 		this.iem = new NamedEventSupport(this);
 		this.ism = new NamedStateSupport(this) {
+			@Override
 			public INamedState getCurrentState() {
 				return new NamedState();
 			}
+			@Override
 			public void setCurrentState(INamedState ignored) {
 			}
 		};
@@ -79,6 +81,7 @@ public class DefaultModuleController implements IModuleController {
 		setMessageSupport(messageSupport);
 	}
 
+	@Override
 	public IConfigurationModel getConfigurationModel() {
 		if (pcs == null) {
 			throw new IllegalStateException("null user messages");
@@ -86,6 +89,7 @@ public class DefaultModuleController implements IModuleController {
 		return this.pcs;
 	}
 
+	@Override
 	public IEventModel getEventModel() {
 		if (iem == null) {
 			throw new IllegalStateException("null user messages");
@@ -93,6 +97,7 @@ public class DefaultModuleController implements IModuleController {
 		return this.iem;
 	}
 	
+	@Override
 	public IMessageSupport getMessageSupport() {
 		if (ims == null) {
 			throw new IllegalStateException("null message support");
@@ -100,6 +105,7 @@ public class DefaultModuleController implements IModuleController {
 		return this.ims;
 	}
 	
+	@Override
 	public IOperationModel getOperationModel() {
 		if (iom == null) {
 			throw new IllegalStateException("null user messages");
@@ -107,6 +113,7 @@ public class DefaultModuleController implements IModuleController {
 		return this.iom;
 	}
 
+	@Override
 	public IStateModel getStateModel() {
 		if (ism == null) {
 			throw new IllegalStateException("null user messages");
@@ -114,6 +121,7 @@ public class DefaultModuleController implements IModuleController {
 		return this.ism;
 	}
 
+	@Override
 	public IStatusModel getStatusModel() {
 		if (iui == null) {
 			throw new IllegalStateException("null user messages");
@@ -121,6 +129,7 @@ public class DefaultModuleController implements IModuleController {
 		return this.ium;
 	}
 
+	@Override
 	public IUserInterface getUserInterface() {
 		if (iui == null) {
 			throw new IllegalStateException("null user messages");

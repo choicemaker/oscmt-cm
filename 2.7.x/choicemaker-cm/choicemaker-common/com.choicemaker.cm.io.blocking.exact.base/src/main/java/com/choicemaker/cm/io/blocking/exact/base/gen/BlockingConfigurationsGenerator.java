@@ -51,6 +51,7 @@ public class BlockingConfigurationsGenerator implements GeneratorPlugin {
 		return (BlockingConfigurationGenerator[]) confList.toArray(new BlockingConfigurationGenerator[confList.size()]);
 	}
 
+	@Override
 	public synchronized void generate(IGenerator g) throws GenException {
 		try {
 			BlockingConfigurationGenerator[] confs = addConfigurations(g);

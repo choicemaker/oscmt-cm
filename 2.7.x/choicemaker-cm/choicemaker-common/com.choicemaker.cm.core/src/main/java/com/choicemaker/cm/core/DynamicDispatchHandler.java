@@ -7,8 +7,6 @@
  *******************************************************************************/
 package com.choicemaker.cm.core;
 
-import com.choicemaker.cm.core.base.DynamicDispatcher;
-
 /**
  * A dispatch handler can handle object of a specific type and its
  * subtypes. The method used for performing some operation on the

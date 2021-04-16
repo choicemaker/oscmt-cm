@@ -18,6 +18,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 
 import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.gui.utils.JavaHelpUtils;
@@ -51,12 +52,13 @@ public class RecordPairFilterDialog extends JDialog {
 		addListeners();
 		layoutPanel();
 		setContentPane(panel);
-		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		pack();
 		setLocation();
 		setVisible(false);
 	}
 
+	@Override
 	public void setVisible(boolean b) {
 		if (b) {
 // TODO:			updateDisplay();
@@ -94,6 +96,7 @@ public class RecordPairFilterDialog extends JDialog {
 	private void addListeners() {
 		//reSet
 		reSet.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				reset();
 			}
@@ -101,6 +104,7 @@ public class RecordPairFilterDialog extends JDialog {
 
 		//cancel
 		cancel.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				dispose();
 			}
@@ -108,6 +112,7 @@ public class RecordPairFilterDialog extends JDialog {
 
 		//set
 		set.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				set();
 				applyFilter();

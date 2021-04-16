@@ -63,42 +63,52 @@ public class PluginPrerequisiteAdapter {
 			this.delegate = o;
 		}
 
+		@Override
 		public CMPluginVersionIdentifier getResolvedVersionIdentifier() {
 			return PluginVersionIdentifierAdapter.convert(delegate.getResolvedVersionIdentifier());
 		}
 
+		@Override
 		public String getUniqueIdentifier() {
 			return delegate.getUniqueIdentifier();
 		}
 
+		@Override
 		public CMPluginVersionIdentifier getVersionIdentifier() {
 			return PluginVersionIdentifierAdapter.convert(delegate.getVersionIdentifier());
 		}
 
+		@Override
 		public boolean isExported() {
 			return delegate.isExported();
 		}
 
+		@Override
 		public boolean isMatchedAsGreaterOrEqual() {
 			return delegate.isMatchedAsGreaterOrEqual();
 		}
 
+		@Override
 		public boolean isMatchedAsCompatible() {
 			return delegate.isMatchedAsCompatible();
 		}
 
+		@Override
 		public boolean isMatchedAsEquivalent() {
 			return delegate.isMatchedAsEquivalent();
 		}
 
+		@Override
 		public boolean isMatchedAsPerfect() {
 			return delegate.isMatchedAsPerfect();
 		}
 
+		@Override
 		public boolean isMatchedAsExact() {
 			return delegate.isMatchedAsExact();
 		}
 
+		@Override
 		public boolean isOptional() {
 			return delegate.isOptional();
 		}
@@ -116,42 +126,52 @@ public class PluginPrerequisiteAdapter {
 			this.delegate = o;
 		}
 
+		@Override
 		public PluginVersionIdentifier getResolvedVersionIdentifier() {
 			return PluginVersionIdentifierAdapter.convert(delegate.getResolvedVersionIdentifier());
 		}
 
+		@Override
 		public String getUniqueIdentifier() {
 			return delegate.getUniqueIdentifier();
 		}
 
+		@Override
 		public PluginVersionIdentifier getVersionIdentifier() {
 			return PluginVersionIdentifierAdapter.convert(delegate.getVersionIdentifier());
 		}
 
+		@Override
 		public boolean isExported() {
 			return delegate.isExported();
 		}
 
+		@Override
 		public boolean isMatchedAsGreaterOrEqual() {
 			return delegate.isMatchedAsGreaterOrEqual();
 		}
 
+		@Override
 		public boolean isMatchedAsCompatible() {
 			return delegate.isMatchedAsCompatible();
 		}
 
+		@Override
 		public boolean isMatchedAsEquivalent() {
 			return delegate.isMatchedAsEquivalent();
 		}
 
+		@Override
 		public boolean isMatchedAsPerfect() {
 			return delegate.isMatchedAsPerfect();
 		}
 
+		@Override
 		public boolean isMatchedAsExact() {
 			return delegate.isMatchedAsExact();
 		}
 
+		@Override
 		public boolean isOptional() {
 			return delegate.isOptional();
 		}

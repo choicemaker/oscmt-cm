@@ -34,6 +34,7 @@ public class NoneTrainDialogPlugin extends TrainDialogPlugin {
 	/**
 	 * @see java.awt.Component#isValid()
 	 */
+	@Override
 	public boolean isParametersValid() {
 		return false;
 	}
@@ -41,9 +42,11 @@ public class NoneTrainDialogPlugin extends TrainDialogPlugin {
 	/**
 	 * @see com.choicemaker.cm.train.gui.hooks.TrainDialogPlugin#set()
 	 */
+	@Override
 	public void set() {
 	}
 	
+	@Override
 	public void setTrainDialog(TrainDialog trainDialog) {
 	}
 }

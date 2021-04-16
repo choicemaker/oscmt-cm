@@ -12,7 +12,7 @@ package com.choicemaker.cm.analyzer.filter;
 
 import java.io.Serializable;
 
-import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
+import com.choicemaker.cm.core.MutableMarkedRecordPair;
 
 /**
  * @author  Martin Buechi

@@ -34,6 +34,7 @@ public class DateHelper {
 	//	protected static final DateFormat oldTwoDigitYearLocaleSpecificDateParser = DateFormat.getDateInstance(DateFormat.SHORT);
 	private static final ThreadLocal
 	oldTwoDigitYearLocaleSpecificDateParserThreadLocal = new ThreadLocal() {
+		@Override
 		protected Object initialValue() {
 			DateFormat oldTwoDigitYearLocaleSpecificDateParser =
 				(DateFormat) DateFormat
@@ -46,6 +47,7 @@ public class DateHelper {
 	//	protected static final DateFormat sqlDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 	private static final ThreadLocal
 	sqlDateFormatThreadLocal = new ThreadLocal() {
+		@Override
 		protected Object initialValue() {
 			DateFormat sqlDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 			return sqlDateFormat;
@@ -55,6 +57,7 @@ public class DateHelper {
 	//	protected static final DateFormat displayDateFormat;
 	private static final ThreadLocal
 	displayDateFormatThreadLocal = new ThreadLocal() {
+		@Override
 		protected Object initialValue() {
 			DateFormat df =
 				(DateFormat) DateFormat
@@ -94,6 +97,7 @@ public class DateHelper {
 	//
 	private static DateParser _dateParser;
 	private static final ThreadLocal dateParserThreadLocal = new ThreadLocal() {
+		@Override
 		protected Object initialValue() {
 			DateParser dateParser = null;
 			if (_dateParser != null) {

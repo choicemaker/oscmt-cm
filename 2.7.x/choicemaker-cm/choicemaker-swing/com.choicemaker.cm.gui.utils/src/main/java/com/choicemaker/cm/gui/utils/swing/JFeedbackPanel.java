@@ -64,6 +64,7 @@ public class JFeedbackPanel extends JPanel{
 			/**
 			 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
 			 */
+			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				String text = feedbackButton.getText();
 				Icon icon = feedbackButton.getIcon();
@@ -90,6 +91,7 @@ public class JFeedbackPanel extends JPanel{
 	 * @see JFeedbackPanel#getWarningBackground()
 	 * @see JFeedbackPanel#setWarningBackground(Color)
 	 */
+	@Override
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
 

@@ -24,6 +24,7 @@ public class CrossValidatorAction extends ToolAction  {
 		super("Cross Validation Tool...");
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		new CrossValidatorDialog(modelMaker).setVisible(true);
 	}

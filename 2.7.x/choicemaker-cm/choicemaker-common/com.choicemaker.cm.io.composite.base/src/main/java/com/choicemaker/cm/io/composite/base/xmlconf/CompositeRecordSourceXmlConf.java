@@ -34,10 +34,12 @@ import com.choicemaker.util.FileUtilities;
 public class CompositeRecordSourceXmlConf implements RecordSourceXmlConfigurator {
 	public static final String EXTENSION_POINT_ID = "com.choicemaker.cm.io.composite.base.compositeRsReader";
 
+	@Override
 	public Object getHandler() {
 		return this;
 	}
 
+	@Override
 	public Class getHandledType() {
 		return CompositeRecordSource.class;
 	}
@@ -46,6 +48,7 @@ public class CompositeRecordSourceXmlConf implements RecordSourceXmlConfigurator
 	 * Add a Composite record source to the configuration.
 	 * @param   s  The composite record source.
 	 */
+	@Override
 	public void add(RecordSource s) throws XmlConfException {
 		try {
 			CompositeRecordSource src = (CompositeRecordSource) s;
@@ -74,6 +77,7 @@ public class CompositeRecordSourceXmlConf implements RecordSourceXmlConfigurator
 		}
 	}
 
+	@Override
 	public RecordSource getRecordSource(String fileName, Element e, ImmutableProbabilityModel model) throws XmlConfException {
 		CompositeRecordSource comp = new CompositeRecordSource();
 		comp.setFileName(fileName);
@@ -90,6 +94,7 @@ public class CompositeRecordSourceXmlConf implements RecordSourceXmlConfigurator
 		return comp;
 	}
 
+	@Override
 	public String toString() {
 		return "Composite RS";
 	}

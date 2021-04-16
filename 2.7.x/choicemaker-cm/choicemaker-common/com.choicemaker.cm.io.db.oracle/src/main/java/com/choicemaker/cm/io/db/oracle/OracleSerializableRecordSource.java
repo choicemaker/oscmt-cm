@@ -90,6 +90,7 @@ public class OracleSerializableRecordSource implements
 		return sqlRS;
 	}
 
+	@Override
 	public ImmutableProbabilityModel getModel () {
 		if (model == null) {
 			model = PMManager.getModelInstance(getModelName());
@@ -101,6 +102,7 @@ public class OracleSerializableRecordSource implements
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.RecordSource#getNext()
 	 */
+	@Override
 	public Record getNext() throws IOException {
 		return getRS().getNext();
 	}
@@ -108,6 +110,7 @@ public class OracleSerializableRecordSource implements
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.Source#open()
 	 */
+	@Override
 	public void open() throws IOException {
 		getRS().open ();
 	}
@@ -115,6 +118,7 @@ public class OracleSerializableRecordSource implements
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.Source#close()
 	 */
+	@Override
 	public void close() throws IOException {
 		getRS().close();
 	}
@@ -122,6 +126,7 @@ public class OracleSerializableRecordSource implements
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.Source#hasNext()
 	 */
+	@Override
 	public boolean hasNext() throws IOException {
 		return getRS().hasNext();
 	}
@@ -129,6 +134,7 @@ public class OracleSerializableRecordSource implements
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.Source#getName()
 	 */
+	@Override
 	public String getName() {
 		return getRS().getName();
 	}
@@ -136,6 +142,7 @@ public class OracleSerializableRecordSource implements
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.Source#setName(java.lang.String)
 	 */
+	@Override
 	public void setName(String name) {
 		Precondition.assertNonEmptyString(name);
 		getRS().setName(name);
@@ -145,6 +152,7 @@ public class OracleSerializableRecordSource implements
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.Source#setModel(com.choicemaker.cm.core.ProbabilityModel)
 	 */
+	@Override
 	public void setModel(ImmutableProbabilityModel m) {
 		Precondition.assertNonNullArgument("null model", m);
 		getRS().setModel(m);
@@ -154,6 +162,7 @@ public class OracleSerializableRecordSource implements
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.Source#hasSink()
 	 */
+	@Override
 	public boolean hasSink() {
 		return getRS().hasSink();
 	}
@@ -161,6 +170,7 @@ public class OracleSerializableRecordSource implements
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.Source#getSink()
 	 */
+	@Override
 	public Sink getSink() {
 		return getRS().getSink();
 	}
@@ -168,10 +178,12 @@ public class OracleSerializableRecordSource implements
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.Source#getFileName()
 	 */
+	@Override
 	public String getFileName() {
 		return getRS().getFileName();
 	}
 
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -186,6 +198,7 @@ public class OracleSerializableRecordSource implements
 		return result;
 	}
 
+	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
@@ -222,6 +235,7 @@ public class OracleSerializableRecordSource implements
 	 * Obsolete method for {@link #equals(Object)}. Used for testing only.
 	 * @deprecated
 	 */
+	@Deprecated
 	public boolean equals_00 (Object o) {
 		if (o instanceof OracleSerializableRecordSource) {
 			OracleSerializableRecordSource rs =
@@ -235,6 +249,7 @@ public class OracleSerializableRecordSource implements
 		}
 	}
 
+	@Override
 	public Properties getProperties() {
 		Properties retVal = new Properties();
 		retVal.setProperty(PN_DATASOURCE_JNDI_NAME, this.getDsJNDIName());
@@ -244,6 +259,7 @@ public class OracleSerializableRecordSource implements
 		return retVal;
 	}
 
+	@Override
 	public void setProperties(Properties properties)
 			throws IncompleteSpecificationException {
 
@@ -318,12 +334,14 @@ public class OracleSerializableRecordSource implements
 		return sqlQuery;
 	}
 
+	@Override
 	public String toXML() {
 		String retVal = AbstractRecordSourceSerializer.toXML(this);
 		return retVal;
 	}
 
 
+	@Override
 	public String toString() {
 		return "OracleSerializableRecordSource [dsJNDIName=" + dsJNDIName
 				+ ", modelName=" + modelName + ", dbConfig=" + dbConfig

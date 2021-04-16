@@ -135,6 +135,7 @@ public class SetTokenType extends TokenType {
 	 * 
 	 * @see WordTokenType#canHaveToken(String)
 	 */
+	@Override
 	public boolean canHaveToken(String token) {
 		if (members != null)
 			return members.contains(token);
@@ -149,6 +150,7 @@ public class SetTokenType extends TokenType {
 	 * 
 	 * Otherwise, return the default probability.
 	 */
+	@Override
 	protected double getTokenProbability(String token) {
 		if (probabilities != null) {
 			double prob = probabilities.getDouble(token);
@@ -170,6 +172,7 @@ public class SetTokenType extends TokenType {
 	 * It is expected that some subclasses may wish to override this
 	 * behavior.
 	 */
+	@Override
 	protected String getStandardToken(String token) {
 		if (standards != null) {
 			Object standard = standards.get(token);
@@ -290,7 +293,7 @@ public class SetTokenType extends TokenType {
 		// count the total number of occurrences.
 		Iterator<Integer> itValues = counts.values().iterator();
 		while (itValues.hasNext()) {
-			sum += ((Integer)itValues.next()).intValue();
+			sum += itValues.next().intValue();
 		}
 		
 		// compute the probabilities for the tokens in the counts
@@ -298,8 +301,8 @@ public class SetTokenType extends TokenType {
 		probabilities = new DoubleValuedHashMap();
 		Iterator<String> itKeys = counts.keySet().iterator();
 		while (itKeys.hasNext()) {
-			String key = (String)itKeys.next();
-			Integer value = (Integer)counts.get(key);
+			String key = itKeys.next();
+			Integer value = counts.get(key);
 			probabilities.putDouble(key, value.intValue() / sum);
 		}
 		

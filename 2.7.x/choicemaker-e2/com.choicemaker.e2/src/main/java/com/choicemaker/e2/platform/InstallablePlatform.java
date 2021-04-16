@@ -31,8 +31,8 @@ import com.choicemaker.e2.CMPluginRegistry;
  */
 public final class InstallablePlatform implements CMPlatform {
 
-	private static final Logger logger = Logger
-			.getLogger(InstallablePlatform.class.getName());
+	private static final Logger logger =
+		Logger.getLogger(InstallablePlatform.class.getName());
 
 	/** Property name */
 	public static final String INSTALLABLE_PLATFORM = "cmInstallablePlatform";
@@ -97,9 +97,8 @@ public final class InstallablePlatform implements CMPlatform {
 
 	private void setDelegate(CMPlatform newDelegate) {
 		if (this.delegate != null) {
-			String msg =
-				"Replacing an installed delegate (" + this.delegate
-						+ ") with a new delegate (" + newDelegate + ")";
+			String msg = "Replacing an installed delegate (" + this.delegate
+					+ ") with a new delegate (" + newDelegate + ")";
 			logger.warning(msg);
 		}
 		this.delegate = newDelegate;
@@ -114,7 +113,7 @@ public final class InstallablePlatform implements CMPlatform {
 	 *
 	 * @throws IllegalArgumentException
 	 *             if the delegate can not be updated.
-	 * */
+	 */
 	public void install(CMPlatform newDelegate) {
 		if (newDelegate == null) {
 			throw new IllegalArgumentException("null delegate");
@@ -146,22 +145,26 @@ public final class InstallablePlatform implements CMPlatform {
 		}
 	}
 
+	@Override
 	public CMPluginRegistry getPluginRegistry() {
 		return getDelegate().getPluginRegistry();
 	}
 
+	@Override
 	public CMPlatformRunnable loaderGetRunnable(String applicationName) {
 		return getDelegate().loaderGetRunnable(applicationName);
 	}
 
+	@Override
 	public String getPluginDirectory(String id, String version) {
 		return getDelegate().getPluginDirectory(id, version);
 	}
 
+	@Override
 	public URL getPluginDescriptorUrl(String id, String version,
 			String descriptorFile) {
-		return getDelegate()
-				.getPluginDescriptorUrl(id, version, descriptorFile);
+		return getDelegate().getPluginDescriptorUrl(id, version,
+				descriptorFile);
 	}
 
 }

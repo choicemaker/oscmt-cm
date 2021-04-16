@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plugin>
+<plugin
+   id="com.choicemaker.cm.io.db.postgres2"
+   name="Postgres DB Plug-in"
+   version="2.7.0"
+   provider-name="ChoiceMaker">
+
+   <runtime>
+      <library name="postgres2.jar">
+         <export name="*"/>
+      </library>
+   </runtime>
+   <requires>
+      <import plugin="com.choicemaker.cm.core"/>
+      <import plugin="com.choicemaker.cm.compiler"/>
+      <import plugin="com.choicemaker.cm.io.db.base"/>
+      <import plugin="com.choicemaker.cm.aba.base"/>
+      <import plugin="com.choicemaker.cm.io.composite.base"/>
+   </requires>
+
+
+   <extension
+         id="PostgresDbObjectMakerApp"
+         point="com.choicemaker.e2.applications">
+      <application>
+         <run
+               class="com.choicemaker.cm.io.db.postgres2.dbom.PostgresDbObjectMaker">
+         </run>
+      </application>
+   </extension>
+   <extension
+         id="postgresDbObjectMaker"
+         point="com.choicemaker.cm.core.objectGenerator">
+      <generator
+            description="Postgres Custom Objects (DDL)"
+            class="com.choicemaker.cm.io.db.postgres2.dbom.PostgresDbObjectMaker">
+      </generator>
+   </extension>
+   <extension
+         id="postgresDatabaseAccessor"
+         name="postgresDatabaseAccessor"
+         point="com.choicemaker.cm.aba.base.databaseAccessor">
+      <databaseAccessor
+            class="com.choicemaker.cm.io.db.postgres2.blocking.PostgresDatabaseAccessor">
+      </databaseAccessor>
+   </extension>
+   <extension
+         id="postgresDatabaseAbstraction"
+         name="postgresDatabaseAbstraction"
+         point="com.choicemaker.cm.io.db.base.databaseAbstraction">
+      <databaseAbstraction
+            class="com.choicemaker.cm.io.db.postgres2.blocking.PostgresDatabaseAbstraction">
+      </databaseAbstraction>
+   </extension>
+   <extension
+         id="postgresRsReader"
+         point="com.choicemaker.cm.core.rsReader">
+      <handler
+            name="Postgres"
+            class="com.choicemaker.cm.io.db.postgres2.xmlconf.PostgresRecordSourceXmlConf"
+            handledClass="com.choicemaker.cm.io.db.postgres2.PostgresRecordSource">
+      </handler>
+   </extension>
+   <extension
+         id="postgresMrpsReader"
+         point="com.choicemaker.cm.core.mrpsReader">
+      <handler
+            name="Postgres"
+            class="com.choicemaker.cm.io.db.postgres2.xmlconf.PostgresMarkedRecordPairSourceXmlConf"
+            handledClass="com.choicemaker.cm.io.db.postgres2.PostgresMarkedRecordPairSource">
+      </handler>
+   </extension>
+
+</plugin>

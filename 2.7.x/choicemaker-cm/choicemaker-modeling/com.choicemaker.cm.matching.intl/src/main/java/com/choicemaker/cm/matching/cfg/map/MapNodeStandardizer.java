@@ -28,6 +28,7 @@ public class MapNodeStandardizer extends DefaultStandardizer {
 		standardizer = new MapStandardizer(standards);
 	}
 
+	@Override
 	public void standardize(ParseTreeNode node, ParsedData holder) {
 		List tokens = getTokens(node);
 		String[] words = (String[])tokens.toArray(new String[tokens.size()]);

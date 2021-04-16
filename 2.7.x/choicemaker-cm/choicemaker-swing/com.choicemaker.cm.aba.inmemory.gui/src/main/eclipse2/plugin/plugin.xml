@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plugin>
+<plugin
+   id="com.choicemaker.cm.aba.inmemory.gui"
+   name="In Memory Automated Gui Plug-in"
+   version="2.5.0"
+   provider-name="ChoiceMaker">
+
+   <runtime>
+      <library name="gui.jar"/>
+   </runtime>
+   <requires>
+      <import plugin="com.choicemaker.cm.core"/>
+      <import plugin="com.choicemaker.cm.aba.inmemory"/>
+      <import plugin="com.choicemaker.cm.modelmaker"/>
+      <import plugin="com.choicemaker.cm.aba.base"/>
+      <import plugin="com.choicemaker.cm.io.db.base"/>
+   </requires>
+
+
+   <extension
+         point="com.choicemaker.cm.modelmaker.matcherBlockingToolkit">
+      <toolkit
+            name="Automated Blocking"
+            class="com.choicemaker.cm.aba.inmemory.gui.InMemoryAutomatedBlockerToolkit">
+      </toolkit>
+   </extension>
+
+</plugin>

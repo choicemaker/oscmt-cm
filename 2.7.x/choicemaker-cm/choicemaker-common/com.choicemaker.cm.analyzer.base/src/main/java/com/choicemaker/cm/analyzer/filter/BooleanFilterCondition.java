@@ -10,8 +10,8 @@
  */
 package com.choicemaker.cm.analyzer.filter;
 
-import com.choicemaker.cm.core.base.ActiveClues;
-import com.choicemaker.cm.core.base.BooleanActiveClues;
+import com.choicemaker.cm.core.ActiveClues;
+import com.choicemaker.cm.core.BooleanActiveClues;
 
 /**
  * Description
@@ -54,6 +54,7 @@ public class BooleanFilterCondition implements FilterCondition {
 		this.value = value;
 	}
 
+	@Override
 	public boolean satisfy(ActiveClues clues) {
 		BooleanActiveClues bac = (BooleanActiveClues)clues;
 		return bac.containsClue(clueNum) == value.booleanValue();
@@ -63,10 +64,12 @@ public class BooleanFilterCondition implements FilterCondition {
 		return value.booleanValue();
 	}
 
+	@Override
 	public int getClueNum() {
 		return clueNum;
 	}
 
+	@Override
 	public String getConditionString() {
 		if (value == null){
 			return NULL_STRING;
@@ -75,10 +78,12 @@ public class BooleanFilterCondition implements FilterCondition {
 		}
 	}
 
+	@Override
 	public FilterCondition createFilterCondition(int clueNum) {
 		return new BooleanFilterCondition(clueNum, value);
 	}
 
+	@Override
 	public String toString(){
 		String returnValue = getConditionString();
 
@@ -87,6 +92,7 @@ public class BooleanFilterCondition implements FilterCondition {
 		return returnValue;
 	}
 
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -100,6 +106,7 @@ public class BooleanFilterCondition implements FilterCondition {
 	 * true if we are compared agains another IntFilterCondition that represents the same condition as us;
 	 * false otherwise.
 	 */
+	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;

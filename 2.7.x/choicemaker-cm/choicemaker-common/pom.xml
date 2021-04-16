@@ -23,26 +23,23 @@
   </description>
 
   <modules>
+    <module>com.choicemaker.client.api</module>
     <module>com.choicemaker.cm.args</module>
     <module>com.choicemaker.cm.core</module>
     <module>com.choicemaker.cm.analyzer.base</module>
-    <module>com.choicemaker.cm.io.blocking.automated.base</module>
-    <module>com.choicemaker.cm.io.blocking.automated.inmemory</module>
+    <module>com.choicemaker.cm.aba.base</module>
+    <module>com.choicemaker.cm.aba.inmemory</module>
     <module>com.choicemaker.cm.io.blocking.base</module>
     <module>com.choicemaker.cm.io.blocking.exact.base</module>
     <module>com.choicemaker.cm.io.composite.base</module>
     <module>com.choicemaker.cm.io.db.base</module>
-<!--
-    <module>com.choicemaker.cm.io.db.jdbc</module>
-    <module>com.choicemaker.cm.io.db.postgres</module>
--->
     <module>com.choicemaker.cm.io.db.oracle</module>
+    <module>com.choicemaker.cm.io.db.postgres2</module>
     <module>com.choicemaker.cm.io.db.sqlserver</module>
     <module>com.choicemaker.cm.io.flatfile.base</module>
     <module>com.choicemaker.cm.io.xml.base</module>
     <module>com.choicemaker.cm.ml.me.base</module>
     <module>com.choicemaker.cm.compiler</module>
-    <!-- module>com.choicemaker.cm.persist</module -->
     <module>com.choicemaker.cm.compiler.tools.jdk180</module>
   </modules>
 

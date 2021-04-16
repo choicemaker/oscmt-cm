@@ -3,13 +3,14 @@ package com.choicemaker.cm.core.gen;
 import java.util.List;
 import java.util.Properties;
 
-import junit.framework.TestCase;
-
 import com.choicemaker.cm.core.PropertyNames;
 import com.choicemaker.util.SystemPropertyUtils;
 
+import junit.framework.TestCase;
+
 public class InstallableGeneratorPluginFactoryTest extends TestCase {
 
+	@Override
 	public void setUp() {
 		// The default list of generator plugins must be overridden for
 		// this test because it may contain FQCNs that are not on the
@@ -21,6 +22,7 @@ public class InstallableGeneratorPluginFactoryTest extends TestCase {
 				.getProperty(ListBackedGeneratorPluginFactory.PROPERTY_GENERATOR_PLUGIN_FACTORIES) != null);
 	}
 
+	@Override
 	public void tearDown() {
 		Properties p = System.getProperties();
 		p.remove(ListBackedGeneratorPluginFactory.PROPERTY_GENERATOR_PLUGIN_FACTORIES);

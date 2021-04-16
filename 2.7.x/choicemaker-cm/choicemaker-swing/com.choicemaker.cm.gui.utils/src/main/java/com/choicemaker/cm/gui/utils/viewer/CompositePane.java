@@ -23,7 +23,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 
-import com.choicemaker.cm.core.base.RecordData;
+import com.choicemaker.cm.core.RecordData;
 import com.choicemaker.cm.core.datamodel.ObservableDataEvent;
 import com.choicemaker.cm.core.datamodel.ObservableDataListener;
 
@@ -194,6 +194,7 @@ public class CompositePane extends JPanel implements ObservableDataListener {
 	 */
 	private void addWeakListener(RecordPairViewer viewer) {
 		PropertyChangeListener listener = new PropertyChangeListener() {
+			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				if (evt.getPropertyName() == RecordPairViewerModel.ALIAS) {
 					RecordPairViewer tabbedViewer = (RecordPairViewer) listeners.get(this);
@@ -267,6 +268,7 @@ public class CompositePane extends JPanel implements ObservableDataListener {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.reviewmaker.gui.datamodel.ObservableDataListener#observableDataAdded(com.choicemaker.cm.reviewmaker.gui.datamodel.ObservableDataEvent)
 	 */
+	@Override
 	public void observableDataAdded(ObservableDataEvent event) {
 		RecordPairViewer viewer = new RecordPairViewer(pair, contentEditable);
 		viewer.setRecordPairViewerModel((RecordPairViewerModel) event.getChild());
@@ -276,6 +278,7 @@ public class CompositePane extends JPanel implements ObservableDataListener {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.reviewmaker.gui.datamodel.ObservableDataListener#observableDataRemoved(com.choicemaker.cm.reviewmaker.gui.datamodel.ObservableDataEvent)
 	 */
+	@Override
 	public void observableDataRemoved(ObservableDataEvent event) {
 		Object viewerModel = event.getChild();
 		Iterator internalFramesIterator = recordPairViewers.iterator();

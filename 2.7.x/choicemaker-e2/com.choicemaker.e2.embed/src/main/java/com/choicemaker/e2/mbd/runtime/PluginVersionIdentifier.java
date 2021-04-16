@@ -170,7 +170,7 @@ private static Object[] parseVersion(String versionId) {
 
 	int[] numbers = new int[3];
 	try {
-		numbers[0] = Integer.parseInt((String) elements.elementAt(0));
+		numbers[0] = Integer.parseInt(elements.elementAt(0));
 		if (numbers[0] < 0)
 			Assert.isTrue(false, Policy.bind("parse.postiveMajor", s)); //$NON-NLS-1$
 	} catch (NumberFormatException nfe) {
@@ -179,7 +179,7 @@ private static Object[] parseVersion(String versionId) {
 
 	try {
 		if (elementSize>=2) {
-			numbers[1] = Integer.parseInt((String) elements.elementAt(1));
+			numbers[1] = Integer.parseInt(elements.elementAt(1));
 			if (numbers[1] < 0)
 				Assert.isTrue(false, Policy.bind("parse.postiveMinor", s)); //$NON-NLS-1$
 		} else
@@ -190,7 +190,7 @@ private static Object[] parseVersion(String versionId) {
 
 	try {
 		if (elementSize>=3) {
-			numbers[2] = Integer.parseInt((String) elements.elementAt(2));
+			numbers[2] = Integer.parseInt(elements.elementAt(2));
 			if (numbers[2] < 0)
 				Assert.isTrue(false, Policy.bind("parse.postiveService", s)); //$NON-NLS-1$
 		} else
@@ -205,7 +205,7 @@ private static Object[] parseVersion(String versionId) {
 	result[1] = new Integer(numbers[1]);
 	result[2] = new Integer(numbers[2]);
 	if (elementSize>=4) 
-		result[3] = verifyQualifier((String) elements.elementAt(3));
+		result[3] = verifyQualifier(elements.elementAt(3));
 	else
 		result[3] = ""; //$NON-NLS-1$
 	return result;
@@ -217,6 +217,7 @@ private static Object[] parseVersion(String versionId) {
  * @param object an object to compare
  * @return whehter or not the two objects are equal
  */
+@Override
 public boolean equals(Object object) {
 	if (!(object instanceof PluginVersionIdentifier))
 		return false;
@@ -228,6 +229,7 @@ public boolean equals(Object object) {
  *
  * @return an integer which is a hash code value for this object.
  */
+@Override
 public int hashCode() {
 	int code = major + minor + service; // R1.0 result
 	if (qualifier.equals("")) //$NON-NLS-1$
@@ -439,6 +441,7 @@ public boolean isGreaterThan(PluginVersionIdentifier id) {
  *
  * @return the string representation of this plug-in version identifier
  */
+@Override
 public String toString() {
 	String base = major+SEPARATOR+minor+SEPARATOR+service; // R1.0 result
 	if (qualifier.equals("")) //$NON-NLS-1$

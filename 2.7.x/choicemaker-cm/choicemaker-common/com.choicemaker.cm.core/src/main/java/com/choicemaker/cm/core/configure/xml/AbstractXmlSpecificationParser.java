@@ -145,7 +145,7 @@ public abstract class AbstractXmlSpecificationParser
 
 			String className =
 				configurable.getAttributeValue(
-					XmlSpecification.ATTRIBUTE_CONFIGURABLE_CLASS);
+					XmlConfigurable.ATTRIBUTE_CONFIGURABLE_CLASS);
 			Class configurableClass = classLoader.loadClass(className);
 
 			//			// Array of {constructor parameter types, constructor}
@@ -263,6 +263,7 @@ public abstract class AbstractXmlSpecificationParser
 	 * -- (UNEXPECTED) The specified String could not be read
 	 * </ul>
 	 */
+	@Override
 	public XmlConfigurable fromXML(ClassLoader classLoader, String xml)
 		throws XmlSpecificationException {
 
@@ -306,6 +307,7 @@ public abstract class AbstractXmlSpecificationParser
 	 * --  a constructor threw an exception
 	 * </ul>
 	 */
+	@Override
 	public XmlConfigurable fromXML(ClassLoader classLoader, IDocument document)
 		throws XmlSpecificationException {
 

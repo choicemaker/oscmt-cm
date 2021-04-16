@@ -41,6 +41,7 @@ public class XmlRecordSink implements RecordSink {
 		setModel(model);
 	}
 
+	@Override
 	public void open() throws IOException {
 		recordOutputter = ((XmlAccessor) model.getAccessor()).getXmlRecordOutputter();
 		outFile = new FileOutputStream(new File(fileName).getAbsoluteFile());
@@ -49,6 +50,7 @@ public class XmlRecordSink implements RecordSink {
 		w.write("<ChoiceMakerRecords>" + Constants.LINE_SEPARATOR);
 	}
 
+	@Override
 	public void close() throws IOException {
 		w.write("</ChoiceMakerRecords>");
 		w.flush();
@@ -58,14 +60,17 @@ public class XmlRecordSink implements RecordSink {
 	/**
 	 * @see com.choicemaker.cm.core.Sink#flush()
 	 */
+	@Override
 	public void flush() throws IOException {
 		w.flush();
 	}
 
+	@Override
 	public String getName() {
 		return name;
 	}
 
+	@Override
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -77,6 +82,7 @@ public class XmlRecordSink implements RecordSink {
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
 	}
+	@Override
 	public void put(Record r) throws IOException {
 		putRecord(r);
 	}
@@ -85,10 +91,12 @@ public class XmlRecordSink implements RecordSink {
 		recordOutputter.put(w, r);
 	}
 
+	@Override
 	public void setModel(ImmutableProbabilityModel model) {
 		this.model = model;
 	}
 
+	@Override
 	public ImmutableProbabilityModel getModel() {
 		return model;
 	}
