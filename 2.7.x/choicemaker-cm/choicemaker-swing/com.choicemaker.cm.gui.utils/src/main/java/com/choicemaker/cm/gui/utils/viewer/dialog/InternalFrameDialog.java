@@ -22,6 +22,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.WindowConstants;
 
 import com.choicemaker.cm.gui.utils.JavaHelpUtils;
 import com.choicemaker.cm.gui.utils.viewer.InternalFrameModel;
@@ -47,7 +48,7 @@ public class InternalFrameDialog extends JDialog {
 		addListeners();
 		layoutPanel();
 		setContentPane(panel);
-		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		
 		pack();
 		setLocationRelativeTo(frame);
@@ -75,18 +76,21 @@ public class InternalFrameDialog extends JDialog {
 		JavaHelpUtils.enableHelpKey(this, "train.gui.dialog.internalframe");
 
 		frameAlias.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				InternalFrameDialog.this.internalFrameModel.setAlias(frameAlias.getText());
 			}
 		});
 		
 		frameAlias.addFocusListener(new FocusAdapter() {
+			@Override
 			public void focusLost(FocusEvent e) {
 				InternalFrameDialog.this.internalFrameModel.setAlias(frameAlias.getText());
 			}
 		});
 		
 		set.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 //				set();
 				dispose();

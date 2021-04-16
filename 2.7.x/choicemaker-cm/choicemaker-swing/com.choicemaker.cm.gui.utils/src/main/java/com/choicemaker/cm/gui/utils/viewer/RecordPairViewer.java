@@ -27,8 +27,8 @@ import javax.swing.SwingConstants;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
 
+import com.choicemaker.cm.core.RecordData;
 import com.choicemaker.cm.core.base.DescriptorCollection;
-import com.choicemaker.cm.core.base.RecordData;
 import com.choicemaker.cm.core.datamodel.ObservableDataEvent;
 import com.choicemaker.cm.core.datamodel.ObservableDataListener;
 import com.choicemaker.cm.gui.utils.viewer.event.DesktopPaneMouseListener;
@@ -187,6 +187,7 @@ public class RecordPairViewer extends JPanel implements ObservableDataListener, 
 	private void addInternalFrame(InternalFrame internalFrame) {
 		internalFrames.add(internalFrame);
 		internalFrame.addInternalFrameListener(new InternalFrameAdapter() {
+			@Override
 			public void internalFrameClosing(InternalFrameEvent e) {
 				recordPairViewerModel.removeFrameModel(((InternalFrame) e.getInternalFrame()).getInternalFrameModel());
 			}
@@ -250,6 +251,7 @@ public class RecordPairViewer extends JPanel implements ObservableDataListener, 
 	/**
 	 * @see com.choicemaker.cm.reviewmaker.gui.datamodel.ObservableDataListener#observableDataAdded(com.choicemaker.cm.reviewmaker.gui.datamodel.ObservableDataEvent)
 	 */
+	@Override
 	public void observableDataAdded(ObservableDataEvent event) {
 		InternalFrame frame = createInternalFrame((InternalFrameModel) event.getChild());
 		frame.setInternalFrameModel((InternalFrameModel) event.getChild());
@@ -259,6 +261,7 @@ public class RecordPairViewer extends JPanel implements ObservableDataListener, 
 	/**
 	 * @see com.choicemaker.cm.reviewmaker.gui.datamodel.ObservableDataListener#observableDataRemoved(com.choicemaker.cm.reviewmaker.gui.datamodel.ObservableDataEvent)
 	 */
+	@Override
 	public void observableDataRemoved(ObservableDataEvent event) {
 		Object frameModel = event.getChild();
 		Iterator internalFramesIterator = internalFrames.iterator();
@@ -276,6 +279,7 @@ public class RecordPairViewer extends JPanel implements ObservableDataListener, 
 	/* (non-Javadoc)
 	 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
 	 */
+	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		updateFromModel();
 	}
@@ -316,6 +320,7 @@ public class RecordPairViewer extends JPanel implements ObservableDataListener, 
 		/* (non-Javadoc)
 		 * @see javax.swing.DesktopManager#beginResizingFrame(javax.swing.JComponent, int)
 		 */
+		@Override
 		public void beginResizingFrame(JComponent f, int direction) {
 			if (enabled) {
 				super.beginResizingFrame(f, direction);
@@ -326,6 +331,7 @@ public class RecordPairViewer extends JPanel implements ObservableDataListener, 
 		/* (non-Javadoc)
 		 * @see javax.swing.DesktopManager#dragFrame(javax.swing.JComponent, int, int)
 		 */
+		@Override
 		public void dragFrame(JComponent f, int newX, int newY) {
 			if (enabled) {
 				super.dragFrame(f, newX, newY);
@@ -336,6 +342,7 @@ public class RecordPairViewer extends JPanel implements ObservableDataListener, 
 		/* (non-Javadoc)
 		 * @see javax.swing.DesktopManager#endDraggingFrame(javax.swing.JComponent)
 		 */
+		@Override
 		public void endDraggingFrame(JComponent f) {
 			if (enabled) {
 				super.endDraggingFrame(f);
@@ -361,6 +368,7 @@ public class RecordPairViewer extends JPanel implements ObservableDataListener, 
 	/* (non-Javadoc)
 	 * @see javax.swing.JComponent#setPreferredSize(java.awt.Dimension)
 	 */
+	@Override
 	public void setPreferredSize(Dimension preferredSize) {
 		super.setPreferredSize(preferredSize);
 		if (preferredSize == null
@@ -374,6 +382,7 @@ public class RecordPairViewer extends JPanel implements ObservableDataListener, 
 	/* (non-Javadoc)
 	 * @see javax.swing.Scrollable#getPreferredScrollableViewportSize()
 	 */
+	@Override
 	public Dimension getPreferredScrollableViewportSize() {
 		return getPreferredSize();
 	}
@@ -381,6 +390,7 @@ public class RecordPairViewer extends JPanel implements ObservableDataListener, 
 	/* (non-Javadoc)
 	 * @see javax.swing.Scrollable#getScrollableUnitIncrement(java.awt.Rectangle, int, int)
 	 */
+	@Override
 	public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) {
 		return 100;
 	}
@@ -388,6 +398,7 @@ public class RecordPairViewer extends JPanel implements ObservableDataListener, 
 	/* (non-Javadoc)
 	 * @see javax.swing.Scrollable#getScrollableBlockIncrement(java.awt.Rectangle, int, int)
 	 */
+	@Override
 	public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction) {
 		if (orientation == SwingConstants.VERTICAL) {
 			return visibleRect.height;
@@ -399,6 +410,7 @@ public class RecordPairViewer extends JPanel implements ObservableDataListener, 
 	/* (non-Javadoc)
 	 * @see javax.swing.Scrollable#getScrollableTracksViewportWidth()
 	 */
+	@Override
 	public boolean getScrollableTracksViewportWidth() {
 		return true;
 	}
@@ -406,6 +418,7 @@ public class RecordPairViewer extends JPanel implements ObservableDataListener, 
 	/* (non-Javadoc)
 	 * @see javax.swing.Scrollable#getScrollableTracksViewportHeight()
 	 */
+	@Override
 	public boolean getScrollableTracksViewportHeight() {
 		return true;
 	}

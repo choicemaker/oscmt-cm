@@ -54,7 +54,7 @@
 
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.io.blocking.automated.base</artifactId><scope>test</scope>
+      <artifactId>com.choicemaker.cm.aba.base</artifactId><scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>

@@ -40,6 +40,7 @@ public class TfIdf implements WeightingFunction {
 		}
 	}
 
+	@Override
 	public float weight(String s) {
 		Number n = (Number) values.get(s);
 		if (n != null) {

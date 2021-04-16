@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="1.0" xmlns="http://java.sun.com/xml/ns/persistence"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd"
+>
+
+  <persistence-unit name="oaba" transaction-type="JTA">
+
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+
+    <jta-data-source>choicemaker/urm/jdbc/ChoiceMakerEjb</jta-data-source>
+
+    <class>com.choicemaker.cm.batch.ejb.BatchJobEntity</class>
+    <class>com.choicemaker.cm.batch.ejb.BatchProcessingEventEntity</class>
+    <class>com.choicemaker.cm.batch.ejb.OperationalPropertyEntity</class>
+    <class>com.choicemaker.cm.oaba.ejb.AbaSettingsEntity</class>
+    <class>com.choicemaker.cm.oaba.ejb.AbstractParametersEntity</class>
+    <class>com.choicemaker.cm.oaba.ejb.AbstractRecordIdTranslationEntity</class>
+    <class>com.choicemaker.cm.oaba.ejb.BaseRecordSourceEntity</class>
+    <class>com.choicemaker.cm.oaba.ejb.DefaultServerConfigurationEntity</class>
+    <class>com.choicemaker.cm.oaba.ejb.DefaultSettingsEntity</class>
+    <class>com.choicemaker.cm.oaba.ejb.OabaJobEntity</class>
+    <class>com.choicemaker.cm.oaba.ejb.OabaParametersEntity</class>
+    <class>com.choicemaker.cm.oaba.ejb.OabaProcessingEventEntity</class>
+    <class>com.choicemaker.cm.oaba.ejb.OabaSettingsEntity</class>
+    <class>com.choicemaker.cm.oaba.ejb.RecordIdIntegerTranslation</class>
+    <class>com.choicemaker.cm.oaba.ejb.RecordIdLongTranslation</class>
+    <class>com.choicemaker.cm.oaba.ejb.RecordIdStringTranslation</class>
+    <class>com.choicemaker.cm.oaba.ejb.ServerConfigurationEntity</class>
+    <class>com.choicemaker.cm.oaba.ejb.SqlRecordSourceEntity</class>
+    <class>com.choicemaker.cm.transitivity.ejb.TransitivityJobEntity</class>
+    <class>com.choicemaker.cm.transitivity.ejb.TransitivityParametersEntity</class>
+    <class>com.choicemaker.cm.transitivity.ejb.TransitivityProcessingEventEntity</class>    
+    <class>com.choicemaker.cms.ejb.NamedConfigurationEntity</class>
+    <class>com.choicemaker.cms.ejb.UrmJobEntity</class>
+
+    <properties>
+      <property name="eclipselink.target-server" value="JBoss" />
+      <property name="eclipselink.ddl-generation" value="create-or-extend-tables" />
+      <property name="eclipselink.ddl-generation.output-mode" value="both" />
+      <property name="eclipselink.logging.logger" value="ServerLogger" />
+      <property name="eclipselink.logging.level.sql" value="FINE" />
+      <property name="eclipselink.logging.parameters" value="true" />
+    </properties>
+  </persistence-unit>
+
+  <persistence-unit name="oaba-local" transaction-type="RESOURCE_LOCAL">
+
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+
+    <non-jta-data-source>jboss/datasources/DefaultDS0</non-jta-data-source>
+
+    <class>com.choicemaker.cm.batch.ejb.BatchJobEntity</class>
+    <class>com.choicemaker.cm.batch.ejb.BatchProcessingEventEntity</class>
+    <class>com.choicemaker.cm.batch.ejb.OperationalPropertyEntity</class>
+    <class>com.choicemaker.cm.oaba.ejb.AbaSettingsEntity</class>
+    <class>com.choicemaker.cm.oaba.ejb.AbstractParametersEntity</class>
+    <class>com.choicemaker.cm.oaba.ejb.AbstractRecordIdTranslationEntity</class>
+    <class>com.choicemaker.cm.oaba.ejb.BaseRecordSourceEntity</class>
+    <class>com.choicemaker.cm.oaba.ejb.DefaultServerConfigurationEntity</class>
+    <class>com.choicemaker.cm.oaba.ejb.DefaultSettingsEntity</class>
+    <class>com.choicemaker.cm.oaba.ejb.OabaJobEntity</class>
+    <class>com.choicemaker.cm.oaba.ejb.OabaParametersEntity</class>
+    <class>com.choicemaker.cm.oaba.ejb.OabaProcessingEventEntity</class>
+    <class>com.choicemaker.cm.oaba.ejb.OabaSettingsEntity</class>
+    <class>com.choicemaker.cm.oaba.ejb.RecordIdIntegerTranslation</class>
+    <class>com.choicemaker.cm.oaba.ejb.RecordIdLongTranslation</class>
+    <class>com.choicemaker.cm.oaba.ejb.RecordIdStringTranslation</class>
+    <class>com.choicemaker.cm.oaba.ejb.ServerConfigurationEntity</class>
+    <class>com.choicemaker.cm.oaba.ejb.SqlRecordSourceEntity</class>
+    <class>com.choicemaker.cm.transitivity.ejb.TransitivityJobEntity</class>
+    <class>com.choicemaker.cm.transitivity.ejb.TransitivityParametersEntity</class>
+    <class>com.choicemaker.cm.transitivity.ejb.TransitivityProcessingEventEntity</class>    
+    <class>com.choicemaker.cms.ejb.NamedConfigurationEntity</class>
+    <class>com.choicemaker.cms.ejb.UrmJobEntity</class>
+
+    <properties>
+      <property name="eclipselink.target-server" value="JBoss" />
+      <property name="eclipselink.ddl-generation" value="create-or-extend-tables" />
+      <property name="eclipselink.ddl-generation.output-mode" value="both" />
+      <property name="eclipselink.logging.logger" value="ServerLogger" />
+      <property name="eclipselink.logging.level.sql" value="FINE" />
+      <property name="eclipselink.logging.parameters" value="true" />
+    </properties>
+  </persistence-unit>
+
+</persistence>
+

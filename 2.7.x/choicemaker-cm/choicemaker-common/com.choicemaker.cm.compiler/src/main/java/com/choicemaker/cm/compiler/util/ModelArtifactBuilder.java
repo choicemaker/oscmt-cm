@@ -179,6 +179,7 @@ public class ModelArtifactBuilder {
 	 * Creates a JAR file containing compiled ChoiceMaker models.
 	 */
 	public static class ProductionModelsBuilder implements ObjectMaker {
+		@Override
 		public void generateObjects(File outDir) throws XmlConfException,
 				IOException {
 			if (outDir == null) {
@@ -198,6 +199,7 @@ public class ModelArtifactBuilder {
 	 * ChoiceMaker models.
 	 */
 	public static class HolderClassesBuilder implements ObjectMaker {
+		@Override
 		public void generateObjects(File outDir) throws XmlConfException,
 				IOException {
 			if (outDir == null) {
@@ -217,6 +219,7 @@ public class ModelArtifactBuilder {
 	 * classes representing records used by ChoiceMaker models.
 	 */
 	public static class ZippedJavadocBuilder implements ObjectMaker {
+		@Override
 		public void generateObjects(File outDir) throws XmlConfException,
 				IOException {
 			if (outDir == null) {

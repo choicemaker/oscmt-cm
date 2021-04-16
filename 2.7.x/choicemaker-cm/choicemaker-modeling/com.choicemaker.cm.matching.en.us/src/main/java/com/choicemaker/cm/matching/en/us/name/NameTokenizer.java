@@ -53,6 +53,7 @@ public class NameTokenizer extends SimpleTokenizer {
 	 * Overrides SimpleTokenizer's implementation, to substitute
 	 * square brackets for parenthesis.
 	 */
+	@Override
 	protected StringBuffer preprocessString(String s) {
 		s = s.replace('(', '[');
 		s = s.replace(')', ']');
@@ -71,6 +72,7 @@ public class NameTokenizer extends SimpleTokenizer {
 	 * unique separators at the beginning and end of the list of tokens,
 	 * depending on how many arguments we've gotten.
 	 */
+	@Override
 	public List<Token> tokenize(String[] s) {
 		s = filterNonNull(s);
 		if (s.length < 1 || s.length > 3) {

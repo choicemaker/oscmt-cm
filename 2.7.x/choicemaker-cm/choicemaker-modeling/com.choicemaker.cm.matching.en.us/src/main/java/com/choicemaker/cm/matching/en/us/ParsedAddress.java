@@ -251,6 +251,7 @@ public class ParsedAddress extends ParsedData {
 	 * Returns a simple String representation of this ParsedAddress
 	 * (actually just returns <code>getStreetAddress()</code>).
 	 */
+	@Override
 	public String toString() {
 		return getStreetAddress();
 	}

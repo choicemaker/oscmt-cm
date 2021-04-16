@@ -101,6 +101,7 @@ public String getValueAsIs() {
  *
  * @see #isReadOnly
  */
+@Override
 public void markReadOnly() {
 	super.markReadOnly();
 	if (children != null)

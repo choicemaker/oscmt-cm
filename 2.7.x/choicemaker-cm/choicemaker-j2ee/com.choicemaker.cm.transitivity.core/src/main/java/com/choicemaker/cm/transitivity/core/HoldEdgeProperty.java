@@ -7,8 +7,8 @@
  *******************************************************************************/
 package com.choicemaker.cm.transitivity.core;
 
-import com.choicemaker.cm.core.Decision;
-import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
+import com.choicemaker.client.api.Decision;
+import com.choicemaker.cm.core.base.MatchRecord2;
 
 /**
  * This class checks to see if the edge is a hold edge.
@@ -32,8 +32,9 @@ public class HoldEdgeProperty implements EdgeProperty {
 	
 
 	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.transitivity.core.EdgeProperty#hasProperty(com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2)
+	 * @see com.choicemaker.cm.transitivity.core.EdgeProperty#hasProperty(com.choicemaker.cm.oaba.data.MatchRecord2)
 	 */
+	@Override
 	public boolean hasProperty(MatchRecord2 mr) {
 		if (mr.getMatchType() == Decision.HOLD) return true;
 		else return false;

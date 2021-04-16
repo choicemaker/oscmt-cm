@@ -23,6 +23,7 @@ public class DefaultPanelControl implements IPanelControl {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.module.swing.IPanelControl#getManagedPanel()
 	 */
+	@Override
 	public JPanel getManagedPanel() {
 		return this.managedPanel;
 	}
@@ -30,6 +31,7 @@ public class DefaultPanelControl implements IPanelControl {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.module.swing.IPanelControl#setManagedPanel(javax.swing.JPanel)
 	 */
+	@Override
 	public void setManagedPanel(JPanel panel) {
 		// Precondition: the panel should not be null, otherwise
 		// this module would become disconnected from any visible

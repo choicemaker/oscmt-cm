@@ -198,10 +198,12 @@ public class TypeChecker extends DefaultVisitor implements Tags {
 			return (sym.modifiers() & Modifiers.PUBLIC) != 0;
 	}
 
+	@Override
 	public void visit(Tree t) {
 		result = prototype;
 	}
 
+	@Override
 	public void visit(ClueSetDecl t) throws CompilerException {
 		// declare the current clue set symbol
 		this.set = t.sym;
@@ -219,6 +221,7 @@ public class TypeChecker extends DefaultVisitor implements Tags {
 		result = type;
 	}
 
+	@Override
 	public void visit(ClueDecl t) throws CompilerException {
 		// enter clue if not already defined
 		if (scope.lookup(t.name) != Symbol.NONE)
@@ -247,6 +250,7 @@ public class TypeChecker extends DefaultVisitor implements Tags {
 		result = exprtype;
 	}
 
+	@Override
 	public void visit(VarDecl t) throws CompilerException {
 		// create a symbol for this variable
 		t.sym = new VarSymbol(t.name, derive.typeOf(t.tpe), 0, scope.owner);
@@ -260,6 +264,7 @@ public class TypeChecker extends DefaultVisitor implements Tags {
 		result = Type.NONE;
 	}
 
+	@Override
 	public void visit(Index t) throws CompilerException {
 		// create a symbol for this index
 		t.sym = new VarSymbol(t.name, derive.typeOf(t.tpe), 0, scope.owner);
@@ -273,6 +278,7 @@ public class TypeChecker extends DefaultVisitor implements Tags {
 		result = Type.NONE;
 	}
 
+	@Override
 	public void visit(Quantified t) throws CompilerException {
 		// create a local scope for this quantifier
 		Scope local = new Scope(scope.owner, scope);
@@ -300,6 +306,7 @@ public class TypeChecker extends DefaultVisitor implements Tags {
 		}
 	}
 
+	@Override
 	public void visit(Let t) throws CompilerException {
 		// create a local scope for this let binder
 		Scope local = new Scope(scope.owner, scope);
@@ -309,6 +316,7 @@ public class TypeChecker extends DefaultVisitor implements Tags {
 		result = typecheck(t.expr, prototype, local);
 	}
 
+	@Override
 	public void visit(Shorthand t) throws CompilerException {
 		Type old = typeOfR;
 		switch (t.form) {
@@ -362,6 +370,7 @@ public class TypeChecker extends DefaultVisitor implements Tags {
 		}
 	}
 
+	@Override
 	public void visit(Valid t) throws CompilerException {
 		typecheck(t.access, Type.ANY, scope);
 		if (t.access != null
@@ -375,6 +384,7 @@ public class TypeChecker extends DefaultVisitor implements Tags {
 		}
 	}
 
+	@Override
 	public void visit(If t) throws CompilerException {
 		// this is an "almost-like-the-spec" implementation; implementing
 		// this according to �15.25 of the JLS would not make much sense
@@ -395,6 +405,7 @@ public class TypeChecker extends DefaultVisitor implements Tags {
 		}
 	}
 
+	@Override
 	public void visit(Apply t) throws CompilerException {
 		// typecheck arguments
 		Type[] argtypes = typecheck(t.args, Type.ANY, scope);
@@ -408,6 +419,7 @@ public class TypeChecker extends DefaultVisitor implements Tags {
 			result = mtype.restype();
 	}
 
+	@Override
 	public void visit(New t) throws CompilerException {
 		// typecheck arguments
 		Type[] argtypes = typecheck(t.args, Type.ANY, scope);
@@ -439,6 +451,7 @@ public class TypeChecker extends DefaultVisitor implements Tags {
 		}
 	}
 
+	@Override
 	public void visit(NewArray t) throws CompilerException {
 		if ((t.clazz == null) && (t.dims == null)) {
 			if (prototype.isArray()) {
@@ -468,6 +481,7 @@ public class TypeChecker extends DefaultVisitor implements Tags {
 		}
 	}
 
+	@Override
 	public void visit(Typeop t) throws CompilerException {
 		Type tpe = derive.typeOf(t.tpe);
 		Type etpe = typecheck(t.expr, Type.ANY, scope);
@@ -490,6 +504,7 @@ public class TypeChecker extends DefaultVisitor implements Tags {
 		}
 	}
 
+	@Override
 	public void visit(Unop t) throws CompilerException {
 		result = Type.ERROR;
 		switch (t.opcode) {
@@ -552,6 +567,7 @@ public class TypeChecker extends DefaultVisitor implements Tags {
 		return isNumeric(t) && (t != Type.FLOAT) && (t != Type.DOUBLE);
 	}
 
+	@Override
 	public void visit(Binop t) throws CompilerException {
 		Type left = typecheck(t.left, Type.ANY, scope);
 		Type right = typecheck(t.right, Type.ANY, scope);
@@ -663,6 +679,7 @@ public class TypeChecker extends DefaultVisitor implements Tags {
 		}
 	}
 
+	@Override
 	public void visit(Indexed t) throws CompilerException {
 		presetMultiClueAccess(t, 1);
 		if (t.multiClue != null) {
@@ -798,6 +815,7 @@ public class TypeChecker extends DefaultVisitor implements Tags {
 		return expr;
 	}
 
+	@Override
 	public void visit(Select t) throws CompilerException {
 		// typecheck qualifier
 		Type tpe = typecheck(t.qualifier, Type.ANY, scope);
@@ -878,6 +896,7 @@ public class TypeChecker extends DefaultVisitor implements Tags {
 		}
 	}
 
+	@Override
 	public void visit(Ident t) throws CompilerException {
 		if (t.name == "null") {
 			t.sym = Symbol.NULL;
@@ -946,6 +965,7 @@ public class TypeChecker extends DefaultVisitor implements Tags {
 		result = t.sym.getType();
 	}
 
+	@Override
 	public void visit(Self t) throws CompilerException {
 		switch (t.stag) {
 			case Q :
@@ -964,6 +984,7 @@ public class TypeChecker extends DefaultVisitor implements Tags {
 		}
 	}
 
+	@Override
 	public void visit(Literal t) throws CompilerException {
 		switch (t.ltag) {
 			case INT :

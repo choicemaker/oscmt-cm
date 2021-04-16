@@ -41,6 +41,7 @@ public class FlatFileSingleFileReaderGenerator implements GeneratorPlugin {
 //	private Set recordTypes;
 //	private int recordNum;
 
+	@Override
 	public void generate(IGenerator g) throws GenException {
 		String className = g.getSchemaName() + "SingleFileFlatFileReader";
 		String packageName = g.getPackage() + ".flatfile";

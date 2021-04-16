@@ -11,10 +11,10 @@ import java.io.IOException;
 
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.MarkedRecordPairSource;
+import com.choicemaker.cm.core.MutableMarkedRecordPair;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.Sink;
-import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
 
 
 public class MrpsToRsAdapter implements RecordSource {
@@ -49,6 +49,7 @@ public class MrpsToRsAdapter implements RecordSource {
 		return which;
 	}
 
+	@Override
 	public Record getNext() throws IOException {
 		if (which == BOTH) {
 			if (pair == null) {
@@ -68,14 +69,17 @@ public class MrpsToRsAdapter implements RecordSource {
 		}
 	}
 
+	@Override
 	public void open() throws IOException {
 		mrps.open();
 	}
 
+	@Override
 	public void close() throws IOException {
 		mrps.close();
 	}
 
+	@Override
 	public boolean hasNext() throws IOException {
 		if (which == BOTH) {
 			return pair != null || mrps.hasNext();
@@ -84,30 +88,37 @@ public class MrpsToRsAdapter implements RecordSource {
 		}
 	}
 
+	@Override
 	public String getName() {
 		return "MRPS to RS Adapter";
 	}
 
+	@Override
 	public void setName(String name) {
 		// do nothing..
 	}
 
+	@Override
 	public ImmutableProbabilityModel getModel() {
 		return mrps.getModel();
 	}
 
+	@Override
 	public void setModel(ImmutableProbabilityModel m) {
 		mrps.setModel(m);
 	}
 
+	@Override
 	public String getFileName() {
 		return null;
 	}
 
+	@Override
 	public boolean hasSink() {
 		return false;
 	}
 
+	@Override
 	public Sink getSink() {
 		return null;
 	}

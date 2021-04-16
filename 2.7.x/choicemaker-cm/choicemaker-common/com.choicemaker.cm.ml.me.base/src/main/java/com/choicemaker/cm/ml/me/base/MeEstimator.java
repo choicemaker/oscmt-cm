@@ -14,10 +14,10 @@ import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.choicemaker.cm.core.BooleanActiveClues;
 import com.choicemaker.cm.core.ClueDesc;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.base.BooleanActiveClues;
-import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
+import com.choicemaker.cm.core.MutableMarkedRecordPair;
 import com.choicemaker.util.IntArrayList;
 
 /**
@@ -702,6 +702,7 @@ public class MeEstimator {
 			}	
 		}
 		
+		@Override
 		public boolean equals(Object obj) {
 			MeHistory h = (MeHistory)obj;
 			int[][] fff = h.featuresForFuture;
@@ -722,6 +723,7 @@ public class MeEstimator {
 			return true;	
 		}
 	
+		@Override
 		public int hashCode() {
 			int hash = 0;
 			

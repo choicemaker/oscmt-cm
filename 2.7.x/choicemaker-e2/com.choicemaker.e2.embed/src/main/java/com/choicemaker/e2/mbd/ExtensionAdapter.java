@@ -65,26 +65,32 @@ public class ExtensionAdapter {
 			this.delegate = o;
 		}
 
+		@Override
 		public CMConfigurationElement[] getConfigurationElements() {
 			return ConfigurationElementAdapter.convert(delegate.getConfigurationElements());
 		}
 
+		@Override
 		public CMPluginDescriptor getDeclaringPluginDescriptor() {
 			return PluginDescriptorAdapter.convert(delegate.getDeclaringPluginDescriptor());
 		}
 
+		@Override
 		public String getExtensionPointUniqueIdentifier() {
 			return delegate.getExtensionPointUniqueIdentifier();
 		}
 
+		@Override
 		public String getLabel() {
 			return delegate.getLabel();
 		}
 
+		@Override
 		public String getSimpleIdentifier() {
 			return delegate.getSimpleIdentifier();
 		}
 
+		@Override
 		public String getUniqueIdentifier() {
 			return delegate.getUniqueIdentifier();
 		}
@@ -102,26 +108,32 @@ public class ExtensionAdapter {
 			this.delegate = o;
 		}
 
+		@Override
 		public IConfigurationElement[] getConfigurationElements() {
 			return ConfigurationElementAdapter.convert(delegate.getConfigurationElements());
 		}
 
+		@Override
 		public IPluginDescriptor getDeclaringPluginDescriptor() {
 			return PluginDescriptorAdapter.convert(delegate.getDeclaringPluginDescriptor());
 		}
 
+		@Override
 		public String getExtensionPointUniqueIdentifier() {
 			return delegate.getExtensionPointUniqueIdentifier();
 		}
 
+		@Override
 		public String getLabel() {
 			return delegate.getLabel();
 		}
 
+		@Override
 		public String getSimpleIdentifier() {
 			return delegate.getSimpleIdentifier();
 		}
 
+		@Override
 		public String getUniqueIdentifier() {
 			return delegate.getUniqueIdentifier();
 		}

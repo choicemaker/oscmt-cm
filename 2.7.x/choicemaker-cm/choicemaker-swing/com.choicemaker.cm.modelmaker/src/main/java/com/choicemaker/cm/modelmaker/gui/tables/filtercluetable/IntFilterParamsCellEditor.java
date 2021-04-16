@@ -19,6 +19,7 @@ import javax.swing.AbstractCellEditor;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
+import javax.swing.SwingConstants;
 import javax.swing.table.TableCellEditor;
 
 import com.choicemaker.cm.analyzer.filter.IntFilterCondition;
@@ -41,6 +42,7 @@ public class IntFilterParamsCellEditor extends AbstractCellEditor implements Tab
 	/**
 	 * @see javax.swing.table.TableCellEditor#getTableCellEditorComponent(javax.swing.JTable, java.lang.Object, boolean, int, int)
 	 */
+	@Override
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 
 		if (value instanceof IntFilterCondition) {
@@ -77,6 +79,7 @@ public class IntFilterParamsCellEditor extends AbstractCellEditor implements Tab
 	/**
 	 * @see javax.swing.CellEditor#getCellEditorValue()
 	 */
+	@Override
 	public Object getCellEditorValue() {
 		IntFilterCondition returnValue;
 
@@ -184,6 +187,7 @@ public class IntFilterParamsCellEditor extends AbstractCellEditor implements Tab
 
 		//TODO: consider not doing this in addNotify but in requestFocus, or something like that.
 		//		this should work but it seems a bit dirty.
+		@Override
 		public void addNotify() {
 			super.addNotify();
 			firstField.requestFocus();
@@ -205,12 +209,14 @@ public class IntFilterParamsCellEditor extends AbstractCellEditor implements Tab
 		/**
 		 * @see java.awt.event.FocusListener#focusGained(java.awt.event.FocusEvent)
 		 */
+		@Override
 		public void focusGained(FocusEvent e) {
 		}
 
 		/**
 		 * @see java.awt.event.FocusListener#focusLost(java.awt.event.FocusEvent)
 		 */
+		@Override
 		public void focusLost(FocusEvent e) {
 			editor.stopCellEditing();
 		}
@@ -253,7 +259,7 @@ public class IntFilterParamsCellEditor extends AbstractCellEditor implements Tab
 			addComponent(secondField, gridbag, c);
 			addComponent(postField, gridbag, c2);
 
-			labelField.setHorizontalAlignment(JLabel.CENTER);
+			labelField.setHorizontalAlignment(SwingConstants.CENTER);
 
 			initializeFocus();
 		}
@@ -269,6 +275,7 @@ public class IntFilterParamsCellEditor extends AbstractCellEditor implements Tab
 
 		//TODO: consider not doing this in addNotify but in requestFocus, or something like that.
 		//		this should work but it seems a bit dirty.
+		@Override
 		public void addNotify() {
 			super.addNotify();
 			firstField.requestFocus();
@@ -310,12 +317,14 @@ public class IntFilterParamsCellEditor extends AbstractCellEditor implements Tab
 		/**
 		 * @see java.awt.event.FocusListener#focusGained(java.awt.event.FocusEvent)
 		 */
+		@Override
 		public void focusGained(FocusEvent e) {
 		}
 
 		/**
 		 * @see java.awt.event.FocusListener#focusLost(java.awt.event.FocusEvent)
 		 */
+		@Override
 		public void focusLost(FocusEvent e) {
 			if (e.getOppositeComponent() != firstField && e.getOppositeComponent() != secondField){
 				editor.stopCellEditing();

@@ -7,7 +7,7 @@
  *******************************************************************************/
 package com.choicemaker.cm.transitivity.core;
 
-import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
+import com.choicemaker.cm.core.base.MatchRecord2;
 
 /**
  * This interface defines what edge properties to check for.

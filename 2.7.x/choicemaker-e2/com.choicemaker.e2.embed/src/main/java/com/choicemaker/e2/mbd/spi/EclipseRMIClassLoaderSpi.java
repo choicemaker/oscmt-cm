@@ -28,12 +28,14 @@ public class EclipseRMIClassLoaderSpi extends RMIClassLoaderSpi {
 		classLoader = v;
 	}
 
+	@Override
 	public ClassLoader getClassLoader(String codebase)
 			throws MalformedURLException {
 		return RMIClassLoader.getDefaultProviderInstance().getClassLoader(
 				codebase);
 	}
 
+	@Override
 	public String getClassAnnotation(Class<?> cl) {
 		RMIClassLoaderSpi defaultProvider =
 			RMIClassLoader.getDefaultProviderInstance();
@@ -51,7 +53,7 @@ public class EclipseRMIClassLoaderSpi extends RMIClassLoaderSpi {
 				} else {
 					annotation.append(' ');
 				}
-				annotation.append((String) iCodeBaseElements.next());
+				annotation.append(iCodeBaseElements.next());
 			}
 			return annotation.toString();
 		}
@@ -75,6 +77,7 @@ public class EclipseRMIClassLoaderSpi extends RMIClassLoaderSpi {
 		}
 	}
 
+	@Override
 	public Class<?> loadClass(String codebase, String name,
 			ClassLoader defaultLoader) throws MalformedURLException,
 			ClassNotFoundException {
@@ -93,6 +96,7 @@ public class EclipseRMIClassLoaderSpi extends RMIClassLoaderSpi {
 		return classLoader.loadClass(name);
 	}
 
+	@Override
 	public Class<?> loadProxyClass(String codebase, String[] interfaces,
 			ClassLoader defaultLoader) throws MalformedURLException,
 			ClassNotFoundException {

@@ -67,34 +67,42 @@ public class ExtensionPointAdapter {
 			this.delegate = o;
 		}
 
+		@Override
 		public CMConfigurationElement[] getConfigurationElements() {
 			return ConfigurationElementAdapter.convert(delegate.getConfigurationElements());
 		}
 
+		@Override
 		public CMPluginDescriptor getDeclaringPluginDescriptor() {
 			return PluginDescriptorAdapter.convert(delegate.getDeclaringPluginDescriptor());
 		}
 
+		@Override
 		public CMExtension getExtension(String extensionId) {
 			return ExtensionAdapter.convert(delegate.getExtension(extensionId));
 		}
 
+		@Override
 		public CMExtension[] getExtensions() {
 			return ExtensionAdapter.convert(delegate.getExtensions());
 		}
 
+		@Override
 		public String getLabel() {
 			return delegate.getLabel();
 		}
 
+		@Override
 		public String getSchemaReference() {
 			return delegate.getSchemaReference();
 		}
 
+		@Override
 		public String getSimpleIdentifier() {
 			return delegate.getSimpleIdentifier();
 		}
 
+		@Override
 		public String getUniqueIdentifier() {
 			return delegate.getUniqueIdentifier();
 		}
@@ -112,34 +120,42 @@ public class ExtensionPointAdapter {
 			this.delegate = o;
 		}
 
+		@Override
 		public IConfigurationElement[] getConfigurationElements() {
 			return ConfigurationElementAdapter.convert(delegate.getConfigurationElements());
 		}
 
+		@Override
 		public IPluginDescriptor getDeclaringPluginDescriptor() {
 			return PluginDescriptorAdapter.convert(delegate.getDeclaringPluginDescriptor());
 		}
 
+		@Override
 		public IExtension getExtension(String extensionId) {
 			return ExtensionAdapter.convert(delegate.getExtension(extensionId));
 		}
 
+		@Override
 		public IExtension[] getExtensions() {
 			return ExtensionAdapter.convert(delegate.getExtensions());
 		}
 
+		@Override
 		public String getLabel() {
 			return delegate.getLabel();
 		}
 
+		@Override
 		public String getSchemaReference() {
 			return delegate.getSchemaReference();
 		}
 
+		@Override
 		public String getSimpleIdentifier() {
 			return delegate.getSimpleIdentifier();
 		}
 
+		@Override
 		public String getUniqueIdentifier() {
 			return delegate.getUniqueIdentifier();
 		}

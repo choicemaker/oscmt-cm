@@ -137,6 +137,7 @@ public class SQLServerSerializableCompositeRecordSource implements
 	 * An obsolete constructor with an unused parameter, <code>unused</code>
 	 * @deprecated
 	 */
+	@Deprecated
 	public SQLServerSerializableCompositeRecordSource (String ds, String unused, String modelName,
 		String dbConfig, String sql, int maxCompositeSize) {
 		this(ds, modelName, dbConfig, sql, maxCompositeSize);
@@ -163,6 +164,7 @@ public class SQLServerSerializableCompositeRecordSource implements
 		return sqlRS;
 	}
 	
+	@Override
 	public ImmutableProbabilityModel getModel () {
 		if (model == null) {
 			model = PMManager.getModelInstance(modelName);
@@ -174,6 +176,7 @@ public class SQLServerSerializableCompositeRecordSource implements
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.RecordSource#getNext()
 	 */
+	@Override
 	public Record getNext() throws IOException {
 		return getRS().getNext();
 	}
@@ -181,6 +184,7 @@ public class SQLServerSerializableCompositeRecordSource implements
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.Source#open()
 	 */
+	@Override
 	public void open() throws IOException {
 		getRS().open ();
 	}
@@ -188,6 +192,7 @@ public class SQLServerSerializableCompositeRecordSource implements
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.Source#close()
 	 */
+	@Override
 	public void close() throws IOException {
 		getRS().close();
 	}
@@ -195,6 +200,7 @@ public class SQLServerSerializableCompositeRecordSource implements
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.Source#hasNext()
 	 */
+	@Override
 	public boolean hasNext() throws IOException {
 		return getRS().hasNext();
 	}
@@ -202,6 +208,7 @@ public class SQLServerSerializableCompositeRecordSource implements
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.Source#getName()
 	 */
+	@Override
 	public String getName() {
 		return getRS().getName();
 	}
@@ -209,6 +216,7 @@ public class SQLServerSerializableCompositeRecordSource implements
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.Source#setName(java.lang.String)
 	 */
+	@Override
 	public void setName(String name) {
 		getRS().setName(name);
 	}
@@ -217,6 +225,7 @@ public class SQLServerSerializableCompositeRecordSource implements
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.Source#setModel(com.choicemaker.cm.core.ProbabilityModel)
 	 */
+	@Override
 	public void setModel(ImmutableProbabilityModel m) {
 		getRS().setModel(m);
 	}
@@ -224,6 +233,7 @@ public class SQLServerSerializableCompositeRecordSource implements
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.Source#hasSink()
 	 */
+	@Override
 	public boolean hasSink() {
 		return getRS().hasSink();
 	}
@@ -231,6 +241,7 @@ public class SQLServerSerializableCompositeRecordSource implements
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.Source#getSink()
 	 */
+	@Override
 	public Sink getSink() {
 		return getRS().getSink();
 	}
@@ -238,11 +249,13 @@ public class SQLServerSerializableCompositeRecordSource implements
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.Source#getFileName()
 	 */
+	@Override
 	public String getFileName() {
 		return getRS().getFileName();
 	}
 
 
+	@Override
 	public boolean equals (Object o) {
 		if (o instanceof SQLServerSerializableCompositeRecordSource) {
 			SQLServerSerializableCompositeRecordSource rs = (SQLServerSerializableCompositeRecordSource) o;
@@ -256,6 +269,7 @@ public class SQLServerSerializableCompositeRecordSource implements
 		}
 	}
 
+	@Override
 	public String toString() {
 		return "SQLServerSerializableCompositeRecordSource [dsJNDIName="
 				+ dsJNDIName + ", modelName=" + modelName + ", dbConfig="
@@ -263,6 +277,7 @@ public class SQLServerSerializableCompositeRecordSource implements
 				+ maxCompositeSize + "]";
 	}
 
+	@Override
 	public Properties getProperties() {
 		Properties retVal = new Properties();
 		retVal.setProperty(PN_DATA_SOURCE, dsJNDIName);
@@ -273,6 +288,7 @@ public class SQLServerSerializableCompositeRecordSource implements
 		return null;
 	}
 
+	@Override
 	public void setProperties(Properties p)
 			throws IncompleteSpecificationException {
 		if (p != null) {
@@ -327,6 +343,7 @@ public class SQLServerSerializableCompositeRecordSource implements
 		}
 	}
 	
+	@Override
 	public String toXML() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(SqlServerXmlUtils.xmlElementStart(SqlServerXmlUtils.EN_SQLSERVERCOMPOSITERECORDSOURCE));

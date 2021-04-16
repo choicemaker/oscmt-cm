@@ -91,6 +91,7 @@ public final class DoubleMetaphone {
 		return res;
 	}
 
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -111,6 +112,7 @@ public final class DoubleMetaphone {
 	 *            the object for comparison
  	 * @return the equality of the Object
  	 */
+	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
@@ -133,6 +135,7 @@ public final class DoubleMetaphone {
 	 * Obsolete method for {@link #equals(Object)}. Used for testing only.
 	 * @deprecated
 	 */
+	@Deprecated
 	public boolean equals_00(Object o) {
 		DoubleMetaphone om = (DoubleMetaphone) o;
 		return getPrimary().equals(om.getPrimary())

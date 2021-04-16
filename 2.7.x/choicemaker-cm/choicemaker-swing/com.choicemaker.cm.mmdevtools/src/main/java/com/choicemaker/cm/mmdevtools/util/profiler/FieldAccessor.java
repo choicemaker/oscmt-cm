@@ -78,6 +78,7 @@ public class FieldAccessor {
 		return descriptor.getValidity(r, row, column);
 	}
 	
+	@Override
 	public String toString() {
 		return getRecordName() + '.' + fieldName;
 	}

@@ -45,6 +45,10 @@ public class XmlOutput {
 		writeAttribute(w, name, String.valueOf(value));
 	}
 
+	public static void writeAttribute(Writer w, String name, double value) throws IOException {
+		writeAttribute(w, name, String.valueOf(value));
+	}
+
 	public static void writeOpenBeginElement(Writer w, String name) throws IOException {
 		w.write("<" + name);
 	}

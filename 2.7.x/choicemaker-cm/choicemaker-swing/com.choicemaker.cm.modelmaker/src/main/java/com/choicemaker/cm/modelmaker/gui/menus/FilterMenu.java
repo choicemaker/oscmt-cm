@@ -48,6 +48,7 @@ public class FilterMenu extends JMenu implements ActionListener {
 
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public void actionPerformed(ActionEvent e) {
 //				humanReview.getFilter().reset();
 //				humanReview.filterMarkedRecordPairList();
@@ -58,7 +59,8 @@ public class FilterMenu extends JMenu implements ActionListener {
         });
     }
 
-    public void actionPerformed(ActionEvent ev) {
+    @Override
+	public void actionPerformed(ActionEvent ev) {
         humanReview.displayRecordPairFilterDialog();
     }
 

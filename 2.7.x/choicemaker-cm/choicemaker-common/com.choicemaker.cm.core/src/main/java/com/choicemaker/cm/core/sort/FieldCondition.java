@@ -31,6 +31,7 @@ public class FieldCondition implements Condition {
 		this.value = value;
 	}
 
+	@Override
 	public boolean accept(Record r, int row, Object val) {
 		Object o = descriptor.getValue(r, row, col);
 		return val == null ? o == null : value.equals(o);

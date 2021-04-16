@@ -67,7 +67,7 @@ public class ContextFreeGrammar {
 	public void addAllRules(Collection<Rule> rules) {
 		Iterator<Rule> elements = rules.iterator();
 		while (elements.hasNext()) {
-			addRule((Rule) elements.next());
+			addRule(elements.next());
 		}
 	}
 	
@@ -143,7 +143,7 @@ public class ContextFreeGrammar {
 		int num = 0;
 		Iterator<CfgRuleBucket> it = lhsBuckets.values().iterator();
 		while (it.hasNext()) {
-			CfgRuleBucket bucket = (CfgRuleBucket) it.next();
+			CfgRuleBucket bucket = it.next();
 			num += bucket.getNumRules();
 		}	
 		return num;
@@ -186,14 +186,14 @@ public class ContextFreeGrammar {
 		ArrayList<Rule> list = new ArrayList<>();
 		Iterator<CfgRuleBucket> it = lhsBuckets.values().iterator();
 		while (it.hasNext()) {
-			CfgRuleBucket bucket = (CfgRuleBucket)it.next();
+			CfgRuleBucket bucket = it.next();
 			list.addAll(bucket.getRules());	
 		}
 		return list;	
 	}
 
 	protected CfgRuleBucket getLhsBucket(Variable lhs) {
-		return (CfgRuleBucket) lhsBuckets.get(lhs);
+		return lhsBuckets.get(lhs);
 	}
 
 	/**
@@ -219,7 +219,7 @@ public class ContextFreeGrammar {
 			
 			double sum = 0;
 			while (itRules.hasNext()) {
-				Rule r = (Rule) itRules.next();
+				Rule r = itRules.next();
 				sum += r.getProbability();	
 			}
 			
@@ -248,7 +248,7 @@ public class ContextFreeGrammar {
 		Set<Variable> rhsNonTokenTypes = new HashSet<>();
 		List<Rule> rules = getRules();
 		for (int i = 0; i < rules.size(); i++) {
-			Rule r = (Rule) rules.get(i);
+			Rule r = rules.get(i);
 			
 			lhsVariables.add(r.getLhs());
 			
@@ -297,7 +297,7 @@ public class ContextFreeGrammar {
 			}
 			
 			for (int i = 0; i < useless.size(); i++) {
-				Rule r = (Rule) useless.get(i);
+				Rule r = useless.get(i);
 				removeRule(r);
 			}
 		}
@@ -312,7 +312,7 @@ public class ContextFreeGrammar {
 		Set<Symbol> rhsVars = new HashSet<>();
 
 		for (int i = 0; i < rules.size(); i++) {
-			Rule r = (Rule) rules.get(i);
+			Rule r = rules.get(i);
 			rhsVars.addAll(r.getRhs());
 		}
 
@@ -320,7 +320,7 @@ public class ContextFreeGrammar {
 
 		List<Rule> useless = new ArrayList<>();
 		for (int i = 0; i < rules.size(); i++) {
-			Rule r = (Rule) rules.get(i);
+			Rule r = rules.get(i);
 			Variable lhs = r.getLhs();			
 			if (!lhs.equals(sv) && !rhsVars.contains(lhs)) {
 				useless.add(r);
@@ -337,6 +337,7 @@ public class ContextFreeGrammar {
 	 * the first rules in the string, and other rules are 
 	 * grouped together by LHS.
 	 */
+	@Override
 	public String toString() {
 		String s = "";
 
@@ -353,7 +354,7 @@ public class ContextFreeGrammar {
 		
 		Iterator<Variable> keys = lhsBuckets.keySet().iterator();
 		while (keys.hasNext()) {
-			Variable lhs = (Variable) keys.next();
+			Variable lhs = keys.next();
 			if (lhs.equals(startVariable)) {
 				continue;	
 			}
@@ -406,7 +407,7 @@ public class ContextFreeGrammar {
 			if (!hasRule(lhs, rhs)) {
 				throw new IllegalArgumentException("Rule does not exist!");
 			}
-			return (Rule)rules.get(rhs);	
+			return rules.get(rhs);	
 		}
 		
 		public int getNumRules() {

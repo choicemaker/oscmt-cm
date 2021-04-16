@@ -80,10 +80,12 @@ public class DefaultProbabilityModelManager implements IProbabilityModelManager 
 	 * @param model
 	 *            The probability model.
 	 */
+	@Override
 	public void addModel(IProbabilityModel model) {
 		models.put(model.getModelName(), model);
 	}
 
+	@Override
 	public Accessor createAccessor(String className, ClassLoader cl)
 			throws ClassNotFoundException, InstantiationException,
 			IllegalAccessException {
@@ -96,6 +98,7 @@ public class DefaultProbabilityModelManager implements IProbabilityModelManager 
 	 *
 	 * @return The specified probability model.
 	 */
+	@Override
 	public IProbabilityModel getModelInstance(String name) {
 		return (IProbabilityModel) models.get(name);
 	}
@@ -105,6 +108,7 @@ public class DefaultProbabilityModelManager implements IProbabilityModelManager 
 	 *
 	 * @return The specified probability model.
 	 */
+	@Override
 	public ImmutableProbabilityModel getImmutableModelInstance(String name) {
 		return (ImmutableProbabilityModel) models.get(name);
 	}
@@ -114,6 +118,7 @@ public class DefaultProbabilityModelManager implements IProbabilityModelManager 
 	// return retVal;
 	// }
 
+	@Override
 	public IProbabilityModel[] getModels() {
 		Set s = new HashSet(models.values());
 		IProbabilityModel[] retVal = new IProbabilityModel[s.size()];
@@ -121,6 +126,7 @@ public class DefaultProbabilityModelManager implements IProbabilityModelManager 
 		return retVal;
 	}
 
+	@Override
 	public void setGlobalReporters(Reporter[] rs) {
 		Precondition.assertNonNullArgument("null reporter array", rs);
 		for (int i = 0; i < rs.length; i++) {
@@ -132,12 +138,14 @@ public class DefaultProbabilityModelManager implements IProbabilityModelManager 
 		reporters = copy;
 	}
 
+	@Override
 	public Reporter[] getGlobalReporters() {
 		Reporter[] retVal = new Reporter[this.reporters.length];
 		System.arraycopy(this.reporters, 0, retVal, 0, this.reporters.length);
 		return retVal;
 	}
 
+	@Override
 	public int loadModelPlugins() throws ModelConfigurationException,
 			IOException {
 		CMExtension[] extensions =

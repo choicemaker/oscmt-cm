@@ -21,17 +21,17 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.choicemaker.cm.args.OabaLinkageType;
-import com.choicemaker.cm.batch.BatchJob;
-import com.choicemaker.cm.batch.OperationalPropertyController;
-import com.choicemaker.cm.batch.ProcessingController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordIdController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
+import com.choicemaker.cm.batch.api.BatchJob;
+import com.choicemaker.cm.batch.api.OperationalPropertyController;
+import com.choicemaker.cm.batch.api.EventPersistenceManager;
+import com.choicemaker.cm.oaba.api.OabaJobManager;
+import com.choicemaker.cm.oaba.api.OabaParametersController;
+import com.choicemaker.cm.oaba.api.OabaService;
+import com.choicemaker.cm.oaba.api.OabaSettingsController;
+import com.choicemaker.cm.oaba.api.RecordIdController;
+import com.choicemaker.cm.oaba.api.RecordSourceController;
+import com.choicemaker.cm.oaba.api.ServerConfigurationController;
+import com.choicemaker.cm.oaba.api.ServerConfigurationException;
 import com.choicemaker.cmit.oaba.util.OabaMdbTestProcedures;
 import com.choicemaker.cmit.utils.j2ee.BatchProcessingPhase;
 import com.choicemaker.cmit.utils.j2ee.JmsUtils;
@@ -90,7 +90,7 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 	private OabaService oabaService;
 
 	@EJB
-	private OabaJobController oabaJobController;
+	private OabaJobManager oabaJobController;
 
 	@EJB
 	private OabaParametersController oabaParamsController;
@@ -101,8 +101,8 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 	@EJB
 	private ServerConfigurationController serverController;
 
-	@EJB(beanName = "OabaProcessingControllerBean")
-	private ProcessingController processingController;
+	@EJB (beanName = "OabaEventManager")
+	private EventPersistenceManager eventManager;
 
 	@EJB
 	private OperationalPropertyController opPropController;
@@ -345,7 +345,7 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 		return jmsContext;
 	}
 
-	protected final OabaJobController getOabaJobController() {
+	protected final OabaJobManager getOabaJobController() {
 		return oabaJobController;
 	}
 
@@ -381,8 +381,8 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 		return oabaParamsController;
 	}
 
-	protected final ProcessingController getOabaProcessingController() {
-		return processingController;
+	protected final EventPersistenceManager getOabaProcessingController() {
+		return eventManager;
 	}
 
 	protected final RecordSourceController getRecordSourceController() {
@@ -499,7 +499,7 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 		}
 
 		@Override
-		public final OabaJobController getOabaJobController() {
+		public final OabaJobManager getOabaJobManager() {
 			return AbstractOabaMdbTest.this.getOabaJobController();
 		}
 
@@ -544,7 +544,7 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 		}
 
 		@Override
-		public final ProcessingController getOabaProcessingController() {
+		public final EventPersistenceManager getOabaProcessingController() {
 			return AbstractOabaMdbTest.this.getOabaProcessingController();
 		}
 

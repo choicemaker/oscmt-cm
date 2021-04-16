@@ -15,10 +15,12 @@ import com.choicemaker.cm.core.ImmutableProbabilityModel;
  * @author  Martin Buechi
  */
 public class AllBlockerToolkit implements BlockerToolkit {
+	@Override
 	public MatchDialogBlockerPlugin getDialogPlugin(ImmutableProbabilityModel model) {
 		return new AllBlockerDialogPlugin();
 	}
 
+	@Override
 	public String toString() {
 		return "All";
 	}

@@ -7,7 +7,7 @@
  *******************************************************************************/
 package com.choicemaker.cm.core;
 
-
+import com.choicemaker.client.api.Decision;
 
 /**
  * An unsafe, historical definition of a matching record. Wherever
@@ -41,6 +41,7 @@ public interface ImmutableUnsafeMatch {
 	 * check of ImmutableMatch in an unexpected manner</em></strong>
 	 * @return {@link #equalProbabilitiesOnly(Object o) equalProbabilitiesOnly(Object)}
 	 */
+	@Override
 	public abstract boolean equals(Object o);
 
 	/**
@@ -93,6 +94,7 @@ public interface ImmutableUnsafeMatch {
 	 * Consistent with <code>equals(Object)</code>, this method hashes on just
 	 * the probability score.
 	 */
+	@Override
 	public abstract int hashCode();
 
 }

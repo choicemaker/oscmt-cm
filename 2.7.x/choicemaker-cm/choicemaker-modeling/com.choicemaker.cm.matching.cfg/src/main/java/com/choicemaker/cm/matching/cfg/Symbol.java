@@ -65,6 +65,7 @@ public abstract class Symbol {
 	 * Returns a <code>String</code> representation of this object.
 	 * @return a <code>String</code> representation of this object.
 	 */
+	@Override
 	public String toString() {
 		return name;
 	}
@@ -78,6 +79,7 @@ public abstract class Symbol {
 	 * @param obj the object for comparison
 	 * @return true iff <code>obj</code> is equal to this <code>Symbol</code>
 	 */
+	@Override
 	public abstract boolean equals(Object obj);
 	
 	/**
@@ -86,6 +88,7 @@ public abstract class Symbol {
 	 * to override this default behavior for better hashing performance.
 	 * @return the hash code for this <code>Symbol</code>
 	 */
+	@Override
 	public int hashCode() {
 		return name.hashCode();
 	}

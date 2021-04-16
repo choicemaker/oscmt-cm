@@ -10,25 +10,24 @@
  */
 package com.choicemaker.cm.analyzer.matcher;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+import com.choicemaker.client.api.Decision;
 import com.choicemaker.cm.analyzer.filter.Filter;
 import com.choicemaker.cm.analyzer.sampler.PairSampler;
+import com.choicemaker.cm.core.ActiveClues;
 import com.choicemaker.cm.core.ClueSet;
-import com.choicemaker.cm.core.Decision;
+import com.choicemaker.cm.core.Evaluator;
 import com.choicemaker.cm.core.IMarkedRecordPair;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.MarkedRecordPairSink;
+import com.choicemaker.cm.core.MutableMarkedRecordPair;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.RecordSource;
-import com.choicemaker.cm.core.base.ActiveClues;
-import com.choicemaker.cm.core.base.Evaluator;
-import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
 import com.choicemaker.cm.core.base.RecordBinder;
 import com.choicemaker.cm.core.blocking.InMemoryBlocker;
 
@@ -104,6 +103,7 @@ public class InMemoryMatcher {
 	private void initSorter(int sortOrder) {
 		if (sortOrder == DECISION_PROBABILITY) {
 			sorter = new Comparator() {
+				@Override
 				public int compare(Object o1, Object o2) {
 					IMarkedRecordPair p1 = (IMarkedRecordPair) o1;
 					IMarkedRecordPair p2 = (IMarkedRecordPair) o2;
@@ -123,6 +123,7 @@ public class InMemoryMatcher {
 			};
 		} else if (sortOrder == PROBABILITY) {
 			sorter = new Comparator() {
+				@Override
 				public int compare(Object o1, Object o2) {
 					IMarkedRecordPair p1 = (IMarkedRecordPair) o1;
 					IMarkedRecordPair p2 = (IMarkedRecordPair) o2;

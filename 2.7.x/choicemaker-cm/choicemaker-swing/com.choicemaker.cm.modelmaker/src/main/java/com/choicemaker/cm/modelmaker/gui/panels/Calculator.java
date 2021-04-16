@@ -22,7 +22,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import com.choicemaker.cm.core.base.Thresholds;
+import com.choicemaker.cm.core.Thresholds;
 import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cm.modelmaker.stats.StatPoint;
@@ -120,6 +120,7 @@ public class Calculator extends JPanel {
 
 	private void addListeners() {
 		calculate.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
 					reset();
@@ -172,6 +173,7 @@ public class Calculator extends JPanel {
 			}
 		});
 		ActionListener l = new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				setEnabledness();
 			}
@@ -179,6 +181,7 @@ public class Calculator extends JPanel {
 		firstTpe.addActionListener(l);
 		sndTpe.addActionListener(l);
 		setDifferThreshold.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				ModelMaker mm = parent.getModelMaker();
 				Thresholds t = mm.getThresholds();
@@ -186,6 +189,7 @@ public class Calculator extends JPanel {
 			}
 		});
 		setMatchThreshold.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				ModelMaker mm = parent.getModelMaker();
 				Thresholds t = mm.getThresholds();
@@ -193,6 +197,7 @@ public class Calculator extends JPanel {
 			}
 		});
 		setBothThresholds.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				ModelMaker mm = parent.getModelMaker();
 				mm.setThresholds(new Thresholds(pt.differThreshold, pt.matchThreshold));

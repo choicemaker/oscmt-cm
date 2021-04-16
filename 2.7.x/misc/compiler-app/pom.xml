@@ -24,7 +24,7 @@
 
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.io.blocking.automated.base</artifactId>
+      <artifactId>com.choicemaker.cm.aba.base</artifactId>
       <version>2.7.1-SNAPSHOT</version>
     </dependency>
     <dependency>
@@ -152,24 +152,9 @@
       <version>2.7.1-SNAPSHOT</version>
     </dependency>
     <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>org.apache.ant</artifactId>
-      <version>1.5.4-SNAPSHOT</version>
-    </dependency>
-    <dependency>
       <groupId>org.apache.bcel</groupId>
       <artifactId>bcel</artifactId>
       <version>6.0</version>
-    </dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>org.eclipse.ant.core</artifactId>
-      <version>2.1.2-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>org.eclipse.ant.internal.core</artifactId>
-      <version>2.1.2-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
@@ -180,11 +165,6 @@
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>org.eclipse.core.launcher</artifactId>
       <version>2.1.4-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>org.eclipse.core.resources.ant</artifactId>
-      <version>2.1.2-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>

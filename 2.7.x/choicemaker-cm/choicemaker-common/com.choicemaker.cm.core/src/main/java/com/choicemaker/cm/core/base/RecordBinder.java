@@ -64,10 +64,12 @@ public class RecordBinder implements RecordSource {
 		this.startPosition = startPosition;
 	}
 
+	@Override
 	public Record getNext() throws IOException {
 		return (Record)iterator.next();
 	}
 
+	@Override
 	public void open() throws IOException {
 		if(startPosition == 0) {
 			iterator = collection.iterator();
@@ -76,38 +78,47 @@ public class RecordBinder implements RecordSource {
 		}
 	}
 
+	@Override
 	public void close() throws IOException {
 		iterator = null;
 	}
 
+	@Override
 	public boolean hasNext() {
 		return iterator.hasNext();
 	}
 
+	@Override
 	public String getName() {
 		return name;
 	}
 
+	@Override
 	public void setName(String name) {
 		this.name = name;
 	}
 
+	@Override
 	public ImmutableProbabilityModel getModel() {
 		return probabilityModel;
 	}
 
+	@Override
 	public void setModel(ImmutableProbabilityModel probabilityModel) {
 		this.probabilityModel = probabilityModel;
 	}
 
+	@Override
 	public boolean hasSink() {
 		return false;
 	}
 
+	@Override
 	public Sink getSink() {
 		return null;
 	}
 
+	@Override
 	public String getFileName() {
 		return null;
 	}

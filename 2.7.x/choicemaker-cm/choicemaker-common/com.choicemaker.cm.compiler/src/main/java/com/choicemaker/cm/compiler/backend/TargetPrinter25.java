@@ -56,6 +56,7 @@ public class TargetPrinter25 extends Printer implements Visitor, TargetTags, ITa
 		super(filename);
 	}
 
+	@Override
 	public void printUnit(ICompilationUnit unit) throws CompilerException {
 		printProlog(unit.getSource().toString());
 		for (int i = 0; i < unit.getTarget().length; i++) {
@@ -64,6 +65,7 @@ public class TargetPrinter25 extends Printer implements Visitor, TargetTags, ITa
 		out.close();
 	}
 
+	@Override
 	public void visit(ClassDecl t) throws CompilerException {
 		printModifiers(t.modifiers);
 		print("class " + t.name);
@@ -83,6 +85,7 @@ public class TargetPrinter25 extends Printer implements Visitor, TargetTags, ITa
 		print("}");
 	}
 
+	@Override
 	public void visit(JMethodDecl t) throws CompilerException {
 		printModifiers(t.modifiers);
 		if (t.restpe != null) {
@@ -104,6 +107,7 @@ public class TargetPrinter25 extends Printer implements Visitor, TargetTags, ITa
 		print("}");
 	}
 
+	@Override
 	public void visit(Block t) throws CompilerException {
 		println("{");
 		indent();
@@ -113,6 +117,7 @@ public class TargetPrinter25 extends Printer implements Visitor, TargetTags, ITa
 		print("}");
 	}
 
+	@Override
 	public void visit(Cond t) throws CompilerException {
 		print("if (");
 		printExpr(t.cond);
@@ -132,6 +137,7 @@ public class TargetPrinter25 extends Printer implements Visitor, TargetTags, ITa
 		}
 	}
 
+	@Override
 	public void visit(Try t) throws CompilerException {
 		println("try {");
 		indent();
@@ -148,6 +154,7 @@ public class TargetPrinter25 extends Printer implements Visitor, TargetTags, ITa
 		print(t.catches, "");
 	}
 
+	@Override
 	public void visit(Catch t) throws CompilerException {
 		print("catch (");
 		print(t.ex);
@@ -161,6 +168,7 @@ public class TargetPrinter25 extends Printer implements Visitor, TargetTags, ITa
 		print("}");
 	}
 
+	@Override
 	public void visit(While t) throws CompilerException {
 		print("while (");
 		print(t.cond);
@@ -171,6 +179,7 @@ public class TargetPrinter25 extends Printer implements Visitor, TargetTags, ITa
 		undent();
 	}
 
+	@Override
 	public void visit(DoWhile t) throws CompilerException {
 		print("do ");
 		print(t.body);
@@ -179,6 +188,7 @@ public class TargetPrinter25 extends Printer implements Visitor, TargetTags, ITa
 		print(")");
 	}
 
+	@Override
 	public void visit(For t) throws CompilerException {
 		print("for (");
 		print(t.inits, ", ");
@@ -193,11 +203,13 @@ public class TargetPrinter25 extends Printer implements Visitor, TargetTags, ITa
 		undent();
 	}
 
+	@Override
 	public void visit(Taged t) throws CompilerException {
 		print(t.label + ": ");
 		print(t.stat);
 	}
 
+	@Override
 	public void visit(Switch t) throws CompilerException {
 		print("switch (");
 		print(t.selector);
@@ -208,6 +220,7 @@ public class TargetPrinter25 extends Printer implements Visitor, TargetTags, ITa
 		align().print("}");
 	}
 
+	@Override
 	public void visit(Case t) throws CompilerException {
 		for (int i = 0; i < t.guard.length; i++) {
 			print("case ");
@@ -221,25 +234,30 @@ public class TargetPrinter25 extends Printer implements Visitor, TargetTags, ITa
 		undent();
 	}
 
+	@Override
 	public void visit(Break t) throws CompilerException {
 		print("break " + t.label);
 	}
 
+	@Override
 	public void visit(Continue t) throws CompilerException {
 		print("continue " + t.label);
 	}
 
+	@Override
 	public void visit(Return t) throws CompilerException {
 		print("return ");
 		print(t.expr);
 	}
 
+	@Override
 	public void visit(Assign t) throws CompilerException {
 		print(t.lhs);
 		print(" = ");
 		print(t.rhs);
 	}
 
+	@Override
 	public void visit(Tree.Self t) throws CompilerException {
 		switch (t.stag) {
 			case THIS :

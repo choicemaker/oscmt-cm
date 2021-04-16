@@ -52,11 +52,13 @@ public class NonNullObjectValidator extends AbstractValidator<Object> {
 	 * @see com.choicemaker.cm.validation.eclipse.IValidator#isValid(java.lang.
 	 * Object)
 	 */
+	@Override
 	public boolean isValid(Object object) {
 		boolean retVal = object != null;
 		return retVal;
 	}
 
+	@Override
 	public boolean equals(IValidator<?> validator) {
 		boolean retVal = false;
 		if (validator != null && validator.getClass().equals(this.getClass())) {
@@ -65,6 +67,7 @@ public class NonNullObjectValidator extends AbstractValidator<Object> {
 		return retVal;
 	}
 
+	@Override
 	public int hashCode() {
 		return this.getClass().hashCode();
 	}

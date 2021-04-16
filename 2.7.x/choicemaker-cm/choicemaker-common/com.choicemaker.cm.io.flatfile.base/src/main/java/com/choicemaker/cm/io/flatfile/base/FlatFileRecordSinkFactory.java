@@ -60,6 +60,7 @@ public class FlatFileRecordSinkFactory implements SinkFactory {
 		this.sources = new ArrayList();
 	}
 
+	@Override
 	public Sink getSink() {
 		String tName = fileNameBase + num + "." + Constants.MRPS_EXTENSION;
 		String tFileName = flatfileFileName + num;

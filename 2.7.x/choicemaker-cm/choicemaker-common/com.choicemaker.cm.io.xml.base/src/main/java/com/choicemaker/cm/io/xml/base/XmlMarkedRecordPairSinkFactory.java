@@ -37,7 +37,8 @@ public class XmlMarkedRecordPairSinkFactory implements SinkFactory {
         this.sources = new ArrayList();
     }
 
-    public Sink getSink() {
+    @Override
+	public Sink getSink() {
         String tName = fileNameBase + num + "." + Constants.MRPS_EXTENSION;
         String tFileName = xmlFileName + num + extension;
         ++num;

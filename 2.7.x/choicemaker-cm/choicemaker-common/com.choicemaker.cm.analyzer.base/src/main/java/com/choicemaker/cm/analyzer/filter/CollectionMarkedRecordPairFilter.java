@@ -44,12 +44,14 @@ public class CollectionMarkedRecordPairFilter extends MarkedRecordPairFilter {
 		}
 	}
 
+	@Override
 	public void reset() {
 		setAcceptedPairs(null);
 		super.reset();
 		// assert useCollection == false;
 	}
 
+	@Override
 	public int[] filterSource(Collection src) {
 		if (useCollection) {
 			IntArrayList indices = new IntArrayList();

@@ -37,6 +37,7 @@ public class LetterTokenType extends TokenType {
 	 * 
 	 * @see com.choicemaker.cm.matching.cfg.TokenType#canHaveToken(String)
 	 */
+	@Override
 	public boolean canHaveToken(String token) {
 		return token != null && token.length() == 1 && Character.isLetter(token.charAt(0));
 	}	
@@ -48,6 +49,7 @@ public class LetterTokenType extends TokenType {
 	 * of the implied rules add up to 1, give that we only see uppercase, Latin
 	 * characters).
 	 */
+	@Override
 	protected double getTokenProbability(String token) {
 		return 1.0 / 26.0;
 	}

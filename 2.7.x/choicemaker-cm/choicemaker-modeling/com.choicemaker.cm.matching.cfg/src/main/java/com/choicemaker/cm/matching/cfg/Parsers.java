@@ -12,6 +12,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import org.jdom2.JDOMException;
 
@@ -26,11 +27,15 @@ import com.choicemaker.e2.platform.CMPlatformUtils;
  * @author Adam Winkel
  */
 public final class Parsers {
-	private static Map<String, Object> parsers = new HashMap<>();
+
+	private static final Logger logger =
+		Logger.getLogger(Parsers.class.getName());
+
+	private static final Map<String, Object> parsers = new HashMap<>();
 
 	static {
 		initRegisteredParsers();
-		initRegisteredCascadedParsers();
+//		initRegisteredCascadedParsers();
 	}
 
 	public static boolean has(String name) {
@@ -39,8 +44,14 @@ public final class Parsers {
 
 	public static Parser get(String name) {
 		Object parser = parsers.get(name);
+		if (parser == null) {
+			String msg = "No parser named '" + name + "'";
+			logger.severe(msg);
+			throw new IllegalStateException(msg);
+		}
 		if (parser instanceof ParserDef) {
 			Parser p = ((ParserDef) parser).load();
+			assert p != null ;
 			put(p);
 			return p;
 		} else {
@@ -94,7 +105,7 @@ public final class Parsers {
 		}
 	}
 
-	static void initRegisteredCascadedParsers() {
+//	static void initRegisteredCascadedParsers() {
 //		CMExtension[] extensions = CMPlatformUtils.getExtensions(
 //				ChoiceMakerExtensionPoint.CM_MATCHING_CFG_CASCADEDPARSER);
 //		for (int i = 0; i < extensions.length; i++) {
@@ -125,22 +136,23 @@ public final class Parsers {
 //				Parsers.put(cp);
 //			}
 //		}
-	}
+//	}
 
 	private Parsers() {
 	}
 
 	private static class ParserDef {
+
+		private static final Logger logger =
+			Logger.getLogger(ParserDef.class.getName());
+
 		protected String name;
 		protected URL pUrl;
 		protected String relPath;
 		protected ClassLoader classLoader;
 
-//		protected ParserDef(String name) {
-//			this.name = name;
-//		}
-
-		public ParserDef(String name, ClassLoader cl, URL pUrl, String relPath) {
+		public ParserDef(String name, ClassLoader cl, URL pUrl,
+				String relPath) {
 			this.name = name;
 			this.pUrl = pUrl;
 			this.relPath = relPath;
@@ -152,22 +164,30 @@ public final class Parsers {
 		}
 
 		public Parser load() {
+			Parser retVal = null;
 			try {
 				URL rUrl = new URL(pUrl, relPath);
-				Parser p =
-					ParserXmlConf.readFromStream(rUrl.openStream(), classLoader, pUrl);
+				Parser p = ParserXmlConf.readFromStream(rUrl.openStream(),
+						classLoader, pUrl);
+				assert p != null;
 				p.setName(name);
-				return p;
-			} catch (XmlConfException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (JDOMException e) {
-				e.printStackTrace();
+				retVal = p;
+			} catch (XmlConfException | IOException | JDOMException e) {
+				String msg = "Unable to load parser from parser definition '"
+						+ this.toString() + "': " + e.toString();
+				logger.severe(msg);
+				throw new IllegalStateException(msg);
 			}
-
-			return null;
+			assert retVal != null;
+			return retVal;
 		}
+
+		@Override
+		public String toString() {
+			return "ParserDef [name=" + name + ", pUrl=" + pUrl + ", relPath="
+					+ relPath + "]";
+		}
+
 	}
 
 //	private static class CascadedParserDef extends ParserDef {

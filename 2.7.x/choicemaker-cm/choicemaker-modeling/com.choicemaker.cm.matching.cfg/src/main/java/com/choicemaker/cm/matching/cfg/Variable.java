@@ -65,6 +65,7 @@ public class Variable extends Symbol {
 	 * 
 	 * @return whether or not this Variable is equal to <code>obj</code>
 	 */
+	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof Variable) {
 			Variable v = (Variable)obj;

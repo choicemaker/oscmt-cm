@@ -7,12 +7,16 @@
  *******************************************************************************/
 package com.choicemaker.cm.core;
 
+import java.io.Serializable;
 import java.util.Date;
+
+import com.choicemaker.client.api.Decision;
 
 /**
  * @author rphall
  */
-public interface IMarkedRecordPair extends IRecordPair, ImmutableMarkedRecordPair {
+public interface IMarkedRecordPair<T extends Comparable<T> & Serializable>
+		extends IRecordPair<T>, ImmutableMarkedRecordPair<T> {
 	/**
 	 * The mark a pair as to whether it matches or not. Marking is performed
 	 * by human reviewers, as opposed to the decision

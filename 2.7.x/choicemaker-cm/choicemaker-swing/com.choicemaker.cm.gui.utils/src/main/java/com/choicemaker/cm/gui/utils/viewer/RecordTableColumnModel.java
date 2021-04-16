@@ -73,6 +73,7 @@ public class RecordTableColumnModel extends DefaultTableColumnModel {
 	/**
 	 * @see javax.swing.table.TableColumnModel#addColumn(javax.swing.table.TableColumn)
 	 */
+	@Override
 	public void addColumn(TableColumn column) {
 		((RecordTableColumn) column).setVisible(true);
 		super.addColumn(column);
@@ -82,6 +83,7 @@ public class RecordTableColumnModel extends DefaultTableColumnModel {
 	/**
 	 * @see javax.swing.table.TableColumnModel#removeColumn(javax.swing.table.TableColumn)
 	 */
+	@Override
 	public void removeColumn(TableColumn column) {
 		((RecordTableColumn) column).setVisible(false);
 		super.removeColumn(column);
@@ -126,6 +128,7 @@ public class RecordTableColumnModel extends DefaultTableColumnModel {
 		column.setHeaderValue(newValue);
 	}
 
+	@Override
 	public void moveColumn(int columnIndex, int newIndex) {
 		super.moveColumn(columnIndex, newIndex);
 		if(columnIndex != newIndex) {
@@ -173,6 +176,7 @@ public class RecordTableColumnModel extends DefaultTableColumnModel {
 	/* (non-Javadoc)
 	 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
 	 */
+	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		support.firePropertyChange(evt);
 		super.propertyChange(evt);

@@ -8,21 +8,22 @@
 package com.choicemaker.cm.core;
 
 import java.io.IOException;
-
-import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
+import java.io.Serializable;
 
 /**
  * Source of marked record pairs.
  *
- * @author    Martin Buechi
+ * @author Martin Buechi
  */
-public interface MarkedRecordPairSource extends RecordPairSource {
+public interface MarkedRecordPairSource<T extends Comparable<T> & Serializable>
+		extends RecordPairSource<T> {
 	/**
 	 * As <code>getNext</code>, but return type specialized to
 	 * <code>MarkedRecordPair</code>.
 	 *
-	 * @return  The next marked record pair.
-	 * @throws  IOException  if there is a problem retrieving the data.
+	 * @return The next marked record pair.
+	 * @throws IOException
+	 *             if there is a problem retrieving the data.
 	 */
-	MutableMarkedRecordPair getNextMarkedRecordPair() throws IOException;
+	MutableMarkedRecordPair<T> getNextMarkedRecordPair() throws IOException;
 }

@@ -25,20 +25,23 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-import com.choicemaker.cm.core.Decision;
+import com.choicemaker.client.api.Decision;
 import com.choicemaker.cm.core.ImmutableMarkedRecordPair;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.ImmutableRecordPair;
 import com.choicemaker.cm.core.MarkedRecordPairSource;
+import com.choicemaker.cm.core.MutableMarkedRecordPair;
 import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.Sink;
-import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
 import com.choicemaker.cm.core.base.PMManager;
+import com.choicemaker.cm.io.db.base.MarkedRecordPairSourceSpec;
+import com.choicemaker.cm.io.db.base.RecordPairRetrievalException;
 
 /**
- * @author ajwinkel
+ * @deprecated No longer used. No future use planned.
  *
  */
+@Deprecated
 public class SqlServerSerialMRPSource implements MarkedRecordPairSource, Serializable {
 
 	private static Logger logger = Logger.getLogger(SqlServerSerialMRPSource.class.getName());
@@ -73,11 +76,13 @@ public class SqlServerSerialMRPSource implements MarkedRecordPairSource, Seriali
 		this.mrpsQuery = mrpsQuery;
 	}
 	
+	@Override
 	public ImmutableProbabilityModel getModel() {
 		if (model == null) model = PMManager.getModelInstance(modelName);
 		return model;
 	}
 
+	@Override
 	public void open() throws IOException {
 		if (getModel () == null) {
 			throw new IllegalStateException("accessProvider is null");
@@ -161,14 +166,17 @@ public class SqlServerSerialMRPSource implements MarkedRecordPairSource, Seriali
 		return buff.toString();
 	}
 
+	@Override
 	public boolean hasNext() throws IOException {
 		return pairIterator.hasNext();
 	}
 
+	@Override
 	public ImmutableRecordPair getNext() throws IOException {
 		return getNextMarkedRecordPair();
 	}
 
+	@Override
 	public MutableMarkedRecordPair getNextMarkedRecordPair() throws IOException {
 		Object obj = pairIterator.next();
 		if (obj instanceof ImmutableMarkedRecordPair) {
@@ -181,14 +189,17 @@ public class SqlServerSerialMRPSource implements MarkedRecordPairSource, Seriali
 		}
 	}
 
+	@Override
 	public void close() throws IOException {
 		pairIterator = null;
 	}
 
+	@Override
 	public String getName() {
 		return dsName;
 	}
 
+	@Override
 	public void setName(String name) {
 		throw new UnsupportedOperationException();
 	}
@@ -206,6 +217,7 @@ public class SqlServerSerialMRPSource implements MarkedRecordPairSource, Seriali
 	}
 
 	//this is not used
+	@Override
 	public void setModel(ImmutableProbabilityModel m) {
 	}
 
@@ -239,19 +251,23 @@ public class SqlServerSerialMRPSource implements MarkedRecordPairSource, Seriali
 	public void setFileName(String fileName) {
 	}
 
+	@Override
 	public String getFileName() {
 		return null;
 	}
 
 
+	@Override
 	public boolean hasSink() {
 		return false;
 	}
 
+	@Override
 	public Sink getSink() {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
 	public String toString() {
 		return "SqlServerSerialMRPSource [dsName=" + dsName + ", modelName="
 				+ modelName + ", dbConfiguration=" + dbConfiguration

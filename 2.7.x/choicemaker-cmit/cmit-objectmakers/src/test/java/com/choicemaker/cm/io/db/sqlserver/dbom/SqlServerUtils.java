@@ -59,7 +59,7 @@ class SqlServerUtils {
 		retVal.add(new ExtensionDeclaration(uid("sqlDbObjectMaker"),
 				"com.choicemaker.cm.core.objectGenerator"));
 		retVal.add(new ExtensionDeclaration(uid("sqlServerDatabaseAccessor"),
-				"com.choicemaker.cm.io.blocking.automated.base.databaseAccessor"));
+				"com.choicemaker.cm.aba.base.databaseAccessor"));
 		retVal.add(new ExtensionDeclaration(
 				uid("sqlServerDatabaseAbstraction"),
 				"com.choicemaker.cm.io.db.base.databaseAbstraction"));

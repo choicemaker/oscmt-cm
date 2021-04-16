@@ -21,6 +21,7 @@ public class ModelUtils {
 		}
 
 		// FIXME Remove this method in Java 5 or later
+		@Override
 		public int compareTo(Object o) {
 			return compareTo((SortableModel) o);
 		}

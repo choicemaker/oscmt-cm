@@ -65,6 +65,7 @@ public abstract class LastUsedMenu extends JMenu {
 		this.maxNumItems = maxNumItems;
 		items = new ArrayList(maxNumItems);
 		listener = new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				MenuItem m = (MenuItem) e.getSource();
 				open(m.fileName);

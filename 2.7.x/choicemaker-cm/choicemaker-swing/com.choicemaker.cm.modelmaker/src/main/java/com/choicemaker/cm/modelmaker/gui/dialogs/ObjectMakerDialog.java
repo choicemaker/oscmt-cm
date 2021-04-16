@@ -89,6 +89,7 @@ public class ObjectMakerDialog extends JDialog implements Enable {
 		}
 	}
 
+	@Override
 	public void setEnabledness() {
 		File outDir = getOutDir();
 		if (outDir == null || outDir.isFile()) {
@@ -107,13 +108,14 @@ public class ObjectMakerDialog extends JDialog implements Enable {
 	}
 
 	private void generateObjects() {
-		final List errorMsgs = new ArrayList();
+		final List<String> errorMsgs = new ArrayList<>();
 		final File outDir = getOutDir();
 		if (!outDir.isDirectory()) {
 			outDir.mkdirs();
 		}
 
 		final Thread t = new Thread() {
+			@Override
 			public void run() {
 				try {
 					ModelArtifactBuilder
@@ -168,13 +170,14 @@ public class ObjectMakerDialog extends JDialog implements Enable {
 
 	private static final String INDENT = "   ";
 
-	private String createMessage(String status, String results, List errorMsgs) {
+	private String createMessage(String status, String results,
+			List<String> errorMsgs) {
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);
 		pw.println(status);
 		if (errorMsgs != null && errorMsgs.size() > 0) {
 			for (int i=0; i<errorMsgs.size(); i++) {
-				String s = (String) errorMsgs.get(i);
+				String s = errorMsgs.get(i);
 				pw.println(INDENT + s);
 			}
 		}
@@ -183,24 +186,27 @@ public class ObjectMakerDialog extends JDialog implements Enable {
 		return retVal;
 	}
 
-	private void logStatus(String status, String results, List errorMsgs, Level level) {
+	private void logStatus(String status, String results,
+			List<String> errorMsgs, Level level) {
 		final String msg = createMessage(status, results,errorMsgs);
 		logger.log(level, msg);
 	}
 
-	private void reportStatus(String status, String results, List errorMsgs) {
+	private void reportStatus(String status, String results,
+			List<String> errorMsgs) {
 		final String msg = createMessage(status, results,errorMsgs);
 		this.modelMaker.getMessagePanel().postMessage(msg);
 	}
 
-	private void displayStatus(String status, String results, List errorMsgs) {
+	private void displayStatus(String status, String results,
+			List<String> errorMsgs) {
 		StringBuilder sb = new StringBuilder("<html>");
 		sb.append("<body style='width: 200px; padding: 5px;'>");
 		sb.append(status);
 		if (errorMsgs != null && errorMsgs.size() > 0) {
 			sb.append("<blockQuote>");
 			for (int i=0; i<errorMsgs.size(); i++) {
-				String e = (String) errorMsgs.get(i);
+				String e = errorMsgs.get(i);
 				sb.append("<br/>").append(e);
 			}
 			sb.append("</blockQuote>");
@@ -223,6 +229,7 @@ public class ObjectMakerDialog extends JDialog implements Enable {
 		c.gridy = 1;
 		d.getContentPane().add(dOk, c);
 		dOk.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				d.dispose();
 			}
@@ -234,9 +241,9 @@ public class ObjectMakerDialog extends JDialog implements Enable {
 	}
 
 	private void getPlugins() {
-		ArrayList makers = new ArrayList();
-		ArrayList descs = new ArrayList();
-		ArrayList defs = new ArrayList();
+		ArrayList<ObjectMaker> makers = new ArrayList<>();
+		ArrayList<String> descs = new ArrayList<>();
+		ArrayList<Boolean> defs = new ArrayList<>();
 
 		String extPtName = ChoiceMakerExtensionPoint.CM_CORE_OBJECTGENERATOR;
 		CMExtensionPoint pt = CMPlatformUtils.getExtensionPoint(extPtName);
@@ -247,20 +254,39 @@ public class ObjectMakerDialog extends JDialog implements Enable {
 			for (int j = 0; j < els.length; j++) {
 				CMConfigurationElement element = els[j];
 				try {
-					makers.add(element.createExecutableExtension("class"));
+					Object o = element.createExecutableExtension("class");
+					if (o == null) {
+						String msg = "Null instance created for extension '"
+								+ extension.getUniqueIdentifier() + "' ('"
+								+ extPtName + "')";
+						logger.severe(msg);
+						msg = "PLUGIN ERROR: " + msg;
+						this.modelMaker.getMessagePanel().postMessage(msg);
+						continue;
+					} else if (!(o instanceof ObjectMaker)) {
+						String msg = "Invalid class specified for extension '"
+								+ extension.getUniqueIdentifier() + "' ('"
+								+ extPtName + "'): " + o.getClass().getName();
+						logger.severe(msg);
+						msg = "PLUGIN ERROR: " + msg;
+						this.modelMaker.getMessagePanel().postMessage(msg);
+						continue;
+					}
+					assert o != null && (o instanceof ObjectMaker);
+					ObjectMaker maker = (ObjectMaker) o;
+					makers.add(maker);
 					descs.add(element.getAttribute("description"));
-					defs.add(new Boolean("true".equals(element
-							.getAttribute("default"))));
+					defs.add(new Boolean(
+							"true".equals(element.getAttribute("default"))));
 				} catch (Exception ex) {
-					ex.printStackTrace();
+					logger.severe(ex.toString());
 				}
 			}
 		}
 
-		objectMakers =
-			(ObjectMaker[]) makers.toArray(new ObjectMaker[makers.size()]);
-		descriptions = (String[]) descs.toArray(new String[descs.size()]);
-		defaults = (Boolean[]) defs.toArray(new Boolean[defs.size()]);
+		objectMakers = makers.toArray(new ObjectMaker[makers.size()]);
+		descriptions = descs.toArray(new String[descs.size()]);
+		defaults = defs.toArray(new Boolean[defs.size()]);
 	}
 
 	private void createContent() {
@@ -333,6 +359,7 @@ public class ObjectMakerDialog extends JDialog implements Enable {
 		dirField.getDocument().addDocumentListener(dl);
 
 		dirBrowse.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				File f = new File(dirField.getText());
 				Component c = ObjectMakerDialog.this;
@@ -344,6 +371,7 @@ public class ObjectMakerDialog extends JDialog implements Enable {
 		});
 
 		ChangeListener boxListener = new ChangeListener() {
+			@Override
 			public void stateChanged(ChangeEvent e) {
 				setEnabledness();
 			}
@@ -353,12 +381,14 @@ public class ObjectMakerDialog extends JDialog implements Enable {
 		}
 
 		ok.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				generateObjects();
 			}
 		});
 
 		cancel.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				dispose();
 			}

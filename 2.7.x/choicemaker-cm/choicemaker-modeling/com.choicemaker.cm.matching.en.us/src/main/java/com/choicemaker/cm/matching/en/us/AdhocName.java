@@ -108,6 +108,7 @@ public class AdhocName {
 		}
 	}
 
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -132,6 +133,7 @@ public class AdhocName {
 		return result;
 	}
 
+	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
 			return true;
@@ -188,6 +190,7 @@ public class AdhocName {
 		return true;
 	}
 
+	@Override
 	public String toString() {
 		return "ParsedName0 [firstName=" + firstName + ", middleNames="
 				+ middleNames + ", lastName=" + lastName + ", titles=" + titles

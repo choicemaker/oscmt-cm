@@ -24,6 +24,7 @@ public class Separator {
 		this.desc = desc;
 		this.other = true;
 	}
+	@Override
 	public String toString() {
 		return desc;
 	}

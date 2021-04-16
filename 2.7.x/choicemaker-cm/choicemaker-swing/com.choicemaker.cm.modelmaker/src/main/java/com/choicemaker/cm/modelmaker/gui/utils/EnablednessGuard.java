@@ -17,14 +17,17 @@ public class EnablednessGuard implements DocumentListener {
 		this.target = target;
 	}
 
+	@Override
 	public void changedUpdate(DocumentEvent e) {
 		target.setEnabledness();
 	}
 
+	@Override
 	public void insertUpdate(DocumentEvent e) {
 		target.setEnabledness();
 	}
 
+	@Override
 	public void removeUpdate(DocumentEvent e) {
 		target.setEnabledness();
 	}

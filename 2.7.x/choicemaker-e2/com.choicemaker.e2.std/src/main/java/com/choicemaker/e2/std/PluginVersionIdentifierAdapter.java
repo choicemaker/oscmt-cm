@@ -62,38 +62,47 @@ public class PluginVersionIdentifierAdapter {
 			this.delegate = o;
 		}
 
+		@Override
 		public int getMajorComponent() {
 			return delegate.getMajorComponent();
 		}
 
+		@Override
 		public int getMinorComponent() {
 			return delegate.getMinorComponent();
 		}
 
+		@Override
 		public int getServiceComponent() {
 			return delegate.getServiceComponent();
 		}
 
+		@Override
 		public String getQualifierComponent() {
 			return delegate.getQualifierComponent();
 		}
 
+		@Override
 		public boolean isGreaterOrEqualTo(CMPluginVersionIdentifier id) {
 			return delegate.isGreaterOrEqualTo(convert(id));
 		}
 
+		@Override
 		public boolean isCompatibleWith(CMPluginVersionIdentifier id) {
 			return delegate.isCompatibleWith(convert(id));
 		}
 
+		@Override
 		public boolean isEquivalentTo(CMPluginVersionIdentifier id) {
 			return delegate.isEquivalentTo(convert(id));
 		}
 
+		@Override
 		public boolean isPerfect(CMPluginVersionIdentifier id) {
 			return delegate.isPerfect(convert(id));
 		}
 
+		@Override
 		public boolean isGreaterThan(CMPluginVersionIdentifier id) {
 			return delegate.isGreaterThan(convert(id));
 		}

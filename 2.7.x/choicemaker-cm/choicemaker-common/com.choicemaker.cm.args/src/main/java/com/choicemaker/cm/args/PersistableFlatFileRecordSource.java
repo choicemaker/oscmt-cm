@@ -1,7 +1,7 @@
 package com.choicemaker.cm.args;
 
-public interface PersistableFlatFileRecordSource extends
-		PersistableRecordSource {
+public interface PersistableFlatFileRecordSource
+		extends PersistableRecordSource {
 
 	String TYPE = "FLATFILE";
 
@@ -13,7 +13,7 @@ public interface PersistableFlatFileRecordSource extends
 	String getDescriptorFileName();
 
 	String getDataFileName();
-	
+
 	// FIXME add other FlatFile attributes
 
 }

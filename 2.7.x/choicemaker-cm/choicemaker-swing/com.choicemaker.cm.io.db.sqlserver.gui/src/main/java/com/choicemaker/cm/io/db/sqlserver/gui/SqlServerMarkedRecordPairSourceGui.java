@@ -60,6 +60,7 @@ public class SqlServerMarkedRecordPairSourceGui extends MarkedRecordPairSourceGu
         init(s);
     }
 
+	@Override
 	public void setVisible(boolean b) {
 		if (b) {
 			setFields();
@@ -68,6 +69,7 @@ public class SqlServerMarkedRecordPairSourceGui extends MarkedRecordPairSourceGu
 		}
 	}
 
+	@Override
 	public void setEnabledness() {
 		okayButton.setEnabled(
 			sourceFileName.getText().length() > 0
@@ -75,6 +77,7 @@ public class SqlServerMarkedRecordPairSourceGui extends MarkedRecordPairSourceGu
 				&& dataSource.getSelectedItem() != null);
 	}
 
+	@Override
 	public void buildSource() {
 		SqlServerMarkedRecordPairSource dbSource = (SqlServerMarkedRecordPairSource) getSource();
 
@@ -125,6 +128,7 @@ public class SqlServerMarkedRecordPairSourceGui extends MarkedRecordPairSourceGu
         }
     }
 
+	@Override
 	public void buildContent() {
 		sourceFileLabel = new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.dialog.source.name"));
 		sourceFileName = new JTextField(35);
@@ -234,6 +238,7 @@ public class SqlServerMarkedRecordPairSourceGui extends MarkedRecordPairSourceGu
         content.add(buttons, c);
     }
 
+	@Override
 	protected void addContentListeners() {
 		super.addContentListeners();
         
@@ -241,12 +246,14 @@ public class SqlServerMarkedRecordPairSourceGui extends MarkedRecordPairSourceGu
 		sourceFileName.getDocument().addDocumentListener(dl);
 		mrpsQuery.getDocument().addDocumentListener(dl);
 		dataSource.addItemListener(new ItemListener() {
+			@Override
 			public void itemStateChanged(ItemEvent e) {
 				setEnabledness();
 			}
 		});
 
 		sourceFileBrowseButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				File file = FileChooserFactory.selectMrpsFile(getParent());
 				if (file != null) {

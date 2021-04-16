@@ -73,34 +73,42 @@ class Unalias implements TargetTree.Visitor, TargetTags {
 		throw new CompilerException("invalid compilation path");
 	}
 	
+	@Override
 	public void visit(Bad t) {
 		res = t;
 	}
 	
+	@Override
 	public void visit(PackageDecl t) throws CompilerException {
 		throw new CompilerException("invalid compilation path");
 	}
 	
+	@Override
 	public void visit(ImportDecl t) throws CompilerException {
 		throw new CompilerException("invalid compilation path");
 	}
 	
+	@Override
 	public void visit(ClueSetDecl t) throws CompilerException {
 		throw new CompilerException("invalid compilation path");
 	}
 	
+	@Override
 	public void visit(ClueDecl t) throws CompilerException {
 		throw new CompilerException("invalid compilation path");
 	}
 	
+	@Override
 	public void visit(Index t) throws CompilerException {
 		throw new CompilerException("invalid compilation path");
 	}
 	
+	@Override
 	public void visit(MethodDecl t) throws CompilerException {
 		throw new CompilerException("invalid compilation path");
 	}
 	
+	@Override
 	public void visit(VarDecl t) throws CompilerException {
 		if (t.initializer.tag == IDENT) {
 			aliases.put(t.name, ((Tree.Ident)t.initializer).name);
@@ -112,22 +120,27 @@ class Unalias implements TargetTree.Visitor, TargetTags {
 		}
 	}
 		
+	@Override
 	public void visit(Quantified t) throws CompilerException {
 		throw new CompilerException("invalid compilation path");
 	}
 	
+	@Override
 	public void visit(Let t) throws CompilerException {
 		throw new CompilerException("invalid compilation path");
 	}
 	
+	@Override
 	public void visit(Shorthand t) throws CompilerException {
 		throw new CompilerException("invalid compilation path");
 	}
 	
+	@Override
 	public void visit(Valid t) throws CompilerException {
 		throw new CompilerException("invalid compilation path");
 	}
 	
+	@Override
 	public void visit(If t) throws CompilerException {
 		t.cond.apply(this);
 		t.cond = res;
@@ -138,6 +151,7 @@ class Unalias implements TargetTree.Visitor, TargetTags {
 		res = t;
 	}
 	
+	@Override
 	public void visit(Apply t) throws CompilerException {
 		t.fun.apply(this);
 		t.fun = res;
@@ -148,6 +162,7 @@ class Unalias implements TargetTree.Visitor, TargetTags {
 		res = t;
 	}
 	
+	@Override
 	public void visit(New t) throws CompilerException {
 		for (int i = 0; i < t.args.length; i++) {
 			t.args[i].apply(this);
@@ -156,22 +171,26 @@ class Unalias implements TargetTree.Visitor, TargetTags {
 		res = t;
 	}
 		
+	@Override
 	public void visit(NewArray t) {
 		res = t;
 	}
 	
+	@Override
 	public void visit(Typeop t) throws CompilerException {
 		t.expr.apply(this);
 		t.expr = res;
 		res = t;
 	}
 	
+	@Override
 	public void visit(Unop t) throws CompilerException {
 		t.arg.apply(this);
 		t.arg = res;
 		res = t;
 	}
 	
+	@Override
 	public void visit(Binop t) throws CompilerException {
 		t.left.apply(this);
 		t.left = res;
@@ -180,6 +199,7 @@ class Unalias implements TargetTree.Visitor, TargetTags {
 		res = t;
 	}
 		
+	@Override
 	public void visit(Indexed t) throws CompilerException {
 		t.expr.apply(this);
 		t.expr = res;
@@ -188,12 +208,14 @@ class Unalias implements TargetTree.Visitor, TargetTags {
 		res = t;
 	}
 	
+	@Override
 	public void visit(Select t) throws CompilerException {
 		t.qualifier.apply(this);
 		t.qualifier = res;
 		res = t;
 	}
 		
+	@Override
 	public void visit(Ident t) throws CompilerException {
 		String alias = null;
 		String target = t.name;
@@ -205,30 +227,37 @@ class Unalias implements TargetTree.Visitor, TargetTags {
 		res.type = t.type;
 	}
 		
+	@Override
 	public void visit(Self t) {
 		res = t;
 	}
 	
+	@Override
 	public void visit(ArrayType t) {
 		res = t;
 	}
 	
+	@Override
 	public void visit(PrimitiveType t) {
 		res = t;
 	}
 	
+	@Override
 	public void visit(Literal t) {
 		res = t;
 	}
 
+	@Override
 	public void visit(ClassDecl t) throws CompilerException {
 		throw new CompilerException("invalid compilation path");
 	}
 	
+	@Override
 	public void visit(JMethodDecl t) throws CompilerException {
 		throw new CompilerException("invalid compilation path");
 	}
 	
+	@Override
 	public void visit(Block t) throws CompilerException {
 		TreeList newstats = new TreeList();
 		for (int i = 0; i < t.stats.length; i++) {
@@ -240,6 +269,7 @@ class Unalias implements TargetTree.Visitor, TargetTags {
 		res = t;
 	}
 		
+	@Override
 	public void visit(Cond t) throws CompilerException {
 		t.cond.apply(this);
 		t.cond = res;
@@ -252,6 +282,7 @@ class Unalias implements TargetTree.Visitor, TargetTags {
 		res = t;
 	}
 	
+	@Override
 	public void visit(While t) throws CompilerException {
 		t.cond.apply(this);
 		t.cond = res;
@@ -260,6 +291,7 @@ class Unalias implements TargetTree.Visitor, TargetTags {
 		res = t;
 	}
 	
+	@Override
 	public void visit(DoWhile t) throws CompilerException {
 		t.cond.apply(this);
 		t.cond = res;
@@ -268,6 +300,7 @@ class Unalias implements TargetTree.Visitor, TargetTags {
 		res = t;
 	}
 	
+	@Override
 	public void visit(For t) throws CompilerException {
 		TreeList ts = new TreeList();
 		for (int i = 0; i < t.inits.length; i++) {
@@ -290,12 +323,14 @@ class Unalias implements TargetTree.Visitor, TargetTags {
 		res = t;
 	}
 	
+	@Override
 	public void visit(Taged t) throws CompilerException {
 		t.stat.apply(this);
 		t.stat = res;
 		res = t;
 	}
 	
+	@Override
 	public void visit(Switch t) throws CompilerException {
 		t.selector.apply(this);
 		t.selector = res;
@@ -306,6 +341,7 @@ class Unalias implements TargetTree.Visitor, TargetTags {
 		res = t;
 	}
 	
+	@Override
 	public void visit(Case t) throws CompilerException {
 		for (int i = 0; i < t.guard.length; i++) {
 			t.guard[i].apply(this);
@@ -321,20 +357,24 @@ class Unalias implements TargetTree.Visitor, TargetTags {
 		res = t;
 	}
 	
+	@Override
 	public void visit(Break t) {
 		res = t;
 	}
 	
+	@Override
 	public void visit(Continue t) {
 		res = t;
 	}
 	
+	@Override
 	public void visit(Return t) throws CompilerException {
 		t.expr.apply(this);
 		t.expr = res;
 		res = t;
 	}
 	
+	@Override
 	public void visit(Assign t) throws CompilerException {
 		if (aliases.get(t.lhs) != null)
 			throw new CompilerException("invalid compilation path");
@@ -345,6 +385,7 @@ class Unalias implements TargetTree.Visitor, TargetTags {
 		res = t;
 	}
 	
+	@Override
 	public void visit(Try t) throws CompilerException {
 		t.body.apply(this);
 		t.body = res;
@@ -355,6 +396,7 @@ class Unalias implements TargetTree.Visitor, TargetTags {
 		res = t;
 	}
 	
+	@Override
 	public void visit(Catch t) throws CompilerException {
 		t.body.apply(this);
 		t.body = res;

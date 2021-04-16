@@ -61,30 +61,37 @@ public interface FileWrapper {
 			this.file = file;
 		}
 
+		@Override
 		public String getName() {
 			return file.getName();
 		}
 
+		@Override
 		public String getPath() {
 			return file.getPath();
 		}
 
+		@Override
 		public boolean exists() {
 			return file.exists();
 		}
 
+		@Override
 		public boolean isDirectory() {
 			return file.isDirectory();
 		}
 
+		@Override
 		public InputStream getInputStream() throws IOException {
 			return new FileInputStream(file.getAbsoluteFile());
 		}
 
+		@Override
 		public String[] list() throws IOException {
 			return file.list();
 		}
 
+		@Override
 		public FileWrapper access(String name) {
 			return new NativeFile(new File(file, name).getAbsoluteFile());
 		}
@@ -101,26 +108,32 @@ public interface FileWrapper {
 			}
 		}
 
+		@Override
 		public String getName() {
 			return entry.getName();
 		}
 
+		@Override
 		public String getPath() {
 			return archive.getPath() + "/" + entry.getName();
 		}
 
+		@Override
 		public boolean exists() {
 			return entry != null;
 		}
 
+		@Override
 		public boolean isDirectory() {
 			return entry.isDirectory();
 		}
 
+		@Override
 		public InputStream getInputStream() throws IOException {
 			return archive.jarfile.getInputStream(entry);
 		}
 
+		@Override
 		public String[] list() throws IOException {
 			if (!isDirectory())
 				throw new IOException();
@@ -128,6 +141,7 @@ public interface FileWrapper {
 				return archive.filter(entry.getName());
 		}
 
+		@Override
 		public FileWrapper access(String filename) {
 			return archive.access(entry.getName() + filename);
 		}
@@ -142,30 +156,37 @@ public interface FileWrapper {
 			this.name = name;
 		}
 
+		@Override
 		public String getName() {
 			return name;
 		}
 
+		@Override
 		public String getPath() {
 			return archive.getPath() + "/" + name;
 		}
 
+		@Override
 		public boolean exists() {
 			return true;
 		}
 
+		@Override
 		public boolean isDirectory() {
 			return true;
 		}
 
+		@Override
 		public InputStream getInputStream() throws IOException {
 			throw new IOException("cannot open input stream for directory");
 		}
 
+		@Override
 		public String[] list() throws IOException {
 			return archive.filter(name);
 		}
 
+		@Override
 		public FileWrapper access(String filename) {
 			return archive.access(name + filename);
 		}
@@ -199,26 +220,32 @@ public interface FileWrapper {
 			}
 		}
 
+		@Override
 		public String getName() {
 			return name;
 		}
 
+		@Override
 		public String getPath() {
 			return path;
 		}
 
+		@Override
 		public boolean exists() {
 			return jarfile != null;
 		}
 
+		@Override
 		public boolean isDirectory() {
 			return jarfile != null;
 		}
 
+		@Override
 		public InputStream getInputStream() throws IOException {
 			throw new IOException("cannot open input stream for jar file");
 		}
 
+		@Override
 		public String[] list() throws IOException {
 			return filter("");
 		}
@@ -241,6 +268,7 @@ public interface FileWrapper {
 			return (String[]) files.toArray(new String[files.size()]);
 		}
 
+		@Override
 		public FileWrapper access(String name) {
 			name = name.replace(File.separatorChar, '/');
 			FileWrapper entry = (FileWrapper) implicit.get(name);

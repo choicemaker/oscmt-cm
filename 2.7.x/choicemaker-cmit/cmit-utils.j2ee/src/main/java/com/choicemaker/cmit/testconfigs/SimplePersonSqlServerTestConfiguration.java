@@ -1,6 +1,6 @@
 package com.choicemaker.cmit.testconfigs;
 
-import static com.choicemaker.cm.args.WellKnownGraphPropertyNames.GPN_SCM;
+import static com.choicemaker.client.api.WellKnownGraphProperties.GPN_SCM;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -11,13 +11,13 @@ import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.args.PersistableSqlRecordSource;
 import com.choicemaker.cm.args.PersistentObject;
-import com.choicemaker.cm.batch.impl.AbstractPersistentObject;
+import com.choicemaker.cm.batch.ejb.AbstractPersistentObject;
 import com.choicemaker.cm.core.IProbabilityModelManager;
 import com.choicemaker.cm.core.ISerializableDbRecordSource;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.ImmutableThresholds;
+import com.choicemaker.cm.core.Thresholds;
 import com.choicemaker.cm.core.base.DefaultProbabilityModelManager;
-import com.choicemaker.cm.core.base.ImmutableThresholds;
-import com.choicemaker.cm.core.base.Thresholds;
 import com.choicemaker.cm.io.db.sqlserver.SQLServerSerializableParallelSerialRecordSource;
 import com.choicemaker.cmit.utils.j2ee.WellKnownTestConfiguration;
 import com.choicemaker.e2.CMPluginRegistry;

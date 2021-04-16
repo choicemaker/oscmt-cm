@@ -13,13 +13,13 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Date;
 
-import com.choicemaker.cm.core.Decision;
+import com.choicemaker.client.api.Decision;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.ImmutableRecordPair;
 import com.choicemaker.cm.core.MarkedRecordPairSource;
+import com.choicemaker.cm.core.MutableMarkedRecordPair;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.Sink;
-import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
 import com.choicemaker.cm.core.util.NameUtils;
 import com.choicemaker.util.FileUtilities;
 
@@ -155,6 +155,7 @@ public class FlatFileMarkedRecordPairSource implements MarkedRecordPairSource {
 		setModel(model);
 	}
 
+	@Override
 	public void open() throws IOException {
 		try {
 			FlatFileAccessor ffa = (FlatFileAccessor) model.getAccessor();
@@ -189,14 +190,17 @@ public class FlatFileMarkedRecordPairSource implements MarkedRecordPairSource {
 		}
 	}
 
+	@Override
 	public boolean hasNext() {
 		return pair != null;
 	}
 
+	@Override
 	public ImmutableRecordPair getNext() throws IOException {
 		return getNextMarkedRecordPair();
 	}
 
+	@Override
 	public MutableMarkedRecordPair getNextMarkedRecordPair() throws IOException {
 		MutableMarkedRecordPair res = pair;
 		getNextMain();
@@ -204,12 +208,12 @@ public class FlatFileMarkedRecordPairSource implements MarkedRecordPairSource {
 	}
 
 	private void getNextMain() throws IOException {
-		if (tokenizer.lineRead()) {
-			Decision decision = Decision.valueOf(tokenizer.nextTrimedString(descWidths[3]));
+		if (tokenizer.isLineAvailable()) {
+			Decision decision = Decision.valueOf(tokenizer.nextTrimmedString(descWidths[3]));
 			Date date = tokenizer.nextDate(descWidths[4]);
-			String user = tokenizer.nextTrimedString(descWidths[5]);
-			String src = tokenizer.nextTrimedString(descWidths[6]);
-			String comment = tokenizer.nextTrimedString(descWidths[7]);
+			String user = tokenizer.nextTrimmedString(descWidths[5]);
+			String src = tokenizer.nextTrimmedString(descWidths[6]);
+			String comment = tokenizer.nextTrimmedString(descWidths[7]);
 			if (!singleLine)
 				tokenizer.readLine();
 			Record q = recordReader.getRecord();
@@ -222,6 +226,7 @@ public class FlatFileMarkedRecordPairSource implements MarkedRecordPairSource {
 		}
 	}
 
+	@Override
 	public void close() throws IOException {
 		for (int i = 0; i < reader.length; ++i) {
 			reader[i].close();
@@ -232,6 +237,7 @@ public class FlatFileMarkedRecordPairSource implements MarkedRecordPairSource {
 	 * Get the value of name.
 	 * @return value of name.
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -240,6 +246,7 @@ public class FlatFileMarkedRecordPairSource implements MarkedRecordPairSource {
 	 * Set the value of name.
 	 * @param v  Value to assign to name.
 	 */
+	@Override
 	public void setName(String v) {
 		this.name = v;
 	}
@@ -249,6 +256,7 @@ public class FlatFileMarkedRecordPairSource implements MarkedRecordPairSource {
 		setName(NameUtils.getNameFromFilePath(fileName));
 	}
 
+	@Override
 	public String getFileName() {
 		return fileName;
 	}
@@ -257,6 +265,7 @@ public class FlatFileMarkedRecordPairSource implements MarkedRecordPairSource {
 	 * Get the value of model.
 	 * @return value of model.
 	 */
+	@Override
 	public ImmutableProbabilityModel getModel() {
 		return model;
 	}
@@ -265,18 +274,22 @@ public class FlatFileMarkedRecordPairSource implements MarkedRecordPairSource {
 	 * Set the value of model.
 	 * @param v  Value to assign to model.
 	 */
+	@Override
 	public void setModel(ImmutableProbabilityModel v) {
 		this.model = v;
 	}
 
+	@Override
 	public String toString() {
 		return name;
 	}
 
+	@Override
 	public boolean hasSink() {
 		return true;
 	}
 
+	@Override
 	public Sink getSink() {
 		return new FlatFileMarkedRecordPairSink(
 			name,

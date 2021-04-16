@@ -6,8 +6,9 @@ import com.choicemaker.e2.CMExtensionPoint;
 import com.choicemaker.e2.CMPluginDescriptor;
 
 public class DoNothingExtensionPoint implements CMExtensionPoint {
-	
-	private static final DoNothingExtensionPoint instance = new DoNothingExtensionPoint();
+
+	private static final DoNothingExtensionPoint instance =
+		new DoNothingExtensionPoint();
 
 	public static DoNothingExtensionPoint getInstance() {
 		return instance;

@@ -47,27 +47,38 @@ public class DefaultStringProfiler implements FieldProfiler {
 			
 			// these are bucket stats.
 			new BucketStatAccumulator(fa, "Num Empty", 
-				new BucketTest() { public boolean testBucket(int bucket) { return (bucket == 0); } }),
+				new BucketTest() { @Override
+				public boolean testBucket(int bucket) { return (bucket == 0); } }),
 			new BucketStatAccumulator(fa, "Num Whitespace Only", 
-				new BucketTest() { public boolean testBucket(int bucket) { return (bucket == SPACE); } }),
+				new BucketTest() { @Override
+				public boolean testBucket(int bucket) { return (bucket == SPACE); } }),
 			new BucketStatAccumulator(fa, "Num Punctuation (and maybe Whitespace)", 
-				new BucketTest() { public boolean testBucket(int bucket) { return (bucket == OTHER || bucket == OTHER + SPACE); } }),
+				new BucketTest() { @Override
+				public boolean testBucket(int bucket) { return (bucket == OTHER || bucket == OTHER + SPACE); } }),
 			new BucketStatAccumulator(fa, "Num Digits Only", 
-				new BucketTest() { public boolean testBucket(int bucket) { return (bucket == DIGITS); } }),
+				new BucketTest() { @Override
+				public boolean testBucket(int bucket) { return (bucket == DIGITS); } }),
 			new BucketStatAccumulator(fa, "Num Digits and Other Stuff (but not Letters)", 
-				new BucketTest() { public boolean testBucket(int bucket) { return ((bucket & DIGITS) == 1 && (bucket & LETTERS) == 0); } }),
+				new BucketTest() { @Override
+				public boolean testBucket(int bucket) { return ((bucket & DIGITS) == 1 && (bucket & LETTERS) == 0); } }),
 			new BucketStatAccumulator(fa, "Num Letters Only", 
-				new BucketTest() { public boolean testBucket(int bucket) { return (bucket == LETTERS); } }),
+				new BucketTest() { @Override
+				public boolean testBucket(int bucket) { return (bucket == LETTERS); } }),
 			new BucketStatAccumulator(fa, "Num Letters and Whitespace Only", 
-				new BucketTest() { public boolean testBucket(int bucket) { return (bucket == LETTERS + SPACE); } }),
+				new BucketTest() { @Override
+				public boolean testBucket(int bucket) { return (bucket == LETTERS + SPACE); } }),
 			new BucketStatAccumulator(fa, "Num Letters and Punctuation (but not Digits)", 
-				new BucketTest() { public boolean testBucket(int bucket) { return ((bucket & LETTERS) != 0 && (bucket & OTHER) != 0 && (bucket & DIGITS) == 0); } }),
+				new BucketTest() { @Override
+				public boolean testBucket(int bucket) { return ((bucket & LETTERS) != 0 && (bucket & OTHER) != 0 && (bucket & DIGITS) == 0); } }),
 			new BucketStatAccumulator(fa, "Num Letters and Digits Only", 
-				new BucketTest() { public boolean testBucket(int bucket) { return (bucket == LETTERS + DIGITS); } }),
+				new BucketTest() { @Override
+				public boolean testBucket(int bucket) { return (bucket == LETTERS + DIGITS); } }),
 			new BucketStatAccumulator(fa, "Num Letters, Digits, and Whitespace (but not Punctuation)", 
-				new BucketTest() { public boolean testBucket(int bucket) { return (bucket == LETTERS + DIGITS + SPACE); } }),
+				new BucketTest() { @Override
+				public boolean testBucket(int bucket) { return (bucket == LETTERS + DIGITS + SPACE); } }),
 			new BucketStatAccumulator(fa, "Num Letters, Digits, Whitespace, and Punctuation", 
-				new BucketTest() { public boolean testBucket(int bucket) { return (bucket == LETTERS + DIGITS + SPACE + OTHER); } }),	
+				new BucketTest() { @Override
+				public boolean testBucket(int bucket) { return (bucket == LETTERS + DIGITS + SPACE + OTHER); } }),	
 				
 			// these are char set stats	
 			new CharSetStatAccumulator(fa, UPPER),
@@ -86,6 +97,7 @@ public class DefaultStringProfiler implements FieldProfiler {
 		idfStat = new FieldIdfStat(fa);
 	}
 	
+	@Override
 	public void reset() {
 		totalRecords = 0;
 		totalRows = 0;
@@ -100,6 +112,7 @@ public class DefaultStringProfiler implements FieldProfiler {
 		idfStat.reset();
 	}
 	
+	@Override
 	public void processRecord(Record r) {
 		totalRecords++;
 		
@@ -120,10 +133,12 @@ public class DefaultStringProfiler implements FieldProfiler {
 	// Stat accessors
 	//
 
+	@Override
 	public int getScalarStatCount() {
 		return 25;
 	}
 	
+	@Override
 	public String getScalarStatName(int i) {
 		switch (i) {
 			case 0: return "Total Records";
@@ -156,6 +171,7 @@ public class DefaultStringProfiler implements FieldProfiler {
 		throw new IllegalArgumentException("Index: " + i);
 	}
 
+	@Override
 	public Object getScalarStatValue(int i) {
 		switch (i) {
 			case 0: return new Integer(totalRecords);
@@ -188,6 +204,7 @@ public class DefaultStringProfiler implements FieldProfiler {
 		throw new IllegalArgumentException("Index: " + i);		
 	}
 
+	@Override
 	public boolean filterRecordForScalarStat(int i, Record r) {
 		switch (i) {
 			case 0:
@@ -221,10 +238,12 @@ public class DefaultStringProfiler implements FieldProfiler {
 		throw new IllegalArgumentException("Index: " + i);
 	}
 
+	@Override
 	public int getTabularStatCount() {
 		return 4;
 	}
 	
+	@Override
 	public String getTabularStatName(int i) {
 		switch (i) {
 			case 0: return fvhStat.getTabularStatName(0);
@@ -236,6 +255,7 @@ public class DefaultStringProfiler implements FieldProfiler {
 		throw new IllegalArgumentException("Index: " + i);			
 	}
 	
+	@Override
 	public Object[] getTabularStatColumnHeaders(int i) {
 		switch (i) {
 			case 0: return fvhStat.getTabularStatColumnHeaders(0);
@@ -247,6 +267,7 @@ public class DefaultStringProfiler implements FieldProfiler {
 		throw new IllegalArgumentException("Index: " + i);			
 	}
 	
+	@Override
 	public Object[][] getTabularStatTableData(int i) {
 		switch (i) {
 			case 0: return fvhStat.getTabularStatTableData(0);
@@ -257,6 +278,7 @@ public class DefaultStringProfiler implements FieldProfiler {
 		throw new IllegalArgumentException("Index: " + i);			
 	}
 
+	@Override
 	public boolean filterRecordForTableStat(int statIndex, Set values, Record r) {
 		switch (statIndex) {
 			case 0: return fvhStat.filterRecordForTableStat(0, values, r);
@@ -294,18 +316,22 @@ public class DefaultStringProfiler implements FieldProfiler {
 		// only thing need to implement!
 		protected abstract boolean testString(String s);
 		
+		@Override
 		public void reset() {
 			count = 0;
 		}
 		
+		@Override
 		public String getName() {
 			return name;
 		}
 		
+		@Override
 		public int getCount() {
 			return count;
 		}
 		
+		@Override
 		public void processRecord(Record r) {
 			for (int i = 0, n = fa.getRowCount(r); i < n; i++) {
 				Object obj = fa.getValue(r, i);
@@ -315,6 +341,7 @@ public class DefaultStringProfiler implements FieldProfiler {
 			}
 		}
 		
+		@Override
 		public boolean filterRecord(Record r) {
 			for (int i = 0, n = fa.getRowCount(r); i < n; i++) {
 				Object obj = fa.getValue(r, i);
@@ -343,6 +370,7 @@ public class DefaultStringProfiler implements FieldProfiler {
 			this.isMin = isMin;
 			reset();
 		}
+		@Override
 		public void reset() {
 			if (isMin) {
 				val = Integer.MAX_VALUE;
@@ -350,6 +378,7 @@ public class DefaultStringProfiler implements FieldProfiler {
 				val = Integer.MIN_VALUE;
 			}
 		}
+		@Override
 		public void processRecord(Record r) {
 			for (int i = 0, n = fa.getRowCount(r); i < n; i++) {
 				int len = getLength(fa.getValue(r, i));
@@ -367,6 +396,7 @@ public class DefaultStringProfiler implements FieldProfiler {
 				return obj.toString().length();
 			}
 		}
+		@Override
 		public String getName() {
 			if (isMin) {
 				return "Min Length";
@@ -374,9 +404,11 @@ public class DefaultStringProfiler implements FieldProfiler {
 				return "Max Length";
 			}
 		}
+		@Override
 		public int getCount() {
 			return val;
 		}
+		@Override
 		public boolean filterRecord(Record r) {
 			for (int i = 0, n = fa.getRowCount(r); i < n; i++) {
 				int len = getLength(fa.getValue(r, i));
@@ -401,9 +433,11 @@ public class DefaultStringProfiler implements FieldProfiler {
 			this.validity = validity;
 			reset();
 		}
+		@Override
 		public void reset() {
 			count = 0;
 		}
+		@Override
 		public void processRecord(Record r) {
 			for (int i = 0, n = fa.getRowCount(r); i < n; i++) {
 				if (fa.getValidity(r, i) == validity) {
@@ -411,6 +445,7 @@ public class DefaultStringProfiler implements FieldProfiler {
 				}
 			}
 		}
+		@Override
 		public String getName() {
 			if (validity) {
 				return "Num Valid Values";
@@ -418,9 +453,11 @@ public class DefaultStringProfiler implements FieldProfiler {
 				return "Num Invalid Values";
 			}
 		}
+		@Override
 		public int getCount() {
 			return count;
 		}
+		@Override
 		public boolean filterRecord(Record r) {
 			for (int i = 0, n = fa.getRowCount(r); i < n; i++) {
 				if (fa.getValidity(r, i) == validity) {
@@ -439,9 +476,11 @@ public class DefaultStringProfiler implements FieldProfiler {
 			this.fa = fa;
 			this.nullness = nullness;
 		}
+		@Override
 		public void reset() {
 			count = 0;
 		}
+		@Override
 		public String getName() {
 			if (nullness) {
 				return "Num Null Values";
@@ -449,6 +488,7 @@ public class DefaultStringProfiler implements FieldProfiler {
 				return "Num Non-Null Values";
 			}
 		}
+		@Override
 		public void processRecord(Record r) {
 			for (int i = 0, n = fa.getRowCount(r); i < n; i++) {
 				Object obj = fa.getValue(r, i);
@@ -457,9 +497,11 @@ public class DefaultStringProfiler implements FieldProfiler {
 				}
 			}
 		}
+		@Override
 		public int getCount() {
 			return count;
 		}		
+		@Override
 		public boolean filterRecord(Record r) {
 			for (int i = 0, n = fa.getRowCount(r); i < n; i++) {
 				Object obj = fa.getValue(r, i);
@@ -491,6 +533,7 @@ public class DefaultStringProfiler implements FieldProfiler {
 			super(fa, name);
 			this.test = test;
 		}
+		@Override
 		protected boolean testString(String s) {
 			int bucket = bucketString(s);
 			return test.testBucket(bucket);
@@ -525,6 +568,7 @@ public class DefaultStringProfiler implements FieldProfiler {
 			super(fa, getCharSetTestName(test));
 			this.test = test;
 		}
+		@Override
 		protected boolean testString(String s) {
 			int bucket = bucketString(s);
 			return (bucket & test) != 0;
@@ -576,6 +620,7 @@ public class DefaultStringProfiler implements FieldProfiler {
 			super(fa, getTestName(test));
 			this.test = test;
 		}
+		@Override
 		protected boolean testString(String s) {
 			s = s.trim();
 			if (test == INTEGER) {

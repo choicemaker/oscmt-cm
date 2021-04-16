@@ -12,17 +12,17 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
 
-import com.choicemaker.cm.core.Decision;
+import com.choicemaker.client.api.Decision;
+import com.choicemaker.cm.args.TransitivityException;
 import com.choicemaker.cm.core.InvalidProfileException;
 import com.choicemaker.cm.core.Profile;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.base.BeanMatchCandidate;
 import com.choicemaker.cm.core.base.BeanProfile;
+import com.choicemaker.cm.core.base.MatchRecord2;
 import com.choicemaker.cm.core.base.PMManager;
-import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE_ROLE;
-import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
-import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecordUtils;
-import com.choicemaker.cm.transitivity.core.TransitivityException;
+import com.choicemaker.cm.core.base.RECORD_SOURCE_ROLE;
+import com.choicemaker.cm.core.util.MatchUtils;
 
 /**
  * This object builds an Iterator of CompositeEntity from an Array of
@@ -101,6 +101,7 @@ public class CEFromMatchCandidatesBuilder extends CEFromMatchesBuilder {
 	 *
 	 * @return Iterator
 	 */
+	@Override
 	public Iterator getCompositeEntities() throws TransitivityException {
 
 		List<MatchRecord2> pairs = new ArrayList<>();
@@ -119,7 +120,7 @@ public class CEFromMatchCandidatesBuilder extends CEFromMatchesBuilder {
 					Decision.valueOf(candidates[i].getDecision());
 				final String[] notes = candidates[i].getNotes();
 				final String noteInfo =
-					MatchRecordUtils.getNotesAsDelimitedString(notes);
+					MatchUtils.getNotesAsDelimitedString(notes);
 				MatchRecord2 mr =
 					new MatchRecord2(q.getId(), m.getId(),
 							RECORD_SOURCE_ROLE.STAGING,

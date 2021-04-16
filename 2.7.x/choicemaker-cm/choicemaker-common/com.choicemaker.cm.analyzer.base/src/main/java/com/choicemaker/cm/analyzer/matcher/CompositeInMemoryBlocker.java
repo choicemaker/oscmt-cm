@@ -32,18 +32,21 @@ public class CompositeInMemoryBlocker implements InMemoryBlocker {
 		this.constituents = constituents;
 	}
 
+	@Override
 	public void init(List records) {
 		for (int i = 0; i < constituents.length; i++) {
 			constituents[i].init(records);
 		}
 	}
 
+	@Override
 	public void clear() {
 		for (int i = 0; i < constituents.length; i++) {
 			constituents[i].clear();
 		}
 	}
 
+	@Override
 	public RecordSource block(Record q) {
 		RecordSource[] is = new RecordSource[constituents.length];
 		for (int i = 0; i < constituents.length; ++i) {
@@ -52,6 +55,7 @@ public class CompositeInMemoryBlocker implements InMemoryBlocker {
 		return new FastCompositeRecordSource(is);
 	}
 
+	@Override
 	public RecordSource block(Record q, int start) {
 		RecordSource[] is = new RecordSource[constituents.length];
 		for (int i = 0; i < constituents.length; ++i) {
@@ -69,9 +73,11 @@ public class CompositeInMemoryBlocker implements InMemoryBlocker {
 			this.constituents = constituents;
 		}
 
+		@Override
 		public boolean hasNext() throws IOException {
 			return curIter != null && curIter.hasNext();
 		}
+		@Override
 		public Record getNext() throws IOException {
 			Record res = curIter.getNext();
 			advance();
@@ -90,6 +96,7 @@ public class CompositeInMemoryBlocker implements InMemoryBlocker {
 				}
 			}
 		}
+		@Override
 		public void open() throws IOException {
 			curIdx = 0;
 			if(constituents.length > 0) {
@@ -98,28 +105,36 @@ public class CompositeInMemoryBlocker implements InMemoryBlocker {
 				advance();
 			}
 		}
+		@Override
 		public void close() throws IOException {
 			if(curIter != null) {
 				curIter.close();
 			}
 			curIter = null;
 		}
+		@Override
 		public String getName() {
 			return null;
 		}
+		@Override
 		public void setName(String name) {
 		}
+		@Override
 		public ImmutableProbabilityModel getModel() {
 			return null;
 		}
+		@Override
 		public void setModel(ImmutableProbabilityModel m) {
 		}
+		@Override
 		public boolean hasSink() {
 			return false;
 		}
+		@Override
 		public Sink getSink() {
 			return null;
 		}
+		@Override
 		public String getFileName() {
 			return null;
 		}

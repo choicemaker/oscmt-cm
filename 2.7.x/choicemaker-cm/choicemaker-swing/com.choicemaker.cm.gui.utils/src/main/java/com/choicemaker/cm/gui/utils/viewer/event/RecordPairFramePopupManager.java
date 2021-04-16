@@ -51,6 +51,7 @@ public class RecordPairFramePopupManager extends MouseAdapter {
 		popup = new JPopupMenu();
 		insertRow = new JMenuItem(INSERT);
 		insertRow.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent ev) {
 				JMenuItem item = (JMenuItem) (ev.getSource());
 				String selection = item.getText();
@@ -63,6 +64,7 @@ public class RecordPairFramePopupManager extends MouseAdapter {
 						
 		JMenuItem editColumns = new JMenuItem(EDIT_COL);
 		editColumns.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				new FieldSelectorDialog(getParentFrame(), recordPairFrameModel);
 			}
@@ -71,12 +73,14 @@ public class RecordPairFramePopupManager extends MouseAdapter {
 
 	}
 
+	@Override
 	public void mousePressed(MouseEvent e) {
 		if (e.isPopupTrigger()) {
 			displayPopup(e);
 		}
 	}
 
+	@Override
 	public void mouseReleased(MouseEvent e) {
 		if (e.isPopupTrigger()) {
 			displayPopup(e);

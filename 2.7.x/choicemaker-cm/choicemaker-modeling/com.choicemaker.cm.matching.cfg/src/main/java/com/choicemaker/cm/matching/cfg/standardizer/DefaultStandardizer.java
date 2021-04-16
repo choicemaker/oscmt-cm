@@ -91,6 +91,7 @@ public class DefaultStandardizer implements ParseTreeNodeStandardizer {
 	 * @param node the ParseTreeNode from which to begin standardizing
 	 * @param holder the ParsedDataHolder in which to store standardized data
 	 */	
+	@Override
 	public void standardize(ParseTreeNode node, ParsedData holder) {
 		holder.append(fieldName, joinTokens(node));
 	}

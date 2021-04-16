@@ -99,12 +99,15 @@ public class OpenRsAsMrpsDialog extends JDialog {
 
 	private void createListeners() {
 		DocumentListener dl = new DocumentListener() {
+			@Override
 			public void changedUpdate(DocumentEvent e) {
 				updateEnabledness();
 			}
+			@Override
 			public void insertUpdate(DocumentEvent e) {
 				updateEnabledness();
 			}
+			@Override
 			public void removeUpdate(DocumentEvent e) {
 				updateEnabledness();
 			}
@@ -112,6 +115,7 @@ public class OpenRsAsMrpsDialog extends JDialog {
 		rsSelector.addDocumentListener(dl);
 
 		newButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				Source s = new SourceTypeSelectorDialog(modelMaker, SourceTypeSelectorDialog.RS, false).define();
 				if (s != null) {
@@ -126,6 +130,7 @@ public class OpenRsAsMrpsDialog extends JDialog {
 		});
 
 		ok.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
 					String rsFileName = rsSelector.getFile().getAbsolutePath();
@@ -140,6 +145,7 @@ public class OpenRsAsMrpsDialog extends JDialog {
 		});
 
 		cancel.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				dispose();
 			}
@@ -148,6 +154,7 @@ public class OpenRsAsMrpsDialog extends JDialog {
 
 	private void showError(final Throwable ex) {
 		Runnable runner = new Runnable() {
+			@Override
 			public void run() {
 				ErrorDialog.showErrorDialog(modelMaker, ex);
 			}
@@ -163,6 +170,7 @@ public class OpenRsAsMrpsDialog extends JDialog {
 		public RsSelector(String label) {
 			super(label);
 		}
+		@Override
 		protected File selectFile() {
 			return FileChooserFactory.selectRsFile(modelMaker);
 		}

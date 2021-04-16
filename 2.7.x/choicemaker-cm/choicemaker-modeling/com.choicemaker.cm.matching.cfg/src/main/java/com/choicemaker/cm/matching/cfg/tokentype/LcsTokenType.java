@@ -89,6 +89,7 @@ public class LcsTokenType extends TokenType {
 		} 
 	}
 
+	@Override
 	public boolean canHaveToken(String token) {
 		if (token == null || token.length() < minLength) {
 			return false;
@@ -114,6 +115,7 @@ public class LcsTokenType extends TokenType {
 		return false;
 	}
 
+	@Override
 	protected double getTokenProbability(String token) {
 		if (canHaveToken(token)) {
 			return defaultProbability;

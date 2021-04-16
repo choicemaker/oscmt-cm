@@ -187,6 +187,7 @@ public class RecordPairViewerXmlConf {
 			m.put(column.getFieldName(), column);
 		}
 		SortedSet visibleColumns = new TreeSet(new Comparator() {
+			@Override
 			public int compare(Object o1, Object o2) {
 				int pos1 = ((RecordTableColumn) o1).getDisplayIndex();
 				int pos2 = ((RecordTableColumn) o2).getDisplayIndex();

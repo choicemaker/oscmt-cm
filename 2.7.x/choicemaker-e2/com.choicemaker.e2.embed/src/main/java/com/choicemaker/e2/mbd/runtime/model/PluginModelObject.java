@@ -113,6 +113,7 @@ public void setStartLine(int lineNumber) {
  * 
  * @see java.lang.Object#toString()
  */
+@Override
 public String toString() {
 	return this.getClass() + "(" + getName() + ")"; //$NON-NLS-1$ //$NON-NLS-2$
 }

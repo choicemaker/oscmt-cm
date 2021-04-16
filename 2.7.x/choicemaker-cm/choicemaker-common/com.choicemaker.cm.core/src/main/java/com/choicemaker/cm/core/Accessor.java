@@ -83,14 +83,14 @@ public interface Accessor extends Serializable {
 	 */
 	String getClueSetName();
 	
-	Object toHolder(Record r);
+	<T extends Comparable<T>>Object toHolder(Record<T> r);
 	
 	
 	/**
 	 * This returns Elmer's IRecordHolder for the record.
 	 * @param r a non-null Record
 	 */
-	Object toRecordHolder(Record r);
+	<T extends Comparable<T>>Object toRecordHolder(Record<T> r);
 	
-	Record toImpl(Object o);
+	<T extends Comparable<T>> Record<T> toImpl(Object o);
 }

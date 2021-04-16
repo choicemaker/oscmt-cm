@@ -50,6 +50,7 @@ public class DefaultDateProfiler implements FieldProfiler {
 		fvhStat = new FieldValueHistogramStat(fa, false);
 	}
 	
+	@Override
 	public void reset() {
 		values = new LongArrayList();
 
@@ -62,6 +63,7 @@ public class DefaultDateProfiler implements FieldProfiler {
 		dirty = true;
 	}
 	
+	@Override
 	public void processRecord(Record r) {
 		totalRecords++;
 		
@@ -184,10 +186,12 @@ public class DefaultDateProfiler implements FieldProfiler {
 	// Stat accessors
 	//
 
+	@Override
 	public int getScalarStatCount() {
 		return 14;
 	}
 	
+	@Override
 	public String getScalarStatName(int i) {
 		switch (i) {
 			case 0: return "Total Records";
@@ -208,6 +212,7 @@ public class DefaultDateProfiler implements FieldProfiler {
 		throw new IllegalArgumentException("Index: " + i);
 	}
 
+	@Override
 	public Object getScalarStatValue(int i) {
 		clean();
 		switch (i) {
@@ -251,15 +256,18 @@ public class DefaultDateProfiler implements FieldProfiler {
 		}
 	}
 	
+	@Override
 	public boolean filterRecordForScalarStat(int i, Record r) {
 		clean();
 		return false;
 	}
 
+	@Override
 	public int getTabularStatCount() {
 		return 1;
 	}
 	
+	@Override
 	public String getTabularStatName(int i) {
 		if (i == 0) {
 			return fvhStat.getTabularStatName(i);
@@ -267,6 +275,7 @@ public class DefaultDateProfiler implements FieldProfiler {
 		throw new IllegalArgumentException("Index: " + i);			
 	}
 	
+	@Override
 	public Object[] getTabularStatColumnHeaders(int i) {
 		if (i == 0) {
 			return fvhStat.getTabularStatColumnHeaders(i);
@@ -274,6 +283,7 @@ public class DefaultDateProfiler implements FieldProfiler {
 		throw new IllegalArgumentException("Index: " + i);			
 	}
 	
+	@Override
 	public Object[][] getTabularStatTableData(int i) {
 		if (i == 0) {
 			return fvhStat.getTabularStatTableData(i);
@@ -281,6 +291,7 @@ public class DefaultDateProfiler implements FieldProfiler {
 		throw new IllegalArgumentException("Index: " + i);			
 	}
 
+	@Override
 	public boolean filterRecordForTableStat(int statIndex, Set values, Record r) {
 		if (statIndex == 0) {
 			return fvhStat.filterRecordForTableStat(statIndex, values, r);

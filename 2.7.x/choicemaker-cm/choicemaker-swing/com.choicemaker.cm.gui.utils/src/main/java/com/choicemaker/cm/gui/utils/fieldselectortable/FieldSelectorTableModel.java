@@ -73,10 +73,12 @@ public class FieldSelectorTableModel extends DefaultTableModel implements TableC
 	 * @return the number of columns in the model
 	 * @see #getRowCount
 	 */
+	@Override
 	public int getColumnCount() {
 		return columns.length;
 	}
 
+	@Override
 	public String getColumnName(int col) {
 		ColumnDefinition[] columnDefinitions = getColumnDefinitions();
 		String str = columnDefinitions[col].getName();
@@ -86,6 +88,7 @@ public class FieldSelectorTableModel extends DefaultTableModel implements TableC
 	/* (non-Javadoc)
 	 * @see javax.swing.table.TableModel#getColumnClass(int)
 	 */
+	@Override
 	public Class getColumnClass(int columnIndex) {
 		if (columnIndex == 2)
 			return Boolean.class;
@@ -96,6 +99,7 @@ public class FieldSelectorTableModel extends DefaultTableModel implements TableC
 	/**
 	 * The Field name cannot be edited but its alias and visibility can.
 	 */
+	@Override
 	public boolean isCellEditable(int nRow, int nCol) {
 		return nCol != 0;
 	}
@@ -103,6 +107,7 @@ public class FieldSelectorTableModel extends DefaultTableModel implements TableC
 	/* (non-Javadoc)
 	 * @see javax.swing.table.TableModel#getRowCount()
 	 */
+	@Override
 	public int getRowCount() {
 		int returnValue = 0;
 		if (columnModel != null){
@@ -116,6 +121,7 @@ public class FieldSelectorTableModel extends DefaultTableModel implements TableC
 	/* (non-Javadoc)
 	 * @see javax.swing.table.TableModel#getValueAt(int, int)
 	 */
+	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		RecordTableColumn column = columnModel.getVisibleAndInvisibleColumns()[rowIndex];
 
@@ -133,6 +139,7 @@ public class FieldSelectorTableModel extends DefaultTableModel implements TableC
 	/* (non-Javadoc)
 	 * @see javax.swing.table.TableModel#setValueAt(java.lang.Object, int, int)
 	 */
+	@Override
 	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
 		RecordTableColumn column = columnModel.getVisibleAndInvisibleColumns()[rowIndex];
 
@@ -181,6 +188,7 @@ public class FieldSelectorTableModel extends DefaultTableModel implements TableC
 	/* (non-Javadoc)
 	 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
 	 */
+	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		this.fireTableDataChanged();
 	}
@@ -188,6 +196,7 @@ public class FieldSelectorTableModel extends DefaultTableModel implements TableC
 	/* (non-Javadoc)
 	 * @see javax.swing.event.TableColumnModelListener#columnAdded(javax.swing.event.TableColumnModelEvent)
 	 */
+	@Override
 	public void columnAdded(TableColumnModelEvent e) {
 		this.fireTableDataChanged();
 	}
@@ -195,6 +204,7 @@ public class FieldSelectorTableModel extends DefaultTableModel implements TableC
 	/* (non-Javadoc)
 	 * @see javax.swing.event.TableColumnModelListener#columnRemoved(javax.swing.event.TableColumnModelEvent)
 	 */
+	@Override
 	public void columnRemoved(TableColumnModelEvent e) {
 		this.fireTableDataChanged();
 	}
@@ -202,6 +212,7 @@ public class FieldSelectorTableModel extends DefaultTableModel implements TableC
 	/* (non-Javadoc)
 	 * @see javax.swing.event.TableColumnModelListener#columnMoved(javax.swing.event.TableColumnModelEvent)
 	 */
+	@Override
 	public void columnMoved(TableColumnModelEvent e) {
 		// DO NOTHING
 	}
@@ -209,6 +220,7 @@ public class FieldSelectorTableModel extends DefaultTableModel implements TableC
 	/* (non-Javadoc)
 	 * @see javax.swing.event.TableColumnModelListener#columnMarginChanged(javax.swing.event.ChangeEvent)
 	 */
+	@Override
 	public void columnMarginChanged(ChangeEvent e) {
 		// DO NOTHING
 	}
@@ -216,6 +228,7 @@ public class FieldSelectorTableModel extends DefaultTableModel implements TableC
 	/* (non-Javadoc)
 	 * @see javax.swing.event.TableColumnModelListener#columnSelectionChanged(javax.swing.event.ListSelectionEvent)
 	 */
+	@Override
 	public void columnSelectionChanged(ListSelectionEvent e) {
 		// DO NOTHING
 	}

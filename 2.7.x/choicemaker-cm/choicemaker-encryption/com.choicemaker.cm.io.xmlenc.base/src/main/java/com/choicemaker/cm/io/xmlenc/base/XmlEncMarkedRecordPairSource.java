@@ -146,6 +146,7 @@ public class XmlEncMarkedRecordPairSource extends XmlMarkedRecordPairSource {
 		this.xmlEncMgr = xmlEncMgr;
 	}
 
+	@Override
 	public void open() {
 		try {
 			final XmlEncryptionManager xcm = getXmlEncryptionManager();
@@ -199,6 +200,7 @@ public class XmlEncMarkedRecordPairSource extends XmlMarkedRecordPairSource {
 		return retVal;
 	}
 
+	@Override
 	public Sink getSink() {
 		XmlEncMarkedRecordPairSink retVal = new XmlEncMarkedRecordPairSink(
 				fileName, getXmlFileName(), model, scheme, credential,

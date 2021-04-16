@@ -112,7 +112,7 @@ protected void assertIsWriteable() {
  * @return the plug-in fragment, or <code>null</code>
  */
 public PluginFragmentModel getFragment(String id) {
-	PluginFragmentModel[] result = (PluginFragmentModel[]) fragments.get(id);
+	PluginFragmentModel[] result = fragments.get(id);
 	return result == null ? null : result[0];
 }
 /**
@@ -148,11 +148,11 @@ public PluginFragmentModel getFragment(String id, String version) {
 public PluginFragmentModel[] getFragments() {
 	List<PluginFragmentModel> result = new ArrayList<>(fragments.size());
 	for (Iterator<PluginFragmentModel[]> i = fragments.values().iterator(); i.hasNext();) {
-		PluginFragmentModel[] entries = (PluginFragmentModel[]) i.next();
+		PluginFragmentModel[] entries = i.next();
 		for (int j = 0; j < entries.length; j++)
 			result.add(entries[j]);
 	}
-	return (PluginFragmentModel[]) result.toArray(new PluginFragmentModel[result.size()]);
+	return result.toArray(new PluginFragmentModel[result.size()]);
 }
 /**
  * Returns all versions of the identified plug-in fragment
@@ -165,7 +165,7 @@ public PluginFragmentModel[] getFragments() {
  * @return the fragments known to this plug-in registry with the given id
  */
 public PluginFragmentModel[] getFragments(String id) {
-	return (PluginFragmentModel[]) fragments.get(id);
+	return fragments.get(id);
 }
 /**
  * Returns the plug-in descriptor with the given plug-in identifier
@@ -178,7 +178,7 @@ public PluginFragmentModel[] getFragments(String id) {
  * @return the plug-in descriptor, or <code>null</code>
  */
 public PluginDescriptorModel getPlugin(String pluginId) {
-	PluginDescriptorModel[] result = (PluginDescriptorModel[]) plugins.get(pluginId);
+	PluginDescriptorModel[] result = plugins.get(pluginId);
 	return result == null ? null : result[0];
 }
 /**
@@ -215,11 +215,11 @@ public PluginDescriptorModel getPlugin(String pluginId, String version) {
 public PluginDescriptorModel[] getPlugins() {
 	List<PluginDescriptorModel> result = new ArrayList<>(plugins.size());
 	for (Iterator<PluginDescriptorModel[]> i = plugins.values().iterator(); i.hasNext();) {
-		PluginDescriptorModel[] entries = (PluginDescriptorModel[]) i.next();
+		PluginDescriptorModel[] entries = i.next();
 		for (int j = 0; j < entries.length; j++)
 			result.add(entries[j]);
 	}
-	return (PluginDescriptorModel[]) result.toArray(new PluginDescriptorModel[result.size()]);
+	return result.toArray(new PluginDescriptorModel[result.size()]);
 }
 /**
  * Returns all versions of the identified plug-in descriptor
@@ -232,7 +232,7 @@ public PluginDescriptorModel[] getPlugins() {
  * @return the plug-in descriptors known to this plug-in registry
  */
 public PluginDescriptorModel[] getPlugins(String pluginId) {
-	return (PluginDescriptorModel[]) plugins.get(pluginId);
+	return plugins.get(pluginId);
 }
 /**
  * Returns whether or not this model object is read-only.
@@ -263,12 +263,12 @@ public boolean isResolved() {
 public void markReadOnly() {
 	readOnly = true;
 	for (Iterator<PluginDescriptorModel[]> it = plugins.values().iterator(); it.hasNext();) {
-		PluginDescriptorModel[] list = (PluginDescriptorModel[]) it.next();
+		PluginDescriptorModel[] list = it.next();
 		for (int i = 0; i < list.length; i++)
 			list[i].markReadOnly();
 	}
 	for (Iterator<PluginFragmentModel[]> it = fragments.values().iterator(); it.hasNext();) {
-		PluginFragmentModel[] list = (PluginFragmentModel[]) it.next();
+		PluginFragmentModel[] list = it.next();
 		for (int i = 0; i < list.length; i++)
 			list[i].markReadOnly();
 	}

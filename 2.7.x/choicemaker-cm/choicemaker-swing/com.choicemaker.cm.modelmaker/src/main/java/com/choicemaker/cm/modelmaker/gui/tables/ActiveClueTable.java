@@ -14,9 +14,9 @@ import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
+import com.choicemaker.cm.core.MutableMarkedRecordPair;
 import com.choicemaker.cm.core.RepositoryChangeEvent;
 import com.choicemaker.cm.core.RepositoryChangeListener;
-import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cm.modelmaker.gui.listeners.ClueNameCellListener;
 import com.choicemaker.cm.modelmaker.gui.listeners.TableColumnListener;
@@ -95,11 +95,13 @@ public class ActiveClueTable extends JTable implements RepositoryChangeListener 
 	/**
 	 * @see com.choicemaker.cm.train.gui.listeners.RepositoryChangeListener#setChanged(com.choicemaker.cm.train.gui.listeners.RepositoryChangeEvent)
 	 */
+	@Override
 	public void setChanged(RepositoryChangeEvent evt) {
 	}
 	/**
 	 * @see com.choicemaker.cm.train.gui.listeners.RepositoryChangeListener#recordDataChanged(com.choicemaker.cm.train.gui.listeners.RepositoryChangeEvent)
 	 */
+	@Override
 	public void recordDataChanged(RepositoryChangeEvent evt) {
 		myModel.setMarkedRecordPair(markedRecordPair);
 		refresh();
@@ -107,6 +109,7 @@ public class ActiveClueTable extends JTable implements RepositoryChangeListener 
 	/**
 	 * @see com.choicemaker.cm.train.gui.listeners.RepositoryChangeListener#markupDataChanged(com.choicemaker.cm.train.gui.listeners.RepositoryChangeEvent)
 	 */
+	@Override
 	public void markupDataChanged(RepositoryChangeEvent evt) {
 	}
 }

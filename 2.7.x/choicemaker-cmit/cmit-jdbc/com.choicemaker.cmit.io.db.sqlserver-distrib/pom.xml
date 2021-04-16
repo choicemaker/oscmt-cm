@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<project
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+  xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+>
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.choicemaker.cmit</groupId>
+    <artifactId>cmit-jdbc</artifactId>
+    <version>2.7.1-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+
+  <artifactId>com.choicemaker.cmit.io.db.sqlserver-distrib</artifactId>
+  <packaging>pom</packaging>
+  <name>Integration Test: ChoiceMaker SqlServer Plugin Dist</name>
+
+  <description><![CDATA[
+  Zip distribution of ChoiceMaker SqlServer Plugin Test App
+  ]]>
+  </description>
+
+  <properties>
+    <eclipse.application.dir>${project.build.directory}/eclipse.application.dir</eclipse.application.dir>
+    <eclipse.application.lib.dir>${eclipse.application.dir}/lib</eclipse.application.lib.dir>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>plugins</id>
+            <phase>package</phase>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>
+                ${eclipse.application.lib.dir}</outputDirectory>
+              <excludeArtifactIds>ojdbc6,ucp</excludeArtifactIds>
+              <stripVersion>true</stripVersion>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>assembly</id>
+            <phase>package</phase>
+            <configuration>
+              <descriptor combine.self="override">src/main/assembly/assembly.xml</descriptor>
+              <descriptorRefs combine.self="override"/>
+            </configuration>
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.choicemaker.cmit</groupId>
+      <artifactId>com.choicemaker.cmit.io.db.sqlserver</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.microsoft.sqlserver</groupId>
+      <artifactId>sqljdbc4</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.matching.gen</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>simple-person-plugin</artifactId>
+    </dependency>
+  </dependencies>
+
+</project>

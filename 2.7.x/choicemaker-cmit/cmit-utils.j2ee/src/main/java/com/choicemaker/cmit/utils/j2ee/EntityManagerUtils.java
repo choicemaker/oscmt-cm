@@ -1,6 +1,6 @@
 package com.choicemaker.cmit.utils.j2ee;
 
-import static com.choicemaker.cm.args.WellKnownGraphPropertyNames.GPN_NAMES;
+import static com.choicemaker.client.api.WellKnownGraphProperties.GPN_NAMES;
 
 import java.util.Random;
 import java.util.UUID;
@@ -8,7 +8,7 @@ import java.util.UUID;
 import com.choicemaker.cm.args.AnalysisResultFormat;
 import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.args.PersistableRecordSource;
-import com.choicemaker.cm.core.base.Thresholds;
+import com.choicemaker.cm.core.Thresholds;
 
 public class EntityManagerUtils {
 

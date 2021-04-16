@@ -27,6 +27,7 @@ public final class CfgNameParsedDataCreator implements CMPlatformRunnable {
 	public static final String PARSER = "-parser";
 	public static final String OUT = "-out";
 
+	@Override
 	public Object run(Object argObj) throws Exception {
 		CommandLineArguments cla = new CommandLineArguments();
 		cla.addOption(PARSE_TREES);

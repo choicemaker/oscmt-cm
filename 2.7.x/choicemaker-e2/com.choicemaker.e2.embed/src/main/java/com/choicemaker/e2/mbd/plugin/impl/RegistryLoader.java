@@ -95,7 +95,7 @@ private PluginModel processManifestFile(URL manifest) {
 			// Give the system id a value in case we want it for
 			// error reporting within the parser.
 			in.setSystemId(manifest.getFile());
-			result = new PluginParser((Factory) factory).parsePlugin(in);
+			result = new PluginParser(factory).parsePlugin(in);
 		} finally {
 			is.close();
 		}

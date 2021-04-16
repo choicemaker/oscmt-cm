@@ -46,6 +46,7 @@ public class EarleyParser extends AbstractParser {
 		super(t, g, s, c);
 	}
 
+	@Override
 	protected ParseTreeNode getBestParseTreeFromParser(List<Token> tokens) {
 		EarleyParserChart chart = new EarleyParserChart(tokens, grammar);
 		if (chart.isParsed()) {
@@ -55,6 +56,7 @@ public class EarleyParser extends AbstractParser {
 		}
 	}
 
+	@Override
 	protected ParseTreeNode[] getAllParseTreesFromParser(List<Token> tokens) {
 		EarleyParserChart chart = new EarleyParserChart(tokens, grammar);
 

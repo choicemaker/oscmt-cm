@@ -22,6 +22,7 @@ import com.choicemaker.cm.core.Record;
  * @author   Martin Buechi
  * @deprecated Never used
  */
+@Deprecated
 public class GenericDescriptor implements Descriptor {
 	private static final long serialVersionUID = 1L;
 
@@ -49,7 +50,7 @@ public class GenericDescriptor implements Descriptor {
 		for (int i = 0; i < childDescriptors.length; i++) {
 			newPath[newPath.length - 1] = i;
 			children[i] = new GenericDescriptor(childDescriptors[i], newPath);
-			newPath = (int[])newPath.clone();
+			newPath = newPath.clone();
 		} 
 		this.columnDefinitions = d.getColumnDefinitions();
 		this.name = d.getName();
@@ -58,14 +59,17 @@ public class GenericDescriptor implements Descriptor {
 		this.editable = d.getEditable(SOURCE);
 	}
 
+	@Override
 	public ColumnDefinition[] getColumnDefinitions() {
 		return columnDefinitions;
 	}
 
+	@Override
 	public Descriptor[] getChildren() {
 		return children;
 	}
 
+	@Override
 	public Record[][] getChildRecords(Record ri) {
 		return null;
 	}
@@ -124,24 +128,29 @@ public class GenericDescriptor implements Descriptor {
 		}
 	}
 	
+	@Override
 	public String getValueAsString(Record r, int row, int col) {
 		String val = getRecord(r, row).getValues()[col];
 		return val;
 	}
 	
+	@Override
 	public Object getValue(Record r, int row, int col) {
 		return getValueAsString(r, row, col);
 	}
 
+	@Override
 	public boolean getValidity(Record r, int row, int col) {
 		return getRecord(r, row).getValidity()[col];
 	}
 
+	@Override
 	public boolean setValue(Record r, int row, int col, String value) {
 		getRecord(r, row).getValues()[col] = value;
 		return true;
 	}
 
+	@Override
 	public void deleteRow(Record r, int row) {
 		if(!stackable) {
 			throw new UnsupportedOperationException("Root node not stackable.");
@@ -158,6 +167,7 @@ public class GenericDescriptor implements Descriptor {
 		pc[pe] = n;
 	}
 
+	@Override
 	public void addRow(int position, boolean above, Record r) {
 		if(!stackable) {
 			throw new UnsupportedOperationException("Root node not stackable.");
@@ -178,10 +188,12 @@ public class GenericDescriptor implements Descriptor {
 		pc[pe] = n;
 	}
 
+	@Override
 	public int getColumnCount() {
 		return columnDefinitions.length;
 	}
 
+	@Override
 	public int getRowCount(Record r) {
 		if(!stackable) {
 			return 1;
@@ -203,18 +215,22 @@ public class GenericDescriptor implements Descriptor {
 		}
 	}
 
+	@Override
 	public String getName() {
 		return name;
 	}
 
+	@Override
 	public String getRecordName() {
 		return recordName;
 	}
 
+	@Override
 	public boolean isStackable() {
 		return stackable;
 	}
 
+	@Override
 	public int getColumnIndexByName(String name) {
 		if (m == null) {
 			m = new HashMap(columnDefinitions.length);
@@ -230,10 +246,12 @@ public class GenericDescriptor implements Descriptor {
 		}
 	}
 
+	@Override
 	public boolean[] getEditable(DerivedSource src) {
 		return editable;
 	}
 
+	@Override
 	public Class getHandledClass() {
 		return GenericRecord.class;
 	}

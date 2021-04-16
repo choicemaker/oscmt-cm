@@ -64,6 +64,7 @@ public abstract class AbstractAggregateValidator<T>
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.validation.eclipse.IValidator#equals(IValidator)
 	 */
+	@Override
 	public boolean equals(IValidator<?> validator) {
 		boolean retVal = false;
 		if (validator != null) {
@@ -97,6 +98,7 @@ public abstract class AbstractAggregateValidator<T>
 		return retVal;
 	}
 
+	@Override
 	public boolean equals(Object o) {
 		boolean retVal = AbstractValidator.validatorEquals(this,o);
 		return retVal;
@@ -105,6 +107,7 @@ public abstract class AbstractAggregateValidator<T>
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.validation.eclipse.IValidator#hashCode()
 	 */
+	@Override
 	public int hashCode() {
 		if (this.getCachedHashCode() == 0) {
 			this.cachedHashCode = this.getClass().hashCode();
@@ -119,6 +122,7 @@ public abstract class AbstractAggregateValidator<T>
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.validation.eclipse.IValidator#toString()
 	*/
+	@Override
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append(this.getClass().getName());

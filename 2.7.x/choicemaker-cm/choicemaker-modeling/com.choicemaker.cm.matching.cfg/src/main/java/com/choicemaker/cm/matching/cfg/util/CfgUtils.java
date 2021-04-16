@@ -58,9 +58,10 @@ public final class CfgUtils {
 	 */
 	private static class ReverseParseTreeNodeComparator
 			implements Comparator<ParseTreeNode> {
+		@Override
 		public int compare(ParseTreeNode obj1, ParseTreeNode obj2) {
-			double p1 = ((ParseTreeNode) obj1).getProbability();
-			double p2 = ((ParseTreeNode) obj2).getProbability();
+			double p1 = obj1.getProbability();
+			double p2 = obj2.getProbability();
 			return p1 < p2 ? 1 : p1 > p2 ? -1 : 0;
 		}
 	}
@@ -70,9 +71,10 @@ public final class CfgUtils {
 	 */
 	private static class ReverseParsedDataHolderComparator
 			implements Comparator<ParsedData> {
+		@Override
 		public int compare(ParsedData obj1, ParsedData obj2) {
-			double p1 = ((ParsedData) obj1).getProbability();
-			double p2 = ((ParsedData) obj2).getProbability();
+			double p1 = obj1.getProbability();
+			double p2 = obj2.getProbability();
 			return p1 < p2 ? 1 : p1 > p2 ? -1 : 0;
 		}
 	}

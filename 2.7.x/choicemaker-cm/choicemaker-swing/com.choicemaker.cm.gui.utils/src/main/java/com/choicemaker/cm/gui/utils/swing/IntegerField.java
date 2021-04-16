@@ -64,6 +64,7 @@ public class IntegerField extends JTextField {
 		}
 	}
 
+	@Override
 	protected Document createDefaultModel() {
 		return new IntegerDocument();
 	}
@@ -71,6 +72,7 @@ public class IntegerField extends JTextField {
 	protected class IntegerDocument extends PlainDocument {
 		private static final long serialVersionUID = 1L;
 
+		@Override
 		public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
 			char[] source = str.toCharArray();
 			char[] result = new char[source.length];

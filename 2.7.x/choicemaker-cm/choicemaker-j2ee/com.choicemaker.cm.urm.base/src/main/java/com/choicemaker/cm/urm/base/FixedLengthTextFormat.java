@@ -23,6 +23,7 @@ public class FixedLengthTextFormat implements ITextFormat {
 		super();
 	}
 
+	@Override
 	public void accept(ITextFormatVisitor ext) {
 		ext.visit(this);
 	}

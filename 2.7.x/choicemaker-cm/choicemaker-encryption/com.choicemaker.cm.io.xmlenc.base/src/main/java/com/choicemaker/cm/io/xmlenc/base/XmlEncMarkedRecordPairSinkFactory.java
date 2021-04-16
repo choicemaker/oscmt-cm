@@ -50,6 +50,7 @@ public class XmlEncMarkedRecordPairSinkFactory implements SinkFactory {
 		this.sources = new ArrayList<>();
 	}
 
+	@Override
 	public Sink getSink() {
 		String tName = fileNameBase + num + "." + Constants.MRPS_EXTENSION;
 		String tFileName = xmlFileName + num + extension;
@@ -61,6 +62,6 @@ public class XmlEncMarkedRecordPairSinkFactory implements SinkFactory {
 	}
 
 	public Source[] getSources() {
-		return (Source[]) sources.toArray(new Source[sources.size()]);
+		return sources.toArray(new Source[sources.size()]);
 	}
 }

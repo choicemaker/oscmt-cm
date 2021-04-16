@@ -190,18 +190,22 @@ public class ExportClueTableDialog extends JDialog {
 	private void createListeners() {
 
 		fileField.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
 			public void changedUpdate(DocumentEvent e) {
 				updateEnabledness();
 			}
+			@Override
 			public void insertUpdate(DocumentEvent e) {
 				updateEnabledness();
 			}
+			@Override
 			public void removeUpdate(DocumentEvent e) {
 				updateEnabledness();
 			}
 		});
 
 		browseButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser fc = new JFileChooser();
 				File f = getFile();
@@ -223,6 +227,7 @@ public class ExportClueTableDialog extends JDialog {
 //		};
 
 		okButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				// 2014-04-24 rphall: Commented out unused local variable.
 //				List pairs = parent.getSourceList();
@@ -242,6 +247,7 @@ public class ExportClueTableDialog extends JDialog {
 		});
 
 		cancelButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				maybeRememberFile();
 				dispose();

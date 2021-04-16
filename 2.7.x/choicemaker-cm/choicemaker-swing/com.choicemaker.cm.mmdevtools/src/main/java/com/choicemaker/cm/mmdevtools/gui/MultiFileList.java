@@ -135,6 +135,7 @@ public class MultiFileList extends JPanel {
 	
 	protected void addListeners() {
 		list.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				if (!e.getValueIsAdjusting()) {
 					removeButton.setEnabled(list.getSelectedIndex() >= 0);
@@ -143,6 +144,7 @@ public class MultiFileList extends JPanel {
 		});
 
 		removeButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				DefaultListModel model = (DefaultListModel) list.getModel();
 				model.remove(list.getSelectedIndex());
@@ -150,6 +152,7 @@ public class MultiFileList extends JPanel {
 		});
 		
 		addButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				performAdd();
 			}

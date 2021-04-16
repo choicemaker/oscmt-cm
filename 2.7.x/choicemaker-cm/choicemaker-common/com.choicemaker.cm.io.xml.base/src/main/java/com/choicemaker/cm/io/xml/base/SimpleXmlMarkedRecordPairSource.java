@@ -21,11 +21,13 @@ public class SimpleXmlMarkedRecordPairSource extends XmlMarkedRecordPairSource {
 		super(xmlFileName, xmlFileName, model);
 	}
 
+	@Override
 	public void setFileName(String fn) {
 		super.setFileName(fn);
 		super.setRawXmlFileName(fn);	
 	}
 
+	@Override
 	public void setRawXmlFileName(String fn) {
 		setFileName(fn);	
 	}

@@ -9,10 +9,11 @@ package com.choicemaker.cm.transitivity.util;
 
 import java.util.List;
 
-import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
+import com.choicemaker.cm.core.base.MatchRecord2;
 import com.choicemaker.cm.transitivity.core.CompositeEntity;
 import com.choicemaker.cm.transitivity.core.EdgeProperty;
 import com.choicemaker.cm.transitivity.core.Link;
+import com.choicemaker.util.UniqueSequence;
 
 /**
  * This object takes in a graph (CompositeEntity) and an EdgeProperty and
@@ -44,10 +45,10 @@ public class GraphFilter {
 	 *            - property which the edges need to satisfy
 	 * @return CompositeEnity - new graph.
 	 */
-	public <T extends Comparable<T>> CompositeEntity<T> filter(
-			CompositeEntity<T> ce, EdgeProperty ep) {
+	public CompositeEntity filter(
+			CompositeEntity ce, EdgeProperty ep) {
 		UniqueSequence seq = UniqueSequence.getInstance();
-		CompositeEntity<T> ret = new CompositeEntity(seq.getNextInteger());
+		CompositeEntity ret = new CompositeEntity(seq.getNextInteger());
 
 		// get all the links
 		List links = ce.getAllLinks();

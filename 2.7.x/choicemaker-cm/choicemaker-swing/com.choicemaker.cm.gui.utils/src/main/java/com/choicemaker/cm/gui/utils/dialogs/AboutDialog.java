@@ -52,6 +52,7 @@ public class AboutDialog extends JDialog {
 
 		JButton okay = new JButton(ChoiceMakerCoreMessages.m.formatMessage("ok"));
 		okay.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				dispose();
 			}

@@ -31,6 +31,7 @@ public class WfstParser implements AmbiguousParser, Cloneable {
 		interpreter = new Interpreter(grammar);
 	}
 	
+	@Override
 	public Object clone() {
 		Filter f = (Filter) this.filter.clone();
 		Filter g = (Filter) this.grammar.clone();
@@ -41,6 +42,7 @@ public class WfstParser implements AmbiguousParser, Cloneable {
 	 * (non-Javadoc)
 	 * @see com.choicemaker.cm.matching.wfst.AmbiguousParser#parse(java.lang.String)
 	 */
+	@Override
 	public boolean isWeighted() {
 		// stubbed for now
 		return false;
@@ -50,6 +52,7 @@ public class WfstParser implements AmbiguousParser, Cloneable {
 	 * (non-Javadoc)
 	 * @see com.choicemaker.cm.matching.wfst.AmbiguousParser#parse(java.lang.String)
 	 */
+	@Override
 	public List<Map<String,String>> parse(String str) {
 		if (str !=null ) {
 			str = str.trim();

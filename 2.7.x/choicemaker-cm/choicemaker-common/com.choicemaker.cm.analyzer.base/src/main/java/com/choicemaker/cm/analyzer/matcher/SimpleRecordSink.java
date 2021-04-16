@@ -41,6 +41,7 @@ public class SimpleRecordSink implements MarkedRecordPairSink {
 	/**
 	 * @see com.choicemaker.cm.core.base.MarkedRecordPairSink#putMarkedRecordPair(com.choicemaker.cm.core.base.MarkedRecordPair)
 	 */
+	@Override
 	public void putMarkedRecordPair(ImmutableMarkedRecordPair r) throws IOException {
 		w.write(r.getQueryRecord().getId() + "," + r.getMatchRecord().getId() + "," + r.getMarkedDecision() + "," + df.format(r.getProbability()) + Constants.LINE_SEPARATOR);
 	}
@@ -48,6 +49,7 @@ public class SimpleRecordSink implements MarkedRecordPairSink {
 	/**
 	 * @see com.choicemaker.cm.core.base.RecordPairSink#put(com.choicemaker.cm.core.base.RecordPair)
 	 */
+	@Override
 	public void put(ImmutableRecordPair r) throws IOException {
 		putMarkedRecordPair((ImmutableMarkedRecordPair)r);
 	}
@@ -55,6 +57,7 @@ public class SimpleRecordSink implements MarkedRecordPairSink {
 	/**
 	 * @see com.choicemaker.cm.core.base.Sink#open()
 	 */
+	@Override
 	public void open() throws IOException {
 		fw = new FileWriter(file);
 		w = new BufferedWriter(fw);
@@ -63,6 +66,7 @@ public class SimpleRecordSink implements MarkedRecordPairSink {
 	/**
 	 * @see com.choicemaker.cm.core.base.Sink#close()
 	 */
+	@Override
 	public void close() throws IOException {
 		w.flush();
 		fw.flush();
@@ -73,6 +77,7 @@ public class SimpleRecordSink implements MarkedRecordPairSink {
 	/**
 	 * @see com.choicemaker.cm.core.base.Sink#flush()
 	 */
+	@Override
 	public void flush() throws IOException {
 		w.flush();
 		fw.flush();
@@ -81,6 +86,7 @@ public class SimpleRecordSink implements MarkedRecordPairSink {
 	/**
 	 * @see com.choicemaker.cm.core.base.Sink#getModelName()
 	 */
+	@Override
 	public String getName() {
 		return null;
 	}
@@ -88,12 +94,14 @@ public class SimpleRecordSink implements MarkedRecordPairSink {
 	/**
 	 * @see com.choicemaker.cm.core.base.Sink#setModelName(java.lang.String)
 	 */
+	@Override
 	public void setName(String name) {
 	}
 
 	/**
 	 * @see com.choicemaker.cm.core.base.Sink#getModel()
 	 */
+	@Override
 	public ImmutableProbabilityModel getModel() {
 		return null;
 	}
@@ -101,6 +109,7 @@ public class SimpleRecordSink implements MarkedRecordPairSink {
 	/**
 	 * @see com.choicemaker.cm.core.base.Sink#setModel(com.choicemaker.cm.core.base.ProbabilityModel)
 	 */
+	@Override
 	public void setModel(ImmutableProbabilityModel m) {
 	}
 

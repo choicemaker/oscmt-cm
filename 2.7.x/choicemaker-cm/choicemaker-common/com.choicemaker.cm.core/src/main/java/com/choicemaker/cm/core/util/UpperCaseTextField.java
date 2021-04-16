@@ -29,7 +29,8 @@ public class UpperCaseTextField extends JTextField {
 		 super(cols);
 	 }
  
-	 protected Document createDefaultModel() {
+	 @Override
+	protected Document createDefaultModel() {
 		  return new UpperCaseDocument();
 	 }
  
@@ -37,6 +38,7 @@ public class UpperCaseTextField extends JTextField {
  
 		 private static final long serialVersionUID = 1L;
 
+		@Override
 		public void insertString(int offs, String str, AttributeSet a) 
 			  throws BadLocationException {
  
@@ -67,6 +69,7 @@ public class UpperCaseTextField extends JTextField {
 			limit = l;			
 		}
  	
+		@Override
 		public void insertString(int offs, String str, AttributeSet a) 
 			 throws BadLocationException {
  

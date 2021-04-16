@@ -51,10 +51,11 @@ public class StringPatternInvalidator extends StringPatternValidator {
 	 * @see com.choicemaker.cm.validation.eclipse.IValidator#isValid(java.lang.
 	 * String)
 	 */
+	@Override
 	public boolean isValid(String object) {
 		boolean retVal = true;
 		if (object != null && object instanceof String) {
-			retVal = !isMatch((String) object);
+			retVal = !isMatch(object);
 		}
 		return retVal;
 	}

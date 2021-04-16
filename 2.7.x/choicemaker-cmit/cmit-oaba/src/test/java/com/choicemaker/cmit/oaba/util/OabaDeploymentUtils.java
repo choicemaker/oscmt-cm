@@ -27,7 +27,7 @@ import org.jboss.shrinkwrap.resolver.api.maven.PomEquippedResolveStage;
 public class OabaDeploymentUtils {
 
 	public static final String REGEX_EJB_DEPENDENCIES =
-		"com.choicemaker.cm.io.blocking.automated.offline.server.*.jar"
+		"com.choicemaker.cm.oaba.server.*.jar"
 				+ "|com.choicemaker.e2.ejb.*.jar"
 				+ "|com.choicemaker.cm.batch.*.jar"
 				;

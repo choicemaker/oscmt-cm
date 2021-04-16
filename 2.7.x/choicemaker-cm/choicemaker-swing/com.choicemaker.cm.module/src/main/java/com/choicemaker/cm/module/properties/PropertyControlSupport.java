@@ -37,9 +37,11 @@ public class PropertyControlSupport implements IPropertyControl {
 				throw new IllegalArgumentException("null listener");
 			}
 		}
+		@Override
 		public void update(Observable src, Object evt) {
 			this.propertyListener.propertyChanged((PropertyChangeEvent) evt);
 		}
+		@Override
 		public boolean equals(Object o) {
 			boolean retVal = false;
 			if (o instanceof PropertyObserver) {
@@ -47,6 +49,7 @@ public class PropertyControlSupport implements IPropertyControl {
 			}
 			return retVal;
 		}
+		@Override
 		public int hashCode() {
 			return this.propertyListener.hashCode();
 		}
@@ -66,18 +69,22 @@ public class PropertyControlSupport implements IPropertyControl {
 
 	// -- Property management
 	
+	@Override
 	public Properties getProperties() {
 		return new Properties(this.properties);
 	}
 
+	@Override
 	public String getProperty(String name) {
 		return this.properties.getProperty(name);
 	}
 
+	@Override
 	public String getProperty(String name, String strDefault) {
 		return this.properties.getProperty(name, strDefault);
 	}
 
+	@Override
 	public void setProperty(String name, String value) {
 		String oldValue = this.properties.getProperty(name);
 		this.properties.setProperty(name,value);
@@ -85,6 +92,7 @@ public class PropertyControlSupport implements IPropertyControl {
 		this.delegate.notifyObservers(pce);
 	}
 
+	@Override
 	public void removeProperty(String name) {
 		String oldValue = this.properties.getProperty(name);
 		this.properties.remove(name);
@@ -94,10 +102,12 @@ public class PropertyControlSupport implements IPropertyControl {
 
 	// -- Listener management
 	
+	@Override
 	public void addPropertyListener(IPropertyListener l) {
 		this.delegate.addObserver(new PropertyObserver(l));
 	}
 
+	@Override
 	public void removePropertyListener(IPropertyListener l) {
 		this.delegate.deleteObserver(new PropertyObserver(l));
 	}

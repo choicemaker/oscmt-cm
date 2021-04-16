@@ -53,6 +53,7 @@ public class CompositeEntityIterator2 implements Iterator {
 	/* (non-Javadoc)
 	 * @see java.util.Iterator#remove()
 	 */
+	@Override
 	public void remove() {
 		it.remove();
 	}
@@ -60,6 +61,7 @@ public class CompositeEntityIterator2 implements Iterator {
 	/* (non-Javadoc)
 	 * @see java.util.Iterator#hasNext()
 	 */
+	@Override
 	public boolean hasNext() {
 		return it.hasNext();
 	}
@@ -67,6 +69,7 @@ public class CompositeEntityIterator2 implements Iterator {
 	/* (non-Javadoc)
 	 * @see java.util.Iterator#next()
 	 */
+	@Override
 	public Object next() {
 		return it.next();
 	}
@@ -77,6 +80,7 @@ public class CompositeEntityIterator2 implements Iterator {
 		/* (non-Javadoc)
 		 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
 		 */
+		@Override
 		public int compare(Object o1, Object o2) {
 			CompositeEntity ce1 = (CompositeEntity) o1;
 			CompositeEntity ce2 = (CompositeEntity) o2;

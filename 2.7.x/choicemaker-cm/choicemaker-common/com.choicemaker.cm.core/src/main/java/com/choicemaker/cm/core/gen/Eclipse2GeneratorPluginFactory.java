@@ -79,6 +79,7 @@ public class Eclipse2GeneratorPluginFactory implements
 		return retVal;
 	}
 
+	@Override
 	public List lookupGeneratorPlugins() {
 		return this.generatorPlugins;
 	}

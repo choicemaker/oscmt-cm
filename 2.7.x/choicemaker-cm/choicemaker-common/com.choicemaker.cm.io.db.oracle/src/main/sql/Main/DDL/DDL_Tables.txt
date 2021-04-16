@@ -36,7 +36,5 @@ CREATE TABLE tb_cmt_cursors (
 
 create global temporary table tb_cmt_temp_ids (id NUMBER);
 					-- temporary table for MCI_IDs of blocking	
+
 create global temporary table tb_cmt_temp_q (q VARCHAR2(4000));
-
-
-	

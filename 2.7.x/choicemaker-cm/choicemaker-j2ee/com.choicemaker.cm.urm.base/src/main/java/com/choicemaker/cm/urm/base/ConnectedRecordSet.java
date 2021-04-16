@@ -7,41 +7,38 @@
  *******************************************************************************/
 package com.choicemaker.cm.urm.base;
 
-
+import java.io.Serializable;
 
 /**
- * A set of records connected by the match or hold relationship. Field <code>connections</code> provides
- * evaluation of the matching between those records.
+ * A set of records connected by the match or hold relationship. Field
+ * <code>connections</code> provides evaluation of the matching between those
+ * records.
  * <p>
  *
  * @author emoussikaev
  * @see
  */
-public class ConnectedRecordSet extends CompositeRecord {
+public class ConnectedRecordSet<T extends Comparable<T> & Serializable>
+		extends CompositeRecord<T> {
 
-	/** As of 2010-11-12 */
 	private static final long serialVersionUID = 1604807022706941623L;
 
-	private IRecordConnection[]		connections;
+	private IRecordConnection[] connections;
 
-	public ConnectedRecordSet(Comparable id, IRecord[] r, IRecordConnection[] connections) {
+	public ConnectedRecordSet(T id, IRecord<T>[] r, IRecordConnection[] connections) {
 		super(id,r);
 		this.connections = connections;
 	}
-	/**
-	 * @return
-	 */
+
 	public IRecordConnection[] getConnections() {
 		return connections;
 	}
 
-	/**
-	 * @param links
-	 */
 	public void setConnections(RecordConnection[] links) {
 		this.connections = links;
 	}
 
+	@Override
 	public void accept(IRecordVisitor ext){
 		ext.visit(this);
 	}

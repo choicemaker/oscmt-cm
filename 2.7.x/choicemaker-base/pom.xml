@@ -17,6 +17,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <!-- Build options -->
     <checkstyle.skip>true</checkstyle.skip>
     <cobertura.skip>true</cobertura.skip>
@@ -44,6 +45,7 @@
     <aws-java-sdk.version>1.11.5</aws-java-sdk.version>
     <bouncycastle.version>1.54</bouncycastle.version>
     <docbook.version>4.4</docbook.version>
+    <javax.transaction-api.version>1.2</javax.transaction-api.version>
     <jsch.version>0.1.50</jsch.version>
     <junit.version>4.8.1</junit.version>
     <santuario-kms.version>0.1.2</santuario-kms.version>
@@ -83,7 +85,7 @@
     <plugin.maven-help.version>2.2</plugin.maven-help.version>
     <plugin.maven-jar.version>2.4</plugin.maven-jar.version>
     <!-- plugin.maven-jar.version>3.0.2</plugin.maven-jar.version -->
-    <plugin.maven-javadoc.version>2.10.3</plugin.maven-javadoc.version>
+    <plugin.maven-javadoc.version>3.1.1</plugin.maven-javadoc.version>
     <plugin.maven-jxr.version>2.3</plugin.maven-jxr.version>
     <!-- plugin.maven-pmd.version>2.7.1</plugin.maven-pmd.version -->
     <plugin.maven-pmd.version>3.0.1</plugin.maven-pmd.version>
@@ -101,6 +103,9 @@
     <plugin.maven-wagon-ssh.version>2.9</plugin.maven-wagon-ssh.version>
 
     <plugin.sonatype-install4j.version>1.0.6</plugin.sonatype-install4j.version>
+
+    <version.ejb.plugin>3.1.0</version.ejb.plugin>
+
   </properties>
   <!-- <scm> <url>http://sourceforge.net/p/oscmt/cm/ci/master/tree/2.7.x/</url> 
     </scm> <issueManagement> <url>http://sourceforge.net/projects/oscmt/support</url> 
@@ -114,13 +119,13 @@
       <id>choicemaker_releases</id>
       <name>ChoiceMaker Enterprise Releases</name>
       <url>
-      https://dev.choicemaker.com:8443/nexus/content/repositories/choicemaker_releases/</url>
+      https://dev2.choicemaker.com:8443/nexus/content/repositories/choicemaker_releases/</url>
     </repository>
     <snapshotRepository>
       <id>choicemaker_snapshots</id>
       <name>ChoiceMaker Enterprise Snapshots</name>
       <url>
-      https://dev.choicemaker.com:8443/nexus/content/repositories/choicemaker_snapshots/</url>
+      https://dev2.choicemaker.com:8443/nexus/content/repositories/choicemaker_snapshots/</url>
     </snapshotRepository>
   </distributionManagement>
 
@@ -290,6 +295,11 @@
         </plugin>
 
         <plugin>
+          <artifactId>maven-ejb-plugin</artifactId>
+          <version>${version.ejb.plugin}</version>
+        </plugin>
+
+        <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-source-plugin</artifactId>
           <version>${plugin.maven-source.version}</version>
@@ -443,6 +453,11 @@
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
+        <artifactId>urm-apps</artifactId>
+        <version>${choicemaker.release.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.analyzer.base</artifactId>
         <version>${choicemaker.release.version}</version>
       </dependency>
@@ -458,8 +473,14 @@
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
-        <artifactId>com.choicemaker.cm.batch</artifactId>
+        <artifactId>com.choicemaker.cm.batch.api</artifactId>
         <version>${choicemaker.release.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>com.choicemaker.cm.batch.ejb</artifactId>
+        <version>${choicemaker.release.version}</version>
+        <type>ejb</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
@@ -468,7 +489,17 @@
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
+        <artifactId>com.choicemaker.client.api</artifactId>
+        <version>${choicemaker.release.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.core</artifactId>
+        <version>${choicemaker.release.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>com.choicemaker.cm.core.util25</artifactId>
         <version>${choicemaker.release.version}</version>
       </dependency>
       <dependency>
@@ -483,33 +514,39 @@
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
-        <artifactId>com.choicemaker.cm.io.blocking.automated.base</artifactId>
+        <artifactId>com.choicemaker.cm.aba.base</artifactId>
         <version>${choicemaker.patch.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
-        <artifactId>com.choicemaker.cm.io.blocking.automated.inmemory</artifactId>
+        <artifactId>com.choicemaker.cm.aba.inmemory</artifactId>
         <version>${choicemaker.release.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
-        <artifactId>com.choicemaker.cm.io.blocking.automated.inmemory.gui</artifactId>
+        <artifactId>com.choicemaker.cm.aba.inmemory.gui</artifactId>
         <version>${choicemaker.release.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
-        <artifactId>com.choicemaker.cm.io.blocking.automated.offline</artifactId>
+        <artifactId>com.choicemaker.cm.oaba</artifactId>
         <version>${choicemaker.release.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
-        <artifactId>com.choicemaker.cm.io.blocking.automated.offline.core</artifactId>
+        <artifactId>com.choicemaker.cm.oaba.core</artifactId>
         <version>${choicemaker.release.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
-        <artifactId>com.choicemaker.cm.io.blocking.automated.offline.server</artifactId>
+        <artifactId>com.choicemaker.cm.oaba.api</artifactId>
         <version>${choicemaker.release.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>com.choicemaker.cm.oaba.ejb</artifactId>
+        <version>${choicemaker.release.version}</version>
+        <type>ejb</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
@@ -564,6 +601,26 @@
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.db.sqlserver.gui</artifactId>
+        <version>${choicemaker.release.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>com.choicemaker.cm.io.db.postgres</artifactId>
+        <version>${choicemaker.release.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>com.choicemaker.cm.io.db.postgres.gui</artifactId>
+        <version>${choicemaker.release.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>com.choicemaker.cm.io.db.postgres2</artifactId>
+        <version>${choicemaker.release.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>com.choicemaker.cm.io.db.postgres2.gui</artifactId>
         <version>${choicemaker.release.version}</version>
       </dependency>
       <dependency>
@@ -708,8 +765,14 @@
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
-        <artifactId>com.choicemaker.cm.transitivity.server</artifactId>
+        <artifactId>com.choicemaker.cm.transitivity.api</artifactId>
         <version>${choicemaker.release.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>com.choicemaker.cm.transitivity.ejb</artifactId>
+        <version>${choicemaker.release.version}</version>
+        <type>ejb</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
@@ -719,6 +782,11 @@
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.urm.adaptor</artifactId>
+        <version>${choicemaker.release.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>com.choicemaker.cm.urm.api</artifactId>
         <version>${choicemaker.release.version}</version>
       </dependency>
       <dependency>
@@ -735,6 +803,7 @@
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.urm.ejb</artifactId>
         <version>${choicemaker.release.version}</version>
+        <type>ejb</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
@@ -754,6 +823,32 @@
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.validation.eclipse</artifactId>
+        <version>${choicemaker.release.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>com.choicemaker.cms.api</artifactId>
+        <version>${choicemaker.release.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>com.choicemaker.cms.ejb</artifactId>
+        <version>${choicemaker.release.version}</version>
+        <type>ejb</type>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>com.choicemaker.cms.rest</artifactId>
+        <version>${choicemaker.release.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>com.choicemaker.cms.webapp</artifactId>
+        <version>${choicemaker.release.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>com.choicemaker.cms.webui</artifactId>
         <version>${choicemaker.release.version}</version>
       </dependency>
       <dependency>
@@ -787,19 +882,14 @@
         <version>1.0.15-SNAPSHOT</version>
       </dependency>
       <dependency>
-        <groupId>com.choicemaker.cm</groupId>
-        <artifactId>org.apache.ant</artifactId>
-        <version>1.5.4-SNAPSHOT</version>
+        <groupId>org.eclipse.persistence</groupId>
+        <artifactId>org.eclipse.persistence.jpa</artifactId>
+        <version>2.5.2</version>
       </dependency>
       <dependency>
-        <groupId>com.choicemaker.cm</groupId>
-        <artifactId>org.eclipse.ant.core</artifactId>
-        <version>2.1.2-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>com.choicemaker.cm</groupId>
-        <artifactId>org.eclipse.ant.internal.core</artifactId>
-        <version>2.1.2-SNAPSHOT</version>
+        <groupId>org.eclipse.persistence</groupId>
+        <artifactId>org.eclipse.persistence.oracle</artifactId>
+        <version>2.5.2</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
@@ -814,11 +904,6 @@
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>org.eclipse.core.resources</artifactId>
-        <version>2.1.2-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>com.choicemaker.cm</groupId>
-        <artifactId>org.eclipse.core.resources.ant</artifactId>
         <version>2.1.2-SNAPSHOT</version>
       </dependency>
       <dependency>
@@ -872,6 +957,11 @@
         <version>${choicemaker.release.version}</version>
       </dependency>
       <dependency>
+        <groupId>com.choicemaker.cmit</groupId>
+        <artifactId>com.choicemaker.cmit.io.db.sqlserver</artifactId>
+        <version>${choicemaker.release.version}</version>
+      </dependency>
+      <dependency>
         <groupId>com.choicemaker.e2</groupId>
         <artifactId>com.choicemaker.e2</artifactId>
         <version>${choicemaker.release.version}</version>
@@ -880,6 +970,7 @@
         <groupId>com.choicemaker.e2</groupId>
         <artifactId>com.choicemaker.e2.ejb</artifactId>
         <version>${choicemaker.release.version}</version>
+        <type>ejb</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.e2</groupId>
@@ -900,6 +991,7 @@
         <groupId>com.choicemaker.e2it</groupId>
         <artifactId>com.choicemaker.e2it.ejb</artifactId>
         <version>${choicemaker.release.version}</version>
+        <type>ejb</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.e2it</groupId>
@@ -919,6 +1011,16 @@
       <dependency>
         <groupId>com.choicemaker.util</groupId>
         <artifactId>choicemaker-util</artifactId>
+        <version>${choicemaker.release.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.util</groupId>
+        <artifactId>choicemaker-dates</artifactId>
+        <version>${choicemaker.release.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.util</groupId>
+        <artifactId>choicemaker-jee</artifactId>
         <version>${choicemaker.release.version}</version>
       </dependency>
       <dependency>
@@ -979,9 +1081,20 @@
           <version>${apache-commons-logging.version}</version>
       </dependency>
       <dependency>
+        <groupId>org.eclipse.persistence</groupId>
+        <artifactId>javax.persistence</artifactId>
+        <version>2.1.0</version>
+      </dependency>
+      <dependency>
         <groupId>javax</groupId>
         <artifactId>javaee-api</artifactId>
-        <version>7.0</version>
+        <version>8.0</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>javax.enterprise</groupId>
+        <artifactId>cdi-api</artifactId>
+        <version>1.2</version>
         <scope>provided</scope>
       </dependency>
       <dependency>
@@ -994,6 +1107,11 @@
         <artifactId>javahelp</artifactId>
         <version>2.0.05</version>
         <classifier>sources</classifier>
+      </dependency>
+      <dependency>
+        <groupId>javax.transaction</groupId>
+        <artifactId>javax.transaction-api</artifactId>
+        <version>${javax.transaction-api.version}</version>
       </dependency>
       <dependency>
         <groupId>junit</groupId>
@@ -1067,6 +1185,11 @@
         <groupId>org.xmlunit</groupId>
         <artifactId>xmlunit-core</artifactId>
         <version>${xmlunit.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.postgresql</groupId>
+        <artifactId>postgresql</artifactId>
+        <version>42.0.0</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

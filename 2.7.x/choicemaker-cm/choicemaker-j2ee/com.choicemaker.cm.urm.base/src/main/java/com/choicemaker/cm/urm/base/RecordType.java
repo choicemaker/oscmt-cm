@@ -39,6 +39,7 @@ public class RecordType implements Serializable {
 	public static final RecordType REF = new RecordType("REF");
 	public static final RecordType GLOBAL_REF = new RecordType("GLOBAL_REF");
 
+	@Override
 	public String toString() {
 		return value;
 	}

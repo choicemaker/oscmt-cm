@@ -106,6 +106,7 @@ public abstract class AbstractSerializableRecordSource
 	protected abstract void checkProperties(Properties p)
 		throws IncompleteSpecificationException;
 
+	@Override
 	public Properties getProperties() {
 		return (Properties) this.properties.clone();
 	}
@@ -122,6 +123,7 @@ public abstract class AbstractSerializableRecordSource
 	 * specified (non-null) Properties object is missing required properties.
 	 * @see #checkProperties(Properties)
 	 */
+	@Override
 	public void setProperties(Properties p)
 		throws IncompleteSpecificationException {
 		if (p == null) {
@@ -131,6 +133,7 @@ public abstract class AbstractSerializableRecordSource
 		this.properties = (Properties) p.clone();
 	}
 
+	@Override
 	public String toXML() {
 		return toXML(this);
 	}

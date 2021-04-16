@@ -16,6 +16,7 @@ import java.io.Serializable;
  * @see
  */
 public interface IRecordVisitor extends Serializable {
+	// void visit(IRecord rh);
 	void visit(IRecordHolder rh);
 	void visit(RecordRef rRef);
 	void visit(GlobalRecordRef grRef);

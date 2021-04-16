@@ -61,10 +61,12 @@ public class SafeRunnableAdapter {
 			this.delegate = o;
 		}
 
+		@Override
 		public void handleException(Throwable exception) {
 			delegate.handleException(exception);
 		}
 
+		@Override
 		public void run() throws Exception {
 			delegate.run();
 		}
@@ -82,10 +84,12 @@ public class SafeRunnableAdapter {
 			this.delegate = o;
 		}
 
+		@Override
 		public void handleException(Throwable exception) {
 			delegate.handleException(exception);
 		}
 
+		@Override
 		public void run() throws Exception {
 			delegate.run();
 		}

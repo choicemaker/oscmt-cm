@@ -24,6 +24,7 @@ import com.choicemaker.e2.CMPlatformRunnable;
  */
 public class CfgNameGrammarTrainer implements CMPlatformRunnable {
 		
+	@Override
 	public Object run(Object argObj) throws Exception {
 		String[] args = CommandLineArguments.eclipseArgsMapper(argObj);
 		

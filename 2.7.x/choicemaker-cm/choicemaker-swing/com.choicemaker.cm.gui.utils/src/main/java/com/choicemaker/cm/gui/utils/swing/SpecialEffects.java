@@ -77,6 +77,7 @@ public class SpecialEffects {
 			new javax.swing.Timer(timerDelay, new ActionListener() {
 				int count = 0;
 
+				@Override
 				public void actionPerformed(ActionEvent evt) {
 					final String METHOD2 = "actionPerformed";
 					logger.entering(LOG_SOURCE, METHOD2, Integer.valueOf(count));

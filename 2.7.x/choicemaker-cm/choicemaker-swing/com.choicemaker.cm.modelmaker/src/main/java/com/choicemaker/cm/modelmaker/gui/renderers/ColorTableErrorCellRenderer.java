@@ -21,6 +21,7 @@ import com.choicemaker.cm.modelmaker.gui.utils.ValueError;
 public class ColorTableErrorCellRenderer extends DefaultTableCellRenderer {
 	private static final long serialVersionUID = 1L;
 
+	@Override
 	public void setValue(Object value) {
 		if (value instanceof ValueError) {
 			ValueError v = (ValueError) value;

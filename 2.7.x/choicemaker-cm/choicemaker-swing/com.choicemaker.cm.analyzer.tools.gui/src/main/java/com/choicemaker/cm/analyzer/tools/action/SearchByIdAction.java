@@ -30,6 +30,7 @@ public class SearchByIdAction extends ToolAction {
 		super("Search by ID...");
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		SearchByIdDialog.showSearchByIdDialog(modelMaker);
 	}
@@ -38,9 +39,11 @@ public class SearchByIdAction extends ToolAction {
 		setEnabled(modelMaker.haveProbabilityModel() && modelMaker.isEvaluated());
 	}
 	
+	@Override
 	public void setModelMaker(ModelMaker mm) {
 		super.setModelMaker(mm);
 		mm.addPropertyChangeListener(new PropertyChangeListener() {
+			@Override
 			public void propertyChange(PropertyChangeEvent e) {
 				updateEnabled();
 			}

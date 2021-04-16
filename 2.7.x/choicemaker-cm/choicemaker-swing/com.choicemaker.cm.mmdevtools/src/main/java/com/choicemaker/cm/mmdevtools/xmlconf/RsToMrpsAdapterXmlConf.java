@@ -27,6 +27,7 @@ import com.choicemaker.util.FileUtilities;
  */
 public class RsToMrpsAdapterXmlConf implements MarkedRecordPairSourceXmlConfigurator {
 
+	@Override
 	public MarkedRecordPairSource getMarkedRecordPairSource(String fileName, Element e, ImmutableProbabilityModel model) throws XmlConfException {
 		String rsFileName = e.getChildText("fileName");
 		rsFileName = FileUtilities.getAbsoluteFile(new File(fileName).getParentFile(), rsFileName).getAbsolutePath();
@@ -35,14 +36,17 @@ public class RsToMrpsAdapterXmlConf implements MarkedRecordPairSourceXmlConfigur
 		return new RsToMrpsAdapter(rs);
 	}
 
+	@Override
 	public void add(MarkedRecordPairSource desc) throws XmlConfException {
 		throw new XmlConfException("Cannot save an RsToMrpsAdapter!");
 	}
 
+	@Override
 	public Object getHandler() {
 		return this;
 	}
 
+	@Override
 	public Class getHandledType() {
 		return RsToMrpsAdapter.class;
 	}

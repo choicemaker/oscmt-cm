@@ -63,38 +63,47 @@ public class StatusAdapter {
 			this.delegate = o;
 		}
 
+		@Override
 		public CMStatus[] getChildren() {
 			return convert(delegate.getChildren());
 		}
 
+		@Override
 		public int getCode() {
 			return delegate.getCode();
 		}
 
+		@Override
 		public Throwable getException() {
 			return delegate.getException();
 		}
 
+		@Override
 		public String getMessage() {
 			return delegate.getMessage();
 		}
 
+		@Override
 		public String getPlugin() {
 			return delegate.getPlugin();
 		}
 
+		@Override
 		public int getSeverity() {
 			return delegate.getSeverity();
 		}
 
+		@Override
 		public boolean isMultiStatus() {
 			return delegate.isMultiStatus();
 		}
 
+		@Override
 		public boolean isOK() {
 			return delegate.isOK();
 		}
 
+		@Override
 		public boolean matches(int severityMask) {
 			return delegate.matches(severityMask);
 		}
@@ -112,38 +121,47 @@ public class StatusAdapter {
 			this.delegate = o;
 		}
 
+		@Override
 		public IStatus[] getChildren() {
 			return convert(delegate.getChildren());
 		}
 
+		@Override
 		public int getCode() {
 			return delegate.getCode();
 		}
 
+		@Override
 		public Throwable getException() {
 			return delegate.getException();
 		}
 
+		@Override
 		public String getMessage() {
 			return delegate.getMessage();
 		}
 
+		@Override
 		public String getPlugin() {
 			return delegate.getPlugin();
 		}
 
+		@Override
 		public int getSeverity() {
 			return delegate.getSeverity();
 		}
 
+		@Override
 		public boolean isMultiStatus() {
 			return delegate.isMultiStatus();
 		}
 
+		@Override
 		public boolean isOK() {
 			return delegate.isOK();
 		}
 
+		@Override
 		public boolean matches(int severityMask) {
 			return delegate.matches(severityMask);
 		}

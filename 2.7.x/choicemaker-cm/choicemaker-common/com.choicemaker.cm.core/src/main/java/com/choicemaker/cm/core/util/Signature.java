@@ -21,8 +21,8 @@ import java.util.logging.Logger;
 import com.choicemaker.cm.core.Accessor;
 import com.choicemaker.cm.core.ClueSet;
 import com.choicemaker.cm.core.Descriptor;
+import com.choicemaker.cm.core.Evaluator;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.base.Evaluator;
 import com.choicemaker.util.Base64;
 import com.choicemaker.util.Precondition;
 

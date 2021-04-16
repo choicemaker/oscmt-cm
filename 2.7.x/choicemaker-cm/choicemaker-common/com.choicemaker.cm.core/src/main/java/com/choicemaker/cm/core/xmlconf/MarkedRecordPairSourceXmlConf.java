@@ -11,6 +11,7 @@
 package com.choicemaker.cm.core.xmlconf;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -43,7 +44,8 @@ public class MarkedRecordPairSourceXmlConf {
 
 	public static HashMap<String, Class<?>> fileMrpsReaders;
 
-	public static void add(MarkedRecordPairSource src) throws XmlConfException {
+	public static <T extends Comparable<T> & Serializable> void add(
+			MarkedRecordPairSource<T> src) throws XmlConfException {
 		try {
 			((MarkedRecordPairSourceXmlConfigurator) ExtensionPointMapper
 					.getInstance(EXTENSION_POINT, src.getClass())).add(src);
@@ -52,7 +54,7 @@ public class MarkedRecordPairSourceXmlConf {
 		}
 	}
 
-	public static MarkedRecordPairSource getMarkedRecordPairSource(
+	public static <T extends Comparable<T> & Serializable> MarkedRecordPairSource<T> getMarkedRecordPairSource(
 			String fileName) throws XmlConfException {
 
 		try {
@@ -68,12 +70,15 @@ public class MarkedRecordPairSourceXmlConf {
 				if (fileMrpsReaders == null) {
 					initFileMrpsReaders();
 				}
-				Class<?> cls = (Class<?>) fileMrpsReaders.get(extension);
+				Class<?> cls = fileMrpsReaders.get(extension);
 				if (cls != null) {
 					MarkedRecordPairSourceXmlConfigurator c =
 						(MarkedRecordPairSourceXmlConfigurator) cls
 								.newInstance();
-					return c.getMarkedRecordPairSource(fileName, null, null);
+					@SuppressWarnings("unchecked")
+					MarkedRecordPairSource<T> retVal =
+						c.getMarkedRecordPairSource(fileName, null, null);
+					return retVal;
 				}
 			}
 
@@ -85,7 +90,11 @@ public class MarkedRecordPairSourceXmlConf {
 			MarkedRecordPairSourceXmlConfigurator c =
 				(MarkedRecordPairSourceXmlConfigurator) ExtensionPointMapper
 						.getInstance(EXTENSION_POINT, cls);
-			return c.getMarkedRecordPairSource(fileName, e, null);
+			@SuppressWarnings("unchecked")
+			MarkedRecordPairSource<T> retVal =
+				c.getMarkedRecordPairSource(fileName, e, null);
+			return retVal;
+
 		} catch (Exception ex) {
 			throw new XmlConfException("Internal error.", ex);
 		}
@@ -127,7 +136,7 @@ public class MarkedRecordPairSourceXmlConf {
 
 		String[] strings = new String[extensions.size()];
 		for (int i = 0; i < strings.length; i++) {
-			strings[i] = (String) extensions.get(i);
+			strings[i] = extensions.get(i);
 		}
 
 		return strings;

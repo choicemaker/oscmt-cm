@@ -29,6 +29,7 @@ public class JdomDocument implements IDocument {
 		this.document = document;
 	}
 
+	@Override
 	public IElement getConfigurableElement() {
 		Element element = document.getRootElement();
 		IElement retVal = new JdomElement(element);

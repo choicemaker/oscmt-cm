@@ -62,6 +62,7 @@ public class AdaptableAdaptor {
 			this.delegate = o;
 		}
 
+		@Override
 		public Object getAdapter(Class<?> adapter) {
 			return delegate.getAdapter(adapter);
 		}
@@ -79,6 +80,7 @@ public class AdaptableAdaptor {
 			this.delegate = o;
 		}
 
+		@Override
 		public Object getAdapter(@SuppressWarnings("rawtypes") Class adapter) {
 			return delegate.getAdapter(adapter);
 		}

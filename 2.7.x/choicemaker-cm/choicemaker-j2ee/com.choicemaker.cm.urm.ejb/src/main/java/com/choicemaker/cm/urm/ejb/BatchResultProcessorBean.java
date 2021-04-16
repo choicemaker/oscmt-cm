@@ -7,201 +7,104 @@
  *******************************************************************************/
 package com.choicemaker.cm.urm.ejb;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.rmi.RemoteException;
-import java.util.Properties;
 import java.util.logging.Logger;
 
-import javax.ejb.CreateException;
-import javax.ejb.EJBException;
-import javax.ejb.SessionBean;
-import javax.ejb.SessionContext;
-import javax.jms.Queue;
-import javax.persistence.EntityManager;
-
-import com.choicemaker.cm.batch.BatchJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntity;
+import com.choicemaker.cm.args.IFilterConfiguration;
+import com.choicemaker.cm.urm.api.BatchResultProcessor;
 import com.choicemaker.cm.urm.base.JobStatus;
+import com.choicemaker.cm.urm.base.RefRecordCollection;
 import com.choicemaker.cm.urm.exceptions.ArgumentException;
 import com.choicemaker.cm.urm.exceptions.CmRuntimeException;
 import com.choicemaker.cm.urm.exceptions.ConfigException;
 import com.choicemaker.cm.urm.exceptions.ModelException;
 import com.choicemaker.cm.urm.exceptions.RecordCollectionException;
 
+public class BatchResultProcessorBean implements BatchResultProcessor {
 
+	private static final String VERSION = "2.7.1";
 
+	// REMOVEME
+	static final int BATCH_MATCH_STEP_INDEX = 0;
+	static final int TRANS_OABA_STEP_INDEX = 1;
+	static final int TRANS_SERIAL_STEP_INDEX = 2;
 
+	protected static Logger logger =
+		Logger.getLogger(BatchResultProcessorBean.class.getName());
 
-/**
- * @author emoussikaev
- * @see
- */
-public class BatchResultProcessorBean implements SessionBean {
+	public final static String JMS_MRPS_PROCESSOR_QUEUE =
+		"java:comp/env/jms/mrpsProcessorQueue";
 
-	private static final long serialVersionUID = 1L;
-
-	protected static Logger log = Logger.getLogger(BatchResultProcessorBean.class.getName());
-	
-	public final static String JMS_MRPS_PROCESSOR_QUEUE = "java:comp/env/jms/mrpsProcessorQueue";
-
-//	@PersistenceContext (unitName = "oaba")
-	private EntityManager em;
-
-	protected transient SessionContext sessionContext;
-		
-	public BatchResultProcessorBean() {
-		super();
-	}
-	
-	/**
-	 * 
-	 */
-
-	/* (non-Javadoc)
-	 * @see javax.ejb.SessionBean#ejbActivate()
-	 */
-	public void ejbActivate() throws EJBException, RemoteException {
-
+	@Override
+	public boolean abortJob(long jobId) throws ArgumentException,
+			ConfigException, CmRuntimeException, RemoteException {
+		throw new Error("never implemented");
 	}
 
-	/* (non-Javadoc)
-	 * @see javax.ejb.SessionBean#ejbPassivate()
-	 */
-	public void ejbPassivate() throws EJBException, RemoteException {
-	}
-	
-	public void ejbCreate() throws CreateException, RemoteException {
-	} // ejbCreate()
-
-	/* (non-Javadoc)
-	 * @see javax.ejb.SessionBean#ejbRemove()
-	 */
-	public void ejbRemove() throws EJBException, RemoteException {
+	@Override
+	public boolean cleanJob(long jobID) throws ArgumentException,
+			ConfigException, CmRuntimeException, RemoteException {
+		throw new Error("never implemented");
 	}
 
-	/* (non-Javadoc)
-	 * @see javax.ejb.SessionBean#setSessionContext(javax.ejb.SessionContext)
-	 */
-	public void setSessionContext(SessionContext sessionContext) throws EJBException, RemoteException {
-			this.sessionContext = sessionContext;
+	@Override
+	public void copyResult(long jobID, RefRecordCollection resRc)
+			throws ModelException, RecordCollectionException, ConfigException,
+			ArgumentException, CmRuntimeException, RemoteException {
+		throw new Error("not yet implemente");
 	}
 
-	public long startResultToMrpsConversion(
-		long urmId,
-		String mrpsUrl,
-		String externalId)
-		throws
-			ModelException,
-			RecordCollectionException,
-			ConfigException,
-			ArgumentException,
-			CmRuntimeException,
-			RemoteException {
-		Properties defaults = new MrpsRequestConfiguration().getProperties();
-		return startResultToMrpsConversion(urmId,mrpsUrl,externalId,defaults);
+	@Override
+	public JobStatus getJobStatus(long jobID) throws ArgumentException,
+			ConfigException, CmRuntimeException, RemoteException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	public long startResultToMrpsConversion(
-		long jobId,
-		// int batchSize,
-		String mrpsUrl,
-		String externalId,
-		Properties optional)
-					throws
-						ModelException, 	
-						RecordCollectionException,
-						ConfigException,
-						ArgumentException,
-						CmRuntimeException, 
-						RemoteException
-	{
-		log.fine("<<startResultToMrpsConversion");
-		long batchJobId = -1;
-		
-		BatchJob bj = Single.getInst().findBatchJobById(em, OabaJobEntity.class, jobId);
-		batchJobId = bj.getId();
-		
-		if(batchJobId == -1){		
-			UrmStepJob batchStep = Single.getInst().findStepJobByUrmAndIndex(jobId,BatchMatchAnalyzerBean.BATCH_MATCH_STEP_INDEX);					
-			batchJobId  = batchStep.getStepJobId().longValue();		
-			log.fine("batch job jd = "+batchJobId);		
-			bj  = Single.getInst().findBatchJobById(em, OabaJobEntity.class, batchJobId);
-		}
-				
-		CmsJob oj = Single.getInst().createCmsJob(externalId, JobStatus.UNDEFINED_ID);
-		oj.markAsStarted();
-		
-		URL url;
-		try {
-			url = new URL(mrpsUrl);
-		} catch (MalformedURLException e) {
-			log.severe(e.toString());
-			throw new ArgumentException("invalid target url; "+e.toString()); 
-		}
-							
-		String mrpsFilename = null;					
-		if(  url.getProtocol().equals("file")){ 
-			mrpsFilename = url.getFile();					
-		}
-		else
-			throw new ArgumentException("invalid target url; protocol is not supported"); 
-		
-		MrpsRequestConfiguration configuration = new MrpsRequestConfiguration();
-		configuration.setProperties(optional);
-
-		MrpsRequest br =
-			new MrpsRequest(
-				oj.getId().longValue(),
-				batchJobId,
-				externalId,
-				mrpsFilename,
-				configuration);
-
-		sendToMrpsProcessorBean(br);
-		log.fine (">>startResultToMrpsConversion");
-		return oj.getId().longValue();		
+	@Override
+	public long[] getMrpsGenerationJobList() throws ArgumentException,
+			ConfigException, CmRuntimeException, RemoteException {
+		throw new Error("not yet implemented");
 	}
 
-										
-	
-	 
-	private void sendToMrpsProcessorBean(MrpsRequest br) throws ConfigException, CmRuntimeException  {
-		Queue queue = Single.getInst().getMessageQueue(JMS_MRPS_PROCESSOR_QUEUE);
-		Single.getInst().sendMessage(queue, br);
-		log.info ("msg sent to transSerializationQueue ");
+	@Override
+	public long[] getResultCopyJobList() throws ArgumentException,
+			ConfigException, CmRuntimeException, RemoteException {
+		throw new Error("not yet implemented");
 	}
 
-
-	/**
-	 * Aborts the matching process with the given job ID.
-	 * 
-	 * @param   jobID		Job ID.
-	 
-	 * @return  Job ID.
-	 * @throws  RemoteException
-	 */	
-	public boolean 					abortJob(
-									long jobId
-									)
-								throws	ArgumentException,
-										ConfigException,
-										CmRuntimeException, 
-										RemoteException
-
-	{
-		boolean res = false;//abortBatchJob(jobID,false);
-		//TODO: implement 
-		return res;
+	@Override
+	public String getVersion(Object context) throws RemoteException {
+		return VERSION;
 	}
 
-	public String getVersion(Object context)
-						throws  RemoteException {
-		return Single.getInst().getVersion();					
-	}											
+	@Override
+	public boolean resumeJob(long jobID) throws ArgumentException,
+			ConfigException, CmRuntimeException, RemoteException {
+		throw new Error("never implemented");
+	}
+
+	@Override
+	public long startMrpsGeneration(long processedJobId, String mrpsUrl,
+			String filterConfName, IFilterConfiguration overrideFilterConfig,
+			String trackingId)
+			throws ModelException, RecordCollectionException, ConfigException,
+			ArgumentException, CmRuntimeException, RemoteException {
+		throw new Error("not yet implemented");
+	}
+
+	@Override
+	public long startResultCopy(long processedJobId, RefRecordCollection resRc,
+			String trackingId)
+			throws ModelException, RecordCollectionException, ConfigException,
+			ArgumentException, CmRuntimeException, RemoteException {
+		throw new Error("not implemented");
+	}
+
+	@Override
+	public boolean suspendJob(long jobID) throws ArgumentException,
+			ConfigException, CmRuntimeException, RemoteException {
+		throw new Error("never implemented");
+	}
 
 }
-
-
-
-	

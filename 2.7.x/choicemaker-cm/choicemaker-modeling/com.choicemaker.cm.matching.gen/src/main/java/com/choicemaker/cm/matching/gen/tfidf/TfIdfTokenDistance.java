@@ -36,6 +36,7 @@ public class TfIdfTokenDistance implements TokenDistanceFunction {
 		this.wf = wf;
 	}
 
+	@Override
 	public float distance(String s1, String s2) {
 		if (wf != null) {
 			return distance(new TokenBag(tokenizer.tokenize(s1), wf), 
@@ -49,6 +50,7 @@ public class TfIdfTokenDistance implements TokenDistanceFunction {
 	/**
 	 * Expects two normalized token bags.
 	 */
+	@Override
 	public float distance(TokenBag b1, TokenBag b2) {
 		if (b1.size() > b2.size()) {
 			TokenBag temp = b1;

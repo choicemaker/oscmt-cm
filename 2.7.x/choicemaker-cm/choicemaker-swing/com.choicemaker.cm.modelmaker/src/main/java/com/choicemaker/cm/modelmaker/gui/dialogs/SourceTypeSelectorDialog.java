@@ -25,6 +25,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
+import javax.swing.WindowConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -78,7 +79,7 @@ public class SourceTypeSelectorDialog extends JDialog {
 		addContentListeners();
 		layoutContent();
 		this.setContentPane(content);
-		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		pack();
 		setLocationRelativeTo(parent);
 		setEnabledness();
@@ -122,6 +123,7 @@ public class SourceTypeSelectorDialog extends JDialog {
 		}
 		sourceTypeList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		sourceTypeList.addListSelectionListener(new ListSelectionListener() {
+			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				setEnabledness();
 			}
@@ -147,6 +149,7 @@ public class SourceTypeSelectorDialog extends JDialog {
 
 	private void addContentListeners() {
 		sourceTypeList.addMouseListener(new MouseAdapter() {
+			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() == 2) {
 					showSource();
@@ -156,12 +159,14 @@ public class SourceTypeSelectorDialog extends JDialog {
 
 		//cancelButton
 		cancelButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent ev) {
 				dispose();
 			}
 		});
 		//okayButton
 		okayButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				showSource();
 			}

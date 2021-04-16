@@ -14,8 +14,6 @@
     </library>
   </runtime>
   <requires>
-     <import plugin="org.apache.ant"/>
-     <import plugin="org.eclipse.ant.core"/>
   </requires>
 
 
@@ -56,29 +54,5 @@
     <attribute name="charEnd"/>
     <attribute name="lineNumber"/>
   </extension>
-
-   <!-- Tasks -->
-   <extension point="org.eclipse.ant.core.antTasks">
-      <antTask
-         name="eclipse.convertPath"
-         class="org.eclipse.core.resources.ant.ConvertPath"
-         library="ant_tasks/resources-ant.jar">
-      </antTask>
-      <antTask
-         name="eclipse.incrementalBuild"
-         class="org.eclipse.core.resources.ant.IncrementalBuild"
-         library="ant_tasks/resources-ant.jar">
-      </antTask>
-      <antTask
-         name="eclipse.refreshLocal"
-         class="org.eclipse.core.resources.ant.RefreshLocalTask"
-         library="ant_tasks/resources-ant.jar">
-      </antTask>
-   </extension>
-
-   <!-- Extra Classpath -->
-   <extension point="org.eclipse.ant.core.extraClasspathEntries">
-      <extraClasspathEntry library="ant_tasks/resources-ant.jar"/>
-   </extension>
 
 </plugin>

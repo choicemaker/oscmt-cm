@@ -13,10 +13,10 @@ package com.choicemaker.cm.analyzer.filter;
 import java.util.Collection;
 import java.util.Iterator;
 
-import com.choicemaker.cm.core.Decision;
+import com.choicemaker.client.api.Decision;
+import com.choicemaker.cm.core.ActiveClues;
 import com.choicemaker.cm.core.IMarkedRecordPair;
-import com.choicemaker.cm.core.base.ActiveClues;
-import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
+import com.choicemaker.cm.core.MutableMarkedRecordPair;
 import com.choicemaker.util.ArrayHelper;
 import com.choicemaker.util.IntArrayList;
 
@@ -39,6 +39,7 @@ public class MarkedRecordPairFilter implements Filter, IMarkedRecordPairFilter {
 		reset();
 	}
 
+	@Override
 	public void set(
 		boolean[] humanDecision,
 		boolean[] choiceMakerDecision,
@@ -56,6 +57,7 @@ public class MarkedRecordPairFilter implements Filter, IMarkedRecordPairFilter {
 	 * Get the value of humanDecision.
 	 * @return value of humanDecision.
 	 */
+	@Override
 	public boolean[] getHumanDecision() {
 		return humanDecision;
 	}
@@ -64,6 +66,7 @@ public class MarkedRecordPairFilter implements Filter, IMarkedRecordPairFilter {
 	 * Set the value of humanDecision.
 	 * @param v  Value to assign to humanDecision.
 	 */
+	@Override
 	public void setHumanDecision(boolean[] v) {
 		this.humanDecision = v;
 	}
@@ -72,6 +75,7 @@ public class MarkedRecordPairFilter implements Filter, IMarkedRecordPairFilter {
 	 * Get the value of choiceMakerDecision.
 	 * @return value of choiceMakerDecision.
 	 */
+	@Override
 	public boolean[] getChoiceMakerDecision() {
 		return choiceMakerDecision;
 	}
@@ -80,6 +84,7 @@ public class MarkedRecordPairFilter implements Filter, IMarkedRecordPairFilter {
 	 * Set the value of choiceMakerDecision.
 	 * @param v  Value to assign to choiceMakerDecision.
 	 */
+	@Override
 	public void setChoiceMakerDecision(boolean[] v) {
 		this.choiceMakerDecision = v;
 	}
@@ -88,6 +93,7 @@ public class MarkedRecordPairFilter implements Filter, IMarkedRecordPairFilter {
 	 * Get the value of fromPercentage.
 	 * @return value of fromPercentage.
 	 */
+	@Override
 	public float getFromPercentage() {
 		return fromPercentage;
 	}
@@ -96,6 +102,7 @@ public class MarkedRecordPairFilter implements Filter, IMarkedRecordPairFilter {
 	 * Set the value of fromPercentage.
 	 * @param v  Value to assign to fromPercentage.
 	 */
+	@Override
 	public void setFromPercentage(float v) {
 		this.fromPercentage = v;
 	}
@@ -104,6 +111,7 @@ public class MarkedRecordPairFilter implements Filter, IMarkedRecordPairFilter {
 	 * Get the value of toPercentage.
 	 * @return value of toPercentage.
 	 */
+	@Override
 	public float getToPercentage() {
 		return toPercentage;
 	}
@@ -112,6 +120,7 @@ public class MarkedRecordPairFilter implements Filter, IMarkedRecordPairFilter {
 	 * Set the value of toPercentage.
 	 * @param v  Value to assign to toPercentage.
 	 */
+	@Override
 	public void setToPercentage(float v) {
 		this.toPercentage = v;
 	}
@@ -120,6 +129,7 @@ public class MarkedRecordPairFilter implements Filter, IMarkedRecordPairFilter {
 	 * Returns the conditions.
 	 * @return FilterCondition[]
 	 */
+	@Override
 	public FilterCondition[] getConditions() {
 		return conditions;
 	}
@@ -128,10 +138,12 @@ public class MarkedRecordPairFilter implements Filter, IMarkedRecordPairFilter {
 	 * Sets the conditions.
 	 * @param conditions The conditions to set
 	 */
+	@Override
 	public void setConditions(FilterCondition[] conditions) {
 		this.conditions = conditions;
 	}
 
+	@Override
 	public void addCondition(FilterCondition c) {
 		FilterCondition[] tmp = new FilterCondition[conditions.length + 1];
 		System.arraycopy(conditions, 0, tmp, 0, conditions.length);
@@ -142,10 +154,12 @@ public class MarkedRecordPairFilter implements Filter, IMarkedRecordPairFilter {
 	/**
 	 * Returns the limiters.
 	 */
+	@Override
 	public Limiter[] getLimiters() {
 		return limiters;
 	}
 
+	@Override
 	public String getLimitersAsString(){
 		return Limiter.getLimitersAsString(limiters);
 	}
@@ -157,6 +171,7 @@ public class MarkedRecordPairFilter implements Filter, IMarkedRecordPairFilter {
 	 *
 	 * @param limiters The limiters to set
 	 */
+	@Override
 	public void setLimiters(String limiters) {
 		setLimiters(Limiter.limitersFromString(limiters));
 	}
@@ -165,16 +180,19 @@ public class MarkedRecordPairFilter implements Filter, IMarkedRecordPairFilter {
 	 * Sets the limiters.
 	 * @param limiters The limiters to set
 	 */
+	@Override
 	public void setLimiters(Limiter[] limiters) {
 		this.limiters = limiters;
 	}
 
+	@Override
 	public void resetLimiters() {
 		for (int i = 0; i < limiters.length; i++) {
 			limiters[i].count = 0;
 		}
 	}
 
+	@Override
 	public void reset() {
 		humanDecision = ArrayHelper.getTrueArray(Decision.NUM_DECISIONS);
 		choiceMakerDecision = ArrayHelper.getTrueArray(Decision.NUM_DECISIONS);
@@ -185,6 +203,7 @@ public class MarkedRecordPairFilter implements Filter, IMarkedRecordPairFilter {
 		collection = null;
 	}
 
+	@Override
 	public int[] filterSource(Collection src) {
 		if (src == null) {
 			return new int[0];
@@ -212,6 +231,7 @@ public class MarkedRecordPairFilter implements Filter, IMarkedRecordPairFilter {
 		return true;
 	}
 
+	@Override
 	public boolean satisfy(MutableMarkedRecordPair mrp) {
 		return humanDecision[mrp.getMarkedDecision().toInt()]
 			&& choiceMakerDecision[mrp.getCmDecision().toInt()]
@@ -230,10 +250,12 @@ public class MarkedRecordPairFilter implements Filter, IMarkedRecordPairFilter {
 		return result;
 	}
 
+	@Override
 	public IntArrayList getCollection() {
 		return collection;
 	}
 
+	@Override
 	public void setCollection(IntArrayList list) {
 		collection = list;
 	}

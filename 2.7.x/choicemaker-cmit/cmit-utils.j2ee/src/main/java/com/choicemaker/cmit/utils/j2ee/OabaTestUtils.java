@@ -11,19 +11,19 @@ import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.args.ServerConfiguration;
-import com.choicemaker.cm.batch.BatchJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.DefaultServerConfiguration;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsEntity;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationControllerBean;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationEntity;
+import com.choicemaker.cm.batch.api.BatchJob;
+import com.choicemaker.cm.oaba.api.DefaultServerConfiguration;
+import com.choicemaker.cm.oaba.api.OabaJobManager;
+import com.choicemaker.cm.oaba.api.OabaParametersController;
+import com.choicemaker.cm.oaba.api.OabaService;
+import com.choicemaker.cm.oaba.api.OabaSettingsController;
+import com.choicemaker.cm.oaba.api.RecordSourceController;
+import com.choicemaker.cm.oaba.api.ServerConfigurationController;
+import com.choicemaker.cm.oaba.api.ServerConfigurationException;
+import com.choicemaker.cm.oaba.ejb.OabaParametersEntity;
+import com.choicemaker.cm.oaba.ejb.OabaSettingsEntity;
+import com.choicemaker.cm.oaba.ejb.ServerConfigurationControllerBean;
+import com.choicemaker.cm.oaba.ejb.ServerConfigurationEntity;
 import com.choicemaker.e2.ejb.EjbPlatform;
 
 /**
@@ -162,9 +162,9 @@ public class OabaTestUtils {
 			fail(e.toString());
 		}
 
-		final OabaJobController jobController = test.getOabaJobController();
+		final OabaJobManager jobManager = test.getOabaJobManager();
 		assertTrue(jobId != NONPERSISTENT_ID);
-		BatchJob retVal = jobController.findOabaJob(jobId);
+		BatchJob retVal = jobManager.findOabaJob(jobId);
 		assertTrue(retVal != null);
 
 		// Validate that the job parameters are correct
@@ -235,7 +235,7 @@ public class OabaTestUtils {
 			RecordSourceController rsController,
 			OabaSettingsController oabaSettingsController,
 			ServerConfigurationController serverController,
-			OabaJobController jobController, TestEntityCounts te)
+			OabaJobManager jobManager, TestEntityCounts te)
 			throws ServerConfigurationException {
 
 		final String methodName = "createPersistentOabaJob";
@@ -246,7 +246,7 @@ public class OabaTestUtils {
 		assertTrue(rsController != null);
 		assertTrue(oabaSettingsController != null);
 		assertTrue(serverController != null);
-		assertTrue(jobController != null);
+		assertTrue(jobManager != null);
 		assertTrue(te != null);
 
 		final String externalId =
@@ -284,7 +284,7 @@ public class OabaTestUtils {
 		te.add(serverConfiguration);
 
 		BatchJob retVal =
-			jobController.createPersistentOabaJob(externalId, bp, oabaSettings,
+			jobManager.createPersistentOabaJob(externalId, bp, oabaSettings,
 					serverConfiguration);
 		te.add(retVal);
 		assertTrue(te.contains(retVal));

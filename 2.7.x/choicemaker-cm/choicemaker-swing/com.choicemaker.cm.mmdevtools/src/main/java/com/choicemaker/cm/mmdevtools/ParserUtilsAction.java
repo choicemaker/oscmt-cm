@@ -24,6 +24,7 @@ public class ParserUtilsAction extends ToolAction {
 		super("Parser Utils");
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		// do nothing		
 	}
@@ -36,6 +37,7 @@ public class ParserUtilsAction extends ToolAction {
 			super("Parser Test...");
 		}
 	
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			new ParserTestDialog(modelMaker).setVisible(true);
 		}

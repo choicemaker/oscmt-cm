@@ -97,6 +97,7 @@ public class RegistryResolver {
 			return ver;
 		}
 
+		@Override
 		public String toString() {
 			if (prq == null)
 				return "(null)"; //$NON-NLS-1$
@@ -330,7 +331,7 @@ public class RegistryResolver {
 						for (int i = 0; i < constraintList.size(); i++) {
 							// Put which actual version this prerequisite resolved to in the
 							// relevant prerequisite in the registry.
-							PluginPrerequisiteModel prq = (PluginPrerequisiteModel) ((Constraint) constraintList.get(i)).getPrerequisite();
+							PluginPrerequisiteModel prq = ((Constraint) constraintList.get(i)).getPrerequisite();
 							prq.setResolvedVersion(getVersionIdentifier(bestMatch).toString());
 						}
 					}
@@ -930,7 +931,7 @@ private void resolveExtension(ExtensionModel ext) {
 	String extPtId = target.substring(ix + 1);
 	String message;
 
-	PluginDescriptorModel plugin = (PluginDescriptorModel) reg.getPlugin(pluginId);
+	PluginDescriptorModel plugin = reg.getPlugin(pluginId);
 	if (plugin == null) {
 		message = Policy.bind("parse.extPointUnknown", target, ext.getParentPluginDescriptor().getId()); //$NON-NLS-1$
 		error(message);
@@ -1072,7 +1073,7 @@ private Cookie resolveNode(String child, PluginDescriptorModel parent, PluginPre
 	PluginPrerequisiteModel prereq;
 	prereqs = prereqs == null ? new PluginPrerequisiteModel[0] : prereqs;
 	for (int i = 0; cookie.isOk() && i < prereqs.length; i++) {
-		prereq = (PluginPrerequisiteModel) prereqs[i];
+		prereq = prereqs[i];
 		cookie = resolveNode(prereq.getPlugin(), childPd, prereq, cookie, orphans);
 	}
 
@@ -1117,7 +1118,7 @@ private void resolvePluginDescriptor(PluginDescriptorModel pd) {
 		// Can be disabled if all required attributes not present
 		return;
 	for (int i = 0; i < list.length; i++)
-		resolveExtension((ExtensionModel) list[i]);
+		resolveExtension(list[i]);
 }
 private void resolvePluginFragment(PluginFragmentModel fragment, PluginDescriptorModel plugin) {
 	ExtensionModel[] extensions = fragment.getDeclaredExtensions();
@@ -1371,7 +1372,7 @@ public void setTrimPlugins(boolean value) {
 private void trimRegistry() {
 	PluginDescriptorModel[] list = reg.getPlugins();
 	for (int i = 0; i < list.length; i++) {
-		PluginDescriptorModel pd = (PluginDescriptorModel) list[i];
+		PluginDescriptorModel pd = list[i];
 		if (!pd.getEnabled()) {
 			if (DEBUG_RESOLVE)
 				debug("removing " + pd.toString()); //$NON-NLS-1$

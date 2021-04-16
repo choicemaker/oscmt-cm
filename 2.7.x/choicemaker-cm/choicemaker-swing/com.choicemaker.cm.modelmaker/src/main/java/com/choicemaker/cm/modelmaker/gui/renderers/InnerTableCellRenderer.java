@@ -30,6 +30,7 @@ public class InnerTableCellRenderer extends JTable implements TableCellRenderer 
 		setBorder(noFocusBorder);
 	}
 
+	@Override
 	public Component getTableCellRendererComponent(
 		JTable table,
 		Object value,

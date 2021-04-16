@@ -229,6 +229,7 @@ public class ProbabilityModelsXmlConf {
 				URL resourceUrl =
 					((URLClassLoader) classLoader).findResource(resourcePath);
 				if (resourceUrl == null) {
+					final String accessorName0 = accessorName;
 					CompilationArguments arguments = new CompilationArguments();
 					// String[] args = { clueFileName };
 					String[] args =
@@ -240,6 +241,12 @@ public class ProbabilityModelsXmlConf {
 					if (accessorName == null) {
 						throw new CompilerException("Compilation error: "
 								+ statusOutput.toString());
+					}
+					if (!accessorName.equals(accessorName0)) {
+						String msg = "Accessor name has changed from '"
+								+ accessorName0 + "' to '" + accessorName
+								+ "'. Save the model to update the accessor name.";
+						logger.warning(msg);
 					}
 				}
 			}
@@ -261,26 +268,22 @@ public class ProbabilityModelsXmlConf {
 			}
 			boolean[] cluesToEvaluate =
 				ArrayHelper.getTrueArray(clueDesc.length);
-			@SuppressWarnings("unchecked")
 			List<Element> cl = m.getChildren("clue");
-			int[] oldClueNums = new int[cl.size()];
+			int[] clueNums = new int[cl.size()];
 			int i = 0;
 			Iterator<Element> iCl = cl.iterator();
 			while (iCl.hasNext()) {
-				Element c = (Element) iCl.next();
+				Element c = iCl.next();
 				String name = c.getAttributeValue("name");
 				Object o = cm.get(name);
-				if (o == null) {
-					o = getByOldName(clueDesc, name);
-				}
 				if (o != null) {
 					int index = ((Integer) o).intValue();
-					oldClueNums[i] = index;
+					clueNums[i] = index;
 					cluesToEvaluate[index] =
 						Boolean.valueOf(c.getAttributeValue("evaluate"))
 								.booleanValue();
 				} else {
-					oldClueNums[i] = -1;
+					clueNums[i] = -1;
 				}
 				++i;
 			}
@@ -290,7 +293,7 @@ public class ProbabilityModelsXmlConf {
 			MlModelConf mc =
 				(MlModelConf) ExtensionPointMapper.getInstance(
 						ChoiceMakerExtensionPoint.CM_CORE_MACHINELEARNER, name);
-			ml = mc.readMachineLearner(mle, accessor, cl, oldClueNums);
+			ml = mc.readMachineLearner(mle, accessor, cl, clueNums);
 			retVal =
 				new MutableProbabilityModel(fileName, clueFileName, accessor, ml,
 						cluesToEvaluate, trainingSource, trainedWithHolds,
@@ -306,29 +309,6 @@ public class ProbabilityModelsXmlConf {
 		return retVal;
 	}
 
-	private static Integer getByOldName(ClueDesc[] clueDescs, String name) {
-		int u = name.lastIndexOf('_');
-		if (u != -1 && u < name.length() - 1) {
-			try {
-				int num = Integer.parseInt(name.substring(u + 1));
-				String prefix = name.substring(0, u) + "[";
-				int i = 0;
-				while (i < clueDescs.length
-					&& !clueDescs[i].name.startsWith(prefix)) {
-					++i;
-				}
-				i += num;
-				if (i < clueDescs.length
-					&& clueDescs[i].name.startsWith(prefix)) {
-					return new Integer(i);
-				}
-			} catch (NumberFormatException ex) {
-				logger.info("Caught NumberFormatException: " + ex);
-			}
-		}
-		return null;
-	}
-
 	public static void loadProductionProbabilityModels(ICompiler compiler,
 			boolean fromResource) throws ModelConfigurationException {
 
@@ -342,7 +322,9 @@ public class ProbabilityModelsXmlConf {
 			XmlConfigurator.getInstance().getCore()
 					.getChild("productionProbabilityModels");
 		if (x != null) {
+			@SuppressWarnings("rawtypes")
 			List l = x.getChildren("model");
+			@SuppressWarnings("rawtypes")
 			Iterator i = l.iterator();
 			while (i.hasNext()) {
 				Element e = (Element) i.next();
@@ -379,14 +361,16 @@ public class ProbabilityModelsXmlConf {
 					String modelName = name.trim();
 					if (!modelName.isEmpty()) {
 						assert m instanceof MutableProbabilityModel;
-						((MutableProbabilityModel) m).setModelName(modelName);
+						m.setModelName(modelName);
 					}
 				}
 
+				@SuppressWarnings("rawtypes")
 				List props = e.getChildren("property");
 				if (props != null && props.size() > 0) {
 					logger.warning("Model properties are deprecated.");
-					for (Iterator iProps = props.iterator(); iProps.hasNext();) {
+					for (@SuppressWarnings("rawtypes")
+					Iterator iProps = props.iterator(); iProps.hasNext();) {
 						Element p = (Element) iProps.next();
 						String key = p.getAttributeValue("name").intern();
 						String value = p.getAttributeValue("value").intern();

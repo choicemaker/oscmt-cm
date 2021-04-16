@@ -31,13 +31,16 @@ public class SqlServerUtilsAction extends ToolAction implements PropertyChangeLi
 		setEnabled(false);
 	}
 
+	@Override
 	public void setModelMaker(ModelMaker m) {
 		super.setModelMaker(m);
 		m.addPropertyChangeListener(this);
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e) { }
 
+	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		setEnabled(modelMaker.haveProbabilityModel() && modelMaker.getProbabilityModel().canEvaluate());		
 	}
@@ -51,15 +54,18 @@ public class SqlServerUtilsAction extends ToolAction implements PropertyChangeLi
 			setEnabled(false);
 		}
 	
+		@Override
 		public void setModelMaker(ModelMaker m) {
 			super.setModelMaker(m);
 			m.addPropertyChangeListener(this);
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			new SqlServerIdSearchDialog(modelMaker).show();
 		}
 
+		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
 			setEnabled(modelMaker.haveProbabilityModel() && modelMaker.getProbabilityModel().canEvaluate());		
 		}
@@ -75,15 +81,18 @@ public class SqlServerUtilsAction extends ToolAction implements PropertyChangeLi
 			setEnabled(false);
 		}
 	
+		@Override
 		public void setModelMaker(ModelMaker m) {
 			super.setModelMaker(m);
 			m.addPropertyChangeListener(this);
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			SqlServerPairViewerDialog.showDialog(modelMaker);
 		}
 
+		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
 			setEnabled(modelMaker.haveProbabilityModel() && modelMaker.getProbabilityModel().canEvaluate());		
 		}

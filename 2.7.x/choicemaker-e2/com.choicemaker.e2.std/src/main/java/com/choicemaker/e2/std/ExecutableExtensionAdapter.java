@@ -12,8 +12,8 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExecutableExtension;
 
 import com.choicemaker.e2.CMConfigurationElement;
-import com.choicemaker.e2.E2Exception;
 import com.choicemaker.e2.CMExecutableExtension;
+import com.choicemaker.e2.E2Exception;
 
 public class ExecutableExtensionAdapter {
 	
@@ -67,6 +67,7 @@ public class ExecutableExtensionAdapter {
 			this.delegate = o;
 		}
 
+		@Override
 		public void setInitializationData(CMConfigurationElement config,
 				String propertyName, Object data) throws E2Exception {
 			try {
@@ -91,6 +92,7 @@ public class ExecutableExtensionAdapter {
 			this.delegate = o;
 		}
 
+		@Override
 		public void setInitializationData(IConfigurationElement config,
 				String propertyName, Object data) throws CoreException {
 			try {

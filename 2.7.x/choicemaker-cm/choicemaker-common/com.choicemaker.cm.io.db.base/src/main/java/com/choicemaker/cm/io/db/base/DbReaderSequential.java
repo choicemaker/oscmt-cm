@@ -20,7 +20,7 @@ import com.choicemaker.cm.core.Record;
  *
  * @author    Martin Buechi
  */
-public interface DbReaderSequential extends DbReader {
+public interface DbReaderSequential<T extends Comparable<T>> extends DbReader<T> {
 	/**
 	 * Opens a database reader in preparation for reading. It is automatically
 	 * closed upon retrieval of the last entity.
@@ -36,7 +36,8 @@ public interface DbReaderSequential extends DbReader {
 	 *
 	 * @return  The next entity.
 	 */
-	Record getNext();
+	@Override
+	Record<T> getNext();
 
 	String getMasterIdType();
 }

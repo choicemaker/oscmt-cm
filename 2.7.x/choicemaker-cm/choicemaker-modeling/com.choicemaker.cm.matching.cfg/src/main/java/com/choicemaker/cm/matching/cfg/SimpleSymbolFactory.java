@@ -26,6 +26,7 @@ public class SimpleSymbolFactory implements SymbolFactory {
 	 * Returns true if this SymbolFactory has a variable with the specified
 	 * display String.
 	 */	
+	@Override
 	public boolean hasVariable(String display) {
 		return variables.containsKey(display);
 	}
@@ -37,8 +38,9 @@ public class SimpleSymbolFactory implements SymbolFactory {
 	 * @throws IllegalArgumentException if there is no variable for the
 	 * specified display String.
 	 */
+	@Override
 	public Variable getVariable(String display) {
-		Variable v = (Variable) variables.get(display);
+		Variable v = variables.get(display);
 		if (v == null) {
 			throw new IllegalArgumentException("No variable for string: " + display);
 		}
@@ -53,6 +55,7 @@ public class SimpleSymbolFactory implements SymbolFactory {
 	 * this SymbolFactory is initialized, the user/application shouldn't need 
 	 * to add new Variables during runtime. 
 	 */
+	@Override
 	public void addVariable(Variable v) {
 		if (hasVariable(v.toString())) {
 			throw new IllegalArgumentException("Variable " + v.toString() + 

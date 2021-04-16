@@ -37,14 +37,14 @@ import com.choicemaker.cm.analyzer.sampler.DefaultPairSampler;
 import com.choicemaker.cm.analyzer.sampler.PairSampler;
 import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.ImmutableThresholds;
 import com.choicemaker.cm.core.MarkedRecordPairSink;
 import com.choicemaker.cm.core.MarkedRecordPairSource;
 import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.Source;
+import com.choicemaker.cm.core.Thresholds;
 import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.base.DescriptorCollection;
-import com.choicemaker.cm.core.base.ImmutableThresholds;
-import com.choicemaker.cm.core.base.Thresholds;
 import com.choicemaker.cm.core.blocking.InMemoryBlocker;
 import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.core.util.LoggingObject;
@@ -287,6 +287,7 @@ public class MatcherDialog extends JDialog implements Enable {
 
 	private void addContentListners() {
 		matchButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent evt) {
 				try {
 					RecordSource smallSource =
@@ -351,6 +352,7 @@ public class MatcherDialog extends JDialog implements Enable {
 						saveItems();
 
 						final Thread t = new Thread("Matcher Thread") {
+							@Override
 							public void run() {
 								try {
 									matcher.match();
@@ -384,12 +386,14 @@ public class MatcherDialog extends JDialog implements Enable {
 
 		//cancelButton
 		cancelButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent evt) {
 				dispose();
 			}
 		});
 
 		ActionListener browseActionListener = new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent evt) {
 				if (evt.getSource() == sinkBrowse) {
 					if (outputFormat.getSelectedIndex() == MRPS_OUTPUT) {
@@ -422,6 +426,7 @@ public class MatcherDialog extends JDialog implements Enable {
 		sinkBrowse.addActionListener(browseActionListener);
 
 		sinkNew.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent evt) {
 				Source s =
 					new SourceTypeSelectorDialog(modelMaker, true).define();
@@ -441,6 +446,7 @@ public class MatcherDialog extends JDialog implements Enable {
 		});
 
 		ActionListener sourceNew = new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent evt) {
 				Source s =
 					new SourceTypeSelectorDialog(
@@ -470,12 +476,14 @@ public class MatcherDialog extends JDialog implements Enable {
 		largeNew.addActionListener(sourceNew);
 
 		deduplicateSingleSource.addItemListener(new ItemListener() {
+			@Override
 			public void itemStateChanged(ItemEvent e) {
 				setEnabledness();
 			}
 		});
 
 		smallPreview.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent evt) {
 				try {
 					Element e =
@@ -516,6 +524,7 @@ public class MatcherDialog extends JDialog implements Enable {
 			}
 		});
 		largePreview.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent evt) {
 				try {
 					Element e =
@@ -557,6 +566,7 @@ public class MatcherDialog extends JDialog implements Enable {
 		});
 
 		useSamplerBox.addItemListener(new ItemListener() {
+			@Override
 			public void itemStateChanged(ItemEvent e) {
 				setEnabledness();
 			}
@@ -571,12 +581,14 @@ public class MatcherDialog extends JDialog implements Enable {
 		sampleSizeField.getDocument().addDocumentListener(dl);
 
 		outputFormat.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				setEnabledness();
 			}
 		});
 
 		blocking.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent evt) {
 				setBlockingPlugin();
 			}
@@ -585,6 +597,7 @@ public class MatcherDialog extends JDialog implements Enable {
 		JavaHelpUtils.enableHelpKey(this, "train.gui.dialog.matcher");
 	}
 
+	@Override
 	public void setEnabledness() {
 		smallPreview.setEnabled(small.getText().length() > 0);
 		largePreview.setEnabled(

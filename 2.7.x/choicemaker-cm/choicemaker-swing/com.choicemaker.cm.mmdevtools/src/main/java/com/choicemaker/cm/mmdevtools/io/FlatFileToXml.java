@@ -114,9 +114,11 @@ public abstract class FlatFileToXml {
 	public static abstract class AbstractFormat implements Format {
 		private List columns = new ArrayList();
 		private Map namesToIndices = new HashMap();
+		@Override
 		public void addColumn(Column c) {
 			addColumn(c, columns.size());
 		}
+		@Override
 		public void addColumn(Column c, int index) {
 			while (index >= getNumColumns()) {
 				columns.add(null);
@@ -124,18 +126,22 @@ public abstract class FlatFileToXml {
 			columns.set(index, c);
 			namesToIndices.put(c.getName(), new Integer(index));
 		}
+		@Override
 		public Column getColumn(int i) {
 			return (Column) columns.get(i);
 		}
+		@Override
 		public int getNumColumns() {
 			return columns.size();
 		}
+		@Override
 		public int columnNameToIndex(String name) {
 			return ((Integer) namesToIndices.get(name)).intValue();
 		}
 	}
 
 	public static class FixedWidthFormat extends AbstractFormat {
+		@Override
 		public Line parseLine(String line) {
 			String[] cols = new String[getNumColumns()];
 			for (int i = 0; i < cols.length; i++) {
@@ -146,6 +152,7 @@ public abstract class FlatFileToXml {
 			}
 			return new Line(cols, this);
 		}
+		@Override
 		public String[] tokenizeLine(String line) {
 			throw new UnsupportedOperationException();
 		}
@@ -158,6 +165,7 @@ public abstract class FlatFileToXml {
 			this.delim = delim;
 		}
 
+		@Override
 		public Line parseLine(String line) {
 			String[] tokens = tokenizeLine(line);
 			String[] cols = new String[getNumColumns()];
@@ -167,6 +175,7 @@ public abstract class FlatFileToXml {
 			return new Line(cols, this);
 		}
 
+		@Override
 		public String[] tokenizeLine(String line) {
 			List tokens = new ArrayList();
 
@@ -199,6 +208,7 @@ public abstract class FlatFileToXml {
 	}
 
 	public static class WhitespaceDelimitedFormat extends AbstractFormat {
+		@Override
 		public Line parseLine(String line) {
 			StringTokenizer tokens = new StringTokenizer(line);
 			String[] cols = new String[getNumColumns()];
@@ -212,6 +222,7 @@ public abstract class FlatFileToXml {
 			}
 			return new Line(cols, this);
 		}
+		@Override
 		public String[] tokenizeLine(String line) {
 			throw new UnsupportedOperationException();
 		}

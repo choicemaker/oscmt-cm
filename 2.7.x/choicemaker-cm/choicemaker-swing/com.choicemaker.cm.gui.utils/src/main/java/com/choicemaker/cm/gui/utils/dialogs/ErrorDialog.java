@@ -271,12 +271,14 @@ public class ErrorDialog extends JDialog {
 		JavaHelpUtils.enableHelpKey(this, "train.gui.dialog.error");
 
 		detailsButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				setShowsDetail(!getShowsDetail());
 			}
 		});
 		
 		copyButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				StringSelection ss = new StringSelection(getMessage() + "\n" + getStackTraceString());
 				Toolkit.getDefaultToolkit().getSystemClipboard().setContents(ss, null);
@@ -284,6 +286,7 @@ public class ErrorDialog extends JDialog {
 		});
 		
 		closeButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);	
 			}

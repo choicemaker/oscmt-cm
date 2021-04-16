@@ -28,6 +28,7 @@ public class MrpsUtilsAction extends AbstractAction {
 		super("Marked Record Pair Source Utils");
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e) { }
 
 	public static class MrpsFlattenAction extends ToolAction {
@@ -36,14 +37,17 @@ public class MrpsUtilsAction extends AbstractAction {
 			super("Flatten...");
 			setEnabled(false);
 		}
+		@Override
 		public void setModelMaker(final ModelMaker m) {
 			m.addPropertyChangeListener(new PropertyChangeListener() {
+				@Override
 				public void propertyChange(PropertyChangeEvent e) {
 					setEnabled(m.haveSourceList());
 				}
 			});
 			super.setModelMaker(m);
 		}
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			MrpsFlattenDialog.showMrpsFlattenDialog(modelMaker);
 		}

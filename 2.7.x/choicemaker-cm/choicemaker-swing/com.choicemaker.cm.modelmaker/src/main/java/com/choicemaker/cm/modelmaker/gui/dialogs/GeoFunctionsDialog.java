@@ -26,6 +26,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
 
 import com.choicemaker.cm.core.util.UpperCaseTextField;
@@ -195,7 +196,7 @@ public class GeoFunctionsDialog extends JDialog {
 		c.gridwidth = 1;
 		dist = new UpperCaseTextField(10);
 		dist.setEditable(false);
-		dist.setHorizontalAlignment(JTextField.LEFT);
+		dist.setHorizontalAlignment(SwingConstants.LEFT);
 		gentPannel.add(dist, c);
 
 		c.gridx = 2;
@@ -336,6 +337,7 @@ public class GeoFunctionsDialog extends JDialog {
 			this.gfd = gfd;
 		}
 
+		@Override
 		public void setEnabledness() {
 			gfd.refreshEntityDist();
 		}
@@ -345,30 +347,35 @@ public class GeoFunctionsDialog extends JDialog {
 	private void addListeners() {
 
 		geTypeBox1.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				changeEntity1Type();
 			}
 		});
 
 		unitBox.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				refreshEntityDist();
 			}
 		});
 
 		geTypeBox2.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				changeEntity2Type();
 			}
 		});
 
 		clearButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				clear();
 			}
 		});
 
 		closeButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent ev) {
 				dispose();
 			}
@@ -425,7 +432,7 @@ public class GeoFunctionsDialog extends JDialog {
 		} else {
 			for (int n = 0; n < fields.size(); n++) {
 				GeoMap.KeyField keyFiled =
-					(GeoMap.KeyField) fields.elementAt(n);
+					fields.elementAt(n);
 				c.gridx = n + n + 1;
 				c.gridy = 0;
 				c.gridwidth = 1;
@@ -488,7 +495,7 @@ public class GeoFunctionsDialog extends JDialog {
 		} else {
 			for (int n = 0; n < fields.size(); n++) {
 				GeoMap.KeyField keyFiled =
-					(GeoMap.KeyField) fields.elementAt(n);
+					fields.elementAt(n);
 				c.gridx = n + n + 1;
 				c.gridy = 0;
 				c.gridwidth = 1;

@@ -27,7 +27,7 @@ public class InputData {
 	}
 
 	public String put(String key, String value) {
-		return (String) fields.put(key, value);
+		return fields.put(key, value);
 	}
 	
 	public boolean has(String key) {
@@ -35,7 +35,7 @@ public class InputData {
 	}
 
 	public String get(String key) {
-		return (String) fields.get(key);
+		return fields.get(key);
 	}
 
 }

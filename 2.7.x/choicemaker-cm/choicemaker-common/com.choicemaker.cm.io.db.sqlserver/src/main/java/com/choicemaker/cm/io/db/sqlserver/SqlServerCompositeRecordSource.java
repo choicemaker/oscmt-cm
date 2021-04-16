@@ -326,6 +326,7 @@ public class SqlServerCompositeRecordSource implements RecordSource {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.RecordSource#getNext()
 	 */
+	@Override
 	public Record getNext() throws IOException {
 		return compositeSource.getNext();
 	}
@@ -333,6 +334,7 @@ public class SqlServerCompositeRecordSource implements RecordSource {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.Source#open()
 	 */
+	@Override
 	public void open() throws IOException {
 		init ();
 		compositeSource.open();
@@ -341,6 +343,7 @@ public class SqlServerCompositeRecordSource implements RecordSource {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.Source#close()
 	 */
+	@Override
 	public void close() throws IOException {
 		compositeSource.close();
 	}
@@ -348,6 +351,7 @@ public class SqlServerCompositeRecordSource implements RecordSource {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.Source#hasNext()
 	 */
+	@Override
 	public boolean hasNext() throws IOException {
 		return compositeSource.hasNext();
 	}
@@ -355,6 +359,7 @@ public class SqlServerCompositeRecordSource implements RecordSource {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.Source#getName()
 	 */
+	@Override
 	public String getName() {
 		return "SQL Server Composite Record Source";
 	}
@@ -362,6 +367,7 @@ public class SqlServerCompositeRecordSource implements RecordSource {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.Source#setName(java.lang.String)
 	 */
+	@Override
 	public void setName(String name) {
 		//do nothing
 	}
@@ -369,6 +375,7 @@ public class SqlServerCompositeRecordSource implements RecordSource {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.Source#getModel()
 	 */
+	@Override
 	public ImmutableProbabilityModel getModel() {
 		return model;
 	}
@@ -376,6 +383,7 @@ public class SqlServerCompositeRecordSource implements RecordSource {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.Source#setModel(com.choicemaker.cm.core.ProbabilityModel)
 	 */
+	@Override
 	public void setModel(ImmutableProbabilityModel m) {
 		this.model = m;
 	}
@@ -383,6 +391,7 @@ public class SqlServerCompositeRecordSource implements RecordSource {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.Source#hasSink()
 	 */
+	@Override
 	public boolean hasSink() {
 		return false;
 	}
@@ -390,6 +399,7 @@ public class SqlServerCompositeRecordSource implements RecordSource {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.Source#getSink()
 	 */
+	@Override
 	public Sink getSink() {
 		throw new UnsupportedOperationException();
 	}
@@ -397,6 +407,7 @@ public class SqlServerCompositeRecordSource implements RecordSource {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.Source#getFileName()
 	 */
+	@Override
 	public String getFileName() {
 		throw new UnsupportedOperationException();
 	}
@@ -413,6 +424,7 @@ public class SqlServerCompositeRecordSource implements RecordSource {
 		return b.toString();
 	}
 
+	@Override
 	public String toString() {
 		return "SqlServerCompositeRecordSource [model=" + model
 				+ ", dbConfiguration=" + dbConfiguration + ", idsQuery="

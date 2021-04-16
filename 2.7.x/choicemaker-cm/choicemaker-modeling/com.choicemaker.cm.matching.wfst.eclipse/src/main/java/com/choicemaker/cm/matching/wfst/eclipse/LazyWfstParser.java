@@ -69,11 +69,13 @@ class LazyWfstParser implements AmbiguousParser {
 		return;
 	} // init()
 
+	@Override
 	public boolean isWeighted() {
 		init();
 		return parser.isWeighted();
 	}
 
+	@Override
 	public List<Map<String,String>> parse(String text) {
 		init();
 		return parser.parse(text);

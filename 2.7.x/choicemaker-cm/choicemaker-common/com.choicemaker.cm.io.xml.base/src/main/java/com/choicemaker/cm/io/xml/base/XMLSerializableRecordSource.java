@@ -50,6 +50,7 @@ public class XMLSerializableRecordSource implements ISerializableRecordSource {
 		return rs;
 	}
 
+	@Override
 	public ImmutableProbabilityModel getModel () {
 		if (model == null) {
 			model = PMManager.getModelInstance(modelName);
@@ -60,6 +61,7 @@ public class XMLSerializableRecordSource implements ISerializableRecordSource {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.RecordSource#getNext()
 	 */
+	@Override
 	public Record getNext() throws IOException {
 		return getRS().getNext();
 	}
@@ -67,6 +69,7 @@ public class XMLSerializableRecordSource implements ISerializableRecordSource {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.Source#open()
 	 */
+	@Override
 	public void open() throws IOException {
 		getRS().open ();
 	}
@@ -74,6 +77,7 @@ public class XMLSerializableRecordSource implements ISerializableRecordSource {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.Source#close()
 	 */
+	@Override
 	public void close() throws IOException {
 		getRS().close();
 	}
@@ -81,6 +85,7 @@ public class XMLSerializableRecordSource implements ISerializableRecordSource {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.Source#hasNext()
 	 */
+	@Override
 	public boolean hasNext() throws IOException {
 		return getRS().hasNext();
 	}
@@ -88,6 +93,7 @@ public class XMLSerializableRecordSource implements ISerializableRecordSource {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.Source#getName()
 	 */
+	@Override
 	public String getName() {
 		return getRS().getName();
 	}
@@ -95,6 +101,7 @@ public class XMLSerializableRecordSource implements ISerializableRecordSource {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.Source#setName(java.lang.String)
 	 */
+	@Override
 	public void setName(String name) {
 		getRS().setName(name);
 	}
@@ -103,6 +110,7 @@ public class XMLSerializableRecordSource implements ISerializableRecordSource {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.Source#setModel(com.choicemaker.cm.core.ImmutableProbabilityModel)
 	 */
+	@Override
 	public void setModel(ImmutableProbabilityModel m) {
 		getRS().setModel(m);
 	}
@@ -110,6 +118,7 @@ public class XMLSerializableRecordSource implements ISerializableRecordSource {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.Source#hasSink()
 	 */
+	@Override
 	public boolean hasSink() {
 		return getRS().hasSink();
 	}
@@ -117,6 +126,7 @@ public class XMLSerializableRecordSource implements ISerializableRecordSource {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.Source#getSink()
 	 */
+	@Override
 	public Sink getSink() {
 		return getRS().getSink();
 	}
@@ -124,10 +134,12 @@ public class XMLSerializableRecordSource implements ISerializableRecordSource {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.Source#getFileName()
 	 */
+	@Override
 	public String getFileName() {
 		return getRS().getFileName();
 	}
 	
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -138,6 +150,7 @@ public class XMLSerializableRecordSource implements ISerializableRecordSource {
 	}
 	
 	
+	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
@@ -169,16 +182,19 @@ public class XMLSerializableRecordSource implements ISerializableRecordSource {
 		}
 	}
 
+	@Override
 	public String toXML() {
 		String retVal = AbstractRecordSourceSerializer.toXML(this);
 		return retVal;
 	}
 	
+	@Override
 	public void setProperties(Properties p) {
 		// TODO NOT YET IMPLEMENTED
 		throw new RuntimeException("not yet implemented");
 	}
 	
+	@Override
 	public Properties getProperties() {
 		// TODO NOT YET IMPLEMENTED
 		throw new RuntimeException("not yet implemented");

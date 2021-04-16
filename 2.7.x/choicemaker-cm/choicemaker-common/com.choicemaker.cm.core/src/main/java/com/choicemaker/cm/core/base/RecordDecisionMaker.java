@@ -17,9 +17,12 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.choicemaker.client.api.Decision;
+import com.choicemaker.cm.core.ActiveClues;
 import com.choicemaker.cm.core.ClueSet;
-import com.choicemaker.cm.core.Decision;
+import com.choicemaker.cm.core.Evaluator;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.Match;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.RecordSource;
 
@@ -102,12 +105,12 @@ public class RecordDecisionMaker {
 		List<Match> matches = new ArrayList<>();
 		try {
 			src.open();
-			Evaluator eval = model.getEvaluator();
-			ClueSet cs = model.getClueSet();
-			boolean[] toEval = model.getCluesToEvaluate();
+			final Evaluator eval = model.getEvaluator();
+			final boolean[] toEval = model.getCluesToEvaluate();
 			while (src.hasNext()) {
 				++numMatched;
 				Record m = src.getNext();
+				ClueSet cs = model.getClueSet();
 				ActiveClues a = cs.getActiveClues(q, m, toEval);
 				float p = eval.getProbability(a);
 				Decision d = eval.getDecision(a, p, lt, ut);

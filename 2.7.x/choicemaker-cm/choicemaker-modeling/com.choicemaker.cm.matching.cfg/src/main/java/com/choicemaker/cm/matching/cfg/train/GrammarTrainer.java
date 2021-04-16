@@ -66,7 +66,7 @@ public class GrammarTrainer {
 	public void addAllParseTrees(Collection<ParseTreeNode> parseTrees) {
 		Iterator<ParseTreeNode> it = parseTrees.iterator();
 		while (it.hasNext()) {
-			addParseTree((ParseTreeNode)it.next());
+			addParseTree(it.next());
 		}
 	}
 	
@@ -83,7 +83,7 @@ public class GrammarTrainer {
 			Variable tokenType = r.getLhs();
 			Symbol token = r.getRhsSymbol(0);
 			
-			IntValuedHashMap typeMap = (IntValuedHashMap) tokenCounts.get(tokenType);
+			IntValuedHashMap typeMap = tokenCounts.get(tokenType);
 			if (typeMap == null) {
 				typeMap = new IntValuedHashMap();
 				tokenCounts.put(tokenType, typeMap);
@@ -97,7 +97,7 @@ public class GrammarTrainer {
 		
 		Iterator<ParseTreeNode> itKids = tree.getChildren().iterator();
 		while (itKids.hasNext()) {
-			addParseTree((ParseTreeNode)itKids.next());	
+			addParseTree(itKids.next());	
 		}
 	}
 	
@@ -114,7 +114,7 @@ public class GrammarTrainer {
 	}
 	
 	public IntValuedHashMap getTokenCounts(TokenType type) {
-		return (IntValuedHashMap)tokenCounts.get(type);	
+		return tokenCounts.get(type);	
 	}
 	
 	public ContextFreeGrammar getTrainedGrammar() {
@@ -127,7 +127,7 @@ public class GrammarTrainer {
 			
 			Iterator<Rule> itRules = newGrammar.getRules(v).iterator();
 			while (itRules.hasNext()) {
-				Rule r = (Rule)itRules.next();
+				Rule r = itRules.next();
 				int ruleCount = ruleCounts.getInt(r);
 				
 				if (varCount == 0) {

@@ -7,35 +7,14 @@
  *******************************************************************************/
 package com.choicemaker.cm.transitivity.util;
 
-import java.io.File;
-import java.io.IOException;
-
 /**
  * @author pcheung
  *
  */
 public class FileUtils {
 
-	/** This returns true is the writer file size is greater than the maxFileSize. 
-	 * 
-	 * @return
-	 */
-	public static boolean isFull (String fileBase, String fileExt,
-		int currentFile, int maxFileSize) throws IOException {
-		
-		File f = new File (FileUtils.getFileName (fileBase, fileExt, currentFile));
-		
-		if (f.length() >= maxFileSize) {
-			return true;
-		} else {
-			return false;
-		} 
-	}
-	
-	
 	public static String getFileName (String fileBase, String fileExt, int num) {
 		return fileBase + "_" + num + "." + fileExt;
 	}
-	
 
 }

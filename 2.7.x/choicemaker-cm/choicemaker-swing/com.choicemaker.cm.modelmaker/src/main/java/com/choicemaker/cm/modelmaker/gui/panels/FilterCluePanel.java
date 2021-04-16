@@ -23,9 +23,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
-import com.choicemaker.cm.core.Decision;
-import com.choicemaker.cm.core.base.ImmutableThresholds;
+import com.choicemaker.client.api.Decision;
+import com.choicemaker.cm.core.ImmutableThresholds;
 import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.core.util.LoggingObject;
 import com.choicemaker.cm.modelmaker.filter.ListeningMarkedRecordPairFilter;
@@ -181,12 +182,12 @@ public class FilterCluePanel extends JPanel {
 			new JLabel(
 				ChoiceMakerCoreMessages.m.formatMessage(
 					"train.gui.modelmaker.dialog.recordpairfilter.marked.human"),
-				JLabel.LEFT);
+				SwingConstants.LEFT);
 		choiceMakerLabel =
 			new JLabel(
 				ChoiceMakerCoreMessages.m.formatMessage(
 					"train.gui.modelmaker.dialog.recordpairfilter.marked.choicemaker"),
-				JLabel.LEFT);
+				SwingConstants.LEFT);
 
 		humanDecision = new JCheckBox[Decision.NUM_DECISIONS];
 		choiceMakerDecision = new JCheckBox[Decision.NUM_DECISIONS];
@@ -204,13 +205,13 @@ public class FilterCluePanel extends JPanel {
 			new JLabel(
 				ChoiceMakerCoreMessages.m.formatMessage(
 					"train.gui.modelmaker.dialog.recordpairfilter.probabilityrange.low"),
-				JLabel.LEFT);
+				SwingConstants.LEFT);
 		pLow = new JTextField("", 5);
 		hiLabel =
 			new JLabel(
 				ChoiceMakerCoreMessages.m.formatMessage(
 					"train.gui.modelmaker.dialog.recordpairfilter.probabilityrange.high"),
-				JLabel.LEFT);
+				SwingConstants.LEFT);
 		pHi = new JTextField("", 5);
 
 		limiterLabel = new JLabel("Limited by:");

@@ -39,6 +39,7 @@ public class RecordComparator implements Comparator {
 		this.condition = condition;
 	}
 
+	@Override
 	public int compare(Object o1, Object o2) {
 		int res;
 		Comparable v1 = getComparisonValue((Record) o1);

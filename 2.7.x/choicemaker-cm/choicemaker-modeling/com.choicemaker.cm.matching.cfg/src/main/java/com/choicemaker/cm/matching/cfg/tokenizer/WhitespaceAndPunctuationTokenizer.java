@@ -63,6 +63,7 @@ public class WhitespaceAndPunctuationTokenizer implements Tokenizer {
 		}
 	}
 	
+	@Override
 	public List<Token> tokenize(String s) {
 		if (dirty) {
 			recalcTranslationTable();
@@ -113,6 +114,7 @@ public class WhitespaceAndPunctuationTokenizer implements Tokenizer {
 		return tokens;
 	}
 	
+	@Override
 	public List<Token> tokenize(String[] s) {
 		// FIXME implement WhitespaceAndPunctuationTokenizer.tokenized(String[])
 		throw new Error("not yet implemented");

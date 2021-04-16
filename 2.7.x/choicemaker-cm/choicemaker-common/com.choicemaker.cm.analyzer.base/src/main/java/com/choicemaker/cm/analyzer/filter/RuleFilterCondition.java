@@ -10,7 +10,7 @@
  */
 package com.choicemaker.cm.analyzer.filter;
 
-import com.choicemaker.cm.core.base.ActiveClues;
+import com.choicemaker.cm.core.ActiveClues;
 
 /**
  * Description
@@ -57,10 +57,12 @@ public class RuleFilterCondition implements FilterCondition {
 	 * Returns the clueNum.
 	 * @return int
 	 */
+	@Override
 	public int getClueNum() {
 		return clueNum;
 	}
 	
+	@Override
 	public boolean satisfy(ActiveClues clues) {
 		return clues.containsRule(clueNum) == value.booleanValue();
 	}
@@ -73,6 +75,7 @@ public class RuleFilterCondition implements FilterCondition {
 		return value.booleanValue();
 	}
 
+	@Override
 	public String getConditionString() {
 		if (value == null){
 			return NULL_STRING;
@@ -81,10 +84,12 @@ public class RuleFilterCondition implements FilterCondition {
 		}
 	}
 
+	@Override
 	public FilterCondition createFilterCondition(int clueNum) {
 		return new RuleFilterCondition(clueNum, value);
 	}
 
+	@Override
 	public String toString(){
 		String returnValue = getConditionString();
 		
@@ -93,6 +98,7 @@ public class RuleFilterCondition implements FilterCondition {
 		return returnValue;
 	}
 
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -106,6 +112,7 @@ public class RuleFilterCondition implements FilterCondition {
 	 * true if we are compared agains another IntFilterCondition that represents the same condition as us;
 	 * false otherwise.
 	 */
+	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;

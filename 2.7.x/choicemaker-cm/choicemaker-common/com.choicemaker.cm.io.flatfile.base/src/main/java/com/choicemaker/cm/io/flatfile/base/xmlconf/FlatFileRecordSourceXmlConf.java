@@ -30,10 +30,12 @@ import com.choicemaker.cm.io.flatfile.base.FlatFileRecordSource;
 public class FlatFileRecordSourceXmlConf implements RecordSourceXmlConfigurator {
 	public static final String EXTENSION_POINT_ID = "com.choicemaker.cm.io.flatfile.base.flatfileRsReader";
 
+	@Override
 	public Object getHandler() {
 		return this;
 	}
 
+	@Override
 	public Class getHandledType() {
 		return FlatFileRecordSource.class;
 	}
@@ -41,6 +43,7 @@ public class FlatFileRecordSourceXmlConf implements RecordSourceXmlConfigurator 
 	/**
 	 * Add a FlatFile marked record pair source to the configuration.
 	 */
+	@Override
 	public void add(RecordSource s) throws XmlConfException {
 		try {
 			FlatFileRecordSource src = (FlatFileRecordSource) s;
@@ -64,6 +67,7 @@ public class FlatFileRecordSourceXmlConf implements RecordSourceXmlConfigurator 
 		}
 	}
 
+	@Override
 	public RecordSource getRecordSource(String fileName, Element e, ImmutableProbabilityModel model)
 		throws XmlConfException {
 		String fileNamePrefix = e.getChildText("fileNamePrefix");

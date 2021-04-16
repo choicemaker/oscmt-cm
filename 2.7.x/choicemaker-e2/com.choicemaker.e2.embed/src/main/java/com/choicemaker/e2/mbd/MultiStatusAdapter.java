@@ -65,62 +65,77 @@ public class MultiStatusAdapter {
 			this.delegate = o;
 		}
 
+		@Override
 		public int hashCode() {
 			return delegate.hashCode();
 		}
 
+		@Override
 		public void add(CMStatus status) {
 			delegate.add(StatusAdapter.convert(status));
 		}
 
+		@Override
 		public int getCode() {
 			return delegate.getCode();
 		}
 
+		@Override
 		public Throwable getException() {
 			return delegate.getException();
 		}
 
+		@Override
 		public void addAll(CMStatus status) {
 			delegate.addAll(StatusAdapter.convert(status));
 		}
 
+		@Override
 		public String getMessage() {
 			return delegate.getMessage();
 		}
 
+		@Override
 		public String getPlugin() {
 			return delegate.getPlugin();
 		}
 
+		@Override
 		public int getSeverity() {
 			return delegate.getSeverity();
 		}
 
+		@Override
 		public CMStatus[] getChildren() {
 			return StatusAdapter.convert(delegate.getChildren());
 		}
 
+		@Override
 		public boolean isMultiStatus() {
 			return delegate.isMultiStatus();
 		}
 
+		@Override
 		public boolean isOK() {
 			return delegate.isOK();
 		}
 
+		@Override
 		public void merge(CMStatus status) {
 			delegate.merge(StatusAdapter.convert(status));
 		}
 
+		@Override
 		public boolean matches(int severityMask) {
 			return delegate.matches(severityMask);
 		}
 
+		@Override
 		public boolean equals(Object obj) {
 			return delegate.equals(obj);
 		}
 
+		@Override
 		public String toString() {
 			return delegate.toString();
 		}

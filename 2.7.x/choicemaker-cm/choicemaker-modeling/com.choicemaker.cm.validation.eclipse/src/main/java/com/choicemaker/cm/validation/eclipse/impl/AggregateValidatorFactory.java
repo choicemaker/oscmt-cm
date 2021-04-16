@@ -67,6 +67,7 @@ public class AggregateValidatorFactory extends AbstractValidatorFactory {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.validation.eclipse.AbstractValidatorFactory#createValidatorFromRegistryConfigurationElements(org.eclipse.core.runtime.CMConfigurationElement[])
 	 */
+	@Override
 	protected NamedValidator createValidatorFromRegistryConfigurationElement(
 			CMConfigurationElement el) throws Exception {
 

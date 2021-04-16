@@ -9,22 +9,26 @@ package com.choicemaker.cm.urm.base;
 
 import java.io.Serializable;
 
+import com.choicemaker.client.api.DataAccessObject;
+
 /**
  * A record
- * <p>  
+ * <p>
+ * See <code>com.choicemaker.cm.core.Record</code>
  *
  * @author emoussikaev
- * @see
  */
-public interface IRecord extends Serializable{
+public interface IRecord<T extends Comparable<T> & Serializable> extends DataAccessObject<T> {
 	
 	/**
-	 * Returns record identifier
-	 * <p> 
-	 * 
-	 * @return record identifier
+	 * Returns a key that uniquely identifies an entity. If two records have
+	 * different identifiers, then they represent different entities (in the
+	 * absence of duplicates).
+	 * <p>
+	 * See <code>com.choicemaker.cm.core.Identifiable</code>
 	 */
-	public java.lang.Comparable getId();
+	@Override
+	public T getId();
 	
 	/**
 	 * Applies visitor to a record.

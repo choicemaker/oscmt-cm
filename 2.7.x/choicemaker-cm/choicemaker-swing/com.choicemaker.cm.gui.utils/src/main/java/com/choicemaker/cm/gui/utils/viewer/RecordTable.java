@@ -27,7 +27,7 @@ import javax.swing.border.Border;
 import javax.swing.plaf.UIResource;
 
 import com.choicemaker.cm.core.Descriptor;
-import com.choicemaker.cm.core.base.RecordData;
+import com.choicemaker.cm.core.RecordData;
 import com.choicemaker.cm.gui.utils.viewer.event.RecordTableMouseListener;
 
 /**
@@ -76,6 +76,7 @@ public class RecordTable extends JTable {
 		super.setColumnModel(columnModel);
 		// NOTE: This fixes the "Header not updated" bug.
 		columnListener = new PropertyChangeListener() {
+			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				getTableHeader().repaint();
 				updateFromModel();
@@ -111,6 +112,7 @@ public class RecordTable extends JTable {
 		((RecordTableModel) getModel()).setRecordData(recordData);
 	}
 
+	@Override
 	protected void configureEnclosingScrollPane() {
 		Container p = getParent();
 		if (p instanceof JViewport) {
@@ -176,11 +178,13 @@ public class RecordTable extends JTable {
 		/**
 		 * @see java.awt.event.FocusListener#focusGained(java.awt.event.FocusEvent)
 		 */
+		@Override
 		public void focusGained(FocusEvent e) {
 		}
 		/**
 		 * @see java.awt.event.FocusListener#focusLost(java.awt.event.FocusEvent)
 		 */
+		@Override
 		public void focusLost(FocusEvent e) {
 			stopCellEditing();
 		}

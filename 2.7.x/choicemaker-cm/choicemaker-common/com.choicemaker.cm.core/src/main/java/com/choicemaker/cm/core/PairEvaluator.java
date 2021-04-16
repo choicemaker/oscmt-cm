@@ -7,6 +7,7 @@
  *******************************************************************************/
 package com.choicemaker.cm.core;
 
+import com.choicemaker.client.api.Decision;
 
 /**
  * Computes the probability that two records match each other,
@@ -46,6 +47,7 @@ public interface PairEvaluator {
 
 	Firings computeActiveClues(Record q, Record m);
 	/** @deprecated */
+	@Deprecated
 	Firings getActiveClues(Record q, Record m);
 
 	/**
@@ -59,10 +61,13 @@ public interface PairEvaluator {
 	 */
 	Decision computeDecision(Firings a, float lt, float ut);
 	/** @deprecated */
+	@Deprecated
 	Decision computeDecision(Firings a, float p, float lt, float ut);
 	/** @deprecated */
+	@Deprecated
 	Decision getDecision(Firings a, float lt, float ut);
 	/** @deprecated */
+	@Deprecated
 	Decision getDecision(Firings a, float p, float lt, float ut);
 
 	/**
@@ -75,6 +80,7 @@ public interface PairEvaluator {
 	 */
 	float computeMatchProbability(Record q, Record m);
 	/** @deprecated */
+	@Deprecated
 	float getProbability(Record q, Record m);
 
 	/**
@@ -85,6 +91,7 @@ public interface PairEvaluator {
 	 */
 	float computeProbability(Firings a);
 	/** @deprecated */
+	@Deprecated
 	float getProbability(Firings a);
 
 	/**
@@ -104,6 +111,7 @@ public interface PairEvaluator {
 	 */
 	String computeProbabilityDetails(Firings a);
 	/** @deprecated */
+	@Deprecated
 	String getProbabilityDetails(Firings a);
 
 }

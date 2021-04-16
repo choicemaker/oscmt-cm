@@ -30,10 +30,12 @@ import com.choicemaker.cm.io.db.oracle.OracleRecordSource;
 public class DbRecordSourceXmlConf implements RecordSourceXmlConfigurator {
 	public static final String EXTENSION_POINT_ID = "com.choicemaker.cm.io.db.base.dbRsReader";
 
+	@Override
 	public Object getHandler() {
 		return this;
 	}
 
+	@Override
 	public Class getHandledType() {
 		return OracleRecordSource.class;
 	}
@@ -41,6 +43,7 @@ public class DbRecordSourceXmlConf implements RecordSourceXmlConfigurator {
 	/**
 	 * Add a Db record source to the configuration.
 	 */
+	@Override
 	public void add(RecordSource s) throws XmlConfException {
 		try {
 			OracleRecordSource src = (OracleRecordSource) s;
@@ -60,6 +63,7 @@ public class DbRecordSourceXmlConf implements RecordSourceXmlConfigurator {
 		}
 	}
 
+	@Override
 	public RecordSource getRecordSource(String fileName, Element e, ImmutableProbabilityModel model)
 		throws XmlConfException {
 		String conf = e.getAttributeValue("conf");

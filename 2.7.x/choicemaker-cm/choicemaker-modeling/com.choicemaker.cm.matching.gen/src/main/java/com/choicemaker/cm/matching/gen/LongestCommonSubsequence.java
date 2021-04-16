@@ -26,37 +26,51 @@ import java.util.Arrays;
 public final class LongestCommonSubsequence {
 
 	/**
-	 * Returns whether one of the two strings of length at least 2 is a subsequence of the other and they start with the same
-	 * characters. More specifically, returns true iff:
+	 * Returns whether one of the two strings of length at least 2 is a
+	 * subsequence of the other and they start with the same characters. More
+	 * specifically, returns true iff:
 	 * <ol>
-	 * 	<li>the minimum of the lengths of <code>w1</code> and <code>w2</code> is at least 2, and</li>
-	 * 	<li>the longest common subsequence length of <code>w1</code> and <code>w2</code> is equal to the 
-	 * 		minimum of the lengths of <code>w1</code> and <code>w2</code>, and</li>
-	 * 	<li><code>w1</code> and <code>w2</code> begin with the same character.</li>
+	 * <li>the minimum of the lengths of <code>w1</code> and <code>w2</code> is
+	 * at least 2, and</li>
+	 * <li>the longest common subsequence length of <code>w1</code> and
+	 * <code>w2</code> is equal to the minimum of the lengths of <code>w1</code>
+	 * and <code>w2</code>, and</li>
+	 * <li><code>w1</code> and <code>w2</code> begin with the same character.
+	 * </li>
 	 * </ol>
 	 * 
-	 * @param   w1  One of the strings.
-	 * @param   w2  The other string.
-	 * @return  Whether one string is a subsequence of the other.
+	 * @param w1
+	 *            One of the strings.
+	 * @param w2
+	 *            The other string.
+	 * @return Whether one string is a subsequence of the other.
 	 */
 	public static boolean isLcsAbbrev(String w1, String w2) {
 		return isLcsAbbrev(w1, w2, 2);
 	}
 
 	/**
-	 * Returns whether one of the two strings of length at least <code>minLength</code> is a subsequence of the other and they start with the same
-	 * characters. More specifically, returns true iff:
+	 * Returns whether one of the two strings of length at least
+	 * <code>minLength</code> is a subsequence of the other and they start with
+	 * the same characters. More specifically, returns true iff:
 	 * <ol>
-	 * 	<li>the minimum of the lengths of <code>w1</code> and <code>w2</code> is at least <code>minLength</code>, and</li>
-	 * 	<li>the longest common subsequence length of <code>w1</code> and <code>w2</code> is equal to the 
-	 * 		minimum of the lengths of <code>w1</code> and <code>w2</code>, and</li>
-	 * 	<li><code>w1</code> and <code>w2</code> begin with the same character.</li>
+	 * <li>the minimum of the lengths of <code>w1</code> and <code>w2</code> is
+	 * at least <code>minLength</code>, and</li>
+	 * <li>the longest common subsequence length of <code>w1</code> and
+	 * <code>w2</code> is equal to the minimum of the lengths of <code>w1</code>
+	 * and <code>w2</code>, and</li>
+	 * <li><code>w1</code> and <code>w2</code> begin with the same character.
+	 * </li>
 	 * </ol>
 	 * 
-	 * @param   w1  the first String
-	 * @param   w2  the second String
-	 * @param   minLength w1 and w2 must be at least <code>minLength</code> for this method to return true
-	 * @return  Whether one string is a subsequence of the other
+	 * @param w1
+	 *            the first String
+	 * @param w2
+	 *            the second String
+	 * @param minLength
+	 *            w1 and w2 must be at least <code>minLength</code> for this
+	 *            method to return true
+	 * @return Whether one string is a subsequence of the other
 	 */
 	public static boolean isLcsAbbrev(String w1, String w2, int minLength) {
 		return w1.length() >= minLength
@@ -66,20 +80,28 @@ public final class LongestCommonSubsequence {
 	}
 
 	/**
-	 * Returns whether one of the two strings of length at least <code>minLength</code> is a subsequence of the other.
-	 * More specifically, returns true iff:
+	 * Returns whether one of the two strings of length at least
+	 * <code>minLength</code> is a subsequence of the other. More specifically,
+	 * returns true iff:
 	 * <ol>
-	 * 	<li>the minimum of the lengths of <code>w1</code> and <code>w2</code> is at least <code>minLength</code>, and</li>
-	 * 	<li>the longest common subsequence length of <code>w1</code> and <code>w2</code> is equal to the 
-	 * 		minimum of the lengths of <code>w1</code> and <code>w2</code>, and</li>
+	 * <li>the minimum of the lengths of <code>w1</code> and <code>w2</code> is
+	 * at least <code>minLength</code>, and</li>
+	 * <li>the longest common subsequence length of <code>w1</code> and
+	 * <code>w2</code> is equal to the minimum of the lengths of <code>w1</code>
+	 * and <code>w2</code>, and</li>
 	 * </ol>
 	 * 
-	 * <b>Note:</b> this method does not care if w1 and w2 begin with the same character or not.
+	 * <b>Note:</b> this method does not care if w1 and w2 begin with the same
+	 * character or not.
 	 * 
-	 * @param   w1  the first String
-	 * @param   w2  the second String
-	 * @param   minLength w1 and w2 must be at least <code>minLength</code> for this method to return true
-	 * @return  Whether one string is a subsequence of the other
+	 * @param w1
+	 *            the first String
+	 * @param w2
+	 *            the second String
+	 * @param minLength
+	 *            w1 and w2 must be at least <code>minLength</code> for this
+	 *            method to return true
+	 * @return Whether one string is a subsequence of the other
 	 */
 	public static boolean isLcsAbbrevAnyStart(String w1, String w2, int minLength) {
 		return w1.length() >= minLength
@@ -88,12 +110,14 @@ public final class LongestCommonSubsequence {
 	}	
 
 	/**
-	 * Returns the length of the longest common subsequence between <code>w1</code>
-	 * and <code>w2</code>.
+	 * Returns the length of the longest common subsequence between
+	 * <code>w1</code> and <code>w2</code>.
 	 * 
-	 * @param   w1  One of the strings.
-	 * @param   w2  The other string.
-	 * @return  The length of the longest common subsequence.
+	 * @param w1
+	 *            One of the strings.
+	 * @param w2
+	 *            The other string.
+	 * @return The length of the longest common subsequence.
 	 */
 	public static int lcsLength(String w1, String w2) {
 		int[][] c = lcsChart(w1, w2);
@@ -101,19 +125,20 @@ public final class LongestCommonSubsequence {
 	}
 
 	/**
-	 * Creates and returns an m by n chart where m = x.length(), 
-	 * n = y.length(), and the ith, jth entry is the length of the 
-	 * longest common subsequence between indices 0 and i in String x
-	 * and 0 and j in String y.
+	 * Creates and returns an m by n chart where m = x.length(), n = y.length(),
+	 * and the ith, jth entry is the length of the longest common subsequence
+	 * between indices 0 and i in String x and 0 and j in String y.
 	 * 
 	 * Thus, the LCS length is c[x.length()][y.length()].
 	 * 
-	 * Note that the actual characters of the longest common subsequence
-	 * can be recovered from x, y, and the returned chart.
+	 * Note that the actual characters of the longest common subsequence can be
+	 * recovered from x, y, and the returned chart.
 	 * 
-	 * @param   x  One of the strings.
-	 * @param   y  The other string.
-	 * @return  the LCS chart
+	 * @param x
+	 *            One of the strings.
+	 * @param y
+	 *            The other string.
+	 * @return the LCS chart
 	 */
 	public static int[][] lcsChart(String x, String y) {
 		int m = x.length();

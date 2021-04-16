@@ -21,13 +21,13 @@ import java.util.logging.Logger;
 
 import javax.sql.DataSource;
 
-import com.choicemaker.cm.core.Decision;
+import com.choicemaker.client.api.Decision;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.ImmutableRecordPair;
 import com.choicemaker.cm.core.MarkedRecordPairSource;
+import com.choicemaker.cm.core.MutableMarkedRecordPair;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.Sink;
-import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
 import com.choicemaker.cm.core.util.NameUtils;
 import com.choicemaker.cm.io.db.base.DataSources;
 import com.choicemaker.cm.io.db.base.DbAccessor;
@@ -173,9 +173,9 @@ public class OracleMarkedRecordPairSource implements MarkedRecordPairSource {
 		try {
 			if (markedPairs.next()) {
 				String qid = markedPairs.getString(IDX_Q_RECORD);
-				Record q = (Record) recordMap.get(qid);
+				Record q = recordMap.get(qid);
 				String mid = markedPairs.getString(IDX_M_RECORD);
-				Record m = (Record) recordMap.get(mid);
+				Record m = recordMap.get(mid);
 				String d = markedPairs.getString(IDX_DECISION);
 				Decision decision = null;
 				if (d != null && d.length() > 0) {
@@ -291,6 +291,7 @@ public class OracleMarkedRecordPairSource implements MarkedRecordPairSource {
 		this.conf = conf;
 	}
 
+	@Override
 	public void open() throws IOException {
 		// Check all implicit preconditions
 		Precondition.assertNonNullArgument("null model", getModel());
@@ -397,20 +398,24 @@ public class OracleMarkedRecordPairSource implements MarkedRecordPairSource {
 		}
 	}
 
+	@Override
 	public boolean hasNext() {
 		return currentPair != null;
 	}
 
+	@Override
 	public ImmutableRecordPair getNext() throws IOException {
 		return getNextMarkedRecordPair();
 	}
 
+	@Override
 	public MutableMarkedRecordPair getNextMarkedRecordPair() throws IOException {
 		MutableMarkedRecordPair retVal = currentPair;
 		this.currentPair = getNextPairInternal(recordMap, pairCursor);
 		return retVal;
 	}
 
+	@Override
 	public void close() throws IOException {
 		List<String> exceptions = new ArrayList<>();
 		try {
@@ -479,10 +484,12 @@ public class OracleMarkedRecordPairSource implements MarkedRecordPairSource {
 		}
 	}
 
+	@Override
 	public String getName() {
 		return recordSourceName;
 	}
 
+	@Override
 	public void setName(String v) {
 		this.recordSourceName = v;
 	}
@@ -492,6 +499,7 @@ public class OracleMarkedRecordPairSource implements MarkedRecordPairSource {
 		setName(NameUtils.getNameFromFilePath(fileName));
 	}
 
+	@Override
 	public String getFileName() {
 		return fileName;
 	}
@@ -513,10 +521,12 @@ public class OracleMarkedRecordPairSource implements MarkedRecordPairSource {
 		this.ds = DataSources.getDataSource(dataSourceName);
 	}
 
+	@Override
 	public ImmutableProbabilityModel getModel() {
 		return model;
 	}
 
+	@Override
 	public void setModel(ImmutableProbabilityModel v) {
 		this.model = v;
 	}
@@ -537,14 +547,17 @@ public class OracleMarkedRecordPairSource implements MarkedRecordPairSource {
 		conf = v;
 	}
 
+	@Override
 	public String toString() {
 		return recordSourceName;
 	}
 
+	@Override
 	public boolean hasSink() {
 		return false;
 	}
 
+	@Override
 	public Sink getSink() {
 		return null;
 	}

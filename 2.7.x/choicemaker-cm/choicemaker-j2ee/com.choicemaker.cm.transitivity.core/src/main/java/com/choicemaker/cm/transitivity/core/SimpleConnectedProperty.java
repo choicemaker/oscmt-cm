@@ -8,7 +8,6 @@
 package com.choicemaker.cm.transitivity.core;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 
@@ -20,44 +19,23 @@ import java.util.Set;
  *
  * ChoiceMaker Technologies, Inc.
  */
-@SuppressWarnings({"rawtypes", "unchecked" })
 public class SimpleConnectedProperty implements SubGraphProperty {
 
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.transitivity.core.SubGraphProperty#hasProperty(com.choicemaker.cm.transitivity.core.CompositeEntity)
 	 */
+	@Override
 	public boolean hasProperty(CompositeEntity ce) {
 		int numChildren = ce.getChildren().size();
-		INode fNode = ce.getFirstNode();
-		Set seenNodes = new HashSet ();
+		INode<?> fNode = ce.getFirstNode();
+		Set<INode<?>> seenNodes = new HashSet<>();
 
-		getAllAccessibleNodes (ce, seenNodes, fNode);
+		CompositeEntity.getAllAccessibleNodes (ce, seenNodes, fNode);
 		
 		//System.out.println (numChildren + " " + seenNodes.size());
 
 		if (numChildren == seenNodes.size()) return true;
 		else return false;
 	}
-	
-	
-	/** This method recursively collects all nodes reachable from the given node.
-	 * 
-	 * @param ce
-	 * @param seenNodes
-	 * @param currentNode
-	 */
-	private void getAllAccessibleNodes (CompositeEntity ce, Set seenNodes, INode currentNode) {
-		if (!seenNodes.contains(currentNode)) {
-			seenNodes.add(currentNode);
-					
-			List al = ce.getAdjacency(currentNode);
-			for (int i=0; i<al.size(); i++) {
-				INode node = (INode) al.get(i);
-				
-				getAllAccessibleNodes (ce, seenNodes, node);
-			}
-		}
-	}
-	
 
 }

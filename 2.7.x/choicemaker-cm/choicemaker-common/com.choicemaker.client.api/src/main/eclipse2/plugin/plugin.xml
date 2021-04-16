@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plugin>
+<plugin
+   id="com.choicemaker.client.api"
+   name="ChoiceMaker Client Plug-in"
+   version="2.7.1"
+   provider-name="rphall">
+
+   <runtime>
+      <library name="core.jar">
+         <export name="*"/>
+      </library>
+      <library name="lib/"/>
+   </runtime>
+   <requires>
+      <import plugin="com.choicemaker.e2"/>
+   </requires>
+
+</plugin>

@@ -68,6 +68,7 @@ public class FilterClueTable extends JTable{
 				DefaultTableCellRenderer textRenderer = new DefaultTableCellRenderer() {
 					private static final long serialVersionUID = 1L;
 
+					@Override
 					public Component getTableCellRendererComponent(
 						JTable table,
 						Object value,
@@ -164,6 +165,7 @@ public class FilterClueTable extends JTable{
 	 *
 	 * Overridden to provide automatic editing of the COL_PARAMETERS functionality when a COL_CONDITION is edited.
 	 */
+	@Override
 	public void tableChanged(TableModelEvent e) {
 		super.tableChanged(e);
 
@@ -176,6 +178,7 @@ public class FilterClueTable extends JTable{
 	/**
 	 * @see javax.swing.event.CellEditorListener#editingStopped(javax.swing.event.ChangeEvent)
 	 */
+	@Override
 	public void editingStopped(ChangeEvent e) {
 		super.editingStopped(e);
 

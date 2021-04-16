@@ -56,6 +56,7 @@ public class XmlRecordSourceGui extends RecordSourceGui implements Enable {
 		init(s);
 	}
 
+	@Override
 	public void setVisible(boolean b) {
 		if (b) {
 			setFields();
@@ -78,11 +79,13 @@ public class XmlRecordSourceGui extends RecordSourceGui implements Enable {
 		}
 	}
 
+	@Override
 	public void setEnabledness() {
 		boolean ok = xmlFileName.getText().length() > 0 && sourceFileName.getText().length() > 0;
 		okayButton.setEnabled(ok);
 	}
 
+	@Override
 	public void buildSource() {
 		XmlRecordSource xmlSource = (XmlRecordSource) getSource();
 		xmlSource.setFileName(getSourceFileName());
@@ -106,6 +109,7 @@ public class XmlRecordSourceGui extends RecordSourceGui implements Enable {
 	/**
 	 * Executed by the superclass constructor to build the panel.
 	 */
+	@Override
 	public void buildContent() {
 		sourceFileNameLabel = new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.dialog.source.name"));
 		sourceFileName = new JTextField(35);
@@ -126,11 +130,13 @@ public class XmlRecordSourceGui extends RecordSourceGui implements Enable {
 		layoutContent();
 	}
 
+	@Override
 	public void addContentListeners() {
 		super.addContentListeners();
 
 		//sourceFileBrowseButton
 		sourceFileBrowseButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent ev) {
 				File f = FileChooserFactory.selectRsFile(parent);
 				if (f != null) {
@@ -141,6 +147,7 @@ public class XmlRecordSourceGui extends RecordSourceGui implements Enable {
 
 		//browsebutton
 		browseButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent ev) {
 				File f = FileChooserFactory.selectXmlFile(parent);
 				if (f != null) {
@@ -156,6 +163,7 @@ public class XmlRecordSourceGui extends RecordSourceGui implements Enable {
 		JavaHelpUtils.enableHelpKey(this, "io.gui.xml.rs");
 	}
 
+	@Override
 	protected void generate() {
 	}
 

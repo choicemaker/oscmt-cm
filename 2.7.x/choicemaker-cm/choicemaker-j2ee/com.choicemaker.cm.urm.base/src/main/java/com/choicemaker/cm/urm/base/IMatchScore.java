@@ -22,4 +22,6 @@ public interface IMatchScore extends Serializable{
 	Decision3 getDecision();
 
 	float getProbability();
+
+	String getNote();
 }

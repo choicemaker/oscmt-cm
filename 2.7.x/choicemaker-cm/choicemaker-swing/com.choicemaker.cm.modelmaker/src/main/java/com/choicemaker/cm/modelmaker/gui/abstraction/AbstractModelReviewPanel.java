@@ -61,6 +61,7 @@ public abstract class AbstractModelReviewPanel
 	 * Invoked when the panel is displayed (true)
 	 * or hidden (false) from the user
 	 */
+	@Override
 	public abstract void setVisible(boolean b);
 
 	protected abstract void buildPanel();
@@ -81,18 +82,23 @@ public abstract class AbstractModelReviewPanel
 	 * {@link com.choicemaker.cm.modelmaker.ModelMakerEventNames#PROBABILITY_MODEL PROBABILITY_MODEL}
 	 * </ul><li/>or the source is the current model</ul>
 	 */
+	@Override
 	public abstract void propertyChange(PropertyChangeEvent evt);
 
 	/** Handle evaluation events from the current model trainer */
+	@Override
 	public abstract void evaluated(EvaluationEvent evt);
 
 	/** Handle data source changes */
+	@Override
 	public abstract void setChanged(RepositoryChangeEvent evt);
 
 	/** Handle changes to data */
+	@Override
 	public abstract void recordDataChanged(RepositoryChangeEvent evt);
 
 	/** Handle markup changes to data */
+	@Override
 	public abstract void markupDataChanged(RepositoryChangeEvent evt);
 
 }

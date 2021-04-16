@@ -256,22 +256,26 @@ public class Printer implements Visitor, Tags {
 			print("note ");
 	}
 
+	@Override
 	public void visit(Bad t) throws CompilerException {
 		print("<bad>");
 	}
 
+	@Override
 	public void visit(PackageDecl t) throws CompilerException {
 		print("package ");
 		print(t.pckage);
 		print(";");
 	}
 
+	@Override
 	public void visit(ImportDecl t) throws CompilerException {
 		print("import ");
 		print(t.pckage);
 		print(t.starImport ? ".*;" : ";");
 	}
 
+	@Override
 	public void visit(ClueSetDecl t) throws CompilerException {
 		println();
 		println(
@@ -282,6 +286,7 @@ public class Printer implements Visitor, Tags {
 		align().print("}");
 	}
 
+	@Override
 	public void visit(ClueDecl t) throws CompilerException {
 		printModifiers(t.clueModifiers);
 		println((t.rule ? "rule " : "clue ") + t.name + " {");
@@ -331,12 +336,14 @@ public class Printer implements Visitor, Tags {
 		print("}");
 	}
 
+	@Override
 	public void visit(Index t) throws CompilerException {
 		print(t.tpe);
 		print(" " + t.name + " = ");
 		print(t.initializer);
 	}
 
+	@Override
 	public void visit(MethodDecl t) throws CompilerException {
 		print(t.restpe);
 		print(" " + t.name + "(");
@@ -350,6 +357,7 @@ public class Printer implements Visitor, Tags {
 		print(t.body);
 	}
 
+	@Override
 	public void visit(VarDecl t) throws CompilerException {
 		printModifiers(t.modifiers);
 		print(t.tpe);
@@ -360,6 +368,7 @@ public class Printer implements Visitor, Tags {
 		}
 	}
 
+	@Override
 	public void visit(Quantified t) throws CompilerException {
 		switch (t.quantifier) {
 			case EXISTS :
@@ -393,6 +402,7 @@ public class Printer implements Visitor, Tags {
 		print(")");
 	}
 
+	@Override
 	public void visit(Let t) throws CompilerException {
 		print("let(");
 		print(t.binders, ", ");
@@ -401,6 +411,7 @@ public class Printer implements Visitor, Tags {
 		print(")");
 	}
 
+	@Override
 	public void visit(Shorthand t) throws CompilerException {
 		switch (t.form) {
 			case SAME :
@@ -438,12 +449,14 @@ public class Printer implements Visitor, Tags {
 		print(")");
 	}
 
+	@Override
 	public void visit(Valid t) throws CompilerException {
 		print("valid(");
 		print(t.access);
 		print(")");
 	}
 
+	@Override
 	public void visit(If t) throws CompilerException {
 		printExpr(t.cond);
 		print(" ?");
@@ -465,6 +478,7 @@ public class Printer implements Visitor, Tags {
 		}
 	}
 
+	@Override
 	public void visit(Apply t) throws CompilerException {
 		print(t.fun);
 		print("(");
@@ -472,6 +486,7 @@ public class Printer implements Visitor, Tags {
 		print(")");
 	}
 
+	@Override
 	public void visit(New t) throws CompilerException {
 		print("new ");
 		print(t.clazz);
@@ -480,6 +495,7 @@ public class Printer implements Visitor, Tags {
 		print(")");
 	}
 
+	@Override
 	public void visit(NewArray t) throws CompilerException {
 		if ((t.dims == null) && (t.clazz == null)) {
 			println("{");
@@ -513,6 +529,7 @@ public class Printer implements Visitor, Tags {
 		}
 	}
 
+	@Override
 	public void visit(Typeop t) throws CompilerException {
 		switch (t.tag) {
 			case TEST :
@@ -531,6 +548,7 @@ public class Printer implements Visitor, Tags {
 		}
 	}
 
+	@Override
 	public void visit(Unop t) throws CompilerException {
 		switch (t.opcode) {
 			case NOT :
@@ -551,6 +569,7 @@ public class Printer implements Visitor, Tags {
 		printExpr(t.arg);
 	}
 
+	@Override
 	public void visit(Binop t) throws CompilerException {
 		printExpr(t.left);
 		switch (t.opcode) {
@@ -617,20 +636,24 @@ public class Printer implements Visitor, Tags {
 		printExpr(t.right);
 	}
 
+	@Override
 	public void visit(Indexed t) throws CompilerException {
 		printExpr(t.expr);
 		print("[").print(t.index).print("]");
 	}
 
+	@Override
 	public void visit(Select t) throws CompilerException {
 		printExpr(t.qualifier);
 		print("." + t.name);
 	}
 
+	@Override
 	public void visit(Ident t) throws CompilerException {
 		print(t.name);
 	}
 
+	@Override
 	public void visit(Self t) throws CompilerException {
 		switch (t.stag) {
 			case Q :
@@ -647,11 +670,13 @@ public class Printer implements Visitor, Tags {
 		}
 	}
 
+	@Override
 	public void visit(ArrayType t) throws CompilerException {
 		print(t.tpe);
 		print("[]");
 	}
 
+	@Override
 	public void visit(PrimitiveType t) throws CompilerException {
 		switch (t.ttag) {
 			case BYTE :
@@ -686,6 +711,7 @@ public class Printer implements Visitor, Tags {
 		}
 	}
 
+	@Override
 	public void visit(Literal t) throws CompilerException {
 		switch (t.ltag) {
 			case LONG :

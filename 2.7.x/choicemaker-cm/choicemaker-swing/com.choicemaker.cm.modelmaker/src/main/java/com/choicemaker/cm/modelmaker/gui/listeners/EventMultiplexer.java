@@ -27,6 +27,7 @@ public class EventMultiplexer implements PropertyChangeListener {
 		propertyChangeListeners.removePropertyChangeListener(l);
 	}
 
+	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		propertyChangeListeners.firePropertyChange(evt);
 	}

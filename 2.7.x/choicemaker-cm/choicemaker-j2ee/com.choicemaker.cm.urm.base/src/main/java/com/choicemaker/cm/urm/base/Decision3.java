@@ -9,6 +9,8 @@ package com.choicemaker.cm.urm.base;
 
 import java.io.Serializable;
 
+import com.choicemaker.util.Precondition;
+
 /**
  * Match, hold (potential match), or differ decision.
  * <p>  
@@ -42,20 +44,24 @@ public class Decision3 implements Serializable {
 	 *
 	 * @return  The string representation of the <code>Decision</code>.
 	 */
+	@Override
 	public String toString() {
 		return this.value;
 	}
 
 	/**
 	 * Returns <code>Decision3</code> corresponding to the <code>name</code>.
-	 * <p> 
 	 * 
-	 * @param	name A string represntation of a code>Decision3</code>  
-	 * @return	The corresponding <code>Decision3</code>.
-	 * @throws	IllegalArgumentException if <code>name</code> doesn't represent a valid decision.
+	 * @param name
+	 *            A string representation of a code>Decision3</code>, case
+	 *            insensitive
+	 * @return The corresponding <code>Decision3</code>.
+	 * @throws IllegalArgumentException
+	 *             if <code>name</code> doesn't represent a valid decision.
 	 */
 	public static Decision3 valueOf(String name) {
-		name = name.intern();
+		Precondition.assertNonEmptyString("null or blank name", name);
+		name = name.toLowerCase().trim().intern();
 		if (DIFFER.toString().intern() == name) {
 			return DIFFER;
 		} else if (HOLD.toString().intern() == name) {
@@ -63,11 +69,12 @@ public class Decision3 implements Serializable {
 		} else if (MATCH.toString().intern() == name) {
 			return MATCH;
 		} else {
-			throw new IllegalArgumentException(name + " is not a valid Decision3.");
+			throw new IllegalArgumentException(
+					name + " is not a valid Decision3.");
 		}
-	}
+	}	
 	
-	
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -75,6 +82,7 @@ public class Decision3 implements Serializable {
 		return result;
 	}
 
+	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
@@ -95,6 +103,7 @@ public class Decision3 implements Serializable {
 	 * Obsolete method for {@link #equals(Object)}. Used for testing only.
 	 * @deprecated
 	 */
+	@Deprecated
 	public boolean equals_00(Object o){
 		if (o instanceof Decision3) {
 			Decision3 d = (Decision3) o;

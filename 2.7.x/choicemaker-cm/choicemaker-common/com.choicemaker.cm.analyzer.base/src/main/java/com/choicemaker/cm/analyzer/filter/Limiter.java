@@ -50,6 +50,7 @@ public class Limiter implements Serializable {
 		return true;
 	}
 
+	@Override
 	public String toString() {
 		StringBuffer buf = new StringBuffer();
 		buf.append(from * 100f);

@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -204,7 +203,7 @@ public class XmlConfigurator implements ChoiceMakerConfigurator,
 			List<Element> modules = ConfigurationUtils.getModules(document);
 			Iterator<Element> i = modules.iterator();
 			while (i.hasNext()) {
-				Element e = (Element) i.next();
+				Element e = i.next();
 				String className = e.getAttributeValue("class");
 				Class<?> clazz = Class.forName(className, true, cl);
 				XmlModuleInitializer m = (XmlModuleInitializer) clazz
@@ -601,10 +600,10 @@ public class XmlConfigurator implements ChoiceMakerConfigurator,
 	 *             if any error occurs.
 	 */
 	@Override
-	public ChoiceMakerConfiguration init(String fn, String logConfName,
+	public ChoiceMakerConfiguration init(String fn, String unusedLogConfName,
 			boolean reload, boolean initGui) throws XmlConfException {
-		if (logConfName != null && !logConfName.trim().isEmpty()) {
-			logger.warning("Ignoring log configuration name: " + logConfName);
+		if (unusedLogConfName != null && !unusedLogConfName.trim().isEmpty()) {
+			logger.warning("Ignoring log configuration name: " + unusedLogConfName);
 
 		}
 		return init(fn, reload, initGui, null);

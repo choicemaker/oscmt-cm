@@ -103,9 +103,12 @@ public class StringPatternValidator
 	private void initializeSetNameAndPatterns(String setName, Collection<String> regexCollection) {
 		// Preconditions
 		Precondition.assertNonEmptyString("Null or blank set name", setName);
-		Precondition.assertNonNullArgument("Null regex collection", regexCollection);
-		Precondition.assertBoolean("empty regex collection", regexCollection.size() > 0);
-		
+		Precondition.assertNonNullArgument(
+				"Null regex collection for set name: " + setName, regexCollection);
+		Precondition.assertBoolean(
+				"empty regex collection for set name : " + setName,
+				regexCollection.size() > 0);
+
 		this.setName = setName;
 		List<Pattern> patternList = new ArrayList<>();
 		for (String s : regexCollection) {

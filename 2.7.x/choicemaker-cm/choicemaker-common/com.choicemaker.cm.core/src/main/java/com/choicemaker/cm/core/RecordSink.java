@@ -7,8 +7,6 @@
  *******************************************************************************/
 package com.choicemaker.cm.core;
 
-import java.io.IOException;
-
 /**
  * Sink of records.
  *

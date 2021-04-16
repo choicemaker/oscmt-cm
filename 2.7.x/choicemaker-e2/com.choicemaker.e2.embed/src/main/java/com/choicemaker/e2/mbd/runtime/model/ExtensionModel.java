@@ -83,6 +83,7 @@ public ConfigurationElementModel[] getSubElements() {
  *
  * @see #isReadOnly
  */
+@Override
 public void markReadOnly() {
 	super.markReadOnly();
 	if (elements != null)

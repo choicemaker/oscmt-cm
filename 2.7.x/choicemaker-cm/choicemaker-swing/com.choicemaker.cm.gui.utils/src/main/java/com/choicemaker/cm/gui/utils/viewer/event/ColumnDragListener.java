@@ -43,6 +43,7 @@ public class ColumnDragListener extends MouseAdapter implements MouseMotionListe
 		return i;
 	}
 
+	@Override
 	public void mouseDragged(MouseEvent e) {
 		setDrag();
 	}
@@ -61,6 +62,7 @@ public class ColumnDragListener extends MouseAdapter implements MouseMotionListe
 		}
 	}
 
+	@Override
 	public void mousePressed(MouseEvent e) {
 		resetDrag();
 	}
@@ -76,28 +78,34 @@ public class ColumnDragListener extends MouseAdapter implements MouseMotionListe
 		}
 	}
 
+	@Override
 	public void mouseReleased(MouseEvent e) {
 		resetDrag();
 	}
 
+	@Override
 	public void mouseMoved(MouseEvent e) {
 	}
 
 	/** Tells listeners that a column was added to the model. */
+	@Override
 	public void columnAdded(TableColumnModelEvent e) {
 	}
 
 	/** Tells listeners that a column was removed from the model. */
+	@Override
 	public void columnRemoved(TableColumnModelEvent e) {
 	}
 
 	/** Tells listeners that a column was repositioned. */
+	@Override
 	public void columnMoved(TableColumnModelEvent e) {
 //		rtB.getColumnModel().moveColumn(e.getFromIndex(), e.getToIndex());
 //		setDrag();
 	}
 
 	/** Tells listeners that a column was moved due to a margin change. */
+	@Override
 	public void columnMarginChanged(ChangeEvent e) {
 	}
 
@@ -105,6 +113,7 @@ public class ColumnDragListener extends MouseAdapter implements MouseMotionListe
 	 * Tells listeners that the selection model of the
 	 * TableColumnModel changed.
 	 */
+	@Override
 	public void columnSelectionChanged(ListSelectionEvent e) {
 	}
 }

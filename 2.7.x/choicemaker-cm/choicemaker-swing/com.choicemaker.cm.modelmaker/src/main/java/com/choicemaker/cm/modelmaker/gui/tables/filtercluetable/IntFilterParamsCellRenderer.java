@@ -23,6 +23,7 @@ public class IntFilterParamsCellRenderer extends DefaultTableCellRenderer {
 	/**
 	 * @see javax.swing.table.DefaultTableCellRenderer#setValue(java.lang.Object)
 	 */
+	@Override
 	protected void setValue(Object value) {
 		if (value instanceof IntFilterCondition) {
 			IntFilterCondition filterCondition = (IntFilterCondition) value;

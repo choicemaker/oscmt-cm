@@ -140,7 +140,7 @@ public class NearlyCnfGrammar extends ContextFreeGrammar {
 
 				List<Rule> rhsList = getRules(rhs);
 				for (int i = 0; i < rhsList.size(); i++) {
-					Rule base = (Rule) rhsList.get(i);
+					Rule base = rhsList.get(i);
 					SquashedRule newRule = new SquashedRule(r, base);
 					if (!unitRulesPreviouslyRemoved.contains(newRule)) {
 						addRule(newRule);
@@ -155,7 +155,7 @@ public class NearlyCnfGrammar extends ContextFreeGrammar {
 	private Rule nextNonTokenTypeUnitRule() {
 		List<Rule> rules = getRules();
 		for (int i = 0; i < rules.size(); i++) {
-			Rule r = (Rule) rules.get(i);
+			Rule r = rules.get(i);
 			if (r.getRhsSize() == 1) {
 				if (!(r.getRhsSymbol(0) instanceof TokenType)) {
 					return r;
@@ -204,7 +204,7 @@ public class NearlyCnfGrammar extends ContextFreeGrammar {
 	private Rule nextLongRule() {
 		List<Rule> rules = getRules();
 		for (int i = 0; i < rules.size(); i++) {
-			Rule r = (Rule) rules.get(i);
+			Rule r = rules.get(i);
 			if (r.getRhsSize() > 2) {
 				return r;
 			}

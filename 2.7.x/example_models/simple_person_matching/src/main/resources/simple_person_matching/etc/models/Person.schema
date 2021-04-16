@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ChoiceMakerSchema
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:noNamespaceSchemaLocation="http://oscmt.sourceforge.net/xml_schemas/2.6/ChoiceMakerAll.xsd"
+	xsi:noNamespaceSchemaLocation="https://www.choicemaker.com/xml_schemas/2.6/ChoiceMakerAll.xsd"
 	version="2.6.0"
 	>
     <import>java.util.Date</import>

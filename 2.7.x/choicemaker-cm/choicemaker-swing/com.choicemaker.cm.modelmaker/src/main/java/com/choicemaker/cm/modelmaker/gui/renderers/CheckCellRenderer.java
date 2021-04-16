@@ -56,6 +56,7 @@ public class CheckCellRenderer extends JCheckBox implements TableCellRenderer {
 	 *              <code>row</code> is -1
 	 * @param   column          the column index of the cell being drawn
 	 */
+	@Override
 	public Component getTableCellRendererComponent(
 		JTable table,
 		Object value,

@@ -7,13 +7,15 @@
  *******************************************************************************/
 package com.choicemaker.cm.core;
 
+import com.choicemaker.client.api.Decision;
+
 /**
  * Describes a single clue.
  *
- * A <code>ClueSet</code> creates an instance of this class for each
- * of its clues and rules. Instances of this class are immutable.
+ * A <code>ClueSet</code> creates an instance of this class for each of its
+ * clues and rules. Instances of this class are immutable.
  *
- * @author    Martin Buechi
+ * @author Martin Buechi
  */
 public class ClueDesc {
 	public static final int NONE = 0;
@@ -31,18 +33,23 @@ public class ClueDesc {
 	/**
 	 * Creates a <code>ClueDesc</code>.
 	 *
-	 * This constructor performs no validity checks on its arguments as all calls
-	 * are in generated code.
+	 * This constructor performs no validity checks on its arguments as all
+	 * calls are in generated code.
 	 *
-	 * @param   number  The clue or rule number. The clues/rules of each <code>ClueSet</code>
-	 *            are numbered consecutively in the order they appear in the ClueMaker
-	 *            source, starting from 0.
-	 * @param   name  The name given to the clue in the ClueMaker source.
-	 * @param   decision  The <code>Decision</code> (future) that this clue predicts.
-	 * @param   startLineNumber  The first line number of this clue in the ClueMaker
-	 *            source code. Includes immediately preceeding JavaDoc-style comments.
-	 * @param   endLineNumber  The last line number of this clue in the ClueMaker
-	 *            source code.
+	 * @param number
+	 *            The clue or rule number. The clues/rules of each
+	 *            <code>ClueSet</code> are numbered consecutively in the order
+	 *            they appear in the ClueMaker source, starting from 0.
+	 * @param name
+	 *            The name given to the clue in the ClueMaker source.
+	 * @param decision
+	 *            The <code>Decision</code> (future) that this clue predicts.
+	 * @param startLineNumber
+	 *            The first line number of this clue in the ClueMaker source
+	 *            code. Includes immediately preceeding JavaDoc-style comments.
+	 * @param endLineNumber
+	 *            The last line number of this clue in the ClueMaker source
+	 *            code.
 	 */
 	public ClueDesc(
 		int number,
@@ -64,7 +71,7 @@ public class ClueDesc {
 	/**
 	 * Returns the clue number number.
 	 *
-	 * @return  The clue number.
+	 * @return The clue number.
 	 */
 	public int getNumber() {
 		return number;
@@ -73,7 +80,7 @@ public class ClueDesc {
 	/**
 	 * Returns the clue name.
 	 *
-	 * @return  The clue name.
+	 * @return The clue name.
 	 */
 	public String getName() {
 		return name;
@@ -82,7 +89,7 @@ public class ClueDesc {
 	/**
 	 * Returns the <code>Decision</code>.
 	 *
-	 * @return  The <code>Decision</code>.
+	 * @return The <code>Decision</code>.
 	 */
 	public Decision getDecision() {
 		return decision;
@@ -91,7 +98,7 @@ public class ClueDesc {
 	/**
 	 * Returns the first line number of this clue in the ClueMaker source.
 	 *
-	 * @return  The first line number of this clue in the ClueMaker source.
+	 * @return The first line number of this clue in the ClueMaker source.
 	 */
 	public int getStartLineNumber() {
 		return startLineNumber;
@@ -100,9 +107,15 @@ public class ClueDesc {
 	/**
 	 * Returns the last line number of this clue in the ClueMaker source.
 	 *
-	 * @return  The last line number of this clue in the ClueMaker source.
+	 * @return The last line number of this clue in the ClueMaker source.
 	 */
 	public int getEndLineNumber() {
 		return endLineNumber;
 	}
+
+	@Override
+	public String toString() {
+		return "ClueDesc [number=" + number + ", name=" + name + "]";
+	}
+
 }

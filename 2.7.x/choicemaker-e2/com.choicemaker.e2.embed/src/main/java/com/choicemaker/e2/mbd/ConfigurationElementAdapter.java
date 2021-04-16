@@ -8,8 +8,8 @@
 package com.choicemaker.e2.mbd;
 
 import com.choicemaker.e2.CMConfigurationElement;
-import com.choicemaker.e2.E2Exception;
 import com.choicemaker.e2.CMExtension;
+import com.choicemaker.e2.E2Exception;
 import com.choicemaker.e2.mbd.runtime.CoreException;
 import com.choicemaker.e2.mbd.runtime.IConfigurationElement;
 import com.choicemaker.e2.mbd.runtime.IExtension;
@@ -65,6 +65,7 @@ public class ConfigurationElementAdapter {
 			this.delegate = o;
 		}
 
+		@Override
 		public Object createExecutableExtension(String propertyName)
 				throws E2Exception {
 			try {
@@ -75,38 +76,47 @@ public class ConfigurationElementAdapter {
 			}
 		}
 
+		@Override
 		public String getAttribute(String name) {
 			return delegate.getAttribute(name);
 		}
 
+		@Override
 		public String getAttributeAsIs(String name) {
 			return delegate.getAttributeAsIs(name);
 		}
 
+		@Override
 		public String[] getAttributeNames() {
 			return delegate.getAttributeNames();
 		}
 
+		@Override
 		public CMConfigurationElement[] getChildren() {
 			return convert(delegate.getChildren());
 		}
 
+		@Override
 		public CMConfigurationElement[] getChildren(String name) {
 			return convert(delegate.getChildren(name));
 		}
 
+		@Override
 		public CMExtension getDeclaringExtension() {
 			return ExtensionAdapter.convert(delegate.getDeclaringExtension());
 		}
 
+		@Override
 		public String getName() {
 			return delegate.getName();
 		}
 
+		@Override
 		public String getValue() {
 			return delegate.getValue();
 		}
 
+		@Override
 		public String getValueAsIs() {
 			return delegate.getValueAsIs();
 		}
@@ -124,6 +134,7 @@ public class ConfigurationElementAdapter {
 			this.delegate = o;
 		}
 
+		@Override
 		public Object createExecutableExtension(String propertyName)
 				throws CoreException {
 			try {
@@ -134,38 +145,47 @@ public class ConfigurationElementAdapter {
 			}
 		}
 
+		@Override
 		public String getAttribute(String name) {
 			return delegate.getAttribute(name);
 		}
 
+		@Override
 		public String getAttributeAsIs(String name) {
 			return delegate.getAttributeAsIs(name);
 		}
 
+		@Override
 		public String[] getAttributeNames() {
 			return delegate.getAttributeNames();
 		}
 
+		@Override
 		public IConfigurationElement[] getChildren() {
 			return convert(delegate.getChildren());
 		}
 
+		@Override
 		public IConfigurationElement[] getChildren(String name) {
 			return convert(delegate.getChildren(name));
 		}
 
+		@Override
 		public IExtension getDeclaringExtension() {
 			return ExtensionAdapter.convert(delegate.getDeclaringExtension());
 		}
 
+		@Override
 		public String getName() {
 			return delegate.getName();
 		}
 
+		@Override
 		public String getValue() {
 			return delegate.getValue();
 		}
 
+		@Override
 		public String getValueAsIs() {
 			return delegate.getValueAsIs();
 		}

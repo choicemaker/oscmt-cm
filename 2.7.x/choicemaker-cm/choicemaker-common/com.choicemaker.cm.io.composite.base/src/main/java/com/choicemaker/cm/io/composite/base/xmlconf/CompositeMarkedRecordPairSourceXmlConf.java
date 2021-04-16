@@ -34,10 +34,12 @@ import com.choicemaker.util.FileUtilities;
 public class CompositeMarkedRecordPairSourceXmlConf implements MarkedRecordPairSourceXmlConfigurator {
 	public static final String EXTENSION_POINT_ID = "com.choicemaker.cm.io.composite.base.compositeMrpsReader";
 
+	@Override
 	public Object getHandler() {
 		return this;
 	}
 
+	@Override
 	public Class getHandledType() {
 		return CompositeMarkedRecordPairSource.class;
 	}
@@ -46,6 +48,7 @@ public class CompositeMarkedRecordPairSourceXmlConf implements MarkedRecordPairS
 	 * Add a Composite marked record pair source to the configuration.
 	 * @param   s  The composite marked record pair source.
 	 */
+	@Override
 	public void add(MarkedRecordPairSource s) throws XmlConfException {
 		try {
 			CompositeMarkedRecordPairSource src = (CompositeMarkedRecordPairSource) s;
@@ -74,6 +77,7 @@ public class CompositeMarkedRecordPairSourceXmlConf implements MarkedRecordPairS
 		}
 	}
 
+	@Override
 	public MarkedRecordPairSource getMarkedRecordPairSource(String fileName, Element e, ImmutableProbabilityModel model)
 		throws XmlConfException {
 		CompositeMarkedRecordPairSource comp = new CompositeMarkedRecordPairSource();
@@ -91,6 +95,7 @@ public class CompositeMarkedRecordPairSourceXmlConf implements MarkedRecordPairS
 		return comp;
 	}
 
+	@Override
 	public String toString() {
 		return "Composite MRPS";
 	}

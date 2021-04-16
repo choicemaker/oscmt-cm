@@ -1,0 +1,331 @@
+/*******************************************************************************
+ * Copyright (c) 2015 ChoiceMaker LLC and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *******************************************************************************/
+package com.choicemaker.cm.oaba.ejb;
+
+import static com.choicemaker.cm.args.PersistableSqlRecordSource.TYPE;
+import static com.choicemaker.cm.batch.ejb.BatchJobJPA.PN_BATCHJOB_FIND_BY_JOBID_P1;
+import static com.choicemaker.cm.batch.ejb.BatchJobJPA.QN_BATCHJOB_FIND_BY_JOBID;
+import static com.choicemaker.cm.oaba.ejb.AbstractParametersJPA.PN_PARAMETERS_FIND_BY_ID_P1;
+import static com.choicemaker.cm.oaba.ejb.AbstractParametersJPA.QN_OABAPARAMETERS_FIND_ALL;
+import static com.choicemaker.cm.oaba.ejb.AbstractParametersJPA.QN_PARAMETERS_FIND_ALL;
+import static com.choicemaker.cm.oaba.ejb.AbstractParametersJPA.QN_PARAMETERS_FIND_BY_ID;
+import static com.choicemaker.util.jee.LogTransactionStatus.logTransactionStatus;
+import static com.choicemaker.util.jee.TransactionStatusEnum.STATUS_ACTIVE;
+import static javax.ejb.TransactionAttributeType.REQUIRED;
+import static javax.ejb.TransactionAttributeType.SUPPORTS;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Logger;
+
+import javax.annotation.Resource;
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.transaction.TransactionSynchronizationRegistry;
+
+import com.choicemaker.cm.args.OabaParameters;
+import com.choicemaker.cm.args.PersistableSqlRecordSource;
+import com.choicemaker.cm.batch.api.BatchJob;
+import com.choicemaker.cm.batch.ejb.AbstractPersistentObject;
+import com.choicemaker.cm.oaba.api.AbstractParameters;
+import com.choicemaker.cm.oaba.api.OabaJobManager;
+import com.choicemaker.cm.oaba.api.OabaParametersController;
+import com.choicemaker.cm.oaba.api.SqlRecordSourceController;
+import com.choicemaker.util.Precondition;
+
+/**
+ * An EJB used to test BatchParameter beans within container-defined
+ * transactions; see {@link OabaJobManagerBean} as an example of a similar
+ * controller.
+ *
+ * @author rphall
+ */
+@Stateless
+@TransactionAttribute(REQUIRED)
+public class OabaParametersControllerBean implements OabaParametersController {
+
+	private static final Logger logger =
+		Logger.getLogger(OabaParametersControllerBean.class.getName());
+
+	@PersistenceContext(unitName = "oaba")
+	private EntityManager em;
+
+	@EJB
+	private OabaJobManager jobManager;
+
+	@EJB
+	private SqlRecordSourceController sqlController;
+
+	@Resource
+	TransactionSynchronizationRegistry tsr;
+
+	protected OabaJobManager getOabaJobController() {
+		return jobManager;
+	}
+
+	protected OabaParametersEntity getBean(OabaParameters p) {
+		OabaParametersEntity retVal = null;
+		if (p != null) {
+			final long jobId = p.getId();
+			if (p instanceof OabaParametersEntity) {
+				retVal = (OabaParametersEntity) p;
+			} else {
+				if (p.isPersistent()) {
+					retVal = em.find(OabaParametersEntity.class, jobId);
+					if (retVal == null) {
+						String msg =
+							"Unable to find persistent OABA job: " + jobId;
+						logger.warning(msg);
+					}
+				}
+			}
+			if (retVal == null) {
+				retVal = new OabaParametersEntity(p);
+			}
+		}
+		return retVal;
+	}
+
+	@Override
+	public OabaParameters save(OabaParameters p) {
+		return save(getBean(p));
+	}
+
+	OabaParametersEntity save(OabaParametersEntity p) {
+		logger.fine("Saving " + p);
+		if (p.getId() == 0) {
+			em.persist(p);
+			logger.fine("Saved " + p);
+		} else {
+			p = em.merge(p);
+			em.flush();
+			logger.fine("Merged " + p);
+		}
+		return p;
+	}
+
+	@TransactionAttribute(SUPPORTS)
+	@Override
+	public OabaParameters findOabaParameters(long id) {
+		OabaParametersEntity p = em.find(OabaParametersEntity.class, id);
+		return p;
+	}
+
+	/** Finds any instance of AbstractParametersEntity */
+	@TransactionAttribute(SUPPORTS)
+	@Override
+	public AbstractParametersEntity findParameters(long id) {
+		AbstractParametersEntity retVal = null;
+		Query query = em.createNamedQuery(QN_PARAMETERS_FIND_BY_ID);
+		query.setParameter(PN_PARAMETERS_FIND_BY_ID_P1, id);
+		@SuppressWarnings("unchecked")
+		List<AbstractParametersEntity> entries = query.getResultList();
+		if (entries != null && entries.size() > 1) {
+			String msg = "Violates primary key constraint: " + entries.size();
+			logger.severe(msg);
+			throw new IllegalStateException(msg);
+		}
+		if (entries != null && !entries.isEmpty()) {
+			assert entries.size() == 1;
+			retVal = entries.get(0);
+		}
+		return retVal;
+	}
+
+	@TransactionAttribute(SUPPORTS)
+	@Override
+	public OabaParameters findOabaParametersByBatchJobId(long jobId) {
+		OabaParameters retVal = null;
+		Query query = em.createNamedQuery(QN_BATCHJOB_FIND_BY_JOBID);
+		query.setParameter(PN_BATCHJOB_FIND_BY_JOBID_P1, jobId);
+		@SuppressWarnings("unchecked")
+		List<BatchJob> entries = query.getResultList();
+		if (entries != null && entries.size() > 1) {
+			String msg = "Violates 1:{0,1} relationship: " + entries.size();
+			logger.severe(msg);
+			throw new IllegalStateException(msg);
+		}
+		if (entries != null && !entries.isEmpty()) {
+			assert entries.size() == 1;
+			BatchJob batchJob = entries.get(0);
+			long paramsId = batchJob.getParametersId();
+			AbstractParametersEntity ape = findParameters(paramsId);
+			if (ape != null && !(ape instanceof OabaParameters)) {
+				String msg = "Invalid instance: " + paramsId + ", "
+						+ ape.getClass().getName();
+				logger.severe(msg);
+				throw new IllegalStateException(msg);
+			} else {
+				retVal = (OabaParameters) ape;
+			}
+		}
+		return retVal;
+	}
+
+	@TransactionAttribute(SUPPORTS)
+	@Override
+	public List<OabaParameters> findAllOabaParameters() {
+		Query query = em.createNamedQuery(QN_OABAPARAMETERS_FIND_ALL);
+		@SuppressWarnings("unchecked")
+		List<OabaParameters> entries = query.getResultList();
+		if (entries == null) {
+			entries = new ArrayList<OabaParameters>();
+		}
+		return entries;
+	}
+
+	/** Finds all subclasses of AbstractParametersEntity */
+	@TransactionAttribute(SUPPORTS)
+	@Override
+	public List<AbstractParameters> findAllParameters() {
+		Query query = em.createNamedQuery(QN_PARAMETERS_FIND_ALL);
+		@SuppressWarnings("unchecked")
+		List<AbstractParameters> entries = query.getResultList();
+		if (entries == null) {
+			entries = new ArrayList<>();
+		}
+		return entries;
+	}
+
+	@Override
+	public void delete(OabaParameters p) {
+		final int status = tsr.getTransactionStatus();
+		logTransactionStatus(logger, status, STATUS_ACTIVE);
+		Precondition.assertBoolean(
+				"Transaction must be active. Invalid status: " + status,
+				STATUS_ACTIVE.equals(status));
+		if (p.isPersistent()) {
+			OabaParametersEntity bean = getBean(p);
+			bean = em.merge(bean);
+			em.remove(bean);
+			em.flush();
+		}
+	}
+
+	@Override
+	public void detach(OabaParameters p) {
+		if (p.isPersistent()) {
+			OabaParametersEntity bean = getBean(p);
+			bean = em.merge(bean);
+			em.detach(p);
+		}
+	}
+
+	public static boolean isValidSqlRecordSourceType(String type) {
+		boolean retVal = true;
+		if (type == null) {
+			logger.fine("null SQL record source type");
+			retVal = false;
+		} else if (!TYPE.equals(type)) {
+			logger.fine("invalid SQL record source type: '" + type + "'");
+			retVal = false;
+		} else {
+			assert TYPE.equals(type);
+			assert retVal == true;
+		}
+		return retVal;
+	}
+
+	public boolean isValidSqlRecordSourceId(Long id) {
+		boolean retVal = true;
+		if (id == null) {
+			logger.warning("null SQL record source id");
+			retVal = false;
+		} else if (!AbstractPersistentObject.isPersistentId(id)) {
+			logger.warning("non-persistent SQL record source id: " + id);
+			retVal = false;
+		} else {
+			assert AbstractPersistentObject.isPersistentId(id);
+			assert retVal == true;
+		}
+		return retVal;
+	}
+
+	protected String getDatabaseConfiguration(String type, Long id) {
+		String retVal = null;
+		if (!isValidSqlRecordSourceType(type)
+				|| !isValidSqlRecordSourceId(id)) {
+			String msg = "database configuration: null";
+			logger.fine(msg);
+			assert retVal == null;
+		} else {
+			PersistableSqlRecordSource psrs = sqlController.find(id, type);
+			retVal = psrs.getDatabaseConfiguration();
+			String msg = "database configuration: " + retVal;
+			logger.fine(msg);
+			assert retVal != null;
+		}
+		return retVal;
+	}
+
+	protected String getDatabaseAccessor(String type, Long id) {
+		String retVal = null;
+		if (!isValidSqlRecordSourceType(type)
+				|| !isValidSqlRecordSourceId(id)) {
+			String msg = "database accessor: null";
+			logger.warning(msg);
+			assert retVal == null;
+		} else {
+			PersistableSqlRecordSource psrs = sqlController.find(id, type);
+			retVal = psrs.getDatabaseAccessor();
+			String msg = "database accessor: " + retVal;
+			logger.fine(msg);
+			assert retVal != null;
+		}
+		return retVal;
+	}
+
+	@TransactionAttribute(SUPPORTS)
+	@Override
+	public String getQueryDatabaseConfiguration(OabaParameters oabaParams) {
+		if (oabaParams == null) {
+			throw new IllegalArgumentException("null parameters");
+		}
+		final String type = oabaParams.getQueryRsType();
+		final Long id = oabaParams.getQueryRsId();
+		return getDatabaseConfiguration(type, id);
+	}
+
+	@TransactionAttribute(SUPPORTS)
+	@Override
+	public String getQueryDatabaseAccessor(OabaParameters oabaParams) {
+		if (oabaParams == null) {
+			throw new IllegalArgumentException("null parameters");
+		}
+		final String type = oabaParams.getQueryRsType();
+		final Long id = oabaParams.getQueryRsId();
+		return getDatabaseAccessor(type, id);
+	}
+
+	@TransactionAttribute(SUPPORTS)
+	@Override
+	public String getReferenceDatabaseConfiguration(OabaParameters oabaParams) {
+		if (oabaParams == null) {
+			throw new IllegalArgumentException("null parameters");
+		}
+		final String type = oabaParams.getReferenceRsType();
+		final Long id = oabaParams.getReferenceRsId();
+		return getDatabaseConfiguration(type, id);
+	}
+
+	@TransactionAttribute(SUPPORTS)
+	@Override
+	public String getReferenceDatabaseAccessor(OabaParameters oabaParams) {
+		if (oabaParams == null) {
+			throw new IllegalArgumentException("null parameters");
+		}
+		final String type = oabaParams.getReferenceRsType();
+		final Long id = oabaParams.getReferenceRsId();
+		return getDatabaseAccessor(type, id);
+	}
+
+}

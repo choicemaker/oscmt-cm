@@ -31,8 +31,8 @@ import javax.swing.table.TableCellRenderer;
 import com.choicemaker.cm.core.ImmutableMarkedRecordPair;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.MarkedRecordPairSource;
+import com.choicemaker.cm.core.MutableMarkedRecordPair;
 import com.choicemaker.cm.core.base.MarkedRecordPairBinder;
-import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
 import com.choicemaker.cm.core.util.LinkMap;
 import com.choicemaker.cm.core.xmlconf.MarkedRecordPairSourceXmlConf;
 import com.choicemaker.cm.gui.utils.dialogs.ErrorDialog;
@@ -152,6 +152,7 @@ public class MrpsDecisionComparatorDialog extends JDialog {
 
 	private void createListeners() {
 		confusionMatrix.addMouseListener(new MouseAdapter() {
+			@Override
 			public void mousePressed(MouseEvent e) {
 				int row = confusionMatrix.rowAtPoint(e.getPoint());
 				int col = confusionMatrix.columnAtPoint(e.getPoint());
@@ -297,6 +298,7 @@ public class MrpsDecisionComparatorDialog extends JDialog {
 			setRowSelectionAllowed(false);
 			setColumnSelectionAllowed(false);
 		}
+		@Override
 		public TableCellRenderer getCellRenderer(int row, int column) {
 			if (row * column == 0) {
 				return headerRenderer;
@@ -323,6 +325,7 @@ public class MrpsDecisionComparatorDialog extends JDialog {
 			setModel(new DefaultTableModel(realData, new Object[5]) {
 				private static final long serialVersionUID = 1L;
 
+				@Override
 				public boolean isCellEditable(int row, int col) {
 					return false;
 				}
@@ -335,6 +338,7 @@ public class MrpsDecisionComparatorDialog extends JDialog {
 		public CompareAction() {
 			super("Compare");
 		}
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			computeMatrix();
 		}
@@ -345,6 +349,7 @@ public class MrpsDecisionComparatorDialog extends JDialog {
 		public CancelAction() {
 			super("Cancel");
 		}
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			dispose();
 		}
@@ -357,6 +362,7 @@ public class MrpsDecisionComparatorDialog extends JDialog {
 			super("Browse");
 			this.tf = tf;
 		}
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			File f = FileChooserFactory.selectMrpsFile(modelMaker);
 			if (f != null) {

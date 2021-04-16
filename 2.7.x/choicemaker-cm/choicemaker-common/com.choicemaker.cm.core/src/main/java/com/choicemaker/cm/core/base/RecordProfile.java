@@ -35,6 +35,7 @@ public class RecordProfile implements Profile {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.base.Profile#getRecord(com.choicemaker.cm.core.base.ProbabilityModel)
 	 */
+	@Override
 	public Record getRecord(ImmutableProbabilityModel model)
 		throws InvalidProfileException {
 		return record;

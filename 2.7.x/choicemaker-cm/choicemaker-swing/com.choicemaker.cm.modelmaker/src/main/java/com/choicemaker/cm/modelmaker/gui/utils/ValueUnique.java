@@ -25,6 +25,7 @@ public class ValueUnique {
 		myValue = value;
 	}
 
+	@Override
 	public String toString() {
 		return myValue;
 	}

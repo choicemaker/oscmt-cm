@@ -37,6 +37,7 @@ public class NumberTokenType extends TokenType {
 	 * 
 	 * Number tokens are positive length Strings that contain only digits.
 	 */
+	@Override
 	public boolean canHaveToken(String token) {
 		return token != null && token.length() > 0 && !StringUtils.containsNonDigits(token);
 	}
@@ -50,6 +51,7 @@ public class NumberTokenType extends TokenType {
 	 * However, the lowest probability we give any digit string is 
 	 * 1 / (10 * 2^5), regardless of how long it is.
 	 */
+	@Override
 	protected double getTokenProbability(String token) {
 		int len = Math.min(token.length(), 5);
 		return P[len];	

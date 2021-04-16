@@ -7,466 +7,120 @@
  *******************************************************************************/
 package com.choicemaker.cm.matching.gen;
 
-import java.util.Calendar;
 import java.util.Date;
-import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.util.DateHelper;
-import com.choicemaker.util.StringUtils;
+import com.choicemaker.util.dates.DateUtils2;
 
 /**
- * Utilities for dealing with <code>Date</code>s.
+ * Utilities for dealing with <code>Date</code>s. Most functionality (except
+ * that which is inherited from DateHelper) has moved to
+ * {@link com.choicemaker.util.dates.DateUtils2}
  *
- * @author    Martin Buechi
+ * @author Martin Buechi
+ * @deprecated see {@link com.choicemaker.util.dates.DateUtils2}
  */
+@Deprecated
 public class DateUtils extends DateHelper {
 
-	private static Logger logger = Logger.getLogger(DateUtils.class.getName());
-
-	// private static Calendar calendar = Calendar.getInstance();
-
-	/**
-	 * Removes the separators from the date leaving just the
-	 * numbers.  For example 8/9/62 become 8962 whereas 12/24/01
-	 * become 122401.
-	 *
-	 * @param d the input date
-	 * @return the date as number according to the following formula:
-	 * year + 10000 * day + x * month, where x is 100000 if day &lt; 10 and 100000 otherwise
-	 */
 	public static int numbersOnly(Date d) {
-		if (d == null) {
-			return 0;
-		}
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(d);
-		int month = calendar.get(Calendar.MONTH) + 1;
-		int day = calendar.get(Calendar.DAY_OF_MONTH);
-		int year = calendar.get(Calendar.YEAR);
-		month = (day < 10) ? (month * 100000) : (month * 1000000);
-		day *= 10000;
-		return year + month + day;
+		return DateUtils2.numbersOnly(d);
 	}
 
-	/**
-	 * Returns an integer representation of <code>d</code> in YYYYMMDD format.
-	 *
-	 * Returns an int representation of <code>d</code> according to the following formula:
-	 * <p>
-	 * 	 year * 10000 + month * 100 + day
-	 * </p>
-	 * Thus, the result is in the format YYYYMMDD.
-	 *
-	 * @param d the input date
-	 * @return the date as number according to the following formula:
-	 */
 	public static int numericFormat(Date d) {
-		if (d == null) {
-			return 0;
-		}
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(d);
-		int month = calendar.get(Calendar.MONTH) + 1;
-		int day = calendar.get(Calendar.DAY_OF_MONTH);
-		int year = calendar.get(Calendar.YEAR);
-		month = month * 100;
-		year *= 10000;
-		return year + month + day;
+		return DateUtils2.numericFormat(d);
 	}
 
-	/**
-	 * Returns true iff the years of d1 and d2 are the same and either
-	 * the month or day of one is missing a digit.
-	 *
-	 * In other words, in addition to the years being the same, one of the
-	 * following must be true:
-	 * <ul>
-	 * 	<li>the months are the same and the day of one is the day of the other
-	 * 	with a digit added on the left or right </li>
-	 *	<li>the days are the same and the month of one is the month of the
-	 * 	other with a digit added on the left or right </li>
-	 * </ul>
-	 * For example, the function returns true for <code>1/5/2002</code> and <code>1/25/2002</code>.
-	 *
-	 * @param d1 the first date
-	 * @param d2 the second date
-	 * @return true if d1 and d2 are the same modulo a missing number in one.
-	 */
 	public static boolean missingNumber(Date d1, Date d2) {
-		if (d1 != null && d2 != null) {
-			Calendar calendar = Calendar.getInstance();
-			calendar.setTime(d1);
-			int month1 = calendar.get(Calendar.MONTH) + 1;
-			int day1 = calendar.get(Calendar.DAY_OF_MONTH);
-			int year1 = calendar.get(Calendar.YEAR);
-			calendar.setTime(d2);
-			int month2 = calendar.get(Calendar.MONTH) + 1;
-			int day2 = calendar.get(Calendar.DAY_OF_MONTH);
-			int year2 = calendar.get(Calendar.YEAR);
-			if (year1 == year2) {
-				if (month1 == month2) {
-					return missingNumber(day1, day2);
-				} else if (day1 == day2) {
-					return missingNumber(month1, month2);
-				}
-			}
-		}
-		return false;
+		return DateUtils2.missingNumber(d1, d2);
 	}
 
-	/**
-	 * Helper method for missingNumber(Date, Date)
-	 */
-	private static boolean missingNumber(int a, int b) {
-		int s, l;
-		if (a < 10 && b >= 10) {
-			s = a;
-			l = b;
-		} else if (a > 10 && b < 10) {
-			s = b;
-			l = a;
-		} else {
-			return false;
-		}
-		return s == l / 10 || s == l % 10;
-	}
-
-	/**
-	 * Returns the difference between d1 and d2 in days.
-	 * If d1 and d2 are different times of day, then the result will
-	 * not be an integer.
-	 *
-	 * @param d1 the first date
-	 * @param d2 the second date
-	 * @return the difference between d1 and d2 in days
-	 */
 	public static float daysApart(Date d1, Date d2) {
-		long t1 = d1.getTime();
-		long t2 = d2.getTime();
-		long diff = java.lang.Math.abs(t1 - t2);
-		float daysDiff = diff / 86400000f; //diff in days
-		return daysDiff;
+		return DateUtils2.daysApart(d1, d2);
 	}
 
-	/**
-	 * Returns true iff d1 and d2 are more than 365 days apart.
-	 *
-	 * @param d1 the first date
-	 * @param d2 the second date
-	 * @return true iff d1 and d2 are more than 365 days apart
-	 */
 	public static boolean moreThanYearApart(Date d1, Date d2) {
-		return (daysApart(d1, d2) > 365);
+		return DateUtils2.moreThanYearApart(d1, d2);
 	}
 
-	/**
-	 * Returns true iff d is non-null and its day is the first of
-	 * the month.
-	 *
-	 * @param d the input date
-	 * @return true if d falls on the first of the month
-	 */
 	public static boolean isFirstOfMonth(Date d) {
-		if (d == null) {
-			return false;
-		}
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(d);
-		int day = calendar.get(Calendar.DAY_OF_MONTH);
-		return day == 1;
+		return DateUtils2.isFirstOfMonth(d);
 	}
 
-	/**
-	 * Returns true iff d is non-null and is on January 1st.
-	 *
-	 * @param d the input date
-	 * @return true if d falls on January 1st
-	 */
 	public static boolean isJanuary1(Date d) {
-		return isFirstOfYear(d);
+		return DateUtils2.isJanuary1(d);
 	}
 
-	/**
-	 * Returns true iff d is non-null and on January 1st.
-	 *
-	 * @param d the input date
-	 * @return true iff d falls on January 1st
-	 */
 	public static boolean isFirstOfYear(Date d) {
-		if (d == null) {
-			return false;
-		}
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(d);
-		return calendar.get(Calendar.DAY_OF_MONTH) == 1
-			&& calendar.get(Calendar.MONTH) == 0;
+		return DateUtils2.isFirstOfYear(d);
 	}
 
-	/**
-	 * Returns true iff d1 and d2 have the same month and year.
-	 *
-	 * @param d1 the first date
-	 * @param d2 the second date
-	 * @return whether the month and year of d1 and d2 are the same
-	 */
 	public static boolean sameMonthAndYear(Date d1, Date d2) {
-		boolean answer = false;
-		if (d1 == null || d2 == null) {
-			return false;
-		}
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(d1);
-		int month = calendar.get(Calendar.MONTH);
-		int year = calendar.get(Calendar.YEAR);
-		calendar.setTime(d2);
-		answer = (month == calendar.get(Calendar.MONTH));
-		answer = answer && (year == calendar.get(Calendar.YEAR));
-		return answer;
+		return DateUtils2.sameMonthAndYear(d1, d2);
 	}
 
-	/**
-	 * Returns true iff d1 and d2 have the same day and month.
-	 *
-	 * @param d1 the first date
-	 * @param d2 the second date
-	 * @return whether the day and month of d1 and d2 are the same
-	 */
 	public static boolean sameDayAndMonth(Date d1, Date d2) {
-		if (d1 == null || d2 == null) {
-			return false;
-		}
-		boolean answer = false;
-		try {
-			Calendar calendar = Calendar.getInstance();
-			calendar.setTime(d1);
-			int month = calendar.get(Calendar.MONTH);
-			int day = calendar.get(Calendar.DAY_OF_MONTH);
-			calendar.setTime(d2);
-			answer = (day == calendar.get(Calendar.DAY_OF_MONTH));
-			answer = answer && (month == calendar.get(Calendar.MONTH));
-		} catch (IllegalArgumentException ex) {
-			logger.severe("d1: " + d1.getTime() + ", d2: " + d2.getTime() + ": " + ex);
-		}
-		return answer;
+		return DateUtils2.sameDayAndMonth(d1, d2);
 	}
 
-	/**
-	 * Returns true iff d1 and d2 have the same day and month.
-	 *
-	 * @param d1 the first date
-	 * @param d2 the second date
-	 * @return whether dates are different in either last digit of the year or 3rh(decade) digit of the year
-	 */
 	public static boolean onlyDecadeOrLastYearDigitDiff(Date d1, Date d2) {
-		if (d1 == null || d2 == null) {
-			return false;
-		}
-		boolean answer = false;
-		try {
-			Calendar calendar = Calendar.getInstance();
-			calendar.setTime(d1);
-			int month = calendar.get(Calendar.MONTH);
-			int day = calendar.get(Calendar.DAY_OF_MONTH);
-			int year1 = calendar.get(Calendar.YEAR);
-			calendar.setTime(d2);
-			int year2 = calendar.get(Calendar.YEAR);
-			answer = (day == calendar.get(Calendar.DAY_OF_MONTH));
-			answer = answer && (month == calendar.get(Calendar.MONTH));
-			answer = answer && (year1 / 100 == year2 / 100);
-			int lt1 = year1 % 100;
-			int lt2 = year2 % 100;
-			answer = answer && (lt1 / 10 == lt2 / 10 || lt1 % 10 == lt2 % 10);
-		} catch (IllegalArgumentException ex) {
-			logger.severe("d1: " + d1.getTime() + ", d2: " + d2.getTime() + ": " + ex);
-		}
-		return answer;
+		return DateUtils2.onlyDecadeOrLastYearDigitDiff(d1, d2);
 	}
 
-	/**
-	 * Returns true iff d1 and d2 have the same year and the month of d1 is the day
-	 * of d2 and vice versa.  For example, returns true for '3/2/1979' and '2/3/1979',
-	 * returns false for '3/2/1979' and '3/3/1979'.
-	 *
-	 * @param d1 the first date
-	 * @param d2 the second date
-	 * @return whether the year of d1 and d2 are the same and the day and month are swapped.
-	 */
 	public static boolean swappedDayMonth(Date d1, Date d2) {
-		if (d1 != null && d2 != null) {
-			Calendar calendar = Calendar.getInstance();
-			calendar.setTime(d1);
-			int month1 = calendar.get(Calendar.MONTH) + 1;
-			int day1 = calendar.get(Calendar.DAY_OF_MONTH);
-			int year1 = calendar.get(Calendar.YEAR);
-			calendar.setTime(d2);
-			int month2 = calendar.get(Calendar.MONTH) + 1;
-			int day2 = calendar.get(Calendar.DAY_OF_MONTH);
-			int year2 = calendar.get(Calendar.YEAR);
-			return month1 == day2 && month2 == day1 && year1 == year2;
-		} else {
-			return false;
-		}
+		return DateUtils2.swappedDayMonth(d1, d2);
 	}
 
-	/**
-	 * Returns the input date's year and month as a String in YYYYMM format.
-	 *
-	 * @param d the input date
-	 * @return d's year and month as a YYYYMM String
-	 */
 	public static String yearAndMonth(Date d) {
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(d);
-		StringBuffer buff = new StringBuffer(6);
-		buff.append(StringUtils.padLeft("" + calendar.get(Calendar.YEAR), 4));
-		buff.append(
-			StringUtils.padLeft("" + (calendar.get(Calendar.MONTH) + 1), 2));
-		return buff.toString();
+		return DateUtils2.yearAndMonth(d);
 	}
 
-	/**
-	 * Returns the year as an integer.
-	 *
-	 * @param d the input date
-	 * @return the year
-	 */
 	public static int getYear(Date d) {
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(d);
-		return calendar.get(Calendar.YEAR);
+		return DateUtils2.getYear(d);
 	}
 
-	/**
-	 * Returns the month as an integer in the range [1,12].
-	 *
-	 * @param d the input date
-	 * @return the month in the range [1,12]
-	 */
 	public static int getMonth(Date d) {
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(d);
-		return calendar.get(Calendar.MONTH) + 1;
+		return DateUtils2.getMonth(d);
 	}
 
-	/**
-	 * Returns the day of the month.
-	 *
-	 * @param d the input date
-	 * @return the day of the month
-	 */
 	public static int getDayOfMonth(Date d) {
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(d);
-		return calendar.get(Calendar.DAY_OF_MONTH);
+		return DateUtils2.getDayOfMonth(d);
 	}
 
-	/**
-	 * Returns the current year.
-	 *
-	 * @return the year of the current date
-	 */
 	public static int getCurrentYear() {
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTimeInMillis(System.currentTimeMillis());
-		return calendar.get(Calendar.YEAR);
+		return DateUtils2.getCurrentYear();
 	}
 
-	/**
-	 * Returns a representation of the input date in YYYYMMDDHHMMSS format.
-	 *
-	 * @param d the input date
-	 * @return a date time String in YYYYMMDDHHMMSS format
-	 */
 	public static String getDateTimeString(Date d) {
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(d);
-		StringBuffer buff = new StringBuffer(14);
-		buff.append(StringUtils.padLeft("" + calendar.get(Calendar.YEAR), 4));
-		buff.append(
-			StringUtils.padLeft("" + (calendar.get(Calendar.MONTH) + 1), 2));
-		buff.append(
-			StringUtils.padLeft("" + calendar.get(Calendar.DAY_OF_MONTH), 2));
-		buff.append(
-			StringUtils.padLeft("" + calendar.get(Calendar.HOUR_OF_DAY), 2));
-		buff.append(StringUtils.padLeft("" + calendar.get(Calendar.MINUTE), 2));
-		buff.append(StringUtils.padLeft("" + calendar.get(Calendar.SECOND), 2));
-		return buff.toString();
+		return DateUtils2.getDateTimeString(d);
 	}
 
-	/**
-	 * Returns a representation of the input date in YYYYMMDD format where YYYY,
-	 * MM and DD doesn't have leading 0
-	 * 
-	 * @param d
-	 *            the input date
-	 * @return a date time String in YYYYMMDD format
-	 */
 	public static String getDateString(Date d) {
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(d);
-		StringBuffer buff = new StringBuffer(14);
-		buff.append("" + calendar.get(Calendar.YEAR));
-		buff.append("" + (calendar.get(Calendar.MONTH) + 1));
-		buff.append("" + calendar.get(Calendar.DAY_OF_MONTH));
-		return buff.toString();
+		return DateUtils2.getDateString(d);
 	}
 
-	/**
-	 * Note, the range of mm is 1 thru 12, inclusive.
-	 */
 	public static Date getDate(int yyyy, int mm, int dd) {
-		Calendar calendar = Calendar.getInstance();
-		calendar.clear();
-		calendar.set(yyyy, mm - 1, dd);
-		return calendar.getTime();
+		return DateUtils2.getDate(yyyy, mm, dd);
 	}
 
-	public static boolean isOverlappingWithinMilliseconds(
-		Date startDate1,
-		Date endDate1,
-		Date startDate2,
-		Date endDate2,
-		long milliseconds
-		) {
-		if (milliseconds < 0) {
-			throw new IllegalArgumentException("milliseconds (" + milliseconds + ") must be non-negative");
-		}
-		boolean retVal = false;
-		if (startDate1 != null && endDate1 != null
-				&& startDate2 != null && endDate2 != null) {
-			long start1 = Math.min(startDate1.getTime(),endDate1.getTime());
-			long end1 = Math.max(startDate1.getTime(),endDate1.getTime());
-			long start2 = Math.min(startDate2.getTime(),endDate2.getTime());
-			long end2 = Math.max(startDate2.getTime(),endDate2.getTime());
-			retVal = (start1 - milliseconds <= start2 && start2 <= end1 + milliseconds)
-				|| (start1 - milliseconds <= end2 && end2 <= end1 + milliseconds)
-				|| (start2 - milliseconds <= start1 && start1 <= end2 + milliseconds)
-				|| (start2 - milliseconds <= end1 && end1 <= end2 + milliseconds);
-		}
-		return retVal;
+	public static boolean isOverlappingWithinMilliseconds(Date startDate1,
+			Date endDate1, Date startDate2, Date endDate2, long milliseconds) {
+		return DateUtils2.isOverlappingWithinMilliseconds(startDate1, endDate1,
+				startDate2, endDate2, milliseconds);
 	}
 
-	public static boolean isOverlapping(
-		Date startDate1,
-		Date endDate1,
-		Date startDate2,
-		Date endDate2
-		) {
-		return isOverlappingWithinMilliseconds(startDate1,endDate1,startDate2,endDate2,0);
+	public static boolean isOverlapping(Date startDate1, Date endDate1,
+			Date startDate2, Date endDate2) {
+		return DateUtils2.isOverlapping(startDate1, endDate1, startDate2,
+				endDate2);
 	}
 
-	public final static long MILLIS_PER_DAY = 24 * 60 * 60 * 1000;
+	public static final long MILLIS_PER_DAY = DateUtils2.MILLISECS_PER_DAY;
 
-	public static boolean isOverlappingWithinDays(
-		Date startDate1,
-		Date endDate1,
-		Date startDate2,
-		Date endDate2,
-		int days
-		) {
-		long millis = days * MILLIS_PER_DAY;
-		return isOverlappingWithinMilliseconds(startDate1,endDate1,startDate2,endDate2,millis);
+	public static boolean isOverlappingWithinDays(Date startDate1,
+			Date endDate1, Date startDate2, Date endDate2, int days) {
+		return DateUtils2.isOverlappingWithinDays(startDate1, endDate1,
+				startDate2, endDate2, days);
 	}
 
 }
-

@@ -25,9 +25,9 @@ import javax.sql.DataSource;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.ImmutableRecordPair;
 import com.choicemaker.cm.core.MarkedRecordPairSource;
+import com.choicemaker.cm.core.MutableMarkedRecordPair;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.Sink;
-import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.db.base.DbReaderParallel;
 
@@ -103,6 +103,7 @@ public class OracleSerialMRPSource
 		this.conf = conf;
 	}
 
+	@Override
 	public void open() throws IOException {
 		try {
 			// Get the database reader for specified database configuration
@@ -142,14 +143,17 @@ public class OracleSerialMRPSource
 		}
 	}
 
+	@Override
 	public boolean hasNext() {
 		return currentPair != null;
 	}
 
+	@Override
 	public ImmutableRecordPair getNext() throws IOException {
 		return getNextMarkedRecordPair();
 	}
 
+	@Override
 	public MutableMarkedRecordPair getNextMarkedRecordPair()
 			throws IOException {
 		MutableMarkedRecordPair retVal = currentPair;
@@ -158,6 +162,7 @@ public class OracleSerialMRPSource
 		return retVal;
 	}
 
+	@Override
 	public void close() throws IOException {
 		List<String> exceptions = new ArrayList<>();
 		try {
@@ -226,6 +231,7 @@ public class OracleSerialMRPSource
 		}
 	}
 
+	@Override
 	public ImmutableProbabilityModel getModel() {
 		if (model == null)
 			model = PMManager.getModelInstance(modelName);
@@ -246,25 +252,31 @@ public class OracleSerialMRPSource
 
 	// Unused methods
 
+	@Override
 	public void setModel(ImmutableProbabilityModel m) {
 	}
 
+	@Override
 	public boolean hasSink() {
 		return false;
 	}
 
+	@Override
 	public Sink getSink() {
 		return null;
 	}
 
+	@Override
 	public String getFileName() {
 		return null;
 	}
 
+	@Override
 	public String getName() {
 		return null;
 	}
 
+	@Override
 	public void setName(String name) {
 	}
 

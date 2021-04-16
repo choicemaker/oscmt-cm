@@ -43,6 +43,7 @@ public class SimpleSortableTable extends JTable {
 		setTableHeader(new JTableHeader(getColumnModel()));
 	}
 
+	@Override
 	public void setTableHeader(JTableHeader header) {
 		JTableHeader old = getTableHeader();
 		if (old != null) {
@@ -74,6 +75,7 @@ public class SimpleSortableTable extends JTable {
 	}
 
 	private class HeaderListener extends MouseAdapter {
+		@Override
 		public void mouseClicked(MouseEvent e) {
 			if (!(getModel() instanceof SortableTableModel)) {
 				return;

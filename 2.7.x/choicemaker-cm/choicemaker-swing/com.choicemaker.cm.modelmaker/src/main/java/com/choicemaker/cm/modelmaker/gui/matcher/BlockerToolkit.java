@@ -15,6 +15,7 @@ import com.choicemaker.cm.core.ImmutableProbabilityModel;
  * @author  Martin Buechi
  */
 public interface BlockerToolkit {
+	@Override
 	String toString();
 	
 	MatchDialogBlockerPlugin getDialogPlugin(ImmutableProbabilityModel model);

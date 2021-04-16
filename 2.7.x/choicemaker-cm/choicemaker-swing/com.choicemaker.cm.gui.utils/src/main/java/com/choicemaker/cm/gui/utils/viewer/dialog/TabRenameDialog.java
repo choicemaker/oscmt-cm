@@ -22,6 +22,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.WindowConstants;
 
 import com.choicemaker.cm.gui.utils.JavaHelpUtils;
 import com.choicemaker.cm.gui.utils.viewer.RecordPairViewerModel;
@@ -47,7 +48,7 @@ public class TabRenameDialog extends JDialog {
 		addListeners();
 		layoutPanel();
 		setContentPane(panel);
-		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		
 		pack();
 		setLocationRelativeTo(frame);
@@ -72,18 +73,21 @@ public class TabRenameDialog extends JDialog {
 	 */
 	private void addListeners() {
 		frameAlias.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				TabRenameDialog.this.viewerModel.setAlias(frameAlias.getText());
 			}
 		});
 		
 		frameAlias.addFocusListener(new FocusAdapter() {
+			@Override
 			public void focusLost(FocusEvent e) {
 				TabRenameDialog.this.viewerModel.setAlias(frameAlias.getText());
 			}
 		});
 		
 		set.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 //				set();
 				dispose();

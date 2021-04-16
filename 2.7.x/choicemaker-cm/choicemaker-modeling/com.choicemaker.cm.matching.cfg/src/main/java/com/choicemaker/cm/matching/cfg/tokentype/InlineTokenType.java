@@ -33,6 +33,7 @@ public class InlineTokenType extends TokenType {
 		}
 	}
 
+	@Override
 	public boolean canHaveToken(String token) {
 		// 2014-04-24 rphall: Commented out unused local variable.
 		// and unused 'if' statement
@@ -42,6 +43,7 @@ public class InlineTokenType extends TokenType {
 		return tokenMap.containsKey(token);
 	}
 
+	@Override
 	public double getTokenProbability(String token) {
 		if (tokenMap.containsKey(token)) {
 			return tokenMap.getDouble(token);

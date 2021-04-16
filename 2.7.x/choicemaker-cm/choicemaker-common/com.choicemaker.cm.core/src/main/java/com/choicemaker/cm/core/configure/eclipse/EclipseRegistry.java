@@ -50,6 +50,7 @@ public class EclipseRegistry
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.base.configure.XmlConfigurablesRegistry#get(java.lang.String)
 	 */
+	@Override
 	public XmlConfigurable get(String uniqueId) throws NotFoundException {
 		Precondition.assertNonEmptyString(uniqueId);
 		XmlConfigurable retVal = null;
@@ -152,6 +153,7 @@ public class EclipseRegistry
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.base.configure.XmlConfigurablesRegistry#register(java.lang.String, com.choicemaker.cm.core.base.configure.XmlConfigurable)
 	 */
+	@Override
 	public void register(String uniqueId, XmlConfigurable configurable)
 		throws NotUniqueException {
 		Precondition.assertNonEmptyString(uniqueId);
@@ -182,6 +184,7 @@ public class EclipseRegistry
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.base.configure.XmlConfigurablesRegistry#remove(java.lang.String)
 	 */
+	@Override
 	public void remove(String uniqueId) {
 		Precondition.assertNonEmptyString(uniqueId);
 		synchronized (this._mapSynch) {
@@ -199,6 +202,7 @@ public class EclipseRegistry
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.base.configure.XmlConfigurablesRegistry#update(java.lang.String, com.choicemaker.cm.core.base.configure.XmlConfigurable)
 	 */
+	@Override
 	public void update(String uniqueId, XmlConfigurable configurable) {
 		Precondition.assertNonEmptyString(uniqueId);
 		Precondition.assertNonNullArgument("null configurable", configurable);

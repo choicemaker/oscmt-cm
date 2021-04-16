@@ -95,6 +95,7 @@ public class FilterConditionCellEditor extends DefaultCellEditor {
 	/**
 	 * @see javax.swing.table.TableCellEditor#getTableCellEditorComponent(javax.swing.JTable, java.lang.Object, boolean, int, int)
 	 */
+	@Override
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 		resetItems(value);
 		return super.getTableCellEditorComponent(table, value, isSelected, row, column);

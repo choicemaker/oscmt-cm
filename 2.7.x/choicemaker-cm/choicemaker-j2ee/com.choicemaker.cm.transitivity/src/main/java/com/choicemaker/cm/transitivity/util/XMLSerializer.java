@@ -13,8 +13,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import com.choicemaker.cm.core.Decision;
-import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
+import com.choicemaker.client.api.Decision;
+import com.choicemaker.cm.core.base.MatchRecord2;
 import com.choicemaker.cm.transitivity.core.CompositeEntity;
 import com.choicemaker.cm.transitivity.core.ConnectedProperty;
 import com.choicemaker.cm.transitivity.core.FullyConnectedProperty;
@@ -72,6 +72,7 @@ public abstract class XMLSerializer implements TransitivityResultSerializer {
 	 *            a non-null writer
 	 * @throws IOException
 	 */
+	@Override
 	public void serialize(TransitivityResult result, Writer writer)
 			throws IOException {
 		if (result == null || writer == null) {

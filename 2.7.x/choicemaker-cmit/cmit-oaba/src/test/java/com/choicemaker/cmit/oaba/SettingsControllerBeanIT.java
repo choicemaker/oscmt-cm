@@ -29,18 +29,18 @@ import org.junit.runner.RunWith;
 
 import com.choicemaker.cm.args.AbaSettings;
 import com.choicemaker.cm.args.OabaSettings;
-import com.choicemaker.cm.batch.OperationalPropertyController;
-import com.choicemaker.cm.batch.ProcessingController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.DefaultSettings;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordIdController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbaSettingsEntity;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsEntity;
+import com.choicemaker.cm.batch.api.OperationalPropertyController;
+import com.choicemaker.cm.batch.api.EventPersistenceManager;
+import com.choicemaker.cm.oaba.api.DefaultSettings;
+import com.choicemaker.cm.oaba.api.OabaJobManager;
+import com.choicemaker.cm.oaba.api.OabaParametersController;
+import com.choicemaker.cm.oaba.api.OabaService;
+import com.choicemaker.cm.oaba.api.OabaSettingsController;
+import com.choicemaker.cm.oaba.api.RecordIdController;
+import com.choicemaker.cm.oaba.api.RecordSourceController;
+import com.choicemaker.cm.oaba.api.ServerConfigurationController;
+import com.choicemaker.cm.oaba.ejb.AbaSettingsEntity;
+import com.choicemaker.cm.oaba.ejb.OabaSettingsEntity;
 import com.choicemaker.cmit.oaba.util.OabaDeploymentUtils;
 import com.choicemaker.cmit.utils.j2ee.MutableProbabilityModelStub;
 import com.choicemaker.cmit.utils.j2ee.TestEntityCounts;
@@ -103,7 +103,7 @@ public class SettingsControllerBeanIT {
 	EntityManager em;
 
 	@EJB(beanName = "OabaJobControllerBean")
-	private OabaJobController oabaController;
+	private OabaJobManager oabaManager;
 
 	@EJB
 	private OabaParametersController paramsController;
@@ -111,8 +111,8 @@ public class SettingsControllerBeanIT {
 	@EJB
 	private OabaSettingsController oabaSettingsController;
 
-	@EJB
-	private ProcessingController processingController;
+	@EJB (beanName = "OabaEventManager")
+	private EventPersistenceManager eventManager;
 
 	@EJB
 	private OabaService oabaService;
@@ -134,17 +134,17 @@ public class SettingsControllerBeanIT {
 	@Before
 	public void setUp() throws Exception {
 		te =
-			new TestEntityCounts(logger, oabaController, paramsController,
+			new TestEntityCounts(logger, oabaManager, paramsController,
 					oabaSettingsController, serverController,
-					processingController, opPropController, rsController,
+					eventManager, opPropController, rsController,
 					ridController);
 	}
 
 	public void checkCounts() {
 		if (te != null) {
-			te.checkCounts(logger, em, utx, oabaController, paramsController,
+			te.checkCounts(logger, em, utx, oabaManager, paramsController,
 					oabaSettingsController, serverController,
-					processingController, opPropController, rsController,
+					eventManager, opPropController, rsController,
 					ridController);
 		} else {
 			throw new Error("Counts not initialized");

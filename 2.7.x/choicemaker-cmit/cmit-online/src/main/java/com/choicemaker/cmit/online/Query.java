@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.base.Match;
+import com.choicemaker.cm.core.Match;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.io.xml.base.XmlSingleRecordWriter;
 

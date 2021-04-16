@@ -12,6 +12,6 @@ import java.util.Set;
 
 public interface PluginDiscovery {
 
-    Set<URL> getPluginUrls();
-    
+	Set<URL> getPluginUrls();
+
 }

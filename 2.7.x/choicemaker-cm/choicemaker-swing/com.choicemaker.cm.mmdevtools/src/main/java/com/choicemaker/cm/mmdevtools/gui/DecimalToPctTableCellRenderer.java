@@ -9,6 +9,7 @@ package com.choicemaker.cm.mmdevtools.gui;
 
 import java.text.DecimalFormat;
 
+import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 
@@ -24,9 +25,10 @@ public class DecimalToPctTableCellRenderer extends DefaultTableCellRenderer {
 	private static DecimalFormat df = new DecimalFormat("##0.00%");
 
 	private DecimalToPctTableCellRenderer() {
-		this.setHorizontalAlignment(DefaultTableCellRenderer.RIGHT);
+		this.setHorizontalAlignment(SwingConstants.RIGHT);
 	}
 
+	@Override
 	public void setValue(Object value) {
 		if (value instanceof Float || value instanceof Double) {
 			double v = ((Number)value).doubleValue();

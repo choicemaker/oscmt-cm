@@ -34,13 +34,13 @@
       <id>choicemaker_releases</id>
       <name>ChoiceMaker Enterprise Releases</name>
       <url>
-      https://dev.choicemaker.com:8443/nexus/content/repositories/choicemaker_releases/</url>
+      https://dev2.choicemaker.com:8443/nexus/content/repositories/choicemaker_releases/</url>
     </repository>
     <snapshotRepository>
       <id>choicemaker_snapshots</id>
       <name>ChoiceMaker Enterprise Snapshots</name>
       <url>
-      https://dev.choicemaker.com:8443/nexus/content/repositories/choicemaker_snapshots/</url>
+      https://dev2.choicemaker.com:8443/nexus/content/repositories/choicemaker_snapshots/</url>
     </snapshotRepository>
   </distributionManagement>
 
@@ -61,7 +61,7 @@
     <module>choicemaker-assembly</module>
     <module>choicemaker-base</module>
 
-    <module>choicemaker-util</module>
+    <module>choicemaker-utils</module>
     <module>choicemaker-e2</module>
     <module>choicemaker-cm</module>
     <module>choicemaker-maven</module>
@@ -71,9 +71,8 @@
     <module>misc/cmtblocking-app</module>
     <module>misc/cmtblocking-app-distrib</module>
     <module>misc/logfrequencypartitioner-app</module>
-    <!--
-    <module>misc/report-pairs-evaluation-app</module>
-    -->
+    <module>misc/urm-apps</module>
+    <module>misc/urm-apps-distrib</module>
 
     <module>choicemaker-utilit</module>
     <module>choicemaker-e2it</module>

@@ -12,10 +12,10 @@ import java.beans.PropertyChangeListener;
 
 import org.jdom2.Element;
 
+import com.choicemaker.cm.core.MutableMarkedRecordPair;
 import com.choicemaker.cm.core.RepositoryChangeEvent;
 import com.choicemaker.cm.core.RepositoryChangeListener;
 import com.choicemaker.cm.core.base.DescriptorCollection;
-import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
 import com.choicemaker.cm.gui.utils.viewer.CompositePane;
 import com.choicemaker.cm.gui.utils.viewer.CompositePaneModel;
 import com.choicemaker.cm.gui.utils.viewer.xmlconf.RecordPairViewerXmlConf;
@@ -50,6 +50,7 @@ public class RecordPairViewerPanel implements RepositoryChangeListener, Property
 		modelMaker.addMarkedRecordPairDataChangeListener(this);
 	}
 
+	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		String propertyName = evt.getPropertyName();
 		Object src = evt.getSource();
@@ -78,13 +79,16 @@ public class RecordPairViewerPanel implements RepositoryChangeListener, Property
 		}
 	}
 
+	@Override
 	public void setChanged(RepositoryChangeEvent evt) {
 		viewer.setRecordData(null);
 	}
 
+	@Override
 	public void recordDataChanged(RepositoryChangeEvent evt) {
 	}
 
+	@Override
 	public void markupDataChanged(RepositoryChangeEvent evt) {
 	}
 

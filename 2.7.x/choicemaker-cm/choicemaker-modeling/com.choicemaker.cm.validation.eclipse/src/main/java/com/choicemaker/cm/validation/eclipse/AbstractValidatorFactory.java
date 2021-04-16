@@ -238,6 +238,7 @@ public abstract class AbstractValidatorFactory implements IValidatorFactory {
 	 * com.choicemaker.cm.validation.eclipse.IValidatorFactory#createValidator
 	 * (java.lang.String)
 	 */
+	@Override
 	public IValidator createValidator(String name)
 			throws ValidatorCreationException {
 
@@ -322,6 +323,7 @@ public abstract class AbstractValidatorFactory implements IValidatorFactory {
 	 * com.choicemaker.cm.validation.eclipse.IValidatorFactory#createValidators
 	 * ()
 	 */
+	@Override
 	public Map createValidators() throws ValidatorCreationException {
 		invariant();
 		String key = this.getClass().getName();
@@ -381,6 +383,7 @@ public abstract class AbstractValidatorFactory implements IValidatorFactory {
 	 * @see com.choicemaker.cm.validation.eclipse.IValidatorFactory#
 	 * getHandledValidatorExtensionPoint()
 	 */
+	@Override
 	public String getHandledValidatorExtensionPoint() {
 		invariant();
 		String key = this.getClass().getName();
@@ -398,6 +401,7 @@ public abstract class AbstractValidatorFactory implements IValidatorFactory {
 	 * @see com.choicemaker.cm.validation.eclipse.IValidatorFactory#
 	 * getRegisteredValidatorNames()
 	 */
+	@Override
 	public String[] getRegisteredValidatorNames()
 			throws ValidatorCreationException {
 		invariant();
@@ -452,6 +456,7 @@ public abstract class AbstractValidatorFactory implements IValidatorFactory {
 	 * @see com.choicemaker.cm.validation.eclipse.IValidatorFactory#
 	 * setHandledValidatorExtensionPoint(String)
 	 */
+	@Override
 	public void setHandledValidatorExtensionPoint(String id) {
 		if (!StringUtils.nonEmptyString(id)) {
 			throw new IllegalArgumentException(

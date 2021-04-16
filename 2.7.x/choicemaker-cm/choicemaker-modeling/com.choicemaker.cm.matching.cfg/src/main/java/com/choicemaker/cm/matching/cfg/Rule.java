@@ -143,7 +143,7 @@ public class Rule {
 				"Must have at least one symbol on the RHS of a rule");			
 		} else if (rhs.size() > 1) {
 			for (int i = 0; i < rhs.size(); i++) {
-				Symbol s = (Symbol) rhs.get(i);	
+				Symbol s = rhs.get(i);	
 				if (s instanceof Token) {
 					throw new IllegalArgumentException(
 						"Tokens must appear alone on the RHS of rules: " + s);	
@@ -187,7 +187,7 @@ public class Rule {
 	 * Valid indices are 0 to <code>getRhsSize() - 1</code>.
 	 */
 	public Symbol getRhsSymbol(int index) {
-		return (Symbol) rhs.get(index);	
+		return rhs.get(index);	
 	}
 	
 	/**
@@ -217,6 +217,7 @@ public class Rule {
 	/**
 	 * Returns a String representation of this Rule, including the probability.
 	 */
+	@Override
 	public String toString() {
 		StringBuffer sBuff = new StringBuffer();
 		
@@ -245,6 +246,7 @@ public class Rule {
 	 * @param  obj  The Object in question
 	 * @return true if, this Rule is equal to <code>obj</code>; false otherwise.
 	 */
+	@Override
 	public boolean equals(Object obj) {
 		if (obj == null || !(obj instanceof Rule)) {
 			return false;
@@ -258,6 +260,7 @@ public class Rule {
 	 * Returns a hash code for this Rule.  Note that probability does not factor
 	 * in to hash code.
 	 */
+	@Override
 	public int hashCode() {
 		return lhs.hashCode() + rhs.hashCode();
 	}

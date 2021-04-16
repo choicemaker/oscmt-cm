@@ -51,11 +51,13 @@ public class RegExTokenType extends TokenType {
 		this.defaultProbability = prob;
 	}
 	
+	@Override
 	public boolean canHaveToken(String token) {
 		Matcher m = pattern.matcher(token);
 		return m.matches();
 	}
 	
+	@Override
 	public double getTokenProbability(String token) {
 		return defaultProbability;
 	}

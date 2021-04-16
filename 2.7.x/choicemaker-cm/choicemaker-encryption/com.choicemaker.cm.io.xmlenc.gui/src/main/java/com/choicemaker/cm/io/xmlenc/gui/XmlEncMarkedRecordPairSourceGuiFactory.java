@@ -53,36 +53,44 @@ public class XmlEncMarkedRecordPairSourceGuiFactory implements SourceGuiFactory 
 		this(xem);
 	}
 
+	@Override
 	public String getName() {
 		return "XML ENC";
 	}
 
+	@Override
 	public SourceGui createGui(ModelMaker parent, Source s) {
 		return new XmlEncMarkedRecordPairSourceGui(parent,
 				(MarkedRecordPairSource) s, false);
 	}
 
+	@Override
 	public SourceGui createGui(ModelMaker parent) {
 		return createGui(parent, new XmlEncMarkedRecordPairSource(xmlEncMgr));
 	}
 
+	@Override
 	public SourceGui createSaveGui(ModelMaker parent) {
 		return new XmlEncMarkedRecordPairSourceGui(parent,
 				new XmlEncMarkedRecordPairSource(xmlEncMgr), true);
 	}
 
+	@Override
 	public Object getHandler() {
 		return this;
 	}
 
+	@Override
 	public Class<?> getHandledType() {
 		return XmlEncMarkedRecordPairSource.class;
 	}
 
+	@Override
 	public String toString() {
 		return "XML EMRPS";
 	}
 
+	@Override
 	public boolean hasSink() {
 		return true;
 	}

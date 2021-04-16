@@ -12,8 +12,9 @@ package com.choicemaker.cm.core.base;
 
 import java.io.Serializable;
 
-import com.choicemaker.cm.core.Decision;
+import com.choicemaker.client.api.Decision;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.Match;
 
 /**
  * Holder class for a returned record. If the actual record data should be returned

@@ -13,17 +13,21 @@ package com.choicemaker.cm.core.train;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import com.choicemaker.client.api.Decision;
+import com.choicemaker.cm.core.ActiveClues;
+import com.choicemaker.cm.core.BooleanActiveClues;
 import com.choicemaker.cm.core.ClueDesc;
 import com.choicemaker.cm.core.ClueSet;
 import com.choicemaker.cm.core.ClueSetType;
-import com.choicemaker.cm.core.Decision;
+import com.choicemaker.cm.core.Evaluator;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.ImmutableRecordPair;
+import com.choicemaker.cm.core.MutableMarkedRecordPair;
 import com.choicemaker.cm.core.OperationFailedException;
-import com.choicemaker.cm.core.base.ActiveClues;
-import com.choicemaker.cm.core.base.BooleanActiveClues;
-import com.choicemaker.cm.core.base.Evaluator;
-import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
+import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 
 /**
@@ -34,6 +38,9 @@ import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
  */
 
 public class Trainer /* implements ITrainer */ {
+
+	private static final Logger logger = Logger.getLogger(Trainer.class.getName());
+
 	private ImmutableProbabilityModel model;
 	private Collection src;
 	private int noPairs;
@@ -121,14 +128,24 @@ public class Trainer /* implements ITrainer */ {
 	 * @exception IOException
 	 */
 	private void computeFirings() throws OperationFailedException {
+		final String METHOD = "computeFirings";
 		++evaluationNo;
 		decisionDomainSize = model.getDecisionDomainSize();
-		ClueSet fs = model.getClueSet();
 		boolean[] cluesToEvaluate = model.getCluesToEvaluate();
 		int br = 0;
+		int idx = -1;
 		Iterator i = src.iterator();
 		while (i.hasNext()) {
+			++idx;
+
+			// Because ClueSet instances are stateful, a new instance should
+			// be initialized for each pair. (The current implementation of
+			// ImmutableProbabilityModel.getClueSet() calls a generated accessor
+			// which in turn instantiates a new ClueSet instance.)
+			ClueSet fs = model.getClueSet();
+
 			MutableMarkedRecordPair mp = (MutableMarkedRecordPair) i.next();
+			logPair(METHOD,idx,mp);
 			mp.setActiveClues(fs.getActiveClues(mp.getQueryRecord(), mp.getMatchRecord(), cluesToEvaluate));
 			if ((br = (br + 1) % 100) == 0 && Thread.currentThread().isInterrupted()) {
 				break;
@@ -223,15 +240,51 @@ public class Trainer /* implements ITrainer */ {
 		return src;
 	}
 
+	protected static void logPair(String tag, int pairIdx, ImmutableRecordPair<?> p) {
+		if (logger.isLoggable(Level.FINER)) {
+			Record<?> qRecord = p == null ? null : p.getQueryRecord();
+			Object qId = qRecord == null ? null : qRecord.getId();
+
+			Record<?> mRecord = p == null ? null : p.getMatchRecord();
+			Object mId = mRecord == null ? null : mRecord.getId();
+
+			String msg0 = "%s: pair %d[queryId = %s, matchId = %s]";
+			String msg = String.format(msg0, tag, pairIdx, qId, mId);
+			logger.finer(msg);
+		}
+	}
+
+	protected static void logPairDecisionProbability(String tag, int pairIdx, ImmutableRecordPair<?> pair,
+			Decision decision, float probabilty) {
+		if (logger.isLoggable(Level.FINE)) {
+			Record<?> qRecord = pair == null ? null : pair.getQueryRecord();
+			Object qId = qRecord == null ? null : qRecord.getId();
+
+			Record<?> mRecord = pair == null ? null : pair.getMatchRecord();
+			Object mId = mRecord == null ? null : mRecord.getId();
+
+			String d = decision == null ? "null" : decision.toSingleCharString();
+
+			String msg0 = "%s: pair %d[queryId = %s, matchId = %s], decision = %s, probability = %f";
+			String msg = String.format(msg0, tag, pairIdx, qId, mId, d, probabilty);
+			logger.fine(msg);
+		}
+	}
+
 	public void computeProbabilitiesAndDecisions(float lt, float ut) {
+		final String METHOD = "computeProbabilitiesAndDecisions";
 		if (evaluationNo != computeProbabilitiesNo) {
 			computeProbabilitiesNo = evaluationNo;
 			Evaluator e = model.getEvaluator();
 			Iterator i = src.iterator();
+			int count = -1;
 			while (i.hasNext()) {
+				++count;
 				MutableMarkedRecordPair p = (MutableMarkedRecordPair) i.next();
+				logPair(METHOD, count, p);
 				p.setProbability(e.getProbability(p.getActiveClues()));
 				p.setCmDecision(e.getDecision(p.getActiveClues(), p.getProbability(), lt, ut));
+				logPairDecisionProbability(METHOD, count, p, p.getCmDecision(), p.getProbability());
 			}
 		}
 	}
@@ -246,12 +299,15 @@ public class Trainer /* implements ITrainer */ {
 	}
 
 	public void computeProbability(MutableMarkedRecordPair mrp) {
+		final String METHOD = "computeProbabilitiesAndDecisions";
 		mrp.getQueryRecord().computeValidityAndDerived();
 		mrp.getMatchRecord().computeValidityAndDerived();
 		mrp.setActiveClues(model.getClueSet().getActiveClues(mrp.getQueryRecord(), mrp.getMatchRecord(), model.getCluesToEvaluate()));
 		Evaluator e = model.getEvaluator();
+		logPairDecisionProbability(METHOD, -1, mrp, mrp.getCmDecision(), mrp.getProbability());
 		mrp.setProbability(e.getProbability(mrp.getActiveClues()));
 		mrp.setCmDecision(e.getDecision(mrp.getActiveClues(), mrp.getProbability(), lowerThreshold, upperThreshold));
+		logPairDecisionProbability(METHOD, -2, mrp, mrp.getCmDecision(), mrp.getProbability());
 	}
 
 	/**

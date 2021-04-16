@@ -10,8 +10,8 @@ package com.choicemaker.cm.gui.utils.viewer;
 import java.awt.Component;
 import java.awt.Font;
 
-import javax.swing.JLabel;
 import javax.swing.JTable;
+import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
@@ -29,6 +29,7 @@ public class HeaderRenderer extends DefaultTableCellRenderer {
 		this.italics = italics;
 	}
 
+	@Override
 	public Component getTableCellRendererComponent(
 		JTable table,
 		Object value,
@@ -37,7 +38,7 @@ public class HeaderRenderer extends DefaultTableCellRenderer {
 		int row,
 		int column) {
 		if (italics) {
-			setHorizontalAlignment(JLabel.CENTER);
+			setHorizontalAlignment(SwingConstants.CENTER);
 		}
 		if (table != null) {
 			JTableHeader header = table.getTableHeader();

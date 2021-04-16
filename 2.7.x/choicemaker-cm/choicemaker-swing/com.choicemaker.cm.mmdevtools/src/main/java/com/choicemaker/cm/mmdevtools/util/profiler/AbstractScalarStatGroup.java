@@ -17,30 +17,41 @@ import com.choicemaker.cm.core.Record;
  */
 public abstract class AbstractScalarStatGroup implements FieldProfiler {
 
+	@Override
 	public abstract void reset();
+	@Override
 	public abstract void processRecord(Record r);
 
+	@Override
 	public abstract int getScalarStatCount();
+	@Override
 	public abstract String getScalarStatName(int index);
+	@Override
 	public abstract Object getScalarStatValue(int index);
+	@Override
 	public abstract boolean filterRecordForScalarStat(int index, Record r);
 
+	@Override
 	public int getTabularStatCount() {
 		return 0;
 	}
 
+	@Override
 	public String getTabularStatName(int index) {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
 	public Object[] getTabularStatColumnHeaders(int index) {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
 	public Object[][] getTabularStatTableData(int index) {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
 	public boolean filterRecordForTableStat(int statIndex, Set values, Record r) {
 		throw new UnsupportedOperationException();
 	}

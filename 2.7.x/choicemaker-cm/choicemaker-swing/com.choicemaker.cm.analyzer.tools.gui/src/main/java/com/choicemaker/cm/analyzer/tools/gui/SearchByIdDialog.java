@@ -28,9 +28,7 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-//import com.choicemaker.cm.core.base.Descriptor;
-//import com.choicemaker.cm.core.base.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
+import com.choicemaker.cm.core.MutableMarkedRecordPair;
 import com.choicemaker.cm.modelmaker.filter.ModelMakerCollectionMRPairFilter;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 
@@ -214,6 +212,7 @@ public class SearchByIdDialog extends JDialog {
 			idField.getDocument().addDocumentListener(this);
 			updateEnabled();
 		}
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			searchById();
 		}
@@ -221,8 +220,11 @@ public class SearchByIdDialog extends JDialog {
 			boolean e = modelMaker.haveProbabilityModel() && modelMaker.isEvaluated() && idField.getText().trim().length() > 0;
 			setEnabled(e);
 		}
+		@Override
 		public void changedUpdate(DocumentEvent e) { updateEnabled(); }
+		@Override
 		public void insertUpdate(DocumentEvent e) { updateEnabled(); }
+		@Override
 		public void removeUpdate(DocumentEvent e) { updateEnabled(); }
 	}
 
@@ -231,6 +233,7 @@ public class SearchByIdDialog extends JDialog {
 		public CancelAction() {
 			super("Close");
 		}
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			dispose();
 		}

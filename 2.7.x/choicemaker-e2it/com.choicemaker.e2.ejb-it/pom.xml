@@ -25,8 +25,6 @@
     <version.org.jboss.spec.jboss.javaee.6.0>3.0.0.Final</version.org.jboss.spec.jboss.javaee.6.0>
     <version.org.jboss.spec.jboss.javaee.7.0>1.0.0.Final</version.org.jboss.spec.jboss.javaee.7.0>
     <version.wildfly>8.1.0.Final</version.wildfly>
-    <!-- other plugin versions -->
-    <version.ejb.plugin>2.3</version.ejb.plugin>
   </properties>
 
   <build>
@@ -75,6 +73,7 @@
     <dependency>
       <groupId>com.choicemaker.e2</groupId>
       <artifactId>com.choicemaker.e2.ejb</artifactId>
+      <type>ejb</type>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -171,12 +170,12 @@
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>
-      com.choicemaker.cm.io.blocking.automated.base</artifactId>
+      com.choicemaker.cm.aba.base</artifactId>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>
-      com.choicemaker.cm.io.blocking.automated.inmemory</artifactId>
+      com.choicemaker.cm.aba.inmemory</artifactId>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>

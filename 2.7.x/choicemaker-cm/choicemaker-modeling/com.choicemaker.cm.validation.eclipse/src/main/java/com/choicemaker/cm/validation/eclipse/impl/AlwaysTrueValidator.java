@@ -38,10 +38,12 @@ public class AlwaysTrueValidator extends AbstractValidator<Object> {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.validation.eclipse.IValidator#isValid(java.lang.Object)
 	 */
+	@Override
 	public boolean isValid(Object object) {
 		return true;
 	}
 	
+	@Override
 	public boolean equals(IValidator<?> validator) {
 		boolean retVal = false;
 		if (validator != null
@@ -51,6 +53,7 @@ public class AlwaysTrueValidator extends AbstractValidator<Object> {
 		return retVal;
 	}
 
+	@Override
 	public int hashCode() {
 		return this.getClass().hashCode();
 	}

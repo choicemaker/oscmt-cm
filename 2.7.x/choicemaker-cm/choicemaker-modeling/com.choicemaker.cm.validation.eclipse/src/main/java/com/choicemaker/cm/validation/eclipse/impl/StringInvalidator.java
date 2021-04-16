@@ -54,6 +54,7 @@ public class StringInvalidator extends AbstractSetBasedValidator<String> {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.validation.eclipse.ISetBasedValidator#getNamedSet()
 	 */
+	@Override
 	public String getNamedSet() {
 		if (this.setName == null) {
 			throw new IllegalStateException("set name not initialized");
@@ -64,6 +65,7 @@ public class StringInvalidator extends AbstractSetBasedValidator<String> {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.validation.eclipse.ISetBasedValidator#getSetContents()
 	 */
+	@Override
 	public Set<String> getSetContents() {
 		if (this.strings == null) {
 			throw new IllegalStateException("strings not initialized");
@@ -108,6 +110,7 @@ public class StringInvalidator extends AbstractSetBasedValidator<String> {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.validation.eclipse.IValidator#isValid(java.lang.String)
 	 */
+	@Override
 	public boolean isValid(String object) {
 		// Preconditions
 		if (this.strings == null) {
@@ -116,7 +119,7 @@ public class StringInvalidator extends AbstractSetBasedValidator<String> {
 
 		boolean retVal = false;
 		if (object != null && object instanceof String) {
-			String value = (String) object;
+			String value = object;
 			retVal = !this.strings.contains(value);
 		}
 
@@ -126,6 +129,7 @@ public class StringInvalidator extends AbstractSetBasedValidator<String> {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.validation.eclipse.ISetBasedValidator#setNamedSet(String)
 	 */
+	@Override
 	public void setNamedSet(String setName) {
 		initializeSetNameAndContents(setName);
 	}

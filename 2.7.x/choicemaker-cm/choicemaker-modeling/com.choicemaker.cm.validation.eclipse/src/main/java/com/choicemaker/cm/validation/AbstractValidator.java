@@ -37,6 +37,7 @@ public abstract class AbstractValidator<T> implements IValidator<T> {
 	 * Code to keep lint happy. Subclasses should override if they
 	 * override {@link #equals(IValidator)}.
 	 */
+	@Override
 	public int hashCode() {
 		return super.hashCode();
 	}
@@ -46,6 +47,7 @@ public abstract class AbstractValidator<T> implements IValidator<T> {
 	 * invokes <code>equals(IValidator)</code>; otherwise, it
 	 * invokes <code>super.equals(Object)</code>.
 	 */
+	@Override
 	public boolean equals(Object o) {
 		boolean retVal;
 		if (o instanceof IValidator) {

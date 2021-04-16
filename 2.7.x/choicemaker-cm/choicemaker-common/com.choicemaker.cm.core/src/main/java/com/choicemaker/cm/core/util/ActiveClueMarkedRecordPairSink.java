@@ -18,13 +18,13 @@ import java.io.Writer;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 
+import com.choicemaker.cm.core.ActiveClues;
+import com.choicemaker.cm.core.BooleanActiveClues;
 import com.choicemaker.cm.core.Constants;
 import com.choicemaker.cm.core.ImmutableMarkedRecordPair;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.ImmutableRecordPair;
 import com.choicemaker.cm.core.MarkedRecordPairSink;
-import com.choicemaker.cm.core.base.ActiveClues;
-import com.choicemaker.cm.core.base.BooleanActiveClues;
 
 /**
  * @author ajwinkel
@@ -68,6 +68,7 @@ public class ActiveClueMarkedRecordPairSink implements MarkedRecordPairSink {
 		this.delim = delim;
 	}
 
+	@Override
 	public void open() throws IOException {
 		writer = new BufferedWriter(new FileWriter(file));
 		
@@ -77,10 +78,12 @@ public class ActiveClueMarkedRecordPairSink implements MarkedRecordPairSink {
 		}
 	}
 	
+	@Override
 	public void putMarkedRecordPair(ImmutableMarkedRecordPair mrp) throws IOException {
 		put(mrp);
 	}
 	
+	@Override
 	public void put(ImmutableRecordPair rp) throws IOException {		
 		count = 0;
 		
@@ -138,6 +141,7 @@ public class ActiveClueMarkedRecordPairSink implements MarkedRecordPairSink {
 		}
 	}
 
+	@Override
 	public void close() throws IOException {
 		writer.close();
 		
@@ -145,18 +149,23 @@ public class ActiveClueMarkedRecordPairSink implements MarkedRecordPairSink {
 		numClues = -1;
 	}
 
+	@Override
 	public void setModel(ImmutableProbabilityModel m) {
 		this.model = m;
 	}
 
+	@Override
 	public ImmutableProbabilityModel getModel() {
 		return model; 
 	}
 
+	@Override
 	public String getName() { throw new UnsupportedOperationException(); }
+	@Override
 	public void setName(String name) { throw new UnsupportedOperationException(); }
 
 	/** NOP for now */
+	@Override
 	public void flush() throws IOException {
 	}
 		

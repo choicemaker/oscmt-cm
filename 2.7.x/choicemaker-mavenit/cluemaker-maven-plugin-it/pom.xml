@@ -7,7 +7,7 @@
     <groupId>com.choicemaker.cm</groupId>
     <artifactId>choicemaker-base</artifactId>
     <version>2.7.1-SNAPSHOT</version>
-    <relativePath>../choicemaker-base/pom.xml</relativePath>
+    <relativePath>../../choicemaker-base/pom.xml</relativePath>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
@@ -26,13 +26,13 @@
       <id>choicemaker_releases</id>
       <name>ChoiceMaker Enterprise Releases</name>
       <url>
-      https://dev.choicemaker.com:8443/nexus/content/repositories/choicemaker_releases/</url>
+      https://dev2.choicemaker.com:8443/nexus/content/repositories/choicemaker_releases/</url>
     </repository>
     <snapshotRepository>
       <id>choicemaker_snapshots</id>
       <name>ChoiceMaker Enterprise Snapshots</name>
       <url>
-      https://dev.choicemaker.com:8443/nexus/content/repositories/choicemaker_snapshots/</url>
+      https://dev2.choicemaker.com:8443/nexus/content/repositories/choicemaker_snapshots/</url>
     </snapshotRepository>
   </distributionManagement>
 

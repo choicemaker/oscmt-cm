@@ -78,6 +78,7 @@ public class Translator25b extends Translator25 implements TargetTags, Modifiers
 	}
 	*/
 
+	@Override
 	public void visit(ClueDecl t) throws CompilerException { // separate procedure only needed if referenced elsewhere
 		String clueName = "Clue " + t.name;
 		Tree clueNameNumException;
@@ -344,6 +345,7 @@ public class Translator25b extends Translator25 implements TargetTags, Modifiers
 	*/
 
 	
+	@Override
 	public boolean visitAorE(Quantified t) throws CompilerException {
 		String auxProcName = ((t.quantifier == EXISTS) ? "__exists" : "__all") + (auxProcNum++);
 		if (!t.stop) {

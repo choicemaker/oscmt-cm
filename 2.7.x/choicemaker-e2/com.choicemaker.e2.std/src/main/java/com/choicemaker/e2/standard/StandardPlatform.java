@@ -43,10 +43,12 @@ public final class StandardPlatform implements CMPlatform {
 
 	public static final String ATTRIBUTE_EXEC_EXTENSION = "run"; //$NON-NLS-1$
 
+	@Override
 	public CMPluginRegistry getPluginRegistry() {
 		return PluginRegistryAdapter.convert(Platform.getPluginRegistry());
 	}
 
+	@Override
 	public CMPlatformRunnable loaderGetRunnable(String applicationName) {
 		CMPlatformRunnable retVal = null;
 		IPluginRegistry registry = Platform.getPluginRegistry();
@@ -77,12 +79,14 @@ public final class StandardPlatform implements CMPlatform {
 		return retVal;
 	}
 
+	@Override
 	public String getPluginDirectory(String id, String version) {
 		// return PLUGIN_BASE_DIR + "/" + id.replace('.', '_') + "_" +
 		// version.replace('.', '_') + "/";
 		throw new Error("not yet implemented");
 	}
 
+	@Override
 	public URL getPluginDescriptorUrl(String id, String version,
 			String descriptorFile) {
 		// return classLoader.getResource(getPluginDirectory(id, version) +

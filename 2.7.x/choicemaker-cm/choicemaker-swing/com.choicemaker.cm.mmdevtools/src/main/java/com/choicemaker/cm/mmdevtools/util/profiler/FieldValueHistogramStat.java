@@ -43,6 +43,7 @@ public class FieldValueHistogramStat implements FieldProfiler {
 		reset();
 	}
 
+	@Override
 	public void reset() {
 		fieldCounts = new IntValuedHashMap();
 		totalRows = 0;
@@ -50,6 +51,7 @@ public class FieldValueHistogramStat implements FieldProfiler {
 		dirty = true;
 	}
 
+	@Override
 	public void processRecord(Record r) {
 		int rows = fa.getRowCount(r);
 		for (int row = 0; row < rows; row++) {
@@ -77,10 +79,12 @@ public class FieldValueHistogramStat implements FieldProfiler {
 		}
 	}
 
+	@Override
 	public int getScalarStatCount() {
 		return 2;
 	}
 
+	@Override
 	public String getScalarStatName(int index) {
 		switch (index) {
 			case 0: return "Num Distinct Values";
@@ -89,6 +93,7 @@ public class FieldValueHistogramStat implements FieldProfiler {
 		throw new IndexOutOfBoundsException("Index: " + index);
 	}
 
+	@Override
 	public Object getScalarStatValue(int index) {
 		switch (index) {
 			case 0: return new Integer(fieldCounts.size());
@@ -99,6 +104,7 @@ public class FieldValueHistogramStat implements FieldProfiler {
 		throw new IndexOutOfBoundsException("Index: " + index);
 	}
 
+	@Override
 	public boolean filterRecordForScalarStat(int index, Record r) {
 		switch (index) {
 			case 0:
@@ -108,10 +114,12 @@ public class FieldValueHistogramStat implements FieldProfiler {
 		throw new IndexOutOfBoundsException("Index: " + index);
 	}
 
+	@Override
 	public int getTabularStatCount() {
 		return 1;
 	}
 
+	@Override
 	public String getTabularStatName(int index) {
 		if (index != 0) {
 			throw new IndexOutOfBoundsException("Index: " + index);
@@ -119,6 +127,7 @@ public class FieldValueHistogramStat implements FieldProfiler {
 		return "Field-Value Histogram";
 	}
 
+	@Override
 	public Object[] getTabularStatColumnHeaders(int index) {
 		if (index != 0) {
 			throw new IndexOutOfBoundsException("Index: " + index);
@@ -131,6 +140,7 @@ public class FieldValueHistogramStat implements FieldProfiler {
 		}
 	}
 
+	@Override
 	public Object[][] getTabularStatTableData(int index) {
 		if (index != 0) {
 			throw new IndexOutOfBoundsException("Index: " + index);
@@ -161,6 +171,7 @@ public class FieldValueHistogramStat implements FieldProfiler {
 		return data;
 	}
 
+	@Override
 	public boolean filterRecordForTableStat(int index, Set values, Record r) {
 		if (index != 0) {
 			throw new IndexOutOfBoundsException("Index: " + index);

@@ -10,13 +10,14 @@ package com.choicemaker.cm.modelmaker.stats;
 import java.util.Comparator;
 
 import com.choicemaker.cm.core.IMarkedRecordPair;
-import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
+import com.choicemaker.cm.core.MutableMarkedRecordPair;
 
 /**
  *
  * @author    Martin Buechi
  */
 public class SimplePairComparator implements Comparator {
+	@Override
 	public int compare(Object o1, Object o2) {
 		return comparePairs((MutableMarkedRecordPair) o1, (MutableMarkedRecordPair) o2);
 	}

@@ -165,7 +165,7 @@ public class ParserState implements Comparable<Object> {
 		}
 
 		for (int i = 0; i < numBackPointers; i++) {
-			BackPointer bp = (BackPointer) backPointers.get(i);
+			BackPointer bp = backPointers.get(i);
 			int numForBackPointer = bp.getNumParseTrees();
 
 			if (numForBackPointer > index)
@@ -186,7 +186,7 @@ public class ParserState implements Comparable<Object> {
 		}
 
 		for (int i = 0; i < numBackPointers; i++) {
-			BackPointer bp = (BackPointer) backPointers.get(i);
+			BackPointer bp = backPointers.get(i);
 			int numForBackPointer = bp.getNumParseTrees();
 
 			if (numForBackPointer > index) {
@@ -211,7 +211,7 @@ public class ParserState implements Comparable<Object> {
 		}
 
 		for (int i = 0; i < numBackPointers; i++) {
-			BackPointer bp = (BackPointer) backPointers.get(i);
+			BackPointer bp = backPointers.get(i);
 			int numForBackPointer = bp.getNumParseTrees();
 
 			if (numForBackPointer > index) {
@@ -226,10 +226,12 @@ public class ParserState implements Comparable<Object> {
 	/**
 	 * Implementation of the Comparator interface.
 	 */
+	@Override
 	public int compareTo(Object obj) {
 		return toString().compareTo(obj.toString());
 	}
 
+	@Override
 	public String toString() {
 		StringBuffer sBuff = new StringBuffer();
 
@@ -257,6 +259,7 @@ public class ParserState implements Comparable<Object> {
 		return sBuff.toString();
 	}
 
+	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof ParserState)) {
 			return false;
@@ -268,6 +271,7 @@ public class ParserState implements Comparable<Object> {
 			   dotPosition == s.dotPosition && rule.equals(s.rule);
 	}
 
+	@Override
 	public int hashCode() {
 		return rule.hashCode() + dotPosition * 100 +  start * 10 + end;
 	}

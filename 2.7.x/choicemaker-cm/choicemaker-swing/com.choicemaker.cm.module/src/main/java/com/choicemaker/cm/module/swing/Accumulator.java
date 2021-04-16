@@ -27,31 +27,41 @@ class Accumulator implements IUserMessages, Runnable {
 	private StringBuffer buf = new StringBuffer();
 	private boolean queued;
 	private final Writer w = new Writer() {
+		@Override
 		public void close() {
 		}
+		@Override
 		public void flush() {
 		}
+		@Override
 		public void write(char[] cbuf, int off, int len) {
 			postMessage(new String(cbuf, off, len));
 		}
+		@Override
 		public void write(int c) {
 			postMessage(String.valueOf((char) c));
 		}
+		@Override
 		public void write(String str) {
 			postMessage(str);
 		}
 	};
 	private final OutputStream os = new OutputStream() {
+		@Override
 		public void close() {
 		}
+		@Override
 		public void flush() {
 		}
+		@Override
 		public void write(byte[] b) {
 			postMessage(new String(b));
 		}
+		@Override
 		public void write(byte[] b, int off, int len) {
 			postMessage(new String(b, off, len));
 		}
+		@Override
 		public void write(int b) {
 			postMessage(String.valueOf((char) b));
 		}
@@ -73,6 +83,7 @@ class Accumulator implements IUserMessages, Runnable {
 			}
 		}
 		
+		@Override
 		public void run() {
 			synchronized(this) {
 				try {
@@ -97,22 +108,27 @@ class Accumulator implements IUserMessages, Runnable {
 		}
 
 
+	@Override
 	public Writer getWriter() {
 		return w;
 	}
 
+	@Override
 	public OutputStream getOutputStream() {
 		return os;
 	}
 
+	@Override
 	public PrintStream getPrintStream() {
 		return new PrintStream(os, true);
 	}
 	
+	@Override
 	public void postInfo(final String s) {
 		postMessage(s);
 	}
 
+	@Override
 	public void postMessage(final String s) {
 		this.append(s);
 	}
@@ -133,6 +149,7 @@ class Accumulator implements IUserMessages, Runnable {
 		}
 	}
 
+	@Override
 	public void clearMessages() {
 		setText("");
 	}

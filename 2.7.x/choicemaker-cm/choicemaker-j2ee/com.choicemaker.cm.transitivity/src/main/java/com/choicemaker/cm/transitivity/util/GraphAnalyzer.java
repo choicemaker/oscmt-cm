@@ -12,14 +12,15 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
+import com.choicemaker.cm.args.TransitivityException;
+import com.choicemaker.cm.core.base.MatchRecord2;
 import com.choicemaker.cm.transitivity.core.CompositeEntity;
 import com.choicemaker.cm.transitivity.core.EdgeProperty;
 import com.choicemaker.cm.transitivity.core.Entity;
 import com.choicemaker.cm.transitivity.core.INode;
 import com.choicemaker.cm.transitivity.core.Link;
 import com.choicemaker.cm.transitivity.core.SubGraphProperty;
-import com.choicemaker.cm.transitivity.core.TransitivityException;
+import com.choicemaker.util.UniqueSequence;
 
 /**
  * This object marks the input graph, indicting which nodes should be compacted.

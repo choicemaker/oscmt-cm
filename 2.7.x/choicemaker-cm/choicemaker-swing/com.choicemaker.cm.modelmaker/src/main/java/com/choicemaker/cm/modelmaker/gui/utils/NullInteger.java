@@ -42,6 +42,7 @@ public class NullInteger implements Comparable {
 		}
 	}
 
+	@Override
 	public int compareTo(Object o) {
 		NullInteger other = (NullInteger) o;
 		if (nul) {
@@ -59,6 +60,7 @@ public class NullInteger implements Comparable {
 		}
 	}
 
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -66,6 +68,7 @@ public class NullInteger implements Comparable {
 		return result;
 	}
 	
+	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
@@ -83,11 +86,13 @@ public class NullInteger implements Comparable {
 	 * Obsolete method for {@link #equals(Object)}. Used for testing only.
 	 * @deprecated
 	 */
+	@Deprecated
 	public boolean equals_00(Object o) {
 		NullInteger other = (NullInteger) o;
 		return nul && other.nul || val == other.val;
 	}
 
+	@Override
 	public String toString() {
 		return nul ? "" : String.valueOf(val) + rPadding;
 	}

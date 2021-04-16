@@ -34,16 +34,61 @@ public class MatchScore implements IMatchScore{
 		this.note = note;
 	}
 
+	@Override
 	public Decision3 getDecision() {
 		return decision;
 	}
 
+	@Override
 	public String getNote() {
 		return note;
 	}
 
+	@Override
 	public float getProbability() {
 		return probability;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result =
+			prime * result + ((decision == null) ? 0 : decision.hashCode());
+		result = prime * result + ((note == null) ? 0 : note.hashCode());
+		result = prime * result + Float.floatToIntBits(probability);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		MatchScore other = (MatchScore) obj;
+		if (decision == null) {
+			if (other.decision != null)
+				return false;
+		} else if (!decision.equals(other.decision))
+			return false;
+		if (note == null) {
+			if (other.note != null)
+				return false;
+		} else if (!note.equals(other.note))
+			return false;
+		if (Float.floatToIntBits(probability) != Float
+				.floatToIntBits(other.probability))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "MatchScore [decision=" + decision + ", probability="
+				+ probability + "]";
 	}
 
 }

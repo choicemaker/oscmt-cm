@@ -22,22 +22,22 @@ import java.util.logging.Logger;
 
 import javax.sql.DataSource;
 
-import oracle.jdbc.OracleTypes;
-
+import com.choicemaker.cm.aba.AutomatedBlocker;
+import com.choicemaker.cm.aba.DatabaseAccessor;
+import com.choicemaker.cm.aba.IBlockingField;
+import com.choicemaker.cm.aba.IBlockingSet;
+import com.choicemaker.cm.aba.IBlockingValue;
+import com.choicemaker.cm.aba.IDbField;
+import com.choicemaker.cm.aba.IGroupTable;
 import com.choicemaker.cm.core.Accessor;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
-import com.choicemaker.cm.io.blocking.automated.AutomatedBlocker;
-import com.choicemaker.cm.io.blocking.automated.DatabaseAccessor;
-import com.choicemaker.cm.io.blocking.automated.IBlockingField;
-import com.choicemaker.cm.io.blocking.automated.IBlockingSet;
-import com.choicemaker.cm.io.blocking.automated.IBlockingValue;
-import com.choicemaker.cm.io.blocking.automated.IDbField;
-import com.choicemaker.cm.io.blocking.automated.IGroupTable;
 import com.choicemaker.cm.io.db.base.DbAccessor;
 import com.choicemaker.cm.io.db.base.DbReaderParallel;
 import com.choicemaker.cm.io.db.base.Index;
 import com.choicemaker.cm.io.db.oracle.OracleRemoteDebugging;
+
+import oracle.jdbc.OracleTypes;
 
 public class OraDatabaseAccessor implements DatabaseAccessor {
 	private static final char BS_SEP = '^';
@@ -67,6 +67,7 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 	}
 
 	/** @deprecated */
+	@Deprecated
 	public OraDatabaseAccessor(DataSource ds, String condition1,
 			String condition2, String startSession, String endSession) {
 		this(ds, condition1, condition2);
@@ -74,10 +75,12 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 		this.setEndSession(endSession);
 	}
 
+	@Override
 	public void setDataSource(DataSource dataSource) {
 		ds = dataSource;
 	}
 
+	@Override
 	public void setCondition(Object condition) {
 		if (condition instanceof String[]) {
 			String[] cs = (String[]) condition;
@@ -88,6 +91,7 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 		}
 	}
 
+	@Override
 	public DatabaseAccessor cloneWithNewConnection()
 			throws CloneNotSupportedException {
 		DatabaseAccessor retVal =
@@ -96,6 +100,7 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 		return retVal;
 	}
 
+	@Override
 	public void open(AutomatedBlocker blocker, String databaseConfiguration)
 			throws IOException {
 		logger.fine("open");
@@ -200,6 +205,7 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 		}
 	}
 
+	@Override
 	public void close() throws IOException {
 		logger.fine("close");
 		Exception ex = null;
@@ -270,10 +276,12 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 		}
 	}
 
+	@Override
 	public boolean hasNext() {
 		return dbr.hasNext();
 	}
 
+	@Override
 	public Record getNext() throws IOException {
 		try {
 			return dbr.getNext();
@@ -298,7 +306,7 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 		Iterator<IBlockingSet> iBlockingSets =
 			blocker.getBlockingSets().iterator();
 		while (iBlockingSets.hasNext()) {
-			IBlockingSet bs = (IBlockingSet) iBlockingSets.next();
+			IBlockingSet bs = iBlockingSets.next();
 			if (firstBlockingSet) {
 				masterId = bs.getTable(0).getTable().getUniqueId();
 				firstBlockingSet = false;
@@ -359,7 +367,7 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 				IGroupTable gt = bs.getTable(i);
 				IBlockingValue[] bvs = bs.getBlockingValues(gt);
 				Map<String, ?> tableIndices =
-					(Map<String, ?>) indices.get(gt.getTable().getName());
+					indices.get(gt.getTable().getName());
 				if (bvs.length > 1 && tableIndices != null) {
 					String[] fields = new String[bvs.length];
 					for (int j = 0; j < fields.length; j++) {
@@ -434,21 +442,25 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 	}
 
 	/** @deprecated */
+	@Deprecated
 	public String getEndSession() {
 		return endSession;
 	}
 
 	/** @deprecated */
+	@Deprecated
 	public String getStartSession() {
 		return startSession;
 	}
 
 	/** @deprecated */
+	@Deprecated
 	public void setEndSession(String string) {
 		endSession = string;
 	}
 
 	/** @deprecated */
+	@Deprecated
 	public void setStartSession(String string) {
 		startSession = string;
 	}

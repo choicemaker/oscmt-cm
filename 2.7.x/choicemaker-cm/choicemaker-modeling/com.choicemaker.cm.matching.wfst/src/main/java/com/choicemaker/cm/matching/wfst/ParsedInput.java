@@ -136,6 +136,7 @@ public class ParsedInput {
 	/**
 	 * Returns a String representation of a ParsedInput instance.
 	 */
+	@Override
 	public String toString() {
 		StringWriter sw = new StringWriter();
 		PrintWriter w = new PrintWriter(sw);

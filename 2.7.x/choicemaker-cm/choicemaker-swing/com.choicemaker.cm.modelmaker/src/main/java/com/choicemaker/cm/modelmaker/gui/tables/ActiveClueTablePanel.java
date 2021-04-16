@@ -39,6 +39,7 @@ public class ActiveClueTablePanel extends JScrollPane implements PropertyChangeL
 		modelMaker.getProbabilityModelEventMultiplexer().addPropertyChangeListener(this);
 	}
 
+	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		String propertyName = evt.getPropertyName();
 		Object source = evt.getSource();

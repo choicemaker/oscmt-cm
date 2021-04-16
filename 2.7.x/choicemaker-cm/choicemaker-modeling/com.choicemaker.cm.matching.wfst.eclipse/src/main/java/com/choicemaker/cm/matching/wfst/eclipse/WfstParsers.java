@@ -108,11 +108,11 @@ public final class WfstParsers {
 	 * @return the collection named by name
 	 */
 	public static AmbiguousParser getWfstParser(String name) {
-		AmbiguousParser m = (AmbiguousParser) parsers.get(name);
+		AmbiguousParser m = parsers.get(name);
 		if (m instanceof LazyWfstParser) {
 			((LazyWfstParser) m).init();
 		}
-		return (AmbiguousParser) parsers.get(name);
+		return parsers.get(name);
 	}
 
 	/**
@@ -136,7 +136,7 @@ public final class WfstParsers {
 	 * @throws IllegalArgumentException if no AmbiguousParser named <code>name</code> is registered.
 	 */
 	public static List<Map<String,String>> parse(String name, String text) {
-		AmbiguousParser parser = (AmbiguousParser) parsers.get(name);
+		AmbiguousParser parser = parsers.get(name);
 		if (parser == null) {
 			throw new IllegalArgumentException(
 				"There is no parser named " + name + " registered");
