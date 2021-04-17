@@ -32,8 +32,9 @@ import com.choicemaker.cm.core.base.PMManager;
  * stores string values with which to create the SqlServerRecordSource.
  * 
  * @author pcheung
- *
+ * @deprecated
  */
+@Deprecated
 public class SQLServerSerializableCompositeRecordSource implements
 		ISerializableRecordSource {
 	

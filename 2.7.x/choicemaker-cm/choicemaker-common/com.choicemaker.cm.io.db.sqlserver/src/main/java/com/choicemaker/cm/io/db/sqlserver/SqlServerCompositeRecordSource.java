@@ -40,8 +40,9 @@ import com.choicemaker.cm.io.db.base.DbReaderSequential;
  * String primary key.
  * 
  * @author pcheung
- *
+ * @deprecated
  */
+@Deprecated
 public class SqlServerCompositeRecordSource implements RecordSource {
 
 	private static final Logger log = Logger
