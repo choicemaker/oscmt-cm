@@ -11,6 +11,7 @@
     </parent>
 
     <artifactId>com.choicemaker.cms.webapp</artifactId>
+  <version>2.7.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>CM Server Web App</name>

@@ -13,6 +13,7 @@
   </parent>
 
   <artifactId>choicemaker-cmit</artifactId>
+  <version>2.7.1-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Integration tests: ChoiceMaker</name>
 

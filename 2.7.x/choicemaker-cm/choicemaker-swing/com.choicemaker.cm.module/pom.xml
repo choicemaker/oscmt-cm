@@ -13,6 +13,7 @@
   </parent>
 
   <artifactId>com.choicemaker.cm.module</artifactId>
+  <version>2.7.1-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>ChoiceMaker Module Plug-in</name>
 

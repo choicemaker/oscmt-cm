@@ -13,6 +13,7 @@
   </parent>
 
   <artifactId>urm-apps</artifactId>
+  <version>2.7.1-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>ChoiceMaker URM Apps</name>
   <description><![CDATA[

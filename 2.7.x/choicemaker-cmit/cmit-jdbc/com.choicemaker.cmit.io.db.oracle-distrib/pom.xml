@@ -13,6 +13,7 @@
   </parent>
 
   <artifactId>com.choicemaker.cmit.io.db.oracle-distrib</artifactId>
+  <version>2.7.1-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Integration Test: ChoiceMaker Oracle Plugin Distrib</name>
 

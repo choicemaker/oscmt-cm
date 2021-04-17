@@ -13,6 +13,7 @@
   </parent>
 
   <artifactId>choicemaker-swing</artifactId>
+  <version>2.7.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>ChoiceMaker Swing</name>
