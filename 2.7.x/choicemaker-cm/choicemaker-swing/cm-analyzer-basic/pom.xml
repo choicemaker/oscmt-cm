@@ -12,6 +12,7 @@
   </parent>
 
   <artifactId>cm-analyzer-basic</artifactId>
+  <version>2.7.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>CM Analyzer Basic Edition</name>

@@ -15,6 +15,7 @@
   <!-- Is the suffix _base_ is more consistent with other cm modules than _core_ ??
    artifactId>com.choicemaker.cm.oaba.base</artifactId -->
   <artifactId>com.choicemaker.cm.oaba.core</artifactId>
+  <version>2.7.1-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>ChoiceMaker Offline Matching (OABA Core)</name>
 

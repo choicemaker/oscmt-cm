@@ -13,6 +13,7 @@
   </parent>
 
   <artifactId>example_models</artifactId>
+  <version>2.7.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>Examples of ChoiceMaker Record Matching Models</name>

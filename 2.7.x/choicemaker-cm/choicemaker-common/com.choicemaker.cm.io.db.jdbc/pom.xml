@@ -13,6 +13,7 @@
   </parent>
 
   <artifactId>com.choicemaker.cm.io.db.jdbc</artifactId>
+  <version>2.7.1-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>ChoiceMaker I/O: JDBC Database</name>
 

@@ -14,6 +14,7 @@
 
   <groupId>com.choicemaker.cmit</groupId>
   <artifactId>cmit-jdbc</artifactId>
+  <version>2.7.1-SNAPSHOT</version>
   <packaging>pom</packaging>
  
   <name>Integration Test: ChoiceMaker JDBC</name>

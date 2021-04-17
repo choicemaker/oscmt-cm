@@ -13,6 +13,7 @@
   </parent>
 
   <artifactId>com.choicemaker.cm.modelmaker.std</artifactId>
+  <version>2.7.1-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>ChoiceMaker ModelMaker App, Standard E2 Platform</name>
 

@@ -14,6 +14,7 @@
 
   <groupId>com.choicemaker.cmit</groupId>
   <artifactId>cmit-cms</artifactId>
+  <version>2.7.1-SNAPSHOT</version>
   <packaging>ejb</packaging>
 
   <name>Integration Test: CM-Server EJBs</name>

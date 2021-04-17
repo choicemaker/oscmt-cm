@@ -14,6 +14,7 @@
 
   <groupId>com.choicemaker.util</groupId>
   <artifactId>choicemaker-util</artifactId>
+  <version>2.7.1-SNAPSHOT</version>
 
   <name>General Utilities</name>
   <url>http://oscmt.sourceforge.net/dev-doc</url>
