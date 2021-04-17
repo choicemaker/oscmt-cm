@@ -39,7 +39,6 @@ import com.choicemaker.cm.io.db.base.RecordPairRetrievalException;
 
 /**
  * @deprecated No longer used. No future use planned.
- *
  */
 @Deprecated
 public class SqlServerSerialMRPSource implements MarkedRecordPairSource, Serializable {
