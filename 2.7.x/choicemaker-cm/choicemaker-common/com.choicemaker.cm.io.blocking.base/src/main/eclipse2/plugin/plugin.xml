@@ -3,8 +3,8 @@
 <plugin
    id="com.choicemaker.cm.io.blocking.base"
    name="Blocking Base Plug-in"
-   version="2.5.0"
-   provider-name="CHOICEMAKER">
+   version="2.7.0"
+   provider-name="ChoiceMaker LLC">
 
    <runtime>
       <library name="blocking.jar">

@@ -4,7 +4,7 @@
    id="com.choicemaker.cm.aba.inmemory"
    name="Inmemory Plug-in"
    version="2.7.0"
-   provider-name="ChoiceMaker">
+   provider-name="ChoiceMaker LLC">
 
    <runtime>
       <library name="inmemory.jar">

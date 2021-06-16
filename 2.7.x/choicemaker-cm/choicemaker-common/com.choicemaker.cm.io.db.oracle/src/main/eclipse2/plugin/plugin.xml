@@ -3,8 +3,8 @@
 <plugin
    id="com.choicemaker.cm.io.db.oracle"
    name="Oracle DB IO Plug-in"
-   version="2.5.0"
-   provider-name="ChoiceMaker">
+   version="2.7.0"
+   provider-name="ChoiceMaker LLC">
 
    <runtime>
       <library name="oracle.jar">

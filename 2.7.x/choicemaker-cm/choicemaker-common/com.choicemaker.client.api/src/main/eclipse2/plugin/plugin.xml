@@ -3,8 +3,8 @@
 <plugin
    id="com.choicemaker.client.api"
    name="ChoiceMaker Client Plug-in"
-   version="2.7.1"
-   provider-name="rphall">
+   version="2.7.0"
+   provider-name="ChoiceMaker LLC">
 
    <runtime>
       <library name="core.jar">
