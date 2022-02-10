@@ -15,6 +15,7 @@
   <groupId>com.choicemaker.cmit</groupId>
   <artifactId>cmit-utils.j2ee</artifactId>
   <name>Integration Test J2EE Utilities</name>
+  <version>2.7.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <properties>

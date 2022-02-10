@@ -4,7 +4,7 @@
    id="com.choicemaker.cm.io.db.postgres2"
    name="Postgres DB Plug-in"
    version="2.7.0"
-   provider-name="ChoiceMaker">
+   provider-name="ChoiceMaker LLC">
 
    <runtime>
       <library name="postgres2.jar">

@@ -1,9 +1,22 @@
 bash.exe.stackdump
 tmp
+*.icloud
 *.BAK-??
 *.tgz
 *~
 .*.swp
+* [2-9].java
+.gitignore [2-9]
+plugin [2-9].xml
+default [2-9]
+*cms [2-9].*/
+*urm [2-9].*/
+* [2-9]
+* [2-9]/
+* [2-9].txt
+* [2-9].apt
+* [2-9].xml
+* [2-9].sh
 .DS_Store
 ._.DS_Store
 .classpath

@@ -13,6 +13,7 @@
   </parent>
 
   <artifactId>com.choicemaker.cm.matching.en</artifactId>
+  <version>2.7.1-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>ChoiceMaker Matching Plug-in (English Locale)</name>
 

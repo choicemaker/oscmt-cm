@@ -13,6 +13,7 @@
   </parent>
 
   <artifactId>com.choicemaker.cm.util.app</artifactId>
+  <version>2.7.1-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>ChoiceMaker Utility Applications Plug-in</name>
 

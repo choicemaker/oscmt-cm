@@ -16,7 +16,9 @@ import com.choicemaker.cm.io.composite.base.CompositeRecordSource;
 
 /**
  * @author emoussikaev
+ * @deprecated
  */
+@Deprecated
 public class HorizontalPartitioner {
 
 	private static final Logger log = Logger.getLogger(HorizontalPartitioner.class.getName());

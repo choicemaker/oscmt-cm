@@ -12,6 +12,7 @@
   </parent>
 
   <artifactId>simple_person_matching</artifactId>
+  <version>2.7.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>Simple Person Matching Model</name>

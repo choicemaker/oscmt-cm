@@ -13,6 +13,7 @@
   </parent>
 
   <artifactId>com.choicemaker.cm.ml.me.gui</artifactId>
+  <version>2.7.1-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>ChoiceMaker Maximum Entropy Plug-in (GUI)</name>
 

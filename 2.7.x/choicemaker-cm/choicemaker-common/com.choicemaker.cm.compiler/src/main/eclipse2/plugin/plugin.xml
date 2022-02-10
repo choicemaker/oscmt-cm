@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plugin>
 <plugin id="com.choicemaker.cm.compiler" name="Compiler Plug-in"
-  version="2.7.1" provider-name="CHOICEMAKER">
+  version="2.7.0"
+  provider-name="ChoiceMaker LLC">
 
   <runtime>
     <library name="compiler.jar">

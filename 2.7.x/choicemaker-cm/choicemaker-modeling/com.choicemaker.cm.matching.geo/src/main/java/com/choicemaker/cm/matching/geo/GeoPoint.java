@@ -36,12 +36,9 @@ public class GeoPoint {
 
 	/**
 	 * @param latitude
-	 *            value, retaining 4 significant digits after the decimal place,
-	 *            computed as (int) (10000 * latitude).</li>
+	 *            in degrees, between -180f and +180f
 	 * @param longitude
-	 *            int value, retaining 4 significant digits after the decimal
-	 *            place, computed as (int) (10000 * longitude).</li>
-	 *            </ul>
+	 *            in degrees, between -90f and +90f
 	 */
 	public GeoPoint(double latitude, double longitude) {
 		this.latitude = (float) latitude;

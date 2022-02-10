@@ -3,8 +3,8 @@
 <plugin
    id="com.choicemaker.cm.analyzer.base"
    name="Analyzer Base Plug-in"
-   version="2.5.0"
-   provider-name="ChoiceMaker Technologies, Inc.">
+   version="2.7.0"
+   provider-name="ChoiceMaker LLC">
 
    <runtime>
       <library name="analyzer-base.jar">
@@ -14,6 +14,5 @@
    <requires>
       <import plugin="com.choicemaker.cm.core"/>
    </requires>
-
 
 </plugin>

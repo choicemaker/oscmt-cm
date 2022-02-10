@@ -13,6 +13,7 @@
   </parent>
 
   <artifactId>com.choicemaker.cm.aba.base</artifactId>
+  <version>2.7.1-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>ChoiceMaker Blocking: Automated Base</name>
 
