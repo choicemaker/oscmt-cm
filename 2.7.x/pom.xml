@@ -67,12 +67,12 @@
     <module>choicemaker-maven</module>
 
     <module>example_models</module>
-    <module>misc/compiler-app</module>
-    <module>misc/cmtblocking-app</module>
-    <module>misc/cmtblocking-app-distrib</module>
-    <module>misc/logfrequencypartitioner-app</module>
-    <module>misc/urm-apps</module>
-    <module>misc/urm-apps-distrib</module>
+    <module>choicemaker-utilapps/compiler-app</module>
+    <module>choicemaker-utilapps/cmtblocking-app</module>
+    <module>choicemaker-utilapps/cmtblocking-app-distrib</module>
+    <module>choicemaker-utilapps/logfrequencypartitioner-app</module>
+    <module>choicemaker-utilapps/urm-apps</module>
+    <module>choicemaker-utilapps/urm-apps-distrib</module>
 
     <module>choicemaker-utilit</module>
     <module>choicemaker-e2it</module>
