@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006 ChoiceMaker Technologies, Inc.
+ * Copyright (c) 2006, 2015 ChoiceMaker Technologies, Inc.
  * 48 Wall Street, 11th Floor, New York, NY 10005
  * All rights reserved.
  *
