@@ -1,13 +1,17 @@
-/*
- * @(#)$RCSfile: StringDistances.java,v $        $Revision: 1.1 $ $Date: 2010/03/27 19:41:45 $
+/*******************************************************************************
+ * Copyright (c) 2007, 2014 ChoiceMaker LLC and others.
  *
- * Copyright (c) 2005 ChoiceMaker Technologies, Inc.
- * 48 Wall Street, 11th floor, New York, NY 10005
- * All rights reserved.
+ * This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License 2.0
+ * which accompanies this distribution, and is available at
+ * https://www.eclipse.org/legal/epl-2.0/
  *
- * This software is the confidential and proprietary information of
- * ChoiceMaker Technologies Inc. ("Confidential Information").
- */
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *     ChoiceMaker Technologies, Inc. - initial API and implementation
+ *     ChoiceMaker LLC - version 2.7 and following
+ *******************************************************************************/
 package com.wcohen.ss.eclipse;
 
 import java.io.IOException;

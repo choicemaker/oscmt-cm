@@ -1,9 +1,17 @@
-/*
- * Created on Jun 15, 2007
+/*******************************************************************************
+ * Copyright (c) 2007, 2014 ChoiceMaker LLC and others.
  *
- * To change the template for this generated file go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
- */
+ * This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License 2.0
+ * which accompanies this distribution, and is available at
+ * https://www.eclipse.org/legal/epl-2.0/
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *     ChoiceMaker Technologies, Inc. - initial API and implementation
+ *     ChoiceMaker LLC - version 2.7 and following
+ *******************************************************************************/
 package com.wcohen.ss.eclipse;
 
 /**
