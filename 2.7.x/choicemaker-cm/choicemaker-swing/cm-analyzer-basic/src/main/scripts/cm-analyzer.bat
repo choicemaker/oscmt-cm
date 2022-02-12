@@ -1,3 +1,17 @@
+@rem ***************************************************************************
+@rem Copyright (c) 2003, 2019 ChoiceMaker LLC and others.
+@rem
+@rem This program and the accompanying materials
+@rem are made available under the terms of the Eclipse Public License 2.0
+@rem which accompanies this distribution, and is available at
+@rem https://www.eclipse.org/legal/epl-2.0/
+@rem
+@rem SPDX-License-Identifier: EPL-2.0
+@rem
+@rem Contributors:
+@rem     ChoiceMaker Technologies, Inc. - initial API and implementation
+@rem     ChoiceMaker LLC - version 2.7 and following
+@rem ***************************************************************************
 @echo off
 rem
 rem 2014-11-29 rphall
