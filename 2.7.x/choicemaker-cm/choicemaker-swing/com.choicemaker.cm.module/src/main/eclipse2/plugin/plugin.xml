@@ -4,7 +4,7 @@
    id="com.choicemaker.cm.module"
    name="Module Plug-in"
    version="2.7.0"
-   provider-name="ChoiceMaker Technologies">
+   provider-name="ChoiceMaker LLC">
 
    <runtime>
       <library name="cm-module.jar">

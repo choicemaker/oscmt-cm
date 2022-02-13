@@ -2,10 +2,10 @@
 <fragment
   name="E2 Standard Platform"
   id="com.choicemaker.e2.std"
-  version="2.7.1"
+  version="2.7.0"
   provider-name="ChoiceMaker LLC"
   plugin-id="com.choicemaker.e2"
-  plugin-version="2.7.1">
+  plugin-version="2.7.0">
 
   <runtime>
     <library name="e2std.jar">

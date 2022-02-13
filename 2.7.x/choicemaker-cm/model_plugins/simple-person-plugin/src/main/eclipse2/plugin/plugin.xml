@@ -3,8 +3,8 @@
 <plugin
    id="com.choicemaker.cm.simplePersonMatching"
    name="Simple Person Matching Models"
-   version="2.7.1"
-   provider-name="ChoiceMaker">
+   version="2.7.0"
+   provider-name="ChoiceMaker LLC">
 
    <runtime>
       <library name="models.jar">

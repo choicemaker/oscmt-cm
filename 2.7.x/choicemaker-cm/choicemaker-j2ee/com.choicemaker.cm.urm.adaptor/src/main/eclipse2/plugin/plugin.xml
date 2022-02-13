@@ -3,8 +3,8 @@
 <plugin
    id="com.choicemaker.cm.urm.adaptor"
    name="URM/CM-core Adaptor"
-   version="2.5.0"
-   provider-name="Rick Hall">
+   version="2.7.0"
+   provider-name="ChoiceMaker LLC">
 
    <runtime>
       <library name="adaptor.jar">

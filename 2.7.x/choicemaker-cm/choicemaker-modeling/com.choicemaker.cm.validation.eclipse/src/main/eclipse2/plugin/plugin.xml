@@ -4,7 +4,7 @@
    id="com.choicemaker.cm.validation.eclipse"
    name="Eclipse-based Validation"
    version="1.0.0"
-   provider-name="Rick Hall">
+   provider-name="ChoiceMaker LLC">
 
    <runtime>
       <library name="validation-eclipse.jar">

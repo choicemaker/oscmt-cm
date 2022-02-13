@@ -4,7 +4,7 @@
   id="org.eclipse.core.resources"
   name="%pluginName"
   version="2.1.1"
-  provider-name="%providerName"
+  provider-name="ChoiceMaker LLC"
   class="org.eclipse.core.resources.ResourcesPlugin">
 
   <runtime>

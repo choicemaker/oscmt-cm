@@ -4,7 +4,7 @@
    id="javax.help.eclipse2plugin"
    name="JavaHelp Plug-in"
    version="2.0.05"
-   provider-name="">
+   provider-name="ChoiceMaker LLC">
 
    <runtime>
       <library name="jhall.jar">

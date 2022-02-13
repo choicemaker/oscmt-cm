@@ -3,7 +3,7 @@
 <plugin
    id="com.choicemaker.cm.transitivity.ejb"
    name="com.choicemaker.cm.transitivity.ejb"
-   version="2.5.0">
+   version="2.7.0">
 
    <runtime>
       <library name="transitivity-ejb.jar">

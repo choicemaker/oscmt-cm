@@ -3,7 +3,7 @@
 <plugin
   name="%pluginName"
   id="com.choicemaker.e2"
-  version="2.7.1"
+  version="2.7.0"
   provider-name="ChoiceMaker LLC">
 
   <runtime>

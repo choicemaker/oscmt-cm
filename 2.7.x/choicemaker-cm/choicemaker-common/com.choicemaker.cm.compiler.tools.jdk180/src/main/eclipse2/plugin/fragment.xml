@@ -2,10 +2,10 @@
 <fragment
    id="com.choicemaker.cm.compiler.tools.jdk180"
    name="Oracle JDK 1.8.0 Tools Fragment"
-   version="2.5.0"
-   provider-name="rphall"
+   version="2.7.0"
+   provider-name="ChoiceMaker LLC"
    plugin-id="com.choicemaker.cm.compiler"
-   plugin-version="2.5.0">
+   plugin-version="2.7.0">
 
    <runtime>
       <library name="tools.jar">

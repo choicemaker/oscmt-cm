@@ -4,7 +4,7 @@
    id="com.choicemaker.cm.batch.ejb"
    name="Batch Persistence Plug-in"
    version="2.7.0"
-   provider-name="CHOICEMAKER"
+   provider-name="ChoiceMaker LLC"
    class="">
 
    <runtime>

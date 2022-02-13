@@ -3,8 +3,8 @@
 <plugin
    id="com.choicemaker.cm.matching.en.us.ny.nyc"
    name="Matching locale en.us.ny.nyc Plug-in"
-   version="2.5.0"
-   provider-name="ChoiceMaker">
+   version="2.7.0"
+   provider-name="ChoiceMaker LLC">
 
    <runtime>
       <library name="nyc.jar">

@@ -3,7 +3,7 @@
 <plugin
    id="com.choicemaker.cm.transitivity.api"
    name="com.choicemaker.cm.transitivity.api"
-   version="2.5.0">
+   version="2.7.0">
 
    <runtime>
       <library name="transitivity-api.jar">

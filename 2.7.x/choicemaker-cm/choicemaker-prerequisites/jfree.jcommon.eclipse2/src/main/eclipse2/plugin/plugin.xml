@@ -4,7 +4,7 @@
    id="jfree.jcommon.eclipse2plugin"
    name="JCommon Plug-in"
    version="1.0.17"
-   provider-name="Rick Hall">
+   provider-name="ChoiceMaker LLC">
 
    <runtime>
       <library name="jcommon.jar">

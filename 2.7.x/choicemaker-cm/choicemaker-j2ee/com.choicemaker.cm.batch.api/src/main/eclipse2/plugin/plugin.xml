@@ -4,7 +4,7 @@
    id="com.choicemaker.cm.batch.api"
    name="Batch API Plug-in"
    version="2.7.0"
-   provider-name="CHOICEMAKER"
+   provider-name="ChoiceMaker LLC"
    class="">
 
    <runtime>

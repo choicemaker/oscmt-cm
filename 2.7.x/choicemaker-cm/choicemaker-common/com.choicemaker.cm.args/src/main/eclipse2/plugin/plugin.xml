@@ -3,7 +3,7 @@
 <plugin
    id="com.choicemaker.cm.args"
    name="com.choicemaker.cm.args"
-   version="2.7.1">
+   version="2.7.0">
 
    <runtime>
       <library name="args.jar"/>

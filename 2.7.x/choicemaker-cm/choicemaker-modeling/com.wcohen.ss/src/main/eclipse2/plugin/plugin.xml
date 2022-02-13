@@ -3,8 +3,8 @@
 <plugin
    id="com.wcohen.ss"
    name="SecondString Plug-in"
-   version="2.5.0"
-   provider-name="William Cohen, www.cs.cmu.edu/~wcohen">
+   version="2.7.0"
+   provider-name="ChoiceMaker LLC">
 
    <runtime>
       <library name="secondstring.jar">

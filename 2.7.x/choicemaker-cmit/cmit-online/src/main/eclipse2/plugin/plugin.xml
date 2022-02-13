@@ -3,7 +3,7 @@
 <plugin
    id="test.choicemaker.cm.online"
    name="ChoiceMaker Online"
-   version="2.7.1"
+   version="2.7.0"
    provider-name="ChoiceMaker LLC">
 
    <runtime>

@@ -3,8 +3,8 @@
 <plugin
    id="com.choicemaker.cm.io.xml.gui"
    name="XML IO Gui Plug-in"
-   version="2.5.0"
-   provider-name="ChoiceMaker">
+   version="2.7.0"
+   provider-name="ChoiceMaker LLC">
 
    <runtime>
       <library name="gui.jar"/>

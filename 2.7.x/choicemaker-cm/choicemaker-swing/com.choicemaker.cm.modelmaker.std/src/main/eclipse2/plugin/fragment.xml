@@ -2,10 +2,10 @@
 <fragment
    id="com.choicemaker.cm.modelmaker.std"
    name="Modelmaker Plug-in, Standard E2 Fragment"
-   version="2.5.0"
+   version="2.7.0"
    provider-name="ChoiceMaker LLC"
    plugin-id="com.choicemaker.cm.modelmaker"
-   plugin-version="2.5.0">
+   plugin-version="2.7.0">
 
   <runtime>
     <library name="mmstd.jar">

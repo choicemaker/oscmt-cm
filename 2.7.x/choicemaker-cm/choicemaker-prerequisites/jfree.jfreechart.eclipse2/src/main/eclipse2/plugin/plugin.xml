@@ -4,7 +4,7 @@
    id="jfree.jfreechart.eclipse2plugin"
    name="JFreeChart Plug-in"
    version="1.0.15"
-   provider-name="Rick Hall">
+   provider-name="ChoiceMaker LLC">
 
    <runtime>
       <library name="jfreechart.jar">
