@@ -1,7 +1,7 @@
 /*
  * @(#)$RCSfile$        $Revision$ $Date$
  *
- * Copyright (c) 2001 ChoiceMaker Technologies, Inc.
+ * Copyright (c) 2001, 2018 ChoiceMaker Technologies, Inc.
  * 41 East 11th Street, New York, NY 10003
  * All rights reserved.
  *
