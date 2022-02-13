@@ -1,5 +1,5 @@
 /*
- * GroupMatchType.java       Revision: 2.5  Date: Sep 9, 2005 2:53:25 PM
+ * GroupMatchType.java       Revision: 2.5  Date: Sep 9, 2005, 2018 2:53:25 PM
  *
  * Copyright (c) 2001 ChoiceMaker Technologies, Inc.
  * 48 Wall Street, 11th Floor, New York, NY 10005

@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: JdbcRecordSourceXmlConf.java,v $        $Revision: 1.1.78.1 $ $Date: 2009/11/18 01:00:19 $
+ * @(#)$RCSfile: JdbcRecordSourceXmlConf.java,v $        $Revision: 1.1.78.1 $ $Date: 2009, 2017/11/18 01:00:19 $
  *
  * Copyright (c) 2001 ChoiceMaker Technologies, Inc.
  * 41 East 11th Street, New York, NY 10003
