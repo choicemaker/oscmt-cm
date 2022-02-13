@@ -39,7 +39,7 @@ public class EjbExtensionPointIT {
 
 	static final String EJB_MAVEN_ARTIFACTID = "com.choicemaker.e2.ejb";
 
-	static final String EJB_MAVEN_VERSION = "2.7.1-SNAPSHOT";
+	static final String EJB_MAVEN_VERSION = "2.7.0";
 
 	static final String EJB_MAVEN_COORDINATES = new StringBuilder()
 			.append(EJB_MAVEN_GROUPID).append(MAVEN_COORDINATE_SEPARATOR)

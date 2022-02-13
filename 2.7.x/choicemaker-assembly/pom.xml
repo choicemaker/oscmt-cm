@@ -7,7 +7,7 @@
 
   <groupId>com.choicemaker.cm</groupId>
   <artifactId>choicemaker-assembly</artifactId>
-  <version>2.7.1-SNAPSHOT</version>
+  <version>2.7.0</version>
   <name>ChoiceMaker Dependencies</name>
 
   <properties>

@@ -8,14 +8,14 @@
   <parent>
     <groupId>com.choicemaker.cm</groupId>
     <artifactId>choicemaker-base</artifactId>
-    <version>2.7.1-SNAPSHOT</version>
+    <version>2.7.0</version>
     <relativePath>../../choicemaker-base/pom.xml</relativePath>
   </parent>
 
   <groupId>com.choicemaker.cmit</groupId>
   <artifactId>simple-person-plugin-it</artifactId>
   <name>Integration Test: Simple Person Matching (EJB)</name>
-  <version>2.7.1-SNAPSHOT</version>
+  <version>2.7.0</version>
   <packaging>jar</packaging>
 
   <properties>

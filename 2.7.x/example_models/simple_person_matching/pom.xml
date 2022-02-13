@@ -7,12 +7,12 @@
   <parent>
     <groupId>com.choicemaker.cm</groupId>
     <artifactId>example_models</artifactId>
-    <version>2.7.1-SNAPSHOT</version>
+    <version>2.7.0</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
   <artifactId>simple_person_matching</artifactId>
-  <version>2.7.1-SNAPSHOT</version>
+  <version>2.7.0</version>
   <packaging>jar</packaging>
 
   <name>Simple Person Matching Model</name>

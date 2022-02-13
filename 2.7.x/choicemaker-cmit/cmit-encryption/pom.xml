@@ -8,13 +8,13 @@
   <parent>
     <groupId>com.choicemaker.cm</groupId>
     <artifactId>choicemaker-base</artifactId>
-    <version>2.7.1-SNAPSHOT</version>
+    <version>2.7.0</version>
     <relativePath>../../choicemaker-base/pom.xml</relativePath>
   </parent>
 
   <groupId>com.choicemaker.cmit</groupId>
   <artifactId>cmit-encryption</artifactId>
-  <version>2.7.1-SNAPSHOT</version>
+  <version>2.7.0</version>
  
   <name>Integration Test: Encryption</name>
   <description><![CDATA[

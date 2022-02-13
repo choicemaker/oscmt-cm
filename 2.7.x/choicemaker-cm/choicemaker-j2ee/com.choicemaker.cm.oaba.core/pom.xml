@@ -8,14 +8,14 @@
   <parent>
     <groupId>com.choicemaker.cm</groupId>
     <artifactId>choicemaker-j2ee</artifactId>
-    <version>2.7.1-SNAPSHOT</version>
+    <version>2.7.0</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
   <!-- Is the suffix _base_ is more consistent with other cm modules than _core_ ??
    artifactId>com.choicemaker.cm.oaba.base</artifactId -->
   <artifactId>com.choicemaker.cm.oaba.core</artifactId>
-  <version>2.7.1-SNAPSHOT</version>
+  <version>2.7.0</version>
   <packaging>jar</packaging>
   <name>ChoiceMaker Offline Matching (OABA Core)</name>
 

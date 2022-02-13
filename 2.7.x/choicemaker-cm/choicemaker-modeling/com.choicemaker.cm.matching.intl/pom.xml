@@ -8,12 +8,12 @@
   <parent>
     <groupId>com.choicemaker.cm</groupId>
     <artifactId>choicemaker-modeling</artifactId>
-    <version>2.7.1-SNAPSHOT</version>
+    <version>2.7.0</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
   <artifactId>com.choicemaker.cm.matching.intl</artifactId>
-  <version>2.7.1-SNAPSHOT</version>
+  <version>2.7.0</version>
   <packaging>jar</packaging>
   <name>ChoiceMaker Matching Plug-in (Intl Country Codes)</name>
 

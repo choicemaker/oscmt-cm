@@ -8,13 +8,13 @@
   <parent>
     <groupId>com.choicemaker.cm</groupId>
     <artifactId>choicemaker-base</artifactId>
-    <version>2.7.1-SNAPSHOT</version>
+    <version>2.7.0</version>
     <relativePath>../../choicemaker-base/pom.xml</relativePath>
   </parent>
 
   <groupId>com.choicemaker.util</groupId>
   <artifactId>choicemaker-dates</artifactId>
-  <version>2.7.1-SNAPSHOT</version>
+  <version>2.7.0</version>
 
   <name>Date Utilities</name>
   <url>http://oscmt.sourceforge.net/dev-doc</url>

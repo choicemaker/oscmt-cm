@@ -8,12 +8,12 @@
   <parent>
     <groupId>com.choicemaker.cm</groupId>
     <artifactId>choicemaker-cm</artifactId>
-    <version>2.7.1-SNAPSHOT</version>
+    <version>2.7.0</version>
     <relativePath>../../choicemaker-cm/pom.xml</relativePath>
   </parent>
 
   <artifactId>cms-apps</artifactId>
-  <version>2.7.1-SNAPSHOT</version>
+  <version>2.7.0</version>
   <packaging>jar</packaging>
   <name>ChoiceMaker URM Apps</name>
   <description><![CDATA[
@@ -28,7 +28,7 @@
     <dependency>
       <groupId>com.choicemaker.util</groupId>
       <artifactId>choicemaker-util</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
+      <version>2.7.0</version>
     </dependency>
     <dependency>
       <groupId>commons-cli</groupId>

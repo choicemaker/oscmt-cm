@@ -7,68 +7,68 @@
 
   <groupId>com.choicemaker.cm</groupId>
   <artifactId>oaba.server-dependencies</artifactId>
-  <version>2.7.1-SNAPSHOT</version>
+  <version>2.7.0</version>
   <name>ChoiceMaker OABA Server Dependencies</name>
 
   <dependencies>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.autonumber</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
+      <version>2.7.0</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.core</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
+      <version>2.7.0</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.io.blocking.automated.base</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
+      <version>2.7.0</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.io.blocking.automated.offline</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
+      <version>2.7.0</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.io.blocking.automated.offline.core</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
+      <version>2.7.0</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.io.db.base</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
+      <version>2.7.0</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.io.flatfile.base</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
+      <version>2.7.0</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.io.xml.base</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
+      <version>2.7.0</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.server.base</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
+      <version>2.7.0</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.server.ejb.impl</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
+      <version>2.7.0</version>
       <scope>compile</scope>
     </dependency>
     <dependency>

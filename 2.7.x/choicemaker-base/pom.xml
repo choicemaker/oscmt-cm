@@ -6,7 +6,7 @@
 
   <groupId>com.choicemaker.cm</groupId>
   <artifactId>choicemaker-base</artifactId>
-  <version>2.7.1-SNAPSHOT</version>
+  <version>2.7.0</version>
   <packaging>pom</packaging>
 
   <name>ChoiceMaker Dependencies</name>
@@ -312,7 +312,7 @@
             <dependency>
               <groupId>com.choicemaker.cm</groupId>
               <artifactId>choicemaker-assembly</artifactId>
-              <version>2.7.1-SNAPSHOT</version>
+              <version>2.7.0</version>
             </dependency>
           </dependencies>
           <executions>
@@ -429,419 +429,419 @@
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>choicemaker-assembly</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>cm-analyzer-ce</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
         <classifier>distrib</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>cmtblocking-app</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>urm-apps</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.analyzer.base</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.analyzer.tools.gui</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.args</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.batch.api</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.batch.ejb</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
         <type>ejb</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.compiler</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.client.api</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.core</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.core.util25</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.docs</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.gui.utils</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.aba.base</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.aba.inmemory</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.aba.inmemory.gui</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.oaba</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.oaba.core</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.oaba.api</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.oaba.ejb</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
         <type>ejb</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.blocking.base</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.blocking.exact.base</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.blocking.exact.gui</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.composite.base</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.composite.gui</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.db.base</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.db.gui</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.db.jboss</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.db.oracle</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.db.sqlserver</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.db.sqlserver.gui</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.db.postgres</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.db.postgres.gui</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.db.postgres2</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.db.postgres2.gui</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.flatfile.base</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.flatfile.gui</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.xml.base</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.xml.gui</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.xmlenc.base</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.xmlenc.gui</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.matching.cfg</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.matching.en</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.matching.en.au</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.matching.en.us</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.matching.en.us.ny.nyc</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.matching.en.us.train</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.matching.gen</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.matching.geo</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.matching.intl</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.matching.wfst</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.matching.wfst.eclipse</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.ml.me.base</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.ml.me.gui</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.mmdevtools</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.modeldb</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.modelmaker</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.modelmaker.pkg_eclipse</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.modelmaker.std</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.module</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.reviewmaker.base</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.transitivity</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.transitivity.core</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.transitivity.api</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.transitivity.ejb</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
         <type>ejb</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.urm</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.urm.adaptor</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.urm.api</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.urm.base</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.urm.config</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.urm.ejb</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
         <type>ejb</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.urm.pkg_eclipse</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.util.app</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.util.app.pkg_eclipse</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.validation.eclipse</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cms.api</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cms.ejb</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
         <type>ejb</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cms.rest</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cms.webapp</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cms.webui</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
@@ -851,12 +851,12 @@
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.wcohen.ss</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.wcohen.ss.eclipse</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
@@ -906,94 +906,94 @@
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>simple-person-plugin</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>simple-person-plugin-tests</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>simple_person_matching</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cmit</groupId>
         <artifactId>cmit-aba</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cmit</groupId>
         <artifactId>cmit-oaba</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cmit</groupId>
         <artifactId>cmit-transitivity</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cmit</groupId>
         <artifactId>cmit-utils</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cmit</groupId>
         <artifactId>cmit-utils.j2ee</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cmit</groupId>
         <artifactId>com.choicemaker.cmit.io.db.oracle</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cmit</groupId>
         <artifactId>com.choicemaker.cmit.io.db.sqlserver</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.e2</groupId>
         <artifactId>com.choicemaker.e2</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.e2</groupId>
         <artifactId>com.choicemaker.e2.ejb</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
         <type>ejb</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.e2</groupId>
         <artifactId>com.choicemaker.e2.embed</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.e2</groupId>
         <artifactId>com.choicemaker.e2.std</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.e2it</groupId>
         <artifactId>com.choicemaker.e2it</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.e2it</groupId>
         <artifactId>com.choicemaker.e2it.ejb</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
         <type>ejb</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.e2it</groupId>
         <artifactId>com.choicemaker.e2it.embed</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.e2it</groupId>
         <artifactId>com.choicemaker.e2it.std</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.mvn.cluemaker</groupId>
@@ -1003,22 +1003,22 @@
       <dependency>
         <groupId>com.choicemaker.util</groupId>
         <artifactId>choicemaker-util</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.util</groupId>
         <artifactId>choicemaker-dates</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.util</groupId>
         <artifactId>choicemaker-jee</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.utilit</groupId>
         <artifactId>choicemaker-utilit</artifactId>
-        <version>2.7.1-SNAPSHOT</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.xml</groupId>
