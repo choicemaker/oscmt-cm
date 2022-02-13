@@ -13,9 +13,9 @@
   </parent>
 
   <artifactId>com.sun.tools</artifactId>
-  <version>2.7.0</version>
+  <version>1.8.0</version>
   <packaging>jar</packaging>
-  <name>Sun JDK 1.8.0 Tools</name>
+  <name>E2 plugin: Sun JDK 1.8.0 Tools</name>
 
   <properties>
     <eclipse.plugin.runtime.library.name>src/main/eclipse2/plugin/tools.jar</eclipse.plugin.runtime.library.name>
