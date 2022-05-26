@@ -1,12 +1,12 @@
 /*
- * GroupMatchType.java       Revision: 2.5  Date: Sep 9, 2005, 2020 2:53:25 PM 
- *
- * Copyright (c) 2001 ChoiceMaker Technologies, Inc.
- * 48 Wall Street, 11th Floor, New York, NY 10005
- * All rights reserved.
- *
- * This software is the confidential and proprietary information of
- * ChoiceMaker Technologies Inc. ("Confidential Information").
+ * Copyright (c) 2001, 2022 ChoiceMaker LLC and others.
+ * All rights reserved. This program and the accompanying materials 
+ * are made available under the terms of the Eclipse Public License
+ * v1.0 which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
 package com.choicemaker.cm.args;
 

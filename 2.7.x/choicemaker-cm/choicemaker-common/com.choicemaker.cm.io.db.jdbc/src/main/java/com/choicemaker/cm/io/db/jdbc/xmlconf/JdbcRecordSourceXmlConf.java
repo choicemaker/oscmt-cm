@@ -1,12 +1,12 @@
 /*
- * @(#)$RCSfile: JdbcRecordSourceXmlConf.java,v $        $Revision: 1.1.78.1 $ $Date: 2009, 2017/11/18 01:00:19 $
- *
- * Copyright (c) 2001 ChoiceMaker Technologies, Inc.
- * 41 East 11th Street, New York, NY 10003
- * All rights reserved.
- *
- * This software is the confidential and proprietary information of
- * ChoiceMaker Technologies Inc. ("Confidential Information").
+ * Copyright (c) 2001, 2022 ChoiceMaker LLC and others.
+ * All rights reserved. This program and the accompanying materials 
+ * are made available under the terms of the Eclipse Public License
+ * v1.0 which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
 
 package com.choicemaker.cm.io.db.jdbc.xmlconf;

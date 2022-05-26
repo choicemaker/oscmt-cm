@@ -1,12 +1,12 @@
 /*
- * @(#)$RCSfile: BlockingCall.java,v $        $Revision: 1.5.2.2 $ $Date: 2010, 2016/04/08 16:14:18 $
+ * Copyright (c) 2014, 2014 ChoiceMaker LLC and others.
  *
- * Copyright (c) 2001 ChoiceMaker Technologies, Inc.
- * 48 Wall Street, 11th Floor, New York, NY 10005
- * All rights reserved.
+ * This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License 2.0
+ * which accompanies this distribution, and is available at
+ * https://www.eclipse.org/legal/epl-2.0/
  *
- * This software is the confidential and proprietary information of
- * ChoiceMaker Technologies Inc. ("Confidential Information").
+ * SPDX-License-Identifier: EPL-2.0
  */
 package com.choicemaker.cmtblocking;
 
